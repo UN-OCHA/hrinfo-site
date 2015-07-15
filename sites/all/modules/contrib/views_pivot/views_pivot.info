@@ -1,0 +1,14 @@
+name = Pivot Tables for Views
+description = Allows to output the result of a view as a pivot table.
+dependencies[] = views
+package = Views
+core = 7.x
+
+files[] = views_plugin_style_pivot.inc
+
+; Information added by Drupal.org packaging script on 2014-03-03
+version = "7.x-1.0"
+core = "7.x"
+project = "views_pivot"
+datestamp = "1393834406"
+

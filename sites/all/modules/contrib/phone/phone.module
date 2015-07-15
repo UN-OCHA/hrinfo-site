@@ -1,0 +1,1449 @@
+<?php
+
+/**
+ * @file
+ * The phone module lets administrators use a phone number field type.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function phone_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#phone':
+      return '<p>' . t('The phone module lets administrators use a phone number field type.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_libraries_info().
+ */
+function phone_libraries_info() {
+  $libraries = array();
+
+  $libraries['libphonenumber-for-php'] = array(
+    // Only used in administrative UI of Libraries API.
+    'name' => 'libphonenumber (PHP Port)',
+    'vendor url' => 'https://github.com/giggsey/libphonenumber-for-php',
+    'download url' => 'https://github.com/giggsey/libphonenumber-for-php/archive/master.zip',
+    'path' => 'src/libphonenumber',
+    'version' => '1.0',
+    'files' => array(
+      'php' => array(
+        'PhoneNumber.php',
+        'PhoneNumberUtil.php',
+        'CountryCodeToRegionCodeMap.php',
+        'RegionCode.php',
+        'PhoneMetadata.php',
+        'PhoneNumberDesc.php',
+        'NumberFormat.php',
+        'PhoneNumberType.php',
+        'PhoneNumberFormat.php',
+        'Matcher.php',
+        'CountryCodeSource.php',
+        'NumberParseException.php',
+        'ValidationResult.php',
+        'MetadataLoaderInterface.php',
+        'DefaultMetadataLoader.php',
+      ),
+    ),
+    'integration files' => array(
+      'phone' => array(
+        'php' => array(
+          'includes/phone.libphonenumber.inc',
+        ),
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Helper function to detect and/or load the libphonenumber libraries.
+ *
+ * @param bool $detect_only
+ *   When TRUE, the library will not be loaded. Its presence will
+ *   only be checked for. Defaults to FALSE.
+ * @param bool $mute
+ *   When TRUE, this function will not output an error message,
+ *   or write to the watchdog table. Defaults to FALSE.
+ *
+ * @return bool
+ *   TRUE if $detect_only is FALSE and the library is loaded.
+ *   TRUE if $detect_only is TRUE and the library is found.
+ *   FALSE otherwise.
+ */
+function phone_libphonenumber($detect_only = FALSE, $mute = FALSE) {
+  static $success = NULL;
+
+  if (isset($success)) {
+    return $success;
+  }
+
+  $function = 'libraries_' . ($detect_only ? 'detect' : 'load');
+  $library = $function('libphonenumber-for-php');
+  $result = $library['installed'] && ($detect_only || $library['loaded']);
+
+  if (!$result && !$mute) {
+    watchdog('phone', 'The libphonenumber library is not installed. There will be no validation, or formatting of phone numbers unless it is installed. Download it from <a href="!url">here</a> and install it into sites/all/libraries/libphonenumber-for-php. Once installed, you may need to re-save any existing phone field settings, and phone field data may also need updating.', array('!url' => $library['download url']), WATCHDOG_ERROR);
+    drupal_set_message(t('The libphonenumber library is not installed. There will be no validation, or formatting of phone numbers unless it is installed. Download it from <a href="@url">here</a> and install it into sites/all/libraries/libphonenumber-for-php. Once installed, you may need to re-save any existing phone field settings, and phone field data may also need updating.', array('@url' => $library['download url'])), 'error');
+  }
+
+  // Do not statically cache detection only calls; breaks unit tests.
+  $success = $detect_only ? NULL : $result;
+
+  return $result;
+}
+
+/**
+ * Implements hook_countries_alter().
+ */
+function phone_countries_alter(&$countries) {
+  // Add in some countries that libphonenumber has, that core does not.
+  $countries['AC'] = t('Ascension Island');
+
+  if (!module_exists('countries')) {
+    $countries['BQ'] = t('Bonaire, Sint Eustatius and Saba');
+    $countries['SS'] = t('South Sudan');
+    $countries['SX'] = t('Sint Maarten');
+
+    asort($countries, SORT_LOCALE_STRING);
+  }
+}
+
+/**
+ * Helper function to get a list of countries.
+ *
+ * @param mixed $codes
+ *   One or more codes to actually lookup.
+ * @param string $type
+ *   When this is 'country', returns the country name.
+ *   When this is 'calling_code', returns the calling code.
+ *   When this is 'combined', returns a combined country name
+ *   with the calling code for countries we have a calling code
+ *   for.
+ *   Defaults to 'combined'.
+ * @param bool $reset
+ *   When TRUE, resets any cached data. Defaults to FALSE.
+ *
+ * @return array
+ *   When $codes is empty, an array of all countries is returned.
+ *   When $codes is an array, only countries matching those codes
+ *   are returned.
+ *   When $codes is a string, and exists in the detected countries,
+ *   returns the country name.
+ *   Otherwise returns FALSE.
+ */
+function phone_countries($codes = NULL, $type = 'combined', $reset = FALSE) {
+  // We don't need drupal_static() do we? Why would we reset this?
+  static $country_data = NULL;
+
+  if (!isset($country_data) || $reset) {
+    if (!$reset && ($cache = cache_get('phone_countries'))) {
+      $country_data = $cache->data;
+    }
+
+    if (!isset($country_data)) {
+      // Load libphonenumber.
+      phone_libphonenumber();
+
+      $country_data = phone_libphonenumber_get_supported_country_lists();
+      cache_set('phone_countries', $country_data);
+    }
+  }
+
+  if (empty($codes)) {
+    return $country_data[$type];
+  }
+  elseif (is_array($codes)) {
+    return array_intersect_key($country_data[$type], drupal_map_assoc($codes));
+  }
+  elseif (isset($country_data[$type][$codes])) {
+    return $country_data[$type][$codes];
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Implements hook_field_info().
+ */
+function phone_field_info() {
+  return array(
+    'phone' => array(
+      'label' => t('Phone'),
+      'description' => t('Store a number, country code, and optional extension and number type on an entity.'),
+      'settings' => array(
+        'enable_numbertype' => FALSE,
+        'numbertype_allowed_values' => array('home', 'work', 'cell', 'fax'),
+      ),
+      'instance_settings' => array(
+        'country_options' => array(
+          'enable_country' => TRUE,
+          'enable_default_country' => TRUE,
+          'default_country' => NULL,
+          'all_country_codes' => TRUE,
+          'country_codes' => array(
+            'hide_single_cc' => FALSE,
+            'country_selection' => array(),
+          ),
+        ),
+        'enable_extension' => FALSE,
+      ),
+      'default_formatter' => 'phone_international',
+      'default_widget' => 'phone',
+      'property_type' => 'field_item_phone',
+      'property_callbacks' => array('phone_field_property_info_callback'),
+      'microdata' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_microdata_value_types().
+ */
+function phone_microdata_value_types_alter(&$value_types) {
+  // Allow our entire phone field to be seen as a text value
+  // type for microdata. We don't need different microdata for
+  // each property.
+  $value_types['field_item_phone'] = 'text';
+}
+
+/**
+ * Additional callback to adapt the property info of phone fields.
+ *
+ * @see entity_metadata_field_entity_property_info()
+ */
+function phone_field_property_info_callback(&$info, $entity_type, $field, $instance, $field_type) {
+  $property = &$info[$entity_type]['bundles'][$instance['bundle']]['properties'][$field['field_name']];
+  $property['getter callback'] = 'entity_metadata_field_verbatim_get';
+  $property['setter callback'] = 'entity_metadata_field_verbatim_set';
+
+  $property['type'] = ($field['cardinality'] != 1) ? 'list<field_item_phone>' : 'field_item_phone';
+
+  // Auto-create the field item as soon as a property is set.
+  $property['auto creation'] = 'phone_field_item_create';
+  $property['property info'] = array(
+    'numbertype' => array(
+      'type' => 'text',
+      'label' => t('The phone number type id. e.g work, home'),
+      'required' => TRUE,
+      'setter callback' => 'entity_property_verbatim_set',
+      'entity views field' => TRUE,
+    ),
+    'numbertypelabel' => array(
+      'type' => 'text',
+      'label' => t('The phone number type label. e.g Work, Home'),
+      'required' => TRUE,
+      'schema field' => 'numbertype',
+      'options list' => 'phone_field_property_numbertype_options',
+      'entity views field' => TRUE,
+    ),
+    'number' => array(
+      'type' => 'text',
+      'label' => t('The phone number as entered'),
+      'required' => TRUE,
+      'setter callback' => 'entity_property_verbatim_set',
+      'entity views field' => TRUE,
+    ),
+    'countrycode' => array(
+      'type' => 'text',
+      'label' => t('The two letter ISO country code'),
+      'setter callback' => 'entity_property_verbatim_set',
+      'entity views field' => TRUE,
+    ),
+    'callingcode' => array(
+      'type' => 'integer',
+      'label' => t('The country calling code.'),
+      'getter callback' => 'phone_field_property_get_callingcode',
+      'entity views field' => TRUE,
+    ),
+    'countryname' => array(
+      'type' => 'text',
+      'label' => t('The country calling code.'),
+      'getter callback' => 'entity_property_verbatim_get',
+      'entity views field' => TRUE,
+      'schema field' => 'countrycode',
+      'options list' => 'phone_field_property_country_options',
+    ),
+    'extension' => array(
+      'type' => 'text',
+      'label' => t('The extension'),
+      'setter callback' => 'entity_property_verbatim_set',
+      'entity views field' => TRUE,
+    ),
+  );
+
+  unset($property['query callback']);
+}
+
+/**
+ * Callback for getting possible list of number type options for entity metadata.
+ */
+function phone_field_property_numbertype_options($name, $info, $op) {
+  $field_info = $info['parent']->info();
+  return phone_numbertype_allowed_values($field_info['field'], $field_info['instance']);
+}
+
+/**
+ * Callback for getting the possible list of country codes for entity metadata.
+ */
+function phone_field_property_country_options($name, $info, $op) {
+  return phone_countries(NULL, 'country');
+}
+
+/**
+ * Callback for getting the calling code for a country.
+ */
+function phone_field_property_get_callingcode($data, array $options, $name, $type, $info) {
+  if (isset($data['countrycode'])) {
+    return phone_countries($data['countrycode'], 'calling_code');
+  }
+
+  return NULL;
+}
+
+/**
+ * Callback for creating a new empty phone fields item.
+ */
+function phone_field_item_create() {
+  return array(
+    'numbertype' => NULL,
+    'number' => NULL,
+    'countrycode' => NULL,
+    'extension' => NULL,
+  );
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function phone_field_is_empty($item, $field) {
+  return empty($item['number']);
+}
+
+/**
+ * Implements hook_field_settings_form().
+ */
+function phone_field_settings_form($field, $instance, $has_data) {
+  $defaults = field_info_field_settings($field['type']);
+  $settings = array_merge($defaults, $field['settings']);
+
+  $form = array();
+
+  $form['enable_numbertype'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable phone number type support'),
+    '#default_value' => $settings['enable_numbertype'],
+    '#description' => t('Check this to enable the phone number type field.'),
+    '#weight' => -2.2,
+  );
+
+  $module_path = drupal_get_path('module', 'phone');
+  $form['numbertype_allowed_values'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Number type allowed values list'),
+    '#default_value' => $settings['numbertype_allowed_values'],
+    '#element_validate' => array('phone_numbertype_allowed_values_setting_validate'),
+    '#field_has_data' => $has_data,
+    '#field' => $field,
+    '#options' => phone_numbertype_all_values($field, $instance),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="field[settings][enable_numbertype]"]' => array('checked' => TRUE),
+      ),
+    ),
+    '#attached' => array(
+      'css' => array(
+        $module_path . '/theme/phone-settings.css',
+      ),
+    ),
+  );
+
+  return $form;
+}
+
+/**
+ * Element validate callback; check that the entered values are valid.
+ */
+function phone_numbertype_allowed_values_setting_validate($element, &$form_state) {
+  $field = $element['#field'];
+  $has_data = $element['#field_has_data'];
+
+  $values = array_filter($element['#value']);
+
+  if (!is_array($values)) {
+    form_error($element, t('Allowed values list: invalid input.'));
+  }
+  else {
+    // Prevent removing values currently in use.
+    if ($has_data) {
+      $lost_keys = array_diff(array_keys($field['settings']['numbertype_allowed_values']), array_keys($values));
+      if (_phone_values_in_use($field, $lost_keys)) {
+        form_error($element, t('Allowed values list: some values are being removed while currently in use.'));
+      }
+    }
+
+    form_set_value($element, $values, $form_state);
+  }
+}
+
+/**
+ * Checks if a list of values are being used in actual field values.
+ */
+function _phone_values_in_use($field, $values) {
+  if ($values) {
+    $query = new EntityFieldQuery();
+    $found = $query
+      ->fieldCondition($field['field_name'], 'value', $values)
+      ->range(0, 1)
+      ->execute();
+    return !empty($found);
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_field_validate().
+ */
+function phone_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  foreach ($items as $delta => $item) {
+    if (isset($item['error']) && !empty($item['error'])) {
+      // Message has already been processed by libphonenumber.
+      $errors[$field['field_name']][$langcode][$delta][] = array(
+        'error' => 'phone_invalid',
+        'message' => t('%label: !error', array('%label' => $instance['label'], '!error' => $item['error'])),
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_field_presave().
+ */
+function phone_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  // Load libphonenumber.
+  phone_libphonenumber();
+
+  foreach ($items as $delta => $item) {
+    $extension = isset($item['extension']) ? trim($item['extension']) : '';
+    $number = trim($item['number']);
+    $items[$delta] = phone_libphonenumber_clean(trim($item['number']), $item['countrycode'], $extension) + $items[$delta];
+    if ($items[$delta]['countrycode'] == '001') {
+      $number = str_replace('+', '', $number);
+      $code = substr($number, 0, 3);
+      $supported_global_networks = phone_libphonenumber_get_supported_global_networks();
+      foreach ($supported_global_networks['calling_code'] as $region_code => $network) {
+        if ($code == $network) {
+          $items[$delta]['countrycode'] = $region_code;
+        }
+      }
+    }
+  }
+
+}
+
+/**
+ * Implements hook_field_instance_settings_form().
+ */
+function phone_field_instance_settings_form($field, $instance) {
+  $defaults = field_info_instance_settings($field['type']);
+  $settings = array_merge($defaults, $instance['settings']);
+
+  $country_options = $settings['country_options'];
+  $country_selection = array_filter($country_options['country_codes']['country_selection']);
+
+  $countries = phone_countries();
+  $module_path = drupal_get_path('module', 'phone');
+
+  $form['country_options'] = array(
+    '#title' => 'Country options',
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#weight' => -3,
+    '#attached' => array(
+      'css' => array(
+        $module_path . '/theme/phone-settings.css',
+      ),
+      'js' => array(
+        $module_path . '/theme/phone-settings.js',
+      ),
+    ),
+  );
+
+  $form['country_options']['enable_country'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable country dropdown'),
+    '#default_value' => $country_options['enable_country'],
+    '#description' => t('Uncheck this to disable the country dropdown. Users will still be able to input international numbers, provided they input them in international format. If input in national format, the number will be validated against the default country below. If no default country is selected, any national number will fail validation. Country selection will also enable a restriction on what calling codes can be used.'),
+    '#weight' => -11,
+  );
+
+  $form['country_options']['enable_default_country'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable default country code'),
+    '#default_value' => $country_options['enable_default_country'],
+    '#description' => t('Check this to enable the default country code below.'),
+    '#weight' => -10,
+  );
+
+  $form['country_options']['default_country'] = array(
+    '#type' => 'select',
+    '#title' => t('Default country code'),
+    '#default_value' => $country_options['default_country'],
+    '#options' => $countries,
+    '#description' => t('This will be the default country selection.'),
+    '#states' => array(
+      'invisible' => array(
+        ':input[name="instance[settings][country_options][enable_default_country]"]' => array('checked' => FALSE),
+      ),
+    ),
+    '#weight' => -9,
+  );
+
+  $form['country_options']['all_country_codes'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show all country codes.'),
+    '#default_value' => $country_options['all_country_codes'],
+    '#description' => t('Uncheck this to select the countries to be displayed.'),
+    '#weight' => -8,
+  );
+
+  $form['country_options']['country_codes'] = array(
+    '#title' => 'Country selection',
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#attributes' => array('class' => array('phone-settings')),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="instance[settings][country_options][all_country_codes]"]' => array('checked' => FALSE),
+      ),
+    ),
+  );
+
+  $form['country_options']['country_codes']['hide_single_cc'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hide when only one country code'),
+    '#default_value' => $country_options['country_codes']['hide_single_cc'],
+    '#description' => t('By default when there is only one country code, it will show as a display-only form element. Check this to hide the country code.'),
+    '#states' => array(
+      'invisible' => array(
+        ':input[name="instance[settings][country_options][enable_country]"]' => array('checked' => FALSE),
+      ),
+    ),
+  );
+
+  $default = $country_options['enable_default_country'] ? drupal_map_assoc(array($country_options['default_country'])) : array();
+  $form['country_options']['country_codes']['country_selection'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Select country codes to be included'),
+    '#default_value' => isset($country_selection) && !empty($country_selection) ? $country_selection : $default,
+    '#options' => $countries,
+  );
+
+  $form['enable_extension'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable phone extension support'),
+    '#default_value' => $settings['enable_extension'],
+    '#description' => t('Check this to enable the phone number extension field.'),
+    '#weight' => -2.6,
+  );
+
+  return $form;
+}
+/**
+ * Implements hook_field_formatter_info().
+ */
+function phone_field_formatter_info() {
+  $base = array(
+    'field types' => array('phone'),
+    'settings' => array(
+      'as_tel_link' => FALSE,
+      'raw' => FALSE,
+      'full_hcard' => FALSE,
+      'allow_alpha' => FALSE,
+      'country_name_position' => 'after',
+      'numbertype_position' => 'before',
+      'extension_prefix' => t(' ext. '),
+      'components' => array(
+        'numbertype' => 'numbertype',
+        'extension' => 'extension',
+      ),
+    ),
+  );
+
+  return array(
+    'phone_international' => $base + array(
+      'label' => t('International'),
+      'description' => t('ITU-T Recommendation for International numbers. e.g., +41 44 668 1800 ext. 1000'),
+    ),
+    'phone_national' => $base + array(
+      'label' => t('National'),
+      'description' => t('ITU-T Recommendation for National numbers. e.g., 044 668 1800 ext. 1000'),
+    ),
+    'phone_e164' => $base + array(
+      'label' => t('E164'),
+      'description' => t('International without formatting, and without the extension. e.g., +41446681800'),
+    ),
+    'phone_rfc3966' => $base + array(
+      'label' => t('RFC3966'),
+      'description' => t('International, but with all spaces and other separating symbols replaced with a hyphen. e.g., +41-44-668-1800;ext=1000'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function phone_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $instance_settings = $instance['settings'];
+  $field_settings = $field['settings'];
+
+  $summary = array();
+
+  if (!empty($settings['components'])) {
+    $components = array_filter($settings['components']);
+
+    $output = array(
+      t('Number') => TRUE,
+      t('Number type') => $field_settings['enable_numbertype'] && isset($components['numbertype']),
+      t('Country') => isset($components['country']),
+      t('Extension') => $instance_settings['enable_extension'] && isset($components['extension']),
+    );
+
+    $output = array_filter($output);
+    $summary[] = t('<strong>Components:</strong> @items', array('@items' => implode(', ', array_keys($output))));
+  }
+
+  $summary[] = t('<strong>Full hCard 1.0 type support:</strong>') . ' ' . (($settings['full_hcard']) ? t('Yes') : t('No'));
+  $summary[] = t('<strong>As tel: link:</strong>') . ' ' . (($settings['as_tel_link']) ? t('Yes') : t('No'));
+  $summary[] = t('<strong>Raw (no HTML)</strong>') . ' ' . (($settings['raw']) ? t('Yes') : t('No'));
+  $summary[] = t('<strong>Convert alpha to digits:</strong>') . ' ' . ((!$settings['allow_alpha']) ? t('Yes') : t('No'));
+
+  if (isset($components['country'])) {
+    $summary[] = t('<strong>Country name position:</strong>') . ' ' . (($settings['country_name_position'] == 'before') ? t('Before') : t('After'));
+  }
+
+  if ($field_settings['enable_numbertype'] && isset($components['numbertype'])) {
+    $summary[] = t('<strong>Number type position:</strong>') . ' ' . (($settings['numbertype_position'] == 'before') ? t('Before') : t('After'));
+  }
+
+  // RFC3966 states the extension prefix must be ;ext=.
+  if ($display['type'] != 'phone_rfc3966' && $instance_settings['enable_extension'] && isset($components['extension'])) {
+    $summary[] = t('<strong>Extension prefix:</strong> @prefix', array('@prefix' => $settings['extension_prefix']));
+  }
+
+  return implode('<br />', $summary);
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function phone_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $element = array();
+
+  $component_options = array('country' => t('Country name'));
+  if (!empty($field['settings']['enable_numbertype'])) {
+    $component_options['numbertype'] = t('Number type');
+  }
+  if (!empty($instance['settings']['enable_extension'])) {
+    $component_options['extension'] = t('Extension');
+  }
+
+  $element['components'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Components to output'),
+    '#default_value' => array_filter($settings['components']),
+    '#options' => $component_options,
+    '#description' => t('The number type and/or extension components will only be output if they are enabled in the widget settings.'),
+  );
+
+  $element['full_hcard'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Full hCard 1.0 type support'),
+    '#default_value' => $settings['full_hcard'],
+    '#description' => check_plain(t('When checked, the number type item will be output as an <abbr> tag instead of a <span>, and will include a title attribute.')),
+  );
+  $element['as_tel_link'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('As tel: link'),
+    '#default_value' => $settings['as_tel_link'],
+  );
+  $element['raw'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Raw (no HTML)'),
+    '#default_value' => $settings['raw'],
+  );
+  $element['allow_alpha'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Convert alpha characters to digits'),
+    '#description' => t('Will convert any alpha characters to their numerical equivalent based on the keypad defined in ITU E.161.'),
+    '#default_value' => $settings['allow_alpha'],
+  );
+
+  $element['country_name_position'] = array(
+    '#title' => t('Country name position'),
+    '#type' => 'radios',
+    '#options' => array(
+      'before' => t('Before phone number'),
+      'after' => t('After phone number'),
+    ),
+    '#default_value' => $settings['country_name_position'],
+    '#states' => array(
+      'visible' => array(
+        ':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][components][country]"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+
+  if (!empty($field['settings']['enable_numbertype'])) {
+    $element['numbertype_position'] = array(
+      '#title' => t('Phone number type position'),
+      '#type' => 'radios',
+      '#options' => array(
+        'before' => t('Before country name and phone number'),
+        'after' => t('After country name and phone number'),
+      ),
+      '#default_value' => $settings['numbertype_position'],
+      '#states' => array(
+        'visible' => array(
+          ':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][components][numbertype]"]' => array('checked' => TRUE),
+        ),
+      ),
+    );
+  }
+
+  // Do not allow extension_prefix to be specified for RFC3966 format, because
+  // it specifies that extension prefix must be ';ext='
+  if (!empty($instance['settings']['enable_extension']) && $display['type'] != 'phone_rfc3966') {
+    $element['extension_prefix'] = array(
+      '#title' => t('Phone extension prefix'),
+      '#description' => t('Text to display before the phone\'s extension.  Be sure to include any desired spaces'),
+      '#type' => 'textfield',
+      '#size' => 15,
+      '#default_value' => check_plain($settings['extension_prefix']),
+      '#states' => array(
+        'visible' => array(
+          ':input[name="fields[' . $field['field_name'] . '][settings_edit_form][settings][components][extension]"]' => array('checked' => TRUE),
+        ),
+      ),
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function phone_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  // Load libphonenumber.
+  phone_libphonenumber();
+
+  $element = array();
+  $settings = $display['settings'];
+  $formatter = $display['type'];
+
+  $allowed_values = phone_numbertype_allowed_values($field, $instance);
+  $components = array_filter($settings['components']);
+
+  foreach ($items as $delta => $item) {
+    $number = $item['number'];
+    $countrycode = $item['countrycode'];
+    $extension = $item['extension'];
+    $numbertype = $item['numbertype'];
+    $numbertype_id = ' phone-numbertype-option-' . drupal_html_class($numbertype);
+
+    // Provide access to a nicer label.
+    $numbertype_label = isset($allowed_values[$item['numbertype']]) ? $allowed_values[$item['numbertype']] : $item['numbertype'];
+
+    // If the extension is disabled, don't pass one through if data exists.
+    if (!$instance['settings']['enable_extension'] || !isset($components['extension'])) {
+      $extension = '';
+    }
+
+    // If the number type is disabled, don't pass one through if data exists.
+    if (!$field['settings']['enable_numbertype'] || !isset($components['numbertype'])) {
+      $numbertype = '';
+      $numbertype_label = '';
+      $numbertype_id = '';
+    }
+
+    $formatted_number = phone_libphonenumber_format($number, $countrycode, $extension, $formatter, $settings['allow_alpha'], $settings['extension_prefix']);
+    $link = $settings['as_tel_link'];
+    $href = phone_libphonenumber_format($number, $countrycode, $extension, 'phone_rfc3966');
+    // As of commit 2447df4655dcbddfab733de392ff077cf3d621e6, libphonenumber-for-php adds tel: for RFC3966 format
+    // Prevent tel: from being prefixed twice, while retaining compatibility with older versions of the library.
+    if (substr($href, 0, 4) !== 'tel:') {
+      $href = 'tel:' . $href;
+    }
+
+    $numbertype_attributes = array();
+    if ($settings['full_hcard']) {
+      $numbertype_attributes = array(
+        'title' => $numbertype,
+      );
+    }
+
+    // Create a render array for our item.
+    $numbertype_before = $settings['numbertype_position'] == 'before';
+    if ($settings['raw']) {
+      $output = '';
+      if (!empty($number_type) && $numbertype_before) {
+        $output .= empty($numbertype_label) ? $numbertype : $numbertype_label;
+        $output .= ': ';
+      }
+      if (isset($components['country']) && $settings['country_name_position'] == 'before') {
+        $output .= '('.phone_countries($countrycode, 'country').')';
+      }
+      $output .= $formatted_number;
+      if (isset($components['country']) && $settings['country_name_position'] != 'before') {
+        $output .= '('.phone_countries($countrycode, 'country').')';
+      }
+      if (!empty($number_type) && !$numbertype_before) {
+        $output .= empty($numbertype_label) ? $numbertype : $numbertype_label;
+      }
+      $render = array('#markup' => $output);
+    }
+    else {
+      $render = array(
+        'phone' => array(
+          '#type' => 'container',
+          '#attributes' => array(
+            'class' => array('tel', 'phone-container' . $numbertype_id),
+          ),
+          'numbertype' => array(
+            '#access' => !empty($numbertype),
+            '#type' => 'html_tag',
+            '#tag' => $settings['full_hcard'] ? 'abbr' : 'span',
+            '#attributes' => $numbertype_attributes + array(
+              'class' => array('type', 'phone-numbertype'),
+            ),
+            '#value' => empty($numbertype_label) ? $numbertype : $numbertype_label,
+            '#value_suffix' => $numbertype_before ? ': ' : '',
+            '#weight' => $numbertype_before ? -2 : 2,
+          ),
+          'number' => array(
+            '#type' => $link ? 'link' : 'html_tag',
+            '#tag' => 'span',
+            '#attributes' => array(
+              'class' => array('value', 'phone-number'),
+            ),
+            '#value' => $formatted_number,
+            '#title' => $formatted_number,
+            '#href' => $href,
+            '#weight' => 0,
+          ),
+          'country' => array(
+            '#access' => isset($components['country']),
+            '#type' => 'html_tag',
+            '#tag' => 'span',
+            '#attributes' => array(
+              'class' => array('phone-country'),
+            ),
+            '#value' => phone_countries($countrycode, 'country'),
+            '#value_prefix' => '(',
+            '#value_suffix' => ')',
+            '#weight' => $settings['country_name_position'] == 'before' ? -1 : 1,
+          ),
+        ),
+      );
+    }
+
+    $element[$delta] = $render;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function phone_field_widget_info() {
+  return array(
+    'phone' => array(
+      'label' => t('Phone'),
+      'field types' => array('phone'),
+      'settings' => array(
+        'country_code_position' => 'before',
+        'numbertype_allowed_values_position' => 'before',
+        'number_size' => 30,
+        'extension_size' => 7,
+        'use_tel_input' => TRUE,
+        'label_position' => 'none',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_settings_form().
+ */
+function phone_field_widget_settings_form($field, $instance) {
+  $widget = $instance['widget'];
+  $defaults = field_info_widget_settings($widget['type']);
+  $settings = array_merge($defaults, $widget['settings']);
+
+  $form['country_code_position'] = array(
+    '#type' => 'radios',
+    '#title' => t('Country code position'),
+    '#options' => array(
+      'before' => t('Before phone number'),
+      'after' => t('After phone number'),
+    ),
+    '#default_value' => $settings['country_code_position'],
+    '#description' => t('Select the position of the country code selection field relative to the phone number text field.'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="instance[settings][enable_country]"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+
+  $form['number_size'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Maximum size of a phone field'),
+    '#default_value' => $settings['number_size'],
+    '#element_validate' => array('_element_validate_integer_positive'),
+    '#required' => TRUE,
+    '#description' => t('International numbers are a maximum of 15 digits with additional country code. Default is %length.', array('%length' => $defaults['number_size'])),
+    '#weight' => -2.8,
+  );
+
+  $form['extension_size'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Maxium size of extension field'),
+    '#default_value' => $settings['extension_size'],
+    '#element_validate' => array('_element_validate_integer_positive'),
+    '#description' => t('This controls the maximum amount of data that can be stored in an extension field.'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="instance[settings][enable_extension]"]' => array('checked' => TRUE),
+      ),
+      'required' => array(
+        ':input[name="instance[settings][enable_extension]"]' => array('checked' => TRUE),
+      ),
+    ),
+    '#weight' => -2.4,
+  );
+
+  $form['numbertype_allowed_values_position'] = array(
+    '#type' => 'radios',
+    '#title' => t('Number type allowed values position'),
+    '#options' => array(
+      'before' => t('Before phone number'),
+      'after' => t('After phone number'),
+    ),
+    '#default_value' => $settings['numbertype_allowed_values_position'],
+    '#description' => t('Select the position of the number type field relative to the phone number text field.'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="field[settings][enable_numbertype]"]' => array('checked' => TRUE),
+      ),
+    ),
+    '#weight' => -2,
+  );
+
+  $form['use_tel_input'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use input type=tel for editing'),
+    '#default_value' => $settings['use_tel_input'],
+    '#weight' => -1,
+  );
+
+  $form['label_position'] = array(
+    '#type' => 'radios',
+    '#title' => t('Position of phone part labels'),
+    '#description' => t('The location of phone part labels, like "Number", "Country", "Extension", or "Type". "Before" displays the label as titles before each phone part. "Above" displays the label as titles above each phone part. "None" does not label any of the phone parts. Theme functions like "phone_part_label_number", "phone_part_label_country", "phone_part_label_extension", and "phone_part_label_type" control label text.'),
+    '#options' => array(
+      'before' => t('Before'),
+      'above' => t('Above'),
+      'none' => t('None'),
+    ),
+    '#default_value' => $settings['label_position'],
+  );
+
+  return $form;
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function phone_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $entitytype = $element['#entity_type'];
+  $entity = $element['#entity'];
+  $allowed_values = phone_numbertype_allowed_values($field, $instance);
+  $element += array(
+    '#type' => 'phone',
+    '#title' => $element['#title'],
+    '#description' => $element['#description'],
+    '#default_value' => isset($items[$delta]) ? $items[$delta] : array(),
+    '#required' => $element['#required'],
+    '#phone_settings' => array_merge(
+        $field['settings'],
+        array('numbertype_allowed_values' => $allowed_values),
+        $instance['settings'],
+        $instance['widget']['settings'],
+        array('bubble_errors' => TRUE)
+    ),
+  );
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_error().
+ */
+function phone_field_widget_error($element, $error, $form, &$form_state) {
+  form_error($element, $error['message']);
+}
+
+/**
+ * Implements hook_element_info().
+ */
+function phone_element_info() {
+  module_load_include('inc', 'phone', 'includes/phone.element');
+  return _phone_element_info();
+}
+
+/**
+ * Returns the array of number type allowed values for a phone field.
+ *
+ * @param array $field
+ *   The field definition.
+ * @param array $instance
+ *   (optional) A field instance array. Defaults to NULL.
+ *
+ * @return array
+ *   The array of number type allowed values. Keys of the array are the raw
+ *   stored values, values of the array are the display labels.
+ */
+function phone_numbertype_allowed_values($field, $instance = NULL) {
+  $allowed_values = &drupal_static(__FUNCTION__, array());
+
+  if (!isset($allowed_values[$field['id']])) {
+    $all_values = phone_numbertype_all_values($field, $instance);
+    $allowed = drupal_map_assoc(array_filter($field['settings']['numbertype_allowed_values']));
+
+    $allowed_values[$field['id']] = array_intersect_key($all_values, $allowed);
+  }
+
+  return $allowed_values[$field['id']];
+}
+
+/**
+ * Returns the array of all possible number type values for a field.
+ *
+ * @param array $field
+ *   The field definition.
+ * @param array $instance
+ *   (optional) A field instance array. Defaults to NULL.
+ *
+ * @return array
+ *   The array of all number type values. Keys of the array are the raw
+ *   stored values, values of the array are the display labels.
+ */
+function phone_numbertype_all_values($field, $instance = NULL) {
+  // The default list is the hCard 1.0 list.
+  // See http://microformats.org/wiki/hcard for details.
+  $values = array(
+    'work' => t('Work'),
+    'home' => t('Home'),
+    'cell' => t('Mobile'),
+    'pref' => t('Preferred'),
+    'car' => t('Car'),
+    'voice' => t('Voice'),
+    'fax' => t('Fax'),
+    'msg' => t('Answering machine'),
+    'bbs' => t('BBS (Bulletin board)'),
+    'isdn' => t('ISDN'),
+    'modem' => t('Modem'),
+    'pager' => t('Pager'),
+    'video' => t('Video conferencing'),
+    'pcs' => t('Personal comm. services'),
+    // Note that other is not actually a hcard type,
+    // but it's being used as the text equivalent of NULL.
+    'other' => t('Other'),
+  );
+
+  $context = array(
+    'field' => $field,
+    'instance' => $instance,
+  );
+  drupal_alter('phone_numbertype_values', $values, $context);
+
+  return $values;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function phone_theme($existing, $type, $theme, $path) {
+  $hooks = array();
+
+  $base = array(
+    'file' => 'phone.element.inc',
+    'path' => $path . '/includes',
+  );
+
+  $hooks['phone'] = $base + array('render element' => 'element');
+  $hooks['phone_tel'] = $base + array('render element' => 'element');
+  $hooks['phone_part_label_number'] = $base + array('variables' => array('element' => NULL));
+  $hooks['phone_part_label_country'] = $base + array('variables' => array('element' => NULL));
+  $hooks['phone_part_label_extension'] = $base + array('variables' => array('element' => NULL));
+  $hooks['phone_part_label_type'] = $base + array('variables' => array('element' => NULL));
+
+  return $hooks;
+}
+
+/**
+ * Implements hook_rdf_mapping().
+ */
+function phone_rdf_mapping() {
+  $mapping = array();
+
+  $fields = field_info_fields();
+  foreach (array_keys($fields) as $field_name) {
+    $field = $fields[$field_name];
+    if ($field['type'] == 'phone') {
+      foreach ($field['bundles'] as $entity_type => $bundles) {
+        foreach ($bundles as $bundle) {
+          $mapping[] = _phone_rdf_mapping($entity_type, $bundle, $field_name);
+        }
+      }
+    }
+  }
+
+  return $mapping;
+}
+
+/**
+ * Helper function to get a RDF mapping for a phone field.
+ *
+ * @param string $entity_type
+ *   The type of the entity the bundle is for.
+ * @param string $bundle
+ *   The bundle the mapping is for.
+ * @param string $field_name
+ *   The name of the field we are creating the mapping for.
+ *
+ * @return array
+ *   A RDF mapping array.
+ */
+function _phone_rdf_mapping($entity_type, $bundle, $field_name) {
+  return array(
+    'type' => $entity_type,
+    'bundle' => $bundle,
+    'mapping' => array(
+      $field_name => array(
+        'predicates' => array('foaf:phone'),
+        'type' => 'rel',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_create_instance().
+ */
+function phone_field_create_instance($instance) {
+  $field_name = $instance['field_name'];
+  $field = field_info_field($field_name);
+  if ($field['type'] == 'phone' && module_exists('rdf')) {
+    $mapping = rdf_mapping_load($instance['entity_type'], $instance['bundle']);
+
+    if (!isset($mapping[$field_name])) {
+      $phone_mapping = _phone_rdf_mapping($instance['entity_type'], $instance['bundle'], $field_name);
+      $mapping[$field_name] = $phone_mapping['mapping'][$field_name];
+
+      $mapping_info = array(
+        'mapping' => $mapping,
+        'type' => $instance['entity_type'],
+        'bundle' => $instance['bundle'],
+      );
+      rdf_mapping_save($mapping_info);
+    }
+  }
+}
+
+/**
+ * Implements hook_field_delete_instance().
+ */
+function phone_field_delete_instance($instance) {
+  $field_name = $instance['field_name'];
+  $field = field_info_field($field_name);
+  if ($field['type'] == 'phone' && module_exists('rdf')) {
+    $mapping = rdf_mapping_load($instance['entity_type'], $instance['bundle']);
+
+    unset($mapping[$field_name]);
+
+    $mapping_info = array(
+      'mapping' => $mapping,
+      'type' => $instance['entity_type'],
+      'bundle' => $instance['bundle'],
+    );
+    rdf_mapping_save($mapping_info);
+  }
+}
+
+/**
+ * Implements MODULE_process_HOOK().
+ *
+ * We make use of this function to add RDF resource
+ * properties for foaf:phone.
+ *
+ * We use process instead of preprocess, as we want
+ * to run after any other modules have done their thing
+ * so we have all the information.
+ */
+function phone_process_field(&$variables) {
+  if ($variables['element']['#field_type'] == 'phone' && module_exists('rdf')) {
+    $element = $variables['element'];
+    $field_name = $element['#field_name'];
+
+    // Go over the attributes array if it exists and manuipulate it as required.
+    if (isset($variables['item_attributes_array'])) {
+      foreach ($variables['item_attributes_array'] as $delta => $attributes) {
+        // If rel="foaf:phone" isset, then add the resource property.
+        if (isset($attributes['rel']) && in_array('foaf:phone', $attributes['rel'])) {
+          $variables['item_attributes_array'][$delta]['resource'] = $variables['items'][$delta]['phone']['number']['#href'];
+
+          // We need to re-flatted our modified item_attributes_array.
+          $variables['item_attributes'][$delta] = drupal_attributes($variables['item_attributes_array'][$delta]);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Helper function for migrate-type functions: convert a number from a
+ * single-entry number to country code, number, and extension.
+ *
+ * The main difference between the processing here and in
+ * phone_element_validate() is that if there is "bad" data, it is
+ * is allowed through without processing.
+ */
+function _phone_migrate_phone_number($number, $default_country = NULL) {
+  phone_libphonenumber();
+
+  // Can't process an empty number
+  if (empty($number)) {
+    return array();
+  }
+
+  if (!isset($default_country)) {
+    $default_country = variable_get('site_default_country', 'US');
+  }
+
+  // No need for drupal_strtoupper() here, as country code should be ASCII only.
+  $default_country = strtoupper($default_country);
+
+  list($phone_util, $processed_phone) = _phone_libphonenumber($number, $default_country, '');
+
+  // If there was any type of error processing the old phone number,
+  // simply stuff the existing value into number so that information is
+  // not lost.
+  if (empty($processed_phone)) {
+    return array('number' => $number);
+  }
+
+  $item = array();
+  // Not doing any validation checks here, because there's no way to get
+  // user to fix the problem, and it's better to keep invalid info than
+  // discard it.
+  $countrycode = $phone_util->getRegionCodeForNumber($processed_phone);
+  if (!empty($countrycode)) {
+    if ($countrycode == '001') {
+      $satnumber = str_replace('+', '', $number);
+      $code = substr($satnumber, 0, 3);
+      $supported_global_networks = phone_libphonenumber_get_supported_global_networks();
+      foreach ($supported_global_networks['calling_code'] as $region_code => $network) {
+        if ($code == $network) {
+          $countrycode = $region_code;
+        }
+      }
+    }
+    $item['countrycode'] = $countrycode;
+    $item['number'] = $processed_phone->getNationalNumber();
+    if ($processed_phone->getExtension()) {
+      $item['extension'] = $processed_phone->getExtension();
+    }
+  }
+  else {
+    // If country code could not be determined, treat as another error.
+    $item['number'] = $number;
+  }
+
+  return $item;
+}
+
+/**
+ * Helper function for migrate/update functions: convert phone-6.x and
+ * phone-7.x-1.x country specification to new value.
+ */
+function _phone_update_phone_country($orig_country) {
+  if ($orig_country == 'int') {
+  // If 'internaional' was used, set new default country based on
+  // site's country.
+    return variable_get('site_default_country', 'US');
+  }
+  else {
+    $country = drupal_strtoupper($orig_country);
+    // Fix the country code as necessary.
+    switch ($country) {
+      // Change 'ca' to 'us' because it's far more likely that's what the
+      // user wanted.
+      case 'CA':
+        $country = 'US';
+        break;
+      // Greece is GR, not EL
+      case 'EL':
+        $country = 'GR';
+        break;
+      // Czech Republic is CZ, not CS
+      case 'CS':
+        $country = 'CZ';
+        break;
+    }
+    return $country;
+  }
+}
+
+/**
+ * Helper function for migrate/update functions: convert phone-6.x and
+ * phone-7.x-1.x instance settings to new values.
+ */
+function _phone_update_phone_instance_settings(&$data, $country_info) {
+  // Get our new field info, in particular the default instance settings.
+  $info = phone_field_info();
+  $format_info = phone_field_formatter_info();
+
+  // Initialize all missing/changed instance information.
+  $data['widget_type'] = $info['phone']['default_widget'];
+
+  $data['settings'] += $info['phone']['instance_settings'];
+  $data['settings']['country_options']['default_country'] = $country_info['new'];
+  if ($country_info['orig'] == 'int') {
+    $data['settings']['country_options']['enable_default_country'] = FALSE;
+    $data['settings']['country_options']['all_country_codes'] = TRUE;
+  }
+  else {
+    $data['settings']['country_options']['enable_default_country'] = TRUE;
+    $data['settings']['country_options']['all_country_codes'] = FALSE;
+    $data['settings']['country_options']['country_codes']['hide_single_cc'] = TRUE;
+    $data['settings']['country_options']['country_codes']['country_selection'] = array($country_info['new'] => 1);
+  }
+  // Update all display formatters to be as similar as possible to
+  // previous formats.
+  foreach ($data['display'] as $context => $ddata) {
+    if (is_array($ddata)) {
+      if ($country_info['orig']=='int') {
+        $data['display'][$context]['type'] = 'phone_international';
+      }
+      else {
+        $data['display'][$context]['type'] = 'phone_national';
+      }
+      $data['display'][$context]['settings'] = $format_info[$data[$context]['type']]['settings'];
+    }
+  }
+
+  // Clear obsolete instance settings.
+  unset($data['settings']['phone_country_code']);
+  unset($data['settings']['phone_default_country_code']);
+  unset($data['settings']['phone_int_max_length']);
+  // @todo: Put formatting information into formatter.  But what values were people using?
+  // Not all options can be transferred over, but should the options that correspond to
+  // new settings be transferred (such as empty values for both)?
+  unset($data['settings']['ca_phone_separator']);
+  unset($data['settings']['ca_phone_parentheses']);
+}
+
+/**
+ * Helper function for migrate/update functions: convert cck_phone-6.x and
+ * cck_phone-7.x-1.x instance settings to new values.
+ */
+function _phone_update_cck_phone_instance_settings(&$data) {
+  $data['module'] = 'phone';
+
+  // Widget settings
+  $data['widget']['module'] = 'phone';
+  $data['widget']['type'] = 'phone';
+  $data['widget']['settings']['country_code_position'] = $data['settings']['country_code_position'];
+  unset($data['settings']['country_code_position']);
+
+  // Instance settings
+  $info = phone_field_info();
+  // Fill in any new settings with default instance settings. These
+  // will be overwritten as appropriate below.
+  foreach ($info['phone']['settings'] as $setting => $value) {
+    if (!isset($data['settings'][$setting])) {
+      $data['settings'][$setting] = $value;
+    }
+  }
+  // Move country settings into country_options array
+  foreach (array('enable_default_country', 'default_country', 'all_country_codes', 'country_codes') as $setting) {
+    if (isset($data['settings'][$setting])) {
+      $data['settings']['country_options'][$setting] = $data['settings'][$setting];
+      unset($data['settings'][$setting]);
+    }
+  }
+  // Convert all country codes to uppercase
+  $data['settings']['country_options']['default_country'] = _phone_update_cck_phone_country($data['settings']['country_options']['default_country']);
+  $orig_list = $data['settings']['country_codes']['country_selection'];
+  $data['settings']['country_options']['country_codes']['country_selection'] = array();
+  foreach ($orig_list as $orig_country => $value) {
+    $country = _phone_update_cck_phone_country($orig_country);
+    if (!empty($country)) {
+      $data['settings']['country_options']['country_codes']['country_selection'][$country] = $value;
+    }
+  }
+
+  if (isset($data['settings']['enable_custom_country'])) {
+//    $data['settings']['enable_country_level_validation'] = $data['settings']['enable_custom_country'];
+    unset($data['settings']['enable_custom_country']);
+  }
+  // @todo: what about "enable_mobile" option in D6?
+
+  // Update all formatters.
+  foreach ($data['display'] as $context => $ddata) {
+    if (is_array($ddata)) {
+      switch ($ddata['type']) {
+        case 'local':
+          $data['display'][$context]['type'] = 'phone_national';
+          break;
+        case 'default':
+        default:
+          $data['display'][$context]['type'] = 'phone_international';
+          break;
+      }
+      $data['display'][$context]['settings'] = $format_info[$data[$context]['type']]['settings'];
+      $data['display'][$context]['settings']['country_name_position'] = 'none';
+      $data['display'][$context]['module'] = 'phone';
+    }
+  }
+}
+
+/**
+ * Helper function for migrate/update functions: convert cck_phone-6.x and
+ * cck_phone-7.x-1.x country codes to new valus.
+ */
+function _phone_update_cck_phone_country($orig_country) {
+  $country = drupal_strtoupper($orig_country);
+  // @todo: Are there are country code changes with latest metadata?
+  if ($country=='TP') {
+    // Replace TP with TL (Timor-Leste)
+    $country = 'TL';
+  }
+  return $country;
+}

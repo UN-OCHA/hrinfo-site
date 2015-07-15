@@ -1,0 +1,140 @@
+<?php
+
+/**
+ * Implements hook_cron_queue_info().
+ */
+function securelogin_cron_queue_info() {
+  // Set a static variable to indicate we're in a cron run.
+  drupal_static('securelogin_is_cron', TRUE);
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function securelogin_form_alter(&$form, &$form_state, $form_id) {
+  if (isset($form_state['build_info']['base_form_id'])) {
+    $form_id = $form_state['build_info']['base_form_id'];
+  }
+  if (variable_get('securelogin_all_forms', FALSE)) {
+    $form['#https'] = TRUE;
+  }
+  elseif (variable_get('securelogin_form_' . $form_id, FALSE)) {
+    $form['#https'] = TRUE;
+  }
+  elseif ($forms = explode(' ', variable_get('securelogin_other_forms', ''))) {
+    if (in_array($form_id, $forms)) {
+      $form['#https'] = TRUE;
+    }
+  }
+  // Other modules may use #https to indicate that a form should be secured.
+  if (!empty($form['#https'])) {
+    securelogin_secure_form($form);
+  }
+}
+
+/**
+ * Implements hook_help().
+ */
+function securelogin_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#securelogin':
+    case 'admin/config/people/securelogin':
+      return t('Secure Login allows user login and other forms to be submitted to a configurable secure (HTTPS) URL from the insecure (HTTP) site. By securing the user login forms, a site can enforce secure authenticated sessions, which are immune to <a href="http://en.wikipedia.org/wiki/Session_hijacking">session sidejacking</a>.');
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function securelogin_menu() {
+  $items['admin/config/people/securelogin'] = array(
+    'title' => 'Secure login',
+    'description' => 'Configure secure login settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('securelogin_admin'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'securelogin.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Secures a form by altering its action to use the secure base URL.
+ */
+function securelogin_secure_form(&$form) {
+  global $base_path, $base_secure_url, $is_https;
+  // Flag form as secure for theming purposes.
+  $form['#https'] = TRUE;
+  if (!$is_https) {
+    // Redirect to secure page, if enabled.
+    if (variable_get('securelogin_secure_forms', TRUE)) {
+      securelogin_secure_redirect();
+    }
+    // Set the form action to use secure base URL in place of base path.
+    if (strpos($form['#action'], $base_path) === 0) {
+      $base_url = variable_get('securelogin_base_url', $base_secure_url);
+      $form['#action'] = substr_replace($form['#action'], $base_url, 0, strlen($base_path) - 1);
+    }
+    // Or if a different domain is being used, forcibly change it to HTTPS.
+    else {
+      $form['#action'] = str_replace('http://', 'https://', $form['#action']);
+    }
+  }
+}
+
+/**
+ * Redirects an insecure request to the same path on the secure base URL.
+ */
+function securelogin_secure_redirect() {
+  global $is_https;
+  // POST requests are not redirected, to prevent unintentional redirects which
+  // result in lost POST data. Likewise do not redirect from HTTPS requests, the
+  // command-line environment or cron runs.
+  if ($is_https || $_SERVER['REQUEST_METHOD'] == 'POST' || drupal_is_cli() || drupal_static('securelogin_is_cron')) {
+    return;
+  }
+  $path = drupal_is_front_page() ? '' : $_GET['q'];
+  $http_response_code = 301;
+  // Do not permit redirecting to an external URL.
+  $options = array('query' => drupal_get_query_parameters(), 'https' => TRUE, 'external' => FALSE);
+  // We don't use drupal_goto() here because we want to be able to use the
+  // page cache, but let's pretend that we are.
+  drupal_alter('drupal_goto', $path, $options, $http_response_code);
+  // The 'Location' HTTP header must be absolute.
+  $options['absolute'] = TRUE;
+  $url = url($path, $options);
+  $status = "$http_response_code Moved Permanently";
+  drupal_add_http_header('Status', $status);
+  drupal_add_http_header('Location', $url);
+  // Drupal page cache requires a non-empty page body for some reason.
+  print $status;
+  // Mimic drupal_exit() and drupal_page_footer() and then exit.
+  module_invoke_all('exit', $url);
+  drupal_session_commit();
+  if (variable_get('cache', 0) && ($cache = drupal_page_set_cache())) {
+    drupal_serve_page_from_cache($cache);
+  }
+  else {
+    ob_flush();
+  }
+  exit;
+}
+
+/**
+ * Implements hook_url_outbound_alter().
+ */
+function securelogin_url_outbound_alter(&$path, &$options, $original_path) {
+  global $base_insecure_url, $base_secure_url;
+  // Modules and themes may set the 'https' option to TRUE to generate HTTPS
+  // URLs or FALSE to generate HTTP URLs.
+  if (!isset($options['https'])) {
+    return;
+  }
+  if (isset($options['base_url'])) {
+    $options['base_url'] = $options['https'] ? str_replace('http://', 'https://', $options['base_url']) : str_replace('https://', 'http://', $options['base_url']);
+  }
+  else {
+    $options['base_url'] = $options['https'] ? variable_get('securelogin_base_url', $base_secure_url) : $base_insecure_url;
+  }
+  $options['absolute'] = TRUE;
+}

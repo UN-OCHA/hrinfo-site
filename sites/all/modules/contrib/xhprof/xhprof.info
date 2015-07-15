@@ -1,0 +1,16 @@
+name = xhprof
+description = Provides code profiling with XHProf integration.
+package = Development
+core = 7.x
+
+configure = admin/config/development/xhprof
+
+files[] = XHProfRunsInterface.inc
+files[] = XHProfRunsFile.inc
+
+; Information added by Drupal.org packaging script on 2014-04-19
+version = "7.x-1.0-beta3"
+core = "7.x"
+project = "xhprof"
+datestamp = "1397947728"
+

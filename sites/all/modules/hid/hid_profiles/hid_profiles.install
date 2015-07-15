@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function hid_profiles_schema() {
+  $schema['hid_profiles'] = array(
+    // Example (partial) specification for table "node".
+    'description' => 'The lookup table between Drupal users and Humanitarian ID profiles.',
+    'fields' => array(
+      'uid' => array(
+        'description' => 'The current {user}.uid identifier.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'cid' => array(
+        'description' => 'The Humanitarian ID profile identifier.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'unique keys' => array(
+      'uid' => array('uid'),
+      'cid' => array('cid'),
+    ),
+  );
+  return $schema;
+}

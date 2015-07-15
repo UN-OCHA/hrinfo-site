@@ -1,0 +1,80 @@
+<?php
+/**
+ * @file
+ * Code for the News feature.
+ */
+
+include_once 'hr_news.features.inc';
+
+/**
+ * Implements hook_og_features_registry()
+ */
+function hr_news_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'hr_news';
+  $feature->name = t('Blog');
+  $feature->description = t('Provide a blog to your space.');
+  $feature->components = array(
+    'node' => array(
+      'hr_news',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
+ * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ */
+function hr_news_og_features_toggle($entity, $entity_id, $entity_type, $features) {
+  if (isset($features['hr_news'])) {
+    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
+    if (empty($features['hr_news'])) {
+      menu_link_delete(NULL, 'node/'.$entity_id.'/news');
+      menu_link_delete(NULL, 'node/'.$entity_id.'/blog');
+    }
+    else {
+      // See if menu link already exists
+      $menu_link = menu_link_get_preferred('node/'.$entity_id.'/blog', OG_MENU_SINGLE_MENU_NAME);
+      if (empty($menu_link)) {
+        $menu_link = array(
+          'link_path' => 'node/'.$entity_id.'/blog',
+          'link_title' => 'Blog',
+          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
+          'weight' => 16,
+          'plid' => $mlid,
+        );
+        menu_link_save($menu_link);
+      }
+    }
+  }
+
+}
+
+/**
+ * Implements hook_search_api_views_query_alter()
+ *
+ * Makes the news view available for disasters
+ */
+function hr_news_search_api_views_query_alter(&$view, &$query) {
+  if ($view->name == 'hr_news') {
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        if (reset($condition) == 'og_group_ref') {
+          $nid = $condition[1];
+          $node = node_load($nid);
+          if ($node->type == 'hr_disaster') {
+            $condition = array('field_disasters', $nid, '=');
+          }
+          // Clusters as spaces
+          // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
+          elseif ($node->type == 'hr_bundle') {
+            $condition = array('field_bundles', $nid, '=');
+          }
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,34 @@
+<?php
+/**
+ * @file
+ * Code for the Locations feature.
+ */
+
+include_once 'hr_locations.features.inc';
+
+/**
+ * Implement hook_taxonomy_term_presave($term)
+ * Calculates and adds the admin level in a field to the term so that it
+ * can be stored in the database.
+ */
+function hr_locations_taxonomy_term_presave($term) {
+  if (empty($term->field_loc_admin_level[LANGUAGE_NONE])) {
+    // Get term parents
+    $parents = taxonomy_get_parents_all($term->tid);
+    $term->field_loc_admin_level[LANGUAGE_NONE] = array(array('value' => count($parents)-1));
+  }
+}
+
+/**
+ * Implements hook_query_TAG_alter()
+ * Allows filter by parent in the API
+ */
+function hr_locations_query_hr_locations_filter_parent_alter($query) {
+  $conditions = &$query->conditions();
+  foreach ($conditions as &$condition) {
+    if (is_array($condition) && $condition['field'] == 'taxonomy_term_data.parent') {
+      $condition['field'] = 'th.parent';
+      $query->join('taxonomy_term_hierarchy', 'th', 'taxonomy_term_data.tid = th.tid');
+    }
+  }
+}

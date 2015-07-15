@@ -1,0 +1,15 @@
+name = CCK Phone Converter
+description = Converts all fields using cck_phone-7.x-1.x into phone-7.x-2.x fields.
+core = 7.x
+package = Fields
+dependencies[] = phone
+dependencies[] = cck_phone
+
+
+
+; Information added by drush on 2015-04-17
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "phone"
+datestamp = "1429267925"
+

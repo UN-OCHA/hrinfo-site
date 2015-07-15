@@ -1,0 +1,12 @@
+name = Humanitarian ID Profiles Integration
+description = Provides support for Drupal to use the Humanitarian ID Profiles API web service.
+core = 7.x
+package = Humanitarian ID
+version = 7.x-1.0
+dependencies[] = context
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = restclient
+features[context][] = hid_contacts
+features[ctools][] = context:context:3
+features[features_api][] = api:2

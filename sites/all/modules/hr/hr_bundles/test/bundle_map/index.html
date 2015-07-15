@@ -1,0 +1,789 @@
+<!-- Test in local env faster than push..  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<link rel="stylesheet" href="http://dev1.humanitarianresponse.info/sites/all/themes/humanitarianresponse/assets/stylesheets/screen.css">
+
+	<link rel="stylesheet" href="../../css/hr_bundles_map.css">
+
+	<script src="https://code.jquery.com/jquery-1.11.2.js"></script>
+
+	<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+	<script src="http://code.highcharts.com/maps/modules/exporting.js"></script>
+	<script src="https://code.highcharts.com/mapdata/custom/world.js"></script>
+
+	<script src="../../js/hr_bundles_map.js"></script>
+
+
+</head>
+<body>
+	<body class="html not-front not-logged-in no-sidebars page-coordination page-coordination-clusters page-coordination-clusters-countries i18n-en" >
+  <div id="skip-link">
+    <a href="#main-content" class="element-invisible element-focusable">Skip to main content</a>
+  </div>
+    <div id="root">
+  <header id="header" class="header" role="header">
+    <div class="container">
+      <div id="top">
+        <nav class="navbar navbar-default">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header top">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+
+            <div class="collapse navbar-collapse">
+                            <ul id="hr-space-tab" class="nav nav-tabs navbar-left">
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#"> HR <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li class="first leaf"><a href="/home" title="">Home</a></li>
+<li class="leaf"><a href="/operations" title="">Operations</a></li>
+<li class="leaf"><a href="/coordination">Coordination</a></li>
+<li class="collapsed"><a href="/clusters" title="">Clusters</a></li>
+<li class="leaf"><a href="/programme-cycle">Programme Cycle</a></li>
+<li class="leaf"><a href="/topics">Topics</a></li>
+<li class="last leaf"><a href="/applications">Applications</a></li>
+                  </ul>
+                </li>
+                              </ul>
+              <div class="navbar-right">
+                  <div class="region region-top">
+    <div id="block-hr-layout-hr-layout-login" class="block block-hr-layout">
+
+
+  <div class="content">
+    <a href="/connect/oauthconnector_hid_oauth?destination=coordination/clusters/countries" class="btn btn-default">Log in</a>  </div>
+</div>
+<div id="block-hr-help-hr-help" class="block block-hr-help">
+
+
+  <div class="content">
+    <div class="btn-group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-question fa-lg"></i>
+          </button>
+          <ul class="dropdown-menu"><li><a href="/user/login?tour=i_can_not_login">I can not login</a></li><li><a href="/?tour=inside_a_space">Inside a space</a></li><li><a href="/?tour=introduction">Introduction</a></li><li><a href="/user/register?tour=registering_on_humanitarianresponse">Registering on Humanitarianresponse</a></li><li><a href="/help">User Guidelines</a></li></ul></div>  </div>
+</div>
+<div id="block-locale-language" class="block block-locale">
+
+    <h2>Languages</h2>
+
+  <div class="content">
+    <div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">EN <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu"><ul class="language-switcher-locale-url"><li class="fr first last"><a href="/fr/coordination/clusters/countries" class="language-link" lang="fr">FR</a></li>
+</ul></ul>
+    </div>  </div>
+</div>
+  </div>
+              </div>
+            </div><!-- .navbar-collapse -->
+        </nav>
+      </div><!-- #top -->
+    </div><!-- .container -->
+    <div class="container-outer header">
+    <div class="container header">
+      <div id="branding">
+                      <a href="/" id="logo">
+              <img src="http://dev1.humanitarianresponse.info/sites/all/themes/humanitarianresponse/logo.png" alt="Humanitarianresponse Logo" />
+            </a>
+                    <div class="pull-right">
+            <div id="header-image"><img src="http://dev1.humanitarianresponse.info/sites/all/themes/humanitarianresponse/assets/images/headers/general.png" alt="Header image" /></div>
+                      </div>
+      </div>
+      <div id="navigation">
+              </div><!-- /.navigation -->
+    </div> <!-- /.container -->
+    </div> <!-- /.container-outer -->
+  </header>
+
+
+  <div id="main-wrapper">
+    <div id="main" class="main">
+      <div class="container">
+                        <div id="content-wrapper" >
+          <div id="page-header">
+                                              </div>
+          <div id="content" class="col-md-12 ">
+              <div class="region region-content">
+    <div id="block-system-main" class="block block-system">
+
+
+  <div class="content">
+
+<div class="panel-display boxton clearfix radix-boxton" >
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 content panel-panel">
+        <div class="panel-panel-inner">
+          <div class="panel-pane pane-block pane-hr-bundles-clusters-map" >
+
+
+
+  <div class="pane-content">
+    <div id="clusters-map" class="loading"><div id="clusters-map-overlay"><div id="close-overlay" class="cursor-pointer">&times;</div><p class="tips-clusters-map top-right">Download or link to this map</p><p class="tips-clusters-map lower-left">Display active Clusters, Sectors or both</p><p class="tips-clusters-map middle-bottom">Select the Cluster, Sector or Area-of-Responsibility to be displayed</p><div id="ok-overlay" class="cursor-pointer">OK, I understand</div></div></div><div id="types"><div type-id="sector" class="first type">Sector</div><div type-id="cluster" class="type">Cluster</div></div><br/><div id="global-clusters"></div>  </div>
+
+
+
+  </div>
+<div class="panel-separator"></div><div class="panel-pane pane-views-panes pane-hr-bundles-text" >
+
+
+
+  <div class="pane-content">
+    <div class="view view-hr-bundles view-id-hr_bundles view-display-id-text views-catgroup view-dom-id-4cc5743347297a21171392b994bd03b1">
+
+
+
+
+
+      <div class="view-content row">
+      <div class="views-group">
+		  <h3 class="views-group-title">Camp Coordination / Management</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Central African Republic</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Haiti</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Iraq</div>  </div>	  </div>
+		  <div class="views-row views-row-4 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pakistan</div>  </div>	  </div>
+		  <div class="views-row views-row-5 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Philippines</div>  </div>	  </div>
+		  <div class="views-row views-row-6 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">South Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-7 views-row-odd views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Yemen</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+		  <h3 class="views-group-title">Early Recovery</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Central African Republic</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Nigeria</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Philippines</div>  </div>	  </div>
+		  <div class="views-row views-row-4 views-row-even views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Yemen</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+		  <h3 class="views-group-title">Education</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Central African Republic</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Chad</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Colombia</div>  </div>	  </div>
+		  <div class="views-row views-row-4 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Democratic Republic of the Congo</div>  </div>	  </div>
+		  <div class="views-row views-row-5 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Ethiopia</div>  </div>	  </div>
+		  <div class="views-row views-row-6 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Iraq</div>  </div>	  </div>
+		  <div class="views-row views-row-7 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Kenya</div>  </div>	  </div>
+		  <div class="views-row views-row-8 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mali</div>  </div>	  </div>
+		  <div class="views-row views-row-9 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Nigeria</div>  </div>	  </div>
+		  <div class="views-row views-row-10 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">occupied Palestinian territory</div>  </div>	  </div>
+		  <div class="views-row views-row-11 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pakistan</div>  </div>	  </div>
+		  <div class="views-row views-row-12 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Philippines</div>  </div>	  </div>
+		  <div class="views-row views-row-13 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Somalia</div>  </div>	  </div>
+		  <div class="views-row views-row-14 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">South Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-15 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-16 views-row-even views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Yemen</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+		  <h3 class="views-group-title">Emergency Shelter and NFI</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Afghanistan</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Central African Republic</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Colombia</div>  </div>	  </div>
+		  <div class="views-row views-row-4 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Democratic Republic of the Congo</div>  </div>	  </div>
+		  <div class="views-row views-row-5 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Indonesia</div>  </div>	  </div>
+		  <div class="views-row views-row-6 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Iraq</div>  </div>	  </div>
+		  <div class="views-row views-row-7 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Madagascar</div>  </div>	  </div>
+		  <div class="views-row views-row-8 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mali</div>  </div>	  </div>
+		  <div class="views-row views-row-9 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mozambique</div>  </div>	  </div>
+		  <div class="views-row views-row-10 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Nigeria</div>  </div>	  </div>
+		  <div class="views-row views-row-11 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pacific Region</div>  </div>	  </div>
+		  <div class="views-row views-row-12 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Philippines</div>  </div>	  </div>
+		  <div class="views-row views-row-13 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Somalia</div>  </div>	  </div>
+		  <div class="views-row views-row-14 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">South Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-15 views-row-odd views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Sudan</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+		  <h3 class="views-group-title">Emergency Telecommunications</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Afghanistan</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Central African Republic</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Ethiopia</div>  </div>	  </div>
+		  <div class="views-row views-row-4 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Guinea</div>  </div>	  </div>
+		  <div class="views-row views-row-5 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Indonesia</div>  </div>	  </div>
+		  <div class="views-row views-row-6 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mali</div>  </div>	  </div>
+		  <div class="views-row views-row-7 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mozambique</div>  </div>	  </div>
+		  <div class="views-row views-row-8 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Niger</div>  </div>	  </div>
+		  <div class="views-row views-row-9 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pakistan</div>  </div>	  </div>
+		  <div class="views-row views-row-10 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Philippines</div>  </div>	  </div>
+		  <div class="views-row views-row-11 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">South Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-12 views-row-even views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Syria</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+		  <h3 class="views-group-title">Food Security</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Afghanistan</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Central African Republic</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Chad</div>  </div>	  </div>
+		  <div class="views-row views-row-4 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Colombia</div>  </div>	  </div>
+		  <div class="views-row views-row-5 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Democratic Republic of the Congo</div>  </div>	  </div>
+		  <div class="views-row views-row-6 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Ethiopia</div>  </div>	  </div>
+		  <div class="views-row views-row-7 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Guinea</div>  </div>	  </div>
+		  <div class="views-row views-row-8 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Indonesia</div>  </div>	  </div>
+		  <div class="views-row views-row-9 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Iraq</div>  </div>	  </div>
+		  <div class="views-row views-row-10 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Madagascar</div>  </div>	  </div>
+		  <div class="views-row views-row-11 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mali</div>  </div>	  </div>
+		  <div class="views-row views-row-12 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mozambique</div>  </div>	  </div>
+		  <div class="views-row views-row-13 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Niger</div>  </div>	  </div>
+		  <div class="views-row views-row-14 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Nigeria</div>  </div>	  </div>
+		  <div class="views-row views-row-15 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pacific Region</div>  </div>	  </div>
+		  <div class="views-row views-row-16 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pakistan</div>  </div>	  </div>
+		  <div class="views-row views-row-17 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Philippines</div>  </div>	  </div>
+		  <div class="views-row views-row-18 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Somalia</div>  </div>	  </div>
+		  <div class="views-row views-row-19 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">South Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-20 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-21 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Yemen</div>  </div>	  </div>
+		  <div class="views-row views-row-22 views-row-even views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Zimbabwe</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+		  <h3 class="views-group-title">Health</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Afghanistan</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Central African Republic</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Chad</div>  </div>	  </div>
+		  <div class="views-row views-row-4 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Colombia</div>  </div>	  </div>
+		  <div class="views-row views-row-5 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Democratic Republic of the Congo</div>  </div>	  </div>
+		  <div class="views-row views-row-6 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Ethiopia</div>  </div>	  </div>
+		  <div class="views-row views-row-7 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Guinea</div>  </div>	  </div>
+		  <div class="views-row views-row-8 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Haiti</div>  </div>	  </div>
+		  <div class="views-row views-row-9 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Indonesia</div>  </div>	  </div>
+		  <div class="views-row views-row-10 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Iraq</div>  </div>	  </div>
+		  <div class="views-row views-row-11 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Ivory Coast</div>  </div>	  </div>
+		  <div class="views-row views-row-12 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Madagascar</div>  </div>	  </div>
+		  <div class="views-row views-row-13 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mali</div>  </div>	  </div>
+		  <div class="views-row views-row-14 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mozambique</div>  </div>	  </div>
+		  <div class="views-row views-row-15 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Niger</div>  </div>	  </div>
+		  <div class="views-row views-row-16 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Nigeria</div>  </div>	  </div>
+		  <div class="views-row views-row-17 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pacific Region</div>  </div>	  </div>
+		  <div class="views-row views-row-18 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pakistan</div>  </div>	  </div>
+		  <div class="views-row views-row-19 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Philippines</div>  </div>	  </div>
+		  <div class="views-row views-row-20 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Somalia</div>  </div>	  </div>
+		  <div class="views-row views-row-21 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">South Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-22 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-23 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Yemen</div>  </div>	  </div>
+		  <div class="views-row views-row-24 views-row-even views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Zimbabwe</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+		  <h3 class="views-group-title">Logistics</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Central African Republic</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Democratic Republic of the Congo</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Iraq</div>  </div>	  </div>
+		  <div class="views-row views-row-4 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mali</div>  </div>	  </div>
+		  <div class="views-row views-row-5 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mauritania</div>  </div>	  </div>
+		  <div class="views-row views-row-6 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mozambique</div>  </div>	  </div>
+		  <div class="views-row views-row-7 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Niger</div>  </div>	  </div>
+		  <div class="views-row views-row-8 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pacific Region</div>  </div>	  </div>
+		  <div class="views-row views-row-9 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">South Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-10 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Syria</div>  </div>	  </div>
+		  <div class="views-row views-row-11 views-row-odd views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Yemen</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+		  <h3 class="views-group-title">Nutrition</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Afghanistan</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Central African Republic</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Chad</div>  </div>	  </div>
+		  <div class="views-row views-row-4 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Democratic Republic of the Congo</div>  </div>	  </div>
+		  <div class="views-row views-row-5 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Ethiopia</div>  </div>	  </div>
+		  <div class="views-row views-row-6 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mali</div>  </div>	  </div>
+		  <div class="views-row views-row-7 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Niger</div>  </div>	  </div>
+		  <div class="views-row views-row-8 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Nigeria</div>  </div>	  </div>
+		  <div class="views-row views-row-9 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Philippines</div>  </div>	  </div>
+		  <div class="views-row views-row-10 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Somalia</div>  </div>	  </div>
+		  <div class="views-row views-row-11 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">South Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-12 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-13 views-row-odd views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Yemen</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+		  <h3 class="views-group-title">Protection</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Afghanistan</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Central African Republic</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Chad</div>  </div>	  </div>
+		  <div class="views-row views-row-4 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Colombia</div>  </div>	  </div>
+		  <div class="views-row views-row-5 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Democratic Republic of the Congo</div>  </div>	  </div>
+		  <div class="views-row views-row-6 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Ethiopia</div>  </div>	  </div>
+		  <div class="views-row views-row-7 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Guinea</div>  </div>	  </div>
+		  <div class="views-row views-row-8 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Haiti</div>  </div>	  </div>
+		  <div class="views-row views-row-9 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Indonesia</div>  </div>	  </div>
+		  <div class="views-row views-row-10 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Madagascar</div>  </div>	  </div>
+		  <div class="views-row views-row-11 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mali</div>  </div>	  </div>
+		  <div class="views-row views-row-12 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mozambique</div>  </div>	  </div>
+		  <div class="views-row views-row-13 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Niger</div>  </div>	  </div>
+		  <div class="views-row views-row-14 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Nigeria</div>  </div>	  </div>
+		  <div class="views-row views-row-15 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">occupied Palestinian territory</div>  </div>	  </div>
+		  <div class="views-row views-row-16 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pacific Region</div>  </div>	  </div>
+		  <div class="views-row views-row-17 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pakistan</div>  </div>	  </div>
+		  <div class="views-row views-row-18 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Philippines</div>  </div>	  </div>
+		  <div class="views-row views-row-19 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Somalia</div>  </div>	  </div>
+		  <div class="views-row views-row-20 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">South Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-21 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-22 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Yemen</div>  </div>	  </div>
+		  <div class="views-row views-row-23 views-row-odd views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Zimbabwe</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+		  <h3 class="views-group-title">Water Sanitation Hygiene</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Afghanistan</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Central African Republic</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Chad</div>  </div>	  </div>
+		  <div class="views-row views-row-4 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Colombia</div>  </div>	  </div>
+		  <div class="views-row views-row-5 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Democratic Republic of the Congo</div>  </div>	  </div>
+		  <div class="views-row views-row-6 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Ethiopia</div>  </div>	  </div>
+		  <div class="views-row views-row-7 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Guinea</div>  </div>	  </div>
+		  <div class="views-row views-row-8 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Haiti</div>  </div>	  </div>
+		  <div class="views-row views-row-9 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Indonesia</div>  </div>	  </div>
+		  <div class="views-row views-row-10 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Iraq</div>  </div>	  </div>
+		  <div class="views-row views-row-11 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Ivory Coast</div>  </div>	  </div>
+		  <div class="views-row views-row-12 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Mali</div>  </div>	  </div>
+		  <div class="views-row views-row-13 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Niger</div>  </div>	  </div>
+		  <div class="views-row views-row-14 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Nigeria</div>  </div>	  </div>
+		  <div class="views-row views-row-15 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">occupied Palestinian territory</div>  </div>	  </div>
+		  <div class="views-row views-row-16 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Pacific Region</div>  </div>	  </div>
+		  <div class="views-row views-row-17 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Philippines</div>  </div>	  </div>
+		  <div class="views-row views-row-18 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Somalia</div>  </div>	  </div>
+		  <div class="views-row views-row-19 views-row-odd">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">South Sudan</div>  </div>	  </div>
+		  <div class="views-row views-row-20 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Yemen</div>  </div>	  </div>
+		  <div class="views-row views-row-21 views-row-odd views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Zimbabwe</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+		  <h3 class="views-group-title">Child Protection</h3>
+				<div class="views-group-content">
+			  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Niangoma</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Niangoma</div>  </div>	  </div>
+				</div>
+	</div><div class="views-group">
+				  <div class="views-row views-row-1 views-row-odd views-row-first">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Afghanistan</div>  </div>	  </div>
+		  <div class="views-row views-row-2 views-row-even">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Niangoma</div>  </div>	  </div>
+		  <div class="views-row views-row-3 views-row-odd views-row-last">
+
+  <div class="views-field views-field-og-group-ref">        <div class="field-content">Niangoma</div>  </div>	  </div>
+		</div>    </div>
+
+
+
+
+
+</div>  </div>
+
+
+  </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.boxton -->
+  </div>
+</div>
+  </div>
+          </div>
+        </div><!-- /#content-wrapper -->
+      </div><!-- #container -->
+    </div> <!-- /#main -->
+  </div> <!-- /#main-wrapper -->
+
+  <div id="root_footer"></div>
+</div><!-- #root -->
+
+<footer id="footer" class="footer" role="footer">
+  <div class="container">
+    <div id="footer-first" class="col-md-3">
+      <p><a href="/" target="_blank">HumanitarianResponse.info</a> is provided by UN OCHA to support humanitarian operations globally </p><p><a href="/about">Learn more about HumanitarianResponse.info</a></p><p><a href="/about/blog">Read our Blog</a></p><p><a href="http://www.unocha.org" target="_blank"><img alt="OCHA logo" src="/sites/all/themes/humanitarianresponse/assets/images/ocha.png"></a></p>
+    </div>
+    <div id="footer-second" class="col-md-6">
+      <div class="col-md-3">
+        <div class="column"><a href="http://fts.unocha.org" target="_blank"><div class="footer-logo footer-logos-fts"></div></a></div>
+        <div class="column"><a href="http://www.irinnews.org" target="_blank"><div class="footer-logo footer-logos-irin"></div></a></div>
+        <div class="column"><a href="http://www.gdacs.org" target="_blank"><div class="footer-logo footer-logos-gdacs"></div></a></div>
+        <div class="column"><a href="http://data.hdx.rwlabs.org" target="_blank"><div class="footer-logo footer-logos-hdx"></div></a></div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="column"><a href="http://www.unocha.org/cerf/" target="_blank"><div class="footer-logo footer-logos-cerf"></div></a></div>
+        <div class="column"><a href="http://www.unocha.org/cap/" target="_blank"><div class="footer-logo footer-logos-cap"></div></a></div>
+        <div class="column"><a href="http://www.reliefweb.int/" target="_blank"><div class="footer-logo footer-logos-reliefweb"></div></a></div>
+        <div class="column"><a href="http://www.insarag.org/" target="_blank"><div class="footer-logo footer-logos-insarag"></div></a></div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="column"><a href="http://www.humanitarianinfo.org/iasc/" target="_blank"><div class="footer-logo footer-logos-iasc"></div></a></div>
+        <div class="column"><a href="http://www.redhum.org" target="_blank"><div class="footer-logo footer-logos-redhum"></div></a></div>
+        <div class="column"><a href="http://www.preventionweb.net/" target="_blank"><div class="footer-logo footer-logos-pw"></div></a></div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="column"><a href="http://www.hewsweb.org" target="_blank"><div class="footer-logo footer-logos-hews"></div></a></div>
+        <div class="column"><a href="http://vosocc.unocha.org" target="_blank"><div class="footer-logo footer-logos-vosocc"></div></a></div>
+	<div class="column"><a href="http://www.worldhumanitariansummit.org" target="_blank"><div class="footer-logo footer-logos-whs"></div></a></div>
+      </div>
+    </div>
+    <div id = "footer-third" class="col-md-3">
+      <i class="fa fa-envelope"></i> <a href="mailto:info@humanitarianresponse.info">info@humanitarianresponse.info</a><br />
+      <i class="fa fa-question-circle"></i> <a href="mailto:help@humanitarianresponse.info">help@humanitarianresponse.info</a><br />
+      <i class="fa fa-info-circle"></i> <a href="/">humanitarianresponse.info</a><br />
+      <i class="fa fa-rss-square"></i> <a href="/feed">RSS feed</a><br />
+      <i class="fa fa-check"></i> <a href="user/login">Login to follow us</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

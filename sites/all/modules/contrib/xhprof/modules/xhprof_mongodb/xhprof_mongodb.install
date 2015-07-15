@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the XHProf module.
+ */
+
+function xhprof_mongodb_requirements($phase) {
+  $requirements = array();
+  // Ensure translations don't break at install time
+  $t = get_t();
+
+  if (extension_loaded('mongo')) {
+    module_load_include('module', 'mongodb');
+    $mongo = mongodb();
+    if (!$mongo instanceOf MongoDB) {
+      $requirements['xhprof_mongodb'] = array(
+        'title' => $t('Mongodb'),
+        'value' => $t('Not running'),
+        'description' => $t('Unable to get a Mongodb collection object. This is required to create indexes on install.'),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+  }
+  return $requirements;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function xhprof_mongodb_install() {
+  module_load_include('module', 'mongodb');
+  if ($collection = mongodb_collection('xhprof')) {
+    $collection->ensureIndex(array("date" => -1, "date" => 1));
+    $collection->ensureIndex(array("path" => -1, "path" => 1));
+  }
+}
+

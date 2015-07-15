@@ -1,0 +1,8 @@
+name = Humanitarian ID Auth Integration
+core = 7.x
+package = Humanitarian ID
+version = 7.x-1.0
+project = hid_auth
+dependencies[] = connector
+dependencies[] = oauthconnector
+dependencies[] = restclient

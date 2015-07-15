@@ -1,0 +1,106 @@
+<?php
+/**
+ * @file
+ * Code for the Datasets feature.
+ */
+
+include_once 'hr_datasets.features.inc';
+
+/**
+ * Implements hook_og_features_registry()
+ */
+function hr_datasets_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'hr_datasets';
+  $feature->name = t('Datasets');
+  $feature->description = t('Provide datasets to your space.');
+  $feature->components = array(
+    'node' => array(
+      'hr_dataset',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
+ * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ */
+function hr_datasets_og_features_toggle($entity, $entity_id, $entity_type, $features) {
+  if (isset($features['hr_datasets'])) {
+    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
+    if (empty($features['hr_datasets'])) {
+      menu_link_delete(NULL, 'node/'.$entity_id.'/datasets');
+    }
+    else {
+      // See if menu link already exists
+      $menu_link = menu_link_get_preferred('node/'.$entity_id.'/datasets', OG_MENU_SINGLE_MENU_NAME);
+      if (empty($menu_link)) {
+        $menu_link = array(
+          'link_path' => 'node/'.$entity_id.'/datasets',
+          'link_title' => 'Datasets',
+          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
+          'weight' => 12,
+          'plid' => $mlid,
+        );
+        menu_link_save($menu_link);
+      }
+    }
+  }
+
+}
+
+function hr_datasets_block_view_alter(&$data, $block) {
+  $path = drupal_get_path_alias();
+  if ($block->module == 'facetapi' && $block->bid == 'facetapi-uulIYjH3ZtSu9hhI5ARgBYQeEUNqWe17' && $path == 'applications/data') {
+    $options = array();
+    $options['_none_'] = t('Find datasets by location...');
+    $regex = '/<a(.*)href="([^"]*)"(.*)>(.*)<span class="element-invisible">(.*)<\/span><\/a>/';
+    foreach ($data['content']['field_locations']['#items'] as $item) {
+      $matches = array();
+      preg_match($regex, $item['data'], $matches);
+      if (!empty($matches)) {
+        $opt_path = str_replace('/applications/data/', '/applications/data/datasets/', $matches[2]);
+        $options[$opt_path] = $matches[4];
+      }
+    }
+    $data['content'] = array(
+      '#type' => 'select',
+      '#id' => 'hr_datasets_location',
+      '#title' => 'Datasets by location',
+      '#options' => $options,
+      '#attributes' => array('onchange' => "top.location.href=document.getElementById('hr_datasets_location').options[document.getElementById('hr_datasets_location').selectedIndex].value",
+        'data-placeholder' => t('Find datasets by location...')),
+    );
+    $data['subject'] = '';
+  }
+}
+
+function hr_datasets_preprocess_block(&$vars) {
+  $block = $vars['elements']['#block'];
+  $path = drupal_get_path_alias();
+  if ($block->module == 'facetapi' && $path == 'applications/data') {
+    $vars['classes_array'] = array(
+      'block',
+      'hr-highlighted',
+      'text-center',
+    );
+  }
+}
+
+function hr_datasets_form_views_exposed_form_alter (&$form, $form_state) {
+  $path = drupal_get_path_alias();
+  if ($path == 'applications/data' && $form['#id'] == 'views-exposed-form-hr-datasets-master') {
+    $form['#action'] = '/applications/data/datasets';
+  }
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function hr_datasets_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'restful') {
+    return 'plugins/' . $plugin;
+  }
+}

@@ -1,0 +1,11 @@
+name = User Merge
+description = Provides an advanced mechanism to merge user accounts together.
+core = 7.x
+configure = admin/config/people/usermerge
+
+; Information added by Drupal.org packaging script on 2014-08-26
+version = "7.x-2.8"
+core = "7.x"
+project = "usermerge"
+datestamp = "1409042329"
+

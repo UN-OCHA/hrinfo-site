@@ -1,0 +1,10 @@
+.inline {
+    display: inline-block;
+}
+
+#j2h_filters {
+    margin: 0 0 50px 0;
+}
+#j2h_filters select {
+    width: 200px;
+}

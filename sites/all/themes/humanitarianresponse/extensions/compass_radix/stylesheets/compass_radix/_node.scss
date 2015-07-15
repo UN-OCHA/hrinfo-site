@@ -1,0 +1,69 @@
+// Node
+// Styles for Nodes
+// --------------------------------------------------
+
+// Miscellaneous
+// --------------------------------------------------
+.field {
+  img.panopoly-image-full,
+  img.panopoly-image-half,
+  img.panopoly-image-quarter {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    float: none;
+    margin: 0;
+  }
+}
+
+.field-collection-container {
+  border: 0;
+  .field-collection-view {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+}
+
+// Panopoly News
+// --------------------------------------------------
+.node-panopoly-page {
+  // Teaser
+  &.node-teaser {
+    .panel-pane {
+      margin: 0 0 10px 260px;
+    }
+    .pane-node-field-featured-image {
+      float: left;
+      margin-left: 0;
+    }
+  }
+  @media (max-width: $screen-xs-max) {
+    .panel-pane {
+      float: none !important;
+      margin: 0 0 10px !important;
+    }
+  }
+}
+
+
+// Panopoly News
+// --------------------------------------------------
+.node-panopoly-news-article {
+  // Teaser
+  &.node-teaser {
+    .panel-pane {
+      margin: 0 0 10px 260px;
+    }
+    .pane-node-field-featured-image {
+      float: left;
+      margin-left: 0;
+    }
+  }
+  @media (max-width: $screen-xs-max) {
+    .panel-pane {
+      float: none !important;
+      margin: 0 0 10px !important;
+    }
+  }
+}

@@ -1,0 +1,219 @@
+<?php
+/**
+ * @file
+ * Primary hook implementations.
+ */
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function panels_content_cache_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'page_manager' || $module == 'panels' || $module == 'ctools') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Implements hook_node_delete().
+ */
+function panels_content_cache_node_delete($node) {
+  panels_content_cache_node_clear_cache($node);
+}
+
+/**
+ * Implements hook_node_revision_delete().
+ */
+function panels_content_cache_node_revision_delete($node) {
+  panels_content_cache_node_clear_cache($node);
+}
+
+/**
+ * Implements hook_node_insert().
+ */
+function panels_content_cache_node_insert($node) {
+  panels_content_cache_node_clear_cache($node);
+}
+
+/**
+ * Implements hook_node_update().
+ */
+function panels_content_cache_node_update($node) {
+  panels_content_cache_node_clear_cache($node);
+}
+
+/**
+ * Implements hook_node_type_delete().
+ */
+function panels_content_cache_node_type_delete($info) {
+  $node_types = variable_get('panels_content_cache_types', array());
+
+  if (!empty($node_types)) {
+    if ($pos = array_search($info->type, $node_types)) {
+      unset($node_types[$pos]);
+      variable_set('panels_content_cache_types', $node_types);
+    }
+  }
+}
+
+/**
+ * Comment integration.
+ */
+
+/**
+ * Implements hook_comment_insert().
+ */
+function panels_content_cache_comment_insert($comment) {
+  panels_content_cache_comment_clear_cache($comment);
+}
+
+/**
+ * Implements hook_comment_update().
+ */
+function panels_content_cache_comment_update($comment) {
+  panels_content_cache_comment_clear_cache($comment);
+}
+
+/**
+ * Implements hook_comment_delete().
+ */
+function panels_content_cache_comment_delete($comment) {
+  panels_content_cache_comment_clear_cache($comment);
+}
+
+/**
+ * Implements hook_comment_publish().
+ */
+function panels_content_cache_comment_publish($comment) {
+  panels_content_cache_comment_clear_cache($comment);
+}
+
+/**
+ * Implements hook_comment_unpublish().
+ */
+function panels_content_cache_comment_unpublish($comment) {
+  panels_content_cache_comment_clear_cache($comment);
+}
+
+/**
+ * Clear the cache bin for this comment's content type.
+ */
+function panels_content_cache_comment_clear_cache($comment) {
+  if (!empty($comment->nid) && ($node = node_load($comment->nid))) {
+    panels_content_cache_node_clear_cache($node);
+  }
+}
+
+/**
+ * Implements hook_panels_display_save().
+ */
+function panels_content_cache_panels_display_save($display) {
+  $content_cache = array();
+  // First clear down any rows in panels_content_cache associated with this
+  // display. We do this incase content caching was previously enabled for a
+  // display/pane and it was subsequenty turned off before the panel was saved
+  // again, therefore we want to clear out those records from
+  // panels_content_cache. The table will be updated again with any panes that
+  // have content caching enabled.
+  db_delete('panels_content_cache')->condition('did', $display->did)->execute();
+
+  // First check if we have set content caching on the entire display.
+  // If the entire display has content caching on then we dont even need
+  if (isset($display->cache['method']) && $display->cache['method'] == 'content') {
+    $content_cache[] = $display;
+  }
+
+  // Next we check any panes on the display to see if any of those have content
+  // caching enabled.
+  if (!empty($display->content)) {
+    foreach ($display->content as $pane) {
+      if (isset($pane->cache['method']) && $pane->cache['method'] == 'content') {
+        $content_cache[] = $pane;
+      }
+    }
+  }
+
+  // Save the cached items to panels_content_cache table.
+  if (!empty($content_cache)) {
+    panels_content_cache_save($content_cache);
+
+    // Cache the content types in the lookup table. We do this to potentially
+    // save a database query on the node hook lookup.
+    panels_content_cache_types_set();
+  }
+}
+
+/**
+ * Store the content types that are in the panels_content_cache database table.
+ */
+function panels_content_cache_types_set() {
+  $node_types = array();
+
+  // Cache the content types in panels_content_cache.
+  $results = db_select('panels_content_cache', 'p')
+    ->fields('p', array('type'))
+    ->distinct()
+    ->execute();
+  foreach ($results as $type) {
+    $node_types[] = $type->type;
+  }
+
+  variable_set('panels_content_cache_types', $node_types);
+}
+
+/**
+ * Helper function to save items into the panels_content_cache table.
+ *
+ * @param array $content_cache
+ *   An array of panels display or pane objects to save to panels_content_cache
+ *   table.
+ */
+function panels_content_cache_save($content_cache = array()) {
+  if (!empty($content_cache)) {
+    foreach ($content_cache as $display) {
+      $types = array_filter($display->cache['settings']['content_types']);
+      foreach ($types as $type) {
+        $row = new stdClass();
+        $row->did = $display->did;
+        $row->type = $type;
+        $row->pid = isset($display->pid) ? $display->pid : NULL;
+        drupal_write_record('panels_content_cache', $row);
+      }
+    }
+  }
+}
+
+/**
+ * This function is called from hook_node_*() and invalidates the panel cache
+ * when a node is updated and it matches the criteria chosen in the caching of
+ * any panels.
+ *
+ * @param $node
+ *   The node object for the current node being saved.
+ */
+function panels_content_cache_node_clear_cache($node) {
+  // Check if the $node->type is in panels_content_cache table. If it exists
+  // then we want to try and lookup the display ID from panels_content_cache to
+  // see if we need to clear the cache on any panels.
+  $types = variable_get('panels_content_cache_types', array());
+  if (!empty($types) && in_array($node->type, $types)) {
+    module_load_include('inc', 'panels_content_cache', 'plugins/cache/content');
+    $results = db_select('panels_content_cache', 'p')
+      ->condition('p.type', $node->type, '=')
+      ->fields('p', array('did'))
+      ->distinct()
+      ->execute();
+    if (!empty($results)) {
+      foreach ($results as $row) {
+        $display = panels_load_display($row->did);
+        panels_content_cache_clear_cache($display);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_workbench_moderation_transition().
+ */
+function panels_content_cache_workbench_moderation_transition($node, $previous_state, $new_state) {
+  panels_content_cache_node_clear_cache($node);
+}

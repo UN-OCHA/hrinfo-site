@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Tools feature.
+ */
+
+include_once 'hr_tools.features.inc';

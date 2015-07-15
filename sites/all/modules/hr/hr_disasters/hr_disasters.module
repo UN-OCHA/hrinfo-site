@@ -1,0 +1,145 @@
+<?php
+/**
+ * @file
+ * Code for the Disasters feature.
+ */
+
+define('HR_DISASTERS_RELIEFWEB_API', 'http://api.rwlabs.org/v1/disasters');
+
+include_once 'hr_disasters.features.inc';
+
+/**
+ * Implements hook_og_features_registry()
+ */
+function hr_disasters_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'hr_disasters';
+  $feature->name = t('Disasters');
+  $feature->description = t('Activate if your operation has multiple disasters.');
+  $feature->components = array(
+    'node' => array(
+      'hr_disaster',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
+ * Implements hook_cron()
+ * Updates the latest 50 disaster items taken from Reliefweb
+ */
+function hr_disasters_cron() {
+  hr_disasters_reliefweb_disasters(50);
+}
+
+/**
+ * Updates the latest number disaster items taken from Reliefweb
+ */
+function hr_disasters_reliefweb_disasters($number) {
+  $url = HR_DISASTERS_RELIEFWEB_API.'?sort[]=date:desc&limit='.$number;
+  $json = file_get_contents($url);
+  $disasters = json_decode($json);
+  foreach ($disasters->data as $data) {
+    _hr_disasters_reliefweb_disaster($data->id);
+  }
+}
+
+/**
+ * Updates one single disaster from Reliefweb
+ */
+function _hr_disasters_reliefweb_disaster($id) {
+  $url = HR_DISASTERS_RELIEFWEB_API.'/'.$id;
+  $json = file_get_contents($url);
+  // Process the request only if it worked
+  if (!empty($json)) {
+    $disaster = json_decode($json);
+    $fields = $disaster->data[0]->fields;
+    $glide = $fields->glide;
+    if (!empty($glide)) {
+      // Does this disaster already exist ?
+      $query = new EntityFieldQuery();
+      $results = $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'hr_disaster')
+        ->fieldCondition('field_glide_number', 'value', $glide, '=')
+        ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT')
+        ->execute();
+      if (!empty($results['node'])) {
+        // HACK to keep this disaster not in sync with Reliefweb, since we "extended" it to multiple countries
+        if ($glide != 'EP-2014-000116-GHA' && $glide != 'OT-2011-000205-NER' && $glide != 'EP-2014-000041-GIN') {
+          // Disaster already exists, simply update
+          $nids = array_keys($results['node']);
+          $nid = reset($nids);
+          $node = node_load($nid);
+          $node = _hr_disasters_reliefweb_disaster_map($node, $fields);
+          node_save($node);
+        }
+      }
+      else {
+        $node = new stdClass();
+        $node->type = 'hr_disaster';
+        $node->language = 'en';
+        $node = _hr_disasters_reliefweb_disaster_map($node, $fields);
+        node_save($node);
+      }
+    }
+  }
+}
+
+/**
+ * Helper function: maps disaster fields from Reliefweb API to hr_disaster nodes
+ */
+function _hr_disasters_reliefweb_disaster_map($node, $fields) {
+  $glide_type = taxonomy_get_term_by_name($fields->type[0]->name, 'hr_glide_type');
+  $type = reset($glide_type);
+  $node->title = $fields->name;
+  $node->field_glide_number = array(LANGUAGE_NONE => array(0 => array('value' => $fields->glide)));
+  $node->field_glide_type = array(LANGUAGE_NONE => array(0 => array('target_id' => $type->tid)));
+  $node->field_disaster_status = array(LANGUAGE_NONE => array(0 => array('value' => $fields->status)));
+  $node->field_reliefweb_id = array(LANGUAGE_NONE => array(0 => array('value' => $fields->id)));
+  $node->body = array('en' => array(0 => array('value' => $fields->description, 'format' => 'panopoly_wysiwyg_text')));
+  $node->created = strtotime($fields->date->created);
+  $node->path = array('pathauto' => TRUE);
+  $node->uid = 1;
+  $node->og_group_ref = array();
+  $i = 0;
+  foreach ($fields->country as $country) {
+    // Make sure country exists as an operation
+    $nid = _hr_disasters_get_operation_by_name($country->name);
+    if (!empty($nid)) {
+      $node->og_group_ref[LANGUAGE_NONE][$i]['target_id'] = $nid;
+      $i++;
+    }
+  }
+    
+  return $node;
+}
+
+/**
+ * Helper function: retrieves an operation by name
+ */
+function _hr_disasters_get_operation_by_name($name) {
+  $query = new EntityFieldQuery();
+  $results = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'hr_operation')
+    ->propertyCondition('title', $name)
+    ->execute();
+  if (!empty($results['node'])) {
+    $keys = array_keys($results['node']);
+    return reset($keys);
+  }
+  else {
+    return NULL;
+  }
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function hr_disasters_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'restful') {
+    return 'plugins/' . $plugin;
+  }
+}
+

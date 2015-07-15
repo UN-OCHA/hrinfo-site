@@ -1,0 +1,16 @@
+<?php
+/**
+ * @file
+ * Code for the API feature.
+ */
+
+include_once 'hr_api.features.inc';
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function hr_api_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'restful') {
+    return 'plugins/' . $plugin;
+  }
+}

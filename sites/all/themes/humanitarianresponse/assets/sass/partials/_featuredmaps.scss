@@ -1,0 +1,132 @@
+$backgrounds:
+  ("NID", "image_name.jpg"),
+
+  // ("82", "image.jpg"), // Afghanistan
+  // ("46", "image.jpg"), // Angola
+  // ("17019", "image.jpg"), // Argentina
+  // ("80", "image.jpg"), // Asia
+  // ("2784", "image.jpg"), // Bangladesh
+  // ("17020", "image.jpg"), // Barbados
+  // ("17021", "image.jpg"), // Belize
+  // ("26", "image.jpg"), // Benin
+  // ("47", "image.jpg"), // Botswana
+  // ("17022", "image.jpg"), // Brazil
+  // ("27", "image.jpg"), // Burkina Faso
+  // ("62", "image.jpg"), // Burundi
+  // ("2783", "image.jpg"), // Cambodia
+  // ("28", "image.jpg"), // Cameroun
+  // ("17023", "image.jpg"), // Chile
+  // ("77", "image.jpg"), // Colombia
+  // ("48", "image.jpg"), // Comoros
+  // ("2799", "image.jpg"), // Congo
+  // ("1449", "image.jpg"), // Cook Islands
+  // ("17024", "image.jpg"), // Costa Rica
+  // ("17025", "image.jpg"), // Cuba
+  // ("63", "image.jpg"), // Djibouti
+  // ("61", "image.jpg"), // Eastern Africa
+  // ("17026", "image.jpg"), // Ecuador
+  // ("64", "image.jpg"), // Eritrea
+  // ("65", "image.jpg"), // Ethiopia
+  // ("43183", "image.jpg"), // Europe
+  // ("1451", "image.jpg"), // Federated States of Micronesia
+  // ("1450", "image.jpg"), // Fiji
+  // ("30", "image.jpg"), // Gambia
+  // ("31", "image.jpg"), // Ghana
+  // ("32", "image.jpg"), // Guinea
+  // ("33", "image.jpg"), // Guinea Bissau
+  // ("17027", "image.jpg"), // Guyana
+  // ("78", "image.jpg"), // Haiti
+  // ("83", "image.jpg"), // Indonesia
+  // ("2793", "image.jpg"), // Iraq
+  // ("29", "image.jpg"), // Ivory Coast
+  // ("2802", "image.jpg"), // Jamaica
+  // ("17028", "image.jpg"), // Jamaica
+  // ("17448", "image.jpg"), // Japan
+  // ("66", "image.jpg"), // Kenya
+  // ("1452", "image.jpg"), // Kiribati
+  // ("2781", "image.jpg"), // Kyrgyzstan
+  // ("2790", "image.jpg"), // Laos
+  // ("76", "image.jpg"), // Latin America and the Caribbean
+  // ("2791", "image.jpg"), // Lebanon
+  // ("49", "image.jpg"), // Lesotho
+  // ("34", "image.jpg"), // Liberia
+  // ("2794", "image.jpg"), // Libya
+  // ("50", "image.jpg"), // Madagascar
+  // ("51", "image.jpg"), // Malawi
+  // ("35", "image.jpg"), // Mali
+  // ("1453", "image.jpg"), // Marshall Islands
+  // ("36", "image.jpg"), // Mauritania
+  // ("52", "image.jpg"), // Mauritius
+  // ("17029", "image.jpg"), // Mexico
+  // ("72", "image.jpg"), // Middle East and North Africa
+  // ("2792", "image.jpg"), // Mongolia
+  // ("53", "image.jpg"), // Mozambique
+  // ("86", "image.jpg"), // Myanmar
+  // ("54", "image.jpg"), // Namibia
+  // ("1454", "image.jpg"), // Nauru
+  // ("85", "image.jpg"), // Nepal
+  // ("17030", "image.jpg"), // Nicaragua
+  // ("37", "image.jpg"), // Niger
+  // ("38", "image.jpg"), // Nigeria
+  // ("1455", "image.jpg"), // Niue
+  // ("2786", "image.jpg"), // North Korea
+  // ("73", "image.jpg"), // occupied Palestinian territory
+  // ("87", "image.jpg"), // Pacific Region
+  // ("81", "image.jpg"), // Pakistan
+  // ("1456", "image.jpg"), // Palau
+  // ("17031", "image.jpg"), // Panama
+  // ("17395", "image.jpg"), // Papua New Guinea
+  // ("17032", "image.jpg"), // Paraguay
+  // ("17033", "image.jpg"), // Peru
+  // ("84", "image.jpg"), // Philippines
+  // ("39", "image.jpg"), // Republique Centrafricaine
+  // ("40", "image.jpg"), // Republique Democratique du Congo
+  // ("67", "image.jpg"), // Rwanda
+  // ("1457", "image.jpg"), // Samoa
+  // ("41", "image.jpg"), // Senegal
+  // ("55", "image.jpg"), // Seychelles
+  // ("42", "image.jpg"), // Sierra Leone
+  // ("58403", "image.jpg"), // SIMAWG
+  // ("1458", "image.jpg"), // Solomon Islands
+  // ("68", "image.jpg"), // Somalia
+  // ("56", "image.jpg"), // South Africa
+  // ("45", "image.jpg"), // Southern Africa
+  // ("69", "image.jpg"), // South Sudan
+  // ("2787", "image.jpg"), // Sri Lanka
+  // ("2788", "image.jpg"), // STIMA
+  // ("70", "image.jpg"), // Sudan
+  // ("17034", "image.jpg"), // Surinam
+  // ("57", "image.jpg"), // Swaziland
+  // ("74", "image.jpg"), // Syria
+  // ("2782", "image.jpg"), // Tajikistan
+  // ("58", "image.jpg"), // Tanzania
+  // ("43", "image.jpg"), // Tchad
+  // ("2796", "image.jpg"), // Thailand
+  // ("2797", "image.jpg"), // Timor-Leste
+  // ("44", "image.jpg"), // Togo
+  // ("1459", "image.jpg"), // Tokelau
+  // ("1460", "image.jpg"), // Tonga
+  // ("38230", "image.jpg"), // Turkey
+  // ("1461", "image.jpg"), // Tuva  lu
+  // ("71", "image.jpg"), // Uganda
+  // ("43184", "image.jpg"), // Ukraine
+  // ("17035", "image.jpg"), // Uruguay
+  // ("1462", "image.jpg"), // Vanuatu
+  // ("17036", "image.jpg"), // Venezuela
+  // ("17396", "image.jpg"), // Viet Nam
+  // ("25", "image.jpg"), // West and Central Africa
+  // ("75", "image.jpg"), // Yemen
+  // ("59", "image.jpg"), // Zambia
+  // ("60", "image.jpg") // Zimbabwe
+;
+
+@each $nid, $image in $backgrounds {
+  .og-context-node-#{$nid} .fieldable-panels-pane .node-teaser.node-hr-infographic .container-fluid {
+    background-image: url(../images/backgrounds/#{$image});
+  }
+}
+
+//Default image
+.og-context-node .fieldable-panels-pane .node-teaser.node-hr-infographic .container-fluid {
+  background-image: url(../images/backgrounds/BG_beige_grey.jpg);
+}

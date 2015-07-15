@@ -1,0 +1,14 @@
+name = Multisite Redirect
+description = Provides the system for creating URL redirect rules across multiple domains in a multisite install.
+core = 7.x
+
+dependencies[] = redirect
+
+configure = admin/config/search/multisite-redirect
+
+; Information added by Drupal.org packaging script on 2015-01-29
+version = "7.x-1.0"
+core = "7.x"
+project = "multisite_redirect"
+datestamp = "1422548582"
+

@@ -1,0 +1,31 @@
+--- pathauto.pathauto.inc
++++ pathauto.pathauto.inc
+@@ -30,17 +30,18 @@
+ /**
+  * Implements hook_pathauto().
+  *
+- * This function is empty so that the other core module implementations can be
+- * defined in this file. This is because in pathauto_module_implements_alter()
+- * we add pathauto to be included first. The module system then peforms a
+- * check on any subsequent run if this function still exists. If this does not
+- * exist, than this file will not get included and the core implementations
+- * will never get run.
+- *
+- * @see pathauto_module_implements_alter().
++ * Calls hook_pathauto() on behalf of other core modules.
+  */
+-function pathauto_pathauto() {
+-  // Empty hook; see the above comment.
++function pathauto_pathauto($op) {
++  $return = array();
++  $modules = array('node', 'taxonomy', 'user', 'forum', 'blog');
++  foreach ($modules as $module) {
++    if (module_exists($module)) {
++      $return[] = module_invoke($module, 'pathauto', $op);
++    }
++  }
++
++  return $return;
+ }
+ 
+ /**

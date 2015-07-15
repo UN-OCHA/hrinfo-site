@@ -1,0 +1,13 @@
+name = Menu target
+description = Allows administrators to choose wether or not to open menu items in a new window.
+package = Other
+core = 7.x
+
+configure = admin/structure/menu/settings
+
+; Information added by Drupal.org packaging script on 2014-10-02
+version = "7.x-1.4"
+core = "7.x"
+project = "menu_target"
+datestamp = "1412270937"
+

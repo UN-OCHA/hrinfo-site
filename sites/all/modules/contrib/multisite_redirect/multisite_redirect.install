@@ -1,0 +1,84 @@
+<?php
+/**
+ * @file
+ * Contains install hooks.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function multisite_redirect_schema() {
+  $schema['multisite_redirect'] = array(
+    'description' => 'Stores information on multisite redirects.',
+    'fields' => array(
+      'rid'  => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique multisite redirect ID.',
+      ),
+      'source_site' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'The source site to redirect from.',
+      ),
+      'source_path' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+        'description' => 'The source paths to redirect from.',
+      ),
+      'redirect' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'The destination path to redirect to.',
+      ),
+      'language' => array(
+        'description' => 'The language this redirect is for; if blank, the alias will be used for unknown languages.',
+        'type' => 'varchar',
+        'length' => 12,
+        'not null' => TRUE,
+        'default' => 'und',
+      ),
+      'status_code' => array(
+        'type' => 'int',
+        'size' => 'small',
+        'not null' => TRUE,
+        'description' => 'The HTTP status code to use for the redirect.',
+      ),
+      'count' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The number of times the redirect has been used.',
+      ),
+      'access' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The timestamp of when the redirect was last accessed.'
+      ),
+      'weight' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The weight of the redirect rule.'
+      ),
+    ),
+    'primary key' => array('rid'),
+  );
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function multisite_redirect_install() {
+  global $base_url;
+  $current = parse_url($base_url);
+  variable_set('multisite_redirect_primary_site', $current['host']);
+  variable_set('multisite_redirect_exclusions', array($current['host'] => $current['host']));
+}

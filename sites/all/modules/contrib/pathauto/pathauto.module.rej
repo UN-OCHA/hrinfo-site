@@ -1,0 +1,29 @@
+--- pathauto.module
++++ pathauto.module
+@@ -37,26 +37,6 @@
+ }
+ 
+ /**
+- * Implements hook_module_implements_alter().
+- *
+- * Adds pathauto support for core modules.
+- */
+-function pathauto_module_implements_alter(&$implementations, $hook) {
+-  if (in_array($hook, array('pathauto', 'path_alias_types'))) {
+-    $modules = array('node', 'taxonomy', 'user', 'forum', 'blog');
+-    foreach ($modules as $module) {
+-      if (module_exists($module)) {
+-        $implementations[$module] = TRUE;
+-      }
+-    }
+-    // Move pathauto.module to get included first since it is responsible for
+-    // other modules.
+-    unset($implementations['pathauto']);
+-    $implementations = array_merge(array('pathauto' => 'pathauto'), $implementations);
+-  }
+-}
+-
+-/**
+  * Implements hook_help().
+  */
+ function pathauto_help($path, $arg) {

@@ -1,0 +1,17 @@
+name = Help
+description = Help features of Humanitarianresponse 2.x
+core = 7.x
+package = Humanitarianresponse
+dependencies[] = bootstrap_tour
+dependencies[] = ctools
+features[bootstrap_tour][] = adding_content
+features[bootstrap_tour][] = anatomy_of_a_space
+features[bootstrap_tour][] = edit_tab
+features[bootstrap_tour][] = i_can_not_login
+features[bootstrap_tour][] = inside_a_space
+features[bootstrap_tour][] = introduction
+features[bootstrap_tour][] = managing_a_space
+features[bootstrap_tour][] = registering_on_humanitarianresponse
+features[bootstrap_tour][] = space_functionalities
+features[ctools][] = bootstrap_tour:bootstrap_tour_tour:1
+features[features_api][] = api:2

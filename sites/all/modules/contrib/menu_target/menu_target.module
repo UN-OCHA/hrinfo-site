@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Allows content editors to choose wether or not to open menu items in a
+ * new window
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function menu_target_form_alter(&$form, $form_state, $form_id) {
+  // Only proceed if the current form is a node edit or menu item edit form.
+  if ((isset($form['#node']) && $form['#node']->type . '_node_form' == $form_id) || $form_id == 'menu_edit_item') {
+    module_load_include('inc', 'menu_target', 'menu_target.admin');
+    menu_target_edit_form_extra_elements($form, ($form_id != 'menu_edit_item'));
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function menu_target_form_menu_configure_alter(&$form, $form_state) {
+  module_load_include('inc', 'menu_target', 'menu_target.admin');
+  menu_target_menu_configure_extra_elements($form);
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function menu_target_preprocess_page(&$variables) {
+  // Only attach the javascript behavior when needed.
+  if (variable_get('menu_target_enabled', 1) && variable_get('menu_target_type', 'html') == 'javascript') {
+    drupal_add_js(drupal_get_path('module', 'menu_target') . '/menu_target.js');
+  }
+}
+
+/**
+ * Implements hook_form_submit().
+ */
+function menu_target_edit_form_extra_elements_submit($form, &$form_state) {
+  module_load_include('inc', 'menu_target', 'menu_target.admin');
+  _menu_target_edit_form_extra_elements_submit($form, $form_state);
+}

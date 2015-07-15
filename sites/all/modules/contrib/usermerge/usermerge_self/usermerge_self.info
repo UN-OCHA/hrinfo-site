@@ -1,0 +1,11 @@
+name = Self-Serve User Merge
+description = Allows users to merge two accounts.
+core = 7.x
+dependencies[] = usermerge
+
+; Information added by Drupal.org packaging script on 2014-08-26
+version = "7.x-2.8"
+core = "7.x"
+project = "usermerge"
+datestamp = "1409042329"
+

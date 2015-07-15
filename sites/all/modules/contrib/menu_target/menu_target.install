@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Uninstall hooks for Menu Target
+ */
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function menu_target_uninstall() {
+  variable_del('menu_target_enabled');
+  variable_del('menu_target_type');
+}

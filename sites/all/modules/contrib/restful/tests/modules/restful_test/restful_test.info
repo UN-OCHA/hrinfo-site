@@ -1,0 +1,15 @@
+name = RESTful Test
+description = Helper module for testing the RESTful module.
+core = 7.x
+dependencies[] = restful
+dependencies[] = restful_example
+dependencies[] = entity_feature
+dependencies[] = entityreference
+hidden = TRUE
+
+; Information added by Drupal.org packaging script on 2015-04-14
+version = "7.x-1.0"
+core = "7.x"
+project = "restful"
+datestamp = "1429031056"
+

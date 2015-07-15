@@ -1,0 +1,64 @@
+diff --git a/pathauto.module b/pathauto.module
+index 9bb132d..209a0ca 100644
+--- a/pathauto.module
++++ b/pathauto.module
+@@ -37,26 +37,6 @@ function pathauto_hook_info() {
+ }
+ 
+ /**
+- * Implements hook_module_implements_alter().
+- *
+- * Adds pathauto support for core modules.
+- */
+-function pathauto_module_implements_alter(&$implementations, $hook) {
+-  if (in_array($hook, array('pathauto', 'path_alias_types'))) {
+-    $modules = array('node', 'taxonomy', 'user', 'forum', 'blog');
+-    foreach ($modules as $module) {
+-      if (module_exists($module)) {
+-        $implementations[$module] = TRUE;
+-      }
+-    }
+-    // Move pathauto.module to get included first since it is responsible for
+-    // other modules.
+-    unset($implementations['pathauto']);
+-    $implementations = array_merge(array('pathauto' => 'pathauto'), $implementations);
+-  }
+-}
+-
+-/**
+  * Implements hook_help().
+  */
+ function pathauto_help($path, $arg) {
+diff --git a/pathauto.pathauto.inc b/pathauto.pathauto.inc
+index 28d3ce0..318a380 100644
+--- a/pathauto.pathauto.inc
++++ b/pathauto.pathauto.inc
+@@ -30,17 +30,18 @@ function pathauto_path_alias_types() {
+ /**
+  * Implements hook_pathauto().
+  *
+- * This function is empty so that the other core module implementations can be
+- * defined in this file. This is because in pathauto_module_implements_alter()
+- * we add pathauto to be included first. The module system then peforms a
+- * check on any subsequent run if this function still exists. If this does not
+- * exist, than this file will not get included and the core implementations
+- * will never get run.
+- *
+- * @see pathauto_module_implements_alter().
++ * Calls hook_pathauto() on behalf of other core modules.
+  */
+-function pathauto_pathauto() {
+-  // Empty hook; see the above comment.
++function pathauto_pathauto($op) {
++  $return = array();
++  $modules = array('node', 'taxonomy', 'user', 'forum', 'blog');
++  foreach ($modules as $module) {
++    if (module_exists($module)) {
++      $return[] = module_invoke($module, 'pathauto', $op);
++    }
++  }
++
++  return $return;
+ }
+ 
+ /**

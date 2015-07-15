@@ -1,0 +1,160 @@
+<?php
+/**
+ * @file
+ * Code for the Notifications feature.
+ */
+
+include_once 'hr_notifications.features.inc';
+
+/**
+ * Implements hook_libraries_info().
+ */
+function hr_notifications_libraries_info() {
+  $libraries['mailchimp'] = array(
+    'name' => 'MailChimp MCAPI',
+    'vendor url' => 'http://apidocs.mailchimp.com/api/1.3',
+    'download url' => 'http://apidocs.mailchimp.com/api/downloads/mailchimp-api-class.zip',
+    'version arguments' => array(
+      'file' => 'MCAPI.class.php',
+      // Version 1.3
+      'pattern' => '/\$version = \"((\d+)\.(\d+))\"/',
+    ),
+    'files' => array(
+      'php' => array('MCAPI.class.php'),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_og_ui_get_group_admin()
+ */
+function hr_notifications_og_ui_get_group_admin($group_type, $gid) {
+  $items = array();
+
+  if (og_user_access($group_type, $gid, 'manage members')) {
+    $items['hr_followers'] = array(
+      'title' => t('Followers'),
+      'description' => t('See who is following your space'),
+      'href' => 'admin/followers',
+    );
+  }
+
+  return $items;
+}
+
+
+
+
+function hr_notifications_block_info() {
+  $blocks['hr_follow'] = array(
+    'info' => t('Follow block'),
+  );
+  return $blocks;
+}
+
+function hr_notifications_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'hr_follow':
+      $context = og_context();
+      if (!empty($context) && $context['group_type'] == 'node') {
+        $gid = $context['gid'];
+        if (user_is_logged_in()) {
+          $block['content'] = flag_create_link('hr_follow', $gid);
+        }
+        else {
+          $block['content'] = l(t('login to follow').' <i class="fa fa-check"></i>', 'user/login', array('attributes' => array('class' => array('btn', 'btn-primary', 'btn-lg')), 'html' => TRUE));
+        }
+      }
+      break;
+  }
+  return $block;
+}
+
+function hr_notifications_mailchimp_get_api_object($api_key) {
+  $library = libraries_load('mailchimp');
+  if (!$library['installed']) {
+    $msg = 'Failed to load MailChimp PHP library. Please refer to the installation requirements.';
+    watchdog('mailchimp', $msg, WATCHDOG_ERROR);
+    drupal_set_message(t($msg), 'error');
+    return NULL;
+  }
+
+  $q = new MCAPI($api_key);
+
+  // Set the timeout to something that won't take down the Drupal site:
+  $q->setTimeout(60);
+
+  // Specify if a secure connection should be used with the API:
+  $q->useSecure(TRUE);
+
+  if ($q->errorCode) {
+    watchdog('mailchimp', 'MCAPI Error: %errmsg', array('%errmsg' => $q->errorMessage), WATCHDOG_ERROR);
+    return NULL;
+  }
+
+  return $q;
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter()
+ */
+function hr_notifications_form_node_form_alter(&$form, &$form_state) {
+  if (isset($form['field_mailchimp_list'])) {
+    $node = $form_state['build_info']['args'][0];
+    if (!empty($node->field_mailchimp_api_key)) {
+      // Get value
+      $api_key = $node->field_mailchimp_api_key[LANGUAGE_NONE][0]['value'];
+      if (!empty($api_key)) {
+        $api = hr_notifications_mailchimp_get_api_object($api_key);
+        $lists = $api->lists();
+        foreach ($lists['data'] as $list) {
+          $form['field_mailchimp_list'][LANGUAGE_NONE]['#options'][$list['id']] = $list['name'];
+        }
+        $form['field_mailchimp_list'][LANGUAGE_NONE]['#default_value'] = $node->field_mailchimp_list[LANGUAGE_NONE][0]['value'];
+        // Make sure the list is not hidden
+        $form['field_mailchimp_list']['#type'] = 'container';
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_flag_flag()
+ */
+function hr_notifications_flag_flag($flag, $entity_id, $account, $flagging) {
+  global $user;
+  if ($flag->name == 'hr_follow') {
+    $node = node_load($entity_id);
+    if (!empty($node->field_mailchimp_api_key) && !empty($node->field_mailchimp_list)) {
+      $api_key = $node->field_mailchimp_api_key[LANGUAGE_NONE][0]['value'];
+      $list_id = $node->field_mailchimp_list[LANGUAGE_NONE][0]['value'];
+      $api = hr_notifications_mailchimp_get_api_object($api_key);
+      // Subscribe user to list
+      $api->listSubscribe($list_id, $user->mail, NULL, 'html', FALSE, FALSE, TRUE, TRUE);
+      if ($entity_id == 2490) { // Hardcoded nid of the "About Us" space
+        drupal_set_message(t('Thank you, you are now following us and are now part of our mailing list.'), 'status');
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_flag_unflag()
+ */
+function hr_notifications_flag_unflag($flag, $entity_id, $account, $flagging) {
+  global $user;
+  if ($flag->name == 'hr_follow') {
+    $node = node_load($entity_id);
+    if (!empty($node->field_mailchimp_api_key) && !empty($node->field_mailchimp_list)) {
+      $api_key = $node->field_mailchimp_api_key[LANGUAGE_NONE][0]['value'];
+      $list_id = $node->field_mailchimp_list[LANGUAGE_NONE][0]['value'];
+      $api = hr_notifications_mailchimp_get_api_object($api_key);
+      // Unsubscribe user 
+      $api->listUnsubscribe($list_id, $user->mail);
+    } 
+  } 
+}
+

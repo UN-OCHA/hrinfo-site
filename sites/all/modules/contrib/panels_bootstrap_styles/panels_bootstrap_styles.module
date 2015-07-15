@@ -1,0 +1,138 @@
+<?php
+
+/**
+ * Implements hook_ctools_plugin_directory()
+ */
+function panels_bootstrap_styles_ctools_plugin_directory($module, $plugin) {
+  if ($module == "panels" && in_array($plugin, array('styles'))) {
+    return "plugins/$plugin";
+  }
+}
+
+/**
+ * Implementation of hook_theme()
+ */
+function panels_bootstrap_styles_theme() {
+  $theme = array();
+
+  $theme['panels_bootstrap_pane'] = array(
+    'variables' => array(
+      'output' => array(),
+      'pane' => array(),
+      'display' => array()
+    ),
+    'path' => drupal_get_path('module', 'panels_bootstrap_styles') . '/theme',
+    'file' => 'theme.inc',
+    'template' => 'panels-bootstrap-pane',
+  );
+
+  $theme['panels_bootstrap_region'] = array(
+    'variables' => array(
+      'output' => array(),
+      'panes' => array(),
+      'display' => array()
+    ),
+    'path' => drupal_get_path('module', 'panels_bootstrap_styles') . '/theme',
+    'file' => 'theme.inc',
+    'template' => 'panels-bootstrap-region',
+  );
+  return $theme;
+}
+
+/**
+ * Retrieves a single or all substyles.
+ * @param string $name
+ * @return array
+ */
+function panels_bootstrap_styles_load_substyles($name = NULL) {
+  $substyles = &drupal_static(__FUNCTION__, array());
+
+  if (empty($substyles)) {
+    $substyles = module_invoke_all('panels_bootstrap_substyles');
+    $default = array(
+      'description' => '',
+      // Default elements.
+      'wrapper_element' => 'div',
+      'header_element' => 'div',
+      'title_element' => 'div',
+      'content_element' => 'div',
+      'links_element' => 'div',
+      'footer_element' => 'div',
+    );
+    foreach ($substyles as $id => &$substyle) {
+      $substyle = $default + $substyle;
+      $substyle['title'] = !empty($substyle['title']) ? $substyle['title'] : $id;
+      $substyle['name'] = !empty($substyle['name']) ? $substyle['name'] : $id;
+    }
+  }
+
+  if ($name) {
+    return $substyles[$name];
+  }
+  return $substyles;
+}
+
+/**
+ * Implements hook_panels_bootstrap_substyles.
+ */
+function panels_bootstrap_styles_panels_bootstrap_substyles() {
+
+  $styles = array(
+    'panel' => array(
+      'name' => 'panel',
+      'title' => 'Panel',
+      'description' => t('Renders as bootstrap panel class.'),
+      'panes' => TRUE,
+      'regions' => TRUE,
+      'collapsible' => TRUE,
+      'modifier_classes' => TRUE,
+      'hide_classes' => TRUE,
+      'additional_classes' => TRUE,
+    ),
+    'jumbotron' => array(
+      'name' => 'jumbotron',
+      'title' => 'Jumbotron',
+      'description' => t('Renders as bootstrap jumbotron class.'),
+      'panes' => TRUE,
+      'regions' => TRUE,
+      'collapsible' => FALSE,
+      'modifier_classes' => FALSE,
+      'hide_classes' => TRUE,
+      'additional_classes' => TRUE,
+    ),
+    'well' => array(
+      'name' => 'well',
+      'title' => 'Well',
+      'description' => t('Renders as bootstrap well class.'),
+      'panes' => TRUE,
+      'regions' => TRUE,
+      'collapsible' => FALSE,
+      'modifier_classes' => FALSE,
+      'hide_classes' => TRUE,
+      'additional_classes' => TRUE,
+    ),
+    'alert' => array(
+      'name' => 'alert',
+      'title' => 'Alert',
+      'description' => t('Renders as alert class.'),
+      'panes' => TRUE,
+      'regions' => FALSE,
+      'collapsible' => FALSE,
+      'modifier_classes' => TRUE,
+      'hide_classes' => TRUE,
+      'additional_classes' => TRUE,
+    ),
+    'tabs' => array(
+      'name' => 'tabs',
+      'title' => 'Tabs',
+      'description' => t('Renders as tabs.'),
+      'panes' => FALSE,
+      'regions' => TRUE,
+      'collapsible' => FALSE,
+      'modifier_classes' => FALSE,
+      'hide_classes' => FALSE,
+      'additional_classes' => FALSE,
+    ),
+  );
+  return $styles;
+}

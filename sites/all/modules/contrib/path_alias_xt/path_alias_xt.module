@@ -1,0 +1,235 @@
+<?php
+
+/**
+ * @file
+ *  Extended Path Aliases.
+ *
+ *  Automatically generates and recognises aliases beyond the base path, e.g.
+ *  generates and accepts "about-us/edit" for "node/123/edit" and
+ *  "users/rik/track" for "user/7/track".
+ *  These aliases may be used anywhere where you are prompted to enter page
+ *  specifications, including wildcards, like "about-us*".
+ *  Examples of modules and pages that particularly benefit are:
+ *  o any node page displaying a revision or links to revisions
+ *  o any node or taxonomy term page with View, Edit, Track etc tabs
+ *  o the tabs on the "My account" page, Edit, Shortcuts etc.
+ *  o Statistics on top visited pages etc, e.g., those under the Track tab
+ *  o page-specific block visibility settings
+ *  o same for any other module that has an include/exclude pages input box
+ */
+
+define('PATH_ALIAS_XT_DEFAULT_NODE_OR_USER_MATCH', '{(^node|^user|^taxonomy/term)/([0-9]+)/(.+)}');
+
+/**
+ * Implements hook_help().
+ */
+function path_alias_xt_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#path_alias_xt':
+      $s = t('Installation instructions are in the README.txt file. Further documentation is on the <a href="@path_alias_xt">Extended Path Aliases</a> project page.',
+        array('@path_alias_xt' => url('http://drupal.org/project/path_alias_xt')));
+      break;
+  }
+  return empty($s) ? '' : '<p>' . $s . '</p>';
+}
+
+/**
+ * Implements hook_menu().
+ */
+function path_alias_xt_menu() {
+  $items['admin/config/system/path_alias_xt'] = array(
+    'title' => 'Extended path aliases',
+    'description' => 'Advanced settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('path_alias_xt_admin_config'),
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+/**
+ * Menu callback for admin settings.
+ */
+function path_alias_xt_admin_config() {
+  $form['path_alias_xt_user_special'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('For the current user: instead of <em>/user/uid</em> or its alias, apply the alias for <em>/user</em>.'),
+    '#default_value' => variable_get('path_alias_xt_user_special', TRUE),
+    '#description' => t('If ticked and the system path <em>/user</em> has an <a target="alias" href="!alias">alias</a>, such as <em>/MyAccount</em>, then <em>/MyAccount</em> will also be applied when a user visits their <em>/user/uid/...</em> pages.<br/>For this feature to work you must complete the full installation procedure outlined in the <a href="!README">README</a>.', array(
+      '!alias' => url('/admin/config/search/path'),
+      '!README' => url(drupal_get_path('module', 'path_alias_xt') . '/README.txt')))
+  );
+  $form['path_alias_xt_regex_pattern'] = array(
+    '#type' => 'textfield',
+    '#size' => 100,
+    '#title' => t('Regular expression to match system paths for nodes, users and taxonomy terms'),
+    '#default_value' => variable_get('path_alias_xt_regex_pattern', PATH_ALIAS_XT_DEFAULT_NODE_OR_USER_MATCH),
+    '#description' => t("While you can always reset this configuration and recover without permanent damage to your site, a change to this expression may temporarily break all extended aliases. Change only when you know what you're doing.")
+  );
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_url_inbound_alter().
+ *
+ * While drupal_get_path_alias() can't be overridden, drupal_get_normal_path()
+ * does let us augment its behaviour by implementing this hook.
+ *
+ * @param $path
+ *   The system path as calculated and passed to us by drupal_get_normal_path().
+ *   When no alternative system path was found by that function, we apply our
+ *   algorithm to create an system (aka normal) path.
+ * @param $original_path
+ *   The original, potentially aliased path.
+ * @param $path_language
+ *
+ * @see includes/path.inc
+ */
+function path_alias_xt_url_inbound_alter(&$path, $original_path, $path_language) {
+  if (!empty($original_path) && $path == $original_path) {
+    // drupal_get_normal_path() did not find a system path
+
+    // See [#2162621]. This deals with special UTF characters in paths.
+    // @todo: make this should be configurable?
+    $func = function_exists('mb_strrpos') ? 'mb_strrpos' : 'strrpos';
+
+    $candidate_alias = $original_path;
+    while ($pos = $func($candidate_alias, '/')) {
+      // If the truncated path exists as a menu item (incl. paged views), abort.
+      // E.g.: we won't replace and extend the user alias 'admin' in this path:
+      // admin/structure/block/manage/system/navigation/configure, because
+      // admin/structure/block is in the menu-router table.
+      if ($menu_item_path = _path_alias_xt_get_menu_item($candidate_alias)) {
+        return;
+      }
+      $candidate_alias = drupal_substr($candidate_alias, 0, $pos);
+      if ($src = drupal_lookup_path('source', $candidate_alias, $path_language)) {
+        // If 'user' is aliased to MyAccount, then MyAccount/edit needs to
+        // transform to 'user/123/edit'.
+        if ($src == 'user') {
+          global $user;
+          $src .= '/' . $user->uid;
+        }
+        $path = $src . drupal_substr($original_path, $pos);
+        return;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_url_outbound_alter().
+ *
+ * This hook implementation gets called from url($path).
+ *
+ * @see includes/common.inc, url()
+ *
+ * @param string $path
+ *   The path as passed to us by the function url(), which we may turn into
+ *   the aliased path or leave unchanged.
+ * @param array $options
+ *   If $options['alias'] is set to TRUE, the path is assumed already to be
+ *   the correct path alias, and the alias is not looked up.
+ * @param string $original_path
+ *   Not touched.
+ */
+function path_alias_xt_url_outbound_alter(&$path, &$options, $original_path) {
+  if (!empty($options['alias'])) {
+    return;
+  }
+  if ($path == $original_path) {
+    // This is always the case unless altered by another module implementing
+    // this hook.
+    $pattern = variable_get('path_alias_xt_regex_pattern', PATH_ALIAS_XT_DEFAULT_NODE_OR_USER_MATCH);
+    if (preg_match($pattern, $path, $matches)) {
+      if ($alias = drupal_lookup_path('alias', "$matches[1]/$matches[2]")) {
+        $path = "$alias/$matches[3]";
+      }
+    }
+  }
+}
+
+/**
+ * Returns FALSE if the supplied path is NOT in the menu_router table.
+ *
+ * @param string $path
+ * @return the supplied path or FALSE if it was not found in the router table
+ */
+function _path_alias_xt_get_menu_item($path) {
+  return db_query("SELECT path FROM {menu_router} WHERE path = :path", array(':path' => $path))->fetchField();
+}
+
+/**
+ * This is used to override the call drupal_get_path_alias(), which occurs
+ * for instance in the block.module. There is no hook available for this, so
+ * this function needs to be invoked via a call inserted in function
+ * drupal_get_path_alias() or by using the PECL runkit.
+ * Both options are described in detail in the README file.
+ *
+ * @param $path, if omitted the current path is used
+ * @param $path_language
+ * @return string
+ *   The alias for $path or $path unchanged if no alias was found.
+ * @todo simplify this code w.r.t 'user' exceptions
+ */
+function path_alias_xt_get_path_alias($path = NULL, $path_language = NULL) {
+  if ($path == NULL) {
+    $path = $_GET['q'];
+  }
+  // First test for special case user/%
+  global $user;
+  $user_special = variable_get('path_alias_xt_user_special', TRUE);
+  if ($user_special && preg_match('{^user/([0-9]+)\z}', $path, $matches) && $matches[1] == $user->uid) {
+    // For current user rather than applying 'user/%' alias, return
+    // 'user' alias, if it exists.
+    if ($user_alias = drupal_lookup_path('alias', 'user', $path_language)) {
+      return $user_alias;
+    }
+  }
+  if ($alias = drupal_lookup_path('alias', $path, $path_language)) {
+    return $alias;
+  }
+  $pattern = variable_get('path_alias_xt_regex_pattern', PATH_ALIAS_XT_DEFAULT_NODE_OR_USER_MATCH);
+  if (preg_match($pattern, $path, $matches)) {
+    // $matches[0] equals $path, eg 'node/123/edit'
+    // $matches[1] will equal 'node' or 'user' or 'taxonomy/term'
+    // $matches[2] will be the node, user or term id, e.g '123'
+    // $matches[3] is the path extension, e.g., 'edit'
+    if ($user_special && $matches[1] == 'user' && $matches[2] == $user->uid) {
+      // For current user rather than applying 'user/%' alias, apply
+      // 'user' alias, if it exists.
+      if ($user_alias = drupal_lookup_path('alias', 'user', $path_language)) {
+        return "$user_alias/$matches[3]";
+      }
+    }
+    if ($alias = drupal_lookup_path('alias', "$matches[1]/$matches[2]", $path_language)) {
+      return "$alias/$matches[3]";
+    }
+  }
+  return $path;
+}
+
+/**
+ * Purists look away...
+ * There is no suitable hook to override core's drupal_get_path_alias()
+ * behaviour. So we either take on the impossible task of rewriting all modules
+ * that call it, or we redefine its body to make a simple call back to this
+ * module. We can do this programmatically by taking advantage of the PECL
+ * runkit extension. The runkit needs to be compiled and placed in the
+ * /extensions (or /ext) directory pointed to by the extension_dir directive in
+ * php.ini
+ *
+ * Dynamically load the runkit. This may not be supported on multi-threaded web
+ * servers.
+ * If the statement below produces an error on your system, comment it out and
+ * make sure that you have "extension=runkit.so" in your php.ini. Alternatively,
+ * apply the simple edit to includes/path.inc as described in the README file.
+ */
+//dl('runkit.so');
+function path_alias_xt_init() {
+  if (function_exists('runkit_function_redefine') /* && function_exists('drupal_get_path_alias')*/) {
+    $args = '$path=NULL, $path_language=NULL';
+    $body = 'return path_alias_xt_get_path_alias($path, $path_language);';
+    runkit_function_redefine('drupal_get_path_alias', $args, $body);
+  }
+}

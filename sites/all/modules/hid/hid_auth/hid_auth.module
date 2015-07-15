@@ -1,0 +1,376 @@
+<?php
+/**
+ * @file
+ * Code for the Humanitarian ID Auth Integration feature.
+ */
+
+/**
+ * Implements hook_menu_alter().
+ */
+function hid_auth_menu_alter(&$items) {
+  // Disable the user registration page for all users.
+  $items['user/register']['access callback'] = 'hid_auth_user_register_access';
+
+  // Disable the user registration page for all users.
+  $items['user/password']['page callback'] = 'hid_auth_user_pass';
+
+  // Disable the user login page if disabled.
+  $items['user']['page callback'] = 'hid_auth_user_page';
+  $items['user/login']['access callback'] = 'hid_auth_user_is_anonymous';
+}
+
+/**
+ * Implements hook_menu().
+ */
+function hid_auth_menu() {
+  $items = array();
+
+  $items['admin/config/services/hid_auth'] = array(
+    'title'             => 'Humanitarian ID',
+    'description'       => 'Configure the Humanitarian ID app integration with this site.',
+    'page callback'     => 'drupal_get_form',
+    'page arguments'    => array('hid_auth_configpage'),
+    'access arguments'  => array('administer users'),
+    'file'              => 'hid_auth.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_user_logout().
+ *
+ * When a user logs out, redirect them to the logout page on the authentication
+ * server to ensure that session is destroyed.
+ *
+ * The only method to alter the redirect to the front page is to set a global
+ * variable that can be checked in hook_drupal_goto_alter().
+ */
+function hid_auth_user_logout($account) {
+  $GLOBALS['hid_auth_user_logout'] = 1;
+}
+
+/**
+ * Implements hook_drupal_goto_alter().
+ *
+ * When the hid_auth_user_logout global variable is set, redirect users
+ * to the authentication server's logout page.
+ */
+function hid_auth_drupal_goto_alter(&$path, $options, $http_response_code) {
+  if (!empty($GLOBALS['hid_auth_user_logout'])) {
+    $path = hid_auth_get_base_url() . '/logout?redirect=' . url('<front>', array('absolute' => TRUE));
+  }
+  // Fixes conflict with language url
+  $oauth_url = '%2Foauth%2Fauthorized2%2F1';
+  if (strpos($path, '%2Fen'.$oauth_url) !== FALSE) {
+    $path = str_replace('%2Fen'.$oauth_url, $oauth_url, $path);
+  }
+  if (strpos($path, '%2Ffr'.$oauth_url) !== FALSE) {
+    $path = str_replace('%2Ffr'.$oauth_url, $oauth_url, $path);
+  }
+  if (strpos($path, '%2Fes'.$oauth_url) !== FALSE) {
+    $path = str_replace('%2Fes'.$oauth_url, $oauth_url, $path);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * For users with an Oauthconnector connection, disable the email field, hide
+ * the password fields, and add a link to the profile management page on the
+ * authentication server.
+ */
+function hid_auth_form_user_profile_form_alter(&$form, &$form_state) {
+  // Only change the standard "account" user page.
+  if (!empty($form['#user_category']) && $form['#user_category'] !== 'account') {
+    return;
+  }
+
+  // Check if the user has a Connector module account.
+  $uid = !empty($form['#user']->uid) ? $form['#user']->uid : FALSE;
+  $authname = $uid ? db_query("SELECT authname FROM {authmap} WHERE module = 'connector' AND uid = :uid", array(':uid' => $uid))->fetchField() : FALSE;
+  if ($authname) {
+    // Make the email field readonly
+    $form['account']['mail']['#disabled'] = TRUE;
+    $form['account']['mail']['#weight'] = -4;
+
+    // Hide and disable the username field
+    $form['account']['name']['#type'] = 'value';
+
+    // Hide and disable password fields
+    $form['account']['current_pass']['#type'] = 'value';
+    $form['account']['pass']['#type'] = 'value';
+
+    // Add a link to the authentication server's account update page.
+    $form['account']['auth_link'] = array(
+      '#type' => 'item',
+      '#title' => t('Change your email address or password'),
+      '#markup' => t('Click !here to update your email address and password for Humanitarian ID Sign In applications.', array('!here' => l(t('here'), hid_auth_get_base_url() . '/account', array('query' => array('redirect_uri' => url(current_path(), array('absolute' => TRUE))))))),
+      '#weight' => -5,
+    );
+  }
+}
+
+/**
+ * Helper function to lookup the base URL for the Humanitarian ID auth system.
+ */
+function hid_auth_get_base_url() {
+  $connector = _connector_get_connectors('oauthconnector_hid_oauth');
+  return !empty($connector['oauthconnector provider']->url) ? $connector['oauthconnector provider']->url : '';
+}
+
+/**
+ * Helper function to lookup the Humanitarian ID auth system ID for a Drupal user.
+ */
+function hid_auth_get_user_id($account = NULL) {
+  if (empty($account)) {
+    global $user;
+    $account = $user;
+  }
+
+  $connectors = _connector_get_connectors();
+  $connections = _connector_get_user_connections($account);
+
+  // Find the connection using the "oauthconnector_hid_oauth" connector,
+  // and return the related cid.
+  foreach ($connections as $connection) {
+    if (array_key_exists($connection->connector, $connectors)) {
+      $connector = $connectors[$connection->connector];
+      if (!empty($connection->connector) && $connection->connector === 'oauthconnector_hid_oauth' && !empty($connection->cid)) {
+        return $connection->cid;
+      }
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Helper function to retrieve a signed-in user's account data from the
+ * authentication service.
+ */
+function hid_auth_get_user_data($cid = NULL) {
+  // Get account ID and provider data.
+  if (empty($cid)) {
+    $cid = hid_auth_get_user_id();
+  }
+  $provider = oauthconnector_provider_load('hid_oauth');
+  $token = (!empty($cid) && !empty($provider->csid)) ? oauthconnector_get_connection_token($provider, $cid) : FALSE;
+
+  if (!empty($provider->mapping['fields']['uid']['resource']) && !empty($token->key)) {
+    // Prepare query to get account data.
+    $url = url($provider->mapping['fields']['uid']['resource'], array('query' => array('access_token' => $token->key)));
+    $res = drupal_http_request($url);
+
+    // Handle response
+    if (empty($res->error) && !empty($res->code) && floor(intval($res->code) / 100) == 2 && !empty($res->data)) {
+      return drupal_json_decode($res->data);
+    }
+    else {
+      watchdog('hid_auth', 'Error occurred when attempting to fetch user data. HTTP code %code: @error', array('%code' => $res->code, '@error' => $res->error), WATCHDOG_WARNING);
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Helper function to register a user with a given email address, and optional
+ * first and last name.
+ */
+function hid_auth_register_user($email, $name_first = '', $name_last = '') {
+  $data = array(
+    'email' => $email,
+    'nameFirst' => $name_first,
+    'nameLast' => $name_last,
+  );
+  $response = hid_auth_api_post('api/register', $data);
+  if (!empty($response->code) && $response->code == 200 && !empty($response->data)) {
+    $response_data = drupal_json_decode($response->data);
+    if (!empty($response_data['status']) && $response_data['status'] == 'ok') {
+      if (!empty($response_data['data']['user_id']) && isset($response_data['data']['is_new'])) {
+        watchdog('hid_auth', 'User %user_id registered with email %email (@nameFirst @nameLast)', array('%user_id' => $response_data['response']['data']['user_id'], '%email' => $email, '@nameFirst' => $name_first, '@nameLast' => $name_last));
+        return $response_data['data'];
+      }
+    }
+    watchdog('hid_auth', 'API error when attempting to register user with email %email (@nameFirst @nameLast)', array('%email' => $email, '@nameFirst' => $name_first, '@nameLast' => $name_last));
+    return FALSE;
+  }
+  else {
+    watchdog('hid_auth', 'API error when attempting to register user. Received: <pre>@response</pre>', array('@response' => var_dump($response)));
+    return FALSE;
+  }
+}
+
+/**
+ * Helper function for making a POST request to the HID Authentication API.
+ */
+function hid_auth_api_post($resource_path, $data = array()) {
+  $connector = _connector_get_connectors('oauthconnector_hid_oauth');
+  $base_url = !empty($connector['oauthconnector provider']->url) ? $connector['oauthconnector provider']->url : '';
+  $csid = !empty($connector['oauthconnector provider']->csid) ? $connector['oauthconnector provider']->csid : FALSE;
+  $consumer = !empty($csid) ? oauth_common_consumer_load($csid) : FALSE;
+  $key = !empty($consumer->key) ? $consumer->key : '';
+  $secret = !empty($consumer->secret) ? $consumer->secret : '';
+
+  if (empty($base_url) || empty($key) || empty($secret)) {
+    watchdog('contactsid_profiles', 'Attempted to make a POST request to the Contacts ID Profiles API, but the API endpoint, key, or secret is not set.');
+    return;
+  }
+
+  $values_string = NULL;
+
+  $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($data));
+  foreach($it as $v) {
+    $values_string .= $v;
+  }
+
+  $key_hash = hash('sha256', $values_string . $secret);
+  $data['client_key'] = $key;
+  $data['access_key'] = $key_hash;
+
+  $variables = array();
+  $variables['data'] = $data;
+  $variables['endpoint'] = $base_url;
+
+  return restclient_post($resource_path, $variables);
+}
+
+/**
+ * Access callback function to replace user_is_anonymous(). If logins are 
+ * disabled, deny the user automatically. Otherwise, continue on to the
+ * original user_is_anonymous() callback.
+ */
+function hid_auth_user_is_anonymous() {
+  $login_enabled = variable_get('hid_auth_login_enabled', FALSE);
+  if ($login_enabled) {
+    return user_is_anonymous();
+  }
+  return FALSE;
+}
+
+/**
+ * Access callback function to replace user_register_access(). If logins are not
+ * permitted and the user is not logged in, deny the user access. If the user is
+ * logged in, use the default user_register_access() callback.
+ */
+function hid_auth_user_register_access() {
+  $login_enabled = variable_get('hid_auth_login_enabled', FALSE);
+  if ($login_enabled) {
+    return user_register_access();
+  }
+  return FALSE;
+}
+
+/**
+ * Callback function to replace user_page(). If logins are not permitted and
+ * the user is not logged in, deny the user access. If the user is logged in,
+ * display their user page.
+ */
+function hid_auth_user_page() {
+  global $user;
+  $login_enabled = variable_get('hid_auth_login_enabled', FALSE);
+
+  if ($user->uid || $login_enabled) { // the order is important here
+    return user_page();
+  }
+  drupal_access_denied();
+}
+
+/**
+ * Callback function to replace user_pass(). If logins are not permitted and
+ * the user is not logged in, deny the user access.
+ */
+function hid_auth_user_pass($form_id) {
+  $login_enabled = variable_get('hid_auth_login_enabled', FALSE);
+
+  if ($login_enabled) {
+    return drupal_get_form($form_id);
+  }
+  drupal_access_denied();
+}
+
+/**
+ * Implements hook_oauthconnector_presets_alter().
+ *
+ * Provides Oauth Connector presets for the production, dev, and local env
+ * configurations for Humanitarian.ID auth integration.
+ */
+function hid_auth_oauthconnector_presets_alter(&$presets) {
+  // Define presets for the production Humanitarian.ID environment.
+  $hid_auth_prod = new stdClass;
+  $hid_auth_prod->name = 'hid_oauth';
+  $hid_auth_prod->title = 'Humanitarian.ID (production)';
+  $hid_auth_prod->url = 'https://auth.humanitarian.id';
+  $hid_auth_prod->consumer_advanced = array(
+    'oauth2' => 1,
+    'signature method' => 'HMAC-SHA1',
+    'authentication realm' => '',
+    'request token endpoint' => '/oauth/request_token',
+    'authorization scope' => 'hid:profile',
+    'authorization endpoint' => '/oauth/authorize',
+    'access token endpoint' => '/oauth/access_token',
+  );
+  $hid_auth_prod->mapping = array(
+    'fields' => array(
+      'uid' => array(
+        'resource' => 'https://auth.humanitarian.id/account.json',
+        'method post' => 0,
+        'field' => 'user_id',
+        'querypath' => FALSE,
+        'sync_with_field' => '',
+      ),
+      'email' => array(
+        'resource' => 'https://auth.humanitarian.id/account.json',
+        'method post' => 0,
+        'field' => 'email',
+        'querypath' => FALSE,
+        'sync_with_field' => 'mail',
+      ),
+      'name' => array(
+        'resource' => 'https://auth.humanitarian.id/account.json',
+        'method post' => 0,
+        'field' => 'email',
+        'querypath' => FALSE,
+        'sync_with_field' => 'name',
+      ),
+      'avatar' => array(
+        'resource' => '',
+        'method post' => 0,
+        'field' => '',
+        'querypath' => FALSE,
+        'sync_with_field' => '',
+      ),
+    ),
+    'format' => 'json',
+  );
+  $presets['hid_auth_prod'] = array(
+    'data' => $hid_auth_prod,
+    'name' => 'Humanitarian.ID (production)',
+  );
+
+  // Define overrides for the dev environment.
+  $hid_auth_dev = clone $hid_auth_prod;
+  $hid_auth_dev->name = 'hid_oauth';
+  $hid_auth_dev->title = 'Humanitarian.ID (dev)';
+  $hid_auth_dev->url = 'http://dev.auth.568elmp02.blackmesh.com';
+  $hid_auth_dev->mapping['fields']['uid']['resource'] = 'http://dev.auth.568elmp02.blackmesh.com/account.json';
+  $hid_auth_dev->mapping['fields']['email']['resource'] = 'http://dev.auth.568elmp02.blackmesh.com/account.json';
+  $hid_auth_dev->mapping['fields']['name']['resource'] = 'http://dev.auth.568elmp02.blackmesh.com/account.json';
+  $presets['hid_auth_dev'] = array(
+    'data' => $hid_auth_dev,
+    'name' => 'Humanitarian.ID (dev)',
+  );
+
+  // Define overrides for the local environment.
+  $hid_auth_local = clone $hid_auth_prod;
+  $hid_auth_local->name = 'hid_oauth';
+  $hid_auth_local->title = 'Humanitarian.ID (local)';
+  $hid_auth_local->url = 'http://auth.contactsid.vm';
+  $hid_auth_local->mapping['fields']['uid']['resource'] = 'http://auth.contactsid.vm/account.json';
+  $hid_auth_local->mapping['fields']['email']['resource'] = 'http://auth.contactsid.vm/account.json';
+  $hid_auth_local->mapping['fields']['name']['resource'] = 'http://auth.contactsid.vm/account.json';
+  $presets['hid_auth_local'] = array(
+    'data' => $hid_auth_local,
+    'name' => 'Humanitarian.ID (local)',
+  );
+}
+

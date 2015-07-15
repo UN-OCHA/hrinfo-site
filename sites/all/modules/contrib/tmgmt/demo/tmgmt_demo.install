@@ -1,0 +1,89 @@
+<?php
+/**
+ * @file
+ * Installation hooks for tmgmt_demo module.
+ */
+
+
+/**
+ * Implements hook_install().
+ */
+function tmgmt_demo_install() {
+  include_once DRUPAL_ROOT . '/includes/locale.inc';
+  // Add German to the language list.
+  if (!array_key_exists('de', language_list())) {
+    locale_add_language('de');
+  }
+
+  // Add content type 'translatable'.
+  if (!array_key_exists('translatable', node_type_get_names())) {
+    $type = array(
+      'type' => 'translatable',
+      'name' => 'Translation Demo Type',
+      'base' => 'node_content',
+      'custom' => 1,
+      'modified' => 1,
+      'locked' => 0,
+    );
+
+    $type = node_type_set_defaults($type);
+    node_type_save($type);
+    node_add_body_field($type);
+    variable_set('language_content_type_translatable', TRUE);
+    variable_set('comment_translatable', '0');
+  }
+
+  // Add language skills to the admin user.
+  $user = user_load(1);
+
+  $edit = array(
+    'tmgmt_translation_skills' => array(
+      'und' => array(
+        0 => array(
+          'language_from' => 'de',
+          'language_to'   => 'en',
+        ),
+        1 => array(
+          'language_from' => 'en',
+          'language_to'   => 'de',
+        ),
+      ),
+    ),
+  );
+
+  user_save($user, $edit);
+
+  // Add demo content.
+  $node = new stdClass();
+  $node->title = 'Second node';
+  $node->type = 'translatable';
+  node_object_prepare($node);
+  $node->language = 'en';
+  $node->body[LANGUAGE_NONE][0]['value'] = 'Have another try. This text can be
+    translated as well';
+  $node->uid = $user->uid;
+  node_save($node);
+
+  $node = new stdClass();
+  $node->title = 'First node';
+  $node->type = 'translatable';
+  node_object_prepare($node);
+  $node->language = 'en';
+  $node->body[LANGUAGE_NONE][0]['value'] = 'This text can be translated with TMGMT.
+    Use the "translate" Tab and choose "Request Translation" to get started';
+  $node->uid = $user->uid;
+  node_save($node);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function tmgmt_demo_uninstall() {
+  // Remove the content type created by the demo module.
+  if (array_key_exists('translatable', node_type_get_names())) {
+    node_type_delete('translatable');
+    variable_del('node_preview_translatable');
+    node_types_rebuild();
+    menu_rebuild();
+  }
+}

@@ -1,0 +1,121 @@
+<?php
+/**
+ * @file
+ * Code for the Operations feature.
+ */
+
+include_once 'hr_operations.features.inc';
+
+/**
+ * Implements hook_block_info().
+ */
+function hr_operations_block_info() {
+  $blocks['operations_map'] = array(
+    'info' => t('Operations Map'),
+  );
+  $blocks['operations_dropdown'] = array(
+    'info' => t('Operations Dropdown'),
+  );
+  $blocks['operations_status'] = array(
+    'info' => t('Operations Status'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function hr_operations_block_view($delta = '') {
+  switch($delta) {
+    case 'operations_map':
+      drupal_add_js('https://code.highcharts.com/maps/highmaps.js', 'external');
+      drupal_add_js('https://code.highcharts.com/mapdata/custom/world.js', 'external');
+      drupal_add_js(drupal_get_path('module', 'hr_operations') . '/js/hr_operations_map.js', 'file');
+      $block['subject'] = t('');
+      $block['content'] = '<div id="operations_map"></div>';
+      break;
+    case 'operations_dropdown':
+      drupal_add_library('chosen', 'drupal.chosen');
+      $block['subject'] = t('Operations');
+      $block['content'] = '<div>
+<div class="col-sm-12">
+    <p><strong><a href="/operations/afghanistan">Afghanistan</a></strong></p>
+  </div>
+</div>
+<div>
+  <div class="col-sm-12">
+    <p><strong><a href="/operations/iraq">Iraq</a></strong></p>
+  </div>
+</div>
+<div>
+  <div class="col-sm-12">
+    <p><strong><a href="/operations/nepal">Nepal</a></strong></p>
+  </div>
+</div>
+<div>
+  <div class="col-sm-12">
+    <p><strong><a href="/operations/democratic-republic-congo">République Démocratique du Congo</a></strong></p>
+  </div>
+</div>
+<div>
+  <div class="col-sm-12">
+    <p><strong><a href="/operations/ukraine">Ukraine</a></strong></p>
+  </div>
+</div>
+<div>
+  <div class="col-sm-12">
+    <p><strong><a href="/operations/vanuatu">Vanuatu</a></strong></p>
+  </div>
+</div>
+<div>
+  <div class="col-sm-12">
+    <p><strong><a href="/operations/whole-of-syria">Whole of Syria</a></strong></p>
+  </div>
+</div>
+
+<div>
+  <div class="col-sm-12">
+    <p><strong><a href="/operations/yemen">Yemen</a></strong></p>
+  </div>
+</div>
+';
+      $block['content'] .= '<p class="text-center"><select id="operations-dropdown" data-placeholder="All Operations" class="hr-goto-dropdown"><option value="_none"></option>';
+      $labels = _hr_operations_get_active_operation_labels();
+      foreach ($labels as $path => $label) {
+        $block['content'] .= '<option value="'.$path.'">'.$label.'</option>';
+      }
+      $block['content'] .= '</select></p>';
+      break;
+    case 'operations_status':
+      $block['subject'] = t('');
+      $node_data = node_load(arg(1));
+      if(isset($node_data->field_operation_status['und'][0]['value'])) {
+        if($node_data->field_operation_status['und'][0]['value'] != "active" && $node_data->field_operation_status['und'][0]['value'] != "") {
+          $block['content'] = '<div class="operation-status ' . $node_data->field_operation_status['und'][0]['value'] . '">' . $node_data->field_operation_status['und'][0]['value'] . '<i class="fa fa-info"></i></div>';
+        }
+      }
+      break;
+  }
+  return $block;
+}
+
+function _hr_operations_get_active_operation_labels() {
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'hr_operation')
+    ->propertyCondition('status', 1)
+    ->fieldCondition('field_operation_status', 'value', 'active', '=')
+    ->execute();
+  $entities = entity_load('node', array_keys($result['node']));
+  $labels = array();
+  foreach ($entities as $nid => $entity) {
+    $path = url('node/'.$nid, array('absolute' => TRUE));
+    if (!empty($entity->field_website)) {
+      $path = $entity->field_website[LANGUAGE_NONE][0]['url'];
+    }
+    $labels[$path] = entity_label('node', $entity);
+  }
+  asort($labels);
+  return $labels;
+}

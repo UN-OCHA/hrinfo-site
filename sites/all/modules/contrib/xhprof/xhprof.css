@@ -1,0 +1,49 @@
+/* diff reports: display regressions in red */
+.vrbar {
+  text-align: right;
+  color:red;
+}
+
+/* diff reports: display improvements in green */
+.vgbar {
+  text-align: right;
+  color:green;
+}
+
+td.vwbar, th.vwbar {
+  text-align: right;
+}
+
+td.vwlbar, th.vwlbar {
+  text-align: left;
+}
+
+p.blue  {
+  color:blue
+}
+
+.xhprof-table tr td:first-child {
+  padding-left: 10px;
+}
+
+.xhprof-table tr td.xhprof_percent:last-child {
+  padding-right: 10px;
+}
+
+.xhprof_micro, .xhprof_percent {
+  text-align: right;
+  padding: 2px 4px;
+}
+
+.xhprof-summary-table {
+  width: 40%;
+  margin: 0 auto;
+}
+
+ul.xhprof_actions {
+  float: right;
+}
+
+.xhprof_actions li {
+  list-style: none;
+}

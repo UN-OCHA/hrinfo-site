@@ -1,0 +1,508 @@
+<?php
+/**
+ * @file
+ * Code for the Layout feature.
+ */
+
+include_once 'hr_layout.features.inc';
+
+/**
+ * Implements hook_ctools_plugin_directory()
+ */
+function hr_layout_ctools_plugin_directory($module, $plugin) {
+  if ($module == "panels" && in_array($plugin, array('styles'))) {
+    return "plugins/$plugin";
+  }
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+function hr_layout_block_info() {
+  $blocks['hr_layout_checkin'] = array(
+    'info' => t('Checkin block'),
+  );
+  $blocks['hr_layout_login'] = array(
+    'info' => t('HR Login block'),
+  );
+  $blocks['hr_layout_create_links'] = array(
+    'info' => t('OG Create links'),
+  );
+  $blocks['hr_layout_share_links'] = array(
+    'info' => t('Share links'),
+  );
+  $blocks['hr_layout_key_documents'] = array(
+    'info' => t('Key documents'),
+  );
+  $blocks['hr_layout_hum_system'] = array(
+    'info' => t('Humanitarian System'),
+  );
+  return $blocks;
+}
+
+function hr_layout_block_view($delta = '') {
+  global $user;
+  $block = array();
+  switch ($delta) {
+    case 'hr_layout_checkin':
+      $block['content'] = '';
+      if (user_is_logged_in()) {
+        $gid = og_context_determine_context('node');
+        if ($gid != 84) { // Philippines
+          if (!empty($gid)) {
+            $og_group = entity_load('node', array($gid));
+            $og_group = $og_group[$gid];
+            if (!og_is_member('node', $gid)) {
+              if (og_user_access('node', $gid, 'subscribe') || og_user_access('node', $gid, 'subscribe without approval')) {
+                if ($og_group->type == 'hr_operation') {
+                  $block['content'] = '<!-- Single button -->
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        '.t('Check-in').' <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li>'.l(t('As In-country/emergency responder'), 'group/node/'.$gid.'/subscribe/field_responder_in', array('query' => array(OG_AUDIENCE_FIELD => $gid))).'</li>
+                        <li>'.l(t('As support/desk officer'), 'group/node/'.$gid.'/subscribe/og_user_node').'</li>
+                      </ul>
+                    </div>';
+                }
+                else {
+                  $block['content'] = l(t('Check-in'), 'group/node/'.$gid.'/subscribe/og_user_node', array('attributes' => array('class' => array('btn', 'btn-default'))));
+                }
+              }
+            }
+            else {
+              $block['content'] = l(t('Check out'), 'group/node/'.$gid.'/unsubscribe', array('attributes' => array('class' => array('btn', 'btn-default'))));
+            }
+            $uri = entity_uri('node', $og_group);
+            $variables['og_group'] = l($og_group->title, $uri['path'], $uri['options']);
+          }
+        }
+        else {
+          // HID checkin
+          $data = hid_profiles_get_user_data($user->uid);
+          $checkedin = FALSE;
+          $cid = '';
+          foreach ($data->contacts as $contact) {
+            if ($contact->status == 1 && $contact->{'type'} == 'local' && $contact->locationId == 'hrinfo:'.$gid) {
+              $checkedin = TRUE;
+              $cid = $contact->{'_id'};
+            }
+          }
+          if ($checkedin) {
+            $block['content'] = l(t('Check out'), 'hid/checkout/'.$cid, array('attributes' => array('class' => array('btn', 'btn-default')), 'query' => array('destination' => current_path())));
+          }
+          else {
+            $block['content'] = l(t('Check-in'), variable_get('hid_profiles_app_url', NULL).'/#/checkin', array('attributes' => array('class' => array('btn', 'btn-default'), 'target' => '_blank')));
+          }
+        }
+      }
+      break;
+    case 'hr_layout_create_links':
+      $block['content'] = hr_layout_create_links();
+      break;
+    case 'hr_layout_login':
+      $block['content'] = '';
+      if (!user_is_logged_in()) {
+        if (module_exists('hid_auth')) {
+          $block['content'] = l(t('Log in'), 'https://www.humanitarianresponse.info/connect/oauthconnector_hid_oauth', array('attributes' => array('class' => array('btn', 'btn-default')), 'query' => drupal_get_destination()));
+        }
+        else {
+          $block['content'] = l(t('Log in'), 'user/login', array('attributes' => array('class' => array('btn', 'btn-default')), 'query' => drupal_get_destination()));
+        }
+      }
+      break;
+    case 'hr_layout_share_links':
+      $block['content'] = '';
+      $context = og_context();
+      if (!empty($context) && $context['group_type'] == 'node') {
+        $gid = $context['gid'];
+        $node = node_load($gid);
+        node_build_content($node);
+        $view = $node->content;
+
+
+        $current_title = drupal_get_title();
+        // $block['content'] .= '<h2><span>' . $current_title . '</span> site</h2>';
+        // $block['content'] .= '<hr/>';
+
+        if(arg(1) != $context['gid']) { // If the current node ID & context ID are different, then we know we are in a cluster page
+          $block['content'] .= '<div class="cluster"><div class="image"></div>' . $current_title . ' Cluster</div>';
+          $block['content'] .= '<hr/>';
+        }
+
+        //Follow flag
+        $block['content'] .= '<div class="space-follow">';
+        if (user_is_logged_in()) {
+          $block['content'].= flag_create_link('hr_follow', $gid);
+        }
+        else {
+          $block['content'].= l(t('Login to follow').' <i class="fa fa-random"></i>', 'user/login', array('attributes' => array('class' => array('btn', 'btn-primary')), 'html' => TRUE));
+        }
+        $block['content'] .= '</div>';
+
+        //Render RSS link
+        $link_rss_options = array(
+          'html' => TRUE,
+          'attributes' => array(
+            'title' => t('RSS Feed'),
+            'class' => array(
+              'btn',
+              'btn-primary',
+            ),
+          ),
+        );
+        $block['content'] .= '<div class="space-rss">';
+        $block['content'] .= l(t('Newsfeed') . '<i class="fa fa-rss"></i>', 'node/'.$gid.'/feed', $link_rss_options);
+        $block['content'] .= '</div>';
+
+        if (isset($view['field_social_media'])) {
+          $link_social_options = array(
+            'html' => TRUE,
+            'absolute' => TRUE,
+            'attributes' => array(
+              'class' => array(
+                'btn',
+                'btn-primary',
+              ),
+            ),
+          );
+          foreach($view['field_social_media']['#items'] as $social_media) {
+            $format = hr_layout_social_media_link($social_media['url']);
+            $link_social_options['attributes']['title'] = $format['text'];
+            //Render Social Media link
+            $block['content'] .= '<div class="space-social-media">';
+            $block['content'] .= l($format['text'] . '<i class="fa ' . $format['icon'] . '"></i>', $social_media['url'], $link_social_options);
+            $block['content'] .= '</div>';
+          }
+        }
+
+
+        $block['content'] .= '<hr/>';
+
+        if (isset($view['field_organizations'])) {
+          $block['content'] .= '<div class="manager">'.t('Managed by').': <br />';
+          foreach ($view['field_organizations']['#items'] as $org) {
+            $block['content'] .= '<i>'.entity_label('taxonomy_term', $org['entity']).'</i><br />';
+          }
+          $block['content'] .= '</div>';
+        }
+
+        if (isset($view['field_users'])) {
+          $block['content'] .= '<div class="manager">'.t('Focal points').': <br />';
+          foreach ($view['field_users']['#items'] as $field_user) {
+            $block['content'] .= '<i>'.l(entity_label('user', $field_user['entity']), 'user/'.$field_user['target_id']).'</i><br />';
+          }
+          $block['content'] .= '</div>';
+        }
+
+
+        if (isset($view['field_email'])) {
+          //Render Email link
+          $link_email_options = array(
+            'html' => TRUE,
+            'absolute' => TRUE,
+            'attributes' => array(
+              'title' => t('Contact'),
+              'class' => array(
+                'btn',
+                'btn-primary',
+              ),
+            ),
+          );
+          $block['content'] .= '<div class="space-email">';
+          $block['content'] .= l(t('Contact') . '<i class="fa fa-at"></i>', 'mailto:'.$view['field_email']['#items'][0]['email'], $link_email_options);
+          $block['content'] .= '</div>';
+        }
+
+      }
+      break;
+    case 'hr_layout_key_documents':
+      drupal_add_library('chosen', 'drupal.chosen');
+      $block['subject'] = t('Documents');
+      $block['content'] = '<ul>';
+      $block['content'] .= '<li>'.l(t('3W / 4W'), 'infographics/infographic-type/3w').'</li>';
+      $block['content'] .= '<li>'.l(t('Appeals'), 'documents/document-type/appeal').'</li>';
+      $block['content'] .= '<li>'.l(t('Assessments'), 'assessments').'</li>';
+      $block['content'] .= '<li>'.l(t('Humanitarian Bulletin'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/humanitarian-bulletin').'</li>';
+      $block['content'] .= '<li>'.l(t('Humanitarian Needs Overview - HNO'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/humanitarian-needs-overview').'</li>';
+      $block['content'] .= '<li>'.l(t('Humanitarian Response Plan - HRP'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/strategic-response-plan').'</li>';
+      $block['content'] .= '<li>'.l(t('Maps'), 'infographics').'</li>';
+      $block['content'] .= '<li>'.l(t('Situation Reports'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/situation-report').'</li>';
+      $block['content'] .= '</ul>';
+      $block['content'] .= '<div class=view-all-hr-layout-key-documents><p class="text-center">'.l(t('View All Documents'), 'documents').'</p></div>';
+      /*$block['content'] .= '<select id="hr-layout-key-documents" data-placeholder="View our key documents" class="hr-goto-dropdown"><option value="_none"></option>';
+      $key_docs = _hr_layout_key_documents();
+      foreach ($key_docs as $group => $items) {
+        $block['content'] .= '<optgroup label="'.t($group).'">';
+        foreach ($items as $label => $path) {
+          $block['content'] .= '<option value="'.$path.'">'.t($label).'</option>';
+        }
+        $block['content'] .= '</optgroup>';
+      }
+      $block['content'] .= '</select>';*/
+      break;
+    case 'hr_layout_hum_system':
+      $block['subject'] = t('Humanitarian System');
+      $block['content'] = '<ul>';
+      $block['content'] .= '<li>'.l(t('Cluster Approach'), 'coordination/clusters').'</li>';
+      $block['content'] .= '<li>'.l(t('Humanitarian Programme Cycle'), 'programme-cycle/space').'</li>';
+      $block['content'] .= '<li>'.l(t('Humanitarian Leadership'), 'coordination/humanitarian-leadership').'</li>';
+      $block['content'] .= '<li>'.l(t('Indicator Registry'), 'applications/ir').'</li>';
+      $block['content'] .= '<li>'.l(t('NGOs'), 'coordination/ngos').'</li>';
+      $block['content'] .= '<li>'.l(t('Policy and Guidance'), 'documents/document-type/policy-and-guidance').'</li>';
+      $block['content'] .= '<li>'.l(t('Training and resource materials'), 'documents/document-type/training-and-resource-materials').'</li>';
+      $block['content'] .= '<li>'.l(t('Transformative Agenda'), 'topics/transformative-agenda').'</li>';
+      $block['content'] .= '</ul>';
+      //Add select option for global clusters available here http://www.humanitarianresponse.info/en/coordination/clusters/global
+      $block['content'] .= '<p class="text-center"><select id="clusters-dropdown" data-placeholder="Clusters/Themes" class="hr-goto-dropdown"><option value="_none"></option>';
+      $options = '
+        <option value="coordination/clusters/camp-coordination-management">Camp Coordination / Management</option>
+        <option value="coordination/clusters/child-protection">Child Protection</option>
+        <option value="coordination/clusters/early-recovery">Early Recovery</option>
+        <option value="coordination/clusters/education">Education</option>
+        <option value="coordination/clusters/emergency-shelter-and-nfi">Emergency Shelter and NFI</option>
+        <option value="coordination/clusters/emergency-telecommunications">Emergency Telecommunications</option>
+        <option value="/topics/environment">Environment</option>
+        <option value="coordination/clusters/food-security">Food Security</option>
+        <option value="/topics/gender">Gender</option>
+        <option value="coordination/clusters/gender-based-violence">Gender Based Violence</option>
+        <option value="coordination/clusters/health">Health</option>
+        <option value="coordination/clusters/housing-land-and-property">Housing, Land and Property</option>
+        <option value="coordination/clusters/logistics">Logistics</option>
+        <option value="coordination/clusters/mine-action">Mine Action</option>
+        <option value="coordination/clusters/nutrition">Nutrition</option>
+        <option value="coordination/clusters/protection">Protection</option>
+        <option value="coordination/clusters/water-sanitation-hygiene">Water Sanitation Hygiene</option>
+      ';
+      $block['content'] .= $options;
+      $block['content'] .= '</select></p>';
+      break;
+  }
+  return $block;
+}
+
+
+/**
+ * Return icon name & link title for given URL.
+ */
+function hr_layout_social_media_link($url) {
+  $services = array(
+    'facebook.com' => array('icon' => 'fa-facebook', 'text' => 'Facebook'),
+    'twitter.com' => array('icon' => 'fa-twitter', 'text' => 'Twitter'),
+    'linkedin.com' => array('icon' => 'fa-linkedin', 'text' => 'LinkedIn'),
+    'github.com' => array('icon' => 'fa-github', 'text' => 'Github'),
+    'pinterest.com' => array('icon' => 'fa-pinterest', 'text' => 'Pinterest'),
+    'google.com' => array('icon' => 'fa-google-plus', 'text' => 'Google'),
+  );
+
+  $parsed = parse_url($url);
+  $chunks = explode('.', $parsed['host']);
+  if (count($chunks) == 1)
+    $host = $chunks[0];
+  else
+    $host = $chunks[count($chunks)-2] . '.' . $chunks[count($chunks)-1];
+
+  if (isset($services[$host]))
+    return $services[$host];
+  else
+    return array('icon' => 'fa-globe', 'text' => t('Social Media'));
+}
+
+function hr_layout_create_links() {
+  global $user;
+  $button = '';
+  if (!user_is_logged_in()) {
+    return $button;
+  }
+
+  $gid = NULL;
+  $context = og_context();
+  if ($context['gid']) {
+    $gid = $context['gid'];
+  }
+
+  if (!empty($gid)) {
+    $bundle_id = 0;
+    $groups = entity_load('node', array($gid));
+    $group = $groups[$gid];
+    if ($group->type == 'hr_bundle') {
+      $bundle_id = $group->nid;
+      $op_gid = _hr_bundles_get_operation($group->nid);
+      $groups = entity_load('node', array($op_gid));
+      $group = $groups[$op_gid];
+    }
+    $types = array();
+    foreach (node_type_get_types() as $type) {
+      if (og_is_group_content_type('node', $type->type)) {
+        $types[$type->type] = $type->type;
+      }
+    }
+
+    $extra_fields = array();
+    if (!empty($bundle_id)) {
+      $extra_fields = array('field_bundles' => $bundle_id);
+    }
+    $content = og_node_create_links('node', $group->nid, OG_AUDIENCE_FIELD, FALSE, $types, $extra_fields);
+    if (!empty($content['og_node_create_links']['#items'])) {
+      foreach ($content['og_node_create_links']['#items'] as $key => $item) {
+        // Unfortunately we have to parse the link path to determine
+        // which node type this is for
+        $matches = array();
+        if (preg_match("/(?<=(node\/add\/)).*(?=\?)/", $item['data'], $matches)) {
+          if (isset($matches[0])) {
+            // Reformat the node type
+            $type = str_replace('-', '_', $matches[0]);
+            // See if this node type is disabled for this group
+            if (!og_features_component_is_disabled('node', $type, $group)) {
+              if ($type != 'hr_contact' || ($type == 'hr_contact' && (og_is_member('node', $group->nid) || in_array('editor', $user->roles)))) {
+                $button .= '<li>'.$item['data'].'</li>';
+              }
+            }
+          }
+        }
+      }
+      if (!empty($button)) {
+        $button = '<div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          <i class="fa fa-plus-square"></i>
+        </button>
+        <ul class="dropdown-menu" role="menu">'.$button.'</ul></div>';
+      }
+    }
+  }
+
+  return $button;
+}
+
+/**
+ * Implements hook_entity_insert()
+ */
+function hr_layout_entity_insert($entity, $type) {
+  if ($type == 'node') {
+    if (og_menu_single_is_enabled_group('node', $entity->type)) {
+      // Add an initial menu link
+      $mlid = og_menu_single_get_link_mlid('node', $entity->nid);
+      $menu_link = array(
+        'link_path' => 'node/'.$entity->nid,
+        'link_title' => entity_label('node', $entity),
+        'menu_name' => OG_MENU_SINGLE_MENU_NAME,
+        'weight' => 0,
+        'plid' => $mlid,
+      );
+      menu_link_save($menu_link);
+    }
+  }
+}
+
+/**
+ * Implements hook_menu_alter()
+ * HACK: fixes a bug that makes ajax calls stop working when adding an FTS
+ * Visualization through "Bean Panes" (Panels)
+ */
+function hr_layout_menu_alter(&$items) {
+  $items['system/ajax']['page callback'] = 'hr_layout_ajax_form_callback';
+}
+
+function hr_layout_ajax_form_callback() {
+  module_load_include('inc', 'bean_pane', 'plugins/content_types/bean_pane');
+  return ajax_form_callback();
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Change default cache for new Panels panes.
+ * Sets content cache for views panes and simple cache for custom content and fieldable panels panes
+ */
+function hr_layout_form_alter(&$form, &$form_state, $form_id) {
+  $panels_add_content_forms = array('ctools_block_content_type_edit_form',
+    'ctools_custom_content_type_edit_form',
+    'ctools_node_content_type_edit_form',
+    'views_content_views_panes_content_type_edit_form',
+    'fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form',
+    'ctools_bean_pane_content_type_form',
+  );
+     
+  if (in_array($form_id, $panels_add_content_forms)) {
+    if ($form_id == 'views_content_views_panes_content_type_edit_form') {
+      $cache = array(
+        'method' => 'content',
+        'settings' => array('lifetime' => 'none'),
+      );
+      switch($form_state['pane']->subtype) {
+        case 'hr_documents_panes-list':
+          $form_state['pane']->cache = $cache;
+          $form_state['pane']->cache['settings']['content_types'] = array('hr_document' => 'hr_document');
+          break;
+        case 'hr_contacts_panes-list':
+          $form_state['pane']->cache = $cache;
+          $form_state['pane']->cache['settings']['content_types'] = array('hr_contact' => 'hr_contact');
+          break;
+        case 'hr_events_panes-upcoming':
+          $form_state['pane']->cache = $cache;
+          $form_state['pane']->cache['settings']['content_types'] = array('hr_event' => 'hr_event');
+          break;
+        case 'hr_infographics_panes-list':
+          $form_state['pane']->cache = $cache;
+          $form_state['pane']->cache['settings']['content_types'] = array('hr_infographic' => 'hr_infographic');
+          break;
+        case 'hr_news_panes-list':
+          $form_state['pane']->cache = $cache;
+          $form_state['pane']->cache['settings']['content_types'] = array('hr_news' => 'hr_news');
+          break;
+      }
+    }
+    elseif ($form_id == 'ctools_custom_content_type_edit_form') {
+      $form_state['pane']->cache = array(
+        'method' => 'simple',
+        'settings' => array('lifetime' => '604800', 'granularity' => 'none'), // 1 week
+      );
+    }
+    elseif ($form_id == 'ctools_bean_pane_content_type_form') {
+      $form_state['pane']->cache = array(
+        'method' => 'simple',
+        'settings' => array('lifetime' => '86400', 'granularity' => 'none'), // 1 day
+      );
+    }
+    elseif ($form_id == 'fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form') {
+      $fpid = str_replace('fpid:', '', $form_state['pane']->subtype);
+      $url = 'admin/structure/fieldable-panels-panes/view/'.$fpid;
+      $form['advanced_settings'] = array(
+        '#markup' => l(t('Advanced settings'), $url),
+        '#weight' => 1,
+      );
+
+    }
+
+    $form['uuid'] = array(
+      '#markup' => '<strong>UUID:</strong>'.$form_state['pane']->uuid,
+      '#weight' => 2,
+    );
+  }
+}
+
+/**
+ * Helper function for key documents block
+ */
+function _hr_layout_key_documents() {
+  return array(
+    'OCHA Core Products' => array(
+      'Humanitarian Bulletin' => 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/humanitarian-bulletin',
+      'Humanitarian Dashboard' => 'infographics/organizations/united-nations-office-coordination-humanitarian-affairs/infographic-type/humanitarian-dashboard',
+      'Humanitarian Snapshot' => 'infographics/organizations/united-nations-office-coordination-humanitarian-affairs/infographic-type/humanitarian-snapshot',
+      'Situation Report' => 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/situation-report',
+    ),
+    'HPC Products' => array(
+      'Humanitarian Needs Overview' => 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/humanitarian-needs-overview',
+      'Strategic Response Planning' => 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/strategic-response-planning',
+    ),
+    'Field coordination' => array(
+      '3W/4W' => 'infographics/infographic-type/3w',
+      'Reference Maps' => 'infographics/infographic-type/reference-maps',
+      'Thematic Maps' => 'infographics/infographic-type/thematic',
+      'Meeting Minutes' => 'documents/document-type/meeting-minutes',
+    ),
+  );
+}
+

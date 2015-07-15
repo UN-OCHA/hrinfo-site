@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall hooks for path_alias_xt module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function path_alias_xt_requirements($phase) {
+  $t = get_t();
+  $has_runkit = function_exists('runkit_function_redefine');
+  $requirements['path_alias_xt'] = array(
+    'title' => $t('PECL runkit (for Extended Path Aliases)'),
+    'value' => $has_runkit ? $t('Installed') : $t('Not installed'),
+  );
+  if (!$has_runkit) {
+    $requirements['path_alias_xt']['severity'] = REQUIREMENT_INFO;
+    $requirements['path_alias_xt']['description'] = $t('Reminder: the PECL runkit is not installed. If, in addition to the already enabled basic functions, you want this module\'s advanced features to be operational, please edit file %path-inc, if you have not done so already. See the <a href="!README">README</a> file for details.',
+      array('%path-inc' => 'include/path.inc',
+            '!README' => url(drupal_get_path('module', 'path_alias_xt') . '/README.txt')));
+  }
+  return $requirements;
+}
+
+/**
+ * Implements hook_install().
+ */
+function path_alias_xt_install() {
+  // Path alias xt hooks should be executed before other modules hooks, in order
+  // to redefine drupal_get_path_alias before other modules get a chance to
+  // call it.
+  db_update('system')
+    ->fields(array('weight' => -1))
+    ->condition('name', 'path_alias_xt')
+    ->execute();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Reduce module weight to work with Context and menu_trail_by_path modules.
+ */
+function path_alias_xt_update_7100() {
+  // See comment at path_alias_xt_install().
+  db_update('system')
+    ->fields(array('weight' => -1))
+    ->condition('name', 'path_alias_xt')
+    ->execute();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function path_alias_xt_uninstall() {
+  variable_del('path_alias_xt_user_special');
+  variable_del('path_alias_xt_regex_pattern');
+}

@@ -1,0 +1,18 @@
+name = Search API saved searches
+description = Offers users the ability to save executed searches and receive notifications about new results.
+dependencies[] = search_api
+core = 7.x
+package = Search
+
+files[] = search_api_saved_searches.search_entity.inc
+files[] = search_api_saved_searches.settings_entity.inc
+files[] = views/handler_field_saved_search_interval.inc
+files[] = views/handler_field_saved_search_link.inc
+files[] = views/handler_field_saved_search_name.inc
+
+; Information added by Drupal.org packaging script on 2014-05-24
+version = "7.x-1.3"
+core = "7.x"
+project = "search_api_saved_searches"
+datestamp = "1400922530"
+

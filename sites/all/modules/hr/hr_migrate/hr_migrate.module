@@ -1,0 +1,287 @@
+<?php
+
+/**
+ * This is example code for a Drupal 6 to Drupal 7 migration. This won't actually
+ * work without defining the referenced vocabularies, content types, and fields
+ * on each side.
+ */
+
+/**
+ * Implements hook_flush_caches().
+ */
+function hr_migrate_flush_caches() {
+  hr_migrate_register_migrations();
+}
+
+function hr_migrate_register_migrations() {
+  $common = array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event');
+  /*hr_migrate_register_site_migration('www', 'www.humanitarianresponse.info', $common);
+  hr_migrate_register_site_migration('clusters', 'clusters.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document'));
+  hr_migrate_register_site_migration('imwg', 'imwg.humanitarianresponse.info', $common);
+  hr_migrate_register_site_migration('ir', 'ir.humanitarianresponse.info', array('hr_page', 'hr_indicator'));
+  hr_migrate_register_site_migration('er', 'er.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document'));
+  hr_migrate_register_site_migration('assessments', 'assessments.humanitarianresponse.info', array('hr_document'));
+  hr_migrate_register_site_migration('cod', 'cod.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_dataset'));
+  hr_migrate_register_site_migration('ethiopia', 'ethiopia.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('somalia', 'somalia.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('philippines', 'philippines.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('car', 'car.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('rdc', 'rdc.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('afghanistan', 'afg.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('zw', 'zw.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('haiti', 'haiti.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('niger', 'niger.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('mali', 'mali.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('indonesia', 'indonesia.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('syria', 'syria.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('sudan', 'sudan.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('wca', 'wca.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('pht', 'pht.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('stima', 'stima.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('rosa', 'rosa.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('kenya', 'kenya.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('chad', 'chad.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('southsudan', 'southsudan.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment', 'acc_incident'));
+  hr_migrate_register_site_migration('ea', 'ea.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+  hr_migrate_register_site_migration('yemen', 'yemen.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment', 'acc_incident'));
+  hr_migrate_register_site_migration('pak', 'pak.humanitarianresponse.info', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment', 'acc_incident', 'acc_application'));*/
+  hr_migrate_register_site_migration('colombia', 'www.salahumanitaria.co', array('profile', 'hr_page', 'hr_document', 'hr_news', 'hr_event', 'hr_contact', 'hr_infographic', 'hr_assessment'));
+}
+
+/**
+ * Register all D6->D7 migrations.
+ */
+function hr_migrate_register_site_migration($source_connection, $site, $content_types) {
+  $machine_name = '_' . $source_connection;
+  if ($machine_name == '_www') {
+    $machine_name = '';
+  }
+  /**
+   * Each migration being registered takes an array of arguments, some required
+   * and some optional. Start with the common arguments required by all - the
+   * source_connection (connection key, set up in settings.php, pointing to
+   * the Drupal 6 database), source_version (major version of Drupal), and
+   * group_name (a.k.a. import job).
+   */
+  $common_arguments = array(
+    'source_connection' => $source_connection,
+    'source_version' => 7,
+    'group_name' => 'hr',
+  );
+
+  // The description and the migration machine name are also required arguments,
+  // which will be unique for each migration you register.
+  $arguments = $common_arguments + array(
+    'description' => t('Migration of users from '.$site),
+    'machine_name' => 'hr_users'.$machine_name,
+  );
+
+  // We just use the migrate_d2d D6 migration class as-is.
+  Migration::registerMigration('HRUserMigration', $arguments['machine_name'],
+                               $arguments);
+
+  $profile_arguments = $common_arguments + array(
+    'description' => t('Migration of user profiles from '.$site),
+    'machine_name' => 'hr_profiles'.$machine_name,
+    'user_migration' => 'hr_users'.$machine_name,
+  );
+
+  if (in_array('profile', $content_types)) {
+    Migration::registerMigration('HRProfile2Migration', $profile_arguments['machine_name'], $profile_arguments);
+  }
+
+  if (in_array('hr_document', $content_types)) {
+    $fc_arguments = $common_arguments + array(
+      'description' => t('Migration of field collections'),
+      'machine_name' => 'hr_field_collections'.$machine_name,
+    );
+
+    Migration::registerMigration('HRFilesCollectionMigration', $fc_arguments['machine_name'], $fc_arguments);
+  }
+
+  $files_arguments = $common_arguments + array(
+    'description' => t('Migration of files'),
+    'machine_name' => 'hr_files'.$machine_name,
+    'user_migration' => 'hr_users'.$machine_name,
+    'source_dir' => 'https://'.$site.'/sites/'.$site.'/files/',
+    'site' => $site,
+  );
+
+  Migration::registerMigration('HRFileMigration', $files_arguments['machine_name'], $files_arguments);
+
+  // Node migrations - each has its own class derived from the migrate_d2d class,
+  // specifying its particular field mappings and transformations. source_type
+  // and destination_type are required arguments.
+  $node_arguments = array(
+    array(
+      'class_name' => 'HRPagesMigration',
+      'description' => t('Migration of pages'),
+      'machine_name' => 'hr_pages'.$machine_name,
+      'source_type' => 'page',
+      'destination_type' => 'hr_page',
+    ),
+    array(
+      'class_name' => 'HRDocumentMigration',
+      'description' => t('Migration of documents'),
+      'machine_name' => 'hr_documents'.$machine_name,
+      'source_type' => 'document',
+      'destination_type' => 'hr_document',
+    ),
+    array(
+      'class_name' => 'HRNewsMigration',
+      'description' => t('Migration of news'),
+      'machine_name' => 'hr_news'.$machine_name,
+      'source_type' => 'news',
+      'destination_type' => 'hr_news',
+    ),
+    array(
+      'class_name' => 'HREventsMigration',
+      'description' => t('Migration of events'),
+      'machine_name' => 'hr_events'.$machine_name,
+      'source_type' => 'event',
+      'destination_type' => 'hr_event',
+    ),
+    array(
+      'class_name' => 'HRIndicatorsMigration',
+      'description' => t('Migration of indicators'),
+      'machine_name' => 'hr_indicators'.$machine_name,
+      'source_type' => 'indicator',
+      'destination_type' => 'hr_indicator',
+    ),
+    array(
+      'class_name' => 'HRDatasetsMigration',
+      'description' => t('Migration of datasets'),
+      'machine_name' => 'hr_datasets'.$machine_name,
+      'source_type' => 'dataset',
+      'destination_type' => 'hr_dataset',
+    ),
+    array(
+      'class_name' => 'HRInfographicMigration',
+      'description' => t('Migration of visuals'),
+      'machine_name' => 'hr_infographics'.$machine_name,
+      'source_type' => 'map',
+      'destination_type' => 'hr_infographic',
+    ),
+    array(
+      'class_name' => 'HRAssessmentMigration',
+      'description' => t('Migration of assessments'),
+      'machine_name' => 'hr_assessments'.$machine_name,
+      'source_type' => 'assessment',
+      'destination_type' => 'hr_assessment',
+    ),
+    array(
+      'class_name' => 'HRAccessIncidentMigration',
+      'description' => t('Migration of Access Incidents'),
+      'machine_name' => 'hr_acc_incidents'.$machine_name,
+      'source_type' => 'acc_incident',
+      'destination_type' => 'acc_incident',
+    ),
+    array(
+      'class_name' => 'HRAccessApplicationMigration',
+      'description' => t('Migration of Access Applications'),
+      'machine_name' => 'hr_acc_applications'.$machine_name,
+      'source_type' => 'acc_application',
+      'destination_type' => 'acc_application',
+    ),
+  );
+
+  // Tell the node migrations where the users are coming from, so they can
+  // set up the dependency and resolve D6->D7 uids.
+  $common_node_arguments = $common_arguments + array(
+    'user_migration' => 'hr_users'.$machine_name,
+    'format_mappings' => array(
+      'full_html' => 'panopoly_wysiwyg_text',
+      'filtered_html' => 'panopoly_html_text',
+      'simple' => 'panopoly_html_text',
+      'plain_text' => 'plain_text',
+    ),
+  );
+  foreach ($node_arguments as $arguments) {
+    $arguments = array_merge_recursive($arguments, $common_node_arguments);
+    if (in_array($arguments['destination_type'], $content_types)) {
+      Migration::registerMigration($arguments['class_name'], $arguments['machine_name'],
+                                 $arguments);
+    }
+  }
+
+  if ($source_connection == 'assessments') {
+    $node_arguments = array(
+      'class_name' => 'HRTrainingsMigration',
+      'description' => t('Migration of trainings'),
+      'machine_name' => 'hr_trainings'.$machine_name,
+      'source_type' => 'training',
+      'destination_type' => 'hr_event',
+    );
+    $arguments = array_merge_recursive($node_arguments, $common_node_arguments);
+    Migration::registerMigration($arguments['class_name'], $arguments['machine_name'], $arguments);
+  }
+
+  if (in_array('hr_contact', $content_types)) {
+    $contact_arguments = $common_arguments + array(
+      'description' => t('Migration of user profiles from '.$site),
+      'machine_name' => 'hr_contacts'.$machine_name,
+      'user_migration' => 'hr_users'.$machine_name,
+    );
+
+    Migration::registerMigration('HRContactsMigration', $contact_arguments['machine_name'], $contact_arguments);
+  }
+
+  if (in_array('hr_assessment', $content_types)) {
+    $data_arguments = $common_arguments + array(
+      'description' => t('Migration of assessments data'),
+      'machine_name' => 'hr_asst_collection_data'.$machine_name,
+    );
+
+    Migration::registerMigration('HRAssessmentCollectionDataMigration', $data_arguments['machine_name'], $data_arguments);
+
+    $report_arguments = $common_arguments + array(
+      'description' => t('Migration of assessments reports'),
+      'machine_name' => 'hr_asst_collection_reports'.$machine_name,
+    );
+
+    Migration::registerMigration('HRAssessmentCollectionReportMigration', $report_arguments['machine_name'], $report_arguments);
+
+    $questionnaire_arguments = $common_arguments + array(
+      'description' => t('Migration of assessments questionnaires'),
+      'machine_name' => 'hr_asst_collection_questionnaire'.$machine_name,
+    );
+
+    Migration::registerMigration('HRAssessmentCollectionQuestionnaireMigration', $questionnaire_arguments['machine_name'], $questionnaire_arguments);
+  }
+
+  if (in_array('acc_incident', $content_types)) {
+    $acc_impact_arguments = $common_arguments + array(
+      'description' => t('Migration of access impacts from '.$site),
+      'machine_name' => 'hr_acc_impacts'.$machine_name,
+    );
+
+    Migration::registerMigration('HRAccImpactsCollectionMigration', $acc_impact_arguments['machine_name'], $acc_impact_arguments);
+  }
+
+  if (in_array('acc_application', $content_types)) {
+    $acc_impact_arguments = $common_arguments + array(
+      'description' => t('Migration of access impacts from '.$site),
+      'machine_name' => 'hr_acc_impacts_applications'.$machine_name,
+    );
+
+    Migration::registerMigration('HRAccImpactsApplicationsCollectionMigration', $acc_impact_arguments['machine_name'], $acc_impact_arguments);
+  }
+
+
+
+}
+
+/**
+ * Implements hook_migrate_api().
+ */
+function hr_migrate_migrate_api() {
+  $api = array(
+    'api' => 2,
+    'groups' => array(
+      'hr' => array(
+        'title' => t('HR Migrations'),
+      ),
+    ),
+  );
+  return $api;
+}

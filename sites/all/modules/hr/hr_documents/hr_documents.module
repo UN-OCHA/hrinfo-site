@@ -1,0 +1,123 @@
+<?php
+/**
+ * @file
+ * Code for the Documents feature.
+ */
+
+include_once 'hr_documents.features.inc';
+
+/**
+ * Implements hook_og_features_registry()
+ */
+function hr_documents_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'hr_documents';
+  $feature->name = t('Documents');
+  $feature->description = t('Provide documents to your space.');
+  $feature->components = array(
+    'node' => array(
+      'hr_document',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
+ * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ */
+function hr_documents_og_features_toggle($entity, $entity_id, $entity_type, $features) {
+  if (isset($features['hr_documents'])) {
+    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
+    if (empty($features['hr_documents'])) {
+      menu_link_delete(NULL, 'node/'.$entity_id.'/documents');
+    }
+    else {
+      // See if menu link already exists
+      $menu_link = menu_link_get_preferred('node/'.$entity_id.'/documents', OG_MENU_SINGLE_MENU_NAME);
+      if (empty($menu_link)) {
+        $menu_link = array(
+          'link_path' => 'node/'.$entity_id.'/documents',
+          'link_title' => 'Documents',
+          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
+          'weight' => 6,
+          'plid' => $mlid,
+        );
+        menu_link_save($menu_link);
+      }
+    }
+  }
+
+}
+
+function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
+  hr_sectors_hide_sectors($form, $form_state);
+}
+
+/** 
+ * Implementation of hook_entity_info_alter()
+ */
+function hr_documents_entity_info_alter(&$entity_info) {
+
+  // Quick links
+  $entity_info['fieldable_panels_pane']['bundles']['hr_documents'] = array(
+    'label' => t('Documents'),
+    'pane category' => t('Documents'),
+    'pane top level' => TRUE,
+    'admin' => array(
+      'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
+      'bundle argument' => 4,
+      'real path' => 'admin/structure/fieldable-panels-panes/manage/hr-documents',
+      'access arguments' => array('administer fieldable panels panes'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_search_api_views_query_alter()
+ *
+ * Makes the documents view available for disasters
+ */
+function hr_documents_search_api_views_query_alter(&$view, &$query) {
+  if ($view->name == 'hr_documents') {
+    $params = drupal_get_query_parameters($_GET, array(
+      'q',
+      'page'
+    ));
+    $existing = $query->getSort();
+    if (empty($existing) && !isset($params['sort']) && !isset($params['order'])) {
+      // Sort by publication date
+      $query->sort('field_publication_date', 'desc');
+    }
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        if (reset($condition) == 'og_group_ref') {
+          $nid = $condition[1];
+          $node = node_load($nid);
+          if ($node->type == 'hr_disaster') {
+            $condition = array('field_disasters', $nid, '=');
+          }
+          // Clusters as spaces
+          // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
+          elseif ($node->type == 'hr_bundle') {
+            $condition = array('field_bundles', $nid, '=');
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function hr_documents_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'restful') {
+    return 'plugins/' . $plugin;
+  }
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/' . $plugin;
+  }
+}
+

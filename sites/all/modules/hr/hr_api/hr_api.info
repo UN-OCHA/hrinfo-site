@@ -1,0 +1,13 @@
+name = API
+core = 7.x
+package = Humanitarianresponse
+dependencies[] = hr_locations
+dependencies[] = hr_organizations
+dependencies[] = hr_themes
+dependencies[] = restful
+dependencies[] = strongarm
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[variable][] = restful_default_output_formatter
+features[variable][] = restful_enable_users_resource
+features[variable][] = restful_enable_user_login_resource

@@ -1,0 +1,49 @@
+<?php
+/**
+ * @file
+ * Code for the Bookmarks feature.
+ */
+
+include_once 'hr_bookmarks.features.inc';
+
+function hr_bookmarks_block_info() {
+  $blocks['hr_favorite_spaces'] = array(
+    'info' => t('Favorite spaces'),
+  );
+  return $blocks;
+}
+
+function hr_bookmarks_block_view($delta = '') {
+  global $user;
+  $block = array();
+  switch ($delta) {
+    case 'hr_favorite_spaces':
+      if (!user_is_anonymous()) {
+        $context = og_context();
+        $context_gid = NULL;
+        if (!empty($context) && $context['group_type'] == 'node') {
+          $context_gid = $context['gid'];
+        }
+        $flags = flag_get_user_flags('node');
+        $block['content'] = '<div class="btn-group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-thumb-tack fa-lg"></i>
+          </button>
+          <ul class="dropdown-menu">';
+        if (isset($flags['hr_favorite_space'])) {
+          foreach ($flags['hr_favorite_space'] as $gid => $space) {
+            //debug($space);
+            $node = node_load($gid);
+            $block['content'] .= '<li>'.l($node->title, 'node/'.$gid).'</li>';
+          }
+        }
+        if ($context_gid != NULL) {
+          $block['content'] .= '<li>'.flag_create_link('hr_favorite_space', $context_gid, array('after_flagging' => FALSE)).'</li>';
+        }
+        $block['content'] .= '</ul></div>';
+      }
+      break;
+  }
+  return $block;
+}
+

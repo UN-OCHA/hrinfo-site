@@ -1,0 +1,13 @@
+name = Job Titles
+description = Job Title taxonomy and fields
+core = 7.x
+package = Humanitarianresponse
+dependencies[] = ctools
+dependencies[] = entityreference
+dependencies[] = features
+dependencies[] = feeds
+dependencies[] = hr_core
+dependencies[] = taxonomy
+dependencies[] = text
+features[features_api][] = api:2
+features[field_base][] = field_job_title_other

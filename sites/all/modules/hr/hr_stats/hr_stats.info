@@ -1,0 +1,12 @@
+name = Statistics
+description = Adds piwik reports to the HumanitarianResponse platform
+core = 7.x
+package = Humanitarianresponse
+dependencies[] = features
+dependencies [] = og_variables
+features[features_api][] = api:2
+features[og_features_permission][] = node:hr_operation:access piwik reports
+features[og_features_permission][] = node:hr_sector:access piwik reports
+features[og_features_permission][] = node:hr_space:access piwik reports
+features[og_features_permission][] = node:hr_disaster:access piwik reports
+

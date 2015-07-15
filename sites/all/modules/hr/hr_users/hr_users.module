@@ -1,0 +1,162 @@
+<?php
+/**
+ * @file
+ * Code for the Users feature.
+ */
+
+include_once 'hr_users.features.inc';
+
+function hr_users_field_formatter_info() {
+  return array(
+    'hr_users_skype' => array(
+      'label' => t('Skype Status'),
+      'field types' => array('text'),
+    ),
+  );
+}
+
+function hr_users_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'hr_users_skype':
+      // Common case: each value is displayed individually in a sub-element
+      // keyed by delta. The field.tpl.php template specifies the markup
+      // wrapping each value.
+      foreach ($items as $delta => $item) {
+        $status = file_get_contents('http://mystatus.skype.com/'.$item['safe_value'].'.num');
+        $class = '';
+        if ($status == 2) {
+          $class = 'skype-online';
+        }
+        $element[$delta] = array('#markup' => '<a href="skype:'.$item['safe_value'].'?call"><i class="fa fa-skype fa-2x '.$class.'"></i></a>');       
+      }
+      break;
+  }
+  return $element;
+}
+
+
+/**
+ * Implements hook_og_features_registry()
+ */
+function hr_users_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'hr_users';
+  $feature->name = t('People');
+  $feature->description = t('Show members of your space.');
+  $feature->components = array(
+    'pane' => array(
+      'hr_users-space_members',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
+ * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ */
+function hr_users_og_features_toggle($entity, $entity_id, $entity_type, $features) {
+  if (isset($features['hr_users'])) {
+    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
+    if (empty($features['hr_users'])) {
+      menu_link_delete(NULL, 'node/'.$entity_id.'/people');
+    }
+    else {
+      // See if menu link already exists
+      $menu_link = menu_link_get_preferred('node/'.$entity_id.'/people', OG_MENU_SINGLE_MENU_NAME);
+      if (empty($menu_link)) {
+        $menu_link = array(
+          'link_path' => 'node/'.$entity_id.'/people',
+          'link_title' => 'People',
+          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
+          'weight' => 18,
+          'plid' => $mlid,
+        );
+        menu_link_save($menu_link);
+      }
+    }
+  }
+
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function hr_users_user_login(&$edit, $account) {
+  // Get account data from the auth service, and ensure the user's name is
+  // up to date in Drupal.
+  if (function_exists('hid_auth_get_user_data')) {
+    $data = hid_auth_get_user_data();
+    $profile = profile2_load_by_user($account, 'main');
+    if (empty($profile)) {
+      $profile_type = profile2_get_types('main');
+      $profile = profile2_create(array('user' => $account, 'type' => $profile_type));
+    }
+    if (!empty($data) && $profile) {
+      $changed = FALSE;
+
+      if (empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) || $profile->field_first_name[LANGUAGE_NONE][0]['value'] != $data['name_given']) {
+        $profile->field_first_name[LANGUAGE_NONE][0]['value'] = $data['name_given'];
+        $changed = TRUE;
+      }
+      if (empty($profile->field_last_name[LANGUAGE_NONE][0]['value']) || $profile->field_last_name[LANGUAGE_NONE][0]['value'] != $data['name_family']) {
+        $profile->field_last_name[LANGUAGE_NONE][0]['value'] = $data['name_family'];
+        $changed = TRUE;
+      }
+
+      if ($changed) {
+        $profile->save();
+        user_save($account);
+      }
+    }
+  }
+
+  // Check if the user's profile is complete. If not, set a session variable to
+  // enforce that the user complete the profile.
+  hr_users_check_profile();
+}
+
+/**
+ * Implements hook_init().
+ *
+ * For authenticated users when the 'hr_users_require_profile' flag is set,
+ * check the profile fields on each page.
+ */
+function hr_users_init() {
+  global $user;
+  if (!user_is_anonymous() && !empty($_SESSION['hr_users_require_profile'])) {
+    $edit = array();
+    hr_users_user_login($edit, $user);
+    hr_users_check_profile(TRUE);
+  }
+}
+
+/**
+ * Helper function to load the current user's main profile and ensure the
+ * required fields have been filled in.
+ */
+function hr_users_check_profile($redirect = NULL) {
+  global $user;
+
+  $profile = profile2_load_by_user($user, 'main');
+  if (empty($profile) || empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) || empty($profile->field_last_name[LANGUAGE_NONE][0]['value']) || empty($profile->field_organizations[LANGUAGE_NONE][0]['target_id'])) {
+    $_SESSION['hr_users_require_profile'] = 1;
+
+    $profile_path = 'user/' . $user->uid . '/edit/main';
+    $allowed_paths = array(
+      $profile_path,
+      'user/logout'
+    );
+    if ($redirect && !in_array($_GET['q'], $allowed_paths)) {
+      drupal_set_message('Please complete your profile before using other site features.');
+      drupal_goto($profile_path);
+    }
+  }
+  else {
+    unset($_SESSION['hr_users_require_profile']);
+  }
+}

@@ -1,0 +1,17 @@
+name = Locales Source
+description = Locales source plugin for the Translation Management system.
+package = Translation Management
+core = 7.x
+dependencies[] = tmgmt
+dependencies[] = locale
+files[] = tmgmt_locale.plugin.inc
+files[] = tmgmt_locale.test
+files[] = tmgmt_locale.ui.inc
+files[] = tmgmt_locale.ui.test
+
+; Information added by Drupal.org packaging script on 2014-03-04
+version = "7.x-1.0-rc1"
+core = "7.x"
+project = "tmgmt"
+datestamp = "1393965810"
+

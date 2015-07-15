@@ -1,0 +1,14 @@
+name = Bookmarks
+description = Bookmark content and spaces
+core = 7.x
+package = Humanitarianresponse
+dependencies[] = features
+dependencies[] = flag
+dependencies[] = hr_core
+dependencies[] = hr_operations
+dependencies[] = hr_sectors
+dependencies[] = hr_spaces
+features[features_api][] = api:2
+features[flag][] = hr_favorite_space
+features[user_permission][] = flag hr_favorite_space
+features[user_permission][] = unflag hr_favorite_space

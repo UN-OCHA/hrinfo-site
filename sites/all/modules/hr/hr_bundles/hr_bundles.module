@@ -1,0 +1,607 @@
+<?php
+/**
+ * @file
+ * Code for the Bundles feature.
+ */
+
+include_once 'hr_bundles.features.inc';
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function hr_bundles_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'entityreference') {
+    return "plugins/entityreference/$plugin";
+  }
+  if ($module == 'restful') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+
+/**
+ * Get operation from bundle GID
+ */
+function _hr_bundles_get_operation($gid) {
+  $og_groups = entity_load('node', array($gid));
+  $og_group = $og_groups[$gid];
+  if ($og_group->type == 'hr_bundle') {
+    $operations = og_get_entity_groups('node', $og_group);
+    if (isset($operations['node']) && count($operations['node'])) {
+      return array_pop($operations['node']);
+    }
+    else {
+      return 0;
+    }
+  }
+  else {
+    return 0;
+  }
+}
+
+/**
+ * Get bundles from operation GID
+ */
+function _hr_bundles_get_bundles($gid) {
+  $query = new EntityFieldQuery();
+  $entities = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'hr_bundle')
+    ->propertyCondition('status', 1)
+    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $gid, '=')
+    ->fieldCondition(OG_GROUP_FIELD, 'value', 1, '=')
+    ->execute();
+  if (isset($entities['node'])) {
+    return entity_load('node', array_keys($entities['node']));
+  }
+  else {
+    return array();
+  }
+}
+
+/**
+ * Load role by name
+ */
+function _hr_bundles_og_role_load_by_name($bundle, $name) {
+  $roles = og_roles('node', $bundle);
+  $rid = array_search($name, $roles);
+  return $rid;
+}
+
+
+/**
+ * Implements hook_og_context_negotiation_info().
+ */
+function hr_bundles_og_context_negotiation_info() {
+  $providers = array();
+
+  $providers['hr_bundles'] = array(
+    'name' => t('HR Bundle'),
+    'description' => t('Sets operation context within bundle'),
+    'callback' => 'hr_bundles_og_context_handler',
+    'menu path' => array('node/%', 'group/%/%/admin'),
+  );
+
+  $providers['hr_bundles_node'] = array(
+    'name' => t('HR Bundle Node'),
+    'description' => t('Sets bundle context on node'),
+    'callback' => 'hr_bundles_node_og_context_handler',
+    'menu path' => array('node/%'),
+  );
+  return $providers;
+}
+
+function hr_bundles_og_context_handler($node = NULL) {
+  $context = og_context_handler_node($node);
+  if (!empty($context) && isset($context['node'])) {
+    $operation = NULL;
+    foreach ($context['node'] as $id => $gid) {
+      $node = node_load($gid);
+      if ($node->type == 'hr_operation') {
+        $operation = $node;
+        break;
+      }
+    }
+    if ($operation != NULL) {
+      array_unshift($context['node'], $operation->nid);
+    }
+    else {
+      $gid = reset($context['node']);
+      $op_gid = _hr_bundles_get_operation($gid);
+      if (!empty($op_gid)) {
+        $context['node'][0] = $op_gid;
+      }
+    }
+  }
+  return $context;
+}
+
+function hr_bundles_node_og_context_handler($node = NULL) {
+  $context = og_context_handler_node($node);
+  if (empty($node)) {
+    $node = menu_get_object();
+  }
+  if (!empty($node) && isset($node->field_bundles) && !empty($node->field_bundles)) {
+    // If there is one single bundle, set the context of the bundle
+    $nb_bundles = count($node->field_bundles[LANGUAGE_NONE]);
+    if ($nb_bundles == 1) {
+      $nid = $node->field_bundles[LANGUAGE_NONE][0]['target_id'];
+      $context['node'] = array($nid);
+    }
+    // Otherwise set the context of the operation
+    elseif ($nb_bundles > 1) {
+      $nid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
+      $context['node'] = array($nid);
+    }
+  }
+  return $context;
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter()
+ */
+function hr_bundles_form_node_form_alter(&$form, &$form_state) {
+  global $user;
+  if (isset($form['field_bundles'])) {
+    $node = $form_state['node'];
+    if (!isset($node->nid) && isset($form_state['entityreference_prepopulate'])) {
+      // Get operation gid
+      $type = $form_state['node']->type;
+      $op_gid = $form_state['entityreference_prepopulate']['node'][$type][OG_AUDIENCE_FIELD][0];
+    }
+    else {
+      if (isset($_GET[OG_AUDIENCE_FIELD])) {
+        $op_gid = $_GET[OG_AUDIENCE_FIELD];
+      }
+      else {
+        $op_gid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
+      }
+    }
+    // Make sure it is an operation
+    $op = entity_load('node', array($op_gid));
+    $op = $op[$op_gid];
+    if ($op->type == 'hr_operation') {
+      $roles = og_get_user_roles('node', $op_gid);
+      if (!in_array('manager', $roles) && !in_array('editor', $roles) && !in_array('contributor', $roles) && $op->uid != $user->uid && !in_array('editor', $user->roles)) {
+        // If user is not a manager or editor of operation, make bundles field required
+        $form['field_bundles'][LANGUAGE_NONE][0]['#required'] = TRUE;
+        $form['field_bundles'][LANGUAGE_NONE][0]['default']['#required'] = TRUE;
+      }
+      // If we are within an operation, hide the global clusters field
+      if (isset($form['field_sectors'])) {
+        $form['field_sectors']['#attributes']['class'][] = 'hidden';
+      }
+    }
+    else {
+      // Otherwise hide the bundles field
+      $form['field_bundles']['#attributes']['class'][] = 'hidden';
+    }
+  }
+
+  // Adds a modal dialog which asks the user to avoid cluster multitagging and chose the Inter-cluster coordination theme instead
+  // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
+  if (isset($form['field_bundles'])) {
+    $form['field_bundles']['#attached']['js'] = array(
+      drupal_get_path('module', 'hr_bundles').'/js/hr_bundles_popup.js',
+    );
+    $form['field_bundles']['#suffix'] = '<div class="modal fade" id="hr_bundles_multitagging" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">'.t('Tagging multiple clusters').'</h4>
+      </div>
+      <div class="modal-body">'.t('Are you sure you would like to tag your content by that many clusters/sectors ? Please consider using the Inter-Cluster Coordination theme instead.').'</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">'.t('Close').'</button>
+      </div>
+    </div>
+  </div>
+</div>';
+  }
+}
+
+/**
+ * Implements hook_node_access($node, $op, $account)
+ * 
+ * Makes sure bundle editors or managers can not edit nodes which
+ * are not tagged with any bundle OR are tagged with bundles that they do not manage
+ * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
+ */
+function hr_bundles_node_access($node, $op, $account) {
+  if (isset($node->nid) && isset($node->{OG_AUDIENCE_FIELD}) && !empty($node->{OG_AUDIENCE_FIELD}) && isset($node->field_bundles) && ($op == 'update' || $op == 'delete')) {
+    // Get the group id
+    $gid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
+    $roles = og_get_user_roles('node', $gid, $account->uid);
+    // If I'm not a manager or editor of the main group or a global editor, check bundles
+    if (!in_array('manager', $roles) && !in_array('editor', $roles) && !in_array('contributor', $roles) && !in_array('editor', $account->roles)) {
+      $group = entity_load_single('node', $gid);
+      if ($group->type == 'hr_operation') {
+        // If there are no bundles tagged
+        if (empty($node->field_bundles)) {
+          return NODE_ACCESS_DENY;
+        }
+        else {
+          // Check each bundle and if the account is not a manager or editor of this bundle, deny access
+          foreach($node->field_bundles[LANGUAGE_NONE] as $bundle) {
+            $bid = $bundle['target_id'];
+            $roles = og_get_user_roles('node', $bid, $account->uid);
+            if (!in_array('manager', $roles) && !in_array('editor', $roles)) {
+              return NODE_ACCESS_DENY;
+            }
+          }
+        }
+      }
+    }
+  }
+  return NODE_ACCESS_IGNORE;
+}
+
+/**
+ * Implements hook_menu_alter().
+ *
+ * Change access callback for node revisions
+ */
+function hr_bundles_menu_alter(&$items) {
+  $items['node/%node/revisions']['access callback'] = 'hr_bundles_node_revision_access';
+  $items['node/%node/revisions']['access arguments'] = array(1);
+
+  $items['node/%node/revisions/%/view']['access callback'] = 'hr_bundles_node_revision_access';
+  $items['node/%node/revisions/%/view']['access arguments'] = array(1);
+
+  $items['node/%node/revisions/%/revert']['access callback'] = 'hr_bundles_node_revision_access';
+  $items['node/%node/revisions/%/revert']['access arguments'] = array(1, 4);
+  $items['node/%node/revisions/%/delete']['access callback'] = 'hr_bundles_node_revision_access';
+  $items['node/%node/revisions/%/delete']['access arguments'] = array(1, 4);
+  if (module_exists('diff')) {
+    $items['node/%node/revisions/view']['access callback'] = 'hr_bundles_node_revision_access';
+  }
+}
+
+function hr_bundles_node_revision_access($node, $op = 'view') {
+  global $user;
+  if (hr_bundles_node_access($node, 'update', $user) == NODE_ACCESS_DENY) {
+    return FALSE;
+  }
+  else {
+    return og_moderation_node_revision_access($node, $op);
+  }
+}
+
+/**
+ * Implements hook_og_role_grant($entity_type, $gid, $uid, $rid)
+ */
+function hr_bundles_og_role_grant($entity_type, $gid, $uid, $rid) {
+  $group = entity_load('node', array($gid));
+  $group = $group[$gid];
+  $role = og_role_load($rid);
+  // WHEN granting manager or editor role to bundle
+  if ($group->type == 'hr_bundle' && ($role->name == 'manager' || $role->name == 'editor')) {
+    // Get operation
+    $op_gid = _hr_bundles_get_operation($gid);
+    if (!empty($op_gid)) {
+      if (!og_is_member('node', $op_gid, 'user', user_load($uid))) {
+        // Make user a member of operation
+        $og_membership = og_membership_create('node', $op_gid, 'user', $uid, 'og_user_node');
+        og_membership_save($og_membership);
+      }
+      $rid = _hr_bundles_og_role_load_by_name('hr_operation', 'bundle member');
+      drupal_static_reset('og_get_user_roles');
+      $roles = og_get_user_roles('node', $op_gid, $uid);
+      if (!in_array('manager', $roles) && !in_array('editor', $roles)) {
+        og_role_grant('node', $op_gid, $uid, $rid);
+      }
+    }
+  }
+  elseif ($group->type == 'hr_operation' && ($role->name == 'manager' || $role->name == 'editor' || $role->name == 'contributor')) {
+    // Grant role on all bundles
+    $bundles = _hr_bundles_get_bundles($gid);
+    $rid = _hr_bundles_og_role_load_by_name('hr_bundle', $role->name);
+    foreach ($bundles as $bundle) {
+      if (!og_is_member('node', $bundle->nid, 'user', user_load($uid))) {
+        // Make user a member of bundle
+        $og_membership = og_membership_create('node', $bundle->nid, 'user', $uid, 'og_user_node');
+        og_membership_save($og_membership);
+      }
+      og_role_grant('node', $bundle->nid, $uid, $rid);
+    }
+  }
+}
+
+/**
+ * Implements hook_og_role_revoke($entity_type, $gid, $uid, $rid)
+ */
+function hr_bundles_og_role_revoke($entity_type, $gid, $uid, $rid) {
+  $group = entity_load('node', array($gid));
+  $group = $group[$gid];
+  $role = og_role_load($rid);
+  // WHEN revoking manager or editor role of a bundle
+  if ($group->type == 'hr_bundle' && ($role->name == 'manager' || $role->name == 'editor')) {
+    $revoke = TRUE;
+    // Get all bundles from operation
+    $op_gid = _hr_bundles_get_operation($gid);
+    $roles = og_get_user_roles('node', $op_gid, $uid);
+    if (in_array('bundle member', $roles)) {
+      $bundles = _hr_bundles_get_bundles($op_gid);
+      foreach ($bundles as $bundle) {
+        drupal_static_reset('og_get_user_roles');
+        $roles = og_get_user_roles('node', $bundle->nid, $uid);
+        if ($bundle->nid != $gid) {
+          // If manager or editor of another bundle, don't revoke
+          if (in_array('manager', $roles) || in_array('editor', $roles)) {
+            $revoke = FALSE;
+          }
+        }
+        else {
+          // If user still had both roles
+          if (in_array('manager', $roles) && in_array('editor', $roles) && !in_array(OG_ANONYMOUS_ROLE, $roles)) {
+            $revoke = FALSE;
+          }
+        }
+      }
+      if ($revoke == TRUE) {
+        $rid = _hr_bundles_og_role_load_by_name('hr_operation', 'bundle member');
+        // Revoke bundle member from operation
+        og_role_revoke('node', $op_gid, $uid, $rid);
+      }
+    }
+  }
+  elseif ($group->type == 'hr_operation' && ($role->name == 'manager' || $role->name == 'editor' || $role->name == 'contributor')) {
+    // Revoke role from all bundles
+    $bundles = _hr_bundles_get_bundles($gid);
+    $rid = _hr_bundles_og_role_load_by_name('hr_bundle', $role->name);
+    foreach ($bundles as $bundle) {
+      og_role_revoke('node', $bundle->nid, $uid, $rid);
+    }
+  }
+}
+
+/**
+ * Implements hook_og_membership_delete(OgMembership $og_membership)
+ */
+function hr_bundles_og_membership_delete(OgMembership $og_membership) {
+  if ($og_membership->group_type == 'node' && $og_membership->entity_type == 'user') {
+    // Get group
+    $group = entity_load('node', array($og_membership->gid));
+    $group = $group[$og_membership->gid];
+    if ($group->type == 'hr_bundle') {
+      $rid = _hr_bundles_og_role_load_by_name('hr_bundle', 'manager');
+      hr_bundles_og_role_revoke('node', $og_membership->gid, $og_membership->etid, $rid);
+    }
+    elseif ($group->type == 'hr_operation') {
+      // Remove from all bundles
+      $bundles = _hr_bundles_get_bundles($og_membership->gid);
+      foreach ($bundles as $bundle) {
+        $bundle_membership = og_get_membership('node', $bundle->nid, 'user', $og_membership->etid);
+        if (!empty($bundle_membership)) {
+          og_membership_delete($bundle_membership->id);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter()
+ */
+function hr_bundles_form_og_ui_edit_membership_alter(&$form, &$form_state) {
+  if (isset($form_state['build_info']['args'][1]) && isset($form_state['build_info']['args'][2])) {
+    $op_gid = _hr_bundles_get_operation($form_state['build_info']['args'][1]);
+    if (!empty($op_gid)) {
+      $roles = og_get_user_roles('node', $op_gid);
+      if (!in_array('manager', $roles)) {
+        $og_membership = $form_state['build_info']['args'][2];
+        $uid = $og_membership->etid;
+        $roles = og_get_user_roles('node', $op_gid, $uid);
+        if (in_array('manager', $roles) || in_array('editor', $roles)) {
+          drupal_set_message(t('This person is a manager or editor of the operation. You can not downgrade his/her membership.'), 'warning');
+          $form['og_user']['state']['#disabled'] = TRUE;
+          if (in_array('manager', $roles)) {
+            // Disable everything
+            $form['og_user']['roles']['#disabled'] = TRUE;
+          }
+          else {
+            $rid = _hr_bundles_og_role_load_by_name('hr_bundle', 'editor');
+            $form['og_user']['roles'][$rid]['#disabled'] = TRUE;
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter()
+ */
+function hr_bundles_form_og_ui_delete_membership_alter(&$form, &$form_state) {
+  if (isset($form_state['build_info']['args'][1]) && isset($form_state['build_info']['args'][2])) {
+    $op_gid = _hr_bundles_get_operation($form_state['build_info']['args'][1]);
+    if (!empty($op_gid)) {
+      $roles = og_get_user_roles('node', $op_gid);
+      if (!in_array('manager', $roles)) {
+        $og_membership = $form_state['build_info']['args'][2];
+        $uid = $og_membership->etid;
+        $roles = og_get_user_roles('node', $op_gid, $uid);
+        if (in_array('manager', $roles) || in_array('editor', $roles)) {
+          drupal_set_message(t('This person is a manager or editor of the operation. You can not remove him/her from this group.'), 'error');
+          $form['actions']['submit']['#disabled'] = TRUE;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_init()
+ * Sets cluster context in countries and global pages
+ */
+function hr_bundles_init() {
+  $path = current_path();
+  $paths = array('coordination/clusters/countries', 'coordination/clusters/global');
+  if (in_array($path, $paths)) {
+    $group = node_load(12);
+    og_context('node', $group);
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function hr_bundles_block_info() {
+  $blocks['clusters_map'] = array(
+    'info' => t('Clusters Map'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function hr_bundles_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'clusters_map':
+      // highcharts api
+      drupal_add_js('https://code.highcharts.com/maps/highmaps.js', 'external');
+      drupal_add_js('https://code.highcharts.com/maps/modules/exporting.js', 'external');
+      drupal_add_js('https://code.highcharts.com/mapdata/custom/world.js', 'external');
+
+      drupal_add_js(drupal_get_path('module', 'hr_bundles') . '/js/hr_bundles_map.js', 'file');
+
+      drupal_add_css(drupal_get_path('module', 'hr_bundles') . '/css/hr_bundles_map.css', 'file');
+
+      $block['content'] = '<div id="clusters-map" class="loading">';
+        $block['content'] .= '<div id="clusters-map-overlay">'; // Map overlay tips
+
+          $block['content'] .= '<div id="close-overlay" class="cursor-pointer">&times;</div>';
+
+          $block['content'] .= '<p class="tips-clusters-map top-right">'.t("Download or link to this map").'</p>';
+          $block['content'] .= '<p class="tips-clusters-map lower-left">'.t("Display active Clusters, Sectors or both").'</p>';
+          $block['content'] .= '<p class="tips-clusters-map middle-bottom">'.t("Select the Cluster, Sector or Area-of-Responsibility to be displayed").'</p>';
+
+          $block['content'] .= '<div id="ok-overlay" class="cursor-pointer">'.t("OK, I understand").'</div>';
+
+        $block['content'] .= '</div>'; // end id="clusters-map-overlay"
+      $block['content'] .= '</div>'; // end id="clusters-map"
+
+      $block['content'].= '<div id="types">';
+        $block['content'].= '<div type-id="sector" class="first type">' . t("Sector") . '</div>';
+        $block['content'].= '<div type-id="cluster" class="type">' . t("Cluster") . '</div>';
+      $block['content'].= '</div><br/>';
+      $block['content'].= '<div id="global-clusters"></div>';
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_facetapi_facet_info_alter
+ *
+ * Change the map callback function to display bundles labels with operations
+ * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4313
+ */
+function hr_bundles_facetapi_facet_info_alter(array &$facet_info, array $searcher_info) {
+  if (isset($facet_info['field_bundles'])) {
+    $facet_info['field_bundles']['map callback'] = 'hr_bundles_facet_bundles_map_callback';
+  }
+}
+
+function hr_bundles_facet_bundles_map_callback(array $values, array $options = array()) {
+  $map = array();
+  $operations = array();
+  $entities = entity_load('node', $values);
+  foreach ($values as $value) {
+    if (isset($entities[$value])) {
+      $entity = $entities[$value];
+      $field = $entity->{OG_AUDIENCE_FIELD};
+      $gid = $field[LANGUAGE_NONE][0]['target_id'];
+      if (!isset($operations[$gid])) {
+        $op = entity_load_single('node', $gid);
+        $operations[$gid] = entity_label('node', $op);
+      } 
+
+      $map[$value] = entity_label('node', $entities[$value]).' ('.$operations[$gid].')';
+    }
+  }
+  return $map;
+}
+
+/**
+ * Implements hook_variable_update($name, $value, $old_value, $options)
+ *
+ * When changing a variable in an operation, update the variables in all bundles
+ */
+function hr_bundles_variable_update($name, $value, $old_value, $options) {
+  // If updating an OG variable
+  if (isset($options['realm']) && $options['realm'] == 'og') {
+    // Load the node for which we are updating variables
+    $gid = str_replace('node_', '', $options['key']);
+    $group = node_load($gid);
+    if ($group->type == 'hr_operation') {
+      // Update the variable in all bundles
+      $bundles = _hr_bundles_get_bundles($gid);
+      $ids = array_keys($bundles);
+      foreach ($ids as $id) {
+        variable_realm_set('og', 'node_'.$id, $name, $value);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_node_insert()
+ *
+ * Sets the og variables of the operation when creating a bundle
+ */
+function hr_bundles_node_insert($node) {
+  if ($node->type == 'hr_bundle') {
+    // Get nid of the operation
+    $op_gid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
+    // Get enabled variables
+    $controller = variable_realm_controller('og');
+    $enabled_variables = $controller->getEnabledVariables();
+    foreach ($enabled_variables as $name) {
+      $value = variable_realm_get('og', 'node_'.$op_gid, $name);
+      if ($value != NULL) {
+        variable_realm_set('og', 'node_'.$node->nid, $name, $value);
+      }
+    }
+  }
+  // Make all managers and editors of the operation a bundle member of this bundle
+  // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4143
+  // Get users belonging to the operation
+  $group_members = _hr_bundles_get_users_in_group($op_gid);
+  $bundle_roles = og_roles('node', 'hr_bundle');
+  foreach ($group_members as $member) {
+    // If user is a manager or editor or contributor of the operation
+    $op_roles = og_get_user_roles('node', $op_gid, $member->uid);
+    if (in_array('manager', $op_roles) || in_array('editor', $op_roles) || in_array('contributor', $op_roles)) {
+      $membership = og_membership_create('node', $node->nid, 'user', $member->uid, 'og_user_node');
+      og_membership_save($membership);
+      foreach ($op_roles as $op_role) {
+        // Get rid of bundle role
+        $bundle_rid = array_search($op_role, $bundle_roles);
+        if ($bundle_rid) {
+          og_role_grant('node', $node->nid, $member->uid, $bundle_rid);
+        }
+      }
+    } 
+  }
+}
+
+
+
+/**
+ * Helper function: Get all users of a group
+ */
+function _hr_bundles_get_users_in_group($gid) {
+  $query = db_select('users', 'u');
+ 
+  $query
+    ->condition('u.uid', 0, '<>')
+    ->condition('u.status', 1, '=')
+    ->fields('u', array('uid', 'name'))
+    ->join('og_membership', 'ogm', "ogm.gid = :gid AND u.uid = ogm.etid AND ogm.entity_type = 'user'", array(':gid' => $gid));
+  return $query->execute();
+}
+

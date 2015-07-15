@@ -1,0 +1,17 @@
+name = Phone
+description = The phone module lets administrators use a phone number field type and provides a validated FAPI phone element.
+package = Fields
+dependencies[] = field
+dependencies[] = libraries (>=2.x)
+files[] = phone.migrate.inc
+files[] = phone.content_migrate.inc
+core = 7.x
+php = 5.3
+
+
+; Information added by drush on 2015-04-17
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "phone"
+datestamp = "1429267925"
+

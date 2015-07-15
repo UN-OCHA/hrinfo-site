@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function securelogin_install() {
+  // Enable a basic secure login configuration by default.
+  variable_set('securelogin_form_user_login', 1);
+  variable_set('securelogin_form_user_login_block', 1);
+  variable_set('securelogin_form_user_pass_reset', 1);
+  variable_set('securelogin_form_user_register_form', 1);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function securelogin_uninstall() {
+  variable_del('securelogin_base_url');
+  variable_del('securelogin_form_comment_form');
+  variable_del('securelogin_form_node_form');
+  variable_del('securelogin_form_user_login');
+  variable_del('securelogin_form_user_login_block');
+  variable_del('securelogin_form_user_pass');
+  variable_del('securelogin_form_user_pass_reset');
+  variable_del('securelogin_form_user_profile_form');
+  variable_del('securelogin_form_user_register_form');
+  variable_del('securelogin_form_contact_personal_form');
+  variable_del('securelogin_form_contact_site_form');
+  variable_del('securelogin_form_webform_client_form');
+  variable_del('securelogin_secure_forms');
+  variable_del('securelogin_all_forms');
+  variable_del('securelogin_other_forms');
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function securelogin_update_7000() {
+  global $base_secure_url;
+  // Rename variables to have more systematic names.
+  variable_set('securelogin_base_url', variable_get('securelogin_baseurl', $base_secure_url));
+  variable_del('securelogin_baseurl');
+  $settings = array(
+    'securelogin_form_user_login'         => 'securelogin_loginform',
+    'securelogin_form_user_login_block'   => 'securelogin_loginform',
+    'securelogin_form_user_profile_form'  => 'securelogin_profileform',
+    'securelogin_form_user_register_form' => 'securelogin_registerform',
+  );
+  foreach ($settings as $new_setting => $old_setting) {
+    variable_set($new_setting, variable_get($old_setting, 1));
+  }
+  foreach ($settings as $old_setting) {
+    variable_del($old_setting);
+  }
+  // The redirect functionality is no longer supported because it requires
+  // mixed-mode (secure and insecure) sessions.
+  variable_del('securelogin_redirect');
+  variable_del('securelogin_original_baseurl');
+}

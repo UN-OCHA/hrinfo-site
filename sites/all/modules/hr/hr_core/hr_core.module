@@ -1,0 +1,374 @@
+<?php
+/**
+ * @file
+ * Code for the Core feature.
+ */
+
+define('HR_CORE_OG_AUDIENCE_FIELD', 'hr_core_gid');
+
+include_once 'hr_core.features.inc';
+
+/**
+ * Implements hook_entity_info_alter()
+ */
+function hr_core_entity_info_alter(&$entity_info) {
+  $entity_info['node']['view modes']['search_result'] = array(
+    'label' => t('Search result'),
+    'custom settings' => TRUE,
+  );
+  $entity_info['fieldable_panels_pane']['view modes']['teaser'] = array(
+    'label' => t('Teaser'),
+    'custom settings' => TRUE,
+  );
+  $entity_info['fieldable_panels_pane']['view modes']['link'] = array(
+    'label' => t('Link'),
+    'custom settings' => TRUE,
+  );
+  $entity_info['user']['view modes']['teaser'] = array(
+    'label' => t('Teaser'),
+    'custom settings' => TRUE,
+  );
+}
+
+/**
+ * Implements hook_form_alter()
+ * Hides fields if they are empty
+ */
+function hr_core_form_alter(&$form, &$form_state, $form_id) {
+  foreach ($form as $id => &$item) {
+    if (is_array($item) && isset($item['#type']) && $item['#type'] == 'container') {
+      switch($item['#type']) {
+        case 'container':
+          $language = isset($item['#language']) ? $item['#language'] : LANGUAGE_NONE;
+          if (isset($item[$language]['#type']) && $item[$language]['#type'] == 'select') {
+            $diff = array_diff($item[$language]['#options'], array('_none' => '- None -'));
+            if (empty($diff)) {
+              $item['#type'] = 'hidden';
+            }
+          }
+          break;
+        case 'select':
+          if (empty($item['#options'])) {
+            $item['#type'] = 'hidden';
+          }
+          break;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_pathauto_alias_alter()
+ */
+function hr_core_pathauto_alias_alter(&$alias, array &$context) {
+  // Force all aliases to be saved as language neutral.
+  $context['language'] = LANGUAGE_NONE;
+}
+
+/**
+ * Implements hook_path_insert()
+ */
+function hr_core_path_insert($path) {
+  if ($path['language'] != LANGUAGE_NONE) {
+    $initial_path = path_load(array('source' => $path['source'], 'language' => LANGUAGE_NONE));
+    if (!empty($initial_path)) {
+      path_delete($path['pid']);
+    }
+    else {
+      $path['language'] = LANGUAGE_NONE;
+      // Resave path
+      path_save($path);
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_presave()
+ *
+ * Makes sure pathauto is not used when no path is set
+ */
+function hr_core_entity_presave($node, $type) {
+  if (!isset($node->path['pathauto'])) {
+    $node->path['pathauto'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_field_extra_fields()
+ */
+function hr_core_field_extra_fields() {
+  $extra['node']['hr_document']['display'] = array(
+    'hr_core_share_button' => array(
+      'label' => t('Share button'),
+      'description' => t('Share button'),
+      'weight' => 0,
+    ),
+    'hr_core_read_more_button' => array(
+      'label' => t('Read more button'),
+      'description' => t('Read more button'),
+      'weight' => 0,
+    ),
+  );
+
+  return $extra;
+}
+
+/**
+ * Implements hook_node_view().
+ *
+ * Adds share button
+ */
+function hr_core_node_view($node, $view_mode, $langcode) {
+  $url = url('node/'.$node->nid, array('absolute' => TRUE));
+  $node->content['hr_core_share_button'] = array(
+    '#type' => 'item',
+    '#title' => '',
+    '#markup' => l('<i class="fa fa-share"></i> '.t('share'), 'http://www.addtoany.com/share_save', array('attributes' => array('class' => array( 'a2a_dd', 'btn', 'btn-secondary', 'btn-sm')), 'html' => TRUE)),
+    '#suffix' => '<script type="text/javascript">a2a_config.linkname = "'.$node->title.'";a2a_config.linkurl = "'.$url.'";a2a.init("page");</script>',
+    '#attached' => array('js' => array('https://static.addtoany.com/menu/page.js')),
+  );
+
+  $node->content['hr_core_read_more_button'] = array(
+    '#type' => 'item',
+    '#title' => '',
+    '#markup' => l('<i class="fa fa-eye"></i> '.t('read more'), 'node/'.$node->nid, array('attributes' => array('class' => array( 'btn', 'btn-secondary', 'btn-sm')), 'html' => TRUE)),
+  );
+}
+
+/**
+ * Implements hook_og_context_negotiation_info().
+ */
+function hr_core_og_context_negotiation_info() {
+  $providers = array();
+
+  $providers['hr_core'] = array(
+    'name' => t('HR Core'),
+    'description' => t('Sets group context within space'),
+    'callback' => 'hr_core_og_context_handler',
+    'menu path' => array('node/%', 'group/%/%/admin'),
+  );
+  return $providers;
+}
+
+function hr_core_og_context_handler($node = NULL) {
+  $context = NULL;
+  if ($node == NULL) {
+    $nid = arg(1);
+    $node = node_load($nid);
+    if ($node) {
+      $context = og_context_handler_node($node);
+    }
+  }
+  return $context;
+}
+
+/**
+ * Implements hook_token_info()
+ */
+function hr_core_token_info() {
+  $info['site']['og_context_current_group'] = array(
+    'name' => t('Current group'),
+    'description' => t('Current group from OG context'),
+  );
+  return $info;
+}
+
+/**
+ * Implements hook_tokens()
+ */
+function hr_core_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  if ($type == 'site') {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'og_context_current_group':
+          $group = og_context();
+          if (isset($group['gid'])) {
+            $node = node_load($group['gid']);
+            $replacements[$original] = $node->title;
+          }
+          break;
+      }
+    }
+  }
+  return $replacements;
+}
+
+function _hr_core_draft_button($label) {
+  return array (
+    '#type' => 'submit',
+    '#access' => true,
+    '#value' => t($label),
+    '#weight' => 6,
+    '#submit' =>
+      array (
+        0 => 'node_form_submit',
+      ),
+  );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alter the node edit forms.
+ */
+function hr_core_form_node_form_alter(&$form, &$form_state) {
+  $node = $form['#node'];
+  if (isset($_GET[OG_AUDIENCE_FIELD])) {
+    $node->{HR_CORE_OG_AUDIENCE_FIELD} = $_GET[OG_AUDIENCE_FIELD];
+  }
+  array_unshift($form['#validate'], 'hr_core_save_draft_validate');
+  if (!variable_get('publishcontent_' . $node->type, FALSE)) {
+    if (!isset($node->nid)) {
+      $form['actions']['submit']['#value'] = t('Publish');
+      $form['actions']['draft'] = _hr_core_draft_button('Save As Draft');
+    }
+    else {
+      if ($node->status == 1) {
+        $form['actions']['draft'] = _hr_core_draft_button('Unpublish');
+      }
+      else {
+        $form['actions']['submit']['#value'] = t('Publish');
+        $form['actions']['draft'] = _hr_core_draft_button('Save As Draft');
+      }
+
+    }
+    return;
+  }
+
+  if (publishcontent_publish_access($node)) {
+    if (!isset($node->nid)) {
+      $form['actions']['submit']['#value'] = t('Publish');
+      $form['actions']['draft'] = _hr_core_draft_button('Save As Draft');
+    }
+  }
+  else {
+    if (!isset($node->nid)) {
+      $form['actions']['submit']['#value'] = t('Save As Draft');
+    }
+  }
+}
+
+/**
+ * Handles save draft form validation
+ */
+function hr_core_save_draft_validate($form, &$form_state) {
+  // Set the node to be published or unpublished depending on which button was
+  // clicked.
+  if ($form_state['triggering_element']['#value'] == t('Save As Draft') || $form_state['triggering_element']['#value'] == t('Unpublish')) {
+    $form_state['values']['status'] = 0;
+  }
+  elseif ($form_state['triggering_element']['#value'] == t('Publish')) {
+    $form_state['values']['status'] = 1;
+  }
+}
+
+/**
+ * Implements hook_publishcontent_publish_access().
+ *
+ */
+function hr_core_publishcontent_publish_access($node, $account) {
+  $access = FALSE;
+  if (!isset($node->nid) && isset($node->{HR_CORE_OG_AUDIENCE_FIELD})) {
+    $entity_type = 'node';
+    $entity_id = $node->{HR_CORE_OG_AUDIENCE_FIELD};
+    $access = og_user_access($entity_type, $entity_id, 'administer nodes', $account)
+        || og_user_access($entity_type, $entity_id, 'publish any content', $account)
+        || (og_user_access($entity_type, $entity_id, 'publish own content', $account) && $account->uid == $node->uid)
+        || (og_user_access($entity_type, $entity_id, 'publish editable content', $account) && node_access('update', $node))
+        || (og_user_access($entity_type, $entity_id, 'publish own ' . check_plain($node->type) . ' content', $account) && $account->uid == $node->uid)
+        || og_user_access($entity_type, $entity_id, 'publish any ' . check_plain($node->type) . ' content', $account)
+        || (og_user_access($entity_type, $entity_id, 'publish editable ' . check_plain($node->type) . ' content', $account) && node_access('update', $node))
+        ;
+    return $access ? PUBLISHCONTENT_ACCESS_ALLOW : PUBLISHCONTENT_ACCESS_IGNORE;
+  }
+  else {
+    return PUBLISHCONTENT_ACCESS_IGNORE;
+  }
+}
+
+/**
+ * Implements hook_publishcontent_unpublish_access().
+ *
+ */
+function hr_core_publishcontent_unpublish_access($node, $account) {
+  $access = FALSE;
+  if (!isset($node->nid) && isset($node->{HR_CORE_OG_AUDIENCE_FIELD})) {
+    $entity_type = 'node';
+    $entity_id = $node->{HR_CORE_OG_AUDIENCE_FIELD};
+    $access = og_user_access($entity_type, $entity_id, 'administer nodes', $account)
+        || og_user_access($entity_type, $entity_id, 'unpublish any content', $account)
+        || (og_user_access($entity_type, $entity_id, 'unpublish own content', $account) && $account->uid == $node->uid)
+        || (og_user_access($entity_type, $entity_id, 'unpublish editable content', $account) && node_access('update', $node))
+        || (og_user_access($entity_type, $entity_id, 'unpublish own ' . check_plain($node->type) . ' content', $account) && $account->uid == $node->uid)
+        || og_user_access($entity_type, $entity_id, 'unpublish any ' . check_plain($node->type) . ' content', $account)
+        || (og_user_access($entity_type, $entity_id, 'unpublish editable ' . check_plain($node->type) . ' content', $account) && node_access('update', $node))
+        ;
+    return $access ? PUBLISHCONTENT_ACCESS_ALLOW : PUBLISHCONTENT_ACCESS_IGNORE;
+  }
+  else {
+    return PUBLISHCONTENT_ACCESS_IGNORE;
+  }
+}
+
+/**
+ * Returns true if a menu item for a given path exists, false otherwise
+ */
+function hr_core_menu_link_exists($path, $menu_name) {
+  $links = db_select('menu_links', 'ml')
+    ->fields('ml')
+    ->condition('ml.menu_name', $menu_name)
+    ->condition('ml.link_path', $path)
+    ->orderBy('weight')
+    ->execute()
+    ->fetchAll();
+
+  return !empty($links);
+}
+
+/**
+ * Implements hook_addressfield_default_values_alter()
+ * Sets default country to the country of the space
+ * See https://atrium.humanitarianresponse.info/humanitarian_response/node/4329
+ */
+function hr_core_addressfield_default_values_alter(&$default_values, $context) {
+  if (empty($default_values['country'])) {
+    $default_values['country'] = variable_get('site_default_country', 'SW');
+  }
+}
+
+/**
+ * Implements hook_languagefield_options_alter()
+ * Added Dari as a language. See https://atrium.humanitarianresponse.info/humanitarian_response/node/4367
+ */
+function hr_core_languagefield_options_alter(&$languages, $subsets, $langcode) {
+  if (!isset($languages['prs'])) {
+    $languages['prs'] = array(
+      'value' => 'prs',
+      'langcode' => 'prs',
+      'name' => 'Dari',
+      'native' => 'دری',
+      'name_native' => 'Dari (دری)',
+    );
+  }
+}
+
+/**
+ * Implements hook_panels_new_pane_alter($pane)
+ * Set default panel style to hr_highlighted
+ */
+function hr_core_panels_new_pane_alter(&$pane) {
+  $pane->style['style'] = 'hr_highlighted';
+}
+
+/**
+ * Redirect user to operation page after deletion of content
+ * See http://atrium.humanitarianresponse.info/humanitarian_response/node/3992
+ */
+function hr_core_node_delete($node) {
+  if (isset($node->{OG_AUDIENCE_FIELD})) {
+    $nid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
+    $_GET['destination'] = 'node/'.$nid;
+  }
+}
+
