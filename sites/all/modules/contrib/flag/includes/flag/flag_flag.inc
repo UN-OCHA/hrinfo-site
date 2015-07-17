@@ -200,7 +200,9 @@ class flag_flag {
 
     // Merge in options from the current link type.
     $link_type = $this->get_link_type();
-    $options = array_merge($options, $link_type['options']);
+    if (is_array($link_type)) {
+      $options = array_merge($options, $link_type['options']);
+    }
 
     // Allow other modules to change the flag options.
     drupal_alter('flag_options', $options, $this);
