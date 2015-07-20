@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * DisplayCacheTestCase.
+ */
+class DisplayCacheTestCase extends DrupalWebTestCase {
+  public static function getInfo() {
+    return array(
+      'name'        => 'Display Cache Test Case',
+      'description' => 'Tests if the cache is operating',
+      'group'       => 'Entity cache',
+    );
+  }
+
+  function setUp() {
+    parent::setup();
+    module_enable(array('display_cache'));
+  }
+}

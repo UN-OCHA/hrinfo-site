@@ -37,4 +37,10 @@ function display_cache_uninstall() {
   }
 
   variable_del('display_cache_variables');
+
+  $node_types = node_type_get_types();
+
+  foreach ($node_types as $type) {
+    variable_del('display_cache_comment_publication_clears_host_entity_cache_' . $type->type);
+  }
 }
