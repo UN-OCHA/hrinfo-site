@@ -93,8 +93,16 @@ function language_cookie_set($lang = NULL) {
   $cookie->secure = FALSE;
   $cookie->httponly = FALSE;
 
-  // Allow other modules to alter the cookie.
-  drupal_alter('language_cookie', $cookie);
+  // Allow other modules to alter the cookie. Include bootstrap modules
+  // only as this is being called during hook_boot().
+  // @see bootstrap_invoke_all()
+  foreach (module_list(FALSE, TRUE) as $module) {
+    drupal_load('module', $module);
+    // Note: this will be executed during hook_boot(), so be careful not
+    // to use module_implements() directly or indirectly during
+    // hook_language_cookie_alter().
+    module_invoke($module, 'language_cookie_alter', $cookie);
+  }
 
   setrawcookie(
     $cookie->name,
