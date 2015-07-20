@@ -51,7 +51,7 @@ function _webform_edit_fieldset($component) {
 /**
  * Implements _webform_render_component().
  */
-function _webform_render_fieldset($component, $value = NULL, $filter = TRUE) {
+function _webform_render_fieldset($component, $value = NULL, $filter = TRUE, $submission = NULL) {
   $node = isset($component['nid']) ? node_load($component['nid']) : NULL;
 
   $element = array(
@@ -82,7 +82,7 @@ function webform_fieldset_prerender($element) {
 /**
  * Implements _webform_display_component().
  */
-function _webform_display_fieldset($component, $value, $format = 'html') {
+function _webform_display_fieldset($component, $value, $format = 'html', $submission = array()) {
   if ($format == 'text') {
     $element = array(
       '#title' => $component['name'],
