@@ -178,3 +178,13 @@ function _humanitarianresponse_block_render($module, $block_id) {
   $block_rendered = drupal_render($build);
   return $block_rendered;
 }
+
+/**
+ * Implements hook_preprocess_fieldable_panels_pane()
+ * Fixes title appearing 2 times in fieldable panels panes
+ */
+function humanitarianresponse_preprocess_fieldable_panels_pane(&$variables) {
+  if (isset($variables['content']['title'])) {
+    unset($variables['content']['title']);
+  }
+}
