@@ -55,7 +55,7 @@ function usermerge_page() {
  * Form to collect the two user IDs.
  */
 function usermerge_merge_form($form, &$form_state) {
-  if ( !empty($form_state['form_page']) && $form_state['form_page'] == 'review_table' ) {
+  if (!empty($form_state['form_page']) && $form_state['form_page'] == 'review_table') {
     return usermerge_data_review_form($form, $form_state);
   }
 
@@ -121,11 +121,12 @@ function usermerge_data_review_form($form, &$form_state) {
 
   $user_to_delete = $form_state['values']['user_to_delete'];
   $user_to_keep = $form_state['values']['user_to_keep'];
+  $action = $form_state['page_values']['merge_form']['usermerge_user_delete_action'];
 
   // Invoke hook_usermerge_account_properties
-  $account_properties = usermerge_invoke_all('usermerge_account_properties', $user_to_delete, $user_to_keep);
+  $account_properties = usermerge_invoke_all('usermerge_account_properties', $user_to_delete, $user_to_keep, $action);
   // Allow modules to alter pre-existing account properties
-  drupal_alter('usermerge_account_properties', $account_properties, $user_to_delete, $user_to_keep);
+  drupal_alter('usermerge_account_properties', $account_properties, $user_to_delete, $user_to_keep, $action);
 
   $form['review'] = usermerge_invoke_all('usermerge_build_review_form_elements', array(), $account_properties, $user_to_delete, $user_to_keep);
 
@@ -170,22 +171,22 @@ function theme_usermerge_data_review_form_table($variables) {
     )
   );
 
-  if ( !in_array('no_merge', $element['#attributes']) ) {
+  if (!in_array('no_merge', $element['#attributes'])) {
     $table['header']['merge'] = t('Merge');
   }
 
-  foreach ( element_children($element) as $id ) {
+  foreach (element_children($element) as $id) {
     $table['rows'][$id]['property_name'] = '<strong>' . drupal_render($element[$id]['property_name']) . '</strong>';
     $table['rows'][$id]['user_to_delete'] = drupal_render($element[$id]['options']['user_to_delete']);
     $table['rows'][$id]['user_to_keep'] = drupal_render($element[$id]['options']['user_to_keep']);
 
-    if ( isset($table['header']['merge']) ) {
-      if ( isset($element[$id]['options']['merge']) ) {
+    if (isset($table['header']['merge'])) {
+      if (isset($element[$id]['options']['merge'])) {
         // Case 'force_select' or 'no_merge'
         $table['rows'][$id]['merge'] = '';
 
         // Case 'merge'
-        if ( $element[$id]['options']['#options']['merge'] == 'merge' ) {
+        if ($element[$id]['options']['#options']['merge'] == 'merge') {
           $element[$id]['options']['merge']['#title'] = t('Merge data');
           $table['rows'][$id]['merge'] = drupal_render($element[$id]['options']['merge']);
 
@@ -206,7 +207,7 @@ function theme_usermerge_data_review_form_table($variables) {
  */
 function usermerge_merge_form_validate($form, &$form_state) {
   // Validate first step
-  if ( !isset($form_state['form_page']) ) {
+  if (!isset($form_state['form_page'])) {
     // Can't be the same user.
     if ($form_state['values']['usermerge_user_keep'] == $form_state['values']['usermerge_user_delete']) {
       form_set_error('usermerge_user', 'You cannot have the same username in both fields.');
@@ -257,10 +258,10 @@ function usermerge_validate_merge($user_to_delete, $user_to_keep) {
  * Displays the userdata-review form, or merges the selected accounts.
  */
 function usermerge_merge_form_submit($form, &$form_state) {
-  if ( !isset($form_state['form_page']) ) {
+  if (!isset($form_state['form_page'])) {
     $form_state['page_values']['merge_form'] = $form_state['values'];
 
-    if ( !empty($form_state['page_values']['review_table']) ) {
+    if (!empty($form_state['page_values']['review_table'])) {
       $form_state['values'] = $form_state['page_values']['review_table'];
     }
 
@@ -298,13 +299,9 @@ function usermerge_merge_accounts($user_to_delete, $user_to_keep, $form_values) 
     $merged_account->pass = $user_to_keep->pass;
     $merged_account->status = 1;
 
-    // Save merged account
-    user_save($merged_account);
-
-    drupal_set_message(t('%user_to_delete was successfully merged into %user_to_keep', array('%user_to_delete' => $user_to_delete->name, '%user_to_keep' => $user_to_keep->name)));
-
-    // Block or delete old account
-    switch ( $form_values['usermerge_user_delete_action'] ) {
+    // Block or delete old account. Do this before saving the new account in
+    // case the merged account is using the deleted account's mail or name.
+    switch ($form_values['usermerge_user_delete_action']) {
       case 'block' :
         user_block_user_action($user_to_delete);
       break;
@@ -313,6 +310,12 @@ function usermerge_merge_accounts($user_to_delete, $user_to_keep, $form_values) 
         user_delete($user_to_delete->uid);
       break;
     }
+
+    // Save merged account
+    user_save($merged_account);
+
+    drupal_set_message(t('%user_to_delete was successfully merged into %user_to_keep', array('%user_to_delete' => $user_to_delete->name, '%user_to_keep' => $user_to_keep->name)));
+
 
     return TRUE;
   }
@@ -349,18 +352,18 @@ function usermerge_do($user_to_delete, $user_to_keep) {
   $review_form_state['page_values']['merge_form'] = $review_form_state['values'];
   $review = array_intersect_key($review_form['review'], array_flip(element_children($review_form['review'])));
 
-  foreach ( $review as $component => $items ) {
-    if ( isset($items['#value']) ) {
+  foreach ($review as $component => $items) {
+    if (isset($items['#value'])) {
       $review_form_state['values'][$component] = $items['#value'];
     }
     else {
       $items = array_intersect_key($items, array_flip(element_children($items)));
 
-      foreach ( $items as $name => $properties ) {
+      foreach ($items as $name => $properties) {
 
-        if ( isset($properties['options']['#options']) ) {
+        if (isset($properties['options']['#options'])) {
           // If the property has a merge options, merge data
-          if ( isset($properties['options']['#options']['merge']) && $properties['options']['#options']['merge'] == 'merge' ) {
+          if (isset($properties['options']['#options']['merge']) && $properties['options']['#options']['merge'] == 'merge') {
             $review_form_state['values']['review'][$component][$name]['options'] = 'merge';
           }
           // Otherwise use data from account to keep
@@ -372,9 +375,9 @@ function usermerge_do($user_to_delete, $user_to_keep) {
           // If there are no set options, check if the module sets other form fields
           unset($properties['property_name'], $properties['options']);
 
-          if ( count($properties) ) {
-            foreach ( $properties as $property_name => $property ) {
-              if ( isset($property['#value']) ) {
+          if (count($properties)) {
+            foreach ($properties as $property_name => $property) {
+              if (isset($property['#value'])) {
                 $review_form_state['values']['review'][$component][$name][$property_name] = $property['#value'];
               }
             }
@@ -426,9 +429,9 @@ function usermerge_hook_info() {
  * by other modules, making the whole module unreliable quite randomly.
  */
 function usermerge_load_includes() {
-  foreach ( module_list() as $module ) {
+  foreach (module_list() as $module) {
     // Load MODULE.usermerge.inc files
-    if ( !($file = module_load_include('inc', $module, $module . '.usermerge')) ) {
+    if (!($file = module_load_include('inc', $module, $module . '.usermerge'))) {
       // Load supplemental includes only if the module doesn't provide its own implementation
       $file = module_load_include('inc', 'usermerge', 'includes/' . $module . '.usermerge');
     }
@@ -473,7 +476,7 @@ function usermerge_invoke_all($hook) {
 function usermerge_module_implements($hook) {
   $modules = array();
 
-  foreach ( module_list() as $module ) {
+  foreach (module_list() as $module) {
     $function = $module . '_' . $hook;
     if (function_exists($function)) {
       $modules[] = $module;
@@ -497,9 +500,9 @@ function usermerge_settings() {
     '#tree' => TRUE
   );
 
-  foreach ( $core_properties as $property ) {
+  foreach ($core_properties as $property) {
     // For some properties there is never a choice
-    if ( !in_array($property, array('uid', 'created', 'access', 'login', 'pass', 'name', 'mail', 'init', 'data', 'roles')) ) {
+    if (!in_array($property, array('uid', 'created', 'access', 'login', 'pass', 'init', 'data', 'roles'))) {
       $form['core'][$property] = array(
         '#type' => 'checkbox',
         '#title' => $property, // No need to localize this
@@ -521,10 +524,11 @@ function usermerge_settings() {
  */
 function usermerge_settings_submit($form, &$form_state) {
   form_state_values_clean($form_state);
-  foreach ( $form_state['values'] as $type => $values ) {
+  foreach ($form_state['values'] as $type => $values) {
     $usermerge_settings[$type] = $values;
   }
   variable_set('usermerge_settings', $usermerge_settings);
+  drupal_set_message('The User Merge settings have been saved.');
 }
 
 /**
@@ -533,11 +537,11 @@ function usermerge_settings_submit($form, &$form_state) {
 function usermerge_settings_default() {
   static $default;
 
-  if ( empty($default) ) {
+  if (empty($default)) {
     $core_properties = usermerge_get_user_core_properties();
 
-    foreach ( $core_properties as $property ) {
-      if ( !in_array($property, array('uid', 'created', 'access', 'login', 'pass', 'name', 'mail', 'init', 'data', 'roles')) ) {
+    foreach ($core_properties as $property) {
+      if (!in_array($property, array('uid', 'created', 'access', 'login', 'pass', 'name', 'mail', 'init', 'data', 'roles'))) {
         $default['core'][$property] = 0;
       }
     }
@@ -552,7 +556,7 @@ function usermerge_settings_default() {
 function usermerge_get_user_core_properties() {
   static $properties;
 
-  if ( empty($properties) ) {
+  if (empty($properties)) {
     // Define list of fields and other user data
     // Using the columns in the user table, so non-field data added from other modules doesn't get mixed in
     $user_entity_info = entity_get_info('user');

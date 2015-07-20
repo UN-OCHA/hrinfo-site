@@ -18,7 +18,7 @@ function multiple_email_usermerge_actions_supported() {
  * Implements hook_form_FORM_ID_alter() on behalf of multiple_email.
  */
 function multiple_email_form_usermerge_merge_form_alter(&$form, &$form_state, $form_id) {
-  if ( isset($form['general']['usermerge_user_delete_action']) ) {
+  if (isset($form['general']['usermerge_user_delete_action'])) {
     $form['general']['usermerge_user_delete_action']['#default_value'] = 'delete';
     $form['general']['usermerge_user_delete_action']['#disabled'] = TRUE;
     $form['general']['usermerge_user_delete_action']['#description'] = t('Integration with Multiple E-mail requires the account to be deleted.');
@@ -36,7 +36,7 @@ function multiple_email_form_usermerge_data_review_form_alter(&$form, $user_to_d
 /**
  * Implements hook_usermerge_account_properties() on behalf of multiple_email.
  */
-function multiple_email_usermerge_account_properties($user_to_delete, $user_to_keep) {
+function multiple_email_usermerge_account_properties($user_to_delete, $user_to_keep, $action) {
   $account_properties['multiple_email'] = array(
     'title' => t('Multiple E-mail'),
     'items' => array(
@@ -80,7 +80,7 @@ function multiple_email_usermerge_build_review_form_elements($review, $account_p
     ),
   );
 
-  if ( isset($properties['description']) ) {
+  if (isset($properties['description'])) {
     $review['multiple_email']['#description'] = $properties['description'];
   }
 
@@ -93,7 +93,7 @@ function multiple_email_usermerge_build_review_form_elements($review, $account_p
 function multiple_email_usermerge_merge_accounts($user_to_delete, $user_to_keep, $review) {
   $emails_to_keep = $review['multiple_email']['multiple_email']['options'];
 
-  if ( $emails_to_keep == 'merge' ) {
+  if ($emails_to_keep == 'merge') {
     $query = db_update('multiple_email')
       ->fields(array(
         'uid' => $user_to_keep->uid
@@ -113,7 +113,7 @@ function multiple_email_usermerge_merge_accounts($user_to_delete, $user_to_keep,
 
     // This fires only if the emails to keep are those of the account to delete
     // If not, this would be redundant
-    if ( $emails_to_keep == 'user_to_delete') {
+    if ($emails_to_keep == 'user_to_delete') {
       $query_update = db_update('multiple_email')
         ->fields(array(
           'uid' => $user_to_keep->uid
@@ -134,11 +134,11 @@ function _multiple_email_usermerge_load_addresses($uid) {
   $addresses = multiple_email_load_addresses($uid);
 
   $address_list = array();
-  foreach ( $addresses as $eid => $properties ) {
-    if ( $eid <> 0 ) {
+  foreach ($addresses as $eid => $properties) {
+    if ($eid <> 0) {
       $address_list[$eid] = $properties->email;
 
-      if ( $properties->email == $addresses[0][0] ) {
+      if ($properties->email == $addresses[0][0]) {
         $address_list[$eid] .= ' ' . t('(main)');
       }
     }

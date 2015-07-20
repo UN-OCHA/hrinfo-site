@@ -10,7 +10,7 @@
  * Implements hook_usermerge_account_properties_alter() on behalf of realname.
  * Disables actions on the realname property.
  */
-function realname_usermerge_account_properties_alter(&$properties, $user_to_delete, $user_to_keep) {
+function realname_usermerge_account_properties_alter(&$properties, $user_to_delete, $user_to_keep, $action) {
   $properties['other']['items']['realname']['criterion'] = 'no_merge';
 }
 

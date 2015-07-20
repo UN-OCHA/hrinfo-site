@@ -17,7 +17,7 @@ function profile2_usermerge_actions_supported() {
 /**
  * Implements hook_usermerge_account_properties().
  */
-function profile2_usermerge_account_properties($user_to_delete, $user_to_keep) {
+function profile2_usermerge_account_properties($user_to_delete, $user_to_keep, $action) {
   // Set the account properties.
   $account_properties = array();
 
