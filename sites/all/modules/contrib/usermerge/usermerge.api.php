@@ -11,7 +11,7 @@
 
 /**
  * Add elements to the list of supported actions.
- * 
+ *
  * The returned array will be sorted by key, so the hook implementation can
  * adjust the order by returning appropriate key names.
  */
@@ -29,8 +29,10 @@ function hook_usermerge_actions_supported() {
  *   The full object of the user to be deleted.
  * @param $user_to_keep
  *   The full object of the user to be kept.
+ * @param $action
+ *   'delete' or 'block'. Usually does not affect the properties.
  */
-function hook_usermerge_account_properties($user_to_delete, $user_to_keep) {
+function hook_usermerge_account_properties($user_to_delete, $user_to_keep, $action) {
   // Example taken from usermerge_usermerge_account_properties()
 
   // Define list of fields and other user data
@@ -55,7 +57,7 @@ function hook_usermerge_account_properties($user_to_delete, $user_to_keep) {
   // Find custom fields
   $user_entity_properties['fields'] = preg_grep("/^field_/", $user_all_properties);
 
-  if ( count($user_entity_properties['fields']) ) {
+  if (count($user_entity_properties['fields'])) {
     $account_properties['fields'] = array(
       'title' => t('Fields'),
       'description' => t('Please note that single-value fields cannot be merged.'),
@@ -67,15 +69,15 @@ function hook_usermerge_account_properties($user_to_delete, $user_to_keep) {
   $user_noncore_properties = array_diff($user_all_properties, $user_entity_properties['core']);
   $user_entity_properties['other'] = array_diff($user_noncore_properties, $user_entity_properties['fields']);
 
-  if ( count($user_entity_properties['other']) ) {
+  if (count($user_entity_properties['other'])) {
     $account_properties['other'] = array(
       'title' => t('Other properties'),
       'items' => array()
     );
   }
 
-  foreach ( $user_entity_properties as $type => $properties ) {
-    foreach ( array_flip($properties) as $property_name => $delta ) {
+  foreach ($user_entity_properties as $type => $properties) {
+    foreach (array_flip($properties) as $property_name => $delta) {
       $account_properties[$type]['items'][$property_name] = array(
         'name' => $property_name,
         'criterion' => 'merge'
@@ -94,7 +96,7 @@ function hook_usermerge_account_properties($user_to_delete, $user_to_keep) {
   $account_properties['core']['items']['signature_format']['default'] = $user_to_keep->signature_format;
 
   // Choose older created date
-  if ( $user_to_delete->created < $user_to_keep->created ) {
+  if ($user_to_delete->created < $user_to_keep->created) {
     $account_properties['core']['items']['created']['default'] = $user_to_delete->created;
   }
   else {
@@ -102,7 +104,7 @@ function hook_usermerge_account_properties($user_to_delete, $user_to_keep) {
   }
 
   // Choose newer access date
-  if ( $user_to_delete->access > $user_to_keep->access ) {
+  if ($user_to_delete->access > $user_to_keep->access) {
     $account_properties['core']['items']['access']['default'] = $user_to_delete->access;
   }
   else {
@@ -126,11 +128,11 @@ function hook_usermerge_account_properties($user_to_delete, $user_to_keep) {
   $account_properties['core']['items']['mail']['criterion'] = 'no_merge';
 
   // Special settings for fields
-  foreach ( $account_properties['fields']['items'] as $field_name => $properties ) {
+  foreach ($account_properties['fields']['items'] as $field_name => $properties) {
     $field_settings = field_info_field($field_name);
     // If the field's cardinality is not 1, do not allow merging
     // This could pose problems for fields whose cardinality is greater than one, but not unlimited
-    if ( $field_settings['cardinality'] <> FIELD_CARDINALITY_UNLIMITED ) {
+    if ($field_settings['cardinality'] <> FIELD_CARDINALITY_UNLIMITED) {
       $account_properties['fields']['items'][$field_name]['criterion'] = 'force_select';
     }
   }
@@ -138,7 +140,7 @@ function hook_usermerge_account_properties($user_to_delete, $user_to_keep) {
   // Authored entitites
   $account_properties['entities']['title'] = t('Authored entities');
 
-  foreach ( usermerge_get_authorable_entities() as $entity_name => $entity ) {
+  foreach (usermerge_get_authorable_entities() as $entity_name => $entity) {
     $account_properties['entities']['items'][$entity_name] = array(
       'name' => $entity_name,
       'criterion' => 'no_merge'
@@ -157,10 +159,12 @@ function hook_usermerge_account_properties($user_to_delete, $user_to_keep) {
  *   The full object of the user to be deleted.
  * @param $user_to_keep
  *   The full object of the user to be kept.
+ * @param $action
+ *   'delete' or 'block'. Usually does not affect the properties.
  *
  * @see hook_usermerge_account_properties()
  */
-function hook_usermerge_account_properties_alter(&$properties, $user_to_delete, $user_to_keep) {
+function hook_usermerge_account_properties_alter(&$properties, $user_to_delete, $user_to_keep, $action) {
   // Example taken from rdf_usermerge_account_properties_alter()
 
   // Sets the default to the value of $user_to_keep
@@ -207,7 +211,7 @@ function hook_usermerge_build_review_form_elements($review, $account_properties,
     ),
   );
 
-  if ( isset($properties['description']) ) {
+  if (isset($properties['description'])) {
     $review['multiple_email']['#description'] = $properties['description'];
   }
 
@@ -229,7 +233,7 @@ function hook_usermerge_merge_accounts($user_to_delete, $user_to_keep, $review) 
 
   $emails_to_keep = $review['multiple_email']['multiple_email']['options'];
 
-  if ( $emails_to_keep == 'merge' ) {
+  if ($emails_to_keep == 'merge') {
     $query = db_update('multiple_email')
       ->fields(array(
         'uid' => $user_to_keep->uid
@@ -249,7 +253,7 @@ function hook_usermerge_merge_accounts($user_to_delete, $user_to_keep, $review) 
 
     // This fires only if the emails to keep are those of the account to delete
     // If not, this would be redundant
-    if ( $emails_to_keep == 'user_to_delete') {
+    if ($emails_to_keep == 'user_to_delete') {
       $query_update = db_update('multiple_email')
         ->fields(array(
           'uid' => $user_to_keep->uid

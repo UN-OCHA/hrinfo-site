@@ -157,17 +157,6 @@ class DrupalDefaultEntityController implements DrupalEntityControllerInterface {
   public function load($ids = array(), $conditions = array()) {
     $entities = array();
 
-    // Clean the $ids array to remove non-integer values that can be passed
-    // in from various sources, including menu callbacks.
-    if (is_array($ids)) {
-      foreach ($ids as $key => $id) {
-        $id = (string) $id;
-        if ((empty($id) && $id !== '0') || ($id !== (string) (int) $id)) {
-          unset($ids[$key]);
-        }
-      }
-    }
-
     // Revisions are not statically cached, and require a different query to
     // other conditions, so separate the revision id into its own variable.
     if ($this->revisionKey && isset($conditions[$this->revisionKey])) {
@@ -192,6 +181,11 @@ class DrupalDefaultEntityController implements DrupalEntityControllerInterface {
       if ($passed_ids) {
         $ids = array_keys(array_diff_key($passed_ids, $entities));
       }
+    }
+
+    // Ensure integer entity IDs are valid.
+    if (!empty($ids)) {
+      $this->cleanIds($ids);
     }
 
     // Load any remaining entities from the database. This is the case if $ids
@@ -232,6 +226,35 @@ class DrupalDefaultEntityController implements DrupalEntityControllerInterface {
     }
 
     return $entities;
+  }
+
+  /**
+   * Ensures integer entity IDs are valid.
+   *
+   * The identifier sanitization provided by this method has been introduced
+   * as Drupal used to rely on the database to facilitate this, which worked
+   * correctly with MySQL but led to errors with other DBMS such as PostgreSQL.
+   *
+   * @param array $ids
+   *   The entity IDs to verify. Non-integer IDs are removed from this array if
+   *   the entity type requires IDs to be integers.
+   */
+  protected function cleanIds(&$ids) {
+    $entity_info = entity_get_info($this->entityType);
+    if (isset($entity_info['base table field types'])) {
+      $id_type = $entity_info['base table field types'][$this->idKey];
+      if ($id_type == 'serial' || $id_type == 'int') {
+        $ids = array_filter($ids, array($this, 'filterId'));
+        $ids = array_map('intval', $ids);
+      }
+    }
+  }
+
+  /**
+   * Callback for array_filter that removes non-integer IDs.
+   */
+  protected function filterId($id) {
+    return is_numeric($id) && $id == (int) $id;
   }
 
   /**

@@ -11,7 +11,7 @@
  */
 function display_cache_flush_caches_form($form, $form_state) {
   $form['display_cache_flush_caches'] = array(
-    '#type' => 'submit',
+    '#type'  => 'submit',
     '#value' => t('Flush all display caches'),
   );
 
@@ -38,20 +38,33 @@ function display_cache_field_ui_form(&$form, &$form_state) {
 
   $settings = display_cache_get_settings($entity_type, $bundle, $view_mode);
 
+  // Add additional settings vertical tab.
+  if (!isset($form['additional_settings'])) {
+    $form['additional_settings'] = array(
+      '#type'           => 'vertical_tabs',
+      '#theme_wrappers' => array('vertical_tabs'),
+      '#prefix'         => '<div>',
+      '#suffix'         => '</div>',
+    );
+    $form['#attached']['js'][] = 'misc/form.js';
+    $form['#attached']['js'][] = 'misc/collapse.js';
+  }
+
   // Add fieldset.
   $form['display_cache'] = array(
-    '#title' => t('Display Cache Display Settings'),
-    '#type' => 'fieldset',
+    '#title'       => t('Display Cache Display Settings'),
+    '#type'        => 'fieldset',
+    '#group'       => 'additional_settings',
     '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-    '#access' => user_access('administer display cache'),
+    '#collapsed'   => TRUE,
+    '#access'      => user_access('administer display cache'),
   );
 
   // Add radios with caching options for the display.
   $display_cache_options = array(
     DISPLAY_CACHE_DISABLED => t('No caching'),
-    DISPLAY_CACHE_ENABLED => t('Cache display'),
-    DISPLAY_CACHE_FIELDS => t('Cache fields only'),
+    DISPLAY_CACHE_ENABLED  => t('Cache display'),
+    DISPLAY_CACHE_FIELDS   => t('Cache fields only'),
   );
 
   // Set default value.
@@ -60,15 +73,15 @@ function display_cache_field_ui_form(&$form, &$form_state) {
     $use_default_value = $settings['default']['use'];
   }
   $form['display_cache']['display_cache_use'] = array(
-    '#type' => 'radios',
-    '#title' => t('Cache the rendered HTML of this view mode.'),
+    '#type'          => 'radios',
+    '#title'         => t('Cache the rendered HTML of this view mode.'),
     '#default_value' => $use_default_value,
-    '#options' => $display_cache_options,
+    '#options'       => $display_cache_options,
   );
 
   // Add radios with granularity options for cache-per-page.
   $page_granularity_options = array(
-    0 => t('No page granularity'),
+    0                     => t('No page granularity'),
     DRUPAL_CACHE_PER_PAGE => t('Cache per URL'),
   );
 
@@ -79,11 +92,11 @@ function display_cache_field_ui_form(&$form, &$form_state) {
   }
 
   $form['display_cache']['display_cache_page_granularity'] = array(
-    '#type' => 'radios',
-    '#title' => t('Cache per URL'),
+    '#type'          => 'radios',
+    '#title'         => t('Cache per URL'),
     '#default_value' => $page_default_value,
-    '#options' => $page_granularity_options,
-    '#states' => array(
+    '#options'       => $page_granularity_options,
+    '#states'        => array(
       'invisible' => array(
         'input[name="display_cache_use"]' => array('value' => 0),
       ),
@@ -92,7 +105,7 @@ function display_cache_field_ui_form(&$form, &$form_state) {
 
   // Add radios with granularity options for users.
   $user_granularity_options = array(
-    0 => t('No user granularity'),
+    0                     => t('No user granularity'),
     DRUPAL_CACHE_PER_ROLE => t('Cache per role'),
     DRUPAL_CACHE_PER_USER => t('Cache per user'),
   );
@@ -104,16 +117,34 @@ function display_cache_field_ui_form(&$form, &$form_state) {
   }
 
   $form['display_cache']['display_cache_user_granularity'] = array(
-    '#type' => 'radios',
-    '#title' => t('User granularity'),
+    '#type'          => 'radios',
+    '#title'         => t('User granularity'),
     '#default_value' => $user_default_value,
-    '#options' => $user_granularity_options,
-    '#states' => array(
+    '#options'       => $user_granularity_options,
+    '#states'        => array(
       'invisible' => array(
         'input[name="display_cache_use"]' => array('value' => 0),
       ),
     ),
   );
+
+  if ($entity_type === 'node') {
+    $clear_on_comment_publication = display_cache_get_comment_publication_clears_host_entity_cache_settings($entity_type, $bundle, $view_mode);
+
+    $form['display_cache']['clear_on_comment_publication'] = array(
+      '#default_value' => $clear_on_comment_publication,
+      '#description'   => t('Should the display cache for this view mode be cleared, if a comment is (un-)published or deleted for this node type.<br />
+          This could be useful if you use any information about the comments in a view mode.'),
+      '#states'        => array(
+        'invisible' => array(
+          'input[name="display_cache_use"]' => array('value' => 0),
+          $settings['display_cache_use']    => FALSE
+        ),
+      ),
+      '#title'         => t('Clear display cache on comment (un-)publication/deletion'),
+      '#type'          => 'checkbox',
+    );
+  }
 
   // Add forms for field settings.
   $fields = array();
@@ -129,11 +160,12 @@ function display_cache_field_ui_form(&$form, &$form_state) {
     ksort($fields);
   }
   $form['display_cache_fields'] = array(
-    '#title' => t('Display Cache Field Settings'),
-    '#type' => 'fieldset',
+    '#title'       => t('Display Cache Field Settings'),
+    '#type'        => 'fieldset',
     '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-    '#access' => user_access('administer display cache'),
+    '#collapsed'   => TRUE,
+    '#group'       => 'additional_settings',
+    '#access'      => user_access('administer display cache'),
     '#description' => t('Use this options to cache fields with less granularity.'),
   );
 
@@ -163,10 +195,10 @@ function _display_cache_field_settings_form(&$form, &$form_state, $settings, $fi
   // Add fieldset for this fields settings.
   $fieldset = 'display_cache_field_' . $field_name;
   $form['display_cache_fields'][$fieldset] = array(
-    '#type' => 'fieldset',
-    '#title' => $field_name,
+    '#type'        => 'fieldset',
+    '#title'       => $field_name,
     '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
+    '#collapsed'   => TRUE,
   );
 
   // Disable field settings if display cache is disabled.
@@ -183,7 +215,7 @@ function _display_cache_field_settings_form(&$form, &$form_state, $settings, $fi
 
   // Add radios with caching options for this field.
   $display_cache_options = array(
-    DISPLAY_CACHE_FIELDS => t('Use default'),
+    DISPLAY_CACHE_FIELDS  => t('Use default'),
     DISPLAY_CACHE_ENABLED => t('Override display cache defaults'),
   );
 
@@ -203,10 +235,10 @@ function _display_cache_field_settings_form(&$form, &$form_state, $settings, $fi
   }
 
   $form['display_cache_fields'][$fieldset][$fieldset . '_override'] = array(
-    '#type' => 'radios',
-    '#title' => t('Override display cache defaults'),
+    '#type'          => 'radios',
+    '#title'         => t('Override display cache defaults'),
     '#default_value' => $override_default_value,
-    '#options' => $display_cache_options,
+    '#options'       => $display_cache_options,
   );
 
   // Add radios with page granularity options.
@@ -222,11 +254,11 @@ function _display_cache_field_settings_form(&$form, &$form_state, $settings, $fi
   }
 
   $form['display_cache_fields'][$fieldset][$fieldset . '_page_granularity'] = array(
-    '#type' => 'radios',
-    '#title' => t('Cache per URL'),
+    '#type'          => 'radios',
+    '#title'         => t('Cache per URL'),
     '#default_value' => $page_default_value,
-    '#options' => $page_granularity_options,
-    '#states' => array(
+    '#options'       => $page_granularity_options,
+    '#states'        => array(
       'visible' => array(
         'input[name="' . $fieldset . '_override"]' => array('value' => 1),
       ),
@@ -257,11 +289,11 @@ function _display_cache_field_settings_form(&$form, &$form_state, $settings, $fi
   }
 
   $form['display_cache_fields'][$fieldset][$fieldset . '_user_granularity'] = array(
-    '#type' => 'radios',
-    '#title' => t('User granularity'),
+    '#type'          => 'radios',
+    '#title'         => t('User granularity'),
     '#default_value' => $user_default_value,
-    '#options' => $user_granularity_options,
-    '#states' => array(
+    '#options'       => $user_granularity_options,
+    '#states'        => array(
       'visible' => array(
         'input[name="' . $fieldset . '_override"]' => array('value' => 1),
       ),
@@ -340,5 +372,43 @@ function display_cache_view_mode_settings_form_submit($form, $form_state) {
   if (!in_array($variable_name, $display_cache_variables)) {
     $display_cache_variables[] = $variable_name;
     variable_set('display_cache_variables', $display_cache_variables);
+  }
+
+  if ($entity_type === 'node') {
+    $clear_on_comment_publication_settings = display_cache_get_comment_publication_clears_host_entity_cache_settings($entity_type, $bundle);
+
+    $clear_on_comment_publication_settings[$view_mode] = $values['clear_on_comment_publication'];
+
+    $variable_name = display_cache_get_comment_publication_clears_host_entity_cache_setting_name($entity_type, $bundle);
+    variable_set($variable_name, $clear_on_comment_publication_settings);
+    // Unset the global clearing for this node type, because else it would over-
+    // write this setting.
+    variable_del('display_cache_comment_publication_clears_host_entity_cache_' . $bundle);
+
+    if (!in_array($variable_name, $display_cache_variables)) {
+      $display_cache_variables[] = $variable_name;
+      variable_set('display_cache_variables', $display_cache_variables);
+    }
+  }
+}
+
+/**
+ * Alters the node_type_form form.
+ *
+ * @param array $form
+ *   The form to alter.
+ * @param array $form_state
+ *   The form state.
+ */
+function display_cache_node_type_form(&$form, &$form_state) {
+  if (isset($form['comment'])) {
+    $form['comment']['display_cache_comment_publication_clears_host_entity_cache'] = array(
+      '#description'   => t('Should the display cache for this node type be cleared, if a comment is (un-)published or deleted for this node type.<br />
+        This could be useful if you use any information about the comments in a view mode.<br />
+        <b>Please be aware that on a site with a lot of view modes for this node type and an active community this can have a big perfomance impact.</b>'),
+      '#title'         => t('Clear host entity display cache on comment (un-)publication/deletion'),
+      '#type'          => 'checkbox',
+      '#default_value' => variable_get('display_cache_comment_publication_clears_host_entity_cache_' . $form['#node_type']->type, FALSE),
+    );
   }
 }

@@ -3,9 +3,9 @@ description = Allows users to merge two accounts.
 core = 7.x
 dependencies[] = usermerge
 
-; Information added by Drupal.org packaging script on 2014-08-26
-version = "7.x-2.8"
+; Information added by Drupal.org packaging script on 2015-06-08
+version = "7.x-2.10"
 core = "7.x"
 project = "usermerge"
-datestamp = "1409042329"
+datestamp = "1433744281"
 

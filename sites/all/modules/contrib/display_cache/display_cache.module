@@ -18,6 +18,13 @@ define('DISPLAY_CACHE_FIELDS', '2');
 define('DISPLAY_CACHE_CACHE_BIN', 'cache_display_cache');
 
 /**
+ * Suffix to a view mode that triggers on-the-fly re-rendering of the view mode.
+ *
+ * @var string
+ */
+define('DISPLAY_CACHE_VIEW_MODE_CACHE_IGNORE_SUFFIX', ':display_cache_no_cache');
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function display_cache_form_field_ui_display_overview_form_alter(&$form, &$form_state) {
@@ -42,13 +49,13 @@ function display_cache_menu() {
 
   // Menu item for configurations.
   $menu_items['admin/config/development/display-cache'] = array(
-    'title' => 'Display Cache',
-    'description' => 'Form to submit cache flush for display cache.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('display_cache_flush_caches_form'),
+    'title'            => 'Display Cache',
+    'description'      => 'Form to submit cache flush for display cache.',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('display_cache_flush_caches_form'),
     'access arguments' => array('administer display cache'),
-    'file' => 'display_cache.admin.inc',
-    'type' => MENU_NORMAL_ITEM,
+    'file'             => 'display_cache.admin.inc',
+    'type'             => MENU_NORMAL_ITEM,
   );
 
   return $menu_items;
@@ -59,7 +66,7 @@ function display_cache_menu() {
  */
 function display_cache_admin_menu_cache_info() {
   $links['display_cache'] = array(
-    'title' => 'Display Caches',
+    'title'    => 'Display Caches',
     'callback' => '_display_cache_clear_cache',
   );
 
@@ -72,10 +79,85 @@ function display_cache_admin_menu_cache_info() {
 function display_cache_permission() {
   return array(
     'administer display cache' => array(
-      'title' => t('Administer Display Cache'),
+      'title'       => t('Administer Display Cache'),
       'description' => t('Permission to administer display cache settings and clear display cache caches from the ui.'),
     ),
   );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * FORM ID: node_type
+ */
+function display_cache_form_node_type_form_alter(&$form, &$form_state) {
+  if (user_access('administer display cache')) {
+    form_load_include($form_state, 'inc', 'display_cache', 'display_cache.admin');
+    display_cache_node_type_form($form, $form_state);
+  }
+}
+
+/**
+ * Implements hook_comment_publish().
+ */
+function display_cache_comment_publish($comment) {
+  display_cache_clear_comment_host_entity_cache($comment);
+}
+
+/**
+ * Implements hook_comment_update().
+ *
+ * This basically implements hook_comment_unpublished() which is not implemented
+ * by the comment module.
+ */
+function display_cache_comment_update($comment) {
+  if ($comment->original && $comment->original->status != $comment->status && $comment->status == COMMENT_NOT_PUBLISHED) {
+    display_cache_clear_comment_host_entity_cache($comment);
+  }
+}
+
+/**
+ * Implements hook_comment_delete().
+ */
+function display_cache_comment_delete($comment) {
+  if ($comment->status == COMMENT_PUBLISHED) {
+    display_cache_clear_comment_host_entity_cache($comment);
+  }
+}
+
+/**
+ * Implemenets hook_node_type_delete().
+ */
+function display_cache_node_type_delete($info) {
+  variable_del('display_cache_comment_publication_clears_host_entity_cache_' . $info->type);
+  variable_del('display_cache_comment_publication_clears_host_entity_cache_node_' . $info->type);
+}
+
+/**
+ * Clears the given comments' host entity if needed.
+ *
+ * @param Object $comment
+ *   The comment.
+ */
+function display_cache_clear_comment_host_entity_cache($comment) {
+  if ($comment->nid) {
+    $node = node_load($comment->nid);
+
+    $should_clear_host_entity_cache_globally = variable_get('display_cache_comment_publication_clears_host_entity_cache_' . $node->type, FALSE);
+
+    $view_modes_to_clear = display_cache_get_comment_publication_clears_host_entity_cache_settings('node', $node->type);
+
+    if ($should_clear_host_entity_cache_globally) {
+      display_cache_flush_cache('node', $node);
+    }
+    elseif (!empty($view_modes_to_clear) && array_sum($view_modes_to_clear) > 0) {
+      foreach ($view_modes_to_clear as $view_mode => $clear) {
+        if ($clear) {
+          display_cache_flush_cache('node', $node, $view_mode);
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -106,7 +188,7 @@ function display_cache_flush_cache($entity_type, $entity = NULL, $view_mode = NU
 
   $keys = display_cache_get_cache_keys($entity_type, $entity, $view_mode, $element);
 
-  $cache_id = implode(':', $keys);
+  $cache_id = implode(':', $keys) . ':';
   cache_clear_all($cache_id, DISPLAY_CACHE_CACHE_BIN, TRUE);
 }
 
@@ -152,16 +234,41 @@ function display_cache_get_settings($entity_type, $bundle, $view_mode) {
     if (!$settings) {
       return array(
         'default' => array(
-          'use' => DISPLAY_CACHE_DISABLED,
+          'use'              => DISPLAY_CACHE_DISABLED,
           'page_granularity' => DISPLAY_CACHE_DISABLED,
           'user_granularity' => DISPLAY_CACHE_DISABLED,
-          'granularity' => DISPLAY_CACHE_DISABLED,
+          'granularity'      => DISPLAY_CACHE_DISABLED,
         ),
       );
     }
   }
 
   return $settings;
+}
+
+/**
+ * Collects the comment publication host entity cache clearing settings.
+ *
+ * @param string $entity_type
+ *   This is almost all the type 'node'. It is just here for completeness.
+ * @param string $bundle
+ *   The bundle to check.
+ * @param string $view_mode
+ *   If given, the settings obtained will be searched for this specific view
+ *   mode.
+ *
+ * @return mixed(array|bool)
+ *   Returns a setting array or a bool if $view_mode has been given.
+ */
+function display_cache_get_comment_publication_clears_host_entity_cache_settings($entity_type, $bundle, $view_mode = NULL) {
+  $variable_name = display_cache_get_comment_publication_clears_host_entity_cache_setting_name($entity_type, $bundle);
+  $result = variable_get($variable_name, array());
+
+  if (!is_null($view_mode)) {
+    $result = isset($result[$view_mode]) ? $result[$view_mode] : FALSE;
+  }
+
+  return $result;
 }
 
 /**
@@ -174,7 +281,7 @@ function display_cache_entity_view_alter(&$build, $entity_type) {
   }
 
   $view_mode = $build['#view_mode'];
-  $bundle = $build['#bundle'];
+  $bundle = isset($build['#bundle']) ? $build['#bundle'] : NULL;
 
   $settings = display_cache_get_settings($entity_type, $bundle, $view_mode);
 
@@ -191,6 +298,9 @@ function display_cache_entity_view_alter(&$build, $entity_type) {
     elseif ($entity_type === 'taxonomy_term') {
       $entity_id = entity_id($entity_type, $build['#term']);
     }
+    elseif ($entity_type === 'user') {
+      $entity_id = entity_id($entity_type, $build['#account']);
+    }
     else {
       // Create watchdog entry for unsupported entities.
       watchdog('display cache', 'The entity type %entity_type seems to be unsupported until now. Please report this to the issue cue of Display Cache so we can fix this.', array('%entity_type' => $entity_type), WATCHDOG_WARNING);
@@ -201,8 +311,8 @@ function display_cache_entity_view_alter(&$build, $entity_type) {
     $keys = display_cache_get_cache_keys($entity_type, $entity_id, $view_mode, 'entity');
 
     $build['#cache'] = array(
-      'keys' => $keys,
-      'bin' => DISPLAY_CACHE_CACHE_BIN,
+      'keys'        => $keys,
+      'bin'         => DISPLAY_CACHE_CACHE_BIN,
       'granularity' => $display_settings['granularity'],
     );
   }
@@ -233,16 +343,16 @@ function display_cache_field_attach_view_alter(&$output, $context) {
   $settings = display_cache_get_settings($entity_type, $bundle, $view_mode);
 
   // Cache if enabled.
-  if (!empty($settings['default']['use']) && $settings['default']['use'] === DISPLAY_CACHE_FIELDS) {
+  if (!empty($settings['default']['use']) && $settings['default']['use'] == DISPLAY_CACHE_FIELDS) {
     foreach (element_children($output) as $field_name) {
       if (array_key_exists($field_name, $settings) && $settings[$field_name]['override'] != DISPLAY_CACHE_DISABLED) {
-        $element = & $output[$field_name];
+        $element = &$output[$field_name];
 
         $keys = display_cache_get_cache_keys($entity_type, $entity_id, $view_mode, $field_name);
 
         $element['#cache'] = array(
-          'keys' => $keys,
-          'bin' => 'cache_display_cache',
+          'keys'        => $keys,
+          'bin'         => DISPLAY_CACHE_CACHE_BIN,
           'granularity' => $settings[$field_name]['granularity'],
         );
       }
@@ -276,43 +386,36 @@ function display_cache_entity_info_alter(&$entity_info) {
 function display_cache_view_entity($entities, $view_mode, $langcode, $entity_type) {
   $info = entity_get_info($entity_type);
   $return = array();
+  $ignore_cache = (strpos($view_mode, DISPLAY_CACHE_VIEW_MODE_CACHE_IGNORE_SUFFIX) !== FALSE);
+
+  if ($ignore_cache) {
+    $view_mode = str_replace(':display_cache_no_cache', '', $view_mode);
+  }
 
   foreach ($entities as $entity_id => $entity) {
     $render_array = array();
 
     // Disable display_cache by global setting.
-    if (variable_get('display_cache_disable', FALSE) === FALSE) {
-      $entity_info = entity_get_info($entity_type);
-      if (!empty($entity_info['entity keys']['bundle'])) {
-        $bundle_key = $entity_info['entity keys']['bundle'];
+    if (!$ignore_cache && variable_get('display_cache_disable', FALSE) === FALSE) {
+      if (!empty($info['entity keys']['bundle'])) {
+        $bundle_key = $info['entity keys']['bundle'];
+      }
+      elseif (!empty($entity_info['bundle keys']['bundle'])) {
+        $bundle_key = $info['bundle keys']['bundle'];
+      }
+
+      // This entity may not have a bundle key, fallback to the entity type.
+      if (isset($bundle_key) && !empty($entity->{$bundle_key})) {
+        $bundle = $entity->{$bundle_key};
       }
       else {
-        $bundle_key = $entity_info['bundle keys']['bundle'];
+        $bundle = $entity_type;
       }
 
-      $bundle = '';
-      if (isset($bundle_key)) {
-        $bundle = isset($entity->{$bundle_key}) ? $entity->{$bundle_key} : '';
-      }
-      $settings = display_cache_get_settings($entity_type, $bundle, $view_mode);
-
-      if ($settings['default']['use'] == DISPLAY_CACHE_ENABLED) {
-        // Get rendered HTML from cache.
-        $keys = display_cache_get_cache_keys($entity_type, $entity_id, $view_mode, 'entity');
-        $cid_parts = array(
-          '#cache' => array(
-            'keys' => $keys,
-            'granularity' => $settings['default']['granularity'],
-          ),
-        );
-
-        $cid = drupal_render_cid_create($cid_parts);
-        $data = cache_get($cid, DISPLAY_CACHE_CACHE_BIN);
-        if (!empty($data->data)) {
-          $render_array = $data->data;
-        }
-      }
+      $render_array = display_cache_get_cached_display($entity_type, $bundle, $entity_id, $view_mode, 'entity');
     }
+
+    // No cached result was found. Render entity.
     if (empty($render_array)) {
       // Get renderable array.
       if (isset($info['entity view callback'])) {
@@ -329,6 +432,51 @@ function display_cache_view_entity($entities, $view_mode, $langcode, $entity_typ
   }
 
   return $return;
+}
+
+/**
+ * Check for cached display.
+ *
+ * @param string $entity_type
+ *   The entity type.
+ * @param string $bundle
+ *   The bundle.
+ * @param int $entity_id
+ *   The entity id.
+ * @param string $view_mode
+ *   The view mode.
+ * @param string $element
+ *   Element which is cached like 'entity', 'field' or 'render_array'.
+ *
+ * @return array
+ *   A render array containing only a #markup index.
+ */
+function display_cache_get_cached_display($entity_type, $bundle = NULL, $entity_id = NULL, $view_mode = NULL, $element = 'entity') {
+  // Initiate result.
+  $result = array();
+
+  // Get settings.
+  $settings = display_cache_get_settings($entity_type, $bundle, $view_mode);
+
+  if ($settings['default']['use'] == DISPLAY_CACHE_ENABLED) {
+    // Get rendered HTML from cache.
+    $keys = display_cache_get_cache_keys($entity_type, $entity_id, $view_mode, $element);
+    $cid_parts = array(
+      '#cache' => array(
+        'keys'        => $keys,
+        'granularity' => $settings['default']['granularity'],
+      ),
+    );
+
+    $cid = drupal_render_cid_create($cid_parts);
+
+    $data = cache_get($cid, DISPLAY_CACHE_CACHE_BIN);
+    if (!empty($data->data)) {
+      $result = $data->data;
+    }
+  }
+
+  return $result;
 }
 
 /**
@@ -389,4 +537,17 @@ function display_cache_get_cache_keys($entity_type, $entity_id = NULL, $view_mod
  */
 function _display_cache_clear_cache() {
   cache_clear_all('*', DISPLAY_CACHE_CACHE_BIN, TRUE);
+}
+
+/**
+ * Returns setting name for comment publication host entity clearing.
+ */
+function display_cache_get_comment_publication_clears_host_entity_cache_setting_name($entity_type, $bundle) {
+  $variable_name_parts = array(
+    'display_cache_comment_publication_clears_host_entity_cache',
+    $entity_type,
+    $bundle
+  );
+
+  return implode('_', $variable_name_parts);
 }

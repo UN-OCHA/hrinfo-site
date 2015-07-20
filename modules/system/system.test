@@ -1068,14 +1068,9 @@ class PageNotFoundTestCase extends DrupalWebTestCase {
     );
     $node = $this->drupalCreateNode($edit);
 
-    // Check that appending text to the node id fails.
-    $this->drupalGet('node/' . $node->nid);
-    $this->assertResponse(200);
-    $this->drupalGet('node/' . $node->nid . 'garbage');
-    $this->assertResponse(404);
-    $this->drupalGet('node/' . $node->nid . '.000');
-    $this->assertResponse(404);
-    $this->drupalGet('node/-1');
+    // As node IDs must be integers, make sure requests for non-integer IDs
+    // return a page not found error.
+    $this->drupalGet('node/invalid');
     $this->assertResponse(404);
 
     // Use a custom 404 page.
