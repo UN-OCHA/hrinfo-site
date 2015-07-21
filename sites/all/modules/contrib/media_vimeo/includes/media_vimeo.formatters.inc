@@ -51,6 +51,7 @@ function media_vimeo_file_formatter_info() {
 function media_vimeo_file_formatter_video_view($file, $display, $langcode) {
   $scheme = file_uri_scheme($file->uri);
 
+  // WYSIWYG does not yet support video inside a running editor instance.
   if ($scheme == 'vimeo' && empty($file->override['wysiwyg'])) {
     $element = array(
       '#theme' => 'media_vimeo_video',
