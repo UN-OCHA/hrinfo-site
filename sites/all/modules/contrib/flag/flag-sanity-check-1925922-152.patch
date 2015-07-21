@@ -1,0 +1,15 @@
+diff --git a/includes/flag/flag_flag.inc b/includes/flag/flag_flag.inc
+index f491b2c..8f42ed5 100644
+--- a/includes/flag/flag_flag.inc
++++ b/includes/flag/flag_flag.inc
+@@ -196,7 +196,9 @@ class flag_flag {
+ 
+     // Merge in options from the current link type.
+     $link_type = $this->get_link_type();
+-    $options = array_merge($options, $link_type['options']);
++    if (is_array($link_type)) {
++      $options = array_merge($options, $link_type['options']);
++    }
+ 
+     // Allow other modules to change the flag options.
+     drupal_alter('flag_options', $options, $this);

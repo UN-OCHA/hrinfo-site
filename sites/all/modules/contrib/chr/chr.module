@@ -34,7 +34,7 @@ function chr_permission() {
 }
 
 /**
- * Legacy wrapper callback
+ * Legacy wrapper callback.
  */
 function curl_http_request($url, array $options = array()) {
   watchdog('curl_http_request', 'Call to legacy function curl_http_request. Please use chr_curl_http_request instead.', array(), WATCHDOG_WARNING);
@@ -118,15 +118,15 @@ function chr_curl_http_request($url, array $options = array()) {
     'verify_ssl' => FALSE,
     'verbose' => FALSE,
     'cookiefile' => NULL,
-    'http_proxy' => variable_get('http_proxy'),
-    'https_proxy' => variable_get('https_proxy'),
+    'http_proxy' => _chr_get_proxy_variable('http_proxy'),
+    'https_proxy' => _chr_get_proxy_variable('https_proxy'),
     'curl_opts' => array(),
   );
 
-  // Initialize cURL object
+  // Initialize cURL object.
   $ch = curl_init($url);
 
-  // Set the proxy settings
+  // Set the proxy settings.
   _chr_curl_set_proxy_settings($options, $ch, $uri);
 
   // If the database prefix is being used by SimpleTest to run the tests in a copied
@@ -143,13 +143,13 @@ function chr_curl_http_request($url, array $options = array()) {
     $options['headers']['User-Agent'] = 'Drupal (+http://drupal.org/)';
   }
 
-  // Set default configuration
+  // Set default configuration.
   _chr_curl_set_defaults($options, $ch);
 
-  // Set cookie settings
+  // Set cookie settings.
   _chr_curl_set_cookie_settings($options, $ch);
 
-  // Set the port
+  // Set the port.
   $success = _chr_curl_set_port($options, $ch, $uri);
 
   if (FALSE === $success) {
@@ -158,7 +158,7 @@ function chr_curl_http_request($url, array $options = array()) {
     return $result;
   }
 
-  // Set request options
+  // Set request options.
   $success = _chr_curl_request_type_option($options, $ch);
 
   if (FALSE === $success) {
@@ -173,19 +173,19 @@ function chr_curl_http_request($url, array $options = array()) {
       ':' . $uri['pass'] : ''));
   }
 
-  // Set headers
+  // Set headers.
   _chr_curl_set_headers($options, $ch);
 
-  // Set any last minute options
+  // Set any last minute options.
   _chr_curl_set_options($options, $ch);
 
-  // Make request
+  // Make request.
   $result->data = trim(curl_exec($ch));
 
-  // Check for errors
+  // Check for errors.
   $result->errno = curl_errno($ch);
 
-  // Get Response Info
+  // Get Response Info.
   $info = curl_getinfo($ch);
 
   // If there's been an error, do not continue.
@@ -207,14 +207,14 @@ function chr_curl_http_request($url, array $options = array()) {
   // Save the request sent into the result object.
   $result->request = curl_getinfo($ch, CURLINFO_HEADER_OUT);
 
-  // Close the connection
+  // Close the connection.
   curl_close($ch);
 
   // For NTLM requests:
   // Since NTLM responses contain multiple header sections, we must parse them
-  // differently than standard response data
+  // differently than standard response data.
   if (isset($options['curl_opts'][CURLOPT_HTTPAUTH]) && $options['curl_opts'][CURLOPT_HTTPAUTH] & CURLAUTH_NTLM) {
-  // @todo don't need right now, fix later
+  //  @todo don't need right now, fix later
   //  $result->ntlm_response = _chr_curl_parse_ntlm_response($headers);
   }
 
@@ -290,10 +290,10 @@ function chr_curl_http_request($url, array $options = array()) {
       $result->error = $status_message;
   }
 
-  // Lastly, include any cURL specific information
+  // Lastly, include any cURL specific information.
   $result->curl_info = $info;
 
-  // Debug output
+  // Debug output.
   if (variable_get('chr_debug', FALSE) and module_exists('devel')) {
     dpm($result);
   }
@@ -302,7 +302,7 @@ function chr_curl_http_request($url, array $options = array()) {
 }
 
 /**
- * Set cURL options
+ * Set cURL options.
  *
  * @param array $options [reference]
  *  Options array
@@ -320,7 +320,7 @@ function _chr_curl_set_options(&$options, &$ch) {
 }
 
 /**
- * Set default cURL settings
+ * Set default cURL settings.
  *
  * @param array $options [reference]
  *  Options array
@@ -344,7 +344,7 @@ function _chr_curl_set_defaults(&$options, &$ch) {
 }
 
 /**
- * Set proxy settings
+ * Set proxy settings.
  *
  * @param array $options [reference]
  *  Options array
@@ -375,7 +375,7 @@ function _chr_curl_set_proxy_settings(&$options, &$ch, &$uri) {
 }
 
 /**
- * Set default headers in curl object
+ * Set default headers in curl object.
  *
  * @param array $options [reference]
  *  Options array
@@ -394,7 +394,7 @@ function _chr_curl_set_headers(&$options, &$ch) {
 
 /**
  * Convert the string name of the request type to
- * a cURL opt value
+ * a cURL opt value.
  *
  * @param array $options [reference]
  *  Options array
@@ -455,10 +455,11 @@ function _chr_curl_request_type_option(&$options, &$ch) {
     default:
       return $valid_method;
   }
+  return $valid_method;
 }
 
 /**
- * Set port options
+ * Set port options.
  *
  * @param array $options [reference]
  *  Options array
@@ -494,7 +495,7 @@ function _chr_curl_set_port(&$options, &$ch, &$uri) {
 }
 
 /**
- * Set default cookie settings
+ * Set default cookie settings.
  *
  * @param array $options [reference]
  *  Options array
@@ -510,7 +511,63 @@ function _chr_curl_set_cookie_settings(&$options, &$ch) {
 }
 
 /**
- * Parse NTLM requests
+ * Get proxy settings for CHR.
+ * @param string $proxy
+ *  The name of proxy setting variable to retrieve.
+ * @return
+ *  The proxy setting variable to retrieve.
+ */
+function _chr_get_proxy_variable($proxy) {
+  // Attempt to retrieve $proxy_var, which could either 
+  // be 'http_proxy' or 'https_proxy'.
+  $proxy_var = variable_get($proxy);
+
+  // If the requested $proxy_var hasn't been found, 
+  // let's try and work it out based on other variables.
+  if (empty($proxy_var)) {
+    switch ($proxy) {
+      // Let's always assume to fall back on the HTTP proxy settings whenever
+      // HTTPS proxy settings are not found. 
+      case 'https_proxy': {
+        // The first attempt is to see if the CHR-specific HTTP settings have 
+        // been set. If so, let's just use that to for 'https_proxy'.
+        if ($proxy_var = variable_get('http_proxy')) {
+          break;
+        }
+        // If 'http_proxy' wasn't set, let's fall through to the next case,
+        // so that we try and fall back on Drupal standard proxy
+        // settings for HTTP. Therefore, no 'break' required here.
+      }
+      case 'http_proxy': {
+        // If a proxy server is set in Drupal, start building an 'http_proxy'
+        // setting in the format expected by CHR.
+        if ($proxy_server = variable_get('proxy_server')) {
+          $proxy_var['server'] = $proxy_server;
+          $proxy_var['port'] = variable_get('proxy_port', 8080);
+          if ($proxy_username = variable_get('proxy_username')) {
+            $proxy_var['username'] = $proxy_username;
+          }
+          if ($proxy_password = variable_get('proxy_password')) {
+            $proxy_var['password'] = $proxy_password;
+          }
+          elseif (isset($proxy_var['username'])) {
+            $proxy_var['password'] = '';
+          }
+          if ($proxy_exceptions = variable_get('proxy_exceptions')) {
+            $proxy_var['exceptions'] = $proxy_exceptions;
+          }
+        }
+        break;
+      }
+    }
+  }
+  // If a server wasn't set, $proxy_var remains NULL.
+  // Either way, return $proxy_var.
+  return $proxy_var;
+}
+
+/**
+ * Parse NTLM requests.
  *
  * @param array $options [reference]
  *  Options array
@@ -567,7 +624,7 @@ function _chr_curl_parse_ntlm_response(&$options, &$ch) {
 }//*/
 
 /**
- * List of response codes
+ * List of response codes.
  *
  * @return array
  *  Returns an array of response codes.

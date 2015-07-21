@@ -1,9 +1,9 @@
-/** global Drupal:false */
-
 /**
  * @file
  * Used to toggle the AdvAgg Bypass Cookie client side.
  */
+
+/* global Drupal:false */
 
 /**
  * Test to see if the given string contains unicode.
@@ -61,7 +61,7 @@ Drupal.formatInterval = function(interval, granularity, langcode) {
   }
 
   return output.length ? output : Drupal.t('0 sec', {}, { langcode : langcode });
-}
+};
 
 /**
  * Test to see if the given string contains unicode.

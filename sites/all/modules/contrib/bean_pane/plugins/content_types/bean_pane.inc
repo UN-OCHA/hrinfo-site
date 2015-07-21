@@ -105,25 +105,6 @@ function ctools_bean_content_type_content_types(){
   return $ctools_content_types;
 }
 
-/**
- * Add form for bean panes.
- */
-function ctools_bean_pane_content_type_form($form, &$form_state) {
-  module_load_include('inc', 'bean', 'includes/bean.pages');
-  $conf = $form_state['conf'];
-  $type = $form_state['subtype_name'];
-
-  if(empty($conf['bean_delta'])){
-    $bean = bean_create(array('type' => $type));
-    $form += bean_form($form, $form_state, $bean, $type);
-  }else if ($bean = bean_load_delta($conf['bean_delta'])) {
-    $form += bean_form($form, $form_state, $bean);
-  }
-
-  $form['actions']['#access'] = FALSE;
-  $form['buttons']['return']['#submit'][] = 'ctools_bean_pane_content_type_form_return_submit';
-  return $form;
-}
 
 /**
  * Submit handler for the add form. Associated with the return button to avoid an infinite loop.

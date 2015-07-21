@@ -62,11 +62,11 @@ function usermerge_self_merge_form($form, &$form_state) {
     '#value' => t('Merge accounts')
   );
 
-  if ( module_exists('html5tools') ) {
+  if (module_exists('html5tools')) {
     $form['general']['usermerge_user_delete']['#type'] = 'emailfield';
   }
 
-  if ( module_exists('password_toggle') ) {
+  if (module_exists('password_toggle')) {
     password_toggle_add_js_and_css();
   }
 
@@ -80,16 +80,16 @@ function usermerge_self_merge_form_validate($form, &$form_state) {
   $user_to_delete = usermerge_self_user_load_by_mail($form_state['values']['usermerge_user_delete']);
   $user_to_keep = $form_state['build_info']['args'][0];
 
-  if ( isset($user_to_delete) && is_object($user_to_delete) ) {
+  if (isset($user_to_delete) && is_object($user_to_delete)) {
     // If the entered used is the same as the current user, return an error message
-    if ( $user_to_delete->uid == $user_to_keep->uid ) {
+    if ($user_to_delete->uid == $user_to_keep->uid) {
       form_set_error('usermerge_user_delete', t('You’re logged in using the same account you’re trying to merge. Please enter an e-mail address associated with a different account.'));
     }
     // Allow alternate password hashing schemes.
     require_once DRUPAL_ROOT . '/' . variable_get('password_inc', 'includes/password.inc');
 
-    if ( user_check_password($form_state['values']['usermerge_user_delete_password'], $user_to_delete) ) {
-      if ( $user_to_delete->uid == 1 ) {
+    if (user_check_password($form_state['values']['usermerge_user_delete_password'], $user_to_delete)) {
+      if ($user_to_delete->uid == 1) {
         form_set_error('usermerge_user_delete', t('Blocking user 1 is not allowed.'));
       }
     }
@@ -122,9 +122,9 @@ function usermerge_self_merge_form_submit($form, &$form_state) {
  * Fetches a user object by email address, using multiple_email when available.
  */
 function usermerge_self_user_load_by_mail($email) {
-  if ( module_exists('multiple_email') ) {
+  if (module_exists('multiple_email')) {
     $email = multiple_email_find_address($email);
-    if ( isset($email->uid) ) {
+    if (isset($email->uid)) {
       $account = user_load($email->uid);
     }
   }
