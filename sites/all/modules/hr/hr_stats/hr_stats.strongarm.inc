@@ -18,15 +18,15 @@ function hr_stats_strongarm() {
     'slots' => array(
       1 => array(
         'slot' => 1,
-        'name' => 'space',
-        'value' => '[node:og_group_ref]',
+        'name' => 'spaces',
+        'value' => '[node:spaces]',
         'scope' => 'page',
       ),
       2 => array(
         'slot' => 2,
-        'name' => '',
-        'value' => '',
-        'scope' => 'visit',
+        'name' => 'bundles',
+        'value' => '[node:bundles]',
+        'scope' => 'page',
       ),
       3 => array(
         'slot' => 3,
