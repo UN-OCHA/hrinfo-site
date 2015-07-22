@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file
+ * Code for the Statistics feature.
+ */
+
+include_once 'hr_stats.features.inc';
 
 /**
 * Implements hook_permission().
@@ -429,4 +435,65 @@ function hr_stats_get_full_stats($period, $date) {
     fputcsv($write, $row);
   }
   fclose($write);
+}
+
+/**
+ * Implements hook_token_info()
+ * Adds a token for the space the current page belongs to. This token will be passed to Piwik to know which space a page belongs to
+ */
+function hr_stats_token_info() {
+  $info['tokens']['node']['spaces'] = array(
+    'name' => t('Spaces'),
+    'description' => t('The spaces the node belongs to'),
+  );
+  $info['tokens']['node']['bundles'] = array(
+    'name' => t('Bundles'),
+    'description' => t('The bundles the node belongs to'),
+  );
+  return $info;
+}
+
+/**
+* Implements hook_tokens().
+*/
+function hr_stats_tokens($type, $tokens, array $data = array(), array $options = array()) {
+ $replacements = array();   
+ if ($type == 'node' && !empty($data['node'])) {
+    $node = $data['node'];
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'spaces':
+          if (isset($node->{OG_AUDIENCE_FIELD})) {
+            $spaces = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE];
+            $space_ids = array();
+            foreach ($spaces as $space) {
+              $space_ids[] = $space['target_id'];
+            }
+            $replacements[$original] = implode(';', $space_ids);
+          }
+          else {
+            if (og_is_group('node', $node->nid)) {
+              $replacements[$original] = $node->nid;
+            }
+          }
+          break;
+        case 'bundles':
+          if (isset($node->field_bundles)) {
+            $bundles = $node->field_bundles[LANGUAGE_NONE];
+            $bundle_ids = array();
+            foreach ($bundles as $bundle) {
+              $bundle_ids[] = $bundle['target_id'];
+            }
+            $replacements[$original] = implode(';', $bundle_ids);
+          }
+          else {
+            if ($node->type== 'hr_bundle') {
+              $replacements[$original] = $node->nid;
+            }
+          }
+          break; 
+      }
+    }
+  }
+  return $replacements;  
 }
