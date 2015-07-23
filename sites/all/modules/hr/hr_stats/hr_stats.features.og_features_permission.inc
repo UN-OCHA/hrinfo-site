@@ -10,15 +10,15 @@
 function hr_stats_og_features_default_permissions() {
   $permissions = array();
 
-  // Exported og permission: 'node:hr_operation:access piwik reports'
-  $permissions['node:hr_operation:access piwik reports'] = array(
+  // Exported og permission: 'node:hr_disaster:access piwik reports'
+  $permissions['node:hr_disaster:access piwik reports'] = array(
     'roles' => array(
       'manager' => 'manager',
     ),
   );
 
-  // Exported og permission: 'node:hr_space:access piwik reports'
-  $permissions['node:hr_space:access piwik reports'] = array(
+  // Exported og permission: 'node:hr_operation:access piwik reports'
+  $permissions['node:hr_operation:access piwik reports'] = array(
     'roles' => array(
       'manager' => 'manager',
     ),
@@ -31,8 +31,8 @@ function hr_stats_og_features_default_permissions() {
     ),
   );
 
-  // Exported og permission: 'node:hr_disaster:access piwik reports'
-  $permissions['node:hr_disaster:access piwik reports'] = array(
+  // Exported og permission: 'node:hr_space:access piwik reports'
+  $permissions['node:hr_space:access piwik reports'] = array(
     'roles' => array(
       'manager' => 'manager',
     ),
