@@ -160,3 +160,15 @@ function hr_users_check_profile($redirect = NULL) {
     unset($_SESSION['hr_users_require_profile']);
   }
 }
+
+/**
+ * Implements hook_menu_alter().
+ *
+ * Place masquerade switch back link in user menu
+ */
+function hr_users_menu_alter(&$items) {
+  if (isset($items['masquerade/unswitch'])) {
+    $items['masquerade/unswitch']['menu_name'] = 'user-menu';
+  }
+}
+

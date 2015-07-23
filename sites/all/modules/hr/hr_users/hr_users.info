@@ -23,6 +23,7 @@ dependencies[] = image
 dependencies[] = link
 dependencies[] = link_icons
 dependencies[] = list
+dependencies[] = masquerade
 dependencies[] = node
 dependencies[] = og
 dependencies[] = openlayers

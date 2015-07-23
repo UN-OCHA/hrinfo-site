@@ -198,6 +198,11 @@ define('ADVAGG_SKIP_ENABLED_PREPROCESS_CHECK', FALSE);
  */
 define('ADVAGG_BROWSER_DNS_PREFETCH', FALSE);
 
+/**
+ * Function to use when converting a non scalar to a string.
+ */
+define('ADVAGG_SERIALIZE', 'json_encode');
+
 // Core hook implementations.
 /**
  * Inbound URL rewrite helper.
@@ -716,6 +721,11 @@ function advagg_element_info_alter(&$type) {
   // Swap in our own aggregation callback.
   $type['scripts']['#aggregate_callback'] = '_advagg_aggregate_js';
   $type['scripts']['#type'] = 'scripts';
+
+  // Copy html_tag to html_script_tag.
+  $type['html_script_tag'] = $type['html_tag'];
+  $type['html_script_tag']['#theme'] = 'html_script_tag';
+  $type['html_script_tag']['#type'] = 'html_script_tag';
 }
 
 /**
@@ -750,6 +760,10 @@ function advagg_theme_registry_alter(&$theme_registry) {
   if ($index !== FALSE) {
     $theme_registry['html']['process functions'][$index] = '_advagg_process_html';
   }
+
+  // Copy html_tag to html_script_tag.
+  $theme_registry['html_script_tag'] = $theme_registry['html_tag'];
+  $theme_registry['html_script_tag']['function'] = 'theme_html_script_tag';
 }
 
 /**
@@ -965,48 +979,50 @@ function advagg_js_alter(&$js) {
  * Implements hook_css_alter().
  */
 function advagg_css_alter(&$css) {
-  if (!advagg_enabled() || !variable_get('advagg_css_fix_type', ADVAGG_CSS_FIX_TYPE)) {
+  if (!advagg_enabled()) {
     return;
   }
 
-  // Fix type if it was incorrectly set.
-  foreach ($css as &$value) {
-    if (empty($value['data']) || !is_string($value['data'])) {
-      continue;
-    }
+  if (variable_get('advagg_css_fix_type', ADVAGG_CSS_FIX_TYPE)) {
+    // Fix type if it was incorrectly set.
+    foreach ($css as &$value) {
+      if (empty($value['data']) || !is_string($value['data'])) {
+        continue;
+      }
 
-    // Default to file if not file, inline, or external.
-    if ( $value['type'] !== 'file'
-      && $value['type'] !== 'inline'
-      && $value['type'] !== 'external'
-    ) {
-      $value['type'] = 'file';
-    }
-
-    // If type is external but doesn't start with http, https, or // change it
-    // to file.
-    if ( $value['type'] === 'external'
-      && stripos($value['data'], 'http://') !== 0
-      && stripos($value['data'], 'https://') !== 0
-      && stripos($value['data'], '//') !== 0
+      // Default to file if not file, inline, or external.
+      if ( $value['type'] !== 'file'
+        && $value['type'] !== 'inline'
+        && $value['type'] !== 'external'
       ) {
-      $value['type'] = 'file';
-    }
+        $value['type'] = 'file';
+      }
 
-    // If type is file but it starts with http, https, or // change it to
-    // external.
-    if ( $value['type'] === 'file'
-      && ( stripos($value['data'], 'http://') === 0
-        || stripos($value['data'], 'https://') === 0
-        || ( stripos($value['data'], '//') === 0
-          && stripos($value['data'], '///') === FALSE
+      // If type is external but doesn't start with http, https, or // change it
+      // to file.
+      if ( $value['type'] === 'external'
+        && stripos($value['data'], 'http://') !== 0
+        && stripos($value['data'], 'https://') !== 0
+        && stripos($value['data'], '//') !== 0
+        ) {
+        $value['type'] = 'file';
+      }
+
+      // If type is file but it starts with http, https, or // change it to
+      // external.
+      if ( $value['type'] === 'file'
+        && ( stripos($value['data'], 'http://') === 0
+          || stripos($value['data'], 'https://') === 0
+          || ( stripos($value['data'], '//') === 0
+            && stripos($value['data'], '///') === FALSE
+            )
           )
-        )
-    ) {
-      $value['type'] = 'external';
+      ) {
+        $value['type'] = 'external';
+      }
     }
+    unset($value);
   }
-  unset($value);
 }
 
 /**
@@ -1220,7 +1236,8 @@ function _advagg_aggregate_css(array &$css_groups) {
 
   if (!empty($files_to_aggregate)) {
     $hooks_hash = advagg_get_current_hooks_hash();
-    $css_hash = drupal_hash_base64(serialize($files_to_aggregate));
+    $serialize_function = variable_get('advagg_serialize', ADVAGG_SERIALIZE);
+    $css_hash = drupal_hash_base64($serialize_function($files_to_aggregate));
     $cache_id = 'advagg:css:' . $hooks_hash . ':' . $css_hash;
     // @ignore druplart_andor_assignment
     if (variable_get('advagg_cache_level', ADVAGG_CACHE_LEVEL) >= 1 && $cache = cache_get($cache_id, 'cache_advagg_aggregates')) {
@@ -1322,7 +1339,8 @@ function _advagg_aggregate_js(array &$js_groups) {
 
   if (!empty($files_to_aggregate)) {
     $hooks_hash = advagg_get_current_hooks_hash();
-    $js_hash = drupal_hash_base64(serialize($files_to_aggregate));
+    $serialize_function = variable_get('advagg_serialize', ADVAGG_SERIALIZE);
+    $js_hash = drupal_hash_base64($serialize_function($files_to_aggregate));
     $cache_id = 'advagg:js:' . $hooks_hash . ':' . $js_hash;
     // @ignore druplart_andor_assignment
     if (variable_get('advagg_cache_level', ADVAGG_CACHE_LEVEL) >= 1 && $cache = cache_get($cache_id, 'cache_advagg_aggregates')) {
@@ -1461,13 +1479,14 @@ function advagg_get_render_cache(array $full_css, array $js_scope_array) {
 
   // Get advagg hash.
   $hooks_hash = advagg_get_current_hooks_hash();
+  $serialize_function = variable_get('advagg_serialize', ADVAGG_SERIALIZE);
   if (advagg_file_aggregation_enabled('css')) {
     // Generate css cache id.
-    $cids[] = $css_cache_id = 'advagg:css:full:1.1:' . $hooks_hash . ':' . drupal_hash_base64(serialize($full_css));
+    $cids[] = $css_cache_id = 'advagg:css:full:1.1:' . $hooks_hash . ':' . drupal_hash_base64($serialize_function($full_css));
   }
   if (advagg_file_aggregation_enabled('js')) {
     // Generate js cache id.
-    $cids[] = $js_cache_id = 'advagg:js:full:1.1:' . $hooks_hash . ':' . drupal_hash_base64(serialize($js_scope_array));
+    $cids[] = $js_cache_id = 'advagg:js:full:1.1:' . $hooks_hash . ':' . drupal_hash_base64($serialize_function($js_scope_array));
   }
 
   if (!empty($cids)) {
@@ -1647,6 +1666,28 @@ function _advagg_process_html(&$variables) {
     if (!empty($css_cache_id_no_alter)) {
       // Save to the cache.
       cache_set($css_cache_id_no_alter, array($variables['styles'], $full_css), 'cache_advagg_aggregates', CACHE_TEMPORARY);
+    }
+  }
+
+  if (module_exists('advagg_font') && variable_get('advagg_font_fontfaceobserver', ADVAGG_FONT_FONTFACEOBSERVER)) {
+    $fonts = array();
+    foreach ($full_css['#groups'] as $groups) {
+      if (isset($groups['items']['files'])) {
+        foreach ($groups['items']['files'] as $file) {
+          if (isset($file['advagg_font'])) {
+            foreach ($file['advagg_font'] as $class => $name) {
+              $fonts[$class] = $name;
+            }
+          }
+        }
+      }
+    }
+    if (!empty($fonts)) {
+      if (isset($js_scope_settings_array)) {
+        $key = key($js_scope_settings_array);
+        $js_scope_settings_array[$key]['settings']['data'][] = array('advagg_font' => $fonts);
+      }
+      drupal_add_js(array('advagg_font' => $fonts), array('type' => 'setting'));
     }
   }
 
@@ -1886,6 +1927,12 @@ function advagg_add_dns_prefetch($url) {
     return FALSE;
   }
 
+  // Add DNS information for more domains.
+  if (strpos($parse['host'], 'fonts.googleapis.com') !== FALSE) {
+    // Add fonts.gstatic.com when fonts.googleapis.com is added.
+    advagg_add_dns_prefetch('https://fonts.gstatic.com');
+  }
+
   // Build render array. Goes after charset tag.
   $element = array(
     '#type' => 'html_tag',
@@ -1894,7 +1941,7 @@ function advagg_add_dns_prefetch($url) {
       'rel' => 'dns-prefetch',
       'href' => '//' . $parse['host'],
     ),
-    '#weight' => '-999.999',
+    '#weight' => -999.9,
   );
   // Add markup for dns-prefetch to html_head.
   drupal_add_html_head($element, 'advagg_dns_prefetch:' . $parse['host']);
@@ -2625,7 +2672,8 @@ function advagg_get_current_hooks_hash() {
     $aggregate_settings = advagg_current_hooks_hash_array();
 
     // Generate the hash.
-    $current_hash = drupal_hash_base64(serialize($aggregate_settings));
+    $serialize_function = variable_get('advagg_serialize', ADVAGG_SERIALIZE);
+    $current_hash = drupal_hash_base64($serialize_function($aggregate_settings));
 
     // Save into variables for verification purposes later on if not found.
     $settings = advagg_get_hash_settings($current_hash);
@@ -2698,7 +2746,8 @@ function advagg_hooks_implemented($all = TRUE) {
   drupal_alter('advagg_hooks_implemented', $hooks, $all);
 
   // Cache module_implements as this will load up .inc files.
-  $cid = 'advagg_hooks_implemented:' . (int) $all . ':' . drupal_hash_base64(serialize($hooks));
+  $serialize_function = variable_get('advagg_serialize', ADVAGG_SERIALIZE);
+  $cid = 'advagg_hooks_implemented:' . (int) $all . ':' . drupal_hash_base64($serialize_function($hooks));
   $cache = cache_get($cid, 'cache_bootstrap');
   if (!empty($cache->data)) {
     $hooks = $cache->data;
@@ -3044,6 +3093,81 @@ function advagg_admin_flush_cache() {
   advagg_admin_flush_cache_button();
 }
 
+/**
+ * Returns HTML for a generic HTML tag with attributes.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array describing the tag:
+ *     - #tag: The tag name to output. Typical tags added to the HTML HEAD:
+ *       - meta: To provide meta information, such as a page refresh.
+ *       - link: To refer to stylesheets and other contextual information.
+ *       - script: To load JavaScript.
+ *     - #attributes: (optional) An array of HTML attributes to apply to the
+ *       tag.
+ *     - #value: (optional) A string containing tag content, such as inline
+ *       CSS.
+ *     - #value_prefix: (optional) A string to prepend to #value, e.g. a CDATA
+ *       wrapper prefix.
+ *     - #value_suffix: (optional) A string to append to #value, e.g. a CDATA
+ *       wrapper suffix.
+ */
+function theme_html_script_tag(array $variables) {
+  $element = $variables['element'];
+  $attributes = '';
+  $onload = '';
+  $onerror = '';
+  if (isset($element['#attributes'])) {
+    // On Load.
+    if (!empty($element['#attributes']['onload'])) {
+      $onload = $element['#attributes']['onload'];
+      unset($element['#attributes']['onload']);
+    }
+    // On Error.
+    if (!empty($element['#attributes']['onerror'])) {
+      $onerror = $element['#attributes']['onerror'];
+      unset($element['#attributes']['onerror']);
+    }
+    $attributes = !empty($element['#attributes']) ? drupal_attributes($element['#attributes']) : '';
+    if (!empty($onload)) {
+      $attributes .= ' onload="' . advagg_jsspecialchars($onload) . '"';
+    }
+    if (!empty($onerror)) {
+      $attributes .= ' onerror="' . advagg_jsspecialchars($onerror) . '"';
+    }
+  }
+
+  if (!isset($element['#value'])) {
+    return '<' . $element['#tag'] . $attributes . " />\n";
+  }
+  else {
+    $output = '<' . $element['#tag'] . $attributes . '>';
+    if (isset($element['#value_prefix'])) {
+      $output .= $element['#value_prefix'];
+    }
+    $output .= $element['#value'];
+    if (isset($element['#value_suffix'])) {
+      $output .= $element['#value_suffix'];
+    }
+    $output .= '</' . $element['#tag'] . ">\n";
+    return $output;
+  }
+}
+/**
+ * Replace quotes with the html version of it.
+ *
+ * @param string $string
+ *   Input string. Convert quotes to html chars.
+ *
+ * @return string
+ *   Transformed string.
+ */
+function advagg_jsspecialchars($string = '') {
+  $string = str_replace('"', '&quot;', $string);
+  $string = str_replace("'", '&#039;', $string);
+
+  return $string;
+}
 
 // Exact Copies of core functions from patches.
 /**
@@ -3101,13 +3225,17 @@ function advagg_pre_render_scripts(array $elements) {
 
   // Defaults for each SCRIPT element.
   $element_defaults = array(
-    '#type' => 'html_tag',
+    '#type' => 'html_script_tag',
     '#tag' => 'script',
     '#value' => '',
     '#attributes' => array(
       'type' => 'text/javascript',
     ),
   );
+  $hooks = theme_get_registry(FALSE);
+  if (empty($hooks['html_script_tag'])) {
+    $element_defaults['#type'] = 'html_tag';
+  }
 
   // Loop through each group.
   foreach ($elements['#groups'] as $group) {

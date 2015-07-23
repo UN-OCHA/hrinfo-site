@@ -24,9 +24,10 @@ function advagg_install() {
     ),
   );
 
+  $schema = advagg_schema();
   foreach ($tables as $table => $fields) {
     // Change utf8_bin to ascii_bin.
-    advagg_install_change_table_collation($table, $fields, 'ascii_bin');
+    advagg_install_change_table_collation($table, $fields, 'ascii_bin', $schema[$table]['fields']);
   }
 }
 
@@ -148,16 +149,18 @@ function advagg_schema() {
         'binary' => TRUE,
         'collation' => 'ascii_bin',
         'charset' => 'ascii',
+        'mysql_character_set' => 'ascii',
       ),
       'content_hash' => array(
         'description' => 'Hash of the file content. Used to see if the file has changed.',
         'type' => 'char',
         'length' => 43,
-        'not null' => TRUE,
+        'not null' => FALSE,
         'default' => '',
         'binary' => TRUE,
         'collation' => 'ascii_bin',
         'charset' => 'ascii',
+        'mysql_character_set' => 'ascii',
       ),
       'filetype' => array(
         'description' => 'Filetype.',
@@ -212,6 +215,7 @@ function advagg_schema() {
         'binary' => TRUE,
         'collation' => 'ascii_bin',
         'charset' => 'ascii',
+        'mysql_character_set' => 'ascii',
       ),
       'filename_hash' => array(
         'description' => 'Hash of path and filename.',
@@ -222,6 +226,7 @@ function advagg_schema() {
         'binary' => TRUE,
         'collation' => 'ascii_bin',
         'charset' => 'ascii',
+        'mysql_character_set' => 'ascii',
       ),
       'porder' => array(
         'description' => 'Processing order.',
@@ -257,6 +262,7 @@ function advagg_schema() {
         'binary' => TRUE,
         'collation' => 'ascii_bin',
         'charset' => 'ascii',
+        'mysql_character_set' => 'ascii',
       ),
       'aggregate_contents_hash' => array(
         'description' => 'Hash of all content_hashes in this aggregate. Simple Version control of the aggregate.',
@@ -267,6 +273,7 @@ function advagg_schema() {
         'binary' => TRUE,
         'collation' => 'ascii_bin',
         'charset' => 'ascii',
+        'mysql_character_set' => 'ascii',
       ),
       'atime' => array(
         'description' => 'Last access time for this version of the aggregate. Updated every 12 hours.',
@@ -492,8 +499,9 @@ function advagg_update_7207(&$sandbox) {
       db_change_field($table, $field, $field, $schema[$table]['fields'][$field]);
     }
     // Change utf8_bin to ascii_bin.
-    advagg_install_change_table_collation($table, $fields, 'ascii_bin');
+    advagg_install_change_table_collation($table, $fields, 'ascii_bin', $schema[$table]['fields']);
   }
+  return t('AdvAgg Tables converted from varcahr to char and utf8_bin to ascii_bin.');
 }
 
 /**
@@ -507,6 +515,41 @@ function advagg_update_7208(&$sandbox) {
     db_add_index('advagg_aggregates', 'filename_hash', array('filename_hash'));
     return t('Database index added to the filename_hash column of the advagg_aggregates table.');
   }
+  return t('Nothing needed to be done.');
+}
+
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update schema making it match the definition.
+ */
+function advagg_update_7209(&$sandbox) {
+  $tables = array(
+    'advagg_aggregates' => array(
+      'aggregate_filenames_hash',
+      'filename_hash',
+    ),
+    'advagg_aggregates_versions' => array(
+      'aggregate_filenames_hash',
+      'aggregate_contents_hash',
+    ),
+    'advagg_files' => array(
+      'filename_hash',
+      'content_hash',
+    ),
+  );
+
+  $schema = advagg_schema();
+  foreach ($tables as $table => $fields) {
+    foreach ($fields as $field) {
+      // Change varchar to char.
+      db_change_field($table, $field, $field, $schema[$table]['fields'][$field]);
+    }
+    // Change utf8_bin to ascii_bin.
+    advagg_install_change_table_collation($table, $fields, 'ascii_bin', $schema[$table]['fields']);
+  }
+  return t('Database schema was adjusted to match what is listed in advagg_schema.');
 }
 
 /**
@@ -518,11 +561,13 @@ function advagg_update_7208(&$sandbox) {
  *   An array of field names.
  * @param string $collation
  *   The db collation to change to table columns to.
+ * @param array $schema_fields
+ *   An array of field definitions.
  *
  * @return array
  *   Returns an array of tables and column names.
  */
-function advagg_install_change_table_collation($table_name, array $fields, $collation) {
+function advagg_install_change_table_collation($table_name, array $fields, $collation, array $schema_fields) {
   $db_type = Database::getConnection()->databaseType();
   // Skip if not MySQL.
   if ($db_type !== 'mysql') {
@@ -530,12 +575,47 @@ function advagg_install_change_table_collation($table_name, array $fields, $coll
   }
   $table_name = Database::getConnection()->prefixTables('{' . db_escape_table($table_name) . '}');
   $results = db_query("SHOW FULL FIELDS FROM $table_name")->fetchAllAssoc('Field');
+  $db_schema = Database::getConnection()->schema();
   foreach ($results as $row) {
     if (!in_array($row->Field, $fields)) {
       continue;
     }
+
     $charset = strtolower(substr($collation, 0, strpos($collation, '_')));
-    $query = "ALTER TABLE $table_name MODIFY {$row->Field} {$row->Type} CHARACTER SET $charset COLLATE $collation";
+    $query = "ALTER TABLE $table_name CHANGE `{$row->Field}` `{$row->Field}` {$row->Type}";
+    $query .= " CHARACTER SET $charset COLLATE $collation";
+
+    if (isset($schema_fields[$row->Field]['not null'])) {
+      if ($schema_fields[$row->Field]['not null']) {
+        $query .= ' NOT NULL';
+      }
+      else {
+        $query .= ' NULL';
+      }
+    }
+
+    // $schema_fields[$row->Field]['default'] can be NULL, so we explicitly
+    // check for the key here.
+    if (array_key_exists('default', $schema_fields[$row->Field])) {
+      $default = $schema_fields[$row->Field]['default'];
+      if (is_string($default)) {
+        $default = "'" . $default . "'";
+      }
+      elseif (!isset($default)) {
+        $default = 'NULL';
+      }
+      $query .= ' DEFAULT ' . $default;
+    }
+
+    if (empty($schema_fields[$row->Field]['not null']) && !isset($schema_fields[$row->Field]['default'])) {
+      $query .= ' DEFAULT NULL';
+    }
+
+    // Add column comment.
+    if (!empty($schema_fields[$row->Field]['description'])) {
+      $query .= ' COMMENT ' . $db_schema->prepareComment($schema_fields[$row->Field]['description'], $db_schema::COMMENT_MAX_COLUMN);
+    }
+
     db_query($query);
   }
 }
@@ -1337,7 +1417,7 @@ function advagg_install_chk_urls(array &$requirements, array $urls, array $optio
               'value' => $t('The expires header being sent by your web server is not at least 1 month in the future.', array('%type' => $type)),
               'description' => $t('The web servers configuration should be adjusted only for AdvAgg files. Was looking for a second counter over 2,628,000 (1 month), actually got <code>@received</code>. You can turn this warning off if you can not adjust this value (Pantheon) by adding this to your settings.php file: <code>@skipcode</code>', array(
                 '@received' => isset($request->headers['expires']) ? number_format(strtotime($request->headers['expires'])) : 'NULL',
-                '@skipcode' => '$conf[\'advagg_skip_far_future_check\'] = FALSE;',
+                '@skipcode' => '$conf[\'advagg_skip_far_future_check\'] = TRUE;',
               )),
             );
           }

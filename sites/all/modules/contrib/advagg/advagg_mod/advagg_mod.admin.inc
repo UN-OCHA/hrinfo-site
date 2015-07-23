@@ -119,6 +119,12 @@ function advagg_mod_admin_settings_form() {
       '@link' => 'http://peter.sh/experiments/asynchronous-and-deferred-javascript-execution-explained/',
     )),
   );
+  $form['js']['placement']['advagg_mod_js_async_in_header'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Asynchronous JavaScript Execution: Group together in the header'),
+    '#default_value' => variable_get('advagg_mod_js_async_in_header', ADVAGG_MOD_JS_ASYNC_IN_HEADER),
+    '#description' => t('This will move all async JavaScript code to the header in the same group.'),
+  );
   $form['js']['placement']['advagg_mod_js_footer_inline_alter'] = array(
     '#type' => 'checkbox',
     '#title' => t('Put a wrapper around inline JS if it was added in the content section incorrectly'),
@@ -186,11 +192,14 @@ function advagg_mod_admin_settings_form() {
     '#default_value' => variable_get('advagg_mod_defer_inline_js_skip_list', ADVAGG_MOD_DEFER_INLINE_JS_SKIP_LIST),
     '#description' => t("If the inline JavaScript matches a given string then the whole inline script will not be wrapped. Enter one per line."),
   );
+  if (!module_exists('jquery_update') || variable_get('jquery_update_jquery_cdn', 'none') === 'none') {
+    $GLOBALS['conf']['advagg_mod_js_defer_jquery'] = FALSE;
+  }
   $form['js']['placement']['expert'] = array(
     '#type' => 'fieldset',
     '#title' => t('Experimental Settings'),
     '#collapsible' => TRUE,
-    '#collapsed' => !variable_get('advagg_mod_js_async', ADVAGG_MOD_JS_ASYNC) && !variable_get('advagg_mod_js_async_in_header', ADVAGG_MOD_JS_ASYNC_IN_HEADER),
+    '#collapsed' => !variable_get('advagg_mod_js_async', ADVAGG_MOD_JS_ASYNC) && !variable_get('advagg_mod_js_defer_jquery', ADVAGG_MOD_JS_DEFER_JQUERY),
   );
   $form['js']['placement']['expert']['advagg_mod_js_async'] = array(
     '#type' => 'checkbox',
@@ -200,12 +209,21 @@ function advagg_mod_admin_settings_form() {
       '@link' => 'http://peter.sh/experiments/asynchronous-and-deferred-javascript-execution-explained/',
     )),
   );
-  $form['js']['placement']['expert']['advagg_mod_js_async_in_header'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Asynchronous JavaScript Execution: Group together in the header'),
-    '#default_value' => variable_get('advagg_mod_js_async_in_header', ADVAGG_MOD_JS_ASYNC_IN_HEADER),
-    '#description' => t('This will move all async JavaScript code to the header in the same group.'),
-  );
+  if (module_exists('jquery_update') && variable_get('jquery_update_jquery_cdn', 'none') !== 'none') {
+    $form['js']['placement']['expert']['advagg_mod_js_defer_jquery'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Defer CDN version of jquery.js from jquery update'),
+      '#default_value' => variable_get('advagg_mod_js_defer_jquery', ADVAGG_MOD_JS_DEFER_JQUERY),
+      '#description' => t('By default the CDN version of jquery is not defered; this allows for jquery to be defered. Requires the "Deferred inline JavaScript Execution: Put a wrapper around inline JS so it runs from a setTimeout call" setting to be enalbed in order to be used. Not using a CDN in <a href="@url">jQuery Update</a> also means that defer works and does not require this experimental setting.', array(
+        '@url' => url('admin/config/development/jquery_update'),
+      )),
+      '#states' => array(
+        'disabled' => array(
+          ':input[name="advagg_mod_js_defer_inline_alter"]' => array('checked' => FALSE),
+        ),
+      ),
+    );
+  }
   // Outdated settings.
   $form['js']['old'] = array(
     '#type' => 'fieldset',
@@ -509,6 +527,10 @@ function advagg_mod_admin_settings_form_submit($form, &$form_state) {
   if ($multisite_dir != $dir) {
     register_shutdown_function('advagg_get_root_files_dir', TRUE);
     register_shutdown_function('menu_rebuild');
+  }
+
+  if (empty($form_state['values']['advagg_mod_js_defer_inline_alter']) && !empty($form_state['values']['advagg_mod_js_defer_jquery'])) {
+    $form_state['values']['advagg_mod_js_defer_jquery'] = FALSE;
   }
 }
 
