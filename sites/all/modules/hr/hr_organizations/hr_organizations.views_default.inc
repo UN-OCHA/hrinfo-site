@@ -26,6 +26,7 @@ function hr_organizations_views_default_views() {
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['distinct'] = TRUE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['style_plugin'] = 'default';
@@ -209,6 +210,25 @@ function hr_organizations_views_default_views() {
     235660466 => 0,
   );
   $handler->display->display_options['filters']['field_organization_type_target_id_entityreference_filter']['reference_display'] = 'hr_organizations:org_types';
+  /* Filter criterion: Field: Acronym (field_acronym) */
+  $handler->display->display_options['filters']['field_acronym_value']['id'] = 'field_acronym_value';
+  $handler->display->display_options['filters']['field_acronym_value']['table'] = 'field_data_field_acronym';
+  $handler->display->display_options['filters']['field_acronym_value']['field'] = 'field_acronym_value';
+  $handler->display->display_options['filters']['field_acronym_value']['operator'] = 'contains';
+  $handler->display->display_options['filters']['field_acronym_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_acronym_value']['expose']['operator_id'] = 'field_acronym_value_op';
+  $handler->display->display_options['filters']['field_acronym_value']['expose']['label'] = 'Acronym';
+  $handler->display->display_options['filters']['field_acronym_value']['expose']['operator'] = 'field_acronym_value_op';
+  $handler->display->display_options['filters']['field_acronym_value']['expose']['identifier'] = 'field_acronym_value';
+  $handler->display->display_options['filters']['field_acronym_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    30037204 => 0,
+    200153887 => 0,
+    218860149 => 0,
+    188284353 => 0,
+    235660466 => 0,
+  );
   $handler->display->display_options['path'] = 'organizations';
 
   /* Display: CSV */
