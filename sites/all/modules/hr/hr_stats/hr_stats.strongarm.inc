@@ -30,9 +30,9 @@ function hr_stats_strongarm() {
       ),
       3 => array(
         'slot' => 3,
-        'name' => '',
-        'value' => '',
-        'scope' => 'visit',
+        'name' => 'type',
+        'value' => '[node:type]',
+        'scope' => 'page',
       ),
       4 => array(
         'slot' => 4,
