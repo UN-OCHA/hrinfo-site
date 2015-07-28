@@ -7,23 +7,6 @@
 
 class RestfulEntityNodeEvents extends \RestfulEntityBaseNode {
 
-  /**
-   * Overrides RestfulEntityBaseNode::addExtraInfoToQuery()
-   * 
-   * Adds proper query tags
-   */
-  protected function addExtraInfoToQuery($query) {
-    parent::addExtraInfoToQuery($query);
-    $filters = $this->parseRequestForListFilter();
-    if (!empty($filters)) {
-      foreach ($query->tags as $i => $tag) {
-        if ($tag == 'node_access') {
-          unset($query->tags[$i]);
-        }
-      }
-      $query->addTag('entity_field_access');
-    }
-  }
 
   /**
    * Overrides \RestfulEntityBase::publicFieldsInfo().
