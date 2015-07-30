@@ -74,6 +74,7 @@ function hr_core_strongarm() {
     'node' => 'node',
     'taxonomy_term' => 'taxonomy_term',
     'fieldable_panels_pane' => 'fieldable_panels_pane',
+    'bean' => 0,
     'file' => 0,
     'user' => 0,
   );
@@ -127,6 +128,14 @@ function hr_core_strongarm() {
       ),
       'file' => 'includes/locale.inc',
     ),
+    'language_cookie' => array(
+      'callbacks' => array(
+        'language' => 'language_cookie_language',
+        'switcher' => 'language_cookie_language_switcher',
+        'url_rewrite' => 'language_cookie_language_rewrite',
+      ),
+      'file' => 'sites/all/modules/contrib/language_cookie/language_cookie.module',
+    ),
     'language-default' => array(
       'callbacks' => array(
         'language' => 'language_from_default',
@@ -166,6 +175,14 @@ function hr_core_strongarm() {
         'url_rewrite' => 'locale_language_url_rewrite_url',
       ),
       'file' => 'includes/locale.inc',
+    ),
+    'language_cookie' => array(
+      'callbacks' => array(
+        'language' => 'language_cookie_language',
+        'switcher' => 'language_cookie_language_switcher',
+        'url_rewrite' => 'language_cookie_language_rewrite',
+      ),
+      'file' => 'sites/all/modules/contrib/language_cookie/language_cookie.module',
     ),
     'locale-url-fallback' => array(
       'callbacks' => array(
