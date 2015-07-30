@@ -10,7 +10,8 @@
 function hr_documents_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'field_collection_item-field_files_collection-field_file'
+  // Exported field_instance:
+  // 'field_collection_item-field_files_collection-field_file'
   $field_instances['field_collection_item-field_files_collection-field_file'] = array(
     'bundle' => 'field_files_collection',
     'default_value' => array(),
@@ -73,7 +74,8 @@ function hr_documents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_files_collection-field_language'
+  // Exported field_instance:
+  // 'field_collection_item-field_files_collection-field_language'
   $field_instances['field_collection_item-field_files_collection-field_language'] = array(
     'bundle' => 'field_files_collection',
     'default_value' => NULL,
@@ -119,7 +121,8 @@ function hr_documents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'fieldable_panels_pane-hr_documents-field_documents'
+  // Exported field_instance:
+  // 'fieldable_panels_pane-hr_documents-field_documents'
   $field_instances['fieldable_panels_pane-hr_documents-field_documents'] = array(
     'bundle' => 'hr_documents',
     'default_value' => array(),
@@ -649,7 +652,7 @@ function hr_documents_field_default_field_instances() {
   // Exported field_instance: 'node-hr_document-field_organizations'
   $field_instances['node-hr_document-field_organizations'] = array(
     'bundle' => 'hr_document',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => '',
@@ -697,12 +700,14 @@ function hr_documents_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'entityreference',
+      'module' => 'options',
       'settings' => array(
+        'apply_chosen' => '',
         'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
-      'type' => 'entityreference_autocomplete_tags',
+      'type' => 'options_select',
       'weight' => 7,
     ),
   );
@@ -811,6 +816,7 @@ function hr_documents_field_default_field_instances() {
     'label' => 'Related content',
     'required' => 0,
     'settings' => array(
+      'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
         'configurable_title' => 0,
@@ -829,6 +835,7 @@ function hr_documents_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'required',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -1273,7 +1280,6 @@ function hr_documents_field_default_field_instances() {
   t('Documents');
   t('File');
   t('File(s)');
-  t('Funding methods');
   t('Fundings');
   t('Global Clusters');
   t('Group content visibility');
