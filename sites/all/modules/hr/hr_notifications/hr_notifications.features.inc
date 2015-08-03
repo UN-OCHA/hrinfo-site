@@ -86,11 +86,11 @@ function hr_notifications_flag_default_flags() {
     'access_author' => 'own',
     'show_contextual_link' => FALSE,
     'i18n' => 0,
-    'api_version' => 3,
     'module' => 'hr_notifications',
     'locked' => array(
       0 => 'name',
     ),
+    'api_version' => 3,
   );
   return $flags;
 
