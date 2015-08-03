@@ -74,6 +74,7 @@ function hr_core_strongarm() {
     'node' => 'node',
     'taxonomy_term' => 'taxonomy_term',
     'fieldable_panels_pane' => 'fieldable_panels_pane',
+    'bean' => 0,
     'file' => 0,
     'user' => 0,
   );

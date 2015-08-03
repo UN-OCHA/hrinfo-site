@@ -83,20 +83,15 @@ function hr_stats_reports($form, &$form_state, $report){
     $date = _hr_stats_select_period(0);
   }
   $period_name = _hr_stats_get_period_name($period);
-	$token_auth = variable_get('hr_stats_piwik_token_auth', '');
-	$segment = variable_get('hr_stats_piwik_segment');
-  if(!isset($segment)){
-    drupal_set_message('You have to specify the segment(In this case the operation) to fetch piwik reports for. This can be done in the group admin page', 'warning', false);
-
-    return;
-  }
+  $token_auth = variable_get('hr_stats_piwik_token_auth', '');
 	
   //array of URL parameters
+  $nid = arg(2);
   $data_params = array();
   $data_params[0]['idSite'] = $piwik_site_id;
   $data_params[0]['date'] = $date;
   $data_params[0]['period'] = $period_name;
-  $data_params[0]['segment'] = $segment;
+  $data_params[0]['segment'] = 'customVariablePageName1==spaces;customVariablePageValue1=@'.$nid;
   $data_params[0]['disableLink'] = 1;
   $data_params[0]['module'] = 'Widgetize';
   $data_params[0]['action'] = 'iframe';
@@ -111,6 +106,16 @@ function hr_stats_reports($form, &$form_state, $report){
       $data_params[0]['columns[]'] = 'nb_visits';
       $data_params[0]['moduleToWidgetize'] = 'VisitsSummary';
       $data_params[0]['actionToWidgetize'] = 'getSparklines';
+      $data_params[1] = $data_params[0];
+      $title[1] = t('Downloads');
+      $data_params[1]['moduleToWidgetize'] = 'HumanitarianResponse';
+      $data_params[1]['actionToWidgetize'] = 'getSpaceSummary';
+      unset($data_params[1]['columns[]']);
+      $node = node_load($nid);
+      $data_params[1]['space_id'] = $nid;
+      if ($node->type != 'hr_operation') {
+        $data_params[1]['space_type'] = 'space';
+      }
     break;
     case 'visitors_settings':
       $data_params[0]['filter_limit'] = 6;
@@ -119,28 +124,28 @@ function hr_stats_reports($form, &$form_state, $report){
       $data_params[0]['moduleToWidgetize'] = 'UserSettings';
       $data_params[0]['actionToWidgetize'] = 'getBrowserType';
     break;
-		case 'visitors_overview_map':
-			$title[0] = t('Browser Map');
-			$data_params[0]['moduleToWidgetize'] = 'UserCountryMap';
-			$data_params[0]['actionToWidgetize'] = 'visitorMap';
-		break;
-		}
-    // Build the data URL with all params and urlencode it.
-		$theme_args = array();
-    foreach ($data_params as $key => $data) {
-      $theme_args['data_url'][] = array('url' => $piwik_url . 'index.php?' . drupal_http_build_query($data), 
+    case 'visitors_overview_map':
+      $title[0] = t('Browser Map');
+      $data_params[0]['moduleToWidgetize'] = 'UserCountryMap';
+      $data_params[0]['actionToWidgetize'] = 'visitorMap';
+    break;
+  }
+  // Build the data URL with all params and urlencode it.
+  $theme_args = array();
+  foreach ($data_params as $key => $data) {
+    $theme_args['data_url'][] = array('url' => $piwik_url . 'index.php?' . drupal_http_build_query($data), 
       'title' => $title[$key], 
       'iframe_height' => ( isset($iframe_height[$key]) && $iframe_height[$key] > 0 ? $iframe_height[$key] : 350),
       'empty_text' => ( isset($empty_text) ? $empty_text : NULL),
-      );
-    }
-    // Render HTML code.
-    $output = theme('piwik_reports', $theme_args);
-    $form['content'] = array(
-      '#type' => 'item',
-      '#markup' => $output,
     );
-    return $form;
+  }
+  // Render HTML code.
+  $output = theme('piwik_reports', $theme_args);
+  $form['content'] = array(
+    '#type' => 'item',
+    '#markup' => $output,
+  );
+  return $form;
 }
 
 /**
