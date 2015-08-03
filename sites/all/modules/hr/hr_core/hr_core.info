@@ -16,7 +16,6 @@ dependencies[] = file_entity
 dependencies[] = image
 dependencies[] = imagemagick
 dependencies[] = jquery_update
-dependencies[] = language_cookie
 dependencies[] = link
 dependencies[] = linkit
 dependencies[] = list
