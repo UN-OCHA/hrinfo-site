@@ -463,7 +463,7 @@ function hr_stats_tokens($type, $tokens, array $data = array(), array $options =
     foreach ($tokens as $name => $original) {
       switch ($name) {
         case 'spaces':
-          if (isset($node->{OG_AUDIENCE_FIELD})) {
+          if (isset($node->{OG_AUDIENCE_FIELD}) && isset($node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE])) {
             $spaces = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE];
             $space_ids = array();
             foreach ($spaces as $space) {
@@ -478,7 +478,7 @@ function hr_stats_tokens($type, $tokens, array $data = array(), array $options =
           }
           break;
         case 'bundles':
-          if (isset($node->field_bundles)) {
+          if (isset($node->field_bundles) && isset($node->field_bundles[LANGUAGE_NONE])) {
             $bundles = $node->field_bundles[LANGUAGE_NONE];
             $bundle_ids = array();
             foreach ($bundles as $bundle) {
