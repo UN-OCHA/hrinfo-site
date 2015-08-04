@@ -1,0 +1,4 @@
+name = HR Jobs
+description = Integrate ReliefWeb Jobs with Humanitarianresponse
+core = 7.x
+package = Humanitarianresponse
