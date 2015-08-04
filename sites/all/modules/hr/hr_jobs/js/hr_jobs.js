@@ -122,7 +122,7 @@ Drupal.behaviors.hrJobs = {
       pager: function() {
         var nextPage = parseInt(this.currentPage) + 1;
         var previousPage = parseInt(this.currentPage) - 1;
-        var count = this.JobsList.count;
+        var count = this.JobsList.totalCount;
         var itemsPerPage = this.numItems;
         var paramsString = $.param(this.JobsList.params);
         if (paramsString != '') {
