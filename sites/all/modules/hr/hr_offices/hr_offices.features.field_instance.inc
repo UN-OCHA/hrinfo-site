@@ -63,6 +63,7 @@ function hr_offices_field_default_field_instances() {
       'module' => 'addressfield',
       'settings' => array(
         'available_countries' => array(),
+        'default_country' => '',
         'format_handlers' => array(
           'address' => 'address',
           'address-hide-country' => 0,
@@ -238,7 +239,7 @@ function hr_offices_field_default_field_instances() {
   // Exported field_instance: 'node-hr_office-field_organizations'
   $field_instances['node-hr_office-field_organizations'] = array(
     'bundle' => 'hr_office',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => '',
@@ -286,9 +287,10 @@ function hr_offices_field_default_field_instances() {
       'module' => 'entityreference',
       'settings' => array(
         'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
-      'type' => 'entityreference_autocomplete_tags',
+      'type' => 'entityreference_autocomplete',
       'weight' => 5,
     ),
   );

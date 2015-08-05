@@ -10,7 +10,8 @@
 function hr_infographics_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'fieldable_panels_pane-hr_infographics-field_infographics'
+  // Exported field_instance:
+  // 'fieldable_panels_pane-hr_infographics-field_infographics'
   $field_instances['fieldable_panels_pane-hr_infographics-field_infographics'] = array(
     'bundle' => 'hr_infographics',
     'default_value' => NULL,
@@ -272,6 +273,7 @@ function hr_infographics_field_default_field_instances() {
     'label' => 'Data sources',
     'required' => 0,
     'settings' => array(
+      'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
         'configurable_title' => 0,
@@ -290,6 +292,7 @@ function hr_infographics_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'optional',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -592,7 +595,7 @@ function hr_infographics_field_default_field_instances() {
   // Exported field_instance: 'node-hr_infographic-field_organizations'
   $field_instances['node-hr_infographic-field_organizations'] = array(
     'bundle' => 'hr_infographic',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => '',
@@ -640,9 +643,10 @@ function hr_infographics_field_default_field_instances() {
       'module' => 'entityreference',
       'settings' => array(
         'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
-      'type' => 'entityreference_autocomplete_tags',
+      'type' => 'entityreference_autocomplete',
       'weight' => 8,
     ),
   );
@@ -742,6 +746,7 @@ function hr_infographics_field_default_field_instances() {
     'label' => 'Related content',
     'required' => 0,
     'settings' => array(
+      'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
         'configurable_title' => 0,
@@ -760,6 +765,7 @@ function hr_infographics_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'required',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
