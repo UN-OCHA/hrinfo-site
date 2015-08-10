@@ -5,6 +5,13 @@
 */
 
 /**
+ * @file
+ * Code for the Jobs feature.
+ */
+
+include_once 'hr_jobs.features.inc';
+
+/**
  * Implements hook_menu().
  */
 

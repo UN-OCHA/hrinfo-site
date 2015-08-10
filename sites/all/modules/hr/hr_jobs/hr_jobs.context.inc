@@ -6,6 +6,7 @@
 /**
  * Implements hook_context_default_contexts().
  */
+
 function hr_jobs_context_default_contexts() {
   $export = array();
   $context = new stdClass();
@@ -13,7 +14,7 @@ function hr_jobs_context_default_contexts() {
   $context->api_version = 3;
   $context->name = 'hr_jobs';
   $context->description = '';
-  $context->tag = '';
+  $context->tag = 'HR Jobs';
   $context->conditions = array(
     'path' => array(
       'values' => array(
@@ -34,6 +35,10 @@ function hr_jobs_context_default_contexts() {
     ),
   );
   $context->condition_mode = 0;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('HR Jobs');
   $export['hr_jobs'] = $context;
   return $export;
 }
