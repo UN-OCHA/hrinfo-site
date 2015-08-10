@@ -131,7 +131,6 @@ function hid_organizations_autocomplete($org_names, $extended = FALSE) {
   drupal_add_http_header('Access-Control-Allow-Origin', '*');
   drupal_add_http_header('Access-Control-Allow-Methods', 'GET');
   drupal_json_output($matches);
-  drupal_exit();
 }
 
 /**
@@ -158,7 +157,6 @@ function hid_locations_countries() {
   drupal_add_http_header('Access-Control-Allow-Origin', '*');
   drupal_add_http_header('Access-Control-Allow-Methods', 'GET');
   drupal_json_output($countries);
-  drupal_exit();
 }
 
 /**
@@ -211,7 +209,6 @@ function hid_location_country($country) {
   drupal_add_http_header('Access-Control-Allow-Origin', '*');
   drupal_add_http_header('Access-Control-Allow-Methods', 'GET');
   drupal_json_output($countries);
-  drupal_exit();
 }
 
 function hid_profiles_load_template($file, $id) {
