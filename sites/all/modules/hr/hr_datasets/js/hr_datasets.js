@@ -28,7 +28,7 @@ Drupal.behaviors.hrDatasets = {
       this.count = response.result.count;
       var fields = [];
       _.each(models, function(resource){
-        fields.push({title: resource.name, url: 'https://data.hdx.rwlabs.org/dataset/' + resource.id});
+        fields.push({title: resource.title, url: 'https://data.hdx.rwlabs.org/dataset/' + resource.id});
       });
       return fields;
       },
