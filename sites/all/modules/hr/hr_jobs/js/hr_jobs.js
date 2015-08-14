@@ -107,15 +107,18 @@ Drupal.behaviors.hrJobs = {
 
       show: function() {
         $('#jobs-list').show();
+        $('#block-current-search-hr-current-search').show();
       },
 
       hide: function() {
         $('#jobs-list').hide();
+        $('#block-current-search-hr-current-search').hide();
       },
 
       finishedLoading: function() {
         $('#loading').hide();
         this.show();
+        $('.facetapi-active').html(this.JobsList.totalCount + ' items');
         this.pager();
       },
 
