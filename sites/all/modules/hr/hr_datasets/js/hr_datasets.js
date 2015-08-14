@@ -103,12 +103,12 @@ Drupal.behaviors.hrDatasets = {
 
         show: function() {
           $('#datasets-list').show();
-          $('#block-hr-datasets-hr-datasets-filters').show();
+          $('#block-current-search-hr-current-search').show();
         },
 
         hide: function() {
           $('#datasets-list').hide();
-          $('#block-hr-datasets-hr-datasets-filters').hide();
+          $('#block-current-search-hr-current-search').hide();
         },
 
         finishedLoading: function() {
