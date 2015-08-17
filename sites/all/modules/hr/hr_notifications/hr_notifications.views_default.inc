@@ -165,7 +165,7 @@ function hr_notifications_views_default_views() {
   $handler->display->display_options['fields']['field_location']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Field: Organization */
+  /* Field: Content: Organization */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'field_data_field_organizations';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
