@@ -1,0 +1,6 @@
+<% _.each(fields, function(dataset) { %>
+   <tr>
+     <td><%= dataset.get('title') %></td>
+     <td><a href ="<%= dataset.get('url') %>"><%= dataset.get('url') %></a></td>
+   </tr>
+ <% }); %>
