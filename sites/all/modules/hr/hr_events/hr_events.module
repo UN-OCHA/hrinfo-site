@@ -257,3 +257,12 @@ function hr_events_pdf_output($nid) {
   exit;
 }
 
+/**
+* Implements hook_form_alter()
+*/
+
+function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id) {
+  $form['#attached']['js'] = array(
+    drupal_get_path('module', 'hr_events') . '/js/hr_events.js',
+  );
+}
