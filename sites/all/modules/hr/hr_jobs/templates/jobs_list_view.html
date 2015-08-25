@@ -1,0 +1,6 @@
+<% _.each(fields, function(job) { %>
+   <tr>
+     <td><%= job.get('title') %></td>
+     <td><a href = "<%= job.get('url') %>"><%= job.get('url') %></a></td>
+   </tr>
+ <% }); %>

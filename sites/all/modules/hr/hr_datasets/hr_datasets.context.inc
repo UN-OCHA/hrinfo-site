@@ -184,5 +184,47 @@ function hr_datasets_context_default_contexts() {
   t('Datasets');
   $export['hr_datasets_space_table'] = $context;
 
+  $context = new stdClass();
+  $context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+  $context->api_version = 3;
+  $context->name = 'hr_datasets_hdx';
+  $context->description = '';
+  $context->tag = 'HDX Datasets';
+  $context->conditions = array(
+    'path' => array(
+      'values' => array(
+        'node/*/hdx-datasets' => 'node/*/hdx-datasets',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'block' => array(
+      'blocks' => array(
+        'hdx-datasets_hdx-datasets_search' => array(
+          'module' => 'hr_datasets',
+          'delta' => 'hdx-datasets_search',
+          'region' => 'sidebar_first',
+          'weight' => '-9',
+        ),
+        'hdx-datasets_hdx-datasets_filters' => array(
+          'module' => 'hr_datasets',
+          'delta' => 'hdx-datasets_filters',
+          'region' => 'sidebar_first',
+          'weight' => '-10',
+        ),
+      ),
+    ),
+  );
+  $context->condition_mode = 0;
+
+  $export['hr_datasets_hdx'] = $context;
+
+  return $export;
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Datasets');
+  $export['hr_datasets_space_table'] = $context;
+
   return $export;
 }

@@ -157,7 +157,7 @@ function hr_notifications_views_default_views() {
   $handler->display->display_options['fields']['counter']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['counter']['alter']['text'] = '[counter]. [name]';
   $handler->display->display_options['fields']['counter']['counter_start'] = '1';
-  /* Field: Field: Location */
+  /* Field: Content: Location */
   $handler->display->display_options['fields']['field_location']['id'] = 'field_location';
   $handler->display->display_options['fields']['field_location']['table'] = 'field_data_field_location';
   $handler->display->display_options['fields']['field_location']['field'] = 'field_location';
@@ -175,7 +175,7 @@ function hr_notifications_views_default_views() {
   );
   $handler->display->display_options['fields']['field_organizations']['delta_offset'] = '0';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Flags: Content ID */
+  /* Contextual filter: Flags: Entity ID */
   $handler->display->display_options['arguments']['entity_id']['id'] = 'entity_id';
   $handler->display->display_options['arguments']['entity_id']['table'] = 'flagging';
   $handler->display->display_options['arguments']['entity_id']['field'] = 'entity_id';
