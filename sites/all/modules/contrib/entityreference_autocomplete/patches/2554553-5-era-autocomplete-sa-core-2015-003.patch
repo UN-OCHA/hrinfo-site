@@ -1,0 +1,13 @@
+diff --git a/entityreference_autocomplete.module b/entityreference_autocomplete.module
+index 50a1f7d..10e0968 100644
+--- a/entityreference_autocomplete.module
++++ b/entityreference_autocomplete.module
+@@ -46,7 +46,7 @@ function entityreference_autocomplete_element_info() {
+     '#size' => 60,
+     '#autocomplete_path' => FALSE,
+     '#value_callback' => 'entityreference_autocomplete_value_callback',
+-    '#process' => array('ajax_process_form', 'entityreference_autocomplete_process_entityreference'),
++    '#process' => array('entityreference_autocomplete_process_entityreference', 'form_process_autocomplete', 'ajax_process_form'),
+     '#element_validate' => array('entityreference_autocomplete_validate_entityreference'),
+     '#theme' => 'textfield',
+     '#theme_wrappers' => array('form_element'),
