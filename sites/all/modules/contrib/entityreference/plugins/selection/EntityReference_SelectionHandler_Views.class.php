@@ -175,9 +175,39 @@ class EntityReference_SelectionHandler_Views implements EntityReference_Selectio
    * Implements EntityReferenceHandler::validateAutocompleteInput().
    */
   public function validateAutocompleteInput($input, &$element, &$form_state, $form) {
-    return NULL;
+    $entities = array();
+    foreach ($this->getReferencableEntities($input, '=', 6) as $bundle => $bundle_entities) {
+      $entities += $bundle_entities;
+    }
+    if (empty($entities)) {
+      // Error if there are no entities available for a required field.
+      form_error($element, t('The %label field has no values matching "%value"', array('%label' => $element['#title'], '%value' => $input)));
+    }
+    elseif (count($entities) > 5) {
+      // Error if there are more than 5 matching entities.
+      form_error($element, t('The %label field has many entities are called "%value". Specify the one you want by appending the id in parentheses, like "@value (@id)"', array(
+        '%label' => $element['#title'],
+        '%value' => $input,
+        '@value' => $input,
+        '@id' => key($entities),
+      )));
+    }
+    elseif (count($entities) > 1) {
+      // More helpful error if there are only a few matching entities.
+      $multiples = array();
+      foreach ($entities as $id => $name) {
+        $multiples[] = $name . ' (' . $id . ')';
+      }
+      form_error($element, t('The %label field has multiple entities that match this reference: "%multiple"', array(
+        '%label' => $element['#title'],
+        '%multiple' => implode('", "', $multiples),
+      )));
+    }
+    else {
+      // Take the one and only matching entity.
+      return key($entities);
+    }
   }
-
   /**
    * Implements EntityReferenceHandler::getLabel().
    */

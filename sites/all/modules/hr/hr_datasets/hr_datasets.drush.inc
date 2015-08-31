@@ -67,6 +67,7 @@ function drush_hr_datasets_migrate($path) {
       $node->field_ds_abstract = array();
       $node->field_languages = array();
       $node->field_dataset_types = array();
+      $node->field_ds_instructions = array();
       node_save($node);
     }
   }
