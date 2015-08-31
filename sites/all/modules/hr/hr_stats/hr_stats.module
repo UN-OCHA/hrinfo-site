@@ -263,8 +263,8 @@ function hr_stats_get_piwik_stat($method, $period, $date, $segment = '', $additi
   }
 }
 
-function hr_stats_get_spaces($type, $page=1) {
-  $url = 'http://www.humanitarianresponse.info/api/v1.0/'.$type.'?page='.$page;
+function hr_stats_get_spaces($type, $page = 1) {
+  $url = 'https://www.humanitarianresponse.info/api/v1.0/'.$type.'?page='.$page;
   $operations = array();
   $data = drupal_http_request($url);
   if (!isset($data->error)) {
@@ -275,9 +275,10 @@ function hr_stats_get_spaces($type, $page=1) {
         $next_ops = hr_stats_get_spaces($type, $page+1);
         $operations = array_merge($operations, $next_ops);
       }
-      return $operations;
     }
   }
+
+  return $operations;
 }
 
 function _hr_stats_get_file_url($files_array) {
@@ -342,10 +343,10 @@ function hr_stats_get_full_stats($period, $date) {
     $op_url = str_replace('pageUrl=@', '', $defs[0]);
     $op_url = urldecode($op_url);
     $op_url = str_replace('humanitarianresponse.info', '', $op_url);
-    $op_url = 'http://www.humanitarianresponse.info/en/'.$op_url;
-    // Find the operation by its URL
+    $op_url = 'www.humanitarianresponse.info/en/' . $op_url;
+     // Find the operation by its URL
     foreach ($operations as $operation) {
-      if ($operation['url'] == $op_url) {
+      if (preg_replace('#^https?://#', '', rtrim($operation['url'],'/')) == $op_url) {
         $segmentref['space'] = $operation;
         $segmentref['space_type'] = 'operation';
         $op_ids[] = $operation['id'];
@@ -353,7 +354,7 @@ function hr_stats_get_full_stats($period, $date) {
     }
     // Find the space by URL
     foreach ($spaces as $space) {
-      if ($space['url'] == $op_url) {
+      if (preg_replace('#^https?://#', '', rtrim($space['url'],'/')) == $op_url) {
         $segmentref['space'] = $space;
         $segmentref['space_type'] = 'space';
       }
