@@ -52,7 +52,7 @@ function hr_assessments_og_features_toggle($entity, $entity_id, $entity_type, $f
 
 }
 
-/** 
+/**
  * Implementation of hook_entity_info_alter()
  */
 function hr_assessments_entity_info_alter(&$entity_info) {
@@ -104,4 +104,32 @@ function hr_assessments_ctools_plugin_directory($module, $plugin) {
   if ($module == 'restful') {
     return 'plugins/' . $plugin;
   }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function hr_assessments_menu() {
+  $items = array();
+
+  $items['assessments/global-map'] = array(
+    'title' => 'Map',
+    'access callback' => TRUE,
+    'page callback' => 'hr_assessments_global_map',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 99,
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback to display the global map as tab in the assessments list.
+ */
+function hr_assessments_global_map() {
+  if ($path = drupal_lookup_path('source', 'assessments/map')) {
+    $map_node = menu_get_object('node', 1, $path);
+    return node_view($map_node);
+  }
+  return drupal_access_denied();
 }
