@@ -389,7 +389,12 @@ function hr_stats_get_full_stats($period, $date) {
         if (!empty($bulk_results->data)) {
           $bulk_results_data = drupal_json_decode($bulk_results->data);
           $row[] = $bulk_results_data[0]['nb_visits'];
-          $row[] = $bulk_results_data[1]['nb_visits'] / $bulk_results_data[0]['nb_visits'] * 100;
+          if ($bulk_results_data[0]['nb_visits'] > 0) {
+            $row[] = $bulk_results_data[1]['nb_visits'] / $bulk_results_data[0]['nb_visits'] * 100;
+          }
+          else {
+            $row[] = 0;
+          }
         }
       }
       else {
