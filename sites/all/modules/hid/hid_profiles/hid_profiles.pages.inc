@@ -232,66 +232,89 @@ function hid_profiles_load_template($file, $id) {
  *
  */
 function hid_profiles_local_contacts($node) {
-  $templates = array(
-    'contacts_list_table_row',
-    'contacts_view',
-  );
-  context_set('context', 'hr_space_menu', FALSE);
-  drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js', array('type' => 'external'));
-  drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js', array('type' => 'external'));
-  drupal_add_library('chosen', 'drupal.chosen');
-  drupal_add_library('system', 'ui.autocomplete');
-  foreach ($templates as $template) {
-    hid_profiles_load_template($template, $template);
-  }
-
-  $settings = array(
-    'operation_id' => $node->nid,
-    'bundle' => '',
-  );
+  global $user;
+  $html = '';
+  $hid = hid_profiles_get_user_data();
+  $op = $node;
   if ($node->type == 'hr_bundle') {
-    $settings['bundle'] = $node->title;
-    $settings['operation_id'] = _hr_bundles_get_operation($node->nid);
+    $op = node_load(_hr_bundles_get_operation($node->nid));
   }
+  if ($op->field_hid_access[LANGUAGE_NONE][0]['value'] == 'open'
+    || $op->field_hid_access[LANGUAGE_NONE][0]['value'] == 'closed' && $hid->profile->verified) {
+    $templates = array(
+      'contacts_list_table_row',
+      'contacts_view',
+    );
+    context_set('context', 'hr_space_menu', FALSE);
+    drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js', array('type' => 'external'));
+    drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js', array('type' => 'external'));
+    drupal_add_library('chosen', 'drupal.chosen');
+    drupal_add_library('system', 'ui.autocomplete');
+    foreach ($templates as $template) {
+      hid_profiles_load_template($template, $template);
+    }
 
-  drupal_add_js(drupal_get_path('module', 'hid_profiles') . '/js/hid_profiles_contacts.js');
-  drupal_add_js(array('hid_profiles' => $settings), 'setting');
+    $settings = array(
+      'operation_id' => $node->nid,
+      'bundle' => '',
+    );
+    if ($node->type == 'hr_bundle') {
+      $settings['bundle'] = $node->title;
+      $settings['operation_id'] = _hr_bundles_get_operation($node->nid);
+    }
 
-  $html = '<div class="feed-icon text-right"><div class="btn-group">
- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-   <i class="fa fa-download"></i> <span class="caret"></span>
- </button>
- <ul class="dropdown-menu">
-   <li><a id="contacts-list-pdf" href="#" target="_blank">PDF</a></li>
-   <li><a id="contacts-list-csv" href="#" target="_blank">CSV</a></li>
- </ul>
-</div>
-</div>
-<div id="contacts-view">
-</div>
-<div id="contacts-list">
-  <table id="contacts-list-table" class="table table-striped">
-    <thead>
-    <tr>
-      <th>Clusters</th>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Job Title</th>
-      <th>Organization</th>
-      <th>Location</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  <div class="text-center">
-    <ul class="pagination">
-      <li class="pager-previous"><a id="previous" href="">Previous</a></li>
-      <li class="pager-next"> <a id="next" href="">Next</a></li>
-    </ul>
-  </div>
-</div>
-<div id="loading"><p class="text-center lead"><i class="fa fa-spinner fa-pulse"></i> Please wait. Data is loading...</p></div>';
+    drupal_add_js(drupal_get_path('module', 'hid_profiles') . '/js/hid_profiles_contacts.js');
+    drupal_add_js(array('hid_profiles' => $settings), 'setting');
+
+    $html = '<div class="feed-icon text-right"><div class="btn-group">
+     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+       <i class="fa fa-download"></i> <span class="caret"></span>
+     </button>
+     <ul class="dropdown-menu">
+       <li><a id="contacts-list-pdf" href="#" target="_blank">PDF</a></li>
+       <li><a id="contacts-list-csv" href="#" target="_blank">CSV</a></li>
+     </ul>
+    </div>
+    </div>
+    <div id="contacts-view">
+    </div>
+    <div id="contacts-list">
+      <table id="contacts-list-table" class="table table-striped">
+      <thead>
+        <tr>
+          <th>Clusters</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Job Title</th>
+          <th>Organization</th>
+          <th>Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <div class="text-center">
+        <ul class="pagination">
+          <li class="pager-previous"><a id="previous" href="">Previous</a></li>
+          <li class="pager-next"> <a id="next" href="">Next</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="loading"><p class="text-center lead"><i class="fa fa-spinner fa-pulse"></i> Please wait. Data is loading...</p></div>';
+  }
+  else {
+    // Hide sidebar and menu
+    context_set('context', 'hr_space_menu', FALSE);
+    context_set('context', 'hid_contacts', FALSE);
+    if (user_is_anonymous()) {
+      // TODO: implement design to show message to login or register on HID
+      drupal_set_message(t('In order to see this list, you need to !login or !register on Humanitarian ID', array('!login' => l(t('Login'), 'http://app.humanitarian.id/#/login'), '!register' => l(t('Register'), 'http://app.humanitarian.id/#/register')))); 
+    }
+    else {
+      // User is not verified
+      drupal_set_message(t('In order to see this list, you need to be a verified user on Humanitarian ID'));
+    }
+  }
 
   return $html;
 }
