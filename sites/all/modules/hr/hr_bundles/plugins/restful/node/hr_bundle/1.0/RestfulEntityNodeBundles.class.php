@@ -89,7 +89,7 @@ class RestfulEntityNodeBundles extends \RestfulEntityBaseNode {
         if ($single == FALSE) {
           $single = TRUE;
         }
-        if (!in_array($id, array('id', 'label', 'self'))) {
+        if (!in_array($id, array('id', 'label', 'self', 'country'))) {
           unset($wrapper[$id]);
         }
       }
@@ -97,7 +97,7 @@ class RestfulEntityNodeBundles extends \RestfulEntityBaseNode {
         $array_item = (array)$item;
         $properties = array_keys($array_item);
         foreach ($properties as $property) {
-          if (!in_array($property, array('id', 'label', 'self'))) {
+          if (!in_array($property, array('id', 'label', 'self', 'country'))) {
             unset($array_item[$property]);
           }
         }

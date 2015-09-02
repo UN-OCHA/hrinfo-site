@@ -202,7 +202,7 @@ function hr_bundles_form_node_form_alter(&$form, &$form_state) {
 
 /**
  * Implements hook_node_access($node, $op, $account)
- * 
+ *
  * Makes sure bundle editors or managers can not edit nodes which
  * are not tagged with any bundle OR are tagged with bundles that they do not manage
  * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
@@ -518,7 +518,7 @@ function hr_bundles_facet_bundles_map_callback(array $values, array $options = a
       if (!isset($operations[$gid])) {
         $op = entity_load_single('node', $gid);
         $operations[$gid] = entity_label('node', $op);
-      } 
+      }
 
       $map[$value] = entity_label('node', $entities[$value]).' ('.$operations[$gid].')';
     }
@@ -527,7 +527,7 @@ function hr_bundles_facet_bundles_map_callback(array $values, array $options = a
 }
 
 /**
- * Implements hook_variable_update($name, $value, $old_value, $options)
+ * Implements hook_variable_update().
  *
  * When changing a variable in an operation, update the variables in all bundles
  */
@@ -585,18 +585,16 @@ function hr_bundles_node_insert($node) {
           og_role_grant('node', $node->nid, $member->uid, $bundle_rid);
         }
       }
-    } 
+    }
   }
 }
-
-
 
 /**
  * Helper function: Get all users of a group
  */
 function _hr_bundles_get_users_in_group($gid) {
   $query = db_select('users', 'u');
- 
+
   $query
     ->condition('u.uid', 0, '<>')
     ->condition('u.status', 1, '=')
@@ -604,4 +602,3 @@ function _hr_bundles_get_users_in_group($gid) {
     ->join('og_membership', 'ogm', "ogm.gid = :gid AND u.uid = ogm.etid AND ogm.entity_type = 'user'", array(':gid' => $gid));
   return $query->execute();
 }
-
