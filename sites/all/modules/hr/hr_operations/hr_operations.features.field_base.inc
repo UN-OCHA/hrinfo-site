@@ -121,6 +121,7 @@ function hr_operations_field_default_field_bases() {
       'allowed_values' => array(
         'open' => 'Open (individuals in this contact list may be viewed by all HID users)',
         'closed' => 'Closed (individuals in this contact list may only be viewed by verified responders)',
+        'inactive' => 'Inactive (will not show up on HID)',
       ),
       'allowed_values_function' => '',
       'entity_translation_sync' => FALSE,
