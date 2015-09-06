@@ -149,16 +149,6 @@ function hr_operations_views_default_views() {
   $handler->display->display_options['cache']['output_lifespan'] = '21600';
   $handler->display->display_options['cache']['output_lifespan_custom'] = '0';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
-  $handler->display->display_options['style_plugin'] = 'views_geojson';
-  $handler->display->display_options['style_options']['data_source']['value'] = 'wkt';
-  $handler->display->display_options['style_options']['data_source']['latitude'] = 'field_website_1';
-  $handler->display->display_options['style_options']['data_source']['longitude'] = 'field_website_1';
-  $handler->display->display_options['style_options']['data_source']['geofield'] = 'field_geofield';
-  $handler->display->display_options['style_options']['data_source']['wkt'] = 'field_geofield';
-  $handler->display->display_options['style_options']['data_source']['name_field'] = 'title_field';
-  $handler->display->display_options['style_options']['data_source']['description_field'] = 'nothing';
-  $handler->display->display_options['style_options']['jsonp_prefix'] = '';
-  $handler->display->display_options['style_options']['using_views_api_mode'] = 0;
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
@@ -411,6 +401,7 @@ function hr_operations_views_default_views() {
     t('Home pane'),
     t('All Operations'),
   );
+
   $export['hr_operations'] = $view;
 
   return $export;
