@@ -84,7 +84,6 @@ function hid_profiles_list_edit_form_submit($form, &$form_state) {
  * See ctools_plugin_examples for more advanced info
  */
 function hid_profiles_list_render($subtype, $conf, $panel_args, $context = NULL) {
-  global $user;
   $block = new stdClass();
   $block->title = t('Contacts');
   $block->content = '';

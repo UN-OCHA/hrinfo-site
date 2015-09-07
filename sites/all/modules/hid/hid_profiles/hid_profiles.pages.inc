@@ -226,74 +226,88 @@ function hid_profiles_load_template($file, $id) {
 }
 
 /**
- * Callback function to display the list of local contacts for a node
+ * Callback function to display the list of local contacts for a node.
  *
- * @param integer Operation Id
+ * @param node
+ *  Operation or Cluster node.
  *
+ * @return string
  */
 function hid_profiles_local_contacts($node) {
-  $templates = array(
-    'contacts_list_table_row',
-    'contacts_view',
-  );
   context_set('context', 'hr_space_menu', FALSE);
-  drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js', array('type' => 'external'));
-  drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js', array('type' => 'external'));
-  drupal_add_library('chosen', 'drupal.chosen');
-  drupal_add_library('system', 'ui.autocomplete');
-  foreach ($templates as $template) {
-    hid_profiles_load_template($template, $template);
+  $operation = $node->type == 'hr_bundle' ? $op = node_load(_hr_bundles_get_operation($node->nid)) : $node;
+  $operation_wrapper = entity_metadata_wrapper('node', $operation);
+  $hid = hid_profiles_get_user_data();
+
+  // Open access operations list their contacts in public, whereas closed, only
+  // show to those logged in and verified.
+  $hid_access = $operation_wrapper->field_hid_access->value();
+  if ($hid_access == 'open' ||  $hid->profile->verified) {
+    $templates = array(
+      'contacts_list_table_row',
+      'contacts_view',
+    );
+    foreach ($templates as $template) {
+      hid_profiles_load_template($template, $template);
+    }
+
+    $settings = array();
+    $settings['operation_id'] = $operation->nid;
+    // Get the operation id from the cluster.
+    $settings['bundle'] = $node->type == 'hr_bundle' ? $operation->title : '';
+
+    return array(
+      '#theme' => 'hid_profiles_local_contacts',
+      '#attached' => array(
+        'js' => array(
+          '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js' => array('type' => 'external'),
+          '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js' => array('type' => 'external'),
+          drupal_get_path('module', 'hid_profiles') . '/js/hid_profiles_contacts.js',
+          array(
+            'data' => array('hid_profiles' => $settings),
+            'type' => 'setting'
+          ),
+        ),
+        'library' => array(
+          array('chosen', 'drupal.chosen'),
+          array('system', 'ui.autocomplete'),
+        ),
+      ),
+    );
   }
+  else {
+    context_set('context', 'hid_contacts', FALSE);
 
-  $settings = array(
-    'operation_id' => $node->nid,
-    'bundle' => '',
-  );
-  if ($node->type == 'hr_bundle') {
-    $settings['bundle'] = $node->title;
-    $settings['operation_id'] = _hr_bundles_get_operation($node->nid);
+    // Display a default generic message for edge cases.
+    $message = '<p>' . t('You can\'t access the contact list for this operation') . '</p>';
+
+    // Display the HID Login / Register screen for anonymous users.
+    if (user_is_anonymous()) {
+      $img_path = drupal_get_path('module', 'hid_profiles') . '/img';
+      $message = theme('hid_profiles_local_contacts_hid_login',
+        array(
+          'logo_image' => '/' . $img_path . '/message.png',
+          'login_button' => l('<img src="/' . $img_path . '/log-in-button.png" />', 'connect/oauthconnector_hid_oauth', array('query' => drupal_get_destination(), 'html' => TRUE)),
+          'register_button' => l('<img src="/' . $img_path . '/register-button.png" />', '//app.humanitarian.id/#register', array('html' => TRUE)),
+        )
+      );
+    }
+
+    // Display a specific message to non verified users.
+    if ($hid_access == 'closed' &&  !$hid->profile->verified) {
+      $message = '<p>' . t('Your account hasn\'t been verified yet. Please wait or contact the operation responsable for more information.') . '</p>';
+    }
+
+    return array(
+      '#theme' => 'hid_profiles_local_contacts_no_access',
+      '#message' => $message,
+      '#attached' => array(
+        'css' => array(
+          drupal_get_path('module', 'hid_profiles') . '/css/hid_profiles_contacts_no_access.css',
+        ),
+      ),
+    );
   }
-
-  drupal_add_js(drupal_get_path('module', 'hid_profiles') . '/js/hid_profiles_contacts.js');
-  drupal_add_js(array('hid_profiles' => $settings), 'setting');
-
-  $html = '<div class="feed-icon text-right"><div class="btn-group">
- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-   <i class="fa fa-download"></i> <span class="caret"></span>
- </button>
- <ul class="dropdown-menu">
-   <li><a id="contacts-list-pdf" href="#" target="_blank">PDF</a></li>
-   <li><a id="contacts-list-csv" href="#" target="_blank">CSV</a></li>
- </ul>
-</div>
-</div>
-<div id="contacts-view">
-</div>
-<div id="contacts-list">
-  <table id="contacts-list-table" class="table table-striped">
-    <thead>
-    <tr>
-      <th>Clusters</th>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Job Title</th>
-      <th>Organization</th>
-      <th>Location</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  <div class="text-center">
-    <ul class="pagination">
-      <li class="pager-previous"><a id="previous" href="">Previous</a></li>
-      <li class="pager-next"> <a id="next" href="">Next</a></li>
-    </ul>
-  </div>
-</div>
-<div id="loading"><p class="text-center lead"><i class="fa fa-spinner fa-pulse"></i> Please wait. Data is loading...</p></div>';
-
-  return $html;
 }
 
 /**
@@ -318,7 +332,7 @@ function hid_profiles_checkout($form, &$form_state, $cid) {
 function hid_profiles_checkout_submit($form, &$form_state) {
   global $user;
   $cid = $form_state['values']['cid'];
-  // checkout from cid
+  // Checkout from cid.
   $data = hid_profiles_get_user_data($user->uid);
   $location = '';
   foreach ($data->contacts as $contact) {

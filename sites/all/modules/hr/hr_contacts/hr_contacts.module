@@ -140,7 +140,7 @@ function hr_contacts_og_features_toggle($entity, $entity_id, $entity_type, $feat
   if (isset($features['hr_contacts'])) {
     $mlid = og_menu_single_get_link_mlid('node', $entity_id);
     if (empty($features['hr_contacts'])) {
-      menu_link_delete(NULL, 'node/'.$entity_id.'/contacts');  
+      menu_link_delete(NULL, 'node/'.$entity_id.'/contacts');
     }
     else {
       // See if menu link already exists
@@ -157,10 +157,10 @@ function hr_contacts_og_features_toggle($entity, $entity_id, $entity_type, $feat
       }
     }
   }
-        
+
 }
 
-/** 
+/**
  * Implementation of hook_entity_info_alter()
  */
 function hr_contacts_entity_info_alter(&$entity_info) {
@@ -208,7 +208,7 @@ function hr_contacts_search_api_views_query_alter(&$view, &$query) {
 /**
  * Implements hook_views_pre_render()
  * Adds PDF button to export events as PDF
- * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4466 
+ * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4466
  */
 function hr_contacts_views_pre_render(&$view) {
   if ($view->name == 'hr_contacts') {
@@ -217,26 +217,6 @@ function hr_contacts_views_pre_render(&$view) {
     }
   }
 }
-
-
-/**
- * Implements hook_og_membership_insert()
- * Creates a check-in message when someones checks into an operation
- */
-/*function hr_contacts_og_membership_insert(OgMembership $og_membership) {
-  global $user;
-  if ($og_membership->type == 'hr_responder') {
-    // Someone is checking in
-    $message = message_create('hr_contacts_check_in', array('uid' => $user->uid));
-    $wrapper = entity_metadata_wrapper('message', $message);
-    $nid = $og_membership->field_contact_information[LANGUAGE_NONE][0]['target_id'];
-    $node = node_load($nid);
-    $group = node_load($og_membership->gid);
-    $wrapper->field_operation->set($group);
-    $wrapper->field_node_ref->set($node);
-    $wrapper->save();
-  }
-}*/
 
 /**
  * Implements hook_ctools_plugin_directory().
@@ -252,11 +232,10 @@ function hr_contacts_ctools_plugin_directory($module, $plugin) {
 
 /**
  * Implements hook_menu()
- * Defines the menu callbacks necessary to print the contacts in PDF format
- * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4466
+ * Defines the menu callbacks necessary to display contacts from HRinfo or Hid.
  */
 function hr_contacts_menu() {
-  $items['node/%/contacts/pdf'] = array(
+  $items['node/%node/contacts/pdf'] = array(
     'page callback' => 'hr_contacts_pdf_output',
     'page arguments' => array(1),
     'access arguments' => array('access content'),
@@ -264,13 +243,16 @@ function hr_contacts_menu() {
   return $items;
 }
 
-function hr_contacts_pdf_output($nid) {
+/**
+ * Generate contacts in a pdf file
+ */
+function hr_contacts_pdf_output($node) {
   $path = current_path();
-  $node = entity_load_single('node', $nid);
   $label = entity_label('node', $node);
   $label = transliteration_clean_filename($label);
   $html_path = str_replace('/pdf', '/print', $path);
-  // Print PDF using wkhtmltopdf service
+
+  // Print PDF using wkhtmltopdf service.
   $html_url = url($html_path, array('absolute' => TRUE));
   $params = array(
     'url' => $html_url,
@@ -288,7 +270,7 @@ function hr_contacts_pdf_output($nid) {
     'method' => 'POST',
   );
   drupal_add_http_header('Content-Type', 'application/pdf; charset=utf-8');
-  drupal_add_http_header('Content-Disposition', 'attachment;filename="'.t('contacts').'.pdf"');
+  drupal_add_http_header('Content-Disposition', 'attachment;filename="'. $label .'.pdf"');
   $output = chr_curl_http_request($url, $req_params);
   echo $output->data;
   exit;
