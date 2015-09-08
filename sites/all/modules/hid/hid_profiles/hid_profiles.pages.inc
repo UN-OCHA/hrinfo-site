@@ -96,7 +96,8 @@ function hid_organizations_autocomplete($org_names, $extended = FALSE) {
     ->fields('fot')
     ->fields('fnf')
     ->condition('t.vid', $vocabulary->vid)
-    ->condition('fnf.language', 'en');
+    ->condition('fnf.language', 'en')
+    ->condition('fdfa.language', 'en');
 
   $or = db_or();
   $or->condition('t.name', $contains_delimiter . db_like($org_names) . '%', 'LIKE');
