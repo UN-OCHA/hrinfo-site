@@ -282,7 +282,7 @@ function hid_profiles_local_contacts($node) {
     $message = '<p>' . t('You can\'t access the contact list for this operation') . '</p>';
 
     // Display the HID Login / Register screen for anonymous users.
-    if (user_is_anonymous()) {
+    if (hid_auth_user_is_anonymous()) {
       $img_path = drupal_get_path('module', 'hid_profiles') . '/img';
       $message = theme('hid_profiles_local_contacts_hid_login',
         array(
@@ -295,7 +295,13 @@ function hid_profiles_local_contacts($node) {
 
     // Display a specific message to non verified users.
     if ($hid_access == 'closed' &&  !$hid->profile->verified) {
-      $message = '<p>' . t('Your account hasn\'t been verified yet. Please wait or contact the operation responsable for more information.') . '</p>';
+      $message = '<p>' .
+        t('This contact list has been set as private by our field-level administrators. This setting is used in situations where those in-countries responders believe that their information should not be easily available due to security concerns. In this case, only "verified" Humanitarian ID users can access the contact list. For information about "verified" users, please see our <a href="@faq-link">FAQs</a> or contact us at <a href="@mail-hrinfo">info@humanitarian.id</a>.',
+          array(
+            '@faq-link' => 'http://humanitarian.id/faqs',
+            '@mail-hrinfo' => 'mailto:info@humanitarian.id',
+          ))
+        . '</p>';
     }
 
     return array(
