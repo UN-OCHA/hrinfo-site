@@ -7,10 +7,9 @@
 include_once 'hr_stats.features.inc';
 
 /**
-* Implements hook_permission().
-*/
-
-function hr_stats_permission(){
+ * Implements hook_permission().
+ */
+function hr_stats_permission() {
   return array(
     'access piwik reports' => array(
       'title' => t('Access piwik reports'),
@@ -24,10 +23,9 @@ function hr_stats_permission(){
 }
 
 /**
-* Implements hook_menu().
-*/
-
-function hr_stats_menu(){
+ * Implements hook_menu().
+ */
+function hr_stats_menu() {
   $items = array();
 
   $items['group/%/%/admin/analytics'] = array(
@@ -83,7 +81,7 @@ function hr_stats_menu(){
 
   $items['admin/config/system/hr-stats'] = array(
     'title' => 'Piwik reports for HumanitarianResponse',
-		'description' => 'Administer Piwik reports for HumanitarianResponse configuration',
+    'description' => 'Administer Piwik reports for HumanitarianResponse configuration',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('hr_stats_admin_settings_form'),
     'access arguments' => array('administer piwik reports'),
@@ -101,12 +99,11 @@ function hr_stats_menu(){
   );
 
   return $items;
- }
+}
 
- /**
+/**
  * Implements hook_og_ui_get_group_admin()
  */
-
 function hr_stats_og_ui_get_group_admin($group_type, $gid) {
   $items = array();
   if (og_user_access($group_type, $gid, 'access piwik reports')) {
@@ -137,26 +134,24 @@ function hr_stats_og_permission() {
 
 
 /**
-*  Implements hook_theme()
-*/
-
-function hr_stats_theme(){
+ *  Implements hook_theme()
+ */
+function hr_stats_theme() {
   return array(
-  	'piwik_reports' => array(
-  	   'template' => 'hr-stats',
-  	   'variables' => array(
-  	     'data_url' => NULL,
-  	     'period' => NULL,
-  	   ),
-  	),
+    'piwik_reports' => array(
+      'template' => 'hr-stats',
+      'variables' => array(
+        'data_url' => NULL,
+        'period' => NULL,
+      ),
+    ),
   );
 }
 
 /**
-*  Return the form that handles hr_stats configuration page
-*/
-
-function hr_stats_admin_settings_form($form_state){
+ *  Return the form that handles hr_stats configuration page
+ */
+function hr_stats_admin_settings_form($form_state) {
   drupal_set_title(t('Piwik Reports'));
 
   $form['token_auth'] = array(
@@ -164,7 +159,9 @@ function hr_stats_admin_settings_form($form_state){
     '#title' => t('Token auth & Segment'),
     '#weight' => 2,
     '#collapsible' => TRUE,
-    '#description' => t('This is needed in order to acces piwik reports. Please consult your Piwik server administrator if you have a difficulty in finding it.'),
+    '#description' => t(
+      'This is needed in order to acces piwik reports. Please consult your Piwik server administrator if you have a difficulty in finding it.'
+    ),
   );
   $form['token_auth']['hr_stats_piwik_token_auth'] = array(
     '#type' => 'textfield',
@@ -196,13 +193,14 @@ function hr_stats_get_raw_piwik_segments($token_auth = '', $site_id = '') {
 
   if($token_auth == '' || $site_id == ''){
     drupal_set_message(t('Piwik configuration for the site Id or Authentication Token has not been set properly, please consult your site admin.'), 'warning', false);
-
     return;
   }
-  else{
-    $result = drupal_http_request(hr_stats_get_url() . 'index.php?module=API&method=SegmentEditor.getAll&idSite=' . (int)$site_id . '&format=JSON&token_auth=' . $token_auth);
+  else {
+    $result = drupal_http_request(
+      hr_stats_get_url() . 'index.php?module=API&method=SegmentEditor.getAll&idSite=' . (int) $site_id . '&format=JSON&token_auth=' . $token_auth
+    );
     if (empty($result->data)) {
-      drupal_set_message(t('Please ask your administrator to check Piwik Reports configuration.'), 'warning', false);
+      drupal_set_message(t('Please ask your administrator to check Piwik Reports configuration.'), 'warning', FALSE);
       return;
     }
     else {
@@ -215,27 +213,22 @@ function hr_stats_get_raw_piwik_segments($token_auth = '', $site_id = '') {
 /**
  * Return a list of segments active on selected site.
  *
- * @param $auth_token
- *   Piwik server token auth.
- * @param $site_id
- *   Selected site id.
- *
- * @return $segments - array with keys corresponding to the values
+ * @return array $segments - array with keys corresponding to the values
  */
-function hr_stats_get_piwik_segments(){
+function hr_stats_get_piwik_segments() {
   $segs = hr_stats_get_raw_piwik_segments();
   if (!empty($segs)) {
-    foreach($segs as $key => $seg){
+    foreach ($segs as $key => $seg) {
       $segments[] = urldecode($seg['definition']);
     }
     return array_combine($segments, $segments);
   }
 }
 
-function hr_stats_get_url(){
+function hr_stats_get_url() {
   $url = variable_get('piwik_url_https', '');
-  if($url == ''){
-    drupal_set_message(t('Piwik server url is missing or wrong. Please ask your administrator to check Piwik Reports configuration.'), 'warning', false);
+  if ($url == '') {
+    drupal_set_message(t('Piwik server url is missing or wrong. Please ask your administrator to check Piwik Reports configuration.'), 'warning', FALSE);
   }
   return $url;
 }
@@ -245,17 +238,17 @@ function hr_stats_get_piwik_stat($token_auth, $site_id, $method, $period, $date,
     drupal_set_message(t('Piwik configuration for the site Id or Authentication Token has not been set properly, please consult your site admin.'), 'warning', false);
     return;
   }
-  else{
-    $url = hr_stats_get_url() . 'index.php?module=API&method='.$method.'&idSite=' . (int)$site_id . '&period='.$period.'&date='.$date.'&format=JSON&token_auth=' . $token_auth;
+  else {
+    $url = hr_stats_get_url() . 'index.php?module=API&method=' . $method . '&idSite=' . (int) $site_id . '&period=' . $period . '&date=' . $date . '&format=JSON&token_auth=' . $token_auth;
     if (!empty($segment)) {
-      $url .= '&segment='.$segment;
+      $url .= '&segment=' . $segment;
     }
     if (!empty($additional)) {
-      $url .= '&'.$additional;
+      $url .= '&' . $additional;
     }
     $result = drupal_http_request($url);
     if (empty($result->data)) {
-      drupal_set_message(t('Please ask your administrator to check Piwik Reports configuration.'), 'warning', false);
+      drupal_set_message(t('Please ask your administrator to check Piwik Reports configuration.'), 'warning', FALSE);
       return;
     }
     else {
@@ -266,7 +259,7 @@ function hr_stats_get_piwik_stat($token_auth, $site_id, $method, $period, $date,
 }
 
 function hr_stats_get_spaces($type, $page = 1) {
-  $url = 'https://www.humanitarianresponse.info/api/v1.0/'.$type.'?page='.$page;
+  $url = 'https://www.humanitarianresponse.info/api/v1.0/' . $type . '?page=' .$page;
   $operations = array();
   $data = drupal_http_request($url);
   if (!isset($data->error)) {
@@ -274,7 +267,7 @@ function hr_stats_get_spaces($type, $page = 1) {
       $json = drupal_json_decode($data->data);
       $operations = $json['data'];
       if (isset($json['next'])) {
-        $next_ops = hr_stats_get_spaces($type, $page+1);
+        $next_ops = hr_stats_get_spaces($type, $page + 1);
         $operations = array_merge($operations, $next_ops);
       }
     }
@@ -296,7 +289,7 @@ function _hr_stats_get_file_url($files_array) {
         }
       }
     }
-    // Assessments
+    // Assessments.
     $asst_fields = array('report', 'questionnaire', 'data');
     foreach ($asst_fields as $asst_field) {
       if (isset($files_row[$asst_field])) {
@@ -309,15 +302,15 @@ function _hr_stats_get_file_url($files_array) {
   return $urls;
 }
 
-function hr_stats_get_urls($space_type, $space, $type, $page=1) {
-  $url = 'http://www.humanitarianresponse.info/api/v1.0/'.$type.'?filter['.$space_type.']='.$space;
+function hr_stats_get_urls($space_type, $space, $type, $page = 1) {
+  $url = 'https://www.humanitarianresponse.info/api/v1.0/' . $type . '?filter[' . $space_type . ']=' . $space;
   if ($type != 'assessments') {
     $url .= '&fields=files';
   }
   else {
     $url .= '&fields=report,questionnaire,data';
   }
-  $url .= '&page='.$page;
+  $url .= '&page=' . $page;
   $data = drupal_http_request($url);
   if (!isset($data->error)) {
     if (isset($data->data)) {
@@ -325,7 +318,7 @@ function hr_stats_get_urls($space_type, $space, $type, $page=1) {
       $files = $json['data'];
       $urls = _hr_stats_get_file_url($files);
       if (isset($json['next'])) {
-        $next_urls = hr_stats_get_urls($space_type, $space, $type, $page+1);
+        $next_urls = hr_stats_get_urls($space_type, $space, $type, $page + 1);
         $urls = array_merge($urls, $next_urls);
       }
       return $urls;
@@ -365,7 +358,16 @@ function hr_stats_get_full_stats($period, $date) {
     }
   }
 
-  $headers = array('Space', 'Number of visits', '% of visits in-country', 'Total number of downloads', 'Number of dataset downloads', 'Number of documents downloads', 'Number of infographics downloads', 'Number of assessments downloads');
+  $headers = array(
+    'Space',
+    'Number of visits',
+    '% of visits in-country',
+    'Total number of downloads',
+    'Number of dataset downloads',
+    'Number of documents downloads',
+    'Number of infographics downloads',
+    'Number of assessments downloads'
+  );
 
   $hr_downloads = _hr_stats_get_hr_downloads($token_auth, $site_id, $period, $date);
 
@@ -375,7 +377,6 @@ function hr_stats_get_full_stats($period, $date) {
     if (isset($segment['space'])) {
       $row = array();
       $row[] = $segment['space']['label'];
-
       // If country is set, avoid calling the API twice.
       if (isset($segment['space']['country'])) {
         // @TODO include this feature in hr_stats_get_piwik_stat().
@@ -389,7 +390,12 @@ function hr_stats_get_full_stats($period, $date) {
         if (!empty($bulk_results->data)) {
           $bulk_results_data = drupal_json_decode($bulk_results->data);
           $row[] = $bulk_results_data[0]['nb_visits'];
-          $row[] = $bulk_results_data[1]['nb_visits'] / $bulk_results_data[0]['nb_visits'] * 100;
+          if ($bulk_results_data[0]['nb_visits'] > 0) {
+            $row[] = $bulk_results_data[1]['nb_visits'] / $bulk_results_data[0]['nb_visits'] * 100;
+          }
+          else {
+            $row[] = 0;
+          }
         }
       }
       else {
@@ -537,7 +543,7 @@ function hr_stats_tokens($type, $tokens, array $data = array(), array $options =
             $replacements[$original] = implode(';', $bundle_ids);
           }
           else {
-            if ($node->type== 'hr_bundle') {
+            if ($node->type == 'hr_bundle') {
               $replacements[$original] = $node->nid;
             }
           }

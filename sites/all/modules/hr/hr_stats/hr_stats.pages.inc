@@ -3,7 +3,6 @@
 /**
  * Return the form where to select the report period.
  */
-
 function hr_stats_dateselect_form() {
 
   $period = array(
@@ -40,7 +39,6 @@ function hr_stats_dateselect_form() {
 /**
  * Reports form submit function
  */
- 
 function hr_stats_reports_submit($form, &$form_state) {
   $_SESSION['hr_stats_reports_period'] = $form_state['values']['period'];
 }
@@ -56,24 +54,31 @@ function hr_stats_reports_submit($form, &$form_state) {
  *
  * @return
  */
+function hr_stats_reports($form, &$form_state, $report) {
 
-function hr_stats_reports($form, &$form_state, $report){
-	
   $piwik_url = variable_get('piwik_url_https', '');
-  if(!isset($piwik_url)){
-    drupal_set_message('Please check your piwik http URL in the configuration settings', 'warning', false);
+  if (!isset($piwik_url)) {
+    drupal_set_message(
+      'Please check your piwik http URL in the configuration settings',
+      'warning',
+      FALSE
+    );
 
     return;
   }
   $form = hr_stats_dateselect_form();
   $piwik_site_id = variable_get('piwik_site_id', '');
-  if(!isset($piwik_site_id)){
-    drupal_set_message('Please check your piwik site Id in the configuration settings', 'warning', false);
+  if (!isset($piwik_site_id)) {
+    drupal_set_message(
+      'Please check your piwik site Id in the configuration settings',
+      'warning',
+      FALSE
+    );
 
     return;
   }
   $period = isset($_SESSION['hr_stats_reports_period']) ? $_SESSION['hr_stats_reports_period'] : 0;
-  if($period == 1){
+  if ($period == 1) {
     // Special handling for "yesterday" = 1.
     // The yesterday date value is required.
     $date = _hr_stats_select_period($period);
@@ -84,14 +89,32 @@ function hr_stats_reports($form, &$form_state, $report){
   }
   $period_name = _hr_stats_get_period_name($period);
   $token_auth = variable_get('hr_stats_piwik_token_auth', '');
-	
-  //array of URL parameters
+
   $nid = arg(2);
+  $node = node_load($nid);
+  // We need to identify if we're in a section or a cluster to establish the
+  // right segment.
+  $segment_vars = array(
+    'hr_operation' => array(
+      'name' => 'customVariablePageName1',
+      'value' => 'customVariablePageValue1',
+      'context' => 'spaces'
+    ),
+    'hr_bundle' => array(
+      'name' => 'customVariablePageName2',
+      'value' => 'customVariablePageValue2',
+      'context' => 'bundles'
+    ),
+  );
+  // Default to operation in case of unexpected node types.
+  $segment_var = isset($segment_vars[$node->type]) ? $segment_vars[$node->type] : $segment_vars['hr_operation'];
+
+  // Array of URL parameters.
   $data_params = array();
   $data_params[0]['idSite'] = $piwik_site_id;
   $data_params[0]['date'] = $date;
   $data_params[0]['period'] = $period_name;
-  $data_params[0]['segment'] = 'customVariablePageName1==spaces;customVariablePageValue1=@'.$nid;
+  $data_params[0]['segment'] = $segment_var['name'] . '==' . $segment_var['context'] . ';' . $segment_var['value'] . '=@' . $nid;
   $data_params[0]['disableLink'] = 1;
   $data_params[0]['module'] = 'Widgetize';
   $data_params[0]['action'] = 'iframe';
@@ -100,7 +123,7 @@ function hr_stats_reports($form, &$form_state, $report){
   if (!empty($token_auth)) {
     $data_params[0]['token_auth'] = $token_auth;
   }
-  switch($report){
+  switch ($report) {
     case 'visitors_overview':
       $title[0] = t('Visits trend');
       $data_params[0]['columns[]'] = 'nb_visits';
@@ -111,32 +134,33 @@ function hr_stats_reports($form, &$form_state, $report){
       $data_params[1]['moduleToWidgetize'] = 'HumanitarianResponse';
       $data_params[1]['actionToWidgetize'] = 'getSpaceSummary';
       unset($data_params[1]['columns[]']);
-      $node = node_load($nid);
       $data_params[1]['space_id'] = $nid;
       if ($node->type != 'hr_operation') {
         $data_params[1]['space_type'] = 'space';
       }
-    break;
+      break;
     case 'visitors_settings':
       $data_params[0]['filter_limit'] = 6;
       // Browser families
       $title[0] = t('Browser families');
       $data_params[0]['moduleToWidgetize'] = 'UserSettings';
       $data_params[0]['actionToWidgetize'] = 'getBrowserType';
-    break;
+      break;
     case 'visitors_overview_map':
       $title[0] = t('Browser Map');
       $data_params[0]['moduleToWidgetize'] = 'UserCountryMap';
       $data_params[0]['actionToWidgetize'] = 'visitorMap';
-    break;
+      break;
   }
+
   // Build the data URL with all params and urlencode it.
   $theme_args = array();
   foreach ($data_params as $key => $data) {
-    $theme_args['data_url'][] = array('url' => $piwik_url . 'index.php?' . drupal_http_build_query($data), 
-      'title' => $title[$key], 
-      'iframe_height' => ( isset($iframe_height[$key]) && $iframe_height[$key] > 0 ? $iframe_height[$key] : 350),
-      'empty_text' => ( isset($empty_text) ? $empty_text : NULL),
+    $theme_args['data_url'][] = array(
+      'url' => $piwik_url . 'index.php?' . drupal_http_build_query($data),
+      'title' => $title[$key],
+      'iframe_height' => (isset($iframe_height[$key]) && $iframe_height[$key] > 0 ? $iframe_height[$key] : 350),
+      'empty_text' => (isset($empty_text) ? $empty_text : NULL),
     );
   }
   // Render HTML code.
@@ -154,8 +178,7 @@ function hr_stats_reports($form, &$form_state, $report){
  *
  * @param $period
  *    selected period
- * @return
- *    array with starting and ending date
+ * @return bool|string date for the period
  */
 function _hr_stats_select_period($period) {
   switch ($period) {
@@ -191,8 +214,7 @@ function _hr_stats_select_period($period) {
  *
  * @param $period
  *    selected period
- * @return
- *    name
+ * @return string name
  */
 function _hr_stats_get_period_name($period) {
   // Possible periods are day, week, month, year.
@@ -249,8 +271,17 @@ function hr_stats_admin_reports_form_submit($form, &$form_state) {
   $filename = 'hr_stats.csv';
   $date = $form_state['values']['date'];
   drupal_add_http_header('Content-Type', 'text/csv;charset=utf-8');
-  drupal_add_http_header('Content-Disposition', 'attachment;filename="'.$filename.'"');
-  hr_stats_get_full_stats($form_state['values']['period'], $date['year'].'-'.sprintf("%02d",$date['month']).'-'.sprintf("%02d", $date['day']));
+  drupal_add_http_header(
+    'Content-Disposition',
+    'attachment;filename="' . $filename . '"'
+  );
+  hr_stats_get_full_stats(
+    $form_state['values']['period'],
+    $date['year'] . '-' . sprintf("%02d", $date['month']) . '-' . sprintf(
+      "%02d",
+      $date['day']
+    )
+  );
   drupal_exit();
 }
 
