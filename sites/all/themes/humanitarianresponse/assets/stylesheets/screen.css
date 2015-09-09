@@ -3107,7 +3107,7 @@ form .description { margin: 2px 0; color: #555555; }
 
 .media-widget > a { margin: 0 10px 0 0; display: inline-block; }
 
-html.js input.form-autocomplete { background: url('../images/throbber.gif?1435220138') no-repeat right 8px #fff !important; }
+html.js input.form-autocomplete { background: url('../images/throbber.gif?1441359364') no-repeat right 8px #fff !important; }
 html.js input.throbbing { background-position: right -122px !important; }
 html.js fieldset.collapsed { height: auto; border-left-width: 1px; border-right-width: 1px; }
 
@@ -3876,6 +3876,7 @@ form .table-responsive { overflow-x: inherit; }
 .node-search-result .row .panel-panel .panel-pane { margin-bottom: 5px; }
 .node-search-result .row .panel-panel .panel-pane .pane-title { color: #8F8F8F; font-weight: normal; font-size: 13px; margin-bottom: 0.5px; }
 .node-search-result .row .panel-panel .panel-pane .pane-content { position: relative; display: block; }
+.node-search-result .row .panel-panel .panel-pane .pane-content .view-content .content img { width: 100px; height: 100px; display: block; }
 .node-search-result .row .panel-panel .panel-pane .form-item, .node-search-result .row .panel-panel .panel-pane .form-group { margin-top: 0; margin-bottom: 0; }
 .node-search-result .row .panel-panel .panel-pane .btn-group { float: right; }
 .node-search-result .row .panel-panel .panel-pane .btn-group .dropdown-menu { margin-top: -16px; margin-left: 6px; font-size: 11px; }
