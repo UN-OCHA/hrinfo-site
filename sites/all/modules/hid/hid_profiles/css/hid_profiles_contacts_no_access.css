@@ -1,0 +1,36 @@
+.contacts-list-no-access-wrapper {
+    min-height: 400px;
+    background-image: url('../img/blurry-background.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    margin-bottom: 50px;
+}
+
+.contacts-list-no-access {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.contacts-list-no-access .message {
+    margin: 0 auto;
+    position: relative;
+    top: 25%;
+}
+
+.contacts-list-no-access .message p {
+    font-family: Exo;
+    font-size: 1.5em;
+    font-weight: bolder;
+    background: rgba(255,255,255, .5);
+    border: 1px solid;
+    margin: 40px auto;
+    width: 70%;
+    padding: 10px;
+}
+
+.contacts-list-no-access .message .buttons a:first-child {
+    padding-right:20px;
+}
