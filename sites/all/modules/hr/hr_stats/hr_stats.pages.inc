@@ -98,12 +98,16 @@ function hr_stats_reports($form, &$form_state, $report) {
     'hr_operation' => array(
       'name' => 'customVariablePageName1',
       'value' => 'customVariablePageValue1',
-      'context' => 'spaces'
+      'context' => 'spaces',
+      'widget' => 'getSpaceSummary',
+      'key' => 'space',
     ),
     'hr_bundle' => array(
       'name' => 'customVariablePageName2',
       'value' => 'customVariablePageValue2',
-      'context' => 'bundles'
+      'context' => 'bundles',
+      'widget' => 'getClusterSummary',
+      'key' => 'cluster',
     ),
   );
   // Default to operation in case of unexpected node types.
@@ -132,12 +136,10 @@ function hr_stats_reports($form, &$form_state, $report) {
       $data_params[1] = $data_params[0];
       $title[1] = t('Downloads');
       $data_params[1]['moduleToWidgetize'] = 'HumanitarianResponse';
-      $data_params[1]['actionToWidgetize'] = 'getSpaceSummary';
+      $data_params[1]['actionToWidgetize'] = $segment_var['widget'];
       unset($data_params[1]['columns[]']);
-      $data_params[1]['space_id'] = $nid;
-      if ($node->type != 'hr_operation') {
-        $data_params[1]['space_type'] = 'space';
-      }
+      $data_params[1][$segment_var['key'] . '_id'] = $node->nid;
+      $data_params[1][$segment_var['key'] . '_type'] = $data_params[1][$segment_var['key']];
       break;
     case 'visitors_settings':
       $data_params[0]['filter_limit'] = 6;
