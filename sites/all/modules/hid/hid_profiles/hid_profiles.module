@@ -16,7 +16,7 @@ include_once 'hid_profiles.features.inc';
  */
 function hid_profiles_menu() {
   $items = array();
-  
+
   $items['admin/config/services/hid_profiles'] = array(
     'title' => 'Humanitarian ID Profiles',
     'description' => 'Configure the API endpoint, key, and secret for the Humanitarian ID Profiles service',
@@ -40,18 +40,6 @@ function hid_profiles_menu() {
     'access arguments' => array('access hid_profiles'),
     'file' => 'hid_profiles.pages.inc',
   );
-//  $items['hid/data'] = array(
-//    'page callback' => 'hid_profiles_ajax_data',
-//    'access arguments' => array('access hid_profiles'),
-//  );
-//  $items['hid/profile'] = array(
-//    'page callback' => 'hid_profiles_ajax_profile',
-//    'access callback' => 'hid_profiles_ajax_profile_access',
-//  );
-//  $items['hid/contact'] = array(
-//    'page callback' => 'hid_profiles_ajax_contact',
-//    'access callback' => 'hid_profiles_ajax_contact_access',
-//  );
 
   // Provide callback to get data on active operations.
   $items['hid/operations'] = array(
@@ -93,7 +81,7 @@ function hid_profiles_menu() {
 
   $items['hid/proxy'] = array(
     'page callback' => 'hid_profiles_proxy',
-    'access arguments' => array('access content'),
+    'access callback' => 'hid_profiles_access_proxy',
   );
 
   $items['hid/autocomplete'] = array(
@@ -171,6 +159,41 @@ function hid_profiles_proxy() {
 }
 
 /**
+ * Access request to the HID proxy.
+ *
+ * @return bool
+ *  whether the request can be granted.
+ */
+function hid_profiles_access_proxy() {
+  $query = $_GET;
+
+  if (isset($query['locationId'])) {
+    list($unused, $nid) = explode(':', $query['locationId']);
+    if (is_numeric($nid) && $node = node_load($nid)) {
+      $operation = $node->type == 'hr_bundle' ? $op = node_load(_hr_bundles_get_operation($node->nid)) : $node;
+      $operation_wrapper = entity_metadata_wrapper('node', $operation);
+      $hid_access = $operation_wrapper->field_hid_access->value();
+
+      // We grant access in case the operation / cluster contact list is public
+      // or if it's private and the user profile is verified.
+      if ($hid_access == 'open') {
+        return TRUE;
+      }
+      $hid = hid_profiles_get_user_data();
+      if ($hid_access == 'closed' && $hid->profile->verified) {
+        return TRUE;
+      }
+    }
+
+    // Restrict access in case we have arrived here with a wrong request.
+    return FALSE;
+  }
+
+  // Grant access for anyone else.
+  return TRUE;
+}
+
+/**
  * Callback function for autocomplete
  */
 function hid_profiles_autocomplete_callback($string = '') {
@@ -190,7 +213,7 @@ function hid_profiles_autocomplete_callback($string = '') {
     }
   }
   drupal_json_output($out);
-} 
+}
 
 /**
  * Implements hook_ctools_plugin_directory()
@@ -374,7 +397,6 @@ function hid_profiles_get_active_global($uid = NULL) {
   return FALSE;
 }
 
-
 /**
  * Helper function to generate an associative array with all active operations,
  * grouped by their respective country or region.
@@ -397,7 +419,7 @@ function hid_profiles_get_operations() {
     foreach ($operations as $op) {
       $op_types = field_get_items('node', $op, 'field_operation_type');
       $op_type = !empty($op_types[0]['value']) ? $op_types[0]['value'] : FALSE;
-  
+
       if ($op_type === 'country') {
         $op_place_tids = field_get_items('node', $op, 'field_country');
         $op_place_tid = !empty($op_place_tids[0]['target_id']) ? $op_place_tids[0]['target_id'] : FALSE;
@@ -410,7 +432,7 @@ function hid_profiles_get_operations() {
         $op_place = !empty($op_place_nid) ? node_load($op_place_nid) : FALSE;
         $op_place_name = !empty($op_place->title) ? $op_place->title : FALSE;
       }
-  
+
       $op_id = !empty($op->nid) ? 'hrinfo:' . $op->nid : FALSE;
       $op_name = !empty($op->title) ? $op->title : FALSE;
 
@@ -457,7 +479,7 @@ function _hid_profiles_get_profile_keys() {
  *
  * @param string $cid
  *   The value of the userid for the Humanitarian ID Profile API.
- * 
+ *
  * @return array
  *   An array of profile values for the user from the Humanitarian ID Profile
  *   API. If the user does not yet exist, and hence has no CID, this function
@@ -489,7 +511,7 @@ function _hid_profiles_get_user_by_cid($cid) {
  *
  * @param string $cid
  *   The value of the userid for the Humanitarian ID Profile API.
- * 
+ *
  * @return array
  *   An array of profile values for the user from the Humanitarian ID Profile
  *   API. If the user does not yet exist, and hence has no CID, this function
@@ -508,11 +530,6 @@ function _hid_profiles_get_contacts($terms = NULL) {
 
   $contacts = hid_profiles_restclient_post($resource_path, $variables);
   return $contacts;
-  /*if (empty($contacts->data)) return array();
-  $data = json_decode($contacts->data);
-  $data = (is_array($data) && !empty($data[0])) ? $data[0] : $data;
-
-  return $data;*/
 }
 
 /**
@@ -531,29 +548,31 @@ function _hid_profiles_get_cid_by_uid($uid) {
   if (!isset($uid_cid[$uid])) {
     $uid_cid[$uid] = db_query("SELECT cid FROM {hid_profiles} WHERE uid = :uid", array(':uid' => $uid))->fetchField();
   }
-  
+
   return $uid_cid[$uid];
 }
 
 /**
  * Save user profile information to the Humanitarian ID Profile API.
- * 
+ *
  * @param string $cid
  *    The Humanitarian ID Profile API CID (userid).
- * 
+ *
  * @param array values
  *    The profile field values to save for the given user.
- * 
+ *
  * @param string $uid
  *    The Drupal user UID. This is needed when the $cid is an empty value so
  *    that the newly created profile's CID can be used to store in a lookup
  *    table (hid_profiles) along with this UID.
+ *
+ * @return bool|mixed
  */
 function _hid_profiles_save_profile($cid, $values, $uid) {
   $resource_path = 'v0/profile/save';
 
   if (empty($cid)) {
-    // TODO: Insert cid into our user mapping table
+    // @TODO: Insert cid into our user mapping table.
     $cid = 0;
     unset($values['userid']);
   }
@@ -590,7 +609,7 @@ function _hid_profiles_save_contact($cid, $values) {
   $variables = array('query' => $query, 'body' => json_encode($values));
 
   $response = hid_profiles_restclient_post($resource_path, $variables);
-  
+
   if ($response->code === "200") {
     $return_data = json_decode($response->data);
     return $return_data;
@@ -663,6 +682,35 @@ function hid_profiles_block_info() {
   return $blocks;
 }
 
+/**
+ * Implements hook_theme().
+ */
+function hid_profiles_theme() {
+  return array(
+    'hid_profiles_local_contacts' => array(
+      'variables' => array(),
+      'template' => 'templates/hid-profiles-local-contacts',
+    ),
+    'hid_profiles_local_contacts_no_access' => array(
+      'variables' => array(
+        'message' => '',
+      ),
+      'template' => 'templates/hid-profiles-local-contacts-no-access',
+    ),
+    'hid_profiles_local_contacts_hid_login' => array(
+      'variables' => array(
+        'logo_image' => '',
+        'login_button' => '',
+        'register_button' => '',
+      ),
+      'template' => 'templates/hid-profiles-local-contacts-hid-login',
+    ),
+  );
+}
+
+/**
+ * Implements hook_block_view().
+ */
 function hid_profiles_block_view($delta = '') {
   $block = array();
   switch ($delta) {
@@ -684,7 +732,7 @@ function hid_profiles_block_view($delta = '') {
       $block['content'] = '<div id="block-current-search-hr-current-search" class="block block-current-search">
 
     <h2>Current search</h2>
-  
+
   <div class="content">
     <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter">Filter: <span class="facetapi-active">216 items</span> displayed</div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/'.drupal_get_path_alias(current_path()).'"><i class="reset"></i></a> Reset all filters</div></div>  </div>
 </div>';

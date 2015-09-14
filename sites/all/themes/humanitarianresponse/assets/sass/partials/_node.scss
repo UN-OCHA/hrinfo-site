@@ -390,6 +390,15 @@
         .pane-content {
             position: relative;
             display: block;
+
+            .view-content {
+
+              .content img {
+                width: 100px;
+                height: 100px;
+                display:block;
+              }
+            }
         }
         .form-item,
         .form-group {
