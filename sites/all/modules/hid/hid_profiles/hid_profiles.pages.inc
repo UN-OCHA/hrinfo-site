@@ -86,18 +86,16 @@ function hid_organizations_autocomplete($org_names, $extended = FALSE) {
   // Search for hr_organization taxonomy terms, where the term name or
   // organization field value match the given search string.
   $query = db_select('taxonomy_term_data', 't');
-  $query->leftJoin('field_data_field_acronym', 'fdfa', '(t.tid = fdfa.entity_id AND fdfa.entity_type = :fdfa_type)', array(':fdfa_type' => 'taxonomy_term'));
+  $query->leftJoin('field_data_field_acronym', 'fdfa', '(t.tid = fdfa.entity_id AND fdfa.entity_type = :fdfa_type AND fdfa.language = \'en\')', array(':fdfa_type' => 'taxonomy_term'));
   $query->leftJoin('field_data_field_organization_type', 'fot', 't.tid = fot.entity_id');
-  $query->leftJoin('field_data_name_field', 'fnf', 'fot.field_organization_type_target_id = fnf.entity_id');
+  $query->leftJoin('field_data_name_field', 'fnf', 'fot.field_organization_type_target_id = fnf.entity_id AND fnf.language = \'en\'');
 
   $query
     ->fields('t')
     ->fields('fdfa')
     ->fields('fot')
     ->fields('fnf')
-    ->condition('t.vid', $vocabulary->vid)
-    ->condition('fnf.language', 'en')
-    ->condition('fdfa.language', 'en');
+    ->condition('t.vid', $vocabulary->vid);
 
   $or = db_or();
   $or->condition('t.name', $contains_delimiter . db_like($org_names) . '%', 'LIKE');
