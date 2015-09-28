@@ -63,10 +63,14 @@ function restful_admin_settings($form_state) {
   );
 
   $form['restful_cache']['restful_page_cache'] = array(
-    '#markup' => t('RESTful leverages page cache out of the box. !link to start caching responses. Status: <strong>@status</strong>.', array(
+    '#type' => 'checkbox',
+    '#title' => t('Page cache'),
+    '#description' => t('RESTful can leverage page cache, this will boost your performace for anonymous traffic. !link to start caching responses. Status: <strong>@status</strong>. <strong>CAUTION:</strong> If your resources are using authentication providers other than cookie, you will want to turn this off. Otherwise you may get cached anonymous values for your authenticated GET requests.', array(
       '!link' => l(t('Enable page cache'), 'admin/config/development/performance'),
       '@status' => variable_get('cache', FALSE) ? t('Enabled') : t('Disabled'),
     )),
+    '#disabled' => !variable_get('cache', FALSE),
+    '#default_value' => variable_get('restful_page_cache', FALSE) && variable_get('cache', FALSE),
   );
 
   $form['restful_cache']['restful_render_cache'] = array(
@@ -120,7 +124,7 @@ function restful_admin_settings($form_state) {
 
   $form['advanced']['restful_global_rate_limit'] = array(
     '#type' => 'textfield',
-    '#title' => t('Rate limit'),
+    '#title' => t('Rate limit - hits'),
     '#description' => t('The number of allowed hits. This is global for all roles. 0 means no global rate limit should be applied.'),
     '#default_value' => variable_get('restful_global_rate_limit', 0),
     '#element_validate' => array('element_validate_integer'),
@@ -128,8 +132,8 @@ function restful_admin_settings($form_state) {
 
   $form['advanced']['restful_global_rate_period'] = array(
     '#type' => 'textfield',
-    '#title' => t('Rate limit'),
-    '#description' => t('The period string compatible with <a href="@url">\DateInterval</a>.', array('@url' => 'http://php.net/manual/en/class.dateinterval.php')),
+    '#title' => t('Rate limit - period'),
+    '#description' => t('The period string compatible with <a href="@url">\DateInterval</a>. After this period the module will restart counting hits.', array('@url' => 'http://php.net/manual/en/dateinterval.createfromdatestring.php')),
     '#default_value' => variable_get('restful_global_rate_period', 'P1D'),
     '#element_validate' => array('restful_date_time_format_element_validate'),
   );
