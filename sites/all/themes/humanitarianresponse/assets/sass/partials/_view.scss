@@ -364,11 +364,11 @@ a.fc-event, .fc-event-draggable {
 	    width: 70px;
 	}
 
-	.calendar-calendar .day-view .full td.multi-day div.days:before {
+	.calendar-calendar .day-view .full td.multi-day .inner:before {
 		content: "All Day";
 		font-weight: bold;
 		float: left;
-		right: 110px;
+		right: 115px;
 		width: 55px;
 		display: block;
 		color: #545454;
@@ -407,8 +407,12 @@ a.fc-event, .fc-event-draggable {
 	}
 
     .calendar-calendar .day-view div.single-day .view-item {
-		left: -45px;
+		left: -90px;
 		width: 200px;
+		display: inline-block;
+		position: relative;
+		top: 5px;
+		margin-top: 5px;
 	}
 
 	.calendar-calendar .day-view #multi-day-container {
@@ -880,7 +884,6 @@ a.fc-event, .fc-event-draggable {
 		}
 
 		div.single-day .view-item {
-			width: 50%;
 			width: 200px;
 		}
 
@@ -934,6 +937,17 @@ a.fc-event, .fc-event-draggable {
 			padding-top: 2px;
 			position: relative;
 			float: left;
+		}
+		.calendar-calendar .day-view .full td.multi-day div.dayview {
+			content: "All Day";
+			font-weight: bold;
+			float: left;
+			right: 110px;
+			width: 55px;
+			display: block;
+			color: #545454;
+			position: relative;
+			padding: 2px 2px 2px 2px;
 		}
 	}
 

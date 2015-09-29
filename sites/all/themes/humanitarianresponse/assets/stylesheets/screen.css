@@ -3696,12 +3696,12 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
   .calendar-calendar .day-view #multi-day-container .full td.calendar-agenda-hour.first { padding-right: 2px; display: none; }
   .calendar-calendar .day-view #multi-day-container .full td.calendar-agenda-hour.first span { font-size: 8em; font-weight: normal; margin-right: 0px; float: right; }
   .calendar-calendar .day-view .full div.calendar-agenda-hour span { font-size: .8em; font-weight: normal; margin-right: 0px; display: block; float: right; width: 70px; }
-  .calendar-calendar .day-view .full td.multi-day div.days:before { content: "All Day"; font-weight: bold; float: left; right: 110px; width: 55px; display: block; color: #545454; font-size: 12px; position: relative; padding: 2px 2px 2px 2px; }
+  .calendar-calendar .day-view .full td.multi-day .inner:before { content: "All Day"; font-weight: bold; float: left; right: 115px; width: 55px; display: block; color: #545454; font-size: 12px; position: relative; padding: 2px 2px 2px 2px; }
   .calendar-calendar .day-view .full div.single-day div.time:before { content: attr(data-hour) ":00"; font-weight: bold; float: left; right: 110px; width: auto; display: block; color: #545454; font-size: 12px; position: relative; padding: 2px 4px 2px 2px; }
   .calendar-calendar .day-view .full td.multi-day div.dayview { float: right; width: 200px; right: 45px; top: -12px; }
   .calendar-calendar .day-view #single-day-container table td { float: left; }
   .calendar-calendar .day-view .full div.single-day div.dayview { float: left; right: 80px; }
-  .calendar-calendar .day-view div.single-day .view-item { left: -45px; width: 200px; }
+  .calendar-calendar .day-view div.single-day .view-item { left: -90px; width: 200px; display: inline-block; position: relative; top: 5px; margin-top: 5px; }
   .calendar-calendar .day-view #multi-day-container { height: 80px; }
   .calendar-calendar .week-view table { width: 100%; margin: 0px; display: inline-block; }
   .calendar-calendar .week-view thead tr { position: absolute; top: -9999px; left: -9999px; }
@@ -3762,12 +3762,13 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
 .calendar-calendar .day-view .full div.single-day div.dayview { background-color: #ffffff; box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2); border-radius: 5px 5px 5px 5px !important; border: none; height: auto; min-height: 100%; }
 .calendar-calendar .day-view .full div.single-day div.dayview div.views-field.views-field-title a { background: transparent; background-color: #54B1C8; display: block; color: #ffffff; font-size: 11px; margin-top: 3px; border-radius: 5px 5px 0px 0px !important; padding-left: 2px; padding-bottom: 0.5em; padding-top: 0.5em; }
 .calendar-calendar .day-view td span.date-display-single { font-weight: bold; display: block; background-color: #e0e0e0; color: #525252; padding-left: 2px; margin-top: 1px; }
-.calendar-calendar .day-view div.single-day .view-item { width: 50%; width: 200px; }
+.calendar-calendar .day-view div.single-day .view-item { width: 200px; }
 .calendar-calendar .day-view .full td .inner div.calendar div a, .calendar-calendar .day-view .full td .inner div.calendar div { margin: 0px 0px; }
 .calendar-calendar .day-view .full td .inner div.calendar.dayview div a:first-child { background: transparent; background-color: #54B1C8; display: block; color: #ffffff; font-size: 11px; margin-top: 3px; border-radius: 5px 5px 0px 0px !important; padding-left: 3px; padding-bottom: 0.5em; padding-top: 0.5em; }
 .calendar-calendar .day-view .full td .inner div.calendar.dayview div.views-field.views-field-field-email a { background: transparent; background-color: #fff; color: #0fa4de; margin-top: -5px; padding-left: 0px; font-size: 10px; }
 .calendar-calendar .day-view .full td .inner div.calendar.dayview div.views-field.views-field-field-user a { background: transparent; background-color: #fff; color: #0fa4de; margin-top: -5px; padding-left: 0px; font-size: 10px; }
 .calendar-calendar .day-view .full td.multi-day div.dayview { background-color: #ffffff; box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2); border-radius: 5px 5px 5px 5px !important; margin: 15px 0px 15px 0px; border: none; color: #777; display: block; height: 157px !important; min-height: 100%; padding-left: 3px; padding-right: 3px; padding-top: 2px; position: relative; float: left; }
+.calendar-calendar .day-view .calendar-calendar .day-view .full td.multi-day div.dayview { content: "All Day"; font-weight: bold; float: left; right: 110px; width: 55px; display: block; color: #545454; position: relative; padding: 2px 2px 2px 2px; }
 .calendar-calendar .year-view td table td { width: 13%; padding-left: 5px; padding-right: 20px; }
 .calendar-calendar td.full { padding: 7px; border: none; }
 .calendar-calendar tr.full { background: #f9f9f9; }
