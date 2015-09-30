@@ -1,0 +1,9 @@
+name = Admin tools
+description = Provides admin tools for Humanitarianresponse
+core = 7.x
+package = Humanitarianresponse
+dependencies[] = ctools
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = hr_content_authors_activity
