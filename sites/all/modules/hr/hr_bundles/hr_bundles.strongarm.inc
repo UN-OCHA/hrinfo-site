@@ -507,7 +507,6 @@ function hr_bundles_strongarm() {
     'block-hr_bookmarks-hr_favorite_spaces' => 0,
     'block-hr_bundles-clusters_map' => 0,
     'block-hr_help-hr_help' => 0,
-    'block-hr_layout-hr_layout_checkin' => 0,
     'block-hr_layout-hr_layout_login' => 0,
     'block-hr_layout-hr_layout_create_links' => 0,
     'block-hr_layout-hr_layout_space_links' => 0,
