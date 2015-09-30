@@ -436,6 +436,9 @@
     if (settings.multiple) {
       $element.attr('multiple', 'multiple');
     }
+    if (settings.settings.hasOwnProperty('required') && settings.settings.required) {
+      $element.addClass('required');
+    }
     // Return the new element.
     return $element;
   }

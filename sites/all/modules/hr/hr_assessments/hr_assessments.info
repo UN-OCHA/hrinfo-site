@@ -21,6 +21,7 @@ dependencies[] = hr_operations
 dependencies[] = hr_organizations
 dependencies[] = hr_themes
 dependencies[] = hr_users
+dependencies[] = js
 dependencies[] = link
 dependencies[] = list
 dependencies[] = media

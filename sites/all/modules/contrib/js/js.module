@@ -1,0 +1,33 @@
+<?php
+/**
+ * @file
+ * JavaScript callback handler module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function js_menu() {
+  $items = array();
+  $items['admin/config/system/js'] = array(
+    'title' => 'JS Callback handler',
+    'description' => 'Configure JavaScript callback handler.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('js_configure_form'),
+    'access arguments' => array('administer js'),
+    'file' => 'js.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function js_permission() {
+  return array(
+    'administer js' => array(
+      'title' => t('Administer JavaScript callback handler settings'),
+    ),
+  );
+}

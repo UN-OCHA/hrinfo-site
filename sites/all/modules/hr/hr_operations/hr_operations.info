@@ -11,6 +11,7 @@ dependencies[] = fts_visualization
 dependencies[] = hr_core
 dependencies[] = hr_notifications
 dependencies[] = hr_users
+dependencies[] = js
 dependencies[] = link_icons
 dependencies[] = og_access
 dependencies[] = og_features
