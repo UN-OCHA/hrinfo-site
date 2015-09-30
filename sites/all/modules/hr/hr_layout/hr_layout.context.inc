@@ -258,9 +258,9 @@ function hr_layout_context_default_contexts() {
           'region' => 'top',
           'weight' => '-5',
         ),
-        'locale-language' => array(	
-          'module' => 'locale',	
-          'delta' => 'language',	
+        'locale-language' => array(
+          'module' => 'locale',
+          'delta' => 'language',
           'region' => 'top',
           'weight' => 10,
         ),
@@ -294,12 +294,6 @@ function hr_layout_context_default_contexts() {
           'delta' => 'hr_layout_create_links',
           'region' => 'top',
           'weight' => '0',
-        ),
-        'hr_layout-hr_layout_checkin' => array(
-          'module' => 'hr_layout',
-          'delta' => 'hr_layout_checkin',
-          'region' => 'top',
-          'weight' => '2',
         ),
         'og_menu_single-menu' => array(
           'module' => 'og_menu_single',

@@ -35,7 +35,7 @@ function hr_users_default_page_manager_pages() {
   );
   $page->menu = array(
     'type' => 'normal',
-    'title' => 'My Check-ins',
+    'title' => 'My Spaces',
     'name' => 'user-menu',
     'weight' => '0',
     'parent' => array(
