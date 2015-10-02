@@ -139,172 +139,13 @@ function hr_operations_views_default_views() {
 
   /* Display: Text */
   $handler = $view->new_display('panel_pane', 'Text', 'text');
-
-  /* Display: GeoJSON */
-  $handler = $view->new_display('page', 'GeoJSON', 'geojson');
-  $handler->display->display_options['defaults']['cache'] = FALSE;
-  $handler->display->display_options['cache']['type'] = 'time';
-  $handler->display->display_options['cache']['results_lifespan'] = '21600';
-  $handler->display->display_options['cache']['results_lifespan_custom'] = '0';
-  $handler->display->display_options['cache']['output_lifespan'] = '21600';
-  $handler->display->display_options['cache']['output_lifespan_custom'] = '0';
-  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
-  $handler->display->display_options['style_plugin'] = 'default';
-  $handler->display->display_options['defaults']['style_options'] = FALSE;
-  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
-  $handler->display->display_options['row_plugin'] = 'fields';
-  $handler->display->display_options['defaults']['row_options'] = FALSE;
-  $handler->display->display_options['defaults']['relationships'] = FALSE;
-  /* Relationship: Entity Reference: Referenced Entity */
-  $handler->display->display_options['relationships']['field_country_target_id']['id'] = 'field_country_target_id';
-  $handler->display->display_options['relationships']['field_country_target_id']['table'] = 'field_data_field_country';
-  $handler->display->display_options['relationships']['field_country_target_id']['field'] = 'field_country_target_id';
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Field: Website */
-  $handler->display->display_options['fields']['field_website_1']['id'] = 'field_website_1';
-  $handler->display->display_options['fields']['field_website_1']['table'] = 'field_data_field_website';
-  $handler->display->display_options['fields']['field_website_1']['field'] = 'field_website';
-  $handler->display->display_options['fields']['field_website_1']['relationship'] = 'field_operation_region_target_id';
-  $handler->display->display_options['fields']['field_website_1']['label'] = '';
-  $handler->display->display_options['fields']['field_website_1']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_website_1']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_website_1']['click_sort_column'] = 'url';
-  $handler->display->display_options['fields']['field_website_1']['type'] = 'link_absolute';
-  /* Field: Content: Region */
-  $handler->display->display_options['fields']['field_operation_region']['id'] = 'field_operation_region';
-  $handler->display->display_options['fields']['field_operation_region']['table'] = 'field_data_field_operation_region';
-  $handler->display->display_options['fields']['field_operation_region']['field'] = 'field_operation_region';
-  $handler->display->display_options['fields']['field_operation_region']['label'] = '';
-  $handler->display->display_options['fields']['field_operation_region']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_operation_region']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_operation_region']['alter']['text'] = '<a href="[field_website_1]">[field_operation_region]</a>';
-  $handler->display->display_options['fields']['field_operation_region']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_operation_region']['hide_alter_empty'] = FALSE;
-  $handler->display->display_options['fields']['field_operation_region']['settings'] = array(
-    'link' => 0,
-  );
-  /* Field: Content: Path */
-  $handler->display->display_options['fields']['path']['id'] = 'path';
-  $handler->display->display_options['fields']['path']['table'] = 'node';
-  $handler->display->display_options['fields']['path']['field'] = 'path';
-  $handler->display->display_options['fields']['path']['label'] = '';
-  $handler->display->display_options['fields']['path']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['path']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['path']['absolute'] = TRUE;
-  /* Field: Field: Website */
-  $handler->display->display_options['fields']['field_website']['id'] = 'field_website';
-  $handler->display->display_options['fields']['field_website']['table'] = 'field_data_field_website';
-  $handler->display->display_options['fields']['field_website']['field'] = 'field_website';
-  $handler->display->display_options['fields']['field_website']['label'] = '';
-  $handler->display->display_options['fields']['field_website']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_website']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_website']['empty'] = '[path]';
-  $handler->display->display_options['fields']['field_website']['click_sort_column'] = 'url';
-  $handler->display->display_options['fields']['field_website']['type'] = 'link_plain';
-  /* Field: Field: Title */
-  $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
-  $handler->display->display_options['fields']['title_field']['table'] = 'field_data_title_field';
-  $handler->display->display_options['fields']['title_field']['field'] = 'title_field';
-  $handler->display->display_options['fields']['title_field']['label'] = '';
-  $handler->display->display_options['fields']['title_field']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['title_field']['alter']['path'] = '[field_website]';
-  $handler->display->display_options['fields']['title_field']['alter']['absolute'] = TRUE;
-  $handler->display->display_options['fields']['title_field']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['title_field']['link_to_entity'] = 0;
-  /* Field: Taxonomy term: Geofield */
-  $handler->display->display_options['fields']['field_geofield']['id'] = 'field_geofield';
-  $handler->display->display_options['fields']['field_geofield']['table'] = 'field_data_field_geofield';
-  $handler->display->display_options['fields']['field_geofield']['field'] = 'field_geofield';
-  $handler->display->display_options['fields']['field_geofield']['relationship'] = 'field_country_target_id';
-  $handler->display->display_options['fields']['field_geofield']['label'] = '';
-  $handler->display->display_options['fields']['field_geofield']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_geofield']['click_sort_column'] = 'geom';
-  $handler->display->display_options['fields']['field_geofield']['settings'] = array(
-    'data' => 'full',
-  );
-  /* Field: Field: Email */
-  $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['table'] = 'field_data_field_email';
-  $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_email']['type'] = 'email_plain';
-  /* Field: Content: Launch date */
-  $handler->display->display_options['fields']['field_launch_date']['id'] = 'field_launch_date';
-  $handler->display->display_options['fields']['field_launch_date']['table'] = 'field_data_field_launch_date';
-  $handler->display->display_options['fields']['field_launch_date']['field'] = 'field_launch_date';
-  $handler->display->display_options['fields']['field_launch_date']['label'] = '';
-  $handler->display->display_options['fields']['field_launch_date']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_launch_date']['alter']['text'] = '<strong>Launched</strong>: [field_launch_date]';
-  $handler->display->display_options['fields']['field_launch_date']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_launch_date']['settings'] = array(
-    'format_type' => 'hr_1',
-    'fromto' => 'both',
-    'multiple_number' => '',
-    'multiple_from' => '',
-    'multiple_to' => '',
-    'show_repeat_rule' => 'show',
-  );
-  /* Field: Content: Cluster Configuration */
-  $handler->display->display_options['fields']['field_cluster_configuration']['id'] = 'field_cluster_configuration';
-  $handler->display->display_options['fields']['field_cluster_configuration']['table'] = 'field_data_field_cluster_configuration';
-  $handler->display->display_options['fields']['field_cluster_configuration']['field'] = 'field_cluster_configuration';
-  $handler->display->display_options['fields']['field_cluster_configuration']['label'] = '';
-  $handler->display->display_options['fields']['field_cluster_configuration']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_cluster_configuration']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_cluster_configuration']['alter']['text'] = '<strong>Cluster configuration</strong>: [field_cluster_configuration]';
-  $handler->display->display_options['fields']['field_cluster_configuration']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_cluster_configuration']['settings'] = array(
-    'link' => 1,
-  );
-  /* Field: Global: Custom text */
-  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['table'] = 'views';
-  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['label'] = '';
-  $handler->display->display_options['fields']['nothing']['alter']['text'] = '[field_email]<br />
-[field_launch_date]<br />
-[field_cluster_configuration]';
-  $handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Published */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'node';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = 1;
-  $handler->display->display_options['filters']['status']['group'] = 1;
-  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'hr_operation' => 'hr_operation',
-  );
-  /* Filter criterion: Content: Type (field_operation_type) */
-  $handler->display->display_options['filters']['field_operation_type_value']['id'] = 'field_operation_type_value';
-  $handler->display->display_options['filters']['field_operation_type_value']['table'] = 'field_data_field_operation_type';
-  $handler->display->display_options['filters']['field_operation_type_value']['field'] = 'field_operation_type_value';
-  $handler->display->display_options['filters']['field_operation_type_value']['value'] = array(
-    'country' => 'country',
-  );
-  /* Filter criterion: Content: Country (field_country) */
-  $handler->display->display_options['filters']['field_country_target_id']['id'] = 'field_country_target_id';
-  $handler->display->display_options['filters']['field_country_target_id']['table'] = 'field_data_field_country';
-  $handler->display->display_options['filters']['field_country_target_id']['field'] = 'field_country_target_id';
-  $handler->display->display_options['filters']['field_country_target_id']['operator'] = 'not empty';
-  /* Filter criterion: Content: Status (field_operation_status) */
-  $handler->display->display_options['filters']['field_operation_status_value']['id'] = 'field_operation_status_value';
-  $handler->display->display_options['filters']['field_operation_status_value']['table'] = 'field_data_field_operation_status';
-  $handler->display->display_options['filters']['field_operation_status_value']['field'] = 'field_operation_status_value';
-  $handler->display->display_options['filters']['field_operation_status_value']['operator'] = 'not';
-  $handler->display->display_options['filters']['field_operation_status_value']['value'] = array(
-    'inactive' => 'inactive',
-  );
-  $handler->display->display_options['path'] = 'operations/geojson';
+  $handler->display->display_options['defaults']['link_display'] = FALSE;
+  $handler->display->display_options['link_display'] = 'feed_1';
 
   /* Display: Map */
   $handler = $view->new_display('panel_pane', 'Map', 'map');
+  $handler->display->display_options['defaults']['link_display'] = FALSE;
+  $handler->display->display_options['link_display'] = 'feed_1';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
   $handler->display->display_options['style_plugin'] = 'openlayers_map';
   $handler->display->display_options['style_options']['map'] = 'hr_operations';
@@ -317,6 +158,8 @@ function hr_operations_views_default_views() {
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'All Operations';
   $handler->display->display_options['defaults']['css_class'] = FALSE;
+  $handler->display->display_options['defaults']['link_display'] = FALSE;
+  $handler->display->display_options['link_display'] = 'feed_1';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
   $handler->display->display_options['style_plugin'] = 'list';
   $handler->display->display_options['defaults']['style_options'] = FALSE;
@@ -377,6 +220,97 @@ function hr_operations_views_default_views() {
   $handler->display->display_options['filters']['field_operation_status_value']['value'] = array(
     'inactive' => 'inactive',
   );
+
+  /* Display: GeoJSON */
+  $handler = $view->new_display('feed', 'GeoJSON', 'operations_geojson_feed');
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['style_plugin'] = 'views_geojson_feed';
+  $handler->display->display_options['style_options']['data_source']['value'] = 'wkt';
+  $handler->display->display_options['style_options']['data_source']['latitude'] = 'path_1';
+  $handler->display->display_options['style_options']['data_source']['longitude'] = 'path_1';
+  $handler->display->display_options['style_options']['data_source']['geofield'] = 'field_geofield';
+  $handler->display->display_options['style_options']['data_source']['wkt'] = 'field_geofield';
+  $handler->display->display_options['style_options']['data_source']['name_field'] = 'title_field';
+  $handler->display->display_options['style_options']['data_source']['description_field'] = '';
+  $handler->display->display_options['style_options']['jsonp_prefix'] = '';
+  $handler->display->display_options['defaults']['relationships'] = FALSE;
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_country_target_id']['id'] = 'field_country_target_id';
+  $handler->display->display_options['relationships']['field_country_target_id']['table'] = 'field_data_field_country';
+  $handler->display->display_options['relationships']['field_country_target_id']['field'] = 'field_country_target_id';
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Path */
+  $handler->display->display_options['fields']['path_1']['id'] = 'path_1';
+  $handler->display->display_options['fields']['path_1']['table'] = 'node';
+  $handler->display->display_options['fields']['path_1']['field'] = 'path';
+  $handler->display->display_options['fields']['path_1']['relationship'] = 'field_operation_region_target_id';
+  $handler->display->display_options['fields']['path_1']['label'] = '';
+  $handler->display->display_options['fields']['path_1']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['path_1']['element_label_colon'] = FALSE;
+  /* Field: Field: Website */
+  $handler->display->display_options['fields']['field_website_1']['id'] = 'field_website_1';
+  $handler->display->display_options['fields']['field_website_1']['table'] = 'field_data_field_website';
+  $handler->display->display_options['fields']['field_website_1']['field'] = 'field_website';
+  $handler->display->display_options['fields']['field_website_1']['relationship'] = 'field_operation_region_target_id';
+  $handler->display->display_options['fields']['field_website_1']['label'] = '';
+  $handler->display->display_options['fields']['field_website_1']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_website_1']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_website_1']['empty'] = '[path_1]';
+  $handler->display->display_options['fields']['field_website_1']['click_sort_column'] = 'url';
+  $handler->display->display_options['fields']['field_website_1']['type'] = 'link_absolute';
+  /* Field: Content: Region */
+  $handler->display->display_options['fields']['field_operation_region']['id'] = 'field_operation_region';
+  $handler->display->display_options['fields']['field_operation_region']['table'] = 'field_data_field_operation_region';
+  $handler->display->display_options['fields']['field_operation_region']['field'] = 'field_operation_region';
+  $handler->display->display_options['fields']['field_operation_region']['label'] = '';
+  $handler->display->display_options['fields']['field_operation_region']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_operation_region']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_operation_region']['alter']['text'] = '<a href="[field_website_1]">[field_operation_region]</a>';
+  $handler->display->display_options['fields']['field_operation_region']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_operation_region']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['field_operation_region']['settings'] = array(
+    'link' => 0,
+  );
+  /* Field: Content: Path */
+  $handler->display->display_options['fields']['path']['id'] = 'path';
+  $handler->display->display_options['fields']['path']['table'] = 'node';
+  $handler->display->display_options['fields']['path']['field'] = 'path';
+  $handler->display->display_options['fields']['path']['label'] = '';
+  $handler->display->display_options['fields']['path']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['path']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['path']['absolute'] = TRUE;
+  /* Field: Field: Website */
+  $handler->display->display_options['fields']['field_website']['id'] = 'field_website';
+  $handler->display->display_options['fields']['field_website']['table'] = 'field_data_field_website';
+  $handler->display->display_options['fields']['field_website']['field'] = 'field_website';
+  $handler->display->display_options['fields']['field_website']['label'] = '';
+  $handler->display->display_options['fields']['field_website']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_website']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_website']['empty'] = '[path]';
+  $handler->display->display_options['fields']['field_website']['click_sort_column'] = 'url';
+  $handler->display->display_options['fields']['field_website']['type'] = 'link_plain';
+  /* Field: Field: Title */
+  $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
+  $handler->display->display_options['fields']['title_field']['table'] = 'field_data_title_field';
+  $handler->display->display_options['fields']['title_field']['field'] = 'title_field';
+  $handler->display->display_options['fields']['title_field']['label'] = '';
+  $handler->display->display_options['fields']['title_field']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['title_field']['alter']['path'] = '[field_website]';
+  $handler->display->display_options['fields']['title_field']['alter']['absolute'] = TRUE;
+  $handler->display->display_options['fields']['title_field']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title_field']['link_to_entity'] = 0;
+  /* Field: Taxonomy term: Geofield */
+  $handler->display->display_options['fields']['field_geofield']['id'] = 'field_geofield';
+  $handler->display->display_options['fields']['field_geofield']['table'] = 'field_data_field_geofield';
+  $handler->display->display_options['fields']['field_geofield']['field'] = 'field_geofield';
+  $handler->display->display_options['fields']['field_geofield']['relationship'] = 'field_country_target_id';
+  $handler->display->display_options['fields']['field_geofield']['label'] = '';
+  $handler->display->display_options['fields']['field_geofield']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_geofield']['click_sort_column'] = 'geom';
+  $handler->display->display_options['fields']['field_geofield']['settings'] = array(
+    'data' => 'full',
+  );
+  $handler->display->display_options['path'] = 'operations/geojson';
   $translatables['hr_operations'] = array(
     t('Master'),
     t('more'),
@@ -391,19 +325,12 @@ function hr_operations_views_default_views() {
     t('[path]'),
     t('Text'),
     t('View panes'),
-    t('GeoJSON'),
-    t('Taxonomy term entity referenced from field_country'),
-    t('Email'),
-    t('<strong>Launched</strong>: [field_launch_date]'),
-    t('<strong>Cluster configuration</strong>: [field_cluster_configuration]'),
-    t('[field_email]<br />
-[field_launch_date]<br />
-[field_cluster_configuration]'),
     t('Map'),
     t('Home pane'),
     t('All Operations'),
+    t('GeoJSON'),
+    t('Taxonomy term entity referenced from field_country'),
   );
-
   $export['hr_operations'] = $view;
 
   return $export;
