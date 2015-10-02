@@ -223,7 +223,8 @@ function hr_operations_views_default_views() {
 
   /* Display: GeoJSON */
   $handler = $view->new_display('feed', 'GeoJSON', 'operations_geojson_feed');
-  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'views_geojson_feed';
   $handler->display->display_options['style_options']['data_source']['value'] = 'wkt';
   $handler->display->display_options['style_options']['data_source']['latitude'] = 'path_1';
