@@ -56,6 +56,18 @@ function hid_profiles_settings_form($form, &$form_state) {
   return system_settings_form($form);
 }
 
+/**
+ * Helper function to return the results in json with the right CORS config.
+ *
+ * @param array $matches
+ *  Array of results
+ */
+function _hid_profiles_json_helper($matches) {
+  drupal_add_http_header('Access-Control-Allow-Origin', '*');
+  drupal_add_http_header('Access-Control-Allow-Methods', 'GET');
+  drupal_json_output($matches);
+  exit();
+}
 
 /**
  * Callback function to return an autocomplete JSON object of matching
@@ -67,71 +79,72 @@ function hid_profiles_settings_form($form, &$form_state) {
  * @param boolean $extended
  *  Option to return extended information about organizations.
  *
- * @return
- *  JSON output of the matching Organizations array.
+ * @TODO: Convert this to an endpoint for HID.
  */
 function hid_organizations_autocomplete($org_names, $extended = FALSE) {
   $matches = array();
-
-  // Get the vocabulary for the Organizations to limit the term query by VID.
-  $vocabulary = taxonomy_vocabulary_machine_name_load('hr_organization');
+  if (empty($org_names)) {
+    _hid_profiles_json_helper($matches);
+  }
 
   // Determine the max number of Organizations to return per request.
   $limit = variable_get('hid_organizations_autocomplete_limit', 30);
-
-  // Limit the query to "begins with" or "contains"
+  // Limit the query to "starts with" or "contains"
   $contains = variable_get('hid_organizations_autocomplete_true', TRUE);
-  $contains_delimiter = ($contains) ? '%' : '';
+  $operator = ($contains) ? 'CONTAINS' : 'STARTS_WITH';
 
-  // Search for hr_organization taxonomy terms, where the term name or
-  // organization field value match the given search string.
-  $query = db_select('taxonomy_term_data', 't');
-  $query->leftJoin('field_data_field_acronym', 'fdfa', '(t.tid = fdfa.entity_id AND fdfa.entity_type = :fdfa_type)', array(':fdfa_type' => 'taxonomy_term'));
-  $query->leftJoin('field_data_field_organization_type', 'fot', 't.tid = fot.entity_id');
-  $query->leftJoin('field_data_name_field', 'fnf', 'fot.field_organization_type_target_id = fnf.entity_id');
-
-  $query
-    ->fields('t')
-    ->fields('fdfa')
-    ->fields('fot')
-    ->fields('fnf')
-    ->condition('t.vid', $vocabulary->vid)
-    ->condition('fnf.language', 'en')
-    ->condition('fdfa.language', 'en');
-
-  $or = db_or();
-  $or->condition('t.name', $contains_delimiter . db_like($org_names) . '%', 'LIKE');
-  $or->condition('fdfa.field_acronym_value', $contains_delimiter . db_like($org_names) . '%', 'LIKE');
-
-  $return = $query
-    ->condition($or)
+  // Query the terms by name.
+  $query = new EntityFieldQuery();
+  $results = $query
+    ->entityCondition('entity_type', 'taxonomy_term')
+    ->entityCondition('bundle', 'hr_organization')
+    ->propertyCondition('name', db_like($org_names), $operator)
     ->range(0, $limit)
     ->execute();
+  $data = reset($results);
 
-  // add matches to $matches
-  foreach ($return as $row) {
-    $display_name = $row->name;
-    $org_type_id = $row->field_organization_type_target_id;
-    $org_type_name = $row->name_field_value;
-    if (!empty($row->field_acronym_value)) {
-      $display_name .= ' (' . $row->field_acronym_value . ')';
-    }
-    if ($extended) {
-      $matches['hrinfo_org_' . $row->tid] = array(
-        'name' => $display_name,
-        'org_type_id' => 'hrinfo_org_type_' . $org_type_id,
-        'org_type_name' => $org_type_name,
-      );
-    }
-    else {
-      $matches['hrinfo_org_' . $row->tid] = $display_name;
+  // If there are not enough results, look for acronyms as well.
+  if (count($data) < $limit) {
+    $query = new EntityFieldQuery();
+    $results = $query
+      ->entityCondition('entity_type', 'taxonomy_term')
+      ->entityCondition('bundle', 'hr_organization')
+      ->fieldCondition('field_acronym', 'value', db_like($org_names), $operator)
+      ->propertyCondition('tid', array_keys($data), 'NOT IN')
+      ->range(0, $limit)
+      ->execute();
+    if ($extra_results = reset($results)) {
+      $data += $extra_results;
     }
   }
 
-  // return for JS
-  drupal_add_http_header('Access-Control-Allow-Origin', '*');
-  drupal_add_http_header('Access-Control-Allow-Methods', 'GET');
-  drupal_json_output($matches);
+  if (!empty($data) && $terms = entity_load('taxonomy_term', array_keys($data))) {
+    foreach ($terms as $term) {
+      $term_wrapper = entity_metadata_wrapper('taxonomy_term', $term);
+      $key = 'hrinfo_org_' . $term->tid;
+      $display_name = $term->name;
+      $acronym = $term_wrapper->field_acronym->value();
+      if (!empty($acronym)) {
+        $display_name .= ' (' . $acronym . ')';
+      }
+
+      // If the request was simple, we return just the term name and the
+      // acronym, whereas for extended requests, the return array includes more
+      // data about the organization.
+      if (!$extended) {
+        $matches[$key] = $display_name;
+      }
+      else {
+        $matches[$key] = array(
+          'name' => $display_name,
+          'org_type_id' => 'hrinfo_org_type_' . $term_wrapper->field_organization_type->tid->value(),
+          'org_type_name' => $term_wrapper->field_organization_type->name->value(),
+        );
+      }
+    }
+  }
+
+  _hid_profiles_json_helper($matches);
 }
 
 /**
@@ -154,10 +167,7 @@ function hid_locations_countries() {
     $countries['hrinfo_loc_' . $term->tid] = $term->name;
   }
 
-  // return for JS
-  drupal_add_http_header('Access-Control-Allow-Origin', '*');
-  drupal_add_http_header('Access-Control-Allow-Methods', 'GET');
-  drupal_json_output($countries);
+  _hid_profiles_json_helper($countries);
 }
 
 /**
@@ -206,10 +216,7 @@ function hid_location_country($country) {
     }
   }
 
-  // return for JS
-  drupal_add_http_header('Access-Control-Allow-Origin', '*');
-  drupal_add_http_header('Access-Control-Allow-Methods', 'GET');
-  drupal_json_output($countries);
+  _hid_profiles_json_helper($countries);
 }
 
 function hid_profiles_load_template($file, $id) {
