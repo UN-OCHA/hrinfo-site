@@ -3671,7 +3671,10 @@ a.fc-event, .fc-event-draggable { border: 1px solid #FFF; box-shadow: 1px 2px 3p
 a.fc-event .fc-event-inner .fc-event-time, .fc-event-draggable .fc-event-inner .fc-event-time { padding: 4px 5px; background-color: #e0e0e0; color: #525252; display: block; font-weight: normal; border: 0; border-radius: 10px 10px 0px 0px; border-bottom: 1px solid #FFF; }
 a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner .fc-event-title { padding: 4px 5px; display: block; }
 
-@media screen and (max-width: 768px) { .calendar-calendar table, .calendar-calendar tbody, .calendar-calendar thead, .calendar-calendar th, .calendar-calendar td, .calendar-calendar tr { display: block; }
+@media screen and (max-width: 768px) { .view-header .title-nav { display: block; float: left; overflow: hidden; text-align: center; right:  2px; position:  relative; }
+  .view-header .title-nav h3 { font-size: 18px; }
+  .view-filters .views-exposed-form .views-exposed-widget .form-submit { width: 60px; }
+  .calendar-calendar table, .calendar-calendar tbody, .calendar-calendar thead, .calendar-calendar th, .calendar-calendar td, .calendar-calendar tr { display: block; }
   .calendar-calendar .month-view table.full { position: relative; }
   .calendar-calendar .month-view .full tr td { width: 100%; float: left; text-align: left; display: block; }
   .calendar-calendar .month-view .full tr.single-day { border-top: 1px solid #ccc; }

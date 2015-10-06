@@ -215,6 +215,32 @@ a.fc-event, .fc-event-draggable {
 
 @media screen and (max-width : $screen-sm) {
 
+	.view-header {
+
+			.title-nav {
+				display:block;
+				float:left;
+				overflow: hidden;
+				text-align: center;
+				right: 2px;
+				position: relative;
+
+					h3 {
+						font-size: 18px;
+					}
+			}
+	}
+
+	.view-filters {
+
+		.views-exposed-form .views-exposed-widget {
+
+				.form-submit {
+					width: 60px;
+				}
+		}
+	}
+
 	.calendar-calendar table,
 	.calendar-calendar tbody,
 	.calendar-calendar thead,
