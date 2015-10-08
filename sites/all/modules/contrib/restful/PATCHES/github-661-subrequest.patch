@@ -1,0 +1,15 @@
+diff --git a/sites/all/modules/contrib/restful/restful.module b/sites/all/modules/contrib/restful/restful.module
+index 54100b1..f0bfeb0 100644
+--- a/sites/all/modules/contrib/restful/restful.module
++++ b/sites/all/modules/contrib/restful/restful.module
+@@ -388,6 +388,10 @@ function restful_get_restful_handler_for_path($path = NULL) {
+   list($major_version, $minor_version) = \RestfulBase::getVersionFromRequest($path);
+ 
+   $handlers[$path] = restful_get_restful_handler($resource, $major_version, $minor_version);
++  // Make sure we have a fresh request.
++  $request = restful_parse_request();
++  $handlers[$path]->setRequest($request);
++  
+   return $handlers[$path];
+ }
+ 
