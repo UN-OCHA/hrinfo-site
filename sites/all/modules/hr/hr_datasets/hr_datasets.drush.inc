@@ -71,7 +71,7 @@ function drush_hr_datasets_migrate($path) {
       $node->field_ds_instructions = array();
       node_save($node);
     }
-    elseif ($dataset[2] == 'NOMIGRATE-INTENT') {
+    elseif ($dataset[2] == 'NOMIGRATE-INTENT') {
       $nid = $dataset[4];
       $node = node_load($nid);
       $node->status = NODE_NOT_PUBLISHED;
