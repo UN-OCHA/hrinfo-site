@@ -255,7 +255,7 @@ function hid_profiles_local_contacts($node) {
     $settings = array();
     $settings['operation_id'] = $operation->nid;
     // Get the operation id from the cluster.
-    $settings['bundle'] = $node->type == 'hr_bundle' ? $operation->title : '';
+    $settings['bundle'] = $node->type == 'hr_bundle' ? $node->title : '';
 
     return array(
       '#theme' => 'hid_profiles_local_contacts',
