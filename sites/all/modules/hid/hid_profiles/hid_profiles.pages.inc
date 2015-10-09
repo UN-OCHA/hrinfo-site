@@ -297,7 +297,7 @@ function hid_profiles_local_contacts($node) {
     // Display a specific message to non verified users.
     if ($hid_access == 'closed' &&  !$hid->profile->verified) {
       $message = '<p>' .
-        t('This contact list has been set as private by our field-level administrators. This setting is used in situations where those in-countries responders believe that their information should not be easily available due to security concerns. In this case, only "verified" Humanitarian ID users can access the contact list. For information about "verified" users, please see our <a href="@faq-link">FAQs</a> or contact us at <a href="@mail-hrinfo">info@humanitarian.id</a>.',
+        t('This contact list has been set as private by our field-level administrators.Only "verified" Humanitarian ID users can access the contact list. For information about "verified" users, please see our <a href="@faq-link">FAQs</a> or contact us at <a href="@mail-hrinfo">info@humanitarian.id</a>.',
           array(
             '@faq-link' => 'http://humanitarian.id/faqs',
             '@mail-hrinfo' => 'mailto:info@humanitarian.id',
