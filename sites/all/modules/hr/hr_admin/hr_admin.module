@@ -27,27 +27,5 @@ function hr_admin_menu() {
     'file path' => drupal_get_path('module', 'system'),
   );
 
-  /*$items['admin/config/hrinfo/clean-urls'] = array(
-    'title' => 'Clean URLs',
-    'description' => 'Enable or disable clean URLs for your site.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('system_clean_url_settings'),
-    'access arguments' => array('administer site configuration'),
-    'file' => 'system.admin.inc',
-    'weight' => 5,
-    'file path' => drupal_get_path('module', 'system'),
-  );*/
-
   return $items;
-}
-
-
-/**
- * Implements hook_menu_alter().
- */
-function hr_admin_menu_alter(&$items) {
-
-  if (isset($items['admin/config/hrinfo/content-authors-activity'])) {
-    dpm($items['admin/config/hrinfo/content-authors-activity']);
-  }
 }
