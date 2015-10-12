@@ -1,10 +1,8 @@
-name = RESTful Test
-description = Helper module for testing the RESTful module.
+name = RESTful node access Test
+description = Helper module for testing the RESTful module with node access.
 core = 7.x
 dependencies[] = restful
-dependencies[] = restful_example
-dependencies[] = entity_feature
-dependencies[] = entityreference
+dependencies[] = restful_test
 hidden = TRUE
 
 ; Information added by Drupal.org packaging script on 2015-10-02
