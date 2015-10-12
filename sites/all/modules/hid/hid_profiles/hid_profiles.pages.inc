@@ -82,7 +82,7 @@ function _hid_profiles_json_helper($matches) {
  * @TODO: Convert this to an endpoint for HID.
  */
 function hid_organizations_autocomplete($org_names, $extended = FALSE) {
-  $matches = array();
+  $matches = $organizations = array();
   if (empty($org_names)) {
     _hid_profiles_json_helper($matches);
   }
@@ -90,8 +90,7 @@ function hid_organizations_autocomplete($org_names, $extended = FALSE) {
   // Determine the max number of Organizations to return per request.
   $limit = variable_get('hid_organizations_autocomplete_limit', 30);
   // Limit the query to "starts with" or "contains"
-  $contains = variable_get('hid_organizations_autocomplete_true', TRUE);
-  $operator = ($contains) ? 'CONTAINS' : 'STARTS_WITH';
+  $operator = variable_get('hid_organizations_autocomplete_true', TRUE) ? 'CONTAINS' : 'STARTS_WITH';
 
   // Query the terms by name.
   $query = new EntityFieldQuery();
@@ -101,24 +100,29 @@ function hid_organizations_autocomplete($org_names, $extended = FALSE) {
     ->propertyCondition('name', db_like($org_names), $operator)
     ->range(0, $limit)
     ->execute();
-  $data = reset($results);
+  if ($data = reset($results)) {
+    $organizations = $data;
+  }
 
+  $num_results = count($organizations);
   // If there are not enough results, look for acronyms as well.
-  if (count($data) < $limit) {
+  if ($num_results < $limit) {
     $query = new EntityFieldQuery();
-    $results = $query
-      ->entityCondition('entity_type', 'taxonomy_term')
+    $query->entityCondition('entity_type', 'taxonomy_term')
       ->entityCondition('bundle', 'hr_organization')
-      ->fieldCondition('field_acronym', 'value', db_like($org_names), $operator)
-      ->propertyCondition('tid', array_keys($data), 'NOT IN')
-      ->range(0, $limit)
+      ->fieldCondition('field_acronym', 'value', db_like($org_names), $operator);
+    // Exclude already retrieved organizations from previous query.
+    if ($num_results > 0) {
+      $query->propertyCondition('tid', array_keys($organizations), 'NOT IN');
+    }
+    $results = $query->range(0, $limit - $num_results)
       ->execute();
-    if ($extra_results = reset($results)) {
-      $data += $extra_results;
+    if ($data = reset($results)) {
+      $organizations += $data;
     }
   }
 
-  if (!empty($data) && $terms = entity_load('taxonomy_term', array_keys($data))) {
+  if (!empty($organizations) && $terms = entity_load('taxonomy_term', array_keys($organizations))) {
     foreach ($terms as $term) {
       $term_wrapper = entity_metadata_wrapper('taxonomy_term', $term);
       $key = 'hrinfo_org_' . $term->tid;
@@ -262,7 +266,7 @@ function hid_profiles_local_contacts($node) {
     $settings = array();
     $settings['operation_id'] = $operation->nid;
     // Get the operation id from the cluster.
-    $settings['bundle'] = $node->type == 'hr_bundle' ? $operation->title : '';
+    $settings['bundle'] = $node->type == 'hr_bundle' ? $node->title : '';
 
     return array(
       '#theme' => 'hid_profiles_local_contacts',
@@ -304,7 +308,7 @@ function hid_profiles_local_contacts($node) {
     // Display a specific message to non verified users.
     if ($hid_access == 'closed' &&  !$hid->profile->verified) {
       $message = '<p>' .
-        t('This contact list has been set as private by our field-level administrators. This setting is used in situations where those in-countries responders believe that their information should not be easily available due to security concerns. In this case, only "verified" Humanitarian ID users can access the contact list. For information about "verified" users, please see our <a href="@faq-link">FAQs</a> or contact us at <a href="@mail-hrinfo">info@humanitarian.id</a>.',
+        t('This contact list has been set as private by our field-level administrators. Only "verified" Humanitarian ID users can access the contact list. For information about "verified" users, please see our <a href="@faq-link">FAQs</a> or contact us at <a href="@mail-hrinfo">info@humanitarian.id</a>.',
           array(
             '@faq-link' => 'http://humanitarian.id/faqs',
             '@mail-hrinfo' => 'mailto:info@humanitarian.id',
@@ -367,4 +371,3 @@ function hid_profiles_checkout_submit($form, &$form_state) {
   }
   $form_state['redirect'] = 'check-ins';
 }
-
