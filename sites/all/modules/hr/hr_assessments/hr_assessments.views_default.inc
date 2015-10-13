@@ -1167,7 +1167,49 @@ function hr_assessments_views_default_views() {
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
-  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['cache']['type'] = 'views_content_cache';
+  $handler->display->display_options['cache']['results_min_lifespan'] = '-1';
+  $handler->display->display_options['cache']['results_max_lifespan'] = '21600';
+  $handler->display->display_options['cache']['output_min_lifespan'] = '-1';
+  $handler->display->display_options['cache']['output_max_lifespan'] = '21600';
+  $handler->display->display_options['cache']['keys'] = array(
+    'comment' => array(
+      'changed' => 0,
+    ),
+    'node' => array(
+      'hr_geographic_level' => 'hr_geographic_level',
+      'acc_application' => 0,
+      'acc_incident' => 0,
+      'hr_assessment' => 0,
+      'hr_news' => 0,
+      'hr_bundle' => 0,
+      'hr_contact' => 0,
+      'hr_dataset' => 0,
+      'hr_disaster' => 0,
+      'hr_discussion' => 0,
+      'hr_document' => 0,
+      'hr_event' => 0,
+      'hr_funding' => 0,
+      'hr_funding_method' => 0,
+      'hr_sector' => 0,
+      'hr_indicator' => 0,
+      'hr_infographic' => 0,
+      'hr_office' => 0,
+      'hr_operation' => 0,
+      'hr_page' => 0,
+      'hr_space' => 0,
+      'hr_toolbox_category' => 0,
+      'hr_toolbox_item' => 0,
+      'webform' => 0,
+    ),
+    'node_only' => array(
+      'node_changed' => 0,
+    ),
+    'og' => array(
+      'current' => 0,
+      'user' => 0,
+    ),
+  );
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';

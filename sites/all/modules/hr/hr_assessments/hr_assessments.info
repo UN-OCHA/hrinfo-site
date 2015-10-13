@@ -36,6 +36,7 @@ dependencies[] = strongarm
 dependencies[] = taxonomy
 dependencies[] = text
 dependencies[] = views
+dependencies[] = views_content_cache
 dependencies[] = views_data_export
 features[conditional_fields][] = field_collection_item:field_asst_data
 features[conditional_fields][] = field_collection_item:field_asst_questionnaire
