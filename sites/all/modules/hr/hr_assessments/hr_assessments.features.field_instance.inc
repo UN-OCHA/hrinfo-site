@@ -10,7 +10,8 @@
 function hr_assessments_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'field_collection_item-field_asst_data-field_asst_accessibility'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_data-field_asst_accessibility'
   $field_instances['field_collection_item-field_asst_data-field_asst_accessibility'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => array(
@@ -48,7 +49,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_data-field_asst_file'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_data-field_asst_file'
   $field_instances['field_collection_item-field_asst_data-field_asst_file'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => array(),
@@ -57,11 +59,9 @@ function hr_assessments_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'file_entity',
-        'settings' => array(
-          'text' => 'Download',
-        ),
-        'type' => 'file_download_link',
+        'module' => 'file',
+        'settings' => array(),
+        'type' => 'file_default',
         'weight' => 1,
       ),
     ),
@@ -107,7 +107,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_data-field_asst_file_rest'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_data-field_asst_file_rest'
   $field_instances['field_collection_item-field_asst_data-field_asst_file_rest'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => array(),
@@ -116,11 +117,9 @@ function hr_assessments_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'file_entity',
-        'settings' => array(
-          'text' => 'Download',
-        ),
-        'type' => 'file_download_link',
+        'module' => 'file',
+        'settings' => array(),
+        'type' => 'file_default',
         'weight' => 3,
       ),
     ),
@@ -166,7 +165,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_data-field_asst_instructions'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_data-field_asst_instructions'
   $field_instances['field_collection_item-field_asst_data-field_asst_instructions'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => NULL,
@@ -205,7 +205,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_data-field_asst_url'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_data-field_asst_url'
   $field_instances['field_collection_item-field_asst_data-field_asst_url'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => NULL,
@@ -244,6 +245,7 @@ function hr_assessments_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'none',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -259,7 +261,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_data-field_asst_url_rest'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_data-field_asst_url_rest'
   $field_instances['field_collection_item-field_asst_data-field_asst_url_rest'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => NULL,
@@ -298,6 +301,7 @@ function hr_assessments_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'none',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -313,7 +317,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_questionnaire-field_asst_accessibility'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_questionnaire-field_asst_accessibility'
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_accessibility'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => array(
@@ -351,7 +356,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_questionnaire-field_asst_file'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_questionnaire-field_asst_file'
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_file'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => array(),
@@ -360,11 +366,9 @@ function hr_assessments_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'file_entity',
-        'settings' => array(
-          'text' => 'Download',
-        ),
-        'type' => 'file_download_link',
+        'module' => 'file',
+        'settings' => array(),
+        'type' => 'file_default',
         'weight' => 1,
       ),
     ),
@@ -410,7 +414,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_questionnaire-field_asst_file_rest'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_questionnaire-field_asst_file_rest'
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_file_rest'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => array(),
@@ -419,11 +424,9 @@ function hr_assessments_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'file_entity',
-        'settings' => array(
-          'text' => 'Download',
-        ),
-        'type' => 'file_download_link',
+        'module' => 'file',
+        'settings' => array(),
+        'type' => 'file_default',
         'weight' => 3,
       ),
     ),
@@ -469,7 +472,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_questionnaire-field_asst_instructions'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_questionnaire-field_asst_instructions'
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_instructions'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => NULL,
@@ -508,7 +512,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_questionnaire-field_asst_url'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_questionnaire-field_asst_url'
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_url'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => NULL,
@@ -547,6 +552,7 @@ function hr_assessments_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'none',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -562,7 +568,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_questionnaire-field_asst_url_rest'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_questionnaire-field_asst_url_rest'
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_url_rest'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => NULL,
@@ -601,6 +608,7 @@ function hr_assessments_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'none',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -616,7 +624,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_report-field_asst_accessibility'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_report-field_asst_accessibility'
   $field_instances['field_collection_item-field_asst_report-field_asst_accessibility'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => array(
@@ -654,7 +663,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_report-field_asst_file'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_report-field_asst_file'
   $field_instances['field_collection_item-field_asst_report-field_asst_file'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => array(),
@@ -663,11 +673,9 @@ function hr_assessments_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'file_entity',
-        'settings' => array(
-          'text' => 'Download',
-        ),
-        'type' => 'file_download_link',
+        'module' => 'file',
+        'settings' => array(),
+        'type' => 'file_default',
         'weight' => 1,
       ),
     ),
@@ -713,7 +721,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_report-field_asst_file_rest'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_report-field_asst_file_rest'
   $field_instances['field_collection_item-field_asst_report-field_asst_file_rest'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => array(),
@@ -722,11 +731,9 @@ function hr_assessments_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'file_entity',
-        'settings' => array(
-          'text' => 'Download',
-        ),
-        'type' => 'file_download_link',
+        'module' => 'file',
+        'settings' => array(),
+        'type' => 'file_default',
         'weight' => 3,
       ),
     ),
@@ -772,7 +779,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_report-field_asst_instructions'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_report-field_asst_instructions'
   $field_instances['field_collection_item-field_asst_report-field_asst_instructions'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => NULL,
@@ -811,7 +819,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_report-field_asst_url'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_report-field_asst_url'
   $field_instances['field_collection_item-field_asst_report-field_asst_url'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => NULL,
@@ -850,6 +859,7 @@ function hr_assessments_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'none',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -865,7 +875,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_asst_report-field_asst_url_rest'
+  // Exported field_instance:
+  // 'field_collection_item-field_asst_report-field_asst_url_rest'
   $field_instances['field_collection_item-field_asst_report-field_asst_url_rest'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => NULL,
@@ -904,6 +915,7 @@ function hr_assessments_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'none',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -919,7 +931,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'fieldable_panels_pane-hr_assessments-field_assessments'
+  // Exported field_instance:
+  // 'fieldable_panels_pane-hr_assessments-field_assessments'
   $field_instances['fieldable_panels_pane-hr_assessments-field_assessments'] = array(
     'bundle' => 'hr_assessments',
     'default_value' => NULL,
@@ -1925,7 +1938,7 @@ function hr_assessments_field_default_field_instances() {
   // Exported field_instance: 'node-hr_assessment-field_organizations'
   $field_instances['node-hr_assessment-field_organizations'] = array(
     'bundle' => 'hr_assessment',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => '',
@@ -1973,6 +1986,7 @@ function hr_assessments_field_default_field_instances() {
       'module' => 'entityreference',
       'settings' => array(
         'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete_tags',
@@ -2132,6 +2146,7 @@ function hr_assessments_field_default_field_instances() {
     'label' => 'Related content',
     'required' => 0,
     'settings' => array(
+      'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
         'configurable_title' => 0,
@@ -2150,6 +2165,7 @@ function hr_assessments_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'optional',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,

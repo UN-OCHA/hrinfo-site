@@ -10,7 +10,7 @@
 function hr_assessments_conditional_fields_default_fields() {
   $items = array();
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_data:0"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_data',
     'dependent' => 'field_asst_file',
@@ -106,7 +106,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_data:1"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_data',
     'dependent' => 'field_asst_file_rest',
@@ -202,7 +202,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_data:2"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_data',
     'dependent' => 'field_asst_instructions',
@@ -298,7 +298,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_data:3"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_data',
     'dependent' => 'field_asst_url',
@@ -394,7 +394,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_data:4"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_data',
     'dependent' => 'field_asst_url_rest',
@@ -490,7 +490,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_questionnaire:0"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_questionnaire',
     'dependent' => 'field_asst_file',
@@ -586,7 +586,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_questionnaire:1"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_questionnaire',
     'dependent' => 'field_asst_file_rest',
@@ -682,7 +682,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_questionnaire:2"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_questionnaire',
     'dependent' => 'field_asst_instructions',
@@ -778,7 +778,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_questionnaire:3"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_questionnaire',
     'dependent' => 'field_asst_url',
@@ -874,7 +874,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_questionnaire:4"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_questionnaire',
     'dependent' => 'field_asst_url_rest',
@@ -970,7 +970,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_report:0"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_report',
     'dependent' => 'field_asst_file',
@@ -1066,7 +1066,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_report:1"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_report',
     'dependent' => 'field_asst_file_rest',
@@ -1162,7 +1162,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_report:2"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_report',
     'dependent' => 'field_asst_instructions',
@@ -1258,7 +1258,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_report:3"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_report',
     'dependent' => 'field_asst_url',
@@ -1354,7 +1354,7 @@ function hr_assessments_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_asst_report:4"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_asst_report',
     'dependent' => 'field_asst_url_rest',
