@@ -169,8 +169,8 @@ function hr_notifications_default_rules_configuration() {
       "DO" : [
         { "mail" : {
             "to" : "submit@reliefweb.int",
-            "subject" : "[HumanitarianResponse] New content submitted",
-            "message" : "A new content was submitted on Humanitarianresponse. You can see it here: [flagged-node:url].",
+            "subject" : "[HumanitarianResponse] New content submitted : [flagged-node:title]",
+            "message" : "A new [flagged-node:content-type] ([flagged-node:title]) was submitted on Humanitarianresponse.\r\n\r\nSpace(s): [flagged-node:og_group_ref]\r\nOrganization: [flagged-node:field-organizations]\r\nPublication Date: [flagged-node:field-publication-date]\r\nDocument type: [flagged-node:field-document-type]\r\n\r\nYou can see it here: [flagged-node:url].",
             "language" : [ "" ]
           }
         }
