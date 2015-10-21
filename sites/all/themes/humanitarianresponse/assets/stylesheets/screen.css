@@ -3107,7 +3107,7 @@ form .description { margin: 2px 0; color: #555555; }
 
 .media-widget > a { margin: 0 10px 0 0; display: inline-block; }
 
-html.js input.form-autocomplete { background: url('../images/throbber.gif?1441798699') no-repeat right 8px #fff !important; }
+html.js input.form-autocomplete { background: url('../images/throbber.gif?1439909526') no-repeat right 8px #fff !important; }
 html.js input.throbbing { background-position: right -122px !important; }
 html.js fieldset.collapsed { height: auto; border-left-width: 1px; border-right-width: 1px; }
 
