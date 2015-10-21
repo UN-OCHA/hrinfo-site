@@ -10,19 +10,36 @@ include_once 'hr_contacts.features.inc';
  * Implements hook_menu_alter()
  */
 function hr_contacts_menu_alter(&$items) {
-  $items['node/add/hr-contact']['access callback'] = 'hr_contacts_add_node_access';
+  $items['node/add/hr-contact']['page callback'] = 'hr_contacts_disabled_page_callback';
+  $items['node/add/hr-contact']['title'] = t('Create Contact');
 }
 
-function hr_contacts_add_node_access($op, $node, $account = NULL) {
-  global $user;
-  $access = node_access($op, $node, $account);
-  if ($access == TRUE && isset($_GET[OG_AUDIENCE_FIELD])) {
-    $gid = $_GET[OG_AUDIENCE_FIELD];
-    if (!og_is_member('node', $gid) && !in_array('editor', $user->roles)) {
-      $access = FALSE;
-    }
-  }
-  return $access;
+/**
+ * Callback for displaying the disabled add contact page.
+ */
+function hr_contacts_disabled_page_callback() {
+  $header = t('Contacts in <strong>HumanitarianResponse.info</strong> are now powered by <strong>Humanitarian ID (HID)</strong>');
+  $message = t('In order to add a new contact, you will need to go to <a href="@hid">HID</a> and either Check-in the responder or use the "Create A Responder" function', array('@hid' => 'http://humanitarian.id'));
+  return array(
+    '#theme' => 'hr_contacts_disabled_contacts',
+    '#header' => $header,
+    '#message' => $message,
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function hr_contacts_theme() {
+  return array(
+    'hr_contacts_disabled_contacts' => array(
+      'variables' => array(
+        'header' => NULL,
+        'message' => NULL,
+      ),
+      'template' => 'templates/hr-contacts-disabled-contacts',
+    ),
+  );
 }
 
 function _hr_contacts_copy_field(&$node_form, $profile, $field_name, $type) {
@@ -244,7 +261,7 @@ function hr_contacts_menu() {
 }
 
 /**
- * Generate contacts in a pdf file
+ * Generate contacts in a pdf file.
  */
 function hr_contacts_pdf_output($node) {
   $path = current_path();
