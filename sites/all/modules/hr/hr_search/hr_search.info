@@ -9,6 +9,7 @@ dependencies[] = entity
 dependencies[] = facetapi
 dependencies[] = facetapi_pretty_paths
 dependencies[] = features
+dependencies[] = hr_layout
 dependencies[] = search_api
 dependencies[] = search_api_facetapi
 dependencies[] = search_api_solr
