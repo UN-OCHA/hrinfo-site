@@ -517,6 +517,7 @@ function hr_news_field_default_field_instances() {
     'label' => 'Related content',
     'required' => 0,
     'settings' => array(
+      'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
         'configurable_title' => 0,
