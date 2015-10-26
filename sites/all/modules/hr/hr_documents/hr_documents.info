@@ -9,6 +9,7 @@ dependencies[] = entityreference_filter
 dependencies[] = hr_bundles
 dependencies[] = hr_disasters
 dependencies[] = hr_fundings
+dependencies[] = hr_layout
 dependencies[] = hr_offices
 dependencies[] = hr_spaces
 dependencies[] = hr_themes

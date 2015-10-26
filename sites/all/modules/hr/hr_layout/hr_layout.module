@@ -215,7 +215,12 @@ function hr_layout_block_view($delta = '') {
       }
       break;
     case 'hr_layout_search_rss':
-      $block['content'] = _hr_layout_rss_icon('search');
+      $gid = NULL;
+      $context = og_context();
+      if (!empty($context) && $context['group_type'] == 'node') {
+        $gid = $context['gid'];
+      }
+      $block['content'] = _hr_layout_rss_icon('search', $gid);
       break;
     case 'hr_layout_key_documents':
       drupal_add_library('chosen', 'drupal.chosen');
@@ -300,22 +305,34 @@ function _hr_layout_rss_icon($mode = 'node', $gid = NULL) {
 
   if ($mode == 'node') {
     // For nodes we need to include the group id and rely on the feed view.
-    $url = 'node/'.$gid.'/feed';
+    $url = 'node/'. $gid .'/feed';
   }
   elseif ($mode == 'search') {
     // For search mode or operations search features, we inject the feed view
     // in the current search terms.
     $arguments = arg();
-    $first_arg = array_shift($arguments);
-    $second_arg = 'feed';
-    array_unshift($arguments, $second_arg);
-    array_unshift($arguments, $first_arg);
+    if (!empty($gid)) {
+      array_splice($arguments, 3, 0, 'feed');
+    }
+    else {
+      array_splice($arguments, 1, 0, 'feed');
+    }
+
+    foreach ($arguments as $delta => $argument) {
+      // Also strip out the table and list url arguments to not affect the Feed
+      // search results.
+      if ($argument == 'table' || $argument == 'list') {
+        unset($arguments[$delta]);
+      }
+    }
+
+    // Generate the search query url. This url needs to be absolute to avoid url
+    // encoding.
     $params = array('absolute' => TRUE);
     $search_query = isset($_GET['search']) && is_string($_GET['search']) ? trim($_GET['search']) : '';
     if (!empty($search_query)) {
       $params['query'] = array('search' => $search_query);
     }
-    // This url needs to be absolute to avoid url encoding.
     $url = url(implode('/', $arguments), $params);
   }
 
