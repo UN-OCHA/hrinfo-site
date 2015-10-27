@@ -4,6 +4,7 @@ package = Humanitarianresponse
 dependencies[] = context
 dependencies[] = ctools
 dependencies[] = current_search
+dependencies[] = hr_layout
 dependencies[] = hr_locations
 dependencies[] = hr_operations
 dependencies[] = languagefield

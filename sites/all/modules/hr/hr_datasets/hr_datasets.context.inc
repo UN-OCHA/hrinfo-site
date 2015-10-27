@@ -112,6 +112,12 @@ function hr_datasets_context_default_contexts() {
           'region' => 'sidebar_first',
           'weight' => '-6',
         ),
+        'hr_layout-hr_layout_search_rss' => array(
+          'delta' => 'hr_layout_search_rss',
+          'module' => 'hr_layout',
+          'region' => 'sidebar_first',
+          'weight' => '3',
+        ),
       ),
     ),
   );
@@ -173,6 +179,12 @@ function hr_datasets_context_default_contexts() {
           'delta' => 'Xgc9MM1xeLYMhx0PgX0XU0N0N0Poh2Lh',
           'region' => 'sidebar_first',
           'weight' => '-6',
+        ),
+        'hr_layout-hr_layout_search_rss' => array(
+          'delta' => 'hr_layout_search_rss',
+          'module' => 'hr_layout',
+          'region' => 'sidebar_first',
+          'weight' => '3',
         ),
       ),
     ),
