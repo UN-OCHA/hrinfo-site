@@ -7,6 +7,7 @@ dependencies[] = feeds_tamper
 dependencies[] = field_collection
 dependencies[] = fieldable_panels_panes
 dependencies[] = hr_documents
+dependencies[] = js
 dependencies[] = link
 dependencies[] = og_moderation
 dependencies[] = og_ui

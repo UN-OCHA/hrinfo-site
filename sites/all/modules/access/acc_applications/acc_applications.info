@@ -18,6 +18,7 @@ dependencies[] = file
 dependencies[] = hr_core
 dependencies[] = hr_locations
 dependencies[] = hr_sectors
+dependencies[] = js
 dependencies[] = list
 dependencies[] = number
 dependencies[] = og
