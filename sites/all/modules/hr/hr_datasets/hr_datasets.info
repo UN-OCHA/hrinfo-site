@@ -16,6 +16,7 @@ dependencies[] = strongarm
 dependencies[] = views
 dependencies[] = views_data_export
 features[context][] = hr_data
+features[context][] = hr_datasets_hdx
 features[context][] = hr_datasets_space
 features[context][] = hr_datasets_space_table
 features[ctools][] = context:context:3

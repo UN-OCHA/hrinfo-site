@@ -220,11 +220,4 @@ function hr_datasets_context_default_contexts() {
   $export['hr_datasets_hdx'] = $context;
 
   return $export;
-
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('Datasets');
-  $export['hr_datasets_space_table'] = $context;
-
-  return $export;
 }

@@ -43,5 +43,6 @@ function hr_datasets_node_info() {
       'help' => t('Use this form to submit or edit a <strong>COD or FOD</strong> dataset.  The dataset must represent the "best-available" dataset which is agreed by the Information Management Working Group for the country or emergency.  More information on the <a href="/about">difference between CODs and FODs.</a>'),
     ),
   );
+  drupal_alter('node_info', $items);
   return $items;
 }

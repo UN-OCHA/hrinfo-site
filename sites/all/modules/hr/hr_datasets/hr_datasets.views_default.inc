@@ -78,7 +78,7 @@ function hr_datasets_views_default_views() {
   $handler->display->display_options['sorts']['field_ds_date']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['sorts']['field_ds_date']['field'] = 'field_ds_date';
   $handler->display->display_options['sorts']['field_ds_date']['order'] = 'DESC';
-  /* Contextual filter: Indexed Node: Groups audience */
+  /* Contextual filter: Indexed Node: Space(s) */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -290,7 +290,7 @@ function hr_datasets_views_default_views() {
   $handler->display->display_options['fields']['field_ds_datasources']['id'] = 'field_ds_datasources';
   $handler->display->display_options['fields']['field_ds_datasources']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_ds_datasources']['field'] = 'field_ds_datasources';
-  /* Field: Indexed Node: Email */
+  /* Field: Indexed Node: Main Email */
   $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
@@ -435,7 +435,7 @@ function hr_datasets_views_default_views() {
   $handler->display->display_options['fields']['field_ds_datasources']['id'] = 'field_ds_datasources';
   $handler->display->display_options['fields']['field_ds_datasources']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_ds_datasources']['field'] = 'field_ds_datasources';
-  /* Field: Indexed Node: Email */
+  /* Field: Indexed Node: Main Email */
   $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
