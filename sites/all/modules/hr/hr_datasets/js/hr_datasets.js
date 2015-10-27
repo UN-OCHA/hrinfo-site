@@ -28,7 +28,9 @@ Drupal.behaviors.hrDatasets = {
       this.count = response.result.count;
       var fields = [];
       _.each(models, function(resource){
-        fields.push({title: resource.title, url: 'https://data.hdx.rwlabs.org/dataset/' + resource.id});
+        var date = new Date(resource.metadata_modified);
+        var last_modified = date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
+        fields.push({title: resource.title, url: 'https://data.hdx.rwlabs.org/dataset/' + resource.id, last_modified: last_modified, source: resource.dataset_source});
       });
       return fields;
       },
@@ -83,6 +85,9 @@ Drupal.behaviors.hrDatasets = {
         events: {
           'click #back': 'back',
           'click #search-button': 'searchByTitle',
+          'keyup #search': 'searchByTitle',
+          'change #hdx-tags-dropdown': 'searchByTags',
+          'change #hdx-organizations-dropdown': 'searchByOrganization',
         },
 
         page: function(page) {
@@ -142,12 +147,36 @@ Drupal.behaviors.hrDatasets = {
         },
 
         searchByTitle: function(event) {
-          var val = $('#search').val();
+          if(event.keyCode == 13) {
+            var val = $('#search').val();
+            if (val != '') {
+              this.DatasetsList.params.title = val;
+            }
+            else {
+              delete this.DatasetsList.params.title;
+            }
+            this.router.navigateWithParams('table/1', this.DatasetsList.params);
+          }
+        },
+
+        searchByTags: function(event) {
+          var val = $('#hdx-tags-dropdown').val();
           if (val != '') {
-            this.DatasetsList.params.title = val;
+            this.DatasetsList.params.tags = 'tags:' + val;
           }
           else {
-            delete this.DatasetsList.params.title;
+            delete this.DatasetsList.params.tags;
+          }
+          this.router.navigateWithParams('table/1', this.DatasetsList.params);
+        },
+
+        searchByOrganization: function(event, ui) {
+          var val = $('#hdx-organizations-dropdown').val();
+          if (val != '') {
+            this.DatasetsList.params.organization = 'organization:' + val;
+          }
+          else {
+            delete this.DatasetsList.params.organization;
           }
           this.router.navigateWithParams('table/1', this.DatasetsList.params);
         },
