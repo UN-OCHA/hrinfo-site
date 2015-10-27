@@ -17,14 +17,6 @@ function hr_events_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_event_agenda',
-    'foreign keys' => array(
-      'node' => array(
-        'columns' => array(
-          'target_id' => 'nid',
-        ),
-        'table' => 'node',
-      ),
-    ),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -62,14 +54,6 @@ function hr_events_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_event_category',
-    'foreign keys' => array(
-      'taxonomy_term_data' => array(
-        'columns' => array(
-          'target_id' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
-    ),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -107,7 +91,9 @@ function hr_events_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_event_date',
-    'foreign keys' => array(),
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'date',
@@ -126,36 +112,36 @@ function hr_events_field_default_field_bases() {
       'profile2_private' => FALSE,
       'repeat' => 1,
       'timezone_db' => array(
-        '#after_build' => array(	
-          0 => 'conditional_fields_element_after_build',	
-        ),	
-        '#after_build_done' => TRUE,	
-        '#array_parents' => array(	
-          0 => 'field',	
-          1 => 'settings',	
+        '#after_build' => array(
+          0 => 'conditional_fields_element_after_build',
+        ),
+        '#after_build_done' => TRUE,
+        '#array_parents' => array(
+          0 => 'field',
+          1 => 'settings',
           2 => 'timezone_db',
-        ),	
-        '#defaults_loaded' => TRUE,	
+        ),
+        '#defaults_loaded' => TRUE,
         '#id' => 'edit-field-settings-timezone-db',
-        '#input' => TRUE,	
+        '#input' => TRUE,
         '#name' => 'field[settings][timezone_db]',
-        '#parents' => array(	
-          0 => 'field',	
-          1 => 'settings',	
-          2 => 'timezone_db',	
-        ),	
-        '#process' => array(	
-          0 => 'ajax_process_form',	
-        ),	
+        '#parents' => array(
+          0 => 'field',
+          1 => 'settings',
+          2 => 'timezone_db',
+        ),
+        '#process' => array(
+          0 => 'ajax_process_form',
+        ),
         '#processed' => TRUE,
-        '#sorted' => TRUE,	
-        '#theme' => 'hidden',	
-        '#title_display' => 'before',	
-        '#tree' => TRUE,	
-        '#type' => 'hidden',	
-        '#validated' => TRUE,	
-        '#value' => 'UTC',	
-        '#weight' => 0.004,	
+        '#sorted' => TRUE,
+        '#theme' => 'hidden',
+        '#title_display' => 'before',
+        '#tree' => TRUE,
+        '#type' => 'hidden',
+        '#validated' => TRUE,
+        '#value' => 'UTC',
+        '#weight' => 0.004,
       ),
       'todate' => 'optional',
       'tz_handling' => 'date',
@@ -171,14 +157,6 @@ function hr_events_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_event_meeting_minutes',
-    'foreign keys' => array(
-      'node' => array(
-        'columns' => array(
-          'target_id' => 'nid',
-        ),
-        'table' => 'node',
-      ),
-    ),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',

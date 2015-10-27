@@ -413,7 +413,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['sorts']['field_event_date_value']['id'] = 'field_event_date_value';
   $handler->display->display_options['sorts']['field_event_date_value']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['sorts']['field_event_date_value']['field'] = 'field_event_date_value';
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -454,7 +454,7 @@ function hr_events_views_default_views() {
     200153887 => 0,
   );
   $handler->display->display_options['filters']['field_coordination_hubs_target_id_entityreference_filter']['reference_display'] = 'hr_offices_panes:entityreference_1';
-  /* Filter criterion: Field: Location (field_location) (reference filter) */
+  /* Filter criterion: Content: Location (field_location) (reference filter) */
   $handler->display->display_options['filters']['field_location_target_id_entityreference_filter']['id'] = 'field_location_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_location_target_id_entityreference_filter']['table'] = 'field_data_field_location';
   $handler->display->display_options['filters']['field_location_target_id_entityreference_filter']['field'] = 'field_location_target_id_entityreference_filter';
@@ -541,7 +541,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['row_options']['colors']['legend'] = 'type';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -608,7 +608,7 @@ return 0;';
   $handler->display->display_options['row_options']['colors']['legend'] = 'type';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -656,7 +656,7 @@ return 0;';
   $handler->display->display_options['row_plugin'] = 'calendar_entity';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -703,7 +703,7 @@ return 0;';
   $handler->display->display_options['row_plugin'] = 'calendar_entity';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -776,7 +776,7 @@ return 0;';
   $handler->display->display_options['fields']['field_event_date']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_event_date']['delta_offset'] = '0';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1050,7 +1050,7 @@ return 0;';
     ),
   );
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1069,6 +1069,7 @@ return 0;';
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
+  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['title_format'] = 'custom';
   $handler->display->display_options['arguments']['date_argument']['title_format_custom'] = 'F Y';
@@ -1310,7 +1311,7 @@ return 0;';
 [field_email]';
   $handler->display->display_options['fields']['field_users_ref_name']['element_label_colon'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1329,6 +1330,7 @@ return 0;';
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
+  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['granularity'] = 'week';
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['title_format'] = 'custom';
@@ -1534,7 +1536,7 @@ return 0;';
 [field_email]';
   $handler->display->display_options['fields']['field_users_ref_name']['element_label_colon'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1553,6 +1555,7 @@ return 0;';
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
+  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['granularity'] = 'day';
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['title_format'] = 'custom';
@@ -1660,7 +1663,7 @@ return 0;';
   $handler->display->display_options['sorts']['field_event_date_value']['id'] = 'field_event_date_value';
   $handler->display->display_options['sorts']['field_event_date_value']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['sorts']['field_event_date_value']['field'] = 'field_event_date_value';
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1686,7 +1689,7 @@ return 0;';
 
   /* Display: Upcoming */
   $handler = $view->new_display('panel_pane', 'Upcoming', 'upcoming');
-  $handler->display->display_options['defaults']['link_display'] = FALSE;	
+  $handler->display->display_options['defaults']['link_display'] = FALSE;
   $handler->display->display_options['link_display'] = 'custom_url';
   $handler->display->display_options['link_url'] = 'search';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
@@ -1707,7 +1710,7 @@ return 0;';
     'hr_event' => 'hr_event',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filter criterion: Field: Space(s) (og_group_ref) */
+  /* Filter criterion: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['filters']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['filters']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['filters']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1787,7 +1790,7 @@ return 0;';
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Field: Themes (field_themes) (reference filter) */
+  /* Filter criterion: Content: Themes (field_themes) (reference filter) */
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['id'] = 'field_themes_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['table'] = 'field_data_field_themes';
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['field'] = 'field_themes_target_id_entityreference_filter';
@@ -1865,7 +1868,7 @@ return 0;';
   /* Display: Upcoming from context */
   $handler = $view->new_display('panel_pane', 'Upcoming from context', 'upcoming_from_context');
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1952,6 +1955,7 @@ return 0;';
     t('All'),
     t('Upcoming'),
     t('Space'),
+    t('Please select a space OR a cluster, but NOT BOTH. Selecting both a space and a cluster will not work.'),
     t('Clusters/Sectors'),
     t('Coordination hubs'),
     t('Disasters'),
