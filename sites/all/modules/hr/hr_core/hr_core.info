@@ -9,7 +9,6 @@ dependencies[] = email
 dependencies[] = entity_translation
 dependencies[] = entityreference
 dependencies[] = features
-dependencies[] = field_ui
 dependencies[] = fieldable_panels_panes
 dependencies[] = file
 dependencies[] = file_entity
