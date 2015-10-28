@@ -139,18 +139,32 @@ function hr_datasets_block_view($delta = '') {
   $block = array();
   switch ($delta) {
     case 'hdx-datasets_search':
+      drupal_add_library('chosen', 'drupal.chosen');
       $block['content'] = '<div><div class="views-exposed-form">
         <div class="views-exposed-widgets clearfix">
                 <div id="edit-search-wrapper" class="views-exposed-widget form-group">
         <div class="input-group">
-          <input class="form-control form-text" id="search" name="datasets.title" value="" size="30" maxlength="128" type="text" placeholder="Search Datasets by Title">
-          <span class="input-group-btn">
-            <button id="search-button" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-          </span>
+          <input class="form-control text-center" id="search" name="datasets.title" value="" maxlength="128" type="text" placeholder="Search Datasets by Title" style="width: 255px">
         </div>
         </div>
         </div>
       </div>  </div>';
+
+      $block['content'] .= '<p class="text-center"><select id="hdx-tags-dropdown" data-placeholder="Search by Tags"><option value="_none"></option>';
+      $labels = hr_datasets_hdx_tags();
+
+      foreach ($labels as $key  => $value) {
+        $block['content'] .= '<option value="'.$value.'">'.$value.'</option>';
+      }
+      $block['content'] .= '</select></p>';
+
+      $block['content'] .= '<p class="text-center"><select id="hdx-organizations-dropdown" data-placeholder="Search by Organization"><option value="_none"></option>';
+
+      $hdx_organizations = hr_datasets_hdx_organizations();
+      foreach ($hdx_organizations as $key => $value) {
+        $block['content'] .= '<option value="'.$value.'">'.$value.'</option>';
+      }
+      $block['content'] .= '</select></p>';
     break;
     case 'hdx-datasets_filters':
       $block['content'] = '<div id="block-current-search-hr-current-search" class="block block-current-search">
@@ -165,5 +179,31 @@ break;
   return $block;
 }
 
+/**
+* Function that gets all the tags from HDX.
+* @return array
+*/
 
+function hr_datasets_hdx_tags() {
+  $url = "https://data.hdx.rwlabs.org/api/3/action/tag_list";
+  $request = drupal_http_request($url);
+  if(!empty($request->data)) {
+    $result = drupal_json_decode($request->data);
+    return $result['result'];
+  }
+}
+
+/**
+* Function that gets all the organizations from HDX.
+* @return array
+*/
+
+function hr_datasets_hdx_organizations() {
+  $url = "https://data.hdx.rwlabs.org/api/3/action/organization_list";
+  $request = drupal_http_request($url);
+  if(!empty($request->data)) {
+    $result = drupal_json_decode($request->data);
+    return $result['result'];
+  }
+}
 
