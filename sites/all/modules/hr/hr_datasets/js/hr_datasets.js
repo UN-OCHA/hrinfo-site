@@ -29,8 +29,10 @@ Drupal.behaviors.hrDatasets = {
       var fields = [];
       _.each(models, function(resource){
         var date = new Date(resource.metadata_modified);
+        var resource_link = "https://data.hdx.rwlabs.org/dataset/" + resource.id;
+        var link = '<a href="' + resource_link + '">' + resource.title + '</a>';
         var last_modified = date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
-        fields.push({title: resource.title, url: 'https://data.hdx.rwlabs.org/dataset/' + resource.id, last_modified: last_modified, source: resource.dataset_source});
+        fields.push({title: link, last_modified: last_modified, source: resource.dataset_source});
       });
       return fields;
       },

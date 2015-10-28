@@ -28,8 +28,7 @@ function hr_datasets_hdx_datasets($operation){
     <table id="datasets-list-table" class="table table-striped">
       <thead>
       <tr>
-        <th>Dataset Title</th>
-        <th>Dataset Link</th>
+        <th>Dataset</th>
         <th>Last Updated</th>
         <th>Source</th>
       </tr>
