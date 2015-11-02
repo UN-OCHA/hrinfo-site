@@ -1,0 +1,105 @@
+<?php
+/**
+ * @file
+ * JavaScript callback handler tests.
+ */
+
+/**
+ * Implements hook_js().
+ */
+function js_test_js() {
+  $items = array();
+  $items['test_basic'] = array(
+    'callback' => 'js_test_basic',
+  );
+  $items['test_basic_access'] = array(
+    'callback' => 'js_test_basic',
+    'access arguments' => array('js test permission'),
+  );
+  $items['test_basic_access_failure'] = array(
+    'callback' => 'js_test_basic',
+    'access arguments' => array('non existing permission'),
+  );
+  $items['test_arguments'] = array(
+    'callback' => 'js_test_arguments',
+    'page arguments' => array(1, 3),
+  );
+  $items['test_file'] = array(
+    'callback' => 'js_test_file',
+    'file' => 'js_test.callbacks.inc',
+  );
+  $items['test_init'] = array(
+    'callback' => 'js_test_basic',
+    'skip_hook_init' => TRUE,
+  );
+  $items['test_variable'] = array(
+    'callback' => 'js_test_variable',
+    'bootstrap' => DRUPAL_BOOTSTRAP_VARIABLES,
+  );
+  
+  return $items;
+}
+
+/**
+ * Implements hook_init().
+ */
+function js_test_init() {
+  global $js_test_init;
+
+  // Set a global variable to indicate the hook init has been called.
+  $js_test_init = TRUE;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function js_test_permission() {
+  return array(
+    'js test permission' => array(
+      'title' => t('JS Test permission'),
+      'description' => t('Permission to test the access functionality for the js callback handler module.'),
+    ),
+  );
+}
+
+/**
+ * Test callback for the js module.
+ */
+function js_test_basic() {
+  return js_test_response('ok');
+}
+
+/**
+ * Test callback for the js module.
+ */
+function js_test_arguments($argument_1, $argument_2) {
+  return js_test_response(array(
+    'argument_1' => $argument_1,
+    'argument_2' => $argument_2,
+  ));
+}
+
+/**
+ * Test callback for the js module.
+ */
+function js_test_variable() {
+  return js_test_response(variable_get('js_test_variable', 0));
+}
+
+/**
+ * Create a generic response with various data.
+ * 
+ * @param mixed $response
+ * 
+ * @return array
+ */
+function js_test_response($response) {
+  global $language, $js_test_init;
+
+  return array(
+    'filename'  => pathinfo($_SERVER['SCRIPT_FILENAME'], PATHINFO_BASENAME),
+    'response'  => $response,
+    'language'  => $language,
+    'hook_init' => $js_test_init,
+  );
+}

@@ -84,7 +84,8 @@ function hr_organizations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_organization-field_organization_fts'
+  // Exported field_instance:
+  // 'taxonomy_term-hr_organization-field_organization_fts'
   $field_instances['taxonomy_term-hr_organization-field_organization_fts'] = array(
     'bundle' => 'hr_organization',
     'default_value' => NULL,
@@ -125,7 +126,8 @@ function hr_organizations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_organization-field_organization_type'
+  // Exported field_instance:
+  // 'taxonomy_term-hr_organization-field_organization_type'
   $field_instances['taxonomy_term-hr_organization-field_organization_type'] = array(
     'bundle' => 'hr_organization',
     'default_value' => NULL,
@@ -181,6 +183,7 @@ function hr_organizations_field_default_field_instances() {
     'label' => 'Website',
     'required' => 0,
     'settings' => array(
+      'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
         'configurable_title' => 0,
@@ -195,6 +198,7 @@ function hr_organizations_field_default_field_instances() {
       'entity_translation_sync' => FALSE,
       'rel_remove' => 'default',
       'title' => 'none',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -247,7 +251,8 @@ function hr_organizations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_organization_type-description_field'
+  // Exported field_instance:
+  // 'taxonomy_term-hr_organization_type-description_field'
   $field_instances['taxonomy_term-hr_organization_type-description_field'] = array(
     'bundle' => 'hr_organization_type',
     'default_value' => NULL,

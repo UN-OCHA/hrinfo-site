@@ -14,6 +14,7 @@ dependencies[] = og_moderation
 dependencies[] = og_ui
 dependencies[] = taxonomy
 dependencies[] = views
+dependencies[] = views_content_cache
 features[context][] = hr_disasters
 features[ctools][] = context:context:3
 features[ctools][] = feeds:feeds_importer_default:1

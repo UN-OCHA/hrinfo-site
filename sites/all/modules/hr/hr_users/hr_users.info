@@ -20,6 +20,7 @@ dependencies[] = hr_sectors
 dependencies[] = hr_themes
 dependencies[] = hr_users
 dependencies[] = image
+dependencies[] = js
 dependencies[] = link
 dependencies[] = link_icons
 dependencies[] = list
