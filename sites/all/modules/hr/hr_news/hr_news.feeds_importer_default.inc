@@ -64,7 +64,7 @@ function hr_news_feeds_importer_default() {
           ),
           4 => array(
             'source' => 'Image',
-            'target' => 'field_image',
+            'target' => 'field_image:uri',
             'unique' => FALSE,
           ),
           5 => array(
@@ -144,6 +144,7 @@ function hr_news_feeds_importer_default() {
           ),
         ),
         'update_existing' => '2',
+        'update_non_existent' => 'skip',
         'input_format' => 'panopoly_wysiwyg_text',
         'skip_hash_check' => 0,
         'bundle' => 'hr_news',
