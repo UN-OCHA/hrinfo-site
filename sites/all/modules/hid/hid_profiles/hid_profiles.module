@@ -743,8 +743,7 @@ function hid_profiles_block_view($delta = '') {
       $block['content'] .= hid_profiles_location_select(arg(1));
       $block['content'] .= hid_profiles_office_select(arg(1));
       $block['content'] .= hid_profiles_disaster_select(arg(1));
-      $block['content'] .= '<hr /><div style="font-size: 14px;" class="block"><span title="Key Contact" class="hid-key-contact">*</span> Key Contact <input type="checkbox" id="key-contact" name="keyContact" /> <br />';
-      $block['content'] .= '<span title="Verified"><i class="fa fa-check-circle fa-lg"></i></span> Verified User <input type="checkbox" id="verified" name="verified" /><hr />';
+      $block['content'] .= '<hr /><span title="Verified"><i class="fa fa-check-circle fa-lg"></i></span> Verified User <input type="checkbox" id="verified" name="verified" /><hr />';
       break;
     case 'hid_profiles_sidebar':
       $block['content'] = '<button class="btn btn-primary btn-lg btn-block" id="back"><i class="fa fa-arrow-circle-left"></i> Back</button>';
