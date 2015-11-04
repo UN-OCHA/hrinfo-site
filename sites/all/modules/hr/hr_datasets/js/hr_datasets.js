@@ -86,7 +86,6 @@ Drupal.behaviors.hrDatasets = {
 
         events: {
           'click #back': 'back',
-          'click #search-button': 'searchByTitle',
           'keyup #search': 'searchByTitle',
           'change #hdx-tags-dropdown': 'searchByTags',
           'change #hdx-organizations-dropdown': 'searchByOrganization',
@@ -150,35 +149,30 @@ Drupal.behaviors.hrDatasets = {
 
         searchByTitle: function(event) {
           if(event.keyCode == 13) {
+            var param = 'title';
             var val = $('#search').val();
-            if (val != '') {
-              this.DatasetsList.params.title = val;
-            }
-            else {
-              delete this.DatasetsList.params.title;
-            }
-            this.router.navigateWithParams('table/1', this.DatasetsList.params);
+            this.search(val, param);
           }
         },
 
         searchByTags: function(event) {
+          var param = 'tags';
           var val = $('#hdx-tags-dropdown').val();
-          if (val != '') {
-            this.DatasetsList.params.tags = 'tags:' + val;
-          }
-          else {
-            delete this.DatasetsList.params.tags;
-          }
-          this.router.navigateWithParams('table/1', this.DatasetsList.params);
+          this.search(val, param);
         },
 
-        searchByOrganization: function(event, ui) {
+        searchByOrganization: function(event) {
+          var param = 'organization';
           var val = $('#hdx-organizations-dropdown').val();
+          this.search(val, param);
+        },
+
+        search: function(val, param) {
           if (val != '') {
-            this.DatasetsList.params.organization = 'organization:' + val;
+            this.DatasetsList.params[param] = param + ':' + val;
           }
           else {
-            delete this.DatasetsList.params.organization;
+            delete this.DatasetsList.params.param;
           }
           this.router.navigateWithParams('table/1', this.DatasetsList.params);
         },
