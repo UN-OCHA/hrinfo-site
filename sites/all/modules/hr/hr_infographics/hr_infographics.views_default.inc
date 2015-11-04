@@ -24,11 +24,7 @@ function hr_infographics_views_default_views() {
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'none';
-  $handler->display->display_options['cache']['type'] = 'search_api_views_cache';
-  $handler->display->display_options['cache']['results_lifespan'] = '1800';
-  $handler->display->display_options['cache']['results_lifespan_custom'] = '0';
-  $handler->display->display_options['cache']['output_lifespan'] = '1800';
-  $handler->display->display_options['cache']['output_lifespan_custom'] = '0';
+  $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
@@ -60,7 +56,7 @@ function hr_infographics_views_default_views() {
   $handler->display->display_options['fields']['field_infographic_type']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_infographic_type']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_infographic_type']['bypass_access'] = 0;
-  /* Field: Indexed Node: Managed by */
+  /* Field: Indexed Node: Organization */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -87,7 +83,7 @@ function hr_infographics_views_default_views() {
   $handler->display->display_options['fields']['field_files_collection']['display'] = 'view';
   $handler->display->display_options['fields']['field_files_collection']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_files_collection']['bypass_access'] = 0;
-  /* Contextual filter: Indexed Node: Groups audience */
+  /* Contextual filter: Indexed Node: Space(s) */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -216,7 +212,7 @@ function hr_infographics_views_default_views() {
   $handler->display->display_options['fields']['field_infographic_type']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_infographic_type']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_infographic_type']['bypass_access'] = 0;
-  /* Field: Indexed Node: Managed by */
+  /* Field: Indexed Node: Organization */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -252,14 +248,14 @@ function hr_infographics_views_default_views() {
     'table' => 0,
   );
 
-  /* Display: Global master */
-  $handler = $view->new_display('page', 'Global master', 'global_master');
+  /* Display: Master */
+  $handler = $view->new_display('page', 'Master', 'global_master');
   $handler->display->display_options['exposed_block'] = TRUE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['path'] = 'infographics';
 
-  /* Display: Global list */
-  $handler = $view->new_display('page', 'Global list', 'global_list');
+  /* Display: List */
+  $handler = $view->new_display('page', 'List', 'global_list');
   $handler->display->display_options['exposed_block'] = TRUE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['path'] = 'infographics/list';
@@ -270,8 +266,8 @@ function hr_infographics_views_default_views() {
   $handler->display->display_options['menu']['context_only_inline'] = 0;
   $handler->display->display_options['tab_options']['weight'] = '0';
 
-  /* Display: Global table */
-  $handler = $view->new_display('page', 'Global table', 'global_table');
+  /* Display: Table */
+  $handler = $view->new_display('page', 'Table', 'global_table');
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
@@ -322,189 +318,6 @@ function hr_infographics_views_default_views() {
   $handler->display->display_options['menu']['weight'] = '2';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
-
-  /* Display: Global feed */
-  $handler = $view->new_display('feed', 'Global feed', 'feed_1');
-  $handler->display->display_options['pager']['type'] = 'some';
-  $handler->display->display_options['style_plugin'] = 'rss';
-  $handler->display->display_options['row_plugin'] = 'rss_fields';
-  $handler->display->display_options['row_options']['title_field'] = 'title_field';
-  $handler->display->display_options['row_options']['link_field'] = 'url';
-  $handler->display->display_options['row_options']['description_field'] = 'body';
-  $handler->display->display_options['row_options']['creator_field'] = 'author';
-  $handler->display->display_options['row_options']['date_field'] = 'created';
-  $handler->display->display_options['row_options']['guid_field_options'] = array(
-    'guid_field' => 'nid',
-    'guid_field_is_permalink' => 0,
-  );
-  $handler->display->display_options['defaults']['empty'] = FALSE;
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Indexed Node: Title */
-  $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
-  $handler->display->display_options['fields']['title_field']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['title_field']['field'] = 'title_field';
-  $handler->display->display_options['fields']['title_field']['label'] = '';
-  $handler->display->display_options['fields']['title_field']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['title_field']['type'] = 'text_plain';
-  $handler->display->display_options['fields']['title_field']['settings'] = array(
-    'title_style' => '_none',
-    'title_link' => 'content',
-    'title_class' => '',
-  );
-  /* Field: Indexed Node: Author */
-  $handler->display->display_options['fields']['author']['id'] = 'author';
-  $handler->display->display_options['fields']['author']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['author']['field'] = 'author';
-  $handler->display->display_options['fields']['author']['label'] = '';
-  $handler->display->display_options['fields']['author']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['author']['link_to_entity'] = 0;
-  $handler->display->display_options['fields']['author']['view_mode'] = 'full';
-  $handler->display->display_options['fields']['author']['bypass_access'] = 0;
-  /* Field: Indexed Node: The main body text */
-  $handler->display->display_options['fields']['body']['id'] = 'body';
-  $handler->display->display_options['fields']['body']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['body']['field'] = 'body';
-  $handler->display->display_options['fields']['body']['label'] = '';
-  $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['body']['type'] = 'text_plain';
-  /* Field: Indexed Node: URL */
-  $handler->display->display_options['fields']['url']['id'] = 'url';
-  $handler->display->display_options['fields']['url']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['url']['field'] = 'url';
-  $handler->display->display_options['fields']['url']['label'] = '';
-  $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['url']['display_as_link'] = FALSE;
-  $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
-  /* Field: Indexed Node: Node ID */
-  $handler->display->display_options['fields']['nid']['id'] = 'nid';
-  $handler->display->display_options['fields']['nid']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['nid']['field'] = 'nid';
-  $handler->display->display_options['fields']['nid']['label'] = '';
-  $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['nid']['separator'] = '';
-  $handler->display->display_options['fields']['nid']['link_to_entity'] = 0;
-  /* Field: Indexed Node: Date created */
-  $handler->display->display_options['fields']['created']['id'] = 'created';
-  $handler->display->display_options['fields']['created']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['label'] = '';
-  $handler->display->display_options['fields']['created']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['created']['date_format'] = 'long';
-  $handler->display->display_options['fields']['created']['second_date_format'] = 'long';
-  $handler->display->display_options['fields']['created']['link_to_entity'] = 0;
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Indexed Node: Date changed */
-  $handler->display->display_options['sorts']['changed']['id'] = 'changed';
-  $handler->display->display_options['sorts']['changed']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['sorts']['changed']['field'] = 'changed';
-  $handler->display->display_options['sorts']['changed']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['arguments'] = FALSE;
-  $handler->display->display_options['path'] = 'infographics/feed';
-  $handler->display->display_options['displays'] = array(
-    'global_master' => 'global_master',
-    'default' => 0,
-    'master' => 0,
-    'list' => 0,
-    'table' => 0,
-    'global_list' => 0,
-    'global_table' => 0,
-  );
-
-  /* Display: Feed */
-  $handler = $view->new_display('feed', 'Feed', 'feed_2');
-  $handler->display->display_options['pager']['type'] = 'some';
-  $handler->display->display_options['style_plugin'] = 'rss';
-  $handler->display->display_options['row_plugin'] = 'rss_fields';
-  $handler->display->display_options['row_options']['title_field'] = 'title_field';
-  $handler->display->display_options['row_options']['link_field'] = 'url';
-  $handler->display->display_options['row_options']['description_field'] = 'body';
-  $handler->display->display_options['row_options']['creator_field'] = 'author';
-  $handler->display->display_options['row_options']['date_field'] = 'created';
-  $handler->display->display_options['row_options']['guid_field_options'] = array(
-    'guid_field' => 'nid',
-    'guid_field_is_permalink' => 0,
-  );
-  $handler->display->display_options['defaults']['empty'] = FALSE;
-  $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Indexed Node: Title */
-  $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
-  $handler->display->display_options['fields']['title_field']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['title_field']['field'] = 'title_field';
-  $handler->display->display_options['fields']['title_field']['label'] = '';
-  $handler->display->display_options['fields']['title_field']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['title_field']['type'] = 'text_plain';
-  $handler->display->display_options['fields']['title_field']['settings'] = array(
-    'title_style' => '_none',
-    'title_link' => 'content',
-    'title_class' => '',
-  );
-  /* Field: Indexed Node: Author */
-  $handler->display->display_options['fields']['author']['id'] = 'author';
-  $handler->display->display_options['fields']['author']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['author']['field'] = 'author';
-  $handler->display->display_options['fields']['author']['label'] = '';
-  $handler->display->display_options['fields']['author']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['author']['link_to_entity'] = 0;
-  $handler->display->display_options['fields']['author']['view_mode'] = 'full';
-  $handler->display->display_options['fields']['author']['bypass_access'] = 0;
-  /* Field: Indexed Node: The main body text */
-  $handler->display->display_options['fields']['body']['id'] = 'body';
-  $handler->display->display_options['fields']['body']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['body']['field'] = 'body';
-  $handler->display->display_options['fields']['body']['label'] = '';
-  $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['body']['type'] = 'text_plain';
-  /* Field: Indexed Node: URL */
-  $handler->display->display_options['fields']['url']['id'] = 'url';
-  $handler->display->display_options['fields']['url']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['url']['field'] = 'url';
-  $handler->display->display_options['fields']['url']['label'] = '';
-  $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['url']['display_as_link'] = FALSE;
-  $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
-  /* Field: Indexed Node: Node ID */
-  $handler->display->display_options['fields']['nid']['id'] = 'nid';
-  $handler->display->display_options['fields']['nid']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['nid']['field'] = 'nid';
-  $handler->display->display_options['fields']['nid']['label'] = '';
-  $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['nid']['separator'] = '';
-  $handler->display->display_options['fields']['nid']['link_to_entity'] = 0;
-  /* Field: Indexed Node: Date created */
-  $handler->display->display_options['fields']['created']['id'] = 'created';
-  $handler->display->display_options['fields']['created']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['created']['field'] = 'created';
-  $handler->display->display_options['fields']['created']['label'] = '';
-  $handler->display->display_options['fields']['created']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['created']['date_format'] = 'long';
-  $handler->display->display_options['fields']['created']['second_date_format'] = 'long';
-  $handler->display->display_options['fields']['created']['link_to_entity'] = 0;
-  $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Indexed Node: Date changed */
-  $handler->display->display_options['sorts']['changed']['id'] = 'changed';
-  $handler->display->display_options['sorts']['changed']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['sorts']['changed']['field'] = 'changed';
-  $handler->display->display_options['sorts']['changed']['order'] = 'DESC';
-  $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Indexed Node: Groups audience */
-  $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
-  $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
-  $handler->display->display_options['arguments']['og_group_ref']['default_action'] = 'not found';
-  $handler->display->display_options['arguments']['og_group_ref']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['og_group_ref']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['og_group_ref']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['og_group_ref']['not'] = 0;
-  $handler->display->display_options['path'] = 'node/%/infographics/feed';
-  $handler->display->display_options['displays'] = array(
-    'master' => 'master',
-    'default' => 0,
-    'list' => 0,
-    'table' => 0,
-    'global_master' => 0,
-    'global_list' => 0,
-    'global_table' => 0,
-  );
   $translatables['hr_infographics'] = array(
     t('Master'),
     t('more'),
@@ -523,7 +336,7 @@ function hr_infographics_views_default_views() {
     t('There are no results'),
     t('Title'),
     t('Type'),
-    t('Managed by'),
+    t('Organization'),
     t('Publication Date'),
     t('Files'),
     t('All'),
@@ -531,12 +344,6 @@ function hr_infographics_views_default_views() {
     t('List'),
     t('Table'),
     t('CSV'),
-    t('Global master'),
-    t('Global list'),
-    t('Global table'),
-    t('Global feed'),
-    t('.'),
-    t('Feed'),
   );
   $export['hr_infographics'] = $view;
 
@@ -578,7 +385,7 @@ function hr_infographics_views_default_views() {
   $handler->display->display_options['sorts']['field_publication_date_value']['id'] = 'field_publication_date_value';
   $handler->display->display_options['sorts']['field_publication_date_value']['table'] = 'field_data_field_publication_date';
   $handler->display->display_options['sorts']['field_publication_date_value']['field'] = 'field_publication_date_value';
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Field: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -631,7 +438,7 @@ function hr_infographics_views_default_views() {
     'hr_infographic' => 'hr_infographic',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filter criterion: Content: Space(s) (og_group_ref) */
+  /* Filter criterion: Field: Space(s) (og_group_ref) */
   $handler->display->display_options['filters']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['filters']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['filters']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -711,7 +518,7 @@ function hr_infographics_views_default_views() {
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Themes (field_themes) (reference filter) */
+  /* Filter criterion: Field: Themes (field_themes) (reference filter) */
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['id'] = 'field_themes_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['table'] = 'field_data_field_themes';
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['field'] = 'field_themes_target_id_entityreference_filter';
@@ -853,7 +660,7 @@ function hr_infographics_views_default_views() {
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Space(s) */
+  /* Field: Field: Space(s) */
   $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['fields']['og_group_ref']['table'] = 'og_membership';
   $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
@@ -902,7 +709,7 @@ function hr_infographics_views_default_views() {
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Field: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -978,14 +785,13 @@ function hr_infographics_views_default_views() {
     t('All'),
     t('List'),
     t('Space'),
-    t('Please select a space OR a cluster, but NOT BOTH. Selecting both a space and a cluster will not work.'),
     t('Clusters/Sectors'),
     t('Coordination hubs'),
     t('Disasters'),
     t('Locations'),
     t('Themes'),
     t('Type'),
-    t('Dynamic'),
+    t('Funding methods'),
     t('Infographics'),
     t('Thumbnail'),
     t('field collection item from field_files_collection'),

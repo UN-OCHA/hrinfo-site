@@ -2,7 +2,7 @@
 
 function hr_datasets_hdx_datasets($operation){
   $templates = array(
-  	'hdx_datasets_list_view',
+    'hdx_datasets_list_view',
   );
   drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js', array('type' => 'external'));
   drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js', array('type' => 'external'));
@@ -28,8 +28,9 @@ function hr_datasets_hdx_datasets($operation){
     <table id="datasets-list-table" class="table table-striped">
       <thead>
       <tr>
-        <th>Dataset Title</th>
-        <th>Dataset Link</th>
+        <th>Dataset</th>
+        <th>Last Updated</th>
+        <th>Source</th>
       </tr>
       </thead>
       <tbody>

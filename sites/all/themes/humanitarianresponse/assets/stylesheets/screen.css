@@ -3978,10 +3978,6 @@ form .table-responsive { overflow-x: inherit; }
 .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { font-size: 0.9em; text-align: left; }
 @media screen and (min-width: 768px) { .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { margin-top: 1em; font-size: 1.2em; } }
 @media screen and (min-width: 992px) { .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { font-size: 1.3em; } }
-@media screen and (min-width: 1200px) { .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { margin-top: 1.5em; font-size: 1.8em; } }
-
-#block-hr-layout-hr-layout-search-rss .content { border-radius: 10px; background-color: #bbd9e1; color: #0fa4de; padding: 10px; }
-#block-hr-layout-hr-layout-search-rss a.btn { color: white; display: block; margin: 6px 27px; font-size: 0.95em; text-transform: uppercase; text-align: left; position: relative; }
-#block-hr-layout-hr-layout-search-rss a.btn i { position: absolute; right: 10px; float: right; font-size: 1.4em; }
+@media screen and (min-width: 1200px) { .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { margin-top: 2em; font-size: 1.5em; } }
 
 /*# sourceMappingURL=screen.css.map */

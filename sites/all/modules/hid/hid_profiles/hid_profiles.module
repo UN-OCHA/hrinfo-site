@@ -729,34 +729,22 @@ function hid_profiles_block_view($delta = '') {
 </div>  </div>';
       break;
     case 'hid_profiles_filters':
-      $nid = arg(1);
-      if (is_numeric($nid)) {
-        $node = node_load($nid);
-        $operation = $node;
-        if ($node->type == 'hr_bundle') {
-          $operation_id = _hr_bundles_get_operation($node->nid);
-          if ($operation_id) {
-            $operation = node_load($operation_id);
-          }
-        }
-        $block['content'] = '<div id="block-current-search-hr-current-search" class="block block-current-search">
+      $block['content'] = '<div id="block-current-search-hr-current-search" class="block block-current-search">
 
-      <h2>Current search</h2>
+    <h2>Current search</h2>
 
-    <div class="content">
-      <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter">Filter: <span class="facetapi-active">216 items</span> displayed</div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/'.drupal_get_path_alias(current_path()).'"><i class="reset"></i></a> Reset all filters</div></div>  </div>
-  </div>';
-        $block['content'] .= hid_profiles_protected_roles_select();
-        if ($node->type == 'hr_operation') {
-          $block['content'] .= hid_profiles_bundles_select($operation);
-        }
-        $block['content'] .= hid_profiles_organization_autocomplete();
-        $block['content'] .= hid_profiles_country_select();
-        $block['content'] .= hid_profiles_location_select($operation);
-        $block['content'] .= hid_profiles_office_select($operation);
-        $block['content'] .= hid_profiles_disaster_select($operation);
-        $block['content'] .= '<hr /><span title="Verified"><i class="fa fa-check-circle fa-lg"></i></span> Verified User <input type="checkbox" id="verified" name="verified" /><hr />';
-      }
+  <div class="content">
+    <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter">Filter: <span class="facetapi-active">216 items</span> displayed</div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/'.drupal_get_path_alias(current_path()).'"><i class="reset"></i></a> Reset all filters</div></div>  </div>
+</div>';
+      $block['content'] .= hid_profiles_protected_roles_select();
+      $block['content'] .= hid_profiles_bundles_select(arg(1));
+      $block['content'] .= hid_profiles_organization_autocomplete();
+      $block['content'] .= hid_profiles_country_select();
+      $block['content'] .= hid_profiles_location_select(arg(1));
+      $block['content'] .= hid_profiles_office_select(arg(1));
+      $block['content'] .= hid_profiles_disaster_select(arg(1));
+      $block['content'] .= '<hr /><div style="font-size: 14px;" class="block"><span title="Key Contact" class="hid-key-contact">*</span> Key Contact <input type="checkbox" id="key-contact" name="keyContact" /> <br />';
+      $block['content'] .= '<span title="Verified"><i class="fa fa-check-circle fa-lg"></i></span> Verified User <input type="checkbox" id="verified" name="verified" /><hr />';
       break;
     case 'hid_profiles_sidebar':
       $block['content'] = '<button class="btn btn-primary btn-lg btn-block" id="back"><i class="fa fa-arrow-circle-left"></i> Back</button>';
@@ -790,7 +778,7 @@ function hid_profiles_bundles_select($operation) {
   $query = new EntityFieldQuery();
   $entities = $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'hr_bundle')
-    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
+    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation, '=')
     ->propertyOrderBy('title')
     ->execute();
   $nodes = node_load_multiple(array_keys($entities['node']));
@@ -827,11 +815,8 @@ function hid_profiles_country_select() {
   return $html;
 }
 
-/**
- * Returns a location filter for HID contacts
- * @param $operation Operation node for which locations should be returned
- */
-function hid_profiles_location_select($operation) {
+function hid_profiles_location_select($operation_id) {
+  $operation = node_load($operation_id);
   $loc_vocabulary = taxonomy_vocabulary_machine_name_load('hr_location');
   $parent = $operation->field_country[LANGUAGE_NONE][0]['target_id'];
   $tree = taxonomy_get_tree($loc_vocabulary->vid, $parent, 1);
@@ -848,7 +833,7 @@ function hid_profiles_office_select($operation) {
   $query = new EntityFieldQuery();
   $entities = $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'hr_office')
-    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
+    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation, '=')
     ->propertyOrderBy('title')
     ->execute();
   $nodes = node_load_multiple(array_keys($entities['node']));
@@ -866,7 +851,7 @@ function hid_profiles_disaster_select($operation) {
   $query = new EntityFieldQuery();
   $entities = $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'hr_disaster')
-    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
+    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation, '=')
     ->propertyOrderBy('title')
     ->execute();
   $nodes = node_load_multiple(array_keys($entities['node']));

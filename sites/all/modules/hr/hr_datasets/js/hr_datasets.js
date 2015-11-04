@@ -28,7 +28,12 @@ Drupal.behaviors.hrDatasets = {
       this.count = response.result.count;
       var fields = [];
       _.each(models, function(resource){
-        fields.push({title: resource.title, url: 'https://data.hdx.rwlabs.org/dataset/' + resource.id});
+        var date = new Date(resource.metadata_modified);
+        var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][date.getMonth()];
+        var resource_link = "https://data.hdx.rwlabs.org/dataset/" + resource.id;
+        var link = '<a href="' + resource_link + '">' + resource.title + '</a>';
+        var last_modified =  month + ' ' + date.getDate() + ', ' + date.getFullYear();
+        fields.push({title: link, last_modified: last_modified, source: resource.dataset_source});
       });
       return fields;
       },
@@ -82,7 +87,9 @@ Drupal.behaviors.hrDatasets = {
 
         events: {
           'click #back': 'back',
-          'click #search-button': 'searchByTitle',
+          'keyup #search': 'searchByTitle',
+          'change #hdx-tags-dropdown': 'searchByTags',
+          'change #hdx-organizations-dropdown': 'searchByOrganization',
         },
 
         page: function(page) {
@@ -142,12 +149,31 @@ Drupal.behaviors.hrDatasets = {
         },
 
         searchByTitle: function(event) {
-          var val = $('#search').val();
+          if(event.keyCode == 13) {
+            var param = 'title';
+            var val = $('#search').val();
+            this.search(val, param);
+          }
+        },
+
+        searchByTags: function(event) {
+          var param = 'tags';
+          var val = $('#hdx-tags-dropdown').val();
+          this.search(val, param);
+        },
+
+        searchByOrganization: function(event) {
+          var param = 'organization';
+          var val = $('#hdx-organizations-dropdown').val();
+          this.search(val, param);
+        },
+
+        search: function(val, param) {
           if (val != '') {
-            this.DatasetsList.params.title = val;
+            this.DatasetsList.params[param] = param + ':' + val;
           }
           else {
-            delete this.DatasetsList.params.title;
+            delete this.DatasetsList.params.param;
           }
           this.router.navigateWithParams('table/1', this.DatasetsList.params);
         },

@@ -43,7 +43,7 @@ function hr_search_default_search_api_index() {
     "options" : {
       "index_directly" : 1,
       "published_safe" : 0,
-      "cron_limit" : "100",
+      "cron_limit" : "50",
       "data_alter_callbacks" : {
         "search_api_alter_bundle_filter" : {
           "status" : 0,
@@ -403,7 +403,7 @@ function hr_search_default_search_api_sort() {
         "search_api_views:hr_assessments:table" : "search_api_views:hr_assessments:table"
       }
     },
-    "options" : { "field_name" : "Report Date \\u00bb Start date" }
+    "options" : { "field_name" : "Date \\u00bb Start date" }
   }');
   $items['default_node_index__field_ds_date'] = entity_import('search_api_sort', '{
     "index_id" : "default_node_index",
