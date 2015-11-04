@@ -3107,7 +3107,7 @@ form .description { margin: 2px 0; color: #555555; }
 
 .media-widget > a { margin: 0 10px 0 0; display: inline-block; }
 
-html.js input.form-autocomplete { background: url('../images/throbber.gif?1441798699') no-repeat right 8px #fff !important; }
+html.js input.form-autocomplete { background: url('../images/throbber.gif?1439909526') no-repeat right 8px #fff !important; }
 html.js input.throbbing { background-position: right -122px !important; }
 html.js fieldset.collapsed { height: auto; border-left-width: 1px; border-right-width: 1px; }
 
@@ -3672,7 +3672,7 @@ a.fc-event .fc-event-inner .fc-event-time, .fc-event-draggable .fc-event-inner .
 a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner .fc-event-title { padding: 4px 5px; display: block; }
 
 @media screen and (max-width: 768px) { .view-header .title-nav { display: block; float: left; overflow: hidden; text-align: center; right:  2px; position:  relative; }
-  .view-header .title-nav h3 { font-size: 18px; width: 180px; }
+  .view-header .title-nav h3 { font-size: 18px; }
   .view-filters .views-exposed-form .views-exposed-widget .form-submit { width: 60px; }
   .calendar-calendar table, .calendar-calendar tbody, .calendar-calendar thead, .calendar-calendar th, .calendar-calendar td, .calendar-calendar tr { display: block; }
   .calendar-calendar .month-view table.full { position: relative; }
@@ -3978,6 +3978,6 @@ form .table-responsive { overflow-x: inherit; }
 .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { font-size: 0.9em; text-align: left; }
 @media screen and (min-width: 768px) { .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { margin-top: 1em; font-size: 1.2em; } }
 @media screen and (min-width: 992px) { .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { font-size: 1.3em; } }
-@media screen and (min-width: 1200px) { .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { margin-top: 1.5em; font-size: 1.8em; } }
+@media screen and (min-width: 1200px) { .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { margin-top: 2em; font-size: 1.5em; } }
 
 /*# sourceMappingURL=screen.css.map */
