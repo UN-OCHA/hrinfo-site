@@ -253,7 +253,8 @@ function hr_admin_views_default_views() {
 
   /* Display: CSV */
   $handler = $view->new_display('views_data_export', 'CSV', 'views_data_export_1');
-  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'views_data_export_csv';
   $handler->display->display_options['style_options']['provide_file'] = 1;
   $handler->display->display_options['style_options']['filename'] = 'content-authors-activity.csv';
@@ -311,7 +312,8 @@ function hr_admin_views_default_views() {
 
   /* Display: XLS */
   $handler = $view->new_display('views_data_export', 'XLS', 'views_data_export_2');
-  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'views_data_export_xls';
   $handler->display->display_options['style_options']['provide_file'] = 1;
   $handler->display->display_options['style_options']['filename'] = 'content-authors-activity.xls';
