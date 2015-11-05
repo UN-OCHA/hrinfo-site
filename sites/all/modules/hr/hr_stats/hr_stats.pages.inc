@@ -105,18 +105,21 @@ function hr_stats_reports($form, &$form_state, $entity_type, $entity, $report) {
       unset($data_params[1]['columns[]']);
       $data_params[1][$segment_var['key'] . '_id'] = $wrapper->getIdentifier();
       $data_params[1][$segment_var['key'] . '_type'] = $data_params[1][$segment_var['key']];
+      $iframe_height = 350;
       break;
     case 'visitors_settings':
       $data_params[0]['filter_limit'] = 6;
       // Browser families.
       $title[0] = t('Browser families');
-      $data_params[0]['moduleToWidgetize'] = 'UserSettings';
-      $data_params[0]['actionToWidgetize'] = 'getBrowserType';
+      $data_params[0]['moduleToWidgetize'] = 'DevicesDetection';
+      $data_params[0]['actionToWidgetize'] = 'getBrowsers';
+      $iframe_height = 500;
       break;
     case 'visitors_overview_map':
-      $title[0] = t('Browser Map');
+      $title[0] = t('Visitor Map');
       $data_params[0]['moduleToWidgetize'] = 'UserCountryMap';
       $data_params[0]['actionToWidgetize'] = 'visitorMap';
+      $iframe_height = 700;
       break;
   }
 
@@ -126,7 +129,7 @@ function hr_stats_reports($form, &$form_state, $entity_type, $entity, $report) {
     $theme_args['data_url'][] = array(
       'url' => $piwik_url . 'index.php?' . drupal_http_build_query($data),
       'title' => $title[$key],
-      'iframe_height' => (isset($iframe_height[$key]) && $iframe_height[$key] > 0 ? $iframe_height[$key] : 350),
+      'iframe_height' => $iframe_height,
       'empty_text' => (isset($empty_text) ? $empty_text : NULL),
     );
   }
