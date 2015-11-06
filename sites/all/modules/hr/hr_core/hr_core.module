@@ -372,3 +372,31 @@ function hr_core_node_delete($node) {
   }
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function hr_core_form_panels_ipe_edit_control_form_alter(&$form, &$form_state) {
+  $form['buttons']['submit']['#submit'][] = 'hr_core_panels_ipe_clear_cache';
+}
+
+/**
+ * Additional form callback that ensures that the panelizer page cache is
+ * cleared.
+ */
+function hr_core_panels_ipe_clear_cache($form, &$form_state) {
+  if (!empty($form_state['panelizer entity'])) {
+    $entity = $form_state['panelizer entity'];
+    $uri = entity_uri($entity->entity_type, $entity);
+    // Clear all language cache.
+    $uri['options']['language'] = '';
+    if ($url = url($uri['path'], $uri['options'])) {
+      // Manually delete the cache because the cid is a full url we don't know
+      // how's going to be generated.
+      // @See cache_clear_all().
+      db_delete('cache_page')
+        ->condition('cid', '%' . db_like($url) . '%', 'LIKE')
+        ->execute();
+    }
+
+  }
+}
