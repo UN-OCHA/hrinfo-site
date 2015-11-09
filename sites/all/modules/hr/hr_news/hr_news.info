@@ -13,6 +13,7 @@ dependencies[] = feeds_tamper
 dependencies[] = hr_bundles
 dependencies[] = hr_disasters
 dependencies[] = hr_fundings
+dependencies[] = hr_layout
 dependencies[] = hr_offices
 dependencies[] = hr_operations
 dependencies[] = hr_sectors

@@ -28,48 +28,53 @@ function hr_stats_permission() {
 function hr_stats_menu() {
   $items = array();
 
-  $items['group/%/%/admin/analytics'] = array(
+  $items['group/%/%entity_object/admin/analytics'] = array(
     'title' => 'Analytics',
     'page callback' => 'hr_stats_reports',
     'page arguments' => array(1, 2),
+    'load arguments' => array(1),
     'access callback' => 'og_user_access',
     'access arguments' => array(1, 2, 'access piwik reports'),
     'file' => 'hr_stats.pages.inc',
     'description' => 'Reports on the Operation\'s visitors, popular pages and so much more ...',
   );
-  $items['group/%/%/admin/analytics/visitors'] = array(
+  $items['group/%/%entity_object/admin/analytics/visitors'] = array(
     'title' => 'Visitors',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('hr_stats_reports', 'visitors_overview'),
+    'page arguments' => array('hr_stats_reports', 1, 2 , 'visitors_overview'),
+    'load arguments' => array(1),
     'access callback' => 'og_user_access',
     'access arguments' => array(1, 2, 'access piwik reports'),
     'file' => 'hr_stats.pages.inc',
     'type' => MENU_NORMAL_ITEM,
   );
-  $items['group/%/%/admin/analytics/visitors/overview'] = array(
+  $items['group/%/%entity_object/admin/analytics/visitors/overview'] = array(
     'title' => 'Overview',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('hr_stats_reports', 'visitors_overview'),
+    'page arguments' => array('hr_stats_reports', 1, 2 , 'visitors_overview'),
+    'load arguments' => array(1),
     'access callback' => 'og_user_access',
     'access arguments' => array(1, 2, 'access piwik reports'),
     'file' => 'hr_stats.pages.inc',
     'weight' => 1,
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $items['group/%/%/admin/analytics/visitors/map'] = array(
+  $items['group/%/%entity_object/admin/analytics/visitors/map'] = array(
     'title' => 'Map',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('hr_stats_reports', 'visitors_overview_map'),
+    'page arguments' => array('hr_stats_reports', 1, 2 , 'visitors_overview_map'),
+    'load arguments' => array(1),
     'access callback' => 'og_user_access',
     'access arguments' => array(1, 2, 'access piwik reports'),
     'file' => 'hr_stats.pages.inc',
     'weight' => 2,
     'type' => MENU_LOCAL_TASK,
   );
-  $items['group/%/%/admin/analytics/visitors/settings'] = array(
+  $items['group/%/%entity_object/admin/analytics/visitors/settings'] = array(
     'title' => 'Settings',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('hr_stats_reports', 'visitors_settings'),
+    'page arguments' => array('hr_stats_reports', 1, 2 , 'visitors_settings'),
+    'load arguments' => array(1),
     'access callback' => 'og_user_access',
     'access arguments' => array(1, 2, 'access piwik reports'),
     'file' => 'hr_stats.pages.inc',
@@ -77,8 +82,7 @@ function hr_stats_menu() {
     'type' => MENU_LOCAL_TASK,
   );
 
-  // admin configuration
-
+  // Admin configuration.
   $items['admin/config/system/hr-stats'] = array(
     'title' => 'Piwik reports for HumanitarianResponse',
     'description' => 'Administer Piwik reports for HumanitarianResponse configuration',

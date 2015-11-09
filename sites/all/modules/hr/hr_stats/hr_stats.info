@@ -3,6 +3,7 @@ description = Adds piwik reports to the HumanitarianResponse platform
 core = 7.x
 package = Humanitarianresponse
 dependencies[] = ctools
+dependencies[] = daterangepicker
 dependencies[] = features
 dependencies[] = hr_operations
 dependencies[] = hr_sectors

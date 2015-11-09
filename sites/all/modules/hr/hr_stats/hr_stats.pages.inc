@@ -1,97 +1,50 @@
 <?php
+/**
+ * @file
+ * Pages file for hr_stats module.
+ */
 
 /**
- * Return the form where to select the report period.
+ * Return the $form that handles piwik reports.
  */
-function hr_stats_dateselect_form() {
+function hr_stats_reports($form, &$form_state, $entity_type, $entity, $report) {
+  $form = array();
+  $piwik_url = variable_get('piwik_url_https', '');
+  if (!isset($piwik_url)) {
+    drupal_set_message(t('Please check your piwik http URL in the configuration settings'), 'warning', FALSE);
+    return array();
+  }
+  $piwik_site_id = variable_get('piwik_site_id', '');
+  if (!isset($piwik_site_id)) {
+    drupal_set_message(t('Please check your piwik site Id in the configuration settings'), 'warning', FALSE);
+    return array();
+  }
 
-  $period = array(
-    0 => t('Today'),
-    1 => t('Yesterday'),
-    2 => t('Last week'),
-    3 => t('Last month'),
-    4 => t('Last year'),
-  );
+  $wrapper = entity_metadata_wrapper($entity_type, $entity);
 
-  $form['#attributes'] = array('class' => array('search-form'));
+  $range = $_SESSION['hr_stats_reports_range'];
   $form['basic'] = array(
     '#type' => 'fieldset',
     '#title' => t('Select time period'),
+    '#attributes' => array(
+      'class' => array(
+        'container-inline',
+      ),
+    ),
   );
-  $form['basic']['inline'] = array(
-    '#prefix' => '<div class="container-inline">',
-    '#suffix' => '</div>',
+  $form['basic']['range'] = array(
+    '#type' => 'daterangepicker',
+    '#required' => TRUE,
+    '#default_value' => $range,
   );
-  $form['basic']['inline']['period'] = array(
-    '#type' => 'select',
-    '#title' => '',
-    '#default_value' => isset($_SESSION['hr_stats_reports_period']) ? $_SESSION['hr_stats_reports_period'] : 0,
-    '#options' => $period,
-  );
-  $form['basic']['inline']['submit'] = array(
+  $form['basic']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Filter'),
     '#weight' => 15,
   );
-  return $form;
-}
 
-/**
- * Reports form submit function
- */
-function hr_stats_reports_submit($form, &$form_state) {
-  $_SESSION['hr_stats_reports_period'] = $form_state['values']['period'];
-}
-
-/**
- * Return the $form that handles piwik reports
- *
- * @param $form
- * @param $form_state
- *   see form api.
- * @param $report
- *   The report name.
- *
- * @return
- */
-function hr_stats_reports($form, &$form_state, $report) {
-
-  $piwik_url = variable_get('piwik_url_https', '');
-  if (!isset($piwik_url)) {
-    drupal_set_message(
-      'Please check your piwik http URL in the configuration settings',
-      'warning',
-      FALSE
-    );
-
-    return;
-  }
-  $form = hr_stats_dateselect_form();
-  $piwik_site_id = variable_get('piwik_site_id', '');
-  if (!isset($piwik_site_id)) {
-    drupal_set_message(
-      'Please check your piwik site Id in the configuration settings',
-      'warning',
-      FALSE
-    );
-
-    return;
-  }
-  $period = isset($_SESSION['hr_stats_reports_period']) ? $_SESSION['hr_stats_reports_period'] : 0;
-  if ($period == 1) {
-    // Special handling for "yesterday" = 1.
-    // The yesterday date value is required.
-    $date = _hr_stats_select_period($period);
-  }
-  else {
-    // Otherwise it returns the today date value.
-    $date = _hr_stats_select_period(0);
-  }
-  $period_name = _hr_stats_get_period_name($period);
   $token_auth = variable_get('hr_stats_piwik_token_auth', '');
 
-  $nid = arg(2);
-  $node = node_load($nid);
   // We need to identify if we're in a section or a cluster to establish the
   // right segment.
   $segment_vars = array(
@@ -111,14 +64,26 @@ function hr_stats_reports($form, &$form_state, $report) {
     ),
   );
   // Default to operation in case of unexpected node types.
-  $segment_var = isset($segment_vars[$node->type]) ? $segment_vars[$node->type] : $segment_vars['hr_operation'];
+  $segment_var = isset($segment_vars[$entity->type]) ? $segment_vars[$entity->type] : $segment_vars['hr_operation'];
+
+  $period = 'day';
+  if (empty($range)) {
+    $date_range = date('Y-m-d');
+  }
+  else {
+    $date_range = $range['start'];
+    if (!empty($range['end']) && ($range['end'] <> $range['start'])) {
+      $date_range .= ',' . $range['end'];
+      $period = 'range';
+    }
+  }
 
   // Array of URL parameters.
   $data_params = array();
   $data_params[0]['idSite'] = $piwik_site_id;
-  $data_params[0]['date'] = $date;
-  $data_params[0]['period'] = $period_name;
-  $data_params[0]['segment'] = $segment_var['name'] . '==' . $segment_var['context'] . ';' . $segment_var['value'] . '=@' . $nid;
+  $data_params[0]['date'] = $date_range;
+  $data_params[0]['period'] = $period;
+  $data_params[0]['segment'] = $segment_var['name'] . '==' . $segment_var['context'] . ';' . $segment_var['value'] . '=@' . $wrapper->getIdentifier();
   $data_params[0]['disableLink'] = 1;
   $data_params[0]['module'] = 'Widgetize';
   $data_params[0]['action'] = 'iframe';
@@ -138,20 +103,23 @@ function hr_stats_reports($form, &$form_state, $report) {
       $data_params[1]['moduleToWidgetize'] = 'HumanitarianResponse';
       $data_params[1]['actionToWidgetize'] = $segment_var['widget'];
       unset($data_params[1]['columns[]']);
-      $data_params[1][$segment_var['key'] . '_id'] = $node->nid;
+      $data_params[1][$segment_var['key'] . '_id'] = $wrapper->getIdentifier();
       $data_params[1][$segment_var['key'] . '_type'] = $data_params[1][$segment_var['key']];
+      $iframe_height = 350;
       break;
     case 'visitors_settings':
       $data_params[0]['filter_limit'] = 6;
-      // Browser families
+      // Browser families.
       $title[0] = t('Browser families');
-      $data_params[0]['moduleToWidgetize'] = 'UserSettings';
-      $data_params[0]['actionToWidgetize'] = 'getBrowserType';
+      $data_params[0]['moduleToWidgetize'] = 'DevicesDetection';
+      $data_params[0]['actionToWidgetize'] = 'getBrowsers';
+      $iframe_height = 500;
       break;
     case 'visitors_overview_map':
-      $title[0] = t('Browser Map');
+      $title[0] = t('Visitor Map');
       $data_params[0]['moduleToWidgetize'] = 'UserCountryMap';
       $data_params[0]['actionToWidgetize'] = 'visitorMap';
+      $iframe_height = 700;
       break;
   }
 
@@ -161,7 +129,7 @@ function hr_stats_reports($form, &$form_state, $report) {
     $theme_args['data_url'][] = array(
       'url' => $piwik_url . 'index.php?' . drupal_http_build_query($data),
       'title' => $title[$key],
-      'iframe_height' => (isset($iframe_height[$key]) && $iframe_height[$key] > 0 ? $iframe_height[$key] : 350),
+      'iframe_height' => $iframe_height,
       'empty_text' => (isset($empty_text) ? $empty_text : NULL),
     );
   }
@@ -175,73 +143,10 @@ function hr_stats_reports($form, &$form_state, $report) {
 }
 
 /**
- * Helper function that return the starting and ending dates according to the
- * selected period.
- *
- * @param $period
- *    selected period
- * @return bool|string date for the period
+ * Reports form submit handler.
  */
-function _hr_stats_select_period($period) {
-  switch ($period) {
-    case 0:
-      $date = date("Y-m-d");
-      break;
-
-    case 1:
-      $d = mktime(0, 0, 0, date("m"), date("d") - 1, date("Y"));
-      $date = date("Y-m-d", $d);
-      break;
-
-    case 2:
-      $d = mktime(0, 0, 0, date("m"), date("d") - 7, date("Y"));
-      $date = date("Y-m-d", $d);
-      break;
-
-    case 3:
-      $d = mktime(0, 0, 0, date("m") - 1, date("d"), date("Y"));
-      $date = date("Y-m-d", $d);
-      break;
-
-    case 4:
-      $d = mktime(0, 0, 0, date("m"), date("d"), date("Y") - 1);
-      $date = date("Y-m-d", $d);
-      break;
-  }
-  return $date;
-}
-
-/**
- * Helper function that return the name of the selected period.
- *
- * @param $period
- *    selected period
- * @return string name
- */
-function _hr_stats_get_period_name($period) {
-  // Possible periods are day, week, month, year.
-  switch ($period) {
-    case 0:
-      $p = "day";
-      break;
-
-    case 1:
-      $p = "day";
-      break;
-
-    case 2:
-      $p = "week";
-      break;
-
-    case 3:
-      $p = "month";
-      break;
-
-    case 4:
-      $p = "year";
-      break;
-  }
-  return $p;
+function hr_stats_reports_submit($form, &$form_state) {
+  $_SESSION['hr_stats_reports_range'] = drupal_json_decode($form_state['values']['range']);
 }
 
 function hr_stats_admin_reports_form($form, &$form_state) {

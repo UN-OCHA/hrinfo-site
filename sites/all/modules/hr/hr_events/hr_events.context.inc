@@ -92,6 +92,12 @@ function hr_events_context_default_contexts() {
           'region' => 'sidebar_first',
           'weight' => '-3',
         ),
+        'hr_layout-hr_layout_search_rss' => array(
+          'delta' => 'hr_layout_search_rss',
+          'module' => 'hr_layout',
+          'region' => 'sidebar_first',
+          'weight' => '3',
+        ),
       ),
     ),
     'disable_context' => array(
@@ -177,6 +183,12 @@ function hr_events_context_default_contexts() {
           'delta' => 'ufw6LRur6Vw9VcpuZ4VayzbcSrlX1VMS',
           'region' => 'sidebar_first',
           'weight' => '-3',
+        ),
+        'hr_layout-hr_layout_search_rss' => array(
+          'delta' => 'hr_layout_search_rss',
+          'module' => 'hr_layout',
+          'region' => 'sidebar_first',
+          'weight' => '3',
         ),
       ),
     ),

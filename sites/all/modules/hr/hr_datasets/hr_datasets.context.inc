@@ -112,6 +112,12 @@ function hr_datasets_context_default_contexts() {
           'region' => 'sidebar_first',
           'weight' => '-6',
         ),
+        'hr_layout-hr_layout_search_rss' => array(
+          'delta' => 'hr_layout_search_rss',
+          'module' => 'hr_layout',
+          'region' => 'sidebar_first',
+          'weight' => '3',
+        ),
       ),
     ),
   );
@@ -174,6 +180,12 @@ function hr_datasets_context_default_contexts() {
           'region' => 'sidebar_first',
           'weight' => '-6',
         ),
+        'hr_layout-hr_layout_search_rss' => array(
+          'delta' => 'hr_layout_search_rss',
+          'module' => 'hr_layout',
+          'region' => 'sidebar_first',
+          'weight' => '3',
+        ),
       ),
     ),
   );
@@ -218,13 +230,6 @@ function hr_datasets_context_default_contexts() {
   $context->condition_mode = 0;
 
   $export['hr_datasets_hdx'] = $context;
-
-  return $export;
-
-  // Translatables
-  // Included for use with string extractors like potx.
-  t('Datasets');
-  $export['hr_datasets_space_table'] = $context;
 
   return $export;
 }
