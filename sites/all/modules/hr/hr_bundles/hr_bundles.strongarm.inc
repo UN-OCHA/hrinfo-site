@@ -13,6 +13,55 @@ function hr_bundles_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'comment_anonymous_hr_bundle';
+  $strongarm->value = 0;
+  $export['comment_anonymous_hr_bundle'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_mode_hr_bundle';
+  $strongarm->value = 1;
+  $export['comment_default_mode_hr_bundle'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_default_per_page_hr_bundle';
+  $strongarm->value = '50';
+  $export['comment_default_per_page_hr_bundle'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_form_location_hr_bundle';
+  $strongarm->value = 1;
+  $export['comment_form_location_hr_bundle'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_hr_bundle';
+  $strongarm->value = '2';
+  $export['comment_hr_bundle'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_preview_hr_bundle';
+  $strongarm->value = '1';
+  $export['comment_preview_hr_bundle'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'comment_subject_field_hr_bundle';
+  $strongarm->value = 1;
+  $export['comment_subject_field_hr_bundle'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'entity_translation_hide_translation_links_hr_bundle';
   $strongarm->value = 0;
   $export['entity_translation_hide_translation_links_hr_bundle'] = $strongarm;
@@ -192,16 +241,9 @@ function hr_bundles_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'og_menu_single_group_content__node__hr_bundle_hr_bundle';
-  $strongarm->value = 0;
-  $export['og_menu_single_group_content__node__hr_bundle_hr_bundle'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'og_menu_single_group__node__hr_bundle_hr_bundle';
-  $strongarm->value = 0;
-  $export['og_menu_single_group__node__hr_bundle_hr_bundle'] = $strongarm;
+  $strongarm->name = 'og_menu_single_group__node__hr_bundle';
+  $strongarm->value = 1;
+  $export['og_menu_single_group__node__hr_bundle'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -507,6 +549,7 @@ function hr_bundles_strongarm() {
     'block-hr_bookmarks-hr_favorite_spaces' => 0,
     'block-hr_bundles-clusters_map' => 0,
     'block-hr_help-hr_help' => 0,
+    'block-hr_layout-hr_layout_checkin' => 0,
     'block-hr_layout-hr_layout_login' => 0,
     'block-hr_layout-hr_layout_create_links' => 0,
     'block-hr_layout-hr_layout_space_links' => 0,
