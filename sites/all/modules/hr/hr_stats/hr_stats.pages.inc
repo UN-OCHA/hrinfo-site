@@ -7,7 +7,7 @@
 /**
  * Return the $form that handles piwik reports.
  */
-function hr_stats_reports($form, &$form_state, $entity_type, $entity, $report) {
+function hr_stats_reports($form, &$form_state, $entity_type, $entity_id, $report) {
   $form = array();
   $piwik_url = variable_get('piwik_url_https', '');
   if (!isset($piwik_url)) {
@@ -19,8 +19,11 @@ function hr_stats_reports($form, &$form_state, $entity_type, $entity, $report) {
     drupal_set_message(t('Please check your piwik site Id in the configuration settings'), 'warning', FALSE);
     return array();
   }
+  if (!is_numeric($entity_id)) {
+    return array();
+  }
 
-  $wrapper = entity_metadata_wrapper($entity_type, $entity);
+  $wrapper = entity_metadata_wrapper($entity_type, $entity_id);
 
   $range = $_SESSION['hr_stats_reports_range'];
   $form['basic'] = array(
@@ -64,7 +67,7 @@ function hr_stats_reports($form, &$form_state, $entity_type, $entity, $report) {
     ),
   );
   // Default to operation in case of unexpected node types.
-  $segment_var = isset($segment_vars[$entity->type]) ? $segment_vars[$entity->type] : $segment_vars['hr_operation'];
+  $segment_var = isset($segment_vars[$entity_type]) ? $segment_vars[$entity->type] : $segment_vars['hr_operation'];
 
   $period = 'day';
   if (empty($range)) {
