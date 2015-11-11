@@ -549,24 +549,29 @@ function hr_bundles_variable_update($name, $value, $old_value, $options) {
 }
 
 /**
- * Implements hook_node_insert()
+ * Implements hook_node_insert().
  *
- * Sets the og variables of the operation when creating a bundle
+ * Sets the og variables of the operation when creating a bundle and creates
+ * the required menus.
  */
 function hr_bundles_node_insert($node) {
-  if ($node->type == 'hr_bundle') {
-    // Get nid of the operation
-    $op_gid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
-    // Get enabled variables
-    $controller = variable_realm_controller('og');
-    $enabled_variables = $controller->getEnabledVariables();
-    foreach ($enabled_variables as $name) {
-      $value = variable_realm_get('og', 'node_'.$op_gid, $name);
-      if ($value != NULL) {
-        variable_realm_set('og', 'node_'.$node->nid, $name, $value);
-      }
+  // Only relevant for clusters/bundles and only act on groups.
+  if ($node->type <> 'hr_bundle') {
+    return;
+  }
+
+  // Get nid of the operation
+  $op_gid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
+  // Get enabled variables
+  $controller = variable_realm_controller('og');
+  $enabled_variables = $controller->getEnabledVariables();
+  foreach ($enabled_variables as $name) {
+    $value = variable_realm_get('og', 'node_'.$op_gid, $name);
+    if ($value != NULL) {
+      variable_realm_set('og', 'node_'.$node->nid, $name, $value);
     }
   }
+
   // Make all managers and editors of the operation a bundle member of this bundle
   // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4143
   // Get users belonging to the operation
@@ -587,6 +592,28 @@ function hr_bundles_node_insert($node) {
       }
     }
   }
+
+  // Add the required menu items for the upper menu.
+  _hr_bundles_toggle_menu_features($node);
+}
+
+/**
+ * Helper function to add the required menus to the cluster/bundle.
+ */
+function _hr_bundles_toggle_menu_features($node) {
+  // Load the features that are disabled for the node to not include those.
+  if (empty($node->features_disabled)) {
+    og_features_load_disabled_features($node, 'node');
+  }
+
+  $features_registry = og_features_get_registry();
+  $features = array();
+  foreach ($features_registry as $id => $registry_item) {
+    if (!isset($node->features_disabled[$id])) {
+      $features[$id] = $id;
+    }
+  }
+  module_invoke_all('og_features_toggle', $node, $node->nid, 'node', $features);
 }
 
 /**

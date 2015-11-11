@@ -19,6 +19,7 @@ dependencies[] = link_icons
 dependencies[] = list
 dependencies[] = number
 dependencies[] = og
+dependencies[] = og_features
 dependencies[] = og_menu
 dependencies[] = og_role_delegate
 dependencies[] = og_ui
