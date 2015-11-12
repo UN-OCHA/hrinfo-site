@@ -3958,6 +3958,8 @@ form .table-responsive { overflow-x: inherit; }
 #block-hr-operations-operations-status .content .operation-status.archived { background-color: #bc2e3c; }
 #block-hr-operations-operations-status .content .operation-status i { display: block; position: absolute; right: 10px; top: 50%; border: 2px solid white; width: 20px; height: 20px; border-radius: 20px; line-height: 18px; margin-top: -10px; }
 
+.form-item-range { margin-top: 0; }
+
 .user-teaser h3 { display: none; }
 
 .user-teaser dl { margin-bottom: 0; }
