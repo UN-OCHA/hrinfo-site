@@ -552,3 +552,17 @@ function hr_stats_tokens($type, $tokens, array $data = array(), array $options =
   }
   return $replacements;
 }
+
+/**
+ * Implements hook_js_alter().
+ *
+ * Remove bootstrap for this particular page of analytics to allow the stats
+ * filter to work.
+ */
+function hr_stats_js_alter(&$javascript) {
+  $path = current_path();
+  $nid = arg(2);
+  if (is_numeric($nid) && (stripos($path, "group/node/$nid/admin/analytics") !== FALSE)) {
+    unset($javascript['http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js']);
+  }
+}

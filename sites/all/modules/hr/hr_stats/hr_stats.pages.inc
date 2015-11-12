@@ -25,7 +25,7 @@ function hr_stats_reports($form, &$form_state, $entity_type, $entity_id, $report
 
   $wrapper = entity_metadata_wrapper($entity_type, $entity_id);
 
-  $range = $_SESSION['hr_stats_reports_range'];
+  $range = isset($_SESSION['hr_stats_reports_range']) ? $_SESSION['hr_stats_reports_range'] : date('Y-m-d');
   $form['basic'] = array(
     '#type' => 'fieldset',
     '#title' => t('Select time period'),
@@ -67,13 +67,11 @@ function hr_stats_reports($form, &$form_state, $entity_type, $entity_id, $report
     ),
   );
   // Default to operation in case of unexpected node types.
-  $segment_var = isset($segment_vars[$entity_type]) ? $segment_vars[$entity->type] : $segment_vars['hr_operation'];
+  $segment_var = isset($segment_vars[$entity_type]) ? $segment_vars[$entity_type] : $segment_vars['hr_operation'];
 
   $period = 'day';
-  if (empty($range)) {
-    $date_range = date('Y-m-d');
-  }
-  else {
+  $date_range = $range;
+  if (is_array($range)) {
     $date_range = $range['start'];
     if (!empty($range['end']) && ($range['end'] <> $range['start'])) {
       $date_range .= ',' . $range['end'];
