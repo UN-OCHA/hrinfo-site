@@ -564,5 +564,7 @@ function hr_stats_js_alter(&$javascript) {
   $nid = arg(2);
   if (is_numeric($nid) && (stripos($path, "group/node/$nid/admin/analytics") !== FALSE)) {
     unset($javascript['http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js']);
+    unset($javascript['https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js']);
+    unset($javascript['://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js']);
   }
 }
