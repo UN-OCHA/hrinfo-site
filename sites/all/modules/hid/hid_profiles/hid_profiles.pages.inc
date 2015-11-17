@@ -66,7 +66,6 @@ function _hid_profiles_json_helper($matches) {
   drupal_add_http_header('Access-Control-Allow-Origin', '*');
   drupal_add_http_header('Access-Control-Allow-Methods', 'GET');
   drupal_json_output($matches);
-  exit();
 }
 
 /**
