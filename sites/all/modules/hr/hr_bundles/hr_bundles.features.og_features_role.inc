@@ -10,6 +10,14 @@
 function hr_bundles_og_features_default_roles() {
   $roles = array();
 
+  // Exported OG Role: 'node:hr_bundle:contributor'.
+  $roles['node:hr_bundle:contributor'] = array(
+    'gid' => 0,
+    'group_type' => 'node',
+    'group_bundle' => 'hr_bundle',
+    'name' => 'contributor',
+  );
+
   // Exported OG Role: 'node:hr_bundle:editor'.
   $roles['node:hr_bundle:editor'] = array(
     'gid' => 0,
@@ -24,14 +32,6 @@ function hr_bundles_og_features_default_roles() {
     'group_type' => 'node',
     'group_bundle' => 'hr_bundle',
     'name' => 'manager',
-  );
-
-  // Exported OG Role: 'node:hr_bundle:contributor'.
-  $roles['node:hr_bundle:contributor'] = array(
-    'gid' => 0,
-    'group_type' => 'node',
-    'group_bundle' => 'hr_bundle',
-    'name' => 'contributor',
   );
 
   return $roles;
