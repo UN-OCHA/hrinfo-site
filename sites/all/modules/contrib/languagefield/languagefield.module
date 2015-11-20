@@ -24,15 +24,15 @@ function languagefield_field_info() {
       'label' => t('Language'),
       'description' => t('This field stores a language reference in the database.'),
       'settings' => array(
-                      'enabled' => array(LANGUAGEFIELD_LANGUAGES_ALL => LANGUAGEFIELD_LANGUAGES_ALL),
-                      'format' => array('name' => 'name'),
-                      'languages' => array(),
-                      'excluded_languages' => array(),
-                      'groups' => '',
+        'enabled' => array(LANGUAGEFIELD_LANGUAGES_ALL => LANGUAGEFIELD_LANGUAGES_ALL),
+        'format' => array('name' => 'name'),
+        'languages' => array(),
+        'excluded_languages' => array(),
+        'groups' => '',
 //                      // TODO: settings to generate a field_list filter in views.
 //                      'allowed_values' => _languagefield_options(NULL),
 //                      'allowed_values_function' => '_languagefield_options',
-                    ),
+      ),
 //      'instance_settings' => array(
 //                               'format' => array('name' => 'name'),
 ////                             'text_processing' => 0,  // avoids error from text.module: function _text_sanitize()
@@ -82,7 +82,7 @@ function languagefield_data_property_info($name = NULL) {
   );
 
   // Add the default values for each of the field properties.
-  foreach ($properties as $key => &$value) {
+  foreach ($properties as &$value) {
     $value += array(
       'description' => !empty($name) ? t('!label of field %name', array('!label' => $value['label'], '%name' => $name)) : '',
       'getter callback' => 'entity_property_verbatim_get',
@@ -117,10 +117,11 @@ function languagefield_field_settings_form($field, $instance, $has_data) {
       LANGUAGEFIELD_LANGUAGES_ENABLED => t('Enabled installed languages'),
       // The following are copied from LanguageConfiguration::getDefaultOptions()
       LANGUAGEFIELD_SITE_DEFAULT => t("Site's default language (!language)", array(
-        '!language' => language_default()->name,
-      )) . '*',
+          '!language' => language_default()->name,
+        )) . '*',
       LANGUAGEFIELD_CURRENT_INTERFACE => t('Current interface language') . '*',
       LANGUAGEFIELD_AUTHORS_DEFAULT => t("Author's preferred language") . '*',
+      LANGUAGE_NONE => t("Language neutral ('und')"),
     ),
     '#description' => t("Installed languages can be maintained on the
       <a href='@languages-page'>@languages</a>
@@ -279,7 +280,7 @@ function languagefield_field_formatter_settings_summary($field, $instance, $view
     $summary[] = t('** Not set **');
   }
   else {
-    foreach ($settings as $key => $value) {
+    foreach ($settings as $value) {
       switch ($value) {
         case '0':
           // Option is not selected. 
@@ -338,17 +339,17 @@ function _languagefield_theme_option($item, &$settings) {
     $language['language'] = $item['value'];
     $variables = array(
       'language' => (object) $language,  // TODO: what happens when no icon for this language code
-      'title' => $item['name'],
+      'title' => !empty($item['name']) ? $item['name'] : '',
     );
     $markup[] = theme('languageicons_icon', $variables);
   }
-  if (!empty($settings['format']['iso'])) {
+  if (!empty($settings['format']['iso']) && !empty($item['value'])) {
     $markup[] = $item['value'];
   }
-  if (!empty($settings['format']['name'])) {
+  if (!empty($settings['format']['name']) && !empty($item['name'])) {
     $markup[] = $item['name'];
   }
-  if (!empty($settings['format']['name_native'])) {
+  if (!empty($settings['format']['name_native']) && !empty($item['name_native'])) {
     $markup[] = $item['name_native'];
   }
 
@@ -397,13 +398,14 @@ function _languagefield_widget_value($element, $input = FALSE, $form_state) {
   if (!$input) {
     // First call the default value_callback function.
     $value_callback = 'form_type_' . $element['#type'] . '_value';
-    $input = $value_callback($element, $input, $form_state);
+    if (function_exists($value_callback)) {
+	    $input = $value_callback($element, $input, $form_state);
+	  }
   }
-
-// We do the following, to ensure that the LANGUAGEFIELD_* default values
-// Are converted before showing the widget.
-// (Widgets are not always processed when they are hidden.)
   else {
+    // We do the following, to ensure that the LANGUAGEFIELD_* default values
+    // are converted before showing the widget.
+    // (Widgets are not always processed when they are hidden.)
     $return = array();
 
     // The form is submitted.
@@ -515,12 +517,13 @@ function languagefield_migrate_api() {
  * static $predefined: array of language subsets.
  */
 function _languagefield_options($subsets = NULL, $langcode = LANGUAGE_NONE) {
-  static $predefined = NULL, $predefined_with_native = NULL;
+  static $predefined = NULL;
 
   // @see _locale_prepare_predefined_list()
   require_once DRUPAL_ROOT . '/includes/iso.inc';
 
   $allsets = array(
+    LANGUAGE_NONE => TRUE,
     LANGUAGEFIELD_LANGUAGES_ALL => TRUE,
     LANGUAGEFIELD_LANGUAGES_ENABLED => TRUE,
     LANGUAGEFIELD_LANGUAGES_INSTALLED => TRUE,
@@ -541,69 +544,76 @@ function _languagefield_options($subsets = NULL, $langcode = LANGUAGE_NONE) {
   // Use a cache for each user-language.
   if (!isset($predefined[$langcode])) {
 
-   foreach($allsets as $subset => $active) {
-    // Get the untranslated language list, using the (array-format) of _locale_get_predefined_list().
-    // @TODO: One day we should use the (objects-)format of language_list().
-    switch ($subset) {
+    foreach($allsets as $subset => $active) {
+      // Get the untranslated language list, using the (array-format) of _locale_get_predefined_list().
+      // @TODO: One day we should use the (objects-)format of language_list().
+      switch ($subset) {
 
-      case LANGUAGEFIELD_SITE_DEFAULT:
-      case LANGUAGEFIELD_CURRENT_INTERFACE:
-      case LANGUAGEFIELD_AUTHORS_DEFAULT:
-        $language = _languagefield_getLanguageConfigurationOptions($subset);
-        $predefined[$langcode][$subset][$subset]['value'] = $subset;
-        $predefined[$langcode][$subset][$subset]['langcode'] = $subset;
-        $predefined[$langcode][$subset][$subset]['name'] = t($language[$subset]);
-        $predefined[$langcode][$subset][$subset]['native'] = '';
+      case LANGUAGE_NONE:
+        $predefined[$langcode][$subset][LANGUAGE_NONE]['value'] = LANGUAGE_NONE;
+        $predefined[$langcode][$subset][LANGUAGE_NONE]['langcode'] = LANGUAGE_NONE;
+        $predefined[$langcode][$subset][LANGUAGE_NONE]['name'] = t('Language neutral');
+        $predefined[$langcode][$subset][LANGUAGE_NONE]['native'] = '';
         break;
 
-      // The following are from Languagefield module.
-      case LANGUAGEFIELD_LANGUAGES_INSTALLED:
-      case LANGUAGEFIELD_LANGUAGES_ENABLED:
-        $predefined[$langcode][$subset] = array();
-        // Get all possible languages with English and native name.
-        $languages = language_list();
-        foreach ($languages as $language) {
-          if ($language->enabled || $subset == LANGUAGEFIELD_LANGUAGES_INSTALLED) {
-            // Prepare for D8. The next line can be removed in D8. See http://drupal.org/node/1399806
-            $language->langcode = isset($language->langcode) ? $language->langcode : $language->language;
+        case LANGUAGEFIELD_SITE_DEFAULT:
+        case LANGUAGEFIELD_CURRENT_INTERFACE:
+        case LANGUAGEFIELD_AUTHORS_DEFAULT:
+          $language = _languagefield_getLanguageConfigurationOptions($subset);
+          $predefined[$langcode][$subset][$subset]['value'] = $subset;
+          $predefined[$langcode][$subset][$subset]['langcode'] = $subset;
+          $predefined[$langcode][$subset][$subset]['name'] = t($language[$subset]);
+          $predefined[$langcode][$subset][$subset]['native'] = '';
+          break;
 
-            $predefined[$langcode][$subset][$language->langcode]['value'] = $language->langcode;
-            $predefined[$langcode][$subset][$language->langcode]['langcode'] = $language->langcode;
-            $predefined[$langcode][$subset][$language->langcode]['name'] = t($language->name);
-            $predefined[$langcode][$subset][$language->langcode]['native'] = isset($language->native) ? $language->native : '';
+        // The following are from Languagefield module.
+        case LANGUAGEFIELD_LANGUAGES_INSTALLED:
+        case LANGUAGEFIELD_LANGUAGES_ENABLED:
+          $predefined[$langcode][$subset] = array();
+          // Get all possible languages with English and native name.
+          $languages = language_list();
+          foreach ($languages as $language) {
+            if ($language->enabled || $subset == LANGUAGEFIELD_LANGUAGES_INSTALLED) {
+              // Prepare for D8. The next line can be removed in D8. See http://drupal.org/node/1399806
+              $language->langcode = isset($language->langcode) ? $language->langcode : $language->language;
+
+              $predefined[$langcode][$subset][$language->langcode]['value'] = $language->langcode;
+              $predefined[$langcode][$subset][$language->langcode]['langcode'] = $language->langcode;
+              $predefined[$langcode][$subset][$language->langcode]['name'] = t($language->name);
+              $predefined[$langcode][$subset][$language->langcode]['native'] = isset($language->native) ? $language->native : '';
+            }
           }
-        }
-        break;
+          break;
 
-      case LANGUAGEFIELD_LANGUAGES_ALL:
-      default:
-        $subset = LANGUAGEFIELD_LANGUAGES_ALL;
-        // @see _locale_prepare_predefined_list()
-        $languages = _locale_get_predefined_list();
-        foreach ($languages as $id => $language) {
-          $predefined[$langcode][$subset][$id]['value'] = $id;
-          $predefined[$langcode][$subset][$id]['langcode'] = $id;
-          $predefined[$langcode][$subset][$id]['name'] = t($language[0]);
-          $predefined[$langcode][$subset][$id]['native'] = isset($language[1]) ? $language[1] : '';
-        }
-        break;
-    }
-
-    // Translate the language list.
-    $t_options = ($langcode != LANGUAGE_NONE) ? array('langcode' => $langcode) : array() ;
-    foreach ($predefined[$langcode][$subset] as $key => $value) {
-      // Translate the language name, if possible.
-      $tname = t($value['name'], array(), $t_options);
-
-      // Append native name in output, if possible.
-      if ( !empty($value['native']) && $tname != $value['native'] ) {
-        $predefined[$langcode][$subset][$key]['name_native'] = t('!language (!native)', array('!language' => $tname, '!native' => $value['native']));
+        case LANGUAGEFIELD_LANGUAGES_ALL:
+        default:
+          $subset = LANGUAGEFIELD_LANGUAGES_ALL;
+          // @see _locale_prepare_predefined_list()
+          $languages = _locale_get_predefined_list();
+          foreach ($languages as $id => $language) {
+            $predefined[$langcode][$subset][$id]['value'] = $id;
+            $predefined[$langcode][$subset][$id]['langcode'] = $id;
+            $predefined[$langcode][$subset][$id]['name'] = t($language[0]);
+            $predefined[$langcode][$subset][$id]['native'] = isset($language[1]) ? $language[1] : '';
+          }
+          break;
       }
-      else {
-        $predefined[$langcode][$subset][$key]['name_native'] = $tname;
+
+      // Translate the language list.
+      $t_options = ($langcode != LANGUAGE_NONE) ? array('langcode' => $langcode) : array() ;
+      foreach ($predefined[$langcode][$subset] as $key => $value) {
+        // Translate the language name, if possible.
+        $tname = t($value['name'], array(), $t_options);
+
+        // Append native name in output, if possible.
+        if ( !empty($value['native']) && $tname != $value['native'] ) {
+          $predefined[$langcode][$subset][$key]['name_native'] = t('!language (!native)', array('!language' => $tname, '!native' => $value['native']));
+        }
+        else {
+          $predefined[$langcode][$subset][$key]['name_native'] = $tname;
+        }
       }
     }
-   }
   }
 
   // Compile the list of languages.
@@ -635,9 +645,9 @@ function _languagefield_settings_options($usage = 'formatter') {
     );
   }
   $options += array(
-      'iso'  => t('ISO 639-code'),
-      'name' => t('Name'),
-      'name_native' => t('Name and native'),
+    'iso'  => t('ISO 639-code'),
+    'name' => t('Name'),
+    'name_native' => t('Name and native'),
   );
   return $options;
 }

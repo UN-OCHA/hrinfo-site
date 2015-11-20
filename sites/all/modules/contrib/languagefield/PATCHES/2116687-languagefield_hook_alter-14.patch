@@ -1,0 +1,15 @@
+diff --git a/languagefield.module b/languagefield.module
+index 4f10c5f..200b907 100644
+--- a/languagefield.module
++++ b/languagefield.module
+@@ -604,6 +604,10 @@ function _languagefield_options($subsets = NULL, $langcode = LANGUAGE_NONE) {
+     }
+   }
+   asort($languages);
++
++  // Let other modules change the default sort.
++  drupal_alter('languagefield_options', $languages, $subsets, $langcode);
++
+   return $languages;
+ }
+ 

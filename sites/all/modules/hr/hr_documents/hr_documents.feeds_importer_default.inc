@@ -114,111 +114,116 @@ function hr_documents_feeds_importer_default() {
         'authorize' => 1,
         'mappings' => array(
           0 => array(
+            'source' => 'Guid',
+            'target' => 'guid',
+            'unique' => 0,
+          ),
+          1 => array(
             'source' => 'Title',
             'target' => 'title',
             'unique' => 0,
           ),
-          1 => array(
+          2 => array(
             'source' => 'Title:en',
             'target' => 'title_field:et:en',
             'unique' => FALSE,
           ),
-          2 => array(
+          3 => array(
             'source' => 'Title:fr',
             'target' => 'title_field:et:fr',
             'unique' => FALSE,
           ),
-          3 => array(
+          4 => array(
             'source' => 'Title:es',
             'target' => 'title_field:et:es',
             'unique' => FALSE,
           ),
-          4 => array(
+          5 => array(
             'source' => 'Description',
             'target' => 'body:et:und',
             'unique' => FALSE,
           ),
-          5 => array(
+          6 => array(
             'source' => 'Description',
             'target' => 'body:et:en',
             'unique' => FALSE,
           ),
-          6 => array(
+          7 => array(
             'source' => 'Type',
             'target' => 'field_document_type:label',
             'unique' => FALSE,
           ),
-          7 => array(
+          8 => array(
             'source' => 'File',
-            'target' => 'field_files_collection:field_file',
+            'target' => 'field_files_collection:field_file:uri',
             'unique' => FALSE,
           ),
-          8 => array(
+          9 => array(
             'source' => 'Language',
             'target' => 'field_files_collection:field_language',
             'unique' => FALSE,
           ),
-          9 => array(
+          10 => array(
             'source' => 'Sectors',
             'target' => 'field_sectors:label',
             'unique' => FALSE,
           ),
-          10 => array(
+          11 => array(
             'source' => 'Clusters/Sectors',
             'target' => 'field_bundles:label',
             'unique' => FALSE,
           ),
-          11 => array(
+          12 => array(
             'source' => 'Publication Date',
             'target' => 'field_publication_date:start',
             'unique' => FALSE,
           ),
-          12 => array(
+          13 => array(
             'source' => 'Organization',
             'target' => 'field_organizations:label',
             'unique' => FALSE,
           ),
-          13 => array(
+          14 => array(
             'source' => 'Coordination hubs',
             'target' => 'field_coordination_hubs:label',
             'unique' => FALSE,
           ),
-          14 => array(
+          15 => array(
             'source' => 'Locations',
             'target' => 'field_locations:label',
             'unique' => FALSE,
           ),
-          15 => array(
+          16 => array(
             'source' => 'Fundings',
-            'target' => 'field_funding_methods:label',
+            'target' => 'field_fundings:label',
             'unique' => FALSE,
           ),
-          16 => array(
+          17 => array(
             'source' => 'Themes',
             'target' => 'field_themes:label',
             'unique' => FALSE,
           ),
-          17 => array(
+          18 => array(
             'source' => 'Disasters',
             'target' => 'field_disasters:label',
             'unique' => FALSE,
           ),
-          18 => array(
+          19 => array(
             'source' => 'Spaces',
             'target' => 'og_group_ref:label',
             'unique' => FALSE,
           ),
-          19 => array(
+          20 => array(
             'source' => 'Post date',
             'target' => 'created',
             'unique' => FALSE,
           ),
-          20 => array(
+          21 => array(
             'source' => 'Author',
             'target' => 'user_mail',
             'unique' => FALSE,
           ),
-          21 => array(
+          22 => array(
             'source' => 'Path',
             'target' => 'path_alias',
             'pathauto_override' => 1,
@@ -228,6 +233,7 @@ function hr_documents_feeds_importer_default() {
         'input_format' => 'plain_text',
         'skip_hash_check' => 0,
         'bundle' => 'hr_document',
+        'update_non_existent' => 'skip',
       ),
     ),
     'content_type' => '',

@@ -52,11 +52,7 @@ function hr_documents_views_default_views() {
   );
 
   /* Display: Entity Reference */
-  $handler = $view->new_display(
-    'entityreference',
-    'Entity Reference',
-    'entityreference_1'
-  );
+  $handler = $view->new_display('entityreference', 'Entity Reference', 'entityreference_1');
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
@@ -902,11 +898,7 @@ function hr_documents_views_default_views() {
   );
 
   /* Display: Entity Reference */
-  $handler = $view->new_display(
-    'entityreference',
-    'Entity Reference',
-    'entityreference_1'
-  );
+  $handler = $view->new_display('entityreference', 'Entity Reference', 'entityreference_1');
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
@@ -954,11 +946,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['defaults']['arguments'] = FALSE;
 
   /* Display: Documents from context */
-  $handler = $view->new_display(
-    'panel_pane',
-    'Documents from context',
-    'documents_from_context'
-  );
+  $handler = $view->new_display('panel_pane', 'Documents from context', 'documents_from_context');
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'Latest Documents';
   $handler->display->display_options['defaults']['link_display'] = FALSE;
@@ -1051,11 +1039,7 @@ function hr_documents_views_default_views() {
   );
 
   /* Display: Meeting Minutes from context */
-  $handler = $view->new_display(
-    'panel_pane',
-    'Meeting Minutes from context',
-    'mm_from_context'
-  );
+  $handler = $view->new_display('panel_pane', 'Meeting Minutes from context', 'mm_from_context');
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'Latest Meeting Minutes';
   $handler->display->display_options['defaults']['link_display'] = FALSE;
@@ -1161,9 +1145,7 @@ function hr_documents_views_default_views() {
     t('All'),
     t('List'),
     t('Space'),
-    t(
-      'Please select a space OR a cluster, but NOT BOTH. Selecting both a space and a cluster will not work.'
-    ),
+    t('Please select a space OR a cluster, but NOT BOTH. Selecting both a space and a cluster will not work.'),
     t('Clusters/Sectors'),
     t('Coordination hubs'),
     t('Disasters'),
