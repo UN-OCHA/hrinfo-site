@@ -1998,7 +1998,7 @@ function field_collection_hide_blank_items($field) {
 }
 
 /**
- * Implements hook_feeds_processor_targets_alter()
+ * Implements hook_feeds_processor_targets_alter().
  */
 function field_collection_feeds_processor_targets_alter(&$targets, $entity_type, $bundle_name) {
   // Thou shalt not attempt Sorcery!
@@ -2008,198 +2008,115 @@ function field_collection_feeds_processor_targets_alter(&$targets, $entity_type,
   foreach (field_info_instances($entity_type, $bundle_name) as $name => $instance) {
     $info = field_info_field($name);
     if ($info['type'] == 'field_collection') {
-      $new_targets = array();
-      feeds_alter('feeds_processor_targets', $new_targets, 'field_collection_item', $info['field_name']);
-      foreach ($new_targets as $sub_name => $target) {
-        $new_name = $info['field_name'] . ':' . $sub_name;
-        $targets[$new_name] = $target;
-        if (isset($target['name'])) {
-          $targets[$new_name]['name'] = $instance['label'] . ': ' . $target['name'];
-        }
-        // We override callback for now and retrieve original later.
-        $targets[$new_name]['callback'] = 'field_collection_feeds_set_target';
-        $targets[$new_name]['form_callback'] = 'field_collection_feeds_mapper_form_language';
-        $targets[$new_name]['summary_callback'] = 'field_collection_feeds_mapper_summary_language';
-      }
-    }
-  }
-}
 
-/**
- * Process Field Collection items
- */
-function field_collection_feeds_set_target($source, $entity, $target, $value, $main_mapping) {
-  static $sub_targets = array();
-  $args = explode(':', $target);
-  $target = array_shift($args);
-  $sub_target = implode(':', $args);
-  // Retrieve the submapping so we can pass it to the callback
-  $sub_mapping = array();
-  $config = $source->importer()->getConfig();
-  if (!empty($config['processor']['config']['mappings'])) {
-    foreach ( $config['processor']['config']['mappings'] as $mapping ) {
-      if ( $mapping['target'] == $target . ':' . $sub_target && $main_mapping['language'] == $mapping['language']) {
-        $sub_mapping = $mapping;
-        $sub_mapping['target'] = $sub_target;
-        break;
-      }
-    }
-  }
-  // Now we retrieve old callbacks and keep then on a static cache
-  if (!isset($sub_targets[$target])) {
-    feeds_alter('feeds_processor_targets', $sub_targets[$target], 'field_collection_item', $target, $sub_mapping);
-  }
-  $_sub_targets = $sub_targets[$target];
-  $value = is_array($value) ? $value : array($value);
-  $info = field_info_field($target);
-  // Iterate over all values.
-  $delta = 0;
-  $field = isset($entity->$target) ? $entity->$target : array();
-  $language = ($info['translatable'] && isset($entity->language)) ? $entity->language : LANGUAGE_NONE;
-  foreach ($value as $v) {
-    if (empty($v)) {
-      // Avoid creation of empty field collections
-      continue;
-    }
-    if (isset($field[$language][$delta]['entity'])) {
-      $field_collection_item = $field[$language][$delta]['entity'];
-    }
-    elseif (isset($field[$language][$delta]['value'])) {
-      $field_collection_item = field_collection_item_load($field[$language][$delta]['value']);
-    }
-    if (empty($field_collection_item)) {
-      $field_collection_item = entity_create('field_collection_item', array('field_name' => $target));
-    }
-    // Hack: feeds mapping callbacks (at least text_feeds_set_target), seem to
-    // want an empty array for a Field Collection item target, to be sure the
-    // item is iterated over at least once.
-    //unset($field_collection_item->$sub_target);// Commented out for language handling. Might cause problems?
-    // let's see if the field in the field collection has multiple cardinality
-    // in case the field is complex type such as field_url:title, field_url:link
-    $sub_field = explode(':', $sub_target);
-    $sub_field_info = field_info_field($sub_field[0]);
-    if (isset($_sub_targets[$sub_target]['callback']) && function_exists($_sub_targets[$sub_target]['callback'])) {
-      $callback = $_sub_targets[$sub_target]['callback'];
-        $callback($source, $field_collection_item, $sub_target, $v, $sub_mapping);
-    }
-    $field[$language][$delta]['entity'] = $field_collection_item;
-    $field[$language][$delta]['value'] = $field_collection_item->item_id;
-    unset($field_collection_item);
-    if ($info['cardinality'] == 1) {
-      break;
-    }
-      $delta++;
-  }
-  $entity->{$target} = $field;
-}
-
-/**
- * Implements hook_feeds_presave().
- */
-function field_collection_feeds_presave($source, $entity) {
-  // Do not save any empty field collection items that may have been created
-  // during the mapping process. Since the mapping is done field by field in
-  // field_collection_feeds_set_target(), we have to wait until this hook (when
-  // the field collection item is fully built up) before we can check if it's
-  // empty.
-  $config = $source->importer()->getConfig();
-  if (!empty($config['processor']['config']['mappings'])) {
-    // Find all field collection mappings.
-    foreach ($config['processor']['config']['mappings'] as $mapping) {
-      if (isset($mapping['target'])) {
-        $args = explode(':', $mapping['target']);
-        $field_name = array_shift($args);
-        if (($field = field_info_field($field_name)) && $field['type'] == 'field_collection') {
-          // If the field collection item is empty, do not save it.
-          if (!empty($entity->{$field_name})) {
-            foreach ($entity->{$field_name} as $langcode => &$items) {
-              foreach ($items as $delta => $item) {
-                if (isset($item['entity']) && field_collection_item_is_empty($item['entity'])) {
-                  unset($items[$delta]);
-                }
-              }
-              // Clean up the final array.
-              if (empty($items)) {
-                unset($entity->{$field_name}[$langcode]);
-              }
-              else {
-                $items = array_values($items);
-              }
-            }
+      static $loaded = FALSE;
+      if (!$loaded) {
+        $path = drupal_get_path('module', 'feeds') . '/mappers';
+        $files = drupal_system_listing('/.*\.inc$/', $path, 'name', 0);
+        foreach ($files as $file) {
+          if (strstr($file->uri, '/mappers/')) {
+            require_once(DRUPAL_ROOT . '/' . $file->uri);
           }
         }
       }
-    }
-  }
-}
+      $loaded = TRUE;
 
-/**
- * Returns the language summary text for use in a mapper target summary_callback
- *
- * @param array $mapping
- *   Associative array of the mapping settings.
- * @param array $target
- *   Array of target settings, as defined by the processor or
- *   hook_feeds_processor_targets_alter().
- * @param array $form
- *   The whole mapping form.
- * @param array $form_state
- *   The form state of the mapping form.
- *
- * @return string
- *   Returns, as a string that may contain HTML, the summary to display while
- *   the full form isn't visible.
- *   If the return value is empty, no summary and no option to view the form
- *   will be displayed.
- */
-function field_collection_feeds_mapper_summary_language($mapping, $target, $form, $form_state) {
-  if (module_exists('locale')) {
-    list($field_name, $subfield_name) = explode(':', $mapping['target']);
-    $info = field_info_field($subfield_name);
-    if ($info['translatable']) {
-      $language_options = array(LANGUAGE_NONE => t('All languages')) + locale_language_list('name');
-      if (empty($mapping['language'])) {
-        return t('Language: <strong>@search</strong>', array('@search' => $language_options[LANGUAGE_NONE]));
+      $sub_type = 'field_collection_item';
+      $new_targets = module_invoke_all('feeds_processor_targets', $sub_type, $info['field_name']);
+      drupal_alter('feeds_processor_targets', $new_targets, $sub_type, $info['field_name']);
+
+      foreach ($new_targets as $sub_name => $target) {
+        $new_name = t($info['field_name']) . ':' . t($sub_name);
+        $targets[$new_name] = $target;
+        if (isset($target['name'])) {
+          $targets[$new_name]['name'] = $instance['label'] . ':' . $target['name'];
+        }
+
+        // We override callback for now and retrieve original later.
+        $targets[$new_name]['callback'] = 'field_collection_feeds_set_target';
       }
-      return t('Language: <strong>@search</strong>', array('@search' => $language_options[$mapping['language']]));
     }
   }
-  return FALSE;
 }
 
 /**
- * Returns the language form for use in a mapper target form_callback
- *
- * @param array $mapping
- *   Associative array of the mapping settings.
- * @param array $target
- *   Array of target settings, as defined by the processor or
- *   hook_feeds_processor_targets_alter().
- * @param array $form
- *   The whole mapping form.
- * @param array $form_state
- *   The form state of the mapping form.
- *
- * @return string
- *   Returns, as a string that may contain HTML, the summary to display while
- *   the full form isn't visible.
- *   If the return value is empty, no summary and no option to view the form
- *   will be displayed.
+ * Process Field Collection items.
  */
-function field_collection_feeds_mapper_form_language($mapping, $target, $form, $form_state) {
-  $form = array();
-  if (module_exists('locale')) {
-    list($field_name, $subfield_name) = explode(':', $mapping['target']);
-    $info = field_info_field($subfield_name);
-    if ($info['translatable']) {
-      $language_options = array(LANGUAGE_NONE => t('All languages')) + locale_language_list('name');
-      $form['language'] = array(
-        '#type' => 'select',
-        '#title' => t('Language'),
-        '#options' => $language_options,
-        '#default_value' => !empty($mapping['language']) ? $mapping['language'] : LANGUAGE_NONE,
-      );
-    }
+function field_collection_feeds_set_target($source, $entity, $target, $value, $main_mapping) {
+  static $sub_targets = array();
+
+  $args = explode(':', $target);
+  $target = array_shift($args);
+  $sub_target = implode(':', $args);
+
+  $sub_type = 'field_collection_item';
+  $new_targets = module_invoke_all('feeds_processor_targets', $sub_type, $target);
+  drupal_alter('feeds_processor_targets', $new_targets, $sub_type, $target);
+
+  // Now we retrieve old callbacks and keep then on a static cache.
+  if (!isset($sub_targets[$target])) {
+    $sub_targets[$target] = array();
+    drupal_alter('feeds_processor_targets', $sub_targets[$target], $sub_type, $target);
   }
-  return $form;
+  $_sub_targets = $new_targets;
+
+  $value = is_array($value) ? $value : array($value);
+  $info = field_info_field($target);
+
+  // Iterate over all values.
+  $delta = 0;
+  $field = isset($entity->$target) ? $entity->$target : array();
+  try {
+    foreach ($value as $v) {
+      if (empty($v)) {
+        // Avoid creation of empty field collections.
+        continue;
+      }
+      if (isset($field['und'][$delta]['entity'])) {
+        $field_collection_item = $field['und'][$delta]['entity'];
+      }
+      elseif (isset($field['und'][$delta]['value'])) {
+        $field_collection_item = field_collection_item_load($field['und'][$delta]['value']);
+      }
+      if (empty($field_collection_item)) {
+        $field_collection_item = entity_create('field_collection_item', array('field_name' => $target));
+        $field_collection_item->setHostEntity($entity->feeds_item->entity_type, $entity);
+      }
+
+      $sub_mapping = array();
+      $config = $source->importer()->getConfig();
+      if (!empty($config['processor']['config']['mappings'])) {
+        foreach ($config['processor']['config']['mappings'] as $mapping) {
+          if ($mapping['target'] == $target . ':' . $sub_target) {
+            $sub_mapping = $mapping;
+            $sub_mapping['target'] = $sub_target;
+            break;
+          }
+        }
+      }
+
+      if (isset($_sub_targets[$sub_target]['callback']) && function_exists($_sub_targets[$sub_target]['callback'])) {
+        $callback = $_sub_targets[$sub_target]['callback'];
+        $callback($source, $field_collection_item, $sub_target, array($v), $sub_mapping);
+      }
+
+      // TRUE to skip host entity save - don't need to save the node here.
+      $field_collection_item->save(TRUE);
+
+      $field['und'][$delta]['entity'] = $field_collection_item;
+
+      unset($field_collection_item);
+
+      if ($info['cardinality'] == 1) {
+        break;
+      }
+      $delta++;
+    }
+  } catch (Exception $e) {
+    drupal_set_message($e->getMessage(), 'error');
+    watchdog_exception('field_collection', $e, $e->getMessage());
+    throw $e;
+  }
+
+  $entity->{$target} = $field;
 }
