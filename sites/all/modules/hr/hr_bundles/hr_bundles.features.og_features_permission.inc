@@ -40,6 +40,13 @@ function hr_bundles_og_features_default_permissions() {
     ),
   );
 
+  // Exported og permission: 'node:hr_bundle:assign contributor role'
+  $permissions['node:hr_bundle:assign contributor role'] = array(
+    'roles' => array(
+      'manager' => 'manager',
+    ),
+  );
+
   // Exported og permission: 'node:hr_bundle:assign editor role'
   $permissions['node:hr_bundle:assign editor role'] = array(
     'roles' => array(
@@ -54,37 +61,6 @@ function hr_bundles_og_features_default_permissions() {
     ),
   );
 
-  // Exported og permission: 'node:hr_bundle:assign contributor role'
-  $permissions['node:hr_bundle:assign contributor role'] = array(
-    'roles' => array(
-      'manager' => 'manager',
-    ),
-  );
-
-  // Exported og permission: 'node:hr_bundle:create hr_contact content'
-  $permissions['node:hr_bundle:create hr_contact content'] = array(
-    'roles' => array(
-      'editor' => 'editor',
-      'manager' => 'manager',
-    ),
-  );
-
-  // Exported og permission: 'node:hr_bundle:delete any hr_contact content'
-  $permissions['node:hr_bundle:delete any hr_contact content'] = array(
-    'roles' => array(
-      'editor' => 'editor',
-      'manager' => 'manager',
-    ),
-  );
-
-  // Exported og permission: 'node:hr_bundle:delete own hr_contact content'
-  $permissions['node:hr_bundle:delete own hr_contact content'] = array(
-    'roles' => array(
-      'editor' => 'editor',
-      'manager' => 'manager',
-    ),
-  );
-
   // Exported og permission: 'node:hr_bundle:manage members'
   $permissions['node:hr_bundle:manage members'] = array(
     'roles' => array(
@@ -93,8 +69,16 @@ function hr_bundles_og_features_default_permissions() {
     ),
   );
 
-  // Exported og permission: 'node:hr_bundle:update any hr_contact content'
-  $permissions['node:hr_bundle:update any hr_contact content'] = array(
+  // Exported og permission: 'node:hr_bundle:publish any content'
+  $permissions['node:hr_bundle:publish any content'] = array(
+    'roles' => array(
+      'editor' => 'editor',
+      'manager' => 'manager',
+    ),
+  );
+
+  // Exported og permission: 'node:hr_bundle:unpublish any content'
+  $permissions['node:hr_bundle:unpublish any content'] = array(
     'roles' => array(
       'editor' => 'editor',
       'manager' => 'manager',
@@ -105,14 +89,6 @@ function hr_bundles_og_features_default_permissions() {
   $permissions['node:hr_bundle:update group'] = array(
     'roles' => array(
       'administrator member' => 'administrator member',
-      'manager' => 'manager',
-    ),
-  );
-
-  // Exported og permission: 'node:hr_bundle:update own hr_contact content'
-  $permissions['node:hr_bundle:update own hr_contact content'] = array(
-    'roles' => array(
-      'editor' => 'editor',
       'manager' => 'manager',
     ),
   );

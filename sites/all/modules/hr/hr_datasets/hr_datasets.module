@@ -25,7 +25,7 @@ function hr_datasets_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ * Implements hook_og_features_toggle().
  */
 function hr_datasets_og_features_toggle($entity, $entity_id, $entity_type, $features) {
   if (isset($features['hr_datasets'])) {
@@ -51,6 +51,9 @@ function hr_datasets_og_features_toggle($entity, $entity_id, $entity_type, $feat
 
 }
 
+/**
+ * Implements hook_block_view_alter().
+ */
 function hr_datasets_block_view_alter(&$data, $block) {
   $path = drupal_get_path_alias();
   if ($block->module == 'facetapi' && $block->bid == 'facetapi-uulIYjH3ZtSu9hhI5ARgBYQeEUNqWe17' && $path == 'applications/data') {
@@ -89,7 +92,10 @@ function hr_datasets_preprocess_block(&$vars) {
   }
 }
 
-function hr_datasets_form_views_exposed_form_alter (&$form, $form_state) {
+/**
+ * Implements hook_form_alter().
+ */
+function hr_datasets_form_views_exposed_form_alter(&$form, $form_state) {
   $path = drupal_get_path_alias();
   if ($path == 'applications/data' && $form['#id'] == 'views-exposed-form-hr-datasets-master') {
     $form['#action'] = '/applications/data/datasets';
@@ -108,7 +114,6 @@ function hr_datasets_ctools_plugin_directory($module, $plugin) {
 /**
 *  Implements hook_menu().
 */
-
 function hr_datasets_menu(){
   $items = array();
   $items['node/%node/hdx-datasets'] = array(
@@ -124,7 +129,6 @@ function hr_datasets_menu(){
 /**
 *  Implements hook_block_info().
 */
-
 function hr_datasets_block_info() {
   $blocks['hdx-datasets_search'] = array(
     'info' => t('HDX Datasets Search'),
@@ -135,6 +139,9 @@ function hr_datasets_block_info() {
   return $blocks;
 }
 
+/**
+ * Implements hook_block_view().
+ */
 function hr_datasets_block_view($delta = '') {
   $block = array();
   switch ($delta) {
@@ -156,7 +163,7 @@ function hr_datasets_block_view($delta = '') {
       $block['content'] = '<div id="block-current-search-hr-current-search" class="block block-current-search">
 
     <h2>Current search</h2>
-  
+
   <div class="content">
     <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter">Filter: <span class="facetapi-active">216 items</span> displayed</div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/'.drupal_get_path_alias(current_path()).'"><i class="reset"></i></a> Reset all filters</div></div>  </div>
 </div>';

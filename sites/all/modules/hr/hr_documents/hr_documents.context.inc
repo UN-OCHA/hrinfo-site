@@ -127,11 +127,10 @@ function hr_documents_context_default_contexts() {
   );
   $context->condition_mode = 0;
 
-// Translatables
-// Included for use with string extractors like potx.
+  // Translatables
+  // Included for use with string extractors like potx.
   t('Documents');
   t('Documents global page');
-
   $export['hr_documents_global'] = $context;
 
   $context = new stdClass();

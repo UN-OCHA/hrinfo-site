@@ -10,7 +10,7 @@
 function hr_bundles_conditional_fields_default_fields() {
   $items = array();
 
-  $items[] = array(
+  $items["node:hr_bundle:0"] = array(
     'entity' => 'node',
     'bundle' => 'hr_bundle',
     'dependent' => 'field_parent_cluster',
