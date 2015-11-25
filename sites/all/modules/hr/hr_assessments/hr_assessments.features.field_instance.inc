@@ -1767,7 +1767,7 @@ function hr_assessments_field_default_field_instances() {
   // Exported field_instance: 'node-hr_assessment-field_disasters'
   $field_instances['node-hr_assessment-field_disasters'] = array(
     'bundle' => 'hr_assessment',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => '',
@@ -1809,11 +1809,14 @@ function hr_assessments_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'options',
+      'module' => 'entityreference',
       'settings' => array(
         'apply_chosen' => 1,
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
       ),
-      'type' => 'options_select',
+      'type' => 'entityreference_autocomplete_tags',
       'weight' => 22,
     ),
   );
@@ -1997,7 +2000,7 @@ function hr_assessments_field_default_field_instances() {
   // Exported field_instance: 'node-hr_assessment-field_organizations2'
   $field_instances['node-hr_assessment-field_organizations2'] = array(
     'bundle' => 'hr_assessment',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => '',
@@ -2042,11 +2045,14 @@ function hr_assessments_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'options',
+      'module' => 'entityreference',
       'settings' => array(
         'apply_chosen' => 1,
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
       ),
-      'type' => 'options_select',
+      'type' => 'entityreference_autocomplete_tags',
       'weight' => 2,
     ),
   );
@@ -2184,7 +2190,7 @@ function hr_assessments_field_default_field_instances() {
   // Exported field_instance: 'node-hr_assessment-field_themes'
   $field_instances['node-hr_assessment-field_themes'] = array(
     'bundle' => 'hr_assessment',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => '',
@@ -2229,11 +2235,14 @@ function hr_assessments_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'options',
+      'module' => 'entityreference',
       'settings' => array(
         'apply_chosen' => 1,
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
       ),
-      'type' => 'options_select',
+      'type' => 'entityreference_autocomplete_tags',
       'weight' => 21,
     ),
   );

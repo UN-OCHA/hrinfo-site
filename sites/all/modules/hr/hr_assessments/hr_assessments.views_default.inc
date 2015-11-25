@@ -54,7 +54,7 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['fields']['field_locations']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_locations']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_locations']['bypass_access'] = 0;
-  /* Field: Indexed Node: Organization */
+  /* Field: Indexed Node: Leading/Coordinating Organizations */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -299,7 +299,7 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['fields']['field_asst_other_location']['id'] = 'field_asst_other_location';
   $handler->display->display_options['fields']['field_asst_other_location']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_asst_other_location']['field'] = 'field_asst_other_location';
-  /* Field: Indexed Node: Organization */
+  /* Field: Indexed Node: Leading/Coordinating Organizations */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -757,7 +757,7 @@ function hr_assessments_views_default_views() {
     t('There are no results'),
     t('Title'),
     t('Locations'),
-    t('Organization'),
+    t('Leading/Coordinating Organizations'),
     t('Participating Organizations'),
     t('Clusters/Sectors'),
     t('Status'),
