@@ -107,13 +107,17 @@ function multisite_redirect_init() {
       foreach ($rules as $rule) {
         if (drupal_match_path(current_path(), $rule->source_path)) {
           $status_code = ($rule->status_code == 0) ? 301 : $rule->status_code;
+          // Added this bit to measure the accesses for a bit.
+          $rule->count += 1;
+          $rule->access = time();
+          multisite_redirect_save($rule);
+
           if (valid_url($rule->redirect, TRUE)) {
             drupal_goto($rule->redirect, array(), $status_code);
           }
           elseif (valid_url($rule->redirect)) {
             $primary = variable_get('multisite_redirect_primary_site');
             if (!empty($primary)) {
-              
               drupal_goto('http://' . $primary . '/' . $rule->redirect, array(), $status_code);
             }
           }
