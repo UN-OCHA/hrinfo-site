@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install file for hr_stats.module.
+ */
+
+/**
+ * Remove piwik unused variable.
+ */
+function hr_stats_update_7001() {
+  variable_del('hr_stats_piwik_segment');
+}
