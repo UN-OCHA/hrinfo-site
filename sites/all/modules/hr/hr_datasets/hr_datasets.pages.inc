@@ -2,7 +2,7 @@
 
 function hr_datasets_hdx_datasets($operation){
   $templates = array(
-  	'hdx_datasets_list_view',
+    'hdx_datasets_list_view',
   );
   drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js', array('type' => 'external'));
   drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js', array('type' => 'external'));
@@ -22,15 +22,27 @@ function hr_datasets_hdx_datasets($operation){
   drupal_add_js(drupal_get_path('module', 'hr_datasets') . '/js/hr_datasets.js');
   drupal_add_js(array('hr_datasets' => array('operation' => $iso3code)), 'setting');
 
+  if(module_exists('date')) {
+    $dates = date_month_names_abbr();
+    drupal_add_js(array('hr_datasets' => array('month' => array_map('strtoupper', $dates))), 'setting');
+  }
+  
+  $table_headers = array(
+    t('Dataset'),
+    t('Last Updated'),
+    t('Source'),
+  );
+
   $html = '<div id="datasets-view">
   </div>
   <div id="datasets-list">
     <table id="datasets-list-table" class="table table-striped">
       <thead>
-      <tr>
-        <th>Dataset Title</th>
-        <th>Dataset Link</th>
-      </tr>
+      <tr>';
+        foreach ($table_headers as $header) {
+          $html .= '<th>' . $header . '</th>';
+        }
+      $html .= '</tr>
       </thead>
       <tbody>
       </tbody>
@@ -82,5 +94,3 @@ function hr_datasets_iso2_to_iso3($iso2_country_code) {
     drupal_set_message(t('Could not reach the countries list on country.io, please consult the site admin.'), 'warning', false);
   }
 }
-
-
