@@ -7,8 +7,8 @@ $plugin = array(
   'category' => t('Humanitarian ID'),
   'edit form' => 'hid_profiles_list_edit_form',
   'render callback' => 'hid_profiles_list_render',
+  'required context' => new ctools_context_required(t('Panelized entity'), 'entity'),
   'defaults' => array(
-    'gid' => '',
     'contacts' => '',
   ),
 );
@@ -16,7 +16,7 @@ $plugin = array(
 /**
  * 'Edit form' callback for the content type.
  */
-function hid_profiles_list_edit_form($form, &$form_state) {
+function hid_profiles_list_edit_form($form, &$form_state, $context) {
   $conf = $form_state['conf'];
 
   if (isset($form_state['contacts_count'])) {
@@ -33,7 +33,7 @@ function hid_profiles_list_edit_form($form, &$form_state) {
     '#suffix' => '</div>',
   );
 
-  // Container for just the poll choices.
+  // Container for the contacts.
   $form['contacts_wrapper']['contacts'] = array(
     '#prefix' => '<div id="hid-profiles-contacts">',
     '#suffix' => '</div>',
@@ -43,8 +43,8 @@ function hid_profiles_list_edit_form($form, &$form_state) {
     $form['contacts_wrapper']['contacts'][$delta] = _hid_profiles_list_form_contact($conf, $delta);
   }
 
-  // We name our button 'hid_profiles_list_more' to avoid conflicts with other modules using
-  // Ajax-enabled buttons with the id 'more'.
+  // We name our button 'hid_profiles_list_more' to avoid conflicts with other
+  // modules using ajax-enabled buttons with the id 'more'.
   $form['contacts_wrapper']['hid_profiles_list_more'] = array(
     '#type' => 'submit',
     '#value' => t('Add another item'),
@@ -53,12 +53,26 @@ function hid_profiles_list_edit_form($form, &$form_state) {
   return $form;
 }
 
+/**
+ * Form to add contacts to the content type.
+ */
 function _hid_profiles_list_form_contact($conf, $delta) {
+  $default_value = '';
+  if (!empty($conf['contacts'][$delta])) {
+    if ($contact = hid_profiles_get_contact_by_id($conf['contacts'][$delta])) {
+      $location = !empty($contact->location) ? $contact->location : t(
+        'Global profile'
+      );
+      $label = "$contact->nameGiven $contact->nameFamily ($location)";
+      $default_value = "$label [id: $contact->_id]";
+    }
+  }
+
   $elt = array(
     '#type' => 'textfield',
     '#title' => t('Contact'),
-    '#autocomplete_path' => 'hid/autocomplete',
-    '#default_value' => $conf['contacts'][$delta],
+    '#autocomplete_path' => 'hid/autocomplete/local',
+    '#default_value' => $default_value,
     '#parents' => array('contacts', $delta),
   );
   return $elt;
@@ -68,15 +82,21 @@ function _hid_profiles_list_form_contact($conf, $delta) {
  * The submit form stores the data in $conf.
  */
 function hid_profiles_list_edit_form_submit($form, &$form_state) {
-  foreach (array_keys($form_state['plugin']['defaults']) as $key) {
-    if (isset($form_state['values'][$key])) {
-      $form_state['conf'][$key] = $form_state['values'][$key];
-    }
+  $contexts = isset($form_state['contexts']) ? $form_state['contexts'] : NULL;
+
+  foreach ($form_state['values']['contacts'] as $key => $contact) {
+    preg_match('/\[id: (.+)\]/', $contact, $matches);
+    $form_state['conf']['contacts'][$key] = $matches[1];
   }
+
   if ($form_state['values']['hid_profiles_list_more']) {
     $form_state['contacts_count'] = count($form_state['values']['contacts']) + 1;
   }
   $form_state['rebuild'] = TRUE;
+
+  // Clear the relevant render cache.
+  $node = $contexts['panelizer']->data;
+  cache_clear_all('hid_contact:' . $node->type . ':' . $node->nid . ':', 'cache', TRUE);
 }
 
 /**
@@ -86,29 +106,26 @@ function hid_profiles_list_edit_form_submit($form, &$form_state) {
 function hid_profiles_list_render($subtype, $conf, $panel_args, $context = NULL) {
   $block = new stdClass();
   $block->title = t('Contacts');
-  $block->content = '';
+  $block->content = array();
+
   foreach ($conf['contacts'] as $cid) {
     if (!empty($cid)) {
-      $variables['query'] = array(
-        '_id' => $cid,
-      );
-      $response = hid_profiles_restclient_post('v0/contact/view', $variables);
-      if ($response->code === "200") {
-        $return_data = json_decode($response->data);
-        if ($return_data->{'count'} > 0) {
-          $contact = $return_data->{'contacts'}[0];
-          $gid = str_replace('hrinfo:', '', $contact->locationId);
-          $block->content .= '<address><strong>'.l($contact->nameGiven.' '.$contact->nameFamily, 'node/'.$gid.'/hid_contacts', array('fragment' => 'contact/'.$contact->{'_id'})).'</strong><br />';
-          $block->content .= '&nbsp;&nbsp;&nbsp;'.$contact->organization[0]->{'name'}.'<br />';
-          $block->content .= '&nbsp;&nbsp;&nbsp;'.$contact->jobtitle.'<br />';
-          $block->content .= '&nbsp;&nbsp;&nbsp;'.$contact->email[0]->address.'<br />';
-          if (!empty($contact->phone)) {
-            foreach ($contact->phone as $phone) {
-              $block->content .= '&nbsp;&nbsp;&nbsp;'.$phone->number.' ('.$phone->type.') '.'<br />';
-            }
-          }
-          $block->content .= '</address>';
-        }
+      if ($contact = hid_profiles_get_contact_by_id($cid)) {
+        $block->content[$cid] = array(
+          '#theme' => 'hid_profiles_single_contact',
+          '#contact' => $contact,
+          '#cache' => array(
+            'keys' => array(
+              'hid_contact',
+              $context->data->type,
+              $context->data->nid,
+              $cid
+            ),
+            'bin' => 'cache',
+            'expire' => time() + 3600,
+            'granularity' => DRUPAL_CACHE_PER_PAGE,
+          ),
+        );
       }
     }
   }

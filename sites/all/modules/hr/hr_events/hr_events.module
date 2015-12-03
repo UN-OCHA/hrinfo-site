@@ -27,7 +27,7 @@ function hr_events_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ * Implements hook_og_features_toggle().
  */
 function hr_events_og_features_toggle($entity, $entity_id, $entity_type, $features) {
   if (isset($features['hr_events'])) {
@@ -56,6 +56,7 @@ function hr_events_og_features_toggle($entity, $entity_id, $entity_type, $featur
 
 /**
  * Implements hook_views_query_alter()
+ *
  * Makes the clusters/sectors filter of the calendar work
  * Makes the calendar view available to disasters
  * Related issue: https://www.drupal.org/node/2291619
@@ -101,7 +102,7 @@ function hr_events_views_query_alter(&$view, &$query) {
 }
 
 /**
- * Implements hook_search_api_views_query_alter()
+ * Implements hook_search_api_views_query_alter().
  *
  * Makes the events view available for disasters
  */
@@ -136,9 +137,10 @@ function hr_events_ctools_plugin_directory($module, $plugin) {
 }
 
 /**
- * Implements hook_views_pre_render()
+ * Implements hook_views_pre_render().
+ *
  * Adds PDF button to export events as PDF
- * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4466 
+ * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4466
  */
 function hr_events_views_pre_render(&$view) {
   if ($view->name == 'hr_events_calendar' && ($view->current_display == 'master' || $view->current_display == 'week' || $view->current_display == 'day')) {
@@ -153,7 +155,8 @@ function hr_events_views_pre_render(&$view) {
 }
 
 /**
- * Implements hook_views_pre_view()
+ * Implements hook_views_pre_view().
+ *
  * Shows the selected filters in the print display for PDF output
  */
 function hr_events_views_pre_view(&$view, &$display_id, &$args) {
@@ -185,7 +188,8 @@ function hr_events_views_pre_view(&$view, &$display_id, &$args) {
 }
 
 /**
- * Implements hook_menu()
+ * Implements hook_menu().
+ *
  * Defines the menu callbacks necessary to print the events in PDF format
  * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4466
  */
@@ -258,11 +262,12 @@ function hr_events_pdf_output($nid) {
 }
 
 /**
-* Implements hook_form_alter()
-*/
-
+ * Implements hook_form_FORM_ID_alter()
+ */
 function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id) {
   $form['#attached']['js'] = array(
     drupal_get_path('module', 'hr_events') . '/js/hr_events.js',
   );
+
+  $form['field_users_ref']['#access'] = user_access('administer nodes');
 }

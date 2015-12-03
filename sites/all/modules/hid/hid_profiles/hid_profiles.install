@@ -1,11 +1,14 @@
 <?php
+/**
+ * @file
+ * Install file for hid_profiles module.
+ */
 
 /**
  * Implements hook_schema().
  */
 function hid_profiles_schema() {
   $schema['hid_profiles'] = array(
-    // Example (partial) specification for table "node".
     'description' => 'The lookup table between Drupal users and Humanitarian ID profiles.',
     'fields' => array(
       'uid' => array(
@@ -29,4 +32,11 @@ function hid_profiles_schema() {
     ),
   );
   return $schema;
+}
+
+/**
+ * Install hid contact reference module.
+ */
+function hid_profiles_update_7001() {
+  module_enable(array('hid_contact_reference'));
 }
