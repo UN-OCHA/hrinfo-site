@@ -391,7 +391,7 @@ function restful_get_restful_handler_for_path($path = NULL) {
   // Make sure we have a fresh request.
   $request = restful_parse_request();
   $handlers[$path]->setRequest($request);
-  
+
   return $handlers[$path];
 }
 
@@ -509,6 +509,11 @@ function restful_menu_process_callback($resource_name, $version = NULL) {
   $request = restful_parse_request();
 
   try {
+    if (!\RestfulBase::isValidMethod($method, FALSE)) {
+      throw new RestfulBadRequestException(format_string('Unsupported method @method.', array(
+        '@method' => $method,
+      )));
+    }
     return $handler->{$method}($path, $request);
   }
   catch (RestfulException $e) {

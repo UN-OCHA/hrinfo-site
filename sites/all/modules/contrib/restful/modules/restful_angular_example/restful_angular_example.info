@@ -7,9 +7,9 @@ dependencies[] = jquery_update
 dependencies[] = restful
 dependencies[] = restful_example
 
-; Information added by Drupal.org packaging script on 2015-10-02
-version = "7.x-1.3+2-dev"
+; Information added by Drupal.org packaging script on 2015-12-02
+version = "7.x-1.6"
 core = "7.x"
 project = "restful"
-datestamp = "1443788012"
+datestamp = "1449025154"
 
