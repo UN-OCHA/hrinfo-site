@@ -67,7 +67,7 @@ function hr_documents_field_default_field_instances() {
           'upload' => 0,
           'youtube' => 0,
         ),
-        'progress_indicator' => 'throbber',
+        'progress_indicator' => 'bar',
       ),
       'type' => 'file_generic',
       'weight' => 0,

@@ -160,7 +160,9 @@ function hr_discussions_panelizer_defaults() {
     $pane->type = 'node_comment_form';
     $pane->subtype = 'node_comment_form';
     $pane->shown = TRUE;
-    $pane->access = array();
+    $pane->access = array(
+      'plugins' => array(),
+    );
     $pane->configuration = array(
       'anon_links' => 0,
       'context' => 'panelizer',

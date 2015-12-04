@@ -339,7 +339,7 @@ function hr_datasets_field_default_field_instances() {
       'active' => 1,
       'module' => 'file',
       'settings' => array(
-        'progress_indicator' => 'throbber',
+        'progress_indicator' => 'bar',
       ),
       'type' => 'file_generic',
       'weight' => 12,
