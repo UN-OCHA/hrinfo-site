@@ -9,6 +9,7 @@ dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = feeds
 dependencies[] = feeds_tamper
+dependencies[] = hr_api
 dependencies[] = hr_core
 dependencies[] = hr_locations
 dependencies[] = hr_operations

@@ -20,6 +20,7 @@ dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = feeds
 dependencies[] = field_collection
+dependencies[] = hr_api
 dependencies[] = hr_bundles
 dependencies[] = hr_core
 dependencies[] = hr_disasters

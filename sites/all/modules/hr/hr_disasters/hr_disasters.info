@@ -8,6 +8,7 @@ dependencies[] = current_search
 dependencies[] = entity
 dependencies[] = entityreference
 dependencies[] = facetapi
+dependencies[] = hr_api
 dependencies[] = hr_operations
 dependencies[] = number
 dependencies[] = og_moderation
