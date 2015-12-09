@@ -232,6 +232,7 @@ function hr_pages_strongarm() {
     'block-facetapi-w7XuwcVu1l6DNu4aCenMydri96KBLxYh' => 0,
     'block-facetapi-9ew5LitJZ6pWU71gbHp1XW9oAOBwV11z' => 0,
     'block-hr_help-hr_help' => 0,
+    'block-hr_layout-hr_layout_checkin' => 0,
     'block-hr_layout-hr_layout_login' => 0,
     'block-hr_layout-hr_layout_create_links' => 0,
     'block-hr_layout-hr_layout_space_links' => 0,
