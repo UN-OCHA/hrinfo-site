@@ -493,10 +493,10 @@ function _hr_stats_get_hr_downloads($token_auth, $site_id, $period, $date) {
 }
 
 /**
- * Implements hook_token_info()
- * Adds a token for the space the current page belongs to. This token will be passed to Piwik to know which space a page belongs to
+ * Implements hook_token_info().
  */
 function hr_stats_token_info() {
+  // Analytics tokens.
   $info['tokens']['node']['spaces'] = array(
     'name' => t('Spaces'),
     'description' => t('The spaces the node belongs to'),
@@ -505,6 +505,7 @@ function hr_stats_token_info() {
     'name' => t('Bundles'),
     'description' => t('The bundles the node belongs to'),
   );
+
   return $info;
 }
 
@@ -515,36 +516,33 @@ function hr_stats_tokens($type, $tokens, array $data = array(), array $options =
  $replacements = array();
  if ($type == 'node' && !empty($data['node'])) {
     $node = $data['node'];
+    $wrapper = entity_metadata_wrapper('node', $node);
     foreach ($tokens as $name => $original) {
       switch ($name) {
         case 'spaces':
-          if (isset($node->{OG_AUDIENCE_FIELD}) && isset($node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE])) {
-            $spaces = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE];
-            $space_ids = array();
-            foreach ($spaces as $space) {
-              $space_ids[] = $space['target_id'];
+          $replacements[$original] = '';
+          if (isset($wrapper->{OG_AUDIENCE_FIELD})) {
+            $spaces = array();
+            foreach ($wrapper->{OG_AUDIENCE_FIELD} as $space) {
+              $spaces[] = $space->getIdentifier();
             }
-            $replacements[$original] = implode(';', $space_ids);
+            $replacements[$original] = implode(';', $spaces);
           }
-          else {
-            if (og_is_group('node', $node->nid)) {
-              $replacements[$original] = $node->nid;
-            }
+          elseif (og_is_group('node', $node->nid)) {
+            $replacements[$original] = $node->nid;
           }
           break;
         case 'bundles':
-          if (isset($node->field_bundles) && isset($node->field_bundles[LANGUAGE_NONE])) {
-            $bundles = $node->field_bundles[LANGUAGE_NONE];
-            $bundle_ids = array();
-            foreach ($bundles as $bundle) {
-              $bundle_ids[] = $bundle['target_id'];
+          $replacements[$original] = '';
+          if (isset($wrapper->field_bundles)) {
+            $bundles = array();
+            foreach ($wrapper->field_bundles as $bundle) {
+              $bundles[] = $bundle->getIdentifier();
             }
-            $replacements[$original] = implode(';', $bundle_ids);
+            $replacements[$original] = implode(';', $bundles);
           }
-          else {
-            if ($node->type == 'hr_bundle') {
-              $replacements[$original] = $node->nid;
-            }
+          elseif ($node->type == 'hr_bundle') {
+            $replacements[$original] = $node->nid;
           }
           break;
       }

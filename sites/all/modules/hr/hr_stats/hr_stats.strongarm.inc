@@ -13,6 +13,33 @@ function hr_stats_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'googleanalytics_account';
+  $strongarm->value = 'UA-70934930-1';
+  $export['googleanalytics_account'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'googleanalytics_custom_dimension';
+  $strongarm->value = array(
+    1 => array(
+      'index' => 1,
+      'value' => '[node:spaces]',
+    ),
+    2 => array(
+      'index' => 2,
+      'value' => '[node:bundles]',
+    ),
+    3 => array(
+      'index' => 3,
+      'value' => '[node:type]',
+    ),
+  );
+  $export['googleanalytics_custom_dimension'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'piwik_custom_var';
   $strongarm->value = array(
     'slots' => array(

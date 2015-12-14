@@ -13,6 +13,7 @@ dependencies[] = features
 dependencies[] = feeds_tamper
 dependencies[] = field_collection
 dependencies[] = file
+dependencies[] = hr_api
 dependencies[] = hr_bundles
 dependencies[] = hr_core
 dependencies[] = hr_disasters
