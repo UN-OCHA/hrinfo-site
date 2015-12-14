@@ -8,6 +8,7 @@ dependencies[] = current_search
 dependencies[] = entity
 dependencies[] = entityreference
 dependencies[] = field_permissions
+dependencies[] = hr_api
 dependencies[] = hr_bundles
 dependencies[] = hr_disasters
 dependencies[] = hr_offices

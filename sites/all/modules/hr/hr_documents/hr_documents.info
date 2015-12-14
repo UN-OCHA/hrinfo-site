@@ -6,6 +6,7 @@ dependencies[] = context
 dependencies[] = current_search
 dependencies[] = entityreference
 dependencies[] = entityreference_filter
+dependencies[] = hr_api
 dependencies[] = hr_bundles
 dependencies[] = hr_disasters
 dependencies[] = hr_fundings
