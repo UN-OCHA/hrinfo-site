@@ -156,22 +156,7 @@ function hr_datasets_block_view($delta = '') {
         </div>
         </div>
       </div>  </div>';
-
-      $block['content'] .= '<p class="text-center"><select id="hdx-tags-dropdown" data-placeholder="Search by Tags"><option value="_none"></option>';
-      $hdx_tags = hr_datasets_hdx_results("https://data.hdx.rwlabs.org/api/3/action/tag_list");
-
-      foreach ($hdx_tags as $key  => $value) {
-        $block['content'] .= '<option value="'.$value.'">'.$value.'</option>';
-      }
-      $block['content'] .= '</select></p>';
-
-      $block['content'] .= '<p class="text-center"><select id="hdx-organizations-dropdown" data-placeholder="Search by Organization"><option value="_none"></option>';
-
-      $hdx_organizations = hr_datasets_hdx_results("https://data.hdx.rwlabs.org/api/3/action/organization_list");
-      foreach ($hdx_organizations as $key => $value) {
-        $block['content'] .= '<option value="'.$value.'">'.$value.'</option>';
-      }
-      $block['content'] .= '</select></p>';
+      
     break;
     case 'hdx-datasets_filters':
       $block['content'] = '<div id="block-current-search-hr-current-search" class="block block-current-search">
