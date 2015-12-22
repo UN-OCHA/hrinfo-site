@@ -93,8 +93,6 @@ Drupal.behaviors.hrDatasets = {
         events: {
           'click #back': 'back',
           'keyup #search': 'searchByTitle',
-          'change #hdx-tags-dropdown': 'searchByTags',
-          'change #hdx-organizations-dropdown': 'searchByOrganization',
         },
 
         page: function(page) {
@@ -156,18 +154,6 @@ Drupal.behaviors.hrDatasets = {
         searchByTitle: function(event) {
           var param = 'title';
           var val = $('#search').val();
-          this.search(val, param);
-        },
-
-        searchByTags: function(event) {
-          var param = 'tags';
-          var val = $('#hdx-tags-dropdown').val();
-          this.search(val, param);
-        },
-
-        searchByOrganization: function(event) {
-          var param = 'organization';
-          var val = $('#hdx-organizations-dropdown').val();
           this.search(val, param);
         },
 
