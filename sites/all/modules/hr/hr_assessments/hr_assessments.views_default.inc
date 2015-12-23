@@ -505,7 +505,7 @@ function hr_assessments_views_default_views() {
   );
   $handler->display->display_options['fields']['field_phones']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_phones']['separator'] = ';';
-  /* Field: Field collection item: Email */
+  /* Field: Field collection item: Cluster coordinator Email */
   $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['table'] = 'entity_field_collection_item';
   $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
@@ -935,7 +935,7 @@ function hr_assessments_views_default_views() {
     30037204 => 0,
   );
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['reference_display'] = 'hr_bundles:entityreference_1';
-  /* Filter criterion: Field: Organization (field_organizations) (reference filter) */
+  /* Filter criterion: Content: Organization (field_organizations) (reference filter) */
   $handler->display->display_options['filters']['field_organizations_target_id_entityreference_filter']['id'] = 'field_organizations_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_organizations_target_id_entityreference_filter']['table'] = 'field_data_field_organizations';
   $handler->display->display_options['filters']['field_organizations_target_id_entityreference_filter']['field'] = 'field_organizations_target_id_entityreference_filter';

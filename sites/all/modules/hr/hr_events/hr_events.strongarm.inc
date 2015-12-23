@@ -35,13 +35,13 @@ function hr_events_strongarm() {
           'weight' => '-5',
         ),
         'path' => array(
-          'weight' => '24',
+          'weight' => '22',
         ),
         'redirect' => array(
-          'weight' => '23',
+          'weight' => '21',
         ),
         'language' => array(
-          'weight' => '-10',
+          'weight' => '0',
         ),
       ),
       'display' => array(),

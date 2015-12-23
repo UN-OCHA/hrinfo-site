@@ -48,13 +48,13 @@ function hr_assessments_strongarm() {
           'weight' => '-5',
         ),
         'path' => array(
-          'weight' => '27',
+          'weight' => '29',
         ),
         'redirect' => array(
-          'weight' => '26',
+          'weight' => '28',
         ),
         'language' => array(
-          'weight' => '-10',
+          'weight' => '0',
         ),
       ),
       'display' => array(),
