@@ -58,7 +58,7 @@ function hr_events_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 10,
+      'weight' => 9,
     ),
   );
 
@@ -124,7 +124,7 @@ function hr_events_field_default_field_instances() {
         ),
       ),
       'type' => 'addressfield_standard',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -190,7 +190,7 @@ function hr_events_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 12,
+      'weight' => 11,
     ),
   );
 
@@ -244,7 +244,7 @@ function hr_events_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 15,
+      'weight' => 14,
     ),
   );
 
@@ -298,7 +298,7 @@ function hr_events_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 16,
+      'weight' => 15,
     ),
   );
 
@@ -354,7 +354,7 @@ function hr_events_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 9,
+      'weight' => 8,
     ),
   );
 
@@ -414,7 +414,7 @@ function hr_events_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 1,
+      'weight' => 2,
     ),
   );
 
@@ -485,7 +485,7 @@ function hr_events_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -541,7 +541,7 @@ function hr_events_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 8,
+      'weight' => 7,
     ),
   );
 
@@ -595,7 +595,51 @@ function hr_events_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 17,
+      'weight' => 16,
+    ),
+  );
+
+  // Exported field_instance: 'node-hr_event-field_hid_contact_ref'
+  $field_instances['node-hr_event-field_hid_contact_ref'] = array(
+    'bundle' => 'hr_event',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'hid_contact_reference',
+        'settings' => array(),
+        'type' => 'hid_contact_reference_full',
+        'weight' => 24,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_hid_contact_ref',
+    'label' => 'Contact(s)',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'hid_contact_reference',
+      'settings' => array(),
+      'type' => 'hid_contact_reference_autocomplete',
+      'weight' => 6,
     ),
   );
 
@@ -658,7 +702,7 @@ function hr_events_field_default_field_instances() {
         ),
       ),
       'type' => 'taxonomy_shs',
-      'weight' => 13,
+      'weight' => 12,
     ),
   );
 
@@ -717,7 +761,7 @@ function hr_events_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 14,
+      'weight' => 13,
     ),
   );
 
@@ -784,7 +828,7 @@ function hr_events_field_default_field_instances() {
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 20,
+      'weight' => 18,
     ),
   );
 
@@ -838,7 +882,7 @@ function hr_events_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 11,
+      'weight' => 10,
     ),
   );
 
@@ -895,7 +939,7 @@ function hr_events_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 19,
+      'weight' => 17,
     ),
   );
 
@@ -945,7 +989,7 @@ function hr_events_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 7,
+      'weight' => 5,
     ),
   );
 
@@ -1004,7 +1048,7 @@ function hr_events_field_default_field_instances() {
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 21,
+      'weight' => 19,
     ),
     'widget_type' => 'options_select',
   );
@@ -1083,7 +1127,7 @@ function hr_events_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 22,
+      'weight' => 20,
     ),
   );
 
@@ -1132,7 +1176,7 @@ function hr_events_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 0,
+      'weight' => 1,
     ),
   );
 

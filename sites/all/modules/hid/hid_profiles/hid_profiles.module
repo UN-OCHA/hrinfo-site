@@ -118,7 +118,7 @@ function hid_profiles_permission() {
 }
 
 /**
- * Callback function to proxy the HID API
+ * Callback function to proxy the HID API.
  */
 function hid_profiles_proxy() {
   $query = $_GET;
@@ -194,25 +194,49 @@ function hid_profiles_access_proxy() {
 }
 
 /**
- * Callback function for autocomplete
+ * Callback function for autocomplete.
+ *
+ * @param $type string
+ *  Type of the autocomplete, 'all' for both global and local profiles, 'local'
+ *  for only local profiles (checked in).
  */
-function hid_profiles_autocomplete_callback($string = '') {
-  $out = array();
+function hid_profiles_autocomplete_callback($type, $string = '') {
   $variables['query'] = array(
-    'type' => 'local',
     'status' => 1,
     'text' => $string,
   );
+
+  // Restrict only to local profiles.
+  if ($type == 'local') {
+    $variables['query']['type'] = 'local';
+  }
+
   $response = hid_profiles_restclient_post('v0/contact/view', $variables);
   if ($response->code == "200") {
-    $return_data = json_decode($response->data);
-    if ($return_data->{'count'} > 0) {
-      foreach ($return_data->contacts as $contact) {
-        $out[$contact->{'_id'}] = $contact->nameGiven . ' ' . $contact->nameFamily.' ('.$contact->location.')';
-      }
+    drupal_json_output(hid_profiles_autocomplete_helper(json_decode($response->data)));
+  }
+
+  drupal_exit();
+}
+
+/**
+ * Helper function to transform the results into name and location.
+ *
+ * @param $data
+ *  Array of results.
+ *
+ * @return array
+ */
+function hid_profiles_autocomplete_helper($data) {
+  $return = array();
+  if ($data->count > 0) {
+    foreach ($data->contacts as $contact) {
+      $location = !empty($contact->location) ? $contact->location : t('Global profile');
+      $label  = "$contact->nameGiven $contact->nameFamily ($location)";
+      $return["$label [id: $contact->_id]"] = $label;
     }
   }
-  drupal_json_output($out);
+  return $return;
 }
 
 /**
@@ -486,23 +510,28 @@ function _hid_profiles_get_profile_keys() {
  *   should return an empty array.
  */
 function _hid_profiles_get_user_by_cid($cid) {
-  if (empty($cid)) return array();
+  $static = &drupal_static(__FUNCTION__);
+  if (empty($cid)) {
+    return array();
+  }
 
-  $resource_path = 'v0/profile/view';
+  if (!isset($static[$cid])) {
+    $resource_path = 'v0/profile/view';
+    $variables = array(
+      'query' => array(
+        'userid' => $cid,
+      ),
+    );
 
-  $variables = array(
-    'query' => array(
-      'userid' => $cid,
-    ),
-  );
+    $profile = hid_profiles_restclient_post($resource_path, $variables);
+    if (empty($profile->data)) {
+      return array();
+    }
+    $data = json_decode($profile->data);
+    $static[$cid] = (is_array($data) && !empty($data[0])) ? $data[0] : $data;
+  }
 
-  $profile = hid_profiles_restclient_post($resource_path, $variables);
-
-  if (empty($profile->data)) return array();
-  $data = json_decode($profile->data);
-  $data = (is_array($data) && !empty($data[0])) ? $data[0] : $data;
-
-  return $data;
+  return $static[$cid];
 }
 
 /**
@@ -533,6 +562,26 @@ function _hid_profiles_get_contacts($terms = NULL) {
 }
 
 /**
+ * Get the contact from HID using the id.
+ */
+function hid_profiles_get_contact_by_id($id) {
+  $contacts = &drupal_static(__FUNCTION__);
+
+  if (!isset($contacts[$id])) {
+    $contacts[$id] = array();
+    $response = _hid_profiles_get_contacts(array('_id' => $id));
+    if ($response->code === "200") {
+      $return_data = json_decode($response->data);
+      if ($return_data->{'count'} > 0) {
+        $contacts[$id] = $return_data->{'contacts'}[0];
+      }
+    }
+  }
+
+  return $contacts[$id];
+}
+
+/**
  * Get the Humanitarian ID Profile API CID (userid) from the Drupal user ID
  * lookup table.
  *
@@ -558,7 +607,7 @@ function _hid_profiles_get_cid_by_uid($uid) {
  * @param string $cid
  *    The Humanitarian ID Profile API CID (userid).
  *
- * @param array values
+ * @param array $values
  *    The profile field values to save for the given user.
  *
  * @param string $uid
@@ -661,11 +710,9 @@ function hid_profiles_restclient_post($resource_path, $variables = array()) {
   return restclient_post($resource_path, $variables);
 }
 
-function hrinfo_country_load($country_id) {
-  $country_id = str_replace('hrinfo_loc_', '', $country_id);
-  return taxonomy_term_load($country_id);
-}
-
+/**
+ * Implements hook_block_info().
+ */
 function hid_profiles_block_info() {
   $blocks['hid_profiles_search'] = array(
     'info' => t('HID Profiles search'),
@@ -680,32 +727,6 @@ function hid_profiles_block_info() {
     'info' => t('HID Profiles Powered By'),
   );
   return $blocks;
-}
-
-/**
- * Implements hook_theme().
- */
-function hid_profiles_theme() {
-  return array(
-    'hid_profiles_local_contacts' => array(
-      'variables' => array(),
-      'template' => 'templates/hid-profiles-local-contacts',
-    ),
-    'hid_profiles_local_contacts_no_access' => array(
-      'variables' => array(
-        'message' => '',
-      ),
-      'template' => 'templates/hid-profiles-local-contacts-no-access',
-    ),
-    'hid_profiles_local_contacts_hid_login' => array(
-      'variables' => array(
-        'logo_image' => '',
-        'login_button' => '',
-        'register_button' => '',
-      ),
-      'template' => 'templates/hid-profiles-local-contacts-hid-login',
-    ),
-  );
 }
 
 /**
@@ -889,3 +910,51 @@ function hid_profiles_organization_autocomplete() {
   return $html;
 }
 
+/**
+ * Implements hook_theme().
+ */
+function hid_profiles_theme() {
+  return array(
+    'hid_profiles_single_contact' => array(
+      'variables' => array(
+        'contact' => array(),
+        'url' => '',
+      ),
+      'template' => 'templates/hid-profiles-single-contact',
+    ),
+    'hid_profiles_local_contacts' => array(
+      'variables' => array(),
+      'template' => 'templates/hid-profiles-local-contacts',
+    ),
+    'hid_profiles_local_contacts_no_access' => array(
+      'variables' => array(
+        'message' => '',
+      ),
+      'template' => 'templates/hid-profiles-local-contacts-no-access',
+    ),
+    'hid_profiles_local_contacts_hid_login' => array(
+      'variables' => array(
+        'logo_image' => '',
+        'login_button' => '',
+        'register_button' => '',
+      ),
+      'template' => 'templates/hid-profiles-local-contacts-hid-login',
+    ),
+  );
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function hid_profiles_preprocess_hid_profiles_single_contact(&$variables) {
+  $variables['url'] = '';
+
+  if ($variables['contact']->type == 'global' || !isset($variables['contact']->locationId)) {
+    // Global contacts link to HID directly.
+    $variables['url'] = url('https://humanitarian.id/#/contact/' . $variables['contact']->{'_id'}, array('absolute' => TRUE));
+  }
+  else {
+    // Local contacts should be linked to their operation/cluster.
+    $variables['url'] = url('node/' . str_replace('hrinfo:', '', $variables['contact']->locationId) . '/hid_contacts', array('fragment' => 'contact/' . $variables['contact']->{'_id'}));
+  }
+}

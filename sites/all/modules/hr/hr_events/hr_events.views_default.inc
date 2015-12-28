@@ -154,7 +154,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['fields']['field_user']['link_to_entity'] = 1;
   $handler->display->display_options['fields']['field_user']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_user']['bypass_access'] = 0;
-  /* Field: Field collection item: Email */
+  /* Field: Field collection item: Cluster coordinator Email */
   $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['table'] = 'entity_field_collection_item';
   $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
@@ -505,7 +505,7 @@ function hr_events_views_default_views() {
     t('There are no results'),
     t('Contact(s)'),
     t('User'),
-    t('Email'),
+    t('Cluster coordinator Email'),
     t('Phones'),
     t('[title_field]<br />
 [field_event_date]<br />

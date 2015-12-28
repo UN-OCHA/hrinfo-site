@@ -172,3 +172,10 @@ function hr_users_menu_alter(&$items) {
   }
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function hr_users_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
+  $form['account']['mail']['#title'] = t('Login e-mail');
+  $form['account']['mail']['#description'] = t('The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail. To change your login address, please contact our support team: <a href="@mailto">info@humanitarianresponse.info</a>.', array('@mailto' => 'mailto:info@humanitarianresponse.info'));
+}
