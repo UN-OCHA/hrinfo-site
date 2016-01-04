@@ -161,6 +161,36 @@ function hr_disasters_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
+  // Exported field_base: 'field_hr_disaster_sync_disaster'
+  $field_bases['field_hr_disaster_sync_disaster'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_hr_disaster_sync_disaster',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        0 => '',
+        1 => '',
+      ),
+      'allowed_values_function' => '',
+      'entity_translation_sync' => FALSE,
+      'profile2_private' => FALSE,
+    ),
+    'translatable' => 0,
+    'type' => 'list_boolean',
+  );
+
   // Exported field_base: 'field_reliefweb_id'
   $field_bases['field_reliefweb_id'] = array(
     'active' => 1,
