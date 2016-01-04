@@ -776,7 +776,7 @@ function hid_profiles_block_view($delta = '') {
       <h2>Current search</h2>
 
     <div class="content">
-      <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter">Filter: <span class="facetapi-active">216 items</span> displayed</div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/'.drupal_get_path_alias(current_path()).'"><i class="reset"></i></a> Reset all filters</div></div>  </div>
+      <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter"><p>Filter: <span class="facetapi-active">216 items</span> displayed</p></div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/'.drupal_get_path_alias(current_path()).'"><i class="reset"></i></a> <span>Reset all filters</span></div></div>  </div>
   </div>';
         $block['content'] .= hid_profiles_protected_roles_select();
         if ($node->type == 'hr_operation') {

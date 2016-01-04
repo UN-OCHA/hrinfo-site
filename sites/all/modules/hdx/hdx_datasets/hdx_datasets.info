@@ -1,0 +1,10 @@
+name = HDX Datasets
+core = 7.x
+package = Humanitarianresponse (hdx)
+dependencies[] = context
+dependencies[] = ctools
+dependencies[] = date
+dependencies[] = hr_bundle
+dependencies[] = hr_core
+dependencies[] = og
+dependencies[] = og_features

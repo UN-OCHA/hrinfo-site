@@ -1,3 +1,200 @@
+// Styles for search sidebars and results.
+
+#sidebar-first {
+
+  .block {
+    &.block-facetapi {
+
+      padding: 0;
+      border-top: 1px solid #FEFEFE;
+      border-bottom: 1px solid #d8d8d8;
+
+      h2 {
+        color: black;
+        cursor: pointer;
+        background: url(../images/facet-down.png) no-repeat right center transparent;
+
+        &.opened {
+          background-image: url(../images/facet-up.png);
+        }
+      }
+
+      .content {
+
+        display: none;
+
+        ul {
+          list-style: none;
+          list-style-type: none;
+          list-style-image: none;
+
+          li {
+            list-style: none;
+            list-style-type: none;
+            list-style-image: none;
+            position: relative;
+
+            a {
+              color: black;
+              padding-left: 6px;
+              display: block;
+              &:hover {
+                background-color: rgba(0, 0, 0, 0.1);
+              }
+
+              &.facetapi-active {
+                display: inline;
+                padding-right: 6px;
+              }
+
+              &.facetapi-inactive {
+                @include checks-sprite(check_off);
+                display: inline-block;
+                padding-left: 14px;
+                max-height: 11px;
+              }
+
+              &.facetapi-inactive:hover {
+                @include checks-sprite(check_on);
+              }
+            }
+
+            &.redactive {
+              color: $p-main;
+              > a {
+                color: $p-main;
+                width: 11px;
+                height: 14px;
+                @include checks-sprite(check_on);
+                display: inline-block;
+                text-indent: -9999px;
+              }
+
+              > a:hover {
+                @include checks-sprite(check_off);
+              }
+            }
+          }
+        }
+
+      }
+    }
+
+  }
+
+  .current-search-filter {
+    background: url(../images/currentfilter.png) no-repeat right 12% transparent;
+    height: 37px;
+
+      // Workaround to complete the image above.
+      &:before {
+        background-color: #FFF;
+        width: 1px;
+        display: block;
+        content: '';
+        height: 33px;
+        position: absolute;
+        left: 15px;
+      }
+
+      p {
+        line-height: 37px;
+        margin-left: 10px;
+
+        .items {
+          font-weight: bold;
+          color: $p-main;
+        }
+      }
+
+  }
+
+  .text-search {
+
+    margin-top: 20px;
+
+    .input-group {
+      width: 100%;
+    }
+
+    input {
+      &[type="text"] {
+        width: 100%;
+        height: 36px;
+      }
+    }
+
+  }
+
+  .block-current-search {
+
+      .current-reset-filter {
+        height: 33px;
+        line-height: 36px;
+        color: $p-main;
+
+        a {
+          height: 28px;
+          width: 19px;
+          background: url(../images/cross.png) no-repeat center bottom rgba(0, 0, 0, 0);
+          float: left;
+          margin-right: 5px
+        }
+      }
+
+      .current-search-item-active {
+        margin-top: 10px;
+        margin-bottom: -8px;
+        .current-selected-item {
+          color: #BC2E3C;
+          list-style: none outside none;
+          li {
+            margin-left: 0;
+            line-height: 22px;
+            color: black;
+            font-size: 0.8em;
+            a {
+              margin-right: 6px;
+              display: inline-block;
+              *display: inline;
+              *zoom: 1;
+              width: 18px;
+              height: 18px;
+              font-size: 0;
+              background: url(../images/bgfilteractive.png) no-repeat center center transparent
+            }
+          }
+        }
+      }
+
+      .current-search-item-results {
+        .current-search-filter {
+          line-height: 20px;
+          font-weight: normal;
+          .facetapi-active {
+            font-weight: bold;
+            color: $p-main;
+          }
+        }
+      }
+    }
+
+    a {
+      padding-left: 0;
+      color: #BC2E3C;
+      padding-right: 2px;
+    }
+
+}
+
+#block-current-search-hr-current-search {
+
+  h2 {
+    display: none;
+  }
+
+}
+
 #block-hr-layout-hr-layout-search-rss {
 
   .content {
@@ -22,4 +219,5 @@
       font-size: 1.4em;
     }
   }
+
 }
