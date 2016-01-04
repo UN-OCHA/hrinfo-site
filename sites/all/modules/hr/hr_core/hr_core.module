@@ -600,7 +600,28 @@ function hr_core_module_implements_alter(&$implementations, $hook) {
       $group = $implementations['hr_core'];
       unset($implementations['hr_core']);
       $implementations['hr_core'] = $group;
-      $hola = 1;
       break;
   }
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function hr_core_menu_alter(&$items) {
+  if (isset($items['node/%/group'])) {
+    $items['node/%/group']['access callback'] = 'hr_core_group_tab_access';
+  }
+}
+
+/**
+ * Access callback override for the group tab.
+ */
+function hr_core_group_tab_access($entity_type, $etid) {
+  $object = menu_get_object();
+  if (!og_is_group($entity_type, $object)) {
+    return FALSE;
+  }
+
+  // Fallback to the original callback.
+  return og_ui_get_group_admin($entity_type, $etid);
 }

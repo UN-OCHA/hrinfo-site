@@ -71,7 +71,7 @@ function hid_profiles_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'hid_profiles.pages.inc',
   );
-  $items['hid/locations/%hrinfo_country'] = array(
+  $items['hid/locations/%hid_profiles_country'] = array(
     'page callback' => 'hid_location_country',
     'page arguments' => array(2),
     'access arguments' => array('access content'),
@@ -115,6 +115,17 @@ function hid_profiles_permission() {
       'description' => t('Administer Humanitarian ID profile API configuration and access debugging pages.'),
     ),
   );
+}
+
+/**
+ * Load function for hid countries menu callback.
+ */
+function hid_profiles_country_load($country_id) {
+  $country_id = str_replace('hrinfo_loc_', '', $country_id);
+  if (!is_numeric($country_id)) {
+    return '';
+  }
+  return taxonomy_term_load($country_id);
 }
 
 /**
