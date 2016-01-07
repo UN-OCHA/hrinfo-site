@@ -3740,7 +3740,7 @@ body .region-branding input.form-text:focus { border-color: #bc2e3c; }
 #sidebar-first .block.block-facetapi .content ul li.redactive > a { color: #bc2e3c; width: 11px; height: 14px; background-position: 0 -11px; display: inline-block; text-indent: -9999px; }
 #sidebar-first .block.block-facetapi .content ul li.redactive > a:hover { background-position: 0 0; }
 #sidebar-first .current-search-filter { background: url(../images/currentfilter.png) no-repeat right 12% transparent; height: 37px; }
-#sidebar-first .current-search-filter:before { background-color: #FFF; width: 1px; display: block; content: ''; height: 33px; position: absolute; left: 15px; }
+#sidebar-first .current-search-filter:before { background-color: #FFF; width: 1px; display: block; content: ''; height: 33px; position: absolute; }
 #sidebar-first .current-search-filter p { line-height: 37px; margin-left: 10px; }
 #sidebar-first .current-search-filter p .items { font-weight: bold; color: #bc2e3c; }
 #sidebar-first .text-search { margin-top: 20px; }
