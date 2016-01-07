@@ -10,7 +10,8 @@
 function hr_users_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'field_collection_item-field_users_ref-field_email'
+  // Exported field_instance:
+  // 'field_collection_item-field_users_ref-field_email'
   $field_instances['field_collection_item-field_users_ref-field_email'] = array(
     'bundle' => 'field_users_ref',
     'default_value' => NULL,
@@ -44,7 +45,8 @@ function hr_users_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_users_ref-field_phones'
+  // Exported field_instance:
+  // 'field_collection_item-field_users_ref-field_phones'
   $field_instances['field_collection_item-field_users_ref-field_phones'] = array(
     'bundle' => 'field_users_ref',
     'default_value' => NULL,
@@ -403,7 +405,8 @@ function hr_users_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_users_ref-field_users_ref_checkbox'
+  // Exported field_instance:
+  // 'field_collection_item-field_users_ref-field_users_ref_checkbox'
   $field_instances['field_collection_item-field_users_ref-field_users_ref_checkbox'] = array(
     'bundle' => 'field_users_ref',
     'default_value' => array(
@@ -440,7 +443,8 @@ function hr_users_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_users_ref-field_users_ref_name'
+  // Exported field_instance:
+  // 'field_collection_item-field_users_ref-field_users_ref_name'
   $field_instances['field_collection_item-field_users_ref-field_users_ref_name'] = array(
     'bundle' => 'field_users_ref',
     'default_value' => NULL,
@@ -677,6 +681,71 @@ function hr_users_field_default_field_instances() {
       'weight' => 2,
     ),
   );
+
+  // Exported field_instance: 'profile2-main-field_organizations_other'
+  $field_instances['profile2-main-field_organizations_other'] = array(
+    'bundle' => 'main',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'If you selected Other in the above field, enter the name of your organization here',
+    'display' => array(
+      'account' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 8,
+      ),
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 5,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 9,
+      ),
+    ),
+    'entity_type' => 'profile2',
+    'field_name' => 'field_organizations_other',
+    'label' => 'Organization name',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 3,
+    ),
+  );
+
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('Check this if you could not find user');
+  t('Email');
+  t('Enter your job title here');
+  t('First name');
+  t('If you selected Other in the above field, enter the name of your organization here');
+  t('Job Title');
+  t('Last name');
+  t('Name');
+  t('Organization');
+  t('Organization name');
+  t('Phones');
+  t('Select the organization you work for');
+  t('Start typing the name of the person you would like to reference as a contact. If you can not find him/her, check the box below and enter the contact details manually.');
+  t('User');
 
   return $field_instances;
 }

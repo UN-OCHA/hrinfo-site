@@ -10,7 +10,7 @@
 function hr_users_conditional_fields_default_fields() {
   $items = array();
 
-  $items[] = array(
+  $items["field_collection_item:field_users_ref:0"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_users_ref',
     'dependent' => 'field_email',
@@ -101,7 +101,7 @@ function hr_users_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_users_ref:1"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_users_ref',
     'dependent' => 'field_phones',
@@ -192,7 +192,7 @@ function hr_users_conditional_fields_default_fields() {
     ),
   );
 
-  $items[] = array(
+  $items["field_collection_item:field_users_ref:2"] = array(
     'entity' => 'field_collection_item',
     'bundle' => 'field_users_ref',
     'dependent' => 'field_users_ref_name',
