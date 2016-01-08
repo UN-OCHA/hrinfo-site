@@ -24,15 +24,15 @@
 // Theme CSS
 // --------------------------------------------------
 @import "global/font";
+@import "partials/comment";
+@import "partials/contacts";
+@import "partials/form";
 @import "partials/layout";
-@import "partials/structure";
 @import "partials/menu";
+@import "partials/node";
 @import "partials/page";
 @import "partials/panel";
-@import "partials/view";
-@import "partials/form";
-@import "partials/comment";
-@import "partials/node";
-@import "partials/user";
-@import "partials/contacts";
 @import "partials/search";
+@import "partials/structure";
+@import "partials/user";
+@import "partials/view";
