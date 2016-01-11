@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the HDX datasets module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function hdx_datasets_install() {
+  // Establish the default option for the hdx datasets and hr datasets features
+  // to be disabled by default.
+  foreach (array('hr_operation', 'hr_bundle', 'hr_sector', 'hr_space', 'hr_disaster') as $bundle) {
+    $variable_name = 'og_features_settings_node_' . $bundle;
+    $og_features = variable_get($variable_name, array());
+    $og_features['hdx_datasets'] = 3;
+    $og_features['hr_datasets'] = 3;
+    variable_set($variable_name, $og_features);
+  }
+}

@@ -20,9 +20,9 @@ function hr_search_current_search_default_items() {
       'results' => array(
         'id' => 'text',
         'label' => 'Results',
-        'text' => ' Filter: <span class="facetapi-active">[facetapi_results:result-count] item</span> displayed',
+        'text' => ' <p>Filter: <span class="facetapi-active">[facetapi_results:result-count] item</span> displayed</p>',
         'plural' => 1,
-        'text_plural' => 'Filter: <span class="facetapi-active">[facetapi_results:result-count] items</span> displayed',
+        'text_plural' => '<p>Filter: <span class="facetapi-active">[facetapi_results:result-count] items</span> displayed</p>',
         'plural_condition' => 'facetapi_results:result-count',
         'wrapper' => 1,
         'element' => 'div',
@@ -33,9 +33,9 @@ function hr_search_current_search_default_items() {
       'reset' => array(
         'id' => 'text',
         'label' => 'Reset',
-        'text' => '<a href="/[facetapi_results:search-path]"><i class="reset"></i></a> Reset filter',
+        'text' => '<a href="/[facetapi_results:search-path]"><i class="reset"></i></a> <span>Reset filter</span>',
         'plural' => 1,
-        'text_plural' => '<a href="/[facetapi_results:search-path]"><i class="reset"></i></a> Reset all filters',
+        'text_plural' => '<a href="/[facetapi_results:search-path]"><i class="reset"></i></a> <span>Reset all filters</span>',
         'plural_condition' => 'facetapi_results:result-count',
         'wrapper' => 1,
         'element' => 'div',
