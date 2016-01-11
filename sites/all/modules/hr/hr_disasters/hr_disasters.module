@@ -66,14 +66,15 @@ function _hr_disasters_reliefweb_disaster($id) {
         ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT')
         ->execute();
       if (!empty($results['node'])) {
-        // HACK to keep this disaster not in sync with Reliefweb, since we "extended" it to multiple countries
-        if ($glide != 'EP-2014-000116-GHA' && $glide != 'OT-2011-000205-NER' && $glide != 'EP-2014-000041-GIN') {
-          // Disaster already exists, simply update
-          $nids = array_keys($results['node']);
-          $nid = reset($nids);
-          $node = node_load($nid);
-          $node = _hr_disasters_reliefweb_disaster_map($node, $fields);
-          node_save($node);
+        $nids = array_keys($results['node']);
+        $nid = reset($nids);
+        $wrapper = entity_metadata_wrapper('node', $nid);
+        if(isset($wrapper->field_hr_disaster_sync_disaster)) {
+          $field_sync_disaster = $wrapper->field_hr_disaster_sync_disaster->value();
+          if(empty($field_sync_disaster)) {
+            $node = _hr_disasters_reliefweb_disaster_map($node, $fields);
+            node_save($node);
+          }
         }
       }
       else {
