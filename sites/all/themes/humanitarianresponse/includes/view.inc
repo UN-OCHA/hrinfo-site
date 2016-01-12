@@ -54,16 +54,19 @@ function _humanitarianresponse_views_get_facet_path($real_field, $value) {
   $field_name = str_replace('_target_id', '', $real_field);
   $args = array();
   $args['adapter'] = $adapter;
-  $args['facet'] = facetapi_facet_load($field_name, 'search_api@default_node_index');
-  $segment = array();
-  $segment['value'] = $value;
-  $facet_settings = $adapter->getFacetSettingsGlobal($args['facet']);
-  $segment['alias'] = $facet_settings->settings['pretty_paths_alias'];
-  $args['segment'] = &$segment;
-  facetapi_pretty_paths_coder_callback('encodePathSegment', $args);
-  if (!empty($args['segment']['value'])) {
-    return $args['segment']['alias'].'/'.$args['segment']['value'];
+  if ($args['facet'] = facetapi_facet_load($field_name, 'search_api@default_node_index')) {
+    $segment = array();
+    $segment['value'] = $value;
+    $facet_settings = $adapter->getFacetSettingsGlobal($args['facet']);
+    $segment['alias'] = $facet_settings->settings['pretty_paths_alias'];
+    $args['segment'] = &$segment;
+    facetapi_pretty_paths_coder_callback('encodePathSegment', $args);
+    if (!empty($args['segment']['value'])) {
+      return $args['segment']['alias'].'/'.$args['segment']['value'];
+    }
   }
+
+  return FALSE;
 }
 
 function _humanitarianresponse_views_more_path($type, $display, $view) {
