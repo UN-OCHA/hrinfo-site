@@ -26,6 +26,9 @@ function hdx_datasets_block_info() {
   $blocks['hdx_datasets_filter'] = array(
     'info' => t('HDX datasets filters'),
   );
+  $blocks['hdx_datasets_powered_by'] = array(
+    'info' => t('HDX datasets powered by'),
+  );
   return $blocks;
 }
 
@@ -39,6 +42,11 @@ function hdx_datasets_block_view($delta = '') {
       $variables = array();
       $variables['reset_filter_link'] = '/' . drupal_get_path_alias(current_path());
       $block['content'] = theme('hdx_datasets_sidebar', $variables);
+      break;
+    case 'hdx_datasets_powered_by':
+      $variables = array();
+      $variables['powered_by'] = t('Powered by');
+      $block['content'] = theme('hdx_datasets_powered_by', $variables);
       break;
   }
   return $block;
@@ -109,6 +117,12 @@ function hdx_datasets_theme() {
         'reset_filter_link' => '',
       ),
       'template' => 'templates/hdx-datasets-sidebar',
+    ),
+    'hdx_datasets_powered_by' => array(
+      'variables' => array(
+        'powered_by' => '',
+      ),
+      'template' => 'templates/hdx-datasets-powered-by',
     ),
   );
 }
@@ -195,6 +209,12 @@ function hdx_datasets_context_default_contexts() {
           'delta' => 'hdx_datasets_filter',
           'region' => 'sidebar_first',
           'weight' => '-9',
+        ),
+        'hdx-datasets_hdx-datasets_powered_by' => array(
+          'module' => 'hdx_datasets',
+          'delta' => 'hdx_datasets_powered_by',
+          'region' => 'sidebar_first',
+          'weight' => '-10',
         ),
       ),
     ),
