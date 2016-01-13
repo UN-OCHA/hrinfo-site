@@ -617,8 +617,8 @@ function hr_core_menu_alter(&$items) {
  * Access callback override for the group tab.
  */
 function hr_core_group_tab_access($entity_type, $etid) {
-  $object = menu_get_object();
-  if (!og_is_group($entity_type, $object)) {
+  $entity = entity_load_single($entity_type, $etid);
+  if (!og_is_group($entity_type, $entity)) {
     return FALSE;
   }
 
