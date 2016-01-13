@@ -118,7 +118,14 @@ function hr_bundles_og_context_handler($node = NULL) {
 function hr_bundles_node_og_context_handler($node = NULL) {
   $context = og_context_handler_node($node);
   if (empty($node)) {
-    $node = menu_get_object();
+    // Get the node from the context.
+    if (isset($context['node'])) {
+      $nid = reset($context['node']);
+      $node = node_load($nid);
+    }
+    else {
+      $node = menu_get_object();
+    }
   }
   if (!empty($node) && isset($node->field_bundles) && !empty($node->field_bundles)) {
     // If there is one single bundle, set the context of the bundle
