@@ -179,7 +179,7 @@ function hr_events_panelizer_defaults() {
     );
     $pane->cache = array();
     $pane->style = array(
-      'style' => 'hr_highlighted',
+      'style' => 'default',
       'settings' => NULL,
     );
     $pane->css = array();
