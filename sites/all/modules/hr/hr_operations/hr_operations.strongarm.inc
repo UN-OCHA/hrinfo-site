@@ -136,8 +136,8 @@ function hr_operations_strongarm() {
     'acc_applications' => '3',
     'acc_incidents' => '3',
     'hr_assessments' => '2',
-    'hr_contacts' => '2',
-    'hr_datasets' => '2',
+    'hr_contacts' => '0',
+    'hr_datasets' => '0',
     'hr_disasters' => '1',
     'hr_discussions' => '3',
     'hr_documents' => '2',
@@ -148,6 +148,7 @@ function hr_operations_strongarm() {
     'hr_pages' => '2',
     'hr_users' => '3',
     'hr_webforms' => '3',
+    'hdx_datasets' => '2',
   );
   $export['og_features_settings_node_hr_operation'] = $strongarm;
 

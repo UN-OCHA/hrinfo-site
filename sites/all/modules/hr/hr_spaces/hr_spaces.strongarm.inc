@@ -139,7 +139,7 @@ function hr_spaces_strongarm() {
     'acc_incidents' => '0',
     'hr_assessments' => '0',
     'hr_contacts' => '0',
-    'hr_datasets' => '3',
+    'hr_datasets' => '0',
     'hr_disasters' => '0',
     'hr_discussions' => '0',
     'hr_documents' => '2',
@@ -150,6 +150,7 @@ function hr_spaces_strongarm() {
     'hr_pages' => '2',
     'hr_users' => '2',
     'hr_webforms' => '3',
+    'hdx_datasets' => '2',
   );
   $export['og_features_settings_node_hr_space'] = $strongarm;
 
