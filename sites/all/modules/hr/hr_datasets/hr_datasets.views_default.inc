@@ -9,6 +9,7 @@
  */
 function hr_datasets_views_default_views() {
   $export = array();
+
   $view = new view();
   $view->name = 'hr_datasets';
   $view->description = '';
@@ -81,7 +82,7 @@ function hr_datasets_views_default_views() {
   $handler->display->display_options['sorts']['field_ds_date']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['sorts']['field_ds_date']['field'] = 'field_ds_date';
   $handler->display->display_options['sorts']['field_ds_date']['order'] = 'DESC';
-  /* Contextual filter: Indexed Node: Groups audience */
+  /* Contextual filter: Indexed Node: Space(s) */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -278,7 +279,7 @@ function hr_datasets_views_default_views() {
   $handler->display->display_options['fields']['status']['label'] = 'Published';
   $handler->display->display_options['fields']['status']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['status']['format_name'] = 1;
-  /* Field: Indexed Node: Geographical Location (Origin) */
+  /* Field: Indexed Node: Locations */
   $handler->display->display_options['fields']['field_locations']['id'] = 'field_locations';
   $handler->display->display_options['fields']['field_locations']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_locations']['field'] = 'field_locations';
@@ -300,11 +301,10 @@ function hr_datasets_views_default_views() {
   $handler->display->display_options['fields']['field_ds_datasources']['id'] = 'field_ds_datasources';
   $handler->display->display_options['fields']['field_ds_datasources']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_ds_datasources']['field'] = 'field_ds_datasources';
-  /* Field: Indexed Node: Email */
+  /* Field: Indexed Node: Data Guardian */
   $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['label'] = 'Data Guardian';
   /* Field: Indexed Node: Abstract */
   $handler->display->display_options['fields']['field_ds_abstract']['id'] = 'field_ds_abstract';
   $handler->display->display_options['fields']['field_ds_abstract']['table'] = 'search_api_index_default_node_index';
@@ -423,7 +423,7 @@ function hr_datasets_views_default_views() {
   $handler->display->display_options['fields']['status']['label'] = 'Published';
   $handler->display->display_options['fields']['status']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['status']['format_name'] = 1;
-  /* Field: Indexed Node: Geographical Location (Origin) */
+  /* Field: Indexed Node: Locations */
   $handler->display->display_options['fields']['field_locations']['id'] = 'field_locations';
   $handler->display->display_options['fields']['field_locations']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_locations']['field'] = 'field_locations';
@@ -445,11 +445,10 @@ function hr_datasets_views_default_views() {
   $handler->display->display_options['fields']['field_ds_datasources']['id'] = 'field_ds_datasources';
   $handler->display->display_options['fields']['field_ds_datasources']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_ds_datasources']['field'] = 'field_ds_datasources';
-  /* Field: Indexed Node: Email */
+  /* Field: Indexed Node: Data Guardian */
   $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['label'] = 'Data Guardian';
   /* Field: Indexed Node: Abstract */
   $handler->display->display_options['fields']['field_ds_abstract']['id'] = 'field_ds_abstract';
   $handler->display->display_options['fields']['field_ds_abstract']['table'] = 'search_api_index_default_node_index';
@@ -653,7 +652,6 @@ function hr_datasets_views_default_views() {
     t('Node ID'),
     t('.'),
     t('Published'),
-    t('Geographical Location (Origin)'),
     t('Data Source(s)'),
     t('Data Guardian'),
     t('Dataset Types'),
