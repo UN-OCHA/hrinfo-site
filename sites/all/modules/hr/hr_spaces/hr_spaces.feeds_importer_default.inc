@@ -140,7 +140,7 @@ function hr_spaces_feeds_importer_default() {
           ),
           6 => array(
             'source' => 'Icon',
-            'target' => 'field_image',
+            'target' => 'field_image:uri',
             'unique' => FALSE,
           ),
           7 => array(
@@ -178,6 +178,7 @@ function hr_spaces_feeds_importer_default() {
         'input_format' => 'plain_text',
         'skip_hash_check' => 0,
         'bundle' => 'hr_space',
+        'update_non_existent' => 'skip',
       ),
     ),
     'content_type' => '',
