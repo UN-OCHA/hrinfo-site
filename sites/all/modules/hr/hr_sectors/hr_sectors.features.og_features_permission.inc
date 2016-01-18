@@ -40,15 +40,15 @@ function hr_sectors_og_features_default_permissions() {
     ),
   );
 
-  // Exported og permission: 'node:hr_sector:assign editor role'
-  $permissions['node:hr_sector:assign editor role'] = array(
+  // Exported og permission: 'node:hr_sector:assign contributor role'
+  $permissions['node:hr_sector:assign contributor role'] = array(
     'roles' => array(
       'manager' => 'manager',
     ),
   );
 
-  // Exported og permission: 'node:hr_sector:assign contributor role'
-  $permissions['node:hr_sector:assign contributor role'] = array(
+  // Exported og permission: 'node:hr_sector:assign editor role'
+  $permissions['node:hr_sector:assign editor role'] = array(
     'roles' => array(
       'manager' => 'manager',
     ),
@@ -76,6 +76,14 @@ function hr_sectors_og_features_default_permissions() {
     ),
   );
 
+  // Exported og permission: 'node:hr_sector:publish any content'
+  $permissions['node:hr_sector:publish any content'] = array(
+    'roles' => array(
+      'editor' => 'editor',
+      'manager' => 'manager',
+    ),
+  );
+
   // Exported og permission: 'node:hr_sector:subscribe'
   $permissions['node:hr_sector:subscribe'] = array(
     'roles' => array(),
@@ -86,6 +94,14 @@ function hr_sectors_og_features_default_permissions() {
     'roles' => array(),
   );
 
+  // Exported og permission: 'node:hr_sector:unpublish any content'
+  $permissions['node:hr_sector:unpublish any content'] = array(
+    'roles' => array(
+      'editor' => 'editor',
+      'manager' => 'manager',
+    ),
+  );
+
   // Exported og permission: 'node:hr_sector:update group'
   $permissions['node:hr_sector:update group'] = array(
     'roles' => array(
@@ -93,23 +109,6 @@ function hr_sectors_og_features_default_permissions() {
       'manager' => 'manager',
     ),
   );
-
-   // Exported og permission: 'node:hr_sector:publish any content'
-  $permissions['node:hr_sector:publish any content'] = array(
-    'roles' => array(
-      'manager' => 'manager',
-      'editor' => 'editor',
-    ),
-  );
-
-  // Exported og permission: 'node:hr_sector:unpublish any content'
-  $permissions['node:hr_sector:unpublish any content'] = array(
-    'roles' => array(
-      'manager' => 'manager',
-      'editor' => 'editor',
-    ),
-  );
-
 
   return $permissions;
 }
