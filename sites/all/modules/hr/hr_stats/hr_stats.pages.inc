@@ -79,6 +79,8 @@ function hr_stats_reports($form, &$form_state, $entity_type, $entity_id, $report
     }
   }
 
+  // Default height for the iframe.
+  $iframe_height = 500;
   // Array of URL parameters.
   $data_params = array();
   $data_params[0]['idSite'] = $piwik_site_id;
@@ -99,30 +101,40 @@ function hr_stats_reports($form, &$form_state, $entity_type, $entity_id, $report
       $data_params[0]['columns[]'] = 'nb_visits';
       $data_params[0]['moduleToWidgetize'] = 'VisitsSummary';
       $data_params[0]['actionToWidgetize'] = 'getSparklines';
+      break;
+    case 'visitors_overview_content':
+      $title[0] = t('Pages visited');
+      $data_params[0]['moduleToWidgetize'] = 'Actions';
+      $data_params[0]['actionToWidgetize'] = 'menuGetPageUrls';
+      $data_params[0]['iframe_height'] = 750;
+      break;
+    case 'visitors_overview_downloads':
+      $title[0] = t('Total downloads');
+      $data_params[0]['moduleToWidgetize'] = 'HumanitarianResponse';
+      $data_params[0]['actionToWidgetize'] = $segment_var['widget'];
+      $data_params[0][$segment_var['key'] . '_id'] = $wrapper->getIdentifier();
+      $data_params[0][$segment_var['key'] . '_type'] = $data_params[1][$segment_var['key']];
+      $data_params[0]['iframe_height'] = 250;
       $data_params[1] = $data_params[0];
-      $title[1] = t('Downloads');
-      $data_params[1]['moduleToWidgetize'] = 'HumanitarianResponse';
-      $data_params[1]['actionToWidgetize'] = $segment_var['widget'];
-      unset($data_params[1]['columns[]']);
-      $data_params[1][$segment_var['key'] . '_id'] = $wrapper->getIdentifier();
-      $data_params[1][$segment_var['key'] . '_type'] = $data_params[1][$segment_var['key']];
-      $iframe_height = 350;
+      $title[1] = t('Files downloaded');
+      $data_params[1]['moduleToWidgetize'] = 'Actions';
+      $data_params[1]['actionToWidgetize'] = 'menuGetDownloads';
+      $data_params[1]['iframe_height'] = 750;
       break;
     case 'visitors_settings':
       $data_params[0]['filter_limit'] = 6;
-      // Browser families.
       $title[0] = t('Browser families');
       $data_params[0]['moduleToWidgetize'] = 'DevicesDetection';
       $data_params[0]['actionToWidgetize'] = 'getBrowsers';
-      $iframe_height = 500;
       break;
     case 'visitors_overview_map':
       $title[0] = t('Visitor Map');
       $data_params[0]['moduleToWidgetize'] = 'UserCountryMap';
       $data_params[0]['actionToWidgetize'] = 'visitorMap';
-      $iframe_height = 700;
+      $data_params[0]['iframe_height'] = 850;
       break;
   }
+
 
   // Build the data URL with all params and urlencode it.
   $theme_args = array();
@@ -130,15 +142,14 @@ function hr_stats_reports($form, &$form_state, $entity_type, $entity_id, $report
     $theme_args['data_url'][] = array(
       'url' => $piwik_url . 'index.php?' . drupal_http_build_query($data),
       'title' => $title[$key],
-      'iframe_height' => $iframe_height,
+      'iframe_height' => !empty($data['iframe_height']) ? $data['iframe_height'] : $iframe_height,
       'empty_text' => (isset($empty_text) ? $empty_text : NULL),
     );
   }
-  // Render HTML code.
-  $output = theme('piwik_reports', $theme_args);
+
   $form['content'] = array(
     '#type' => 'item',
-    '#markup' => $output,
+    '#markup' => theme('piwik_reports', $theme_args),
   );
   return $form;
 }
