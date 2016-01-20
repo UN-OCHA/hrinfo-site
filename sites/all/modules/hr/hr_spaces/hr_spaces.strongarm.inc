@@ -151,6 +151,7 @@ function hr_spaces_strongarm() {
     'hr_users' => '2',
     'hr_webforms' => '3',
     'hdx_datasets' => '2',
+    'hid_contacts' => '0',
   );
   $export['og_features_settings_node_hr_space'] = $strongarm;
 

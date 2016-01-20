@@ -229,6 +229,7 @@ function hr_bundles_strongarm() {
     'hr_users' => '3',
     'hr_webforms' => '3',
     'hdx_datasets' => '0',
+    'hid_contacts' => '2',
   );
   $export['og_features_settings_node_hr_bundle'] = $strongarm;
 
