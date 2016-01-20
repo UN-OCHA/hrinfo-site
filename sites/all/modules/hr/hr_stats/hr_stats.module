@@ -56,6 +56,26 @@ function hr_stats_menu() {
     'weight' => 1,
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
+  $items['group/%/%/admin/analytics/visitors/content'] = array(
+    'title' => 'Content',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hr_stats_reports', 1, 2 , 'visitors_overview_content'),
+    'access callback' => 'og_user_access',
+    'access arguments' => array(1, 2, 'access piwik reports'),
+    'file' => 'hr_stats.pages.inc',
+    'weight' => 2,
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['group/%/%/admin/analytics/visitors/downloads'] = array(
+    'title' => 'Downloads',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hr_stats_reports', 1, 2 , 'visitors_overview_downloads'),
+    'access callback' => 'og_user_access',
+    'access arguments' => array(1, 2, 'access piwik reports'),
+    'file' => 'hr_stats.pages.inc',
+    'weight' => 2,
+    'type' => MENU_LOCAL_TASK,
+  );
   $items['group/%/%/admin/analytics/visitors/map'] = array(
     'title' => 'Map',
     'page callback' => 'drupal_get_form',
