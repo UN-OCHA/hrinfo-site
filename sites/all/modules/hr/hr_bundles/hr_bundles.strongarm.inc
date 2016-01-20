@@ -216,7 +216,7 @@ function hr_bundles_strongarm() {
     'acc_applications' => '0',
     'acc_incidents' => '0',
     'hr_assessments' => '2',
-    'hr_contacts' => '2',
+    'hr_contacts' => '0',
     'hr_datasets' => '0',
     'hr_disasters' => '0',
     'hr_discussions' => '0',
@@ -228,6 +228,7 @@ function hr_bundles_strongarm() {
     'hr_pages' => '1',
     'hr_users' => '3',
     'hr_webforms' => '3',
+    'hdx_datasets' => '0',
   );
   $export['og_features_settings_node_hr_bundle'] = $strongarm;
 

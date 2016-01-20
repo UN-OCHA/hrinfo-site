@@ -139,7 +139,7 @@ function hr_spaces_strongarm() {
     'acc_incidents' => '0',
     'hr_assessments' => '0',
     'hr_contacts' => '0',
-    'hr_datasets' => '3',
+    'hr_datasets' => '0',
     'hr_disasters' => '0',
     'hr_discussions' => '0',
     'hr_documents' => '2',
@@ -150,6 +150,7 @@ function hr_spaces_strongarm() {
     'hr_pages' => '2',
     'hr_users' => '2',
     'hr_webforms' => '3',
+    'hdx_datasets' => '2',
   );
   $export['og_features_settings_node_hr_space'] = $strongarm;
 
@@ -457,6 +458,7 @@ function hr_spaces_strongarm() {
     'block-hr_bookmarks-hr_favorite_spaces' => 0,
     'block-hr_bundles-clusters_map' => 0,
     'block-hr_help-hr_help' => 0,
+    'block-hr_layout-hr_layout_checkin' => 0,
     'block-hr_layout-hr_layout_login' => 0,
     'block-hr_layout-hr_layout_create_links' => 0,
     'block-hr_layout-hr_layout_space_links' => 0,

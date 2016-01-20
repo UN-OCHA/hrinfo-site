@@ -64,7 +64,7 @@ function hr_sectors_feeds_importer_default() {
           ),
           4 => array(
             'source' => 'Icon',
-            'target' => 'field_image',
+            'target' => 'field_image:uri',
             'unique' => FALSE,
           ),
           5 => array(
@@ -112,6 +112,7 @@ function hr_sectors_feeds_importer_default() {
         'input_format' => 'plain_text',
         'skip_hash_check' => 0,
         'bundle' => 'hr_sector',
+        'update_non_existent' => 'skip',
       ),
     ),
     'content_type' => '',

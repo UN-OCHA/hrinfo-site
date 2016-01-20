@@ -23,3 +23,12 @@ function hr_sectors_hide_sectors(&$form, $form_state) {
     }
   }
 }
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function hr_sectors_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'restful') {
+    return 'plugins/' . $plugin;
+  }
+}
