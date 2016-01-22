@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ * Install file for hr_core.
+ */
+
+/**
+ * Uninstall multisite redirect module.
+ */
+function hr_core_update_7001() {
+  // We need to handle the top redirects using the redirect module instead.
+  $query = db_select('multisite_redirect')
+    ->fields('multisite_redirect', array('source_site', 'redirect'))
+    ->condition('source_path', '<front>');
+  $result = $query->execute();
+  $base_fields = $result->fetchAllKeyed();
+
+
+  $query = db_select('multisite_redirect')
+    ->fields('multisite_redirect', array('source_site', 'source_path', 'redirect'))
+    ->condition('source_path', '<front>', '<>')
+    ->condition('access', '1429351251', '>')
+    ->condition('count', 5, '>');
+  $result = $query->execute();
+  $redirects = $result->fetchAll();
+
+  $languages = language_list();
+
+  foreach ($redirects as $redirect) {
+    $source_site = _hr_core_install_remove_language_url($languages, urldecode($base_fields[$redirect->source_site]));
+
+    if ($source_site_path = drupal_lookup_path('source', $source_site)) {
+      $source = $source_site_path . '/' . urldecode($redirect->source_path);
+    }
+    else {
+      $source = $source = $source_site . '/' . urldecode($redirect->source_path);
+    }
+
+    $destination =  _hr_core_install_remove_language_url($languages, urldecode($redirect->redirect));
+    if ($dest_path = drupal_lookup_path('source', $destination)) {
+      $destination = $dest_path;
+    }
+    $redirect = new stdClass();
+
+    redirect_object_prepare(
+      $redirect,
+      array(
+        'source' => $source,
+        'source_options' => array(),
+        'redirect' => $destination,
+        'redirect_options' => array(),
+        'language' => LANGUAGE_NONE,
+      )
+    );
+
+    $hash = redirect_hash($redirect);
+    $existing = redirect_load_by_hash($hash);
+    if (!$existing) {
+      redirect_save($redirect);
+    }
+
+  }
+  redirect_page_cache_clear();
+
+  if( module_exists('multisite_redirect')) {
+    variable_del('multisite_redirect_primary_site');
+    variable_del('multisite_redirect_exclusions');
+    module_disable(array('multisite_redirect'));
+    drupal_uninstall_modules(array('multisite_redirect'));
+  }
+}
+
+/**
+ * Helper function to remove the language from the front of the string.
+ */
+function _hr_core_install_remove_language_url($languages, $string) {
+  // We need to clean out the language from the urls.
+  foreach ($languages as $key => $language) {
+    if (strpos($string, $key) === 0) {
+      return str_replace($key . '/', '', $string);
+    }
+  }
+  return $string;
+}
+
