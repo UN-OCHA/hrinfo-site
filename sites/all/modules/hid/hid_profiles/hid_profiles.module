@@ -205,6 +205,51 @@ function hid_profiles_access_proxy() {
 }
 
 /**
+ * Implements hook_og_features_registry()
+ */
+function hid_profiles_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'hid_contacts';
+  $feature->name = t('Contacts (HID)');
+  $feature->description = t('Provide contacts to your space.');
+  $feature->components = array(
+    'path' => array(
+      'node/%node/hid_contacts',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
+ * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ */
+function hid_profiles_og_features_toggle($entity, $entity_id, $entity_type, $features) {
+  if (isset($features['hid_contacts'])) {
+    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
+    if (empty($features['hid_contacts'])) {
+      menu_link_delete(NULL, 'node/'.$entity_id.'/hid_contacts');
+    }
+    else {
+      // See if menu link already exists.
+      $menu_link = menu_link_get_preferred('node/'.$entity_id.'/hid_contacts', OG_MENU_SINGLE_MENU_NAME);
+      if (empty($menu_link)) {
+        $menu_link = array(
+          'link_path' => 'node/'.$entity_id.'/hid_contacts',
+          'link_title' => 'Contacts',
+          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
+          'weight' => 2,
+          'plid' => $mlid,
+        );
+        menu_link_save($menu_link);
+      }
+    }
+  }
+
+}
+
+/**
  * Callback function for autocomplete.
  *
  * @param $type string
@@ -807,7 +852,6 @@ function hid_profiles_protected_roles_select() {
                     ->propertyCondition('vid', $voc->vid)
                     ->execute();
   $terms = taxonomy_term_load_multiple(array_keys($entities['taxonomy_term']));
-  $labels = array();
   $html = '<div id="block-hid-profiles-filters-roles" class="block"><select id="protectedRoles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Role">';
   $html .= '<option value=""></option>';
   foreach ($terms as $term) {
