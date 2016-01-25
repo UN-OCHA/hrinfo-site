@@ -1,0 +1,4 @@
+name = Decommissioner
+description = Helper module to disable and remove no longer needed features from the HR info site.
+core = 7.x
+package = Humanitarianresponse

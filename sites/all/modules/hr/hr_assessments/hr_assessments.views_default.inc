@@ -54,7 +54,7 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['fields']['field_locations']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_locations']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_locations']['bypass_access'] = 0;
-  /* Field: Indexed Node: Leading/Coordinating Organizations */
+  /* Field: Indexed Node: Organization */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -276,10 +276,6 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['relationships']['field_asst_report']['id'] = 'field_asst_report';
   $handler->display->display_options['relationships']['field_asst_report']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['relationships']['field_asst_report']['field'] = 'field_asst_report';
-  /* Relationship: Indexed Node: Contact(s) */
-  $handler->display->display_options['relationships']['field_users_ref']['id'] = 'field_users_ref';
-  $handler->display->display_options['relationships']['field_users_ref']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['relationships']['field_users_ref']['field'] = 'field_users_ref';
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Indexed Node: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
@@ -299,7 +295,7 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['fields']['field_asst_other_location']['id'] = 'field_asst_other_location';
   $handler->display->display_options['fields']['field_asst_other_location']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_asst_other_location']['field'] = 'field_asst_other_location';
-  /* Field: Indexed Node: Leading/Coordinating Organizations */
+  /* Field: Indexed Node: Organization */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -469,49 +465,6 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['fields']['field_asst_instructions']['field'] = 'field_asst_instructions';
   $handler->display->display_options['fields']['field_asst_instructions']['relationship'] = 'field_asst_data';
   $handler->display->display_options['fields']['field_asst_instructions']['label'] = 'Data Instructions';
-  /* Field: Field collection item: User */
-  $handler->display->display_options['fields']['field_user']['id'] = 'field_user';
-  $handler->display->display_options['fields']['field_user']['table'] = 'entity_field_collection_item';
-  $handler->display->display_options['fields']['field_user']['field'] = 'field_user';
-  $handler->display->display_options['fields']['field_user']['relationship'] = 'field_users_ref';
-  $handler->display->display_options['fields']['field_user']['label'] = 'Contact Profile';
-  $handler->display->display_options['fields']['field_user']['link_to_entity'] = 0;
-  $handler->display->display_options['fields']['field_user']['view_mode'] = 'full';
-  $handler->display->display_options['fields']['field_user']['bypass_access'] = 0;
-  /* Field: Field collection item: Name */
-  $handler->display->display_options['fields']['field_users_ref_name']['id'] = 'field_users_ref_name';
-  $handler->display->display_options['fields']['field_users_ref_name']['table'] = 'entity_field_collection_item';
-  $handler->display->display_options['fields']['field_users_ref_name']['field'] = 'field_users_ref_name';
-  $handler->display->display_options['fields']['field_users_ref_name']['relationship'] = 'field_users_ref';
-  $handler->display->display_options['fields']['field_users_ref_name']['label'] = 'Contact Name';
-  /* Field: Field collection item: Phones */
-  $handler->display->display_options['fields']['field_phones']['id'] = 'field_phones';
-  $handler->display->display_options['fields']['field_phones']['table'] = 'entity_field_collection_item';
-  $handler->display->display_options['fields']['field_phones']['field'] = 'field_phones';
-  $handler->display->display_options['fields']['field_phones']['relationship'] = 'field_users_ref';
-  $handler->display->display_options['fields']['field_phones']['label'] = 'Contact Phones';
-  $handler->display->display_options['fields']['field_phones']['click_sort_column'] = 'numbertype';
-  $handler->display->display_options['fields']['field_phones']['settings'] = array(
-    'components' => array(
-      'country' => 0,
-      'numbertype' => 0,
-    ),
-    'full_hcard' => 0,
-    'as_tel_link' => 0,
-    'raw' => 1,
-    'allow_alpha' => 0,
-    'country_name_position' => 'after',
-    'numbertype_position' => 'before',
-  );
-  $handler->display->display_options['fields']['field_phones']['delta_offset'] = '0';
-  $handler->display->display_options['fields']['field_phones']['separator'] = ';';
-  /* Field: Field collection item: Cluster coordinator Email */
-  $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['table'] = 'entity_field_collection_item';
-  $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['relationship'] = 'field_users_ref';
-  $handler->display->display_options['fields']['field_email']['label'] = 'Contact Email';
-  $handler->display->display_options['fields']['field_email']['type'] = 'email_plain';
   $handler->display->display_options['path'] = 'node/%/assessments/csv';
   $handler->display->display_options['displays'] = array(
     'master' => 'master',
@@ -757,7 +710,7 @@ function hr_assessments_views_default_views() {
     t('There are no results'),
     t('Title'),
     t('Locations'),
-    t('Leading/Coordinating Organizations'),
+    t('Organization'),
     t('Participating Organizations'),
     t('Clusters/Sectors'),
     t('Status'),
@@ -776,7 +729,6 @@ function hr_assessments_views_default_views() {
     t('Assessment Data'),
     t('Assessment Questionnaire'),
     t('Assessment Report'),
-    t('Contact(s)'),
     t('Location'),
     t('Other location'),
     t('Leading Organizations'),
@@ -803,10 +755,6 @@ function hr_assessments_views_default_views() {
     t('Data File'),
     t('Data URL'),
     t('Data Instructions'),
-    t('Contact Profile'),
-    t('Contact Name'),
-    t('Contact Phones'),
-    t('Contact Email'),
     t('Map data'),
     t('.'),
     t('Map'),

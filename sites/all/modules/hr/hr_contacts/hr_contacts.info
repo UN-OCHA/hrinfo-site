@@ -148,4 +148,3 @@ features_exclude[dependencies][panelizer] = panelizer
 features_exclude[dependencies][phone] = phone
 features_exclude[dependencies][shs] = shs
 features_exclude[dependencies][strongarm] = strongarm
-features_exclude[field_base][field_email] = field_email

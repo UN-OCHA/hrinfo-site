@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * hr_stats.features.og_features_role.inc
+ * hr_disasters.features.og_features_role.inc
  */
 
 /**
  * Implements hook_og_features_default_roles().
  */
-function hr_stats_og_features_default_roles() {
+function hr_disasters_og_features_default_roles() {
   $roles = array();
 
   // Exported OG Role: 'node:hr_disaster:manager'.

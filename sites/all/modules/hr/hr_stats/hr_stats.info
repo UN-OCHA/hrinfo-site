@@ -18,7 +18,6 @@ features[og_features_permission][] = node:hr_disaster:access piwik reports
 features[og_features_permission][] = node:hr_operation:access piwik reports
 features[og_features_permission][] = node:hr_sector:access piwik reports
 features[og_features_permission][] = node:hr_space:access piwik reports
-features[og_features_role][] = node:hr_disaster:manager
 features[variable][] = googleanalytics_account
 features[variable][] = googleanalytics_custom_dimension
 features[variable][] = piwik_custom_var
