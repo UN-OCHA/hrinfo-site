@@ -127,7 +127,6 @@ features[field_instance][] = node-hr_assessment-field_organizations2
 features[field_instance][] = node-hr_assessment-field_population_types
 features[field_instance][] = node-hr_assessment-field_related_content
 features[field_instance][] = node-hr_assessment-field_themes
-features[field_instance][] = node-hr_assessment-field_users_ref
 features[field_instance][] = node-hr_assessment-group_content_access
 features[field_instance][] = node-hr_assessment-og_group_ref
 features[field_instance][] = node-hr_assessment-title_field

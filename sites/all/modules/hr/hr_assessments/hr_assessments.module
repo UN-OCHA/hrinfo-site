@@ -133,10 +133,3 @@ function hr_assessments_global_map() {
   }
   return drupal_access_denied();
 }
-
-/**
- * Implements hook_form_FORM_ID_alter()
- */
-function hr_assessments_form_hr_assessment_node_form_alter(&$form, &$form_state, $form_id) {
-  $form['field_users_ref']['#access'] = user_access('administer nodes');
-}

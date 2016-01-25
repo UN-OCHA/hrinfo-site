@@ -29,11 +29,6 @@ class RestfulEntityNodeEvents extends \RestfulEntityBaseNode {
       'process_callbacks' => array(array($this, 'formatAddress')),
     );
 
-    $public_fields['contacts'] = array(
-      'property' => 'field_users_ref',
-      'process_callbacks' => array(array($this, 'getContacts')),
-    );
-
     $public_fields['meeting_minutes'] = array(
       'property' => 'field_event_meeting_minutes',
       'resource' => array(
@@ -226,28 +221,5 @@ class RestfulEntityNodeEvents extends \RestfulEntityBaseNode {
     unset($value['data']);
     return $value;
   }
-
-  protected function getContacts($wrapper) {
-    $return  = array();
-    if (!empty($wrapper)) {
-      foreach ($wrapper as $item) {
-        $tmp = new stdClass();
-        if (!empty($item->field_user)) {
-          $account = user_load($item->field_user[LANGUAGE_NONE][0]['target_id']);
-          $tmp->name = $account->realname;
-          $tmp->email = $account->mail;
-        }
-        else {
-          if (!empty($item->field_users_ref_name)) {
-            $tmp->name = $item->field_users_ref_name[LANGUAGE_NONE][0]['value'];
-          }
-          if (!empty($item->field_email)) {
-            $tmp->email = $item->field_email[LANGUAGE_NONE][0]['email'];
-          }
-        }
-        $return[] = $tmp;
-      }
-    }
-    return $return;
-  }
+  
 }

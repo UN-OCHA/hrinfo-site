@@ -111,10 +111,6 @@ function hr_events_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = 'There are no results';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
-  /* Relationship: Indexed Node: Contact(s) */
-  $handler->display->display_options['relationships']['field_users_ref']['id'] = 'field_users_ref';
-  $handler->display->display_options['relationships']['field_users_ref']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['relationships']['field_users_ref']['field'] = 'field_users_ref';
   /* Field: Indexed Node: Date */
   $handler->display->display_options['fields']['field_event_date']['id'] = 'field_event_date';
   $handler->display->display_options['fields']['field_event_date']['table'] = 'search_api_index_default_node_index';
@@ -146,38 +142,6 @@ function hr_events_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: Field collection item: User */
-  $handler->display->display_options['fields']['field_user']['id'] = 'field_user';
-  $handler->display->display_options['fields']['field_user']['table'] = 'entity_field_collection_item';
-  $handler->display->display_options['fields']['field_user']['field'] = 'field_user';
-  $handler->display->display_options['fields']['field_user']['relationship'] = 'field_users_ref';
-  $handler->display->display_options['fields']['field_user']['link_to_entity'] = 1;
-  $handler->display->display_options['fields']['field_user']['view_mode'] = 'full';
-  $handler->display->display_options['fields']['field_user']['bypass_access'] = 0;
-  /* Field: Field collection item: Cluster coordinator Email */
-  $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['table'] = 'entity_field_collection_item';
-  $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['relationship'] = 'field_users_ref';
-  /* Field: Field collection item: Phones */
-  $handler->display->display_options['fields']['field_phones']['id'] = 'field_phones';
-  $handler->display->display_options['fields']['field_phones']['table'] = 'entity_field_collection_item';
-  $handler->display->display_options['fields']['field_phones']['field'] = 'field_phones';
-  $handler->display->display_options['fields']['field_phones']['relationship'] = 'field_users_ref';
-  $handler->display->display_options['fields']['field_phones']['click_sort_column'] = 'numbertype';
-  $handler->display->display_options['fields']['field_phones']['settings'] = array(
-    'components' => array(
-      'numbertype' => 'numbertype',
-      'country' => 0,
-    ),
-    'full_hcard' => 0,
-    'as_tel_link' => 0,
-    'raw' => 1,
-    'allow_alpha' => 0,
-    'country_name_position' => 'after',
-    'numbertype_position' => 'before',
-  );
-  $handler->display->display_options['fields']['field_phones']['delta_offset'] = '0';
   /* Field: Indexed Node: Title */
   $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
   $handler->display->display_options['fields']['title_field']['table'] = 'search_api_index_default_node_index';
@@ -186,17 +150,14 @@ function hr_events_views_default_views() {
   $handler->display->display_options['fields']['title_field']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['title_field']['alter']['text'] = '[title_field]<br />
 [field_event_date]<br />
-[field_address]<br />
-[field_user]<br />
-[field_phones] <br />
-[field_email]<br />';
+[field_address]<br />';
   $handler->display->display_options['fields']['title_field']['element_label_colon'] = FALSE;
   /* Sort criterion: Indexed Node: Date created */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Contextual filter: Indexed Node: Space(s) */
+  /* Contextual filter: Indexed Node: Groups audience */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -319,10 +280,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['fields']['title_field']['label'] = '';
   $handler->display->display_options['fields']['title_field']['alter']['text'] = '[title_field]<br />
 [field_event_date]<br />
-[field_address]<br />
-[field_user]<br />
-[field_phones] <br />
-[field_email]<br />';
+[field_address]<br />';
   $handler->display->display_options['fields']['title_field']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title_field']['type'] = 'text_plain';
   $handler->display->display_options['fields']['title_field']['settings'] = array(
@@ -430,10 +388,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['fields']['title_field']['label'] = '';
   $handler->display->display_options['fields']['title_field']['alter']['text'] = '[title_field]<br />
 [field_event_date]<br />
-[field_address]<br />
-[field_user]<br />
-[field_phones] <br />
-[field_email]<br />';
+[field_address]<br />';
   $handler->display->display_options['fields']['title_field']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title_field']['type'] = 'text_plain';
   $handler->display->display_options['fields']['title_field']['settings'] = array(
@@ -479,7 +434,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['sorts']['changed']['field'] = 'changed';
   $handler->display->display_options['sorts']['changed']['order'] = 'DESC';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Indexed Node: Space(s) */
+  /* Contextual filter: Indexed Node: Groups audience */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -503,16 +458,9 @@ function hr_events_views_default_views() {
     t('Asc'),
     t('Desc'),
     t('There are no results'),
-    t('Contact(s)'),
-    t('User'),
-    t('Cluster coordinator Email'),
-    t('Phones'),
     t('[title_field]<br />
 [field_event_date]<br />
-[field_address]<br />
-[field_user]<br />
-[field_phones] <br />
-[field_email]<br />'),
+[field_address]<br />'),
     t('All'),
     t('Search Events'),
     t('List'),
@@ -560,11 +508,6 @@ function hr_events_views_default_views() {
   $handler->display->display_options['style_options']['theme_style'] = '1';
   $handler->display->display_options['style_options']['max_items'] = '0';
   $handler->display->display_options['row_plugin'] = 'calendar_entity';
-  /* Relationship: Content: Contact(s) (field_users_ref) */
-  $handler->display->display_options['relationships']['field_users_ref_value']['id'] = 'field_users_ref_value';
-  $handler->display->display_options['relationships']['field_users_ref_value']['table'] = 'field_data_field_users_ref';
-  $handler->display->display_options['relationships']['field_users_ref_value']['field'] = 'field_users_ref_value';
-  $handler->display->display_options['relationships']['field_users_ref_value']['delta'] = '0';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
@@ -604,51 +547,6 @@ function hr_events_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Field: Field collection item: User */
-  $handler->display->display_options['fields']['field_user']['id'] = 'field_user';
-  $handler->display->display_options['fields']['field_user']['table'] = 'field_data_field_user';
-  $handler->display->display_options['fields']['field_user']['field'] = 'field_user';
-  $handler->display->display_options['fields']['field_user']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_user']['label'] = '';
-  $handler->display->display_options['fields']['field_user']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_user']['settings'] = array(
-    'link' => 1,
-  );
-  /* Field: Field collection item: Name */
-  $handler->display->display_options['fields']['field_users_ref_name']['id'] = 'field_users_ref_name';
-  $handler->display->display_options['fields']['field_users_ref_name']['table'] = 'field_data_field_users_ref_name';
-  $handler->display->display_options['fields']['field_users_ref_name']['field'] = 'field_users_ref_name';
-  $handler->display->display_options['fields']['field_users_ref_name']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_users_ref_name']['label'] = '';
-  $handler->display->display_options['fields']['field_users_ref_name']['element_label_colon'] = FALSE;
-  /* Field: Field: Phones */
-  $handler->display->display_options['fields']['field_phones']['id'] = 'field_phones';
-  $handler->display->display_options['fields']['field_phones']['table'] = 'field_data_field_phones';
-  $handler->display->display_options['fields']['field_phones']['field'] = 'field_phones';
-  $handler->display->display_options['fields']['field_phones']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_phones']['label'] = '';
-  $handler->display->display_options['fields']['field_phones']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_phones']['click_sort_column'] = 'numbertype';
-  $handler->display->display_options['fields']['field_phones']['settings'] = array(
-    'components' => array(
-      'country' => 0,
-      'numbertype' => 0,
-    ),
-    'full_hcard' => 0,
-    'as_tel_link' => 0,
-    'raw' => 1,
-    'allow_alpha' => 0,
-    'country_name_position' => 'after',
-    'numbertype_position' => 'before',
-  );
-  $handler->display->display_options['fields']['field_phones']['delta_offset'] = '0';
-  /* Field: Field: Email */
-  $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['table'] = 'field_data_field_email';
-  $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_email']['label'] = '';
-  $handler->display->display_options['fields']['field_email']['element_label_colon'] = FALSE;
   /* Sort criterion: Content: Date -  start date (field_event_date) */
   $handler->display->display_options['sorts']['field_event_date_value']['id'] = 'field_event_date_value';
   $handler->display->display_options['sorts']['field_event_date_value']['table'] = 'field_data_field_event_date';
@@ -1160,10 +1058,6 @@ return 0;';
     'title' => 'title',
     'field_event_date' => 'field_event_date',
     'field_address' => 'field_address',
-    'field_user' => 'field_user',
-    'field_users_ref_name' => 'field_users_ref_name',
-    'field_phones' => 'field_phones',
-    'field_email' => 'field_email',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
@@ -1182,32 +1076,6 @@ return 0;';
       'empty_column' => 0,
     ),
     'field_address' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_user' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_users_ref_name' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_phones' => array(
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_email' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -1355,10 +1223,6 @@ return 0;';
     'title' => 'title',
     'field_event_date' => 'field_event_date',
     'field_address' => 'field_address',
-    'field_user' => 'field_user',
-    'field_users_ref_name' => 'field_users_ref_name',
-    'field_phones' => 'field_phones',
-    'field_email' => 'field_email',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
@@ -1377,32 +1241,6 @@ return 0;';
       'empty_column' => 0,
     ),
     'field_address' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_user' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_users_ref_name' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_phones' => array(
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_email' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -1497,59 +1335,6 @@ return 0;';
       'address' => 'address',
     ),
   );
-  /* Field: Field collection item: User */
-  $handler->display->display_options['fields']['field_user']['id'] = 'field_user';
-  $handler->display->display_options['fields']['field_user']['table'] = 'field_data_field_user';
-  $handler->display->display_options['fields']['field_user']['field'] = 'field_user';
-  $handler->display->display_options['fields']['field_user']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_user']['label'] = '';
-  $handler->display->display_options['fields']['field_user']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_user']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_user']['settings'] = array(
-    'link' => 1,
-  );
-  /* Field: Field: Phones */
-  $handler->display->display_options['fields']['field_phones']['id'] = 'field_phones';
-  $handler->display->display_options['fields']['field_phones']['table'] = 'field_data_field_phones';
-  $handler->display->display_options['fields']['field_phones']['field'] = 'field_phones';
-  $handler->display->display_options['fields']['field_phones']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_phones']['label'] = '';
-  $handler->display->display_options['fields']['field_phones']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_phones']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_phones']['click_sort_column'] = 'numbertype';
-  $handler->display->display_options['fields']['field_phones']['settings'] = array(
-    'components' => array(
-      'country' => 0,
-      'numbertype' => 0,
-    ),
-    'full_hcard' => 0,
-    'as_tel_link' => 0,
-    'raw' => 1,
-    'allow_alpha' => 0,
-    'country_name_position' => 'after',
-    'numbertype_position' => 'before',
-  );
-  $handler->display->display_options['fields']['field_phones']['delta_offset'] = '0';
-  /* Field: Field: Email */
-  $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['table'] = 'field_data_field_email';
-  $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_email']['label'] = '';
-  $handler->display->display_options['fields']['field_email']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_email']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_email']['type'] = 'email_plain';
-  /* Field: Field collection item: Name */
-  $handler->display->display_options['fields']['field_users_ref_name']['id'] = 'field_users_ref_name';
-  $handler->display->display_options['fields']['field_users_ref_name']['table'] = 'field_data_field_users_ref_name';
-  $handler->display->display_options['fields']['field_users_ref_name']['field'] = 'field_users_ref_name';
-  $handler->display->display_options['fields']['field_users_ref_name']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_users_ref_name']['label'] = 'Contact';
-  $handler->display->display_options['fields']['field_users_ref_name']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_users_ref_name']['alter']['text'] = '[field_users_ref_name]<br />
-[field_phones]<br />
-[field_email]';
-  $handler->display->display_options['fields']['field_users_ref_name']['element_label_colon'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
@@ -1596,10 +1381,6 @@ return 0;';
     'title' => 'title',
     'field_event_date' => 'field_event_date',
     'field_address' => 'field_address',
-    'field_user' => 'field_user',
-    'field_users_ref_name' => 'field_users_ref_name',
-    'field_phones' => 'field_phones',
-    'field_email' => 'field_email',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
@@ -1618,32 +1399,6 @@ return 0;';
       'empty_column' => 0,
     ),
     'field_address' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_user' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_users_ref_name' => array(
-      'sortable' => 0,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_phones' => array(
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_email' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -1722,59 +1477,6 @@ return 0;';
       'address' => 'address',
     ),
   );
-  /* Field: Field collection item: User */
-  $handler->display->display_options['fields']['field_user']['id'] = 'field_user';
-  $handler->display->display_options['fields']['field_user']['table'] = 'field_data_field_user';
-  $handler->display->display_options['fields']['field_user']['field'] = 'field_user';
-  $handler->display->display_options['fields']['field_user']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_user']['label'] = '';
-  $handler->display->display_options['fields']['field_user']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_user']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_user']['settings'] = array(
-    'link' => 1,
-  );
-  /* Field: Field: Phones */
-  $handler->display->display_options['fields']['field_phones']['id'] = 'field_phones';
-  $handler->display->display_options['fields']['field_phones']['table'] = 'field_data_field_phones';
-  $handler->display->display_options['fields']['field_phones']['field'] = 'field_phones';
-  $handler->display->display_options['fields']['field_phones']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_phones']['label'] = '';
-  $handler->display->display_options['fields']['field_phones']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_phones']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_phones']['click_sort_column'] = 'numbertype';
-  $handler->display->display_options['fields']['field_phones']['settings'] = array(
-    'components' => array(
-      'country' => 0,
-      'numbertype' => 0,
-    ),
-    'full_hcard' => 0,
-    'as_tel_link' => 0,
-    'raw' => 1,
-    'allow_alpha' => 0,
-    'country_name_position' => 'after',
-    'numbertype_position' => 'before',
-  );
-  $handler->display->display_options['fields']['field_phones']['delta_offset'] = '0';
-  /* Field: Field: Email */
-  $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['table'] = 'field_data_field_email';
-  $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
-  $handler->display->display_options['fields']['field_email']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_email']['label'] = '';
-  $handler->display->display_options['fields']['field_email']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_email']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_email']['type'] = 'email_plain';
-  /* Field: Field collection item: Name */
-  $handler->display->display_options['fields']['field_users_ref_name']['id'] = 'field_users_ref_name';
-  $handler->display->display_options['fields']['field_users_ref_name']['table'] = 'field_data_field_users_ref_name';
-  $handler->display->display_options['fields']['field_users_ref_name']['field'] = 'field_users_ref_name';
-  $handler->display->display_options['fields']['field_users_ref_name']['relationship'] = 'field_users_ref_value';
-  $handler->display->display_options['fields']['field_users_ref_name']['label'] = 'Contact';
-  $handler->display->display_options['fields']['field_users_ref_name']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_users_ref_name']['alter']['text'] = '[field_users_ref_name]<br />
-[field_phones]<br />
-[field_email]';
-  $handler->display->display_options['fields']['field_users_ref_name']['element_label_colon'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
@@ -1816,7 +1518,6 @@ return 0;';
     t('Sort by'),
     t('Asc'),
     t('Desc'),
-    t('field collection item from field_users_ref'),
     t('All'),
     t('Coordination hubs'),
     t('Location'),
@@ -1844,12 +1545,9 @@ return 0;';
 </div>'),
     t('Rep'),
     t('[field_event_date_2-rrule]'),
-    t('Contact'),
-    t('[field_users_ref_name]<br />
-[field_phones]<br />
-[field_email]'),
     t('Print Day'),
   );
+
   $export['hr_events_calendar'] = $view;
 
   $view = new view();
