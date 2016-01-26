@@ -235,5 +235,19 @@ function hr_core_strongarm() {
   $strongarm->value = '2';
   $export['user_default_timezone'] = $strongarm;
 
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'views_data_export_gc_chunk';
+  $strongarm->value = 100;
+  $export['views_data_export_gc_chunk'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'views_data_export_gc_expires';
+  $strongarm->value = 86400;
+  $export['views_data_export_gc_expires'] = $strongarm;
+
   return $export;
 }
