@@ -3638,6 +3638,10 @@ body .region-branding input.form-text:focus { border-color: #bc2e3c; }
 .hr-highlighted .field-name-field-infographics.field-type-entityreference .field-item .node { margin-bottom: 1em; }
 .hr-highlighted .field-name-field-documents.field-type-entityreference .field-item .node { margin-bottom: 1em; }
 
+/* hid contact name font style */
+.field-type-hid-contact-reference { display: block; }
+.field-type-hid-contact-reference p { color: #333333; text-align: left; font-size: 13px; line-height: 15px; margin-bottom: 1px; }
+
 #hr-bundles-layer-switcher .baseLbl, #hr-bundles-layer-switcher .baseLayersDiv, #hr-bundles-layer-switcher .dataLbl, #hr-bundles-layer-switcher br, #hr-bundles-layer-switcher span, #hr-bundles-layer-switcher input.olButton { display: none !important; }
 #hr-bundles-layer-switcher label.olButton { cursor: pointer; }
 #hr-bundles-layer-switcher .dataLayersDiv { text-align: center; }

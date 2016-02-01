@@ -5,11 +5,11 @@
 ?>
 
 <article itemscope itemtype="https://schema.org/Person">
-  <h4><strong>
+  <p>
       <?php
         empty($url) ? print l("$contact->nameGiven $contact->nameFamily", $url) : print "$contact->nameGiven $contact->nameFamily";
       ?>
-    </strong></h4>
+  </p>
 
   <div itemscope itemtype="https://schema.org/Organization">
     <span itemprop="name" > <?php print $contact->organization[0]->{'name'}; ?> </span>

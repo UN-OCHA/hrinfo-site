@@ -109,6 +109,20 @@
   }
 }
 
+/* hid contact name font style */
+
+.field-type-hid-contact-reference {
+    display: block;
+
+      p {
+          color: #333333;
+          text-align: left;
+          font-size: 13px;
+          line-height: 15px;
+          margin-bottom: 1px;
+      }
+}
+
 // Hide radio inputs in layer switcher to replace by images
 #hr-bundles-layer-switcher {
 
