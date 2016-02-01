@@ -22,6 +22,12 @@ function hr_decommissioner_drush_command() {
     'aliases' => array(),
   );
 
+  $items['hr-decommissioner-remove-contact-menus'] = array(
+    'description' => "Remove the contact menus from all groups",
+    'drupal dependencies' => array(),
+    'aliases' => array(),
+  );
+
   return $items;
 }
 
@@ -58,11 +64,6 @@ function drush_hr_decommissioner_export_additional_contacts() {
   batch_set($batch);
   drush_backend_batch_process();
 }
-
-function drush_hr_decommissioner_finished($success, $results, $operations) {
-  drush_log('Process finished');
-}
-
 /**
  * Generates a listing of additional contacts.
  */
@@ -140,30 +141,106 @@ function drush_hr_decommissioner_get_contacts($contacts, &$context) {
 }
 
 /**
- * Checks the email in the profiles.
+ * Drush command to remove the contact menus and replace them by hid ones.
  */
-function drush_hr_contacts_email_is_in_profile($email, $profiles) {
-  foreach ($profiles as $profile) {
-    if (strstr($profile->cid, $email) !== FALSE) {
-      return TRUE;
-    }
+function drush_hr_decommissioner_remove_contact_menus() {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', array('hr_operation', 'hr_bundle', 'hr_disaster', 'hr_sector', 'hr_space'), 'IN');
+  $result = $query->execute();
+
+  if (empty($result['node'])) {
+    drush_log('No spaces found', 'ok');
+    return;
   }
 
-  return FALSE;
+  $registry = og_features_get_registry();
+
+  $batch = array(
+    'operations' => array(
+      array(
+        'drush_hr_decommissioner_remove_contact_menus_callback',
+        array(
+          array_keys($result['node']),
+          $registry
+        ),
+      ),
+    ),
+    'finished' => 'drush_hr_decommissioner_finished',
+    'title' => t('Disable HR contacts feature'),
+    'init_message' => t('Preparing...'),
+    'progress_message' => t('Disabling features...'),
+    'error_message' => t('HR contacts disable process resulted in an error.'),
+  );
+
+  batch_set($batch);
+  drush_backend_batch_process();
 }
 
 /**
- * Reads the file and looks for the email.
+ * Callback function to disable the HR contacts.
  */
-function drush_hr_contacts_email_is_in_file($email, $handle) {
-  while ($row = fgetcsv($handle)) {
-    if (in_array($email, $row)) {
-//      $meta_data = stream_get_meta_data($handle);
-//      $filename = $meta_data['uri'];
-//      drush_log("Found $email in $filename");
-      return TRUE;
-    }
+function drush_hr_decommissioner_remove_contact_menus_callback($node_ids, $registry, &$context) {
+  $limit = 500;
+  $context['finished'] = 0;
+
+  if (!isset($context['sandbox']['node_ids'])) {
+    $context['sandbox']['node_ids'] = $node_ids;
+    $context['sandbox']['total_nodes'] = count($node_ids);
+    $context['results']['count'] = 0;
   }
 
-  return FALSE;
+  if ($nodes_pending = count($context['sandbox']['node_ids'])) {
+    $actual_limit = min($nodes_pending, $limit);
+    $node_info = array_slice(
+      $context['sandbox']['node_ids'],
+      $context['results']['count'],
+      $actual_limit,
+      TRUE
+    );
+    $nodes = node_load_multiple($node_info);
+    foreach($nodes as $node) {
+      $disabled_features = isset($node->features_disabled) ? $node->features_disabled : array();
+      $enabled_features = drupal_map_assoc(array_keys(array_diff_key($registry, $disabled_features)));
+
+      // Get rid of the menu for contacts.
+      menu_link_delete(NULL, 'node/' . $node->nid . '/contacts');
+      // Also of the hid contacts one, we'll recreate it below if necessary.
+      menu_link_delete(NULL, 'node/' . $node->nid . '/hid_contacts');
+
+      if (isset($enabled_features['hid_contacts'])) {
+        $mlid = og_menu_single_get_link_mlid('node', $node->nid);
+        // Create the hid contacts menu.
+        $menu_link = array(
+          'link_path' => 'node/'.$node->nid.'/hid_contacts',
+          'link_title' => 'Contacts',
+          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
+          'weight' => 2,
+          'plid' => $mlid,
+        );
+        menu_link_save($menu_link);
+      }
+    }
+
+    $context['results']['count'] += $actual_limit;
+    $context['finished'] = $context['results']['count'] / $context['sandbox']['total_nodes'];
+  }
+  else {
+    $context['finished'] = 1;
+  }
+
+  $context['message'] = t(
+    'Processed @count of @total nodes.',
+    array(
+      '@count' => $context['results']['count'],
+      '@total' => $context['sandbox']['total_nodes'],
+    )
+  );
+}
+
+/**
+ * Batch finished callback.
+ */
+function drush_hr_decommissioner_finished($success, $results, $operations) {
+  drush_log('Process finished');
 }
