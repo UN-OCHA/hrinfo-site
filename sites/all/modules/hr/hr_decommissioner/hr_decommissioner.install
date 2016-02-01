@@ -43,3 +43,11 @@ function hr_decommissioner_install() {
   hr_decomissioner_delete_field('field_users_ref_name');
   hr_decomissioner_delete_field('field_users_ref');
 }
+
+/**
+ * Uninstall migrate features and modules
+ */
+function hr_decommissioner_update_7001() {
+  // They are already disabled, we need to remove the data.
+  drupal_uninstall_modules(array('migrate', 'migrate_ui', 'migrate_extras', 'migrate_d2d'));
+}

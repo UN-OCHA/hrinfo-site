@@ -229,11 +229,11 @@ function hid_profiles_og_features_toggle($entity, $entity_id, $entity_type, $fea
   if (isset($features['hid_contacts'])) {
     $mlid = og_menu_single_get_link_mlid('node', $entity_id);
     if (empty($features['hid_contacts'])) {
-      menu_link_delete(NULL, 'node/'.$entity_id.'/hid_contacts');
+      menu_link_delete(NULL, 'node/' . $entity_id . '/hid_contacts');
     }
     else {
       // See if menu link already exists.
-      $menu_link = menu_link_get_preferred('node/'.$entity_id.'/hid_contacts', OG_MENU_SINGLE_MENU_NAME);
+      $menu_link = menu_link_get_preferred('node/' . $entity_id . '/hid_contacts', OG_MENU_SINGLE_MENU_NAME);
       if (empty($menu_link)) {
         $menu_link = array(
           'link_path' => 'node/'.$entity_id.'/hid_contacts',
