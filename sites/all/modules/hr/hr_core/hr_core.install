@@ -84,3 +84,10 @@ function _hr_core_install_remove_language_url($languages, $string) {
   return $string;
 }
 
+/**
+ * Enable elysia cron and set cron runs to 1h.
+ */
+function hr_core_update_7002() {
+  module_enable(array('elysia_cron'));
+  variable_set('cron_safe_threshold', 60);
+}
