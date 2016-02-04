@@ -51,3 +51,15 @@ function hr_decommissioner_update_7001() {
   // They are already disabled, we need to remove the data.
   drupal_uninstall_modules(array('migrate', 'migrate_ui', 'migrate_extras', 'migrate_d2d'));
 }
+
+/**
+ * Force migrate uninstall.
+ */
+function hr_decommissioner_update_7002() {
+  foreach (db_find_tables('drupal.migrate_map_%') as $tablename) {
+    db_drop_table($tablename);
+  }
+  foreach (db_find_tables('drupal.migrate_message_%') as $tablename) {
+    db_drop_table($tablename);
+  }
+}
