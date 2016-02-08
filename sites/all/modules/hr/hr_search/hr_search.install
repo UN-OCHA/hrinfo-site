@@ -1,0 +1,23 @@
+<?php
+/**
+ * @file
+ * Update file for the Search feature.
+ */
+
+/**
+ * Re enables field_infographic_type field under search api fields.
+ */
+
+function hr_search_update_7001() {
+  $index = search_api_index_load('default_node_index', TRUE);
+
+  $fields = array(
+    'options' => $index->options,
+  );
+
+  $fields['options']['fields']['field_infographic_type'] = array(
+    'type' => 'integer',
+    'entity_type' => 'taxonomy_term',
+  );
+  search_api_index_edit($index->id, $fields);
+}

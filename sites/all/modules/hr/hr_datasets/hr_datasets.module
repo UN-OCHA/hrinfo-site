@@ -80,6 +80,9 @@ function hr_datasets_block_view_alter(&$data, $block) {
   }
 }
 
+/**
+ * Implements template_preprocess_hook.
+ */
 function hr_datasets_preprocess_block(&$vars) {
   $block = $vars['elements']['#block'];
   $path = drupal_get_path_alias();
@@ -109,4 +112,22 @@ function hr_datasets_ctools_plugin_directory($module, $plugin) {
   if ($module == 'restful') {
     return 'plugins/' . $plugin;
   }
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function hr_datasets_menu_alter(&$items) {
+  $items['api/v1.0/datasets'] = array(
+    'page callback' => 'hr_datasets_redirect_api_datasets',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+}
+
+/**
+ * Redirect hr datasets api to HDX.
+ */
+function hr_datasets_redirect_api_datasets() {
+  drupal_goto('https://data.hdx.rwlabs.org/faq#body-faq-HDX_API');
 }
