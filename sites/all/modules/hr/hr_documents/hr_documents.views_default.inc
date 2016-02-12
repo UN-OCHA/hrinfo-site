@@ -647,15 +647,19 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['fields']['title']['label'] = '';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  /* Sort criterion: Content: Publication Date (field_publication_date) */
+  $handler->display->display_options['sorts']['field_publication_date_value']['id'] = 'field_publication_date_value';
+  $handler->display->display_options['sorts']['field_publication_date_value']['table'] = 'field_data_field_publication_date';
+  $handler->display->display_options['sorts']['field_publication_date_value']['field'] = 'field_publication_date_value';
+  $handler->display->display_options['sorts']['field_publication_date_value']['exposed'] = TRUE;
+  $handler->display->display_options['sorts']['field_publication_date_value']['expose']['label'] = 'Publication Date (field_publication_date)';
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Sort criterion: Content: Publication Date (field_publication_date) */
-  $handler->display->display_options['sorts']['field_publication_date_value']['id'] = 'field_publication_date_value';
-  $handler->display->display_options['sorts']['field_publication_date_value']['table'] = 'field_data_field_publication_date';
-  $handler->display->display_options['sorts']['field_publication_date_value']['field'] = 'field_publication_date_value';
+  $handler->display->display_options['sorts']['created']['exposed'] = TRUE;
+  $handler->display->display_options['sorts']['created']['expose']['label'] = 'Post date';
   /* Contextual filter: Content: Space(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
@@ -1151,6 +1155,8 @@ function hr_documents_views_default_views() {
     t('Sort by'),
     t('Asc'),
     t('Desc'),
+    t('Publication Date (field_publication_date)'),
+    t('Post date'),
     t('All'),
     t('List'),
     t('Space'),
