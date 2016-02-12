@@ -32,6 +32,7 @@ dependencies[] = taxonomy
 dependencies[] = text
 dependencies[] = views
 dependencies[] = views_data_export
+dependencies[] = views_pivot
 dependencies[] = visualization
 features[context][] = acc_applications
 features[context][] = acc_applications_imp_reports

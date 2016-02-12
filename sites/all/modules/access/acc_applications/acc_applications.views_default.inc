@@ -158,6 +158,16 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['field_acc_submission_status']['settings'] = array(
     'link' => 0,
   );
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
   /* Filter criterion: Content: Published */
@@ -366,7 +376,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['field_acc_submission_status']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Sectors */
+  /* Field: Content: Global Cluster */
   $handler->display->display_options['fields']['field_sector']['id'] = 'field_sector';
   $handler->display->display_options['fields']['field_sector']['table'] = 'field_data_field_sector';
   $handler->display->display_options['fields']['field_sector']['field'] = 'field_sector';
@@ -542,7 +552,7 @@ function acc_applications_views_default_views() {
     'thousand_separator' => ' ',
     'prefix_suffix' => 1,
   );
-  /* Field: Content: Sectors */
+  /* Field: Content: Global Cluster */
   $handler->display->display_options['fields']['field_sector']['id'] = 'field_sector';
   $handler->display->display_options['fields']['field_sector']['table'] = 'field_data_field_sector';
   $handler->display->display_options['fields']['field_sector']['field'] = 'field_sector';
@@ -785,7 +795,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['field_acc_submission_status']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Sectors */
+  /* Field: Content: Global Cluster */
   $handler->display->display_options['fields']['field_sector']['id'] = 'field_sector';
   $handler->display->display_options['fields']['field_sector']['table'] = 'field_data_field_sector';
   $handler->display->display_options['fields']['field_sector']['field'] = 'field_sector';
@@ -1027,7 +1037,7 @@ function acc_applications_views_default_views() {
     'thousand_separator' => ' ',
     'prefix_suffix' => 1,
   );
-  /* Field: Content: Sectors */
+  /* Field: Content: Global Cluster */
   $handler->display->display_options['fields']['field_sector']['id'] = 'field_sector';
   $handler->display->display_options['fields']['field_sector']['table'] = 'field_data_field_sector';
   $handler->display->display_options['fields']['field_sector']['field'] = 'field_sector';
@@ -1082,7 +1092,7 @@ function acc_applications_views_default_views() {
     t('Geographical Location (Destination)'),
     t('Res By Sector n Status'),
     t('Access Application By Sector And Status'),
-    t('Sectors'),
+    t('Global Cluster'),
     t('Res Num of days'),
     t('Number of days to get an answer'),
     t('Avg number of days to get an answer'),
@@ -1128,7 +1138,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
-  /* Contextual filter: Indexed Node: Groups audience */
+  /* Contextual filter: Indexed Node: Space(s) */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -1283,7 +1293,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['field_acc_application_types']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_acc_application_types']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_acc_application_types']['bypass_access'] = 0;
-  /* Field: Indexed Node: Date » Start date */
+  /* Field: Indexed Node: Report Date » Start date */
   $handler->display->display_options['fields']['field_asst_date_value']['id'] = 'field_asst_date_value';
   $handler->display->display_options['fields']['field_asst_date_value']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['field_asst_date_value']['field'] = 'field_asst_date_value';
@@ -1291,7 +1301,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['field_asst_date_value']['date_format'] = 'short';
   $handler->display->display_options['fields']['field_asst_date_value']['second_date_format'] = 'long';
   $handler->display->display_options['fields']['field_asst_date_value']['link_to_entity'] = 0;
-  /* Field: Indexed Node: Date » End date */
+  /* Field: Indexed Node: Report Date » End date */
   $handler->display->display_options['fields']['field_asst_date_value2']['id'] = 'field_asst_date_value2';
   $handler->display->display_options['fields']['field_asst_date_value2']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['field_asst_date_value2']['field'] = 'field_asst_date_value2';
@@ -1368,23 +1378,16 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['field_sector']['link_to_entity'] = 1;
   $handler->display->display_options['fields']['field_sector']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_sector']['bypass_access'] = 0;
-  /* Field: Impacts: Impacts (indexed) */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_type']['id'] = 'field_acc_impacts_field_acc_impact_type';
   $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_type']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_type']['field'] = 'field_acc_impacts_field_acc_impact_type';
   $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_type']['label'] = 'Impacts Type';
-  $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_type']['link_to_entity'] = 0;
-  $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_type']['view_mode'] = 'full';
-  $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_type']['bypass_access'] = 0;
-  /* Field: Impacts: Value (indexed) */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_value']['id'] = 'field_acc_impacts_field_acc_impact_value';
   $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_value']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_value']['field'] = 'field_acc_impacts_field_acc_impact_value';
   $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_value']['label'] = 'Impact Value';
-  $handler->display->display_options['fields']['field_acc_impacts_field_acc_impact_value']['settings'] = array(
-    'thousand_separator' => ' ',
-    'prefix_suffix' => 1,
-  );
   /* Field: Indexed Node: Attach file */
   $handler->display->display_options['fields']['field_acc_attach_file']['id'] = 'field_acc_attach_file';
   $handler->display->display_options['fields']['field_acc_attach_file']['table'] = 'search_api_index_acc_search';
@@ -1396,7 +1399,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['body']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = 'Description';
-  /* Field: Indexed Node: Groups audience */
+  /* Field: Indexed Node: Space(s) */
   $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['fields']['og_group_ref']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
@@ -1614,7 +1617,7 @@ function acc_applications_views_default_views() {
     t('Impact Value'),
     t('Attach file'),
     t('Description'),
-    t('Groups audience'),
+    t('Space(s)'),
     t('Data Overlay'),
     t('Latitude'),
     t('Longitude'),
