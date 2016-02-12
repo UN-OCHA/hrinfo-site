@@ -21,3 +21,26 @@ function hr_search_update_7001() {
   );
   search_api_index_edit($index->id, $fields);
 }
+
+/**
+ * Re enables field_sector and field_event_category under search api fields.
+ */
+
+function hr_search_update_7002() {
+  $index = search_api_index_load('default_node_index', TRUE);
+
+  $fields = array(
+    'options' => $index->options,
+  );
+
+  $fields['options']['fields']['field_event_category'] = array(
+    'type' => 'list<integer>',
+    'entity_type' => 'taxonomy_term',
+  );
+
+  $fields['options']['fields']['field_sector'] = array(
+    'type' => 'list<integer>',
+    'entity_type' => 'node',
+  );
+  search_api_index_edit($index->id, $fields);
+}
