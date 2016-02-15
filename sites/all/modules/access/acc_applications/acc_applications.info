@@ -16,6 +16,7 @@ dependencies[] = feeds_tamper
 dependencies[] = field_collection
 dependencies[] = file
 dependencies[] = hr_core
+dependencies[] = hr_layout
 dependencies[] = hr_locations
 dependencies[] = hr_sectors
 dependencies[] = js

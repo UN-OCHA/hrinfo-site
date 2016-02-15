@@ -12,6 +12,7 @@ dependencies[] = hr_disasters
 dependencies[] = hr_fundings
 dependencies[] = hr_layout
 dependencies[] = hr_offices
+dependencies[] = hr_sectors
 dependencies[] = hr_spaces
 dependencies[] = hr_themes
 dependencies[] = languagefield

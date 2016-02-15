@@ -11,6 +11,7 @@ dependencies[] = field_permissions
 dependencies[] = hr_api
 dependencies[] = hr_bundles
 dependencies[] = hr_disasters
+dependencies[] = hr_layout
 dependencies[] = hr_offices
 dependencies[] = hr_themes
 dependencies[] = hr_users

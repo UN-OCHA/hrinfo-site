@@ -8,6 +8,7 @@ dependencies[] = ctools
 dependencies[] = entity
 dependencies[] = features
 dependencies[] = hid_auth
+dependencies[] = hr_layout
 dependencies[] = restclient
 features[field_base][] = field_hid_contact_ref
 features[context][] = hid_contacts

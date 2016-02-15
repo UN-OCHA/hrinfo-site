@@ -166,32 +166,17 @@ function hdx_datasets_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ * Implements hook_og_features_toggle().
  */
 function hdx_datasets_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  if (isset($features['hdx_datasets'])) {
-    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
-    if (empty($features['hdx_datasets'])) {
-      menu_link_delete(NULL, 'node/' . $entity_id . '/hdx-datasets');
-    }
-    else {
-      // See if menu link already exists.
-      $menu_link = menu_link_get_preferred(
-        'node/' . $entity_id . '/hdx-datasets',
-        OG_MENU_SINGLE_MENU_NAME
-      );
-      if (empty($menu_link)) {
-        $menu_link = array(
-          'link_path' => 'node/' . $entity_id . '/hdx-datasets',
-          'link_title' => 'Datasets',
-          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
-          'weight' => 3,
-          'plid' => $mlid,
-        );
-        menu_link_save($menu_link);
-      }
-    }
-  }
+  $menus_to_create = array(
+    'hdx_datasets' => array(
+      'title' => 'Datasets',
+      'path' => 'node/' . $entity_id . '/hdx-datasets',
+      'weight' => 3,
+    )
+  );
+  _hr_layout_og_menu_single_helper('hdx_datasets', $features, $entity_id, $menus_to_create);
 }
 
 /**
