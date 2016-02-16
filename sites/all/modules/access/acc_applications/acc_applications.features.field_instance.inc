@@ -453,7 +453,8 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_acc_submitted_by_org_type'
+  // Exported field_instance:
+  // 'node-acc_application-field_acc_submitted_by_org_type'
   $field_instances['node-acc_application-field_acc_submitted_by_org_type'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,

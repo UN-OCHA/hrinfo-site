@@ -3188,6 +3188,9 @@ html.js fieldset.collapsed { height: auto; border-left-width: 1px; border-right-
 @media screen and (min-width: 992px) { .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { font-size: 1.3em; } }
 @media screen and (min-width: 1200px) { .contacts-disabled-form-wrapper .contacts-disabled-form .message .text { margin-top: 1.5em; font-size: 1.8em; } }
 
+.hid-contact { margin-bottom: 10px; }
+.hid-contact div { margin-left: 10px; }
+
 label { display: block; }
 
 .chosen-container { max-width: 100%; }
@@ -3637,10 +3640,6 @@ body .region-branding input.form-text:focus { border-color: #bc2e3c; }
 .hr-highlighted .panel-pane .pane-content ul { padding-left: 14px; color: #333333; }
 .hr-highlighted .field-name-field-infographics.field-type-entityreference .field-item .node { margin-bottom: 1em; }
 .hr-highlighted .field-name-field-documents.field-type-entityreference .field-item .node { margin-bottom: 1em; }
-
-/* hid contact name font style */
-.field-type-hid-contact-reference { display: block; }
-.field-type-hid-contact-reference p { color: #333333; text-align: left; font-size: 13px; line-height: 15px; margin-bottom: 1px; }
 
 #hr-bundles-layer-switcher .baseLbl, #hr-bundles-layer-switcher .baseLayersDiv, #hr-bundles-layer-switcher .dataLbl, #hr-bundles-layer-switcher br, #hr-bundles-layer-switcher span, #hr-bundles-layer-switcher input.olButton { display: none !important; }
 #hr-bundles-layer-switcher label.olButton { cursor: pointer; }

@@ -4,12 +4,12 @@
    */
 ?>
 
-<article itemscope itemtype="https://schema.org/Person">
-  <p>
-      <?php
-        empty($url) ? print l("$contact->nameGiven $contact->nameFamily", $url) : print "$contact->nameGiven $contact->nameFamily";
-      ?>
-  </p>
+<article class="hid-contact" itemscope itemtype="https://schema.org/Person">
+  <span itemprop="name">
+    <strong>
+      <?php empty($url) ? print l("$contact->nameGiven $contact->nameFamily", $url) : print "$contact->nameGiven $contact->nameFamily"; ?>
+    </strong>
+  </span>
 
   <div itemscope itemtype="https://schema.org/Organization">
     <span itemprop="name" > <?php print $contact->organization[0]->{'name'}; ?> </span>

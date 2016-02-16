@@ -33,7 +33,7 @@ function acc_applications_feeds_tamper_default() {
   $feeds_tamper->importer = 'csv_acc_application';
   $feeds_tamper->source = 'Nationality of traveler';
   $feeds_tamper->plugin_id = 'explode';
-  $feeds_tamper->settings = '';
+  $feeds_tamper->settings = array();
   $feeds_tamper->weight = 1;
   $feeds_tamper->description = 'Explode';
   $export['csv_acc_application-nationality_of_traveler-explode'] = $feeds_tamper;
