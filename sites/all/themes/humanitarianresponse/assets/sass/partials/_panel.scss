@@ -85,13 +85,16 @@
   	}
 
   	.pane-content {
-  		padding: 0 7px;
+          padding: 0 7px;
 
-  		ul {
-  			padding-left: 14px;
-  			color: $gray-dark;
-  		}
-    }
+          ul {
+            padding-left: 14px;
+            color: $gray-dark;
+              li {
+                margin-left: 0px;
+              }
+            }
+          }
 	}
 
   .field-name-field-infographics.field-type-entityreference {
