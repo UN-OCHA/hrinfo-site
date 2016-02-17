@@ -25,16 +25,15 @@ function hr_search_update_7001() {
 /**
  * Marks the hr_infographic content type nodes for reindexing.
  */
-
 function hr_search_update_7002() {
   $query = new EntityFieldQuery();
   $results = $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'hr_infographic')
-    ->propertyCondition('status', 1);
-  $results = $query->execute();
+    ->propertyCondition('status', 1)
+    ->execute();
   if(!empty($results['node'])) {
     $nids = array_keys($results['node']);
-    //mark all the infographics as 'dirty', to be reindexed.
+    // Mark all the infographics as 'dirty', to be reindexed.
     search_api_track_item_change('node', $nids);
   }
 }
