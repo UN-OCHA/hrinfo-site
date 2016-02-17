@@ -61,6 +61,13 @@ function hr_bundles_og_features_default_permissions() {
     ),
   );
 
+  // Exported og permission: 'node:hr_bundle:edit group features'
+  $permissions['node:hr_bundle:edit group features'] = array(
+    'roles' => array(
+      'manager' => 'manager',
+    ),
+  );
+
   // Exported og permission: 'node:hr_bundle:manage members'
   $permissions['node:hr_bundle:manage members'] = array(
     'roles' => array(

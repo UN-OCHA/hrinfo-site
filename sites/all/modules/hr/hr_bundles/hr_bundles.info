@@ -92,6 +92,7 @@ features[og_features_permission][] = node:hr_bundle:approve and deny subscriptio
 features[og_features_permission][] = node:hr_bundle:assign contributor role
 features[og_features_permission][] = node:hr_bundle:assign editor role
 features[og_features_permission][] = node:hr_bundle:assign manager role
+features[og_features_permission][] = node:hr_bundle:edit group features
 features[og_features_permission][] = node:hr_bundle:manage members
 features[og_features_permission][] = node:hr_bundle:publish any content
 features[og_features_permission][] = node:hr_bundle:unpublish any content
