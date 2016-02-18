@@ -11,6 +11,7 @@ dependencies[] = feeds
 dependencies[] = feeds_tamper
 dependencies[] = hr_api
 dependencies[] = hr_core
+dependencies[] = hr_layout
 dependencies[] = hr_locations
 dependencies[] = hr_operations
 dependencies[] = hr_organizations

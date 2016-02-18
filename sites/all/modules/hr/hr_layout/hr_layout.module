@@ -568,3 +568,76 @@ function _hr_layout_key_documents() {
   );
 }
 
+/**
+ * Helper function that takes care of the og_menu_single menu creation.
+ *
+ * @param string $feature_name
+ *  Feature name to handle the menu.
+ * @param array $features
+ *  Array of enabled/disabled features for the entity.
+ * @param $entity_id
+ *  Entity id
+ * @param array $menus_to_create
+ *  Array of menus to create, using path, title and weight properties.
+ * @param array $menus_to_delete
+ *  Array of menus to delete, defaults to $menus_to_create to keep consistency.
+ */
+function _hr_layout_og_menu_single_helper($feature_name, $features, $entity_id, $menus_to_create, $menus_to_delete = array()) {
+  // The menus to delete are normally the same ones to create.
+  $menus_to_delete = empty($menus_to_delete) ? $menus_to_create : $menus_to_delete;
+
+  if (isset($features[$feature_name])) {
+    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
+    if (empty($features[$feature_name])) {
+      foreach ($menus_to_delete as $menu_to_delete) {
+        menu_link_delete(NULL, $menu_to_delete['path']);
+      }
+    }
+    else {
+      // See if menu links already exists.
+      foreach ($menus_to_create as $menu_to_create) {
+        $parent = menu_link_get_preferred('node/' . $entity_id, OG_MENU_SINGLE_MENU_NAME);
+        $parameters = array(
+          'active_trail' => array($parent['plid']),
+          'only_active_trail' => FALSE,
+          'min_depth' => $parent['depth']+1,
+          'max_depth' => $parent['depth']+1,
+          'conditions' => array('plid' => $parent['mlid']),
+        );
+        $menu_tree = menu_build_tree($parent['menu_name'], $parameters);
+
+        if (!empty($menu_tree) && !_hr_layout_menu_item_in_tree($menu_to_create['path'], $menu_tree)) {
+          $menu_link = array(
+            'link_path' => $menu_to_create['path'],
+            'link_title' => $menu_to_create['title'],
+            'menu_name' => OG_MENU_SINGLE_MENU_NAME,
+            'weight' => isset($menu_to_create['weight']) ? $menu_to_create['weight'] : 1,
+            'plid' => $mlid,
+          );
+          menu_link_save($menu_link);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Finds out whether a menu item is present in a given tree.
+ *
+ * @param string $path
+ *  Path to search for.
+ * @param array $menu_tree
+ *  Menu tree to search the path in.
+ *
+ * @return bool
+ *  TRUE if found, FALSE if not found.
+ */
+function _hr_layout_menu_item_in_tree($path, $menu_tree) {
+  foreach ($menu_tree as $menu_item) {
+    if ($menu_item['link']['link_path'] == $path) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
