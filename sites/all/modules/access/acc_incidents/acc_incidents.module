@@ -24,29 +24,17 @@ function acc_incidents_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ * Implements hook_og_features_toggle().
  */
 function acc_incidents_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  if (isset($features['acc_incidents'])) {
-    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
-    if (empty($features['acc_incidents'])) {
-      menu_link_delete(NULL, 'node/'.$entity_id.'/access/incidents');
-    }
-    else {
-      // See if menu link already exists
-      $menu_link = hr_core_menu_link_exists('node/'.$entity_id.'/access/incidents', OG_MENU_SINGLE_MENU_NAME);
-      if (empty($menu_link)) {
-        $menu_link = array(
-          'link_path' => 'node/'.$entity_id.'/access/incidents',
-          'link_title' => 'Access Incidents',
-          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
-          'weight' => 99,
-          'plid' => $mlid,
-        );
-        menu_link_save($menu_link);
-      }
-    }
-  }
+  $menus_to_create = array(
+    'acc_incidents' => array(
+      'title' => 'Access Incidents',
+      'path' => 'node/' . $entity_id . '/access/incidents',
+      'weight' => 99
+    )
+  );
+  _hr_layout_og_menu_single_helper('acc_incidents', $features, $entity_id, $menus_to_create);
 }
 
 /**

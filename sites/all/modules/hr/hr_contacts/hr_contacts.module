@@ -150,30 +150,17 @@ function hr_contacts_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ * Implements hook_og_features_toggle().
  */
 function hr_contacts_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  if (isset($features['hr_contacts'])) {
-    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
-    if (empty($features['hr_contacts'])) {
-      menu_link_delete(NULL, 'node/'.$entity_id.'/contacts');
-    }
-    else {
-      // See if menu link already exists.
-      $menu_link = menu_link_get_preferred('node/'.$entity_id.'/contacts', OG_MENU_SINGLE_MENU_NAME);
-      if (empty($menu_link)) {
-        $menu_link = array(
-          'link_path' => 'node/'.$entity_id.'/contacts',
-          'link_title' => 'Contacts',
-          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
-          'weight' => 2,
-          'plid' => $mlid,
-        );
-        menu_link_save($menu_link);
-      }
-    }
-  }
-
+  $menus_to_create = array(
+    'hr_contacts' => array(
+      'title' => 'Contacts',
+      'path' => 'node/' . $entity_id . '/contacts',
+      'weight' => 2,
+    )
+  );
+  _hr_layout_og_menu_single_helper('hr_contacts', $features, $entity_id, $menus_to_create);
 }
 
 /**
@@ -248,7 +235,6 @@ function hr_contacts_ctools_plugin_directory($module, $plugin) {
 
 /**
  * Implements hook_menu()
- * Defines the menu callbacks necessary to display contacts from HRinfo or Hid.
  */
 function hr_contacts_menu() {
   $items['node/%node/contacts/pdf'] = array(

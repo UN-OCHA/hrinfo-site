@@ -3107,7 +3107,7 @@ form .description { margin: 2px 0; color: #555555; }
 
 .media-widget > a { margin: 0 10px 0 0; display: inline-block; }
 
-html.js input.form-autocomplete { background: url('../images/throbber.gif?1449594379') no-repeat right 8px #fff !important; }
+html.js input.form-autocomplete { background: url('../images/throbber.gif?1450043918') no-repeat right 8px #fff !important; }
 html.js input.throbbing { background-position: right -122px !important; }
 html.js fieldset.collapsed { height: auto; border-left-width: 1px; border-right-width: 1px; }
 
@@ -3395,7 +3395,7 @@ div.region-top div.block { display: inline-block; }
 
 .node-type-hr-operation .hr-highlighted { margin-top: -11px; margin-bottom: 40px; }
 .node-type-hr-operation .hr-highlighted .pane-content ul { padding-left: 19px; }
-.node-type-hr-operation .hr-highlighted .pane-content ul li { margin-bottom: 5px; color: #333333; }
+.node-type-hr-operation .hr-highlighted .pane-content ul li { margin-bottom: 5px; margin-left: 0px; color: #333333; }
 .node-type-hr-operation .pane-hr-documents-panes-list .view, .node-type-hr-operation .pane-hr-infographics-panes-list .view { margin: 0 !important; }
 
 #block-hr-layout-hr-layout-share-links .content { border-radius: 10px; background-color: #bbd9e1; color: #0fa4de; padding: 10px; }
@@ -3638,6 +3638,7 @@ body .region-branding input.form-text:focus { border-color: #bc2e3c; }
 .hr-highlighted .panel-pane .pane-title:after { font-family: FontAwesome; float: right; }
 .hr-highlighted .panel-pane .pane-content { padding: 0 7px; }
 .hr-highlighted .panel-pane .pane-content ul { padding-left: 14px; color: #333333; }
+.hr-highlighted .panel-pane .pane-content ul li { margin-left: 0px; }
 .hr-highlighted .field-name-field-infographics.field-type-entityreference .field-item .node { margin-bottom: 1em; }
 .hr-highlighted .field-name-field-documents.field-type-entityreference .field-item .node { margin-bottom: 1em; }
 

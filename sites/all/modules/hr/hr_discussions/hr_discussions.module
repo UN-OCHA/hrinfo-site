@@ -25,28 +25,15 @@ function hr_discussions_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ * Implements hook_og_features_toggle().
  */
 function hr_discussions_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  if (isset($features['hr_discussions'])) {
-    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
-    if (empty($features['hr_discussions'])) {
-      menu_link_delete(NULL, 'node/'.$entity_id.'/discussions');
-    }
-    else {
-      // See if menu link already exists
-      $menu_link = menu_link_get_preferred('node/'.$entity_id.'/discussions', OG_MENU_SINGLE_MENU_NAME);
-      if (empty($menu_link)) {
-        $menu_link = array(
-          'link_path' => 'node/'.$entity_id.'/discussions',
-          'link_title' => 'Discussions',
-          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
-          'weight' => 18,
-          'plid' => $mlid,
-        );
-        menu_link_save($menu_link);
-      }
-    }
-  }
-
+  $menus_to_create = array(
+    'hr_discussions' => array(
+      'title' => 'Discussions',
+      'path' => 'node/' . $entity_id . '/discussions',
+      'weight' => 18,
+    )
+  );
+  _hr_layout_og_menu_single_helper('hr_discussions', $features, $entity_id, $menus_to_create);
 }

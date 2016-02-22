@@ -6,6 +6,9 @@
 
 include_once 'hr_users.features.inc';
 
+/**
+ * Implements hook_field_formatter_info().
+ */
 function hr_users_field_formatter_info() {
   return array(
     'hr_users_skype' => array(
@@ -15,6 +18,9 @@ function hr_users_field_formatter_info() {
   );
 }
 
+/**
+ * Implements hook_field_formatter_view().
+ */
 function hr_users_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
   $settings = $display['settings'];
@@ -30,7 +36,7 @@ function hr_users_field_formatter_view($entity_type, $entity, $field, $instance,
         if ($status == 2) {
           $class = 'skype-online';
         }
-        $element[$delta] = array('#markup' => '<a href="skype:'.$item['safe_value'].'?call"><i class="fa fa-skype fa-2x '.$class.'"></i></a>');       
+        $element[$delta] = array('#markup' => '<a href="skype:'.$item['safe_value'].'?call"><i class="fa fa-skype fa-2x '.$class.'"></i></a>');
       }
       break;
   }
@@ -57,30 +63,17 @@ function hr_users_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ * Implements hook_og_features_toggle().
  */
 function hr_users_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  if (isset($features['hr_users'])) {
-    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
-    if (empty($features['hr_users'])) {
-      menu_link_delete(NULL, 'node/'.$entity_id.'/people');
-    }
-    else {
-      // See if menu link already exists
-      $menu_link = menu_link_get_preferred('node/'.$entity_id.'/people', OG_MENU_SINGLE_MENU_NAME);
-      if (empty($menu_link)) {
-        $menu_link = array(
-          'link_path' => 'node/'.$entity_id.'/people',
-          'link_title' => 'People',
-          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
-          'weight' => 18,
-          'plid' => $mlid,
-        );
-        menu_link_save($menu_link);
-      }
-    }
-  }
-
+  $menus_to_create = array(
+    'hr_users' => array(
+      'title' => 'People',
+      'path' => 'node/' . $entity_id . '/people',
+      'weight' => 18,
+    )
+  );
+  _hr_layout_og_menu_single_helper('hr_users', $features, $entity_id, $menus_to_create);
 }
 
 /**

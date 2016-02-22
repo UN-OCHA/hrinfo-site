@@ -25,31 +25,22 @@ function hr_news_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ * Implements hook_og_features_toggle().
  */
 function hr_news_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  if (isset($features['hr_news'])) {
-    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
-    if (empty($features['hr_news'])) {
-      menu_link_delete(NULL, 'node/'.$entity_id.'/news');
-      menu_link_delete(NULL, 'node/'.$entity_id.'/blog');
-    }
-    else {
-      // See if menu link already exists
-      $menu_link = menu_link_get_preferred('node/'.$entity_id.'/blog', OG_MENU_SINGLE_MENU_NAME);
-      if (empty($menu_link)) {
-        $menu_link = array(
-          'link_path' => 'node/'.$entity_id.'/blog',
-          'link_title' => 'Blog',
-          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
-          'weight' => 16,
-          'plid' => $mlid,
-        );
-        menu_link_save($menu_link);
-      }
-    }
-  }
-
+  $menus_to_delete = array(
+    'news' => array(
+      'path' => 'node/'.$entity_id.'/news',
+    ),
+    'blog' => array(
+      'title' => 'Blog',
+      'path' => 'node/'.$entity_id.'/blog',
+      'weight' => 16,
+    )
+  );
+  $menus_to_create = $menus_to_delete;
+  unset($menus_to_create['news']);
+  _hr_layout_og_menu_single_helper('hr_news', $features, $entity_id, $menus_to_create, $menus_to_delete);
 }
 
 /**

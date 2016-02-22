@@ -25,37 +25,24 @@ function hr_infographics_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle($entity, $entity_id, $entity_type, $features)
+ * Implements hook_og_features_toggle().
  */
 function hr_infographics_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  if (isset($features['hr_infographics'])) {
-    $mlid = og_menu_single_get_link_mlid('node', $entity_id);
-    if (empty($features['hr_infographics'])) {
-      menu_link_delete(NULL, 'node/'.$entity_id.'/infographics');
-    }
-    else {
-      // See if menu link already exists
-      $menu_link = menu_link_get_preferred('node/'.$entity_id.'/infographics', OG_MENU_SINGLE_MENU_NAME);
-      if (empty($menu_link)) {
-        $menu_link = array(
-          'link_path' => 'node/'.$entity_id.'/infographics',
-          'link_title' => 'Maps/Infographics',
-          'menu_name' => OG_MENU_SINGLE_MENU_NAME,
-          'weight' => 8,
-          'plid' => $mlid,
-        );
-        menu_link_save($menu_link);
-      }
-    }
-  }
-
+  $menus_to_create = array(
+    'hr_infographics' => array(
+      'title' => 'Maps/Infographics',
+      'path' => 'node/' . $entity_id . '/infographics',
+      'weight' => 8,
+    )
+  );
+  _hr_layout_og_menu_single_helper('hr_infographics', $features, $entity_id, $menus_to_create);
 }
 
 function hr_infographics_form_hr_document_node_form_alter(&$form, &$form_state) {
   hr_sectors_hide_sectors($form, $form_state);
 }
 
-/** 
+/**
  * Implementation of hook_entity_info_alter()
  */
 function hr_infographics_entity_info_alter(&$entity_info) {
