@@ -64,7 +64,7 @@ function hr_operations_block_view($delta = '') {
 </div>
 <div>
   <div class="col-sm-12">
-    <p><strong><a href="/operations/vanuatu">Vanuatu</a></strong></p>
+    <p><strong><a href="/operations/fiji">Fiji</a></strong></p>
   </div>
 </div>
 <div>
