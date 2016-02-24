@@ -3721,8 +3721,10 @@ body .region-branding input.form-text:focus { border-color: #bc2e3c; }
 .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents p, .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system p, .panel-pane.pane-block.pane-hr-operations-operations-dropdown p { margin: 0; margin-bottom: 5px; }
 .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents h4, .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system h4, .panel-pane.pane-block.pane-hr-operations-operations-dropdown h4 { background-repeat: no-repeat; height: 40px; padding-left: 50px; padding-top: 13px; }
 
+.panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents { margin-bottom: 54px; }
 .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents h4 { background-image: url("../images/icons/38/Homepage/DocumentsIcon38x38.png"); }
 
+.panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system { margin-bottom: 54px; }
 .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system h4 { background-image: url("../images/icons/38/Homepage/CoordinationIcon38x38.png"); }
 .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system .chosen-container { margin-top: -5px; }
 
