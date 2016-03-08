@@ -44,6 +44,10 @@ function hr_layout_block_info() {
     'hr_layout_search_rss' => array(
       'info' => t('Search rss'),
     ),
+    // See https://github.com/humanitarianresponse/site/issues/372
+    'hr_layout_horz_menu' => array(
+      'info' => t('Horizontal menu'),
+    ),
   );
 }
 
@@ -273,6 +277,21 @@ function hr_layout_block_view($delta = '') {
       ';
       $block['content'] .= $options;
       $block['content'] .= '</select></p>';
+      break;
+    case 'hr_layout_horz_menu':
+      $block['content'] = '';
+      $gid = og_context_determine_context('node');
+      if (!empty($gid)) {
+        $og_group = entity_load('node', array($gid));
+        $og_group = $og_group[$gid];
+        $items = array();
+        $items['node/'.$gid] = $og_group->title;
+        $block['content'] = '<ul class="menu nav nav-pills">';
+        foreach ($items as $path => $title) {
+          $block['content'] .= '<li>'.l($title, $path).'</li>';
+        }
+        $block['content'] .= '</ul>';
+      }
       break;
   }
   return $block;

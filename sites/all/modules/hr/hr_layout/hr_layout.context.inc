@@ -295,9 +295,9 @@ function hr_layout_context_default_contexts() {
           'region' => 'top',
           'weight' => '0',
         ),
-        'og_menu_single-menu' => array(
-          'module' => 'og_menu_single',
-          'delta' => 'menu',
+        'hr_layout-hr_layout_horz_menu' => array(
+          'module' => 'hr_layout',
+          'delta' => 'hr_layout_horz_menu',
           'region' => 'navigation',
           'weight' => '-10',
         ),
