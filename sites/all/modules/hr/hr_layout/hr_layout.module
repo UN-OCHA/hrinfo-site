@@ -296,8 +296,17 @@ function hr_layout_block_view($delta = '') {
           }
           // Check if feature is disabled
           if (!og_features_feature_is_disabled($key, $og_group)) {
+            $path = str_replace('hr_', '', $key);
+            switch($key) {
+              case 'hr_contacts':
+                $path = 'hid_contacts';
+                break;
+              case 'hr_datasets':
+                $path = 'hdx-datasets';
+                break;
+            }
             // If not disabled add to menu items
-            $items['node/'.$gid.'/'.$key] = $feature->name;
+            $items['node/'.$gid.'/'.$path] = $feature->name;
           }
         }
 
