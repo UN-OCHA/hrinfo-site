@@ -282,10 +282,21 @@ function hr_layout_block_view($delta = '') {
       $block['content'] = '';
       $gid = og_context_determine_context('node');
       if (!empty($gid)) {
+        $weights = array(
+          'hr_contacts' => 1,
+          'hr_events' => 2,
+          'hr_documents' => 3,
+          'hr_infographics' => 4,
+          'hr_datasets' => 5,
+          'hr_assessments' => 6
+        ); 
         $og_group = entity_load('node', array($gid));
         $og_group = $og_group[$gid];
         $items = array();
-        $items['node/'.$gid] = $og_group->title;
+        $items[0] = array(
+          'name' => $og_group->title,
+          'path' => 'node/'.$gid
+        );
         // Fetch the og features registry
         $registry = og_features_get_registry();
         // Iterate all the available features to provide a toggle switch
@@ -306,13 +317,16 @@ function hr_layout_block_view($delta = '') {
                 break;
             }
             // If not disabled add to menu items
-            $items['node/'.$gid.'/'.$path] = $feature->name;
+            $items[$weights[$key]] = array(
+              'name' => $feature->name,
+              'path' => 'node/'.$gid.'/'.$path
+            );
           }
         }
 
         $block['content'] = '<ul class="menu nav nav-pills">';
-        foreach ($items as $path => $title) {
-          $block['content'] .= '<li>'.l($title, $path).'</li>';
+        foreach ($items as $weight => $item) {
+          $block['content'] .= '<li>'.l($item['name'], $item['path']).'</li>';
         }
         $block['content'] .= '</ul>';
       }
