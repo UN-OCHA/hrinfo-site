@@ -338,6 +338,14 @@ function hr_layout_block_view($delta = '') {
           }
         }
 
+        // Indicators registry
+        if ($gid == 24) {
+          $items[] = array(
+            'name' => 'Indicators',
+            'path' => 'node/'.$gid.'/indicators'
+          );
+        }
+
         $block['content'] = '<ul class="menu nav nav-pills">';
         foreach ($items as $weight => $item) {
           $block['content'] .= '<li>'.l(t($item['name']), $item['path']).'</li>';
