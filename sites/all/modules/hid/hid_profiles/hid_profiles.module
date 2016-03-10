@@ -211,7 +211,7 @@ function hid_profiles_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hid_contacts';
-  $feature->name = t('Contacts (HID)');
+  $feature->name = 'Contacts';
   $feature->description = t('Provide contacts to your space.');
   $feature->components = array(
     'path' => array(

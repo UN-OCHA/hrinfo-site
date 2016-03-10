@@ -15,7 +15,7 @@ function hr_events_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hr_events';
-  $feature->name = t('Events');
+  $feature->name = 'Events';
   $feature->description = t('Provide events to your space.');
   $feature->components = array(
     'node' => array(

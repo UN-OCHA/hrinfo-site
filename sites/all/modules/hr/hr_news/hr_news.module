@@ -13,7 +13,7 @@ function hr_news_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hr_news';
-  $feature->name = t('Blog');
+  $feature->name = 'Blog';
   $feature->description = t('Provide a blog to your space.');
   $feature->components = array(
     'node' => array(

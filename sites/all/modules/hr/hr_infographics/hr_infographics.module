@@ -13,7 +13,7 @@ function hr_infographics_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hr_infographics';
-  $feature->name = t('Maps/Infographics');
+  $feature->name = 'Maps/Infographics';
   $feature->description = t('Provide maps and infographics to your space.');
   $feature->components = array(
     'node' => array(
