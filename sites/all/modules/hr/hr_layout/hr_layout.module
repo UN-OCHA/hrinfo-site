@@ -302,7 +302,7 @@ function hr_layout_block_view($delta = '') {
         // Iterate all the available features to provide a toggle switch
         foreach ($registry as $key => $feature) {
           // Make sure this feature can be toggled by this group
-          if (!og_features_feature_can_toggle('node', $og_group->bundle_name, $key) || $key == 'hr_pages') {
+          if (!og_features_feature_can_toggle('node', $og_group->bundle_name, $key) || $key == 'hr_pages' || $key == 'hr_webforms') {
             continue;
           }
           // Check if feature is disabled
@@ -313,9 +313,21 @@ function hr_layout_block_view($delta = '') {
                 if ($gid != 77) { // Special case: Colombia, which is not using Humanitarian ID
                   $path = 'hid_contacts';
                 }
+                else {
+                  $path = 'j2h/contactos';
+                }
                 break;
               case 'hr_datasets':
                 $path = 'hdx-datasets';
+                break;
+              case 'hr_news':
+                $path = 'blog';
+                break;
+              case 'acc_applications':
+                $path = 'access/applications';
+                break;
+              case 'acc_incidents':
+                $path = 'access/incidents';
                 break;
             }
             // If not disabled add to menu items
