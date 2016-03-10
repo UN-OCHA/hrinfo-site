@@ -310,7 +310,9 @@ function hr_layout_block_view($delta = '') {
             $path = str_replace('hr_', '', $key);
             switch($key) {
               case 'hr_contacts':
-                $path = 'hid_contacts';
+                if ($gid != 77) { // Special case: Colombia, which is not using Humanitarian ID
+                  $path = 'hid_contacts';
+                }
                 break;
               case 'hr_datasets':
                 $path = 'hdx-datasets';
@@ -326,7 +328,7 @@ function hr_layout_block_view($delta = '') {
 
         $block['content'] = '<ul class="menu nav nav-pills">';
         foreach ($items as $weight => $item) {
-          $block['content'] .= '<li>'.l($item['name'], $item['path']).'</li>';
+          $block['content'] .= '<li>'.l(t($item['name']), $item['path']).'</li>';
         }
         $block['content'] .= '</ul>';
       }
