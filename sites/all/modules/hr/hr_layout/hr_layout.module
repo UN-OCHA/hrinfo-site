@@ -44,6 +44,10 @@ function hr_layout_block_info() {
     'hr_layout_search_rss' => array(
       'info' => t('Search rss'),
     ),
+    // See https://github.com/humanitarianresponse/site/issues/372
+    'hr_layout_horz_menu' => array(
+      'info' => t('Horizontal menu'),
+    ),
   );
 }
 
@@ -273,6 +277,81 @@ function hr_layout_block_view($delta = '') {
       ';
       $block['content'] .= $options;
       $block['content'] .= '</select></p>';
+      break;
+    case 'hr_layout_horz_menu':
+      $block['content'] = '';
+      $gid = og_context_determine_context('node');
+      if (!empty($gid)) {
+        $weights = array(
+          'hr_contacts' => 1,
+          'hr_events' => 2,
+          'hr_documents' => 3,
+          'hr_infographics' => 4,
+          'hr_datasets' => 5,
+          'hr_assessments' => 6
+        ); 
+        $og_group = entity_load('node', array($gid));
+        $og_group = $og_group[$gid];
+        $items = array();
+        $items[0] = array(
+          'name' => $og_group->title,
+          'path' => 'node/'.$gid
+        );
+        // Fetch the og features registry
+        $registry = og_features_get_registry();
+        // Iterate all the available features to provide a toggle switch
+        foreach ($registry as $key => $feature) {
+          // Make sure this feature can be toggled by this group
+          if (!og_features_feature_can_toggle('node', $og_group->bundle_name, $key) || $key == 'hr_pages' || $key == 'hr_webforms') {
+            continue;
+          }
+          // Check if feature is disabled
+          if (!og_features_feature_is_disabled($key, $og_group)) {
+            $path = str_replace('hr_', '', $key);
+            switch($key) {
+              case 'hr_contacts':
+                if ($gid != 77) { // Special case: Colombia, which is not using Humanitarian ID
+                  $path = 'hid_contacts';
+                }
+                else {
+                  $path = 'j2h/contactos';
+                }
+                break;
+              case 'hr_datasets':
+                $path = 'hdx-datasets';
+                break;
+              case 'hr_news':
+                $path = 'blog';
+                break;
+              case 'acc_applications':
+                $path = 'access/applications';
+                break;
+              case 'acc_incidents':
+                $path = 'access/incidents';
+                break;
+            }
+            // If not disabled add to menu items
+            $items[$weights[$key]] = array(
+              'name' => $feature->name,
+              'path' => 'node/'.$gid.'/'.$path
+            );
+          }
+        }
+
+        // Indicators registry
+        if ($gid == 24) {
+          $items[] = array(
+            'name' => 'Indicators',
+            'path' => 'node/'.$gid.'/indicators'
+          );
+        }
+
+        $block['content'] = '<ul class="menu nav nav-pills">';
+        foreach ($items as $weight => $item) {
+          $block['content'] .= '<li>'.l(t($item['name']), $item['path']).'</li>';
+        }
+        $block['content'] .= '</ul>';
+      }
       break;
   }
   return $block;

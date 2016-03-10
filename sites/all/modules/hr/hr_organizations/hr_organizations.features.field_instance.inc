@@ -328,6 +328,38 @@ function hr_organizations_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'taxonomy_term-hr_orgnization_type-field_org_type_access'
+  $field_instances['taxonomy_term-hr_organization_type-field_org_type_access'] = array(
+    'bundle' => 'hr_organization_type',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 15,
+      ),
+    ),
+    'entity_type' => 'taxonomy_term',
+    'field_name' => 'field_org_type_access',
+    'label' => 'Humanitarian Access only',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 8,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Acronym');
