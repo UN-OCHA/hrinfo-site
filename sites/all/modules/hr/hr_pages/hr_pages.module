@@ -13,7 +13,7 @@ function hr_pages_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hr_pages';
-  $feature->name = t('Pages');
+  $feature->name = 'Pages';
   $feature->description = t('Provide static pages to your space.');
   $feature->components = array(
     'node' => array(

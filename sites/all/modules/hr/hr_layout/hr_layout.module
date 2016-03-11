@@ -358,7 +358,7 @@ function hr_layout_block_view($delta = '') {
           }
         }
         foreach ($items as $item) {
-          $block['content'] .= '<li>'.l($item['name'], $item['path']).'</li>';
+          $block['content'] .= '<li>'.l(t($item['name']), $item['path']).'</li>';
         }
         $block['content'] .= '</ul>';
       }

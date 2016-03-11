@@ -51,7 +51,7 @@ function hr_users_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hr_users';
-  $feature->name = t('People');
+  $feature->name = 'People';
   $feature->description = t('Show members of your space.');
   $feature->components = array(
     'pane' => array(

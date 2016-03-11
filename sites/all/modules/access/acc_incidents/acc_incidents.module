@@ -12,7 +12,7 @@ function acc_incidents_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'acc_incidents';
-  $feature->name = t('Access Incidents');
+  $feature->name = 'Access Incidents';
   $feature->description = t('Humanitarian Access Incidents Content Type, Views, Context, Search Index, Facets, Map');
   $feature->components = array(
     'node' => array(

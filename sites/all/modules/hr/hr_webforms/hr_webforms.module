@@ -13,7 +13,7 @@ function hr_webforms_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hr_webforms';
-  $feature->name = t('Webforms');
+  $feature->name = 'Webforms';
   $feature->description = t('Create webforms in your space.');
   $feature->components = array(
     'node' => array(

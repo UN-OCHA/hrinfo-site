@@ -15,7 +15,7 @@ function hr_disasters_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hr_disasters';
-  $feature->name = t('Disasters');
+  $feature->name = 'Disasters';
   $feature->description = t('Activate if your operation has multiple disasters.');
   $feature->components = array(
     'node' => array(
