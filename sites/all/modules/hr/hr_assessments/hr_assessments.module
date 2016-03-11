@@ -13,7 +13,7 @@ function hr_assessments_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hr_assessments';
-  $feature->name = t('Assessments');
+  $feature->name = 'Assessments';
   $feature->description = t('Provide assessments to your space.');
   $feature->components = array(
     'node' => array(

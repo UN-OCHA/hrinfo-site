@@ -154,7 +154,7 @@ function hdx_datasets_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hdx_datasets';
-  $feature->name = t('Datasets (Hdx)');
+  $feature->name = 'Datasets';
   $feature->description = t('Display HDX datasets in your space.');
   $feature->components = array(
     'path' => array(

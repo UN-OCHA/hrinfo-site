@@ -282,21 +282,26 @@ function hr_layout_block_view($delta = '') {
       $block['content'] = '';
       $gid = og_context_determine_context('node');
       if (!empty($gid)) {
-        $weights = array(
-          'hr_contacts' => 1,
-          'hr_events' => 2,
-          'hr_documents' => 3,
-          'hr_infographics' => 4,
-          'hr_datasets' => 5,
-          'hr_assessments' => 6
-        ); 
+        $order = array(
+          'hid_contacts',
+          'hr_events',
+          'hr_documents',
+          'hr_infographics',
+          'hdx_datasets',
+          'hr_offices',
+          'hr_assessments',
+          'hr_news',
+          'acc_applications',
+          'acc_incidents'
+        );
         $og_group = entity_load('node', array($gid));
         $og_group = $og_group[$gid];
         $items = array();
-        $items[0] = array(
+        $items[] = array(
           'name' => $og_group->title,
           'path' => 'node/'.$gid
         );
+        $paths = array();
         // Fetch the og features registry
         $registry = og_features_get_registry();
         // Iterate all the available features to provide a toggle switch
@@ -309,7 +314,7 @@ function hr_layout_block_view($delta = '') {
           if (!og_features_feature_is_disabled($key, $og_group)) {
             $path = str_replace('hr_', '', $key);
             switch($key) {
-              case 'hr_contacts':
+              case 'hid_contacts':
                 if ($gid != 77) { // Special case: Colombia, which is not using Humanitarian ID
                   $path = 'hid_contacts';
                 }
@@ -317,7 +322,7 @@ function hr_layout_block_view($delta = '') {
                   $path = 'j2h/contactos';
                 }
                 break;
-              case 'hr_datasets':
+              case 'hdx_datasets':
                 $path = 'hdx-datasets';
                 break;
               case 'hr_news':
@@ -331,7 +336,7 @@ function hr_layout_block_view($delta = '') {
                 break;
             }
             // If not disabled add to menu items
-            $items[$weights[$key]] = array(
+            $paths[$key] = array(
               'name' => $feature->name,
               'path' => 'node/'.$gid.'/'.$path
             );
@@ -347,7 +352,12 @@ function hr_layout_block_view($delta = '') {
         }
 
         $block['content'] = '<ul class="menu nav nav-pills">';
-        foreach ($items as $weight => $item) {
+        foreach ($order as $feature) {
+          if ($paths[$feature]) {
+            $items[] = $paths[$feature];
+          }
+        }
+        foreach ($items as $item) {
           $block['content'] .= '<li>'.l(t($item['name']), $item['path']).'</li>';
         }
         $block['content'] .= '</ul>';
