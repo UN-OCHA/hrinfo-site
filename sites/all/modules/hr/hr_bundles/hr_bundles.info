@@ -141,7 +141,6 @@ features[variable][] = og_context_negotiation_group_context
 features[variable][] = og_context_providers_weight_group_context
 features[variable][] = og_features_settings_node_hr_bundle
 features[variable][] = og_menu_enable_hr_bundle
-features[variable][] = og_menu_single_group__node__hr_bundle
 features[variable][] = panelizer_defaults_node_hr_bundle
 features[variable][] = panelizer_node:hr_bundle_allowed_layouts_default
 features[variable][] = panelizer_node:hr_bundle_allowed_types

@@ -19,7 +19,6 @@ dependencies[] = hr_indicators
 dependencies[] = hr_infographics
 dependencies[] = hr_news
 dependencies[] = hr_tools
-dependencies[] = og_menu_single
 dependencies[] = page_manager
 dependencies[] = special_menu_items
 features[context][] = hr_nodes
