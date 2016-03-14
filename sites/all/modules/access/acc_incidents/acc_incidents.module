@@ -24,20 +24,6 @@ function acc_incidents_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle().
- */
-function acc_incidents_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  $menus_to_create = array(
-    'acc_incidents' => array(
-      'title' => 'Access Incidents',
-      'path' => 'node/' . $entity_id . '/access/incidents',
-      'weight' => 99
-    )
-  );
-  _hr_layout_og_menu_single_helper('acc_incidents', $features, $entity_id, $menus_to_create);
-}
-
-/**
  * Implements hook_init()
  * Raises the memory limit on the node/%/access/incidents page
  * TODO: fix this hack by improving access performance

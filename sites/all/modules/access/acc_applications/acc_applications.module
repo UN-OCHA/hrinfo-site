@@ -24,16 +24,3 @@ function acc_applications_og_features_registry() {
   return $registry;
 }
 
-/**
- * Implements hook_og_features_toggle().
- */
-function acc_applications_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  $menus_to_create = array(
-    'acc_applications' => array(
-      'title' => 'Access Applications',
-      'path' => 'node/' . $entity_id . '/access/applications',
-      'weight' => 99
-    )
-  );
-  _hr_layout_og_menu_single_helper('acc_applications', $features, $entity_id, $menus_to_create);
-}

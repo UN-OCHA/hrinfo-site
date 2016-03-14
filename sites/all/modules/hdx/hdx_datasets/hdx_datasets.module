@@ -166,20 +166,6 @@ function hdx_datasets_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle().
- */
-function hdx_datasets_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  $menus_to_create = array(
-    'hdx_datasets' => array(
-      'title' => 'Datasets',
-      'path' => 'node/' . $entity_id . '/hdx-datasets',
-      'weight' => 3,
-    )
-  );
-  _hr_layout_og_menu_single_helper('hdx_datasets', $features, $entity_id, $menus_to_create);
-}
-
-/**
  * Implementation hook_ctools_plugin_api().
  */
 function hdx_datasets_ctools_plugin_api($module, $api) {

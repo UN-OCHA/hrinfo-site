@@ -25,25 +25,6 @@ function hr_news_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle().
- */
-function hr_news_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  $menus_to_delete = array(
-    'news' => array(
-      'path' => 'node/'.$entity_id.'/news',
-    ),
-    'blog' => array(
-      'title' => 'Blog',
-      'path' => 'node/'.$entity_id.'/blog',
-      'weight' => 16,
-    )
-  );
-  $menus_to_create = $menus_to_delete;
-  unset($menus_to_create['news']);
-  _hr_layout_og_menu_single_helper('hr_news', $features, $entity_id, $menus_to_create, $menus_to_delete);
-}
-
-/**
  * Implements hook_search_api_views_query_alter()
  *
  * Makes the news view available for disasters

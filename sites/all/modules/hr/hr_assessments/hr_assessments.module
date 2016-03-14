@@ -26,20 +26,6 @@ function hr_assessments_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle().
- */
-function hr_assessments_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  $menus_to_create = array(
-    'hr_assessments' => array(
-      'title' => 'Assessments',
-      'path' => 'node/' . $entity_id . '/assessments',
-      'weight' => 10,
-    )
-  );
-  _hr_layout_og_menu_single_helper('hr_assessments', $features, $entity_id, $menus_to_create);
-}
-
-/**
  * Implementation of hook_entity_info_alter().
  */
 function hr_assessments_entity_info_alter(&$entity_info) {

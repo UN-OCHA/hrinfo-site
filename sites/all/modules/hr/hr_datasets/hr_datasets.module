@@ -25,20 +25,6 @@ function hr_datasets_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle().
- */
-function hr_datasets_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  $menus_to_create = array(
-    'hr_datasets' => array(
-      'title' => 'Datasets',
-      'path' => 'node/' . $entity_id . '/datasets',
-      'weight' => 12,
-    )
-  );
-  _hr_layout_og_menu_single_helper('hr_datasets', $features, $entity_id, $menus_to_create);
-}
-
-/**
  * Implements hook_block_view_alter().
  */
 function hr_datasets_block_view_alter(&$data, $block) {
