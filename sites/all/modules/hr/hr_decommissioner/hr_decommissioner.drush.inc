@@ -3,6 +3,8 @@
 /**
  * @file
  * hr_decommissioner module drush integration.
+ *
+ * KEPT FOR REFERENCE ONLY !! THIS CODE SHOULD NOT BE USED ANYMORE
  */
 
 /**
@@ -16,7 +18,7 @@
 function hr_decommissioner_drush_command() {
   $items = array();
 
-  $items['hr-decommissioner-export-additional-contacts'] = array(
+  /*$items['hr-decommissioner-export-additional-contacts'] = array(
     'description' => "Export additional contacts in hrinfo",
     'drupal dependencies' => array(),
     'aliases' => array(),
@@ -26,7 +28,7 @@ function hr_decommissioner_drush_command() {
     'description' => "Remove the contact menus from all groups",
     'drupal dependencies' => array(),
     'aliases' => array(),
-  );
+  );*/
 
   return $items;
 }

@@ -63,20 +63,6 @@ function hr_users_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle().
- */
-function hr_users_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  $menus_to_create = array(
-    'hr_users' => array(
-      'title' => 'People',
-      'path' => 'node/' . $entity_id . '/people',
-      'weight' => 18,
-    )
-  );
-  _hr_layout_og_menu_single_helper('hr_users', $features, $entity_id, $menus_to_create);
-}
-
-/**
  * Implements hook_user_login().
  */
 function hr_users_user_login(&$edit, $account) {

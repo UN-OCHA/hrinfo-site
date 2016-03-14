@@ -24,17 +24,3 @@ function hr_offices_og_features_registry() {
   return $registry;
 }
 
-/**
- * Implements hook_og_features_toggle().
- */
-function hr_offices_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  $menus_to_create = array(
-    'hr_offices' => array(
-      'title' => 'Offices',
-      'path' => 'node/' . $entity_id . '/offices',
-      'weight' => 14,
-    )
-  );
-  _hr_layout_og_menu_single_helper('hr_offices', $features, $entity_id, $menus_to_create);
-}
-

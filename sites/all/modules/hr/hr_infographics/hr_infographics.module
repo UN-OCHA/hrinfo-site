@@ -24,20 +24,6 @@ function hr_infographics_og_features_registry() {
   return $registry;
 }
 
-/**
- * Implements hook_og_features_toggle().
- */
-function hr_infographics_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  $menus_to_create = array(
-    'hr_infographics' => array(
-      'title' => 'Maps/Infographics',
-      'path' => 'node/' . $entity_id . '/infographics',
-      'weight' => 8,
-    )
-  );
-  _hr_layout_og_menu_single_helper('hr_infographics', $features, $entity_id, $menus_to_create);
-}
-
 function hr_infographics_form_hr_document_node_form_alter(&$form, &$form_state) {
   hr_sectors_hide_sectors($form, $form_state);
 }

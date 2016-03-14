@@ -243,13 +243,6 @@ function hr_bundles_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'og_menu_single_group__node__hr_bundle';
-  $strongarm->value = 1;
-  $export['og_menu_single_group__node__hr_bundle'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'panelizer_defaults_node_hr_bundle';
   $strongarm->value = array(
     'status' => 1,
@@ -346,7 +339,6 @@ function hr_bundles_strongarm() {
     'hid_profiles_checkins-hid_profiles_checkins' => 0,
     'hr_layout_standard-hr_layout_standard' => 0,
     'node_create_links-node_create_links' => 0,
-    'og_menu_single_menu-og_menu_single_menu' => 0,
     'membership_links-membership_links' => 0,
     'twitter-twitter' => 0,
     'views_exposed-views_exposed' => 0,
@@ -1559,7 +1551,6 @@ function hr_bundles_strongarm() {
     'block-node-recent' => 0,
     'block-og_menu-og_single_menu_block' => 0,
     'block-og_menu-og_multi_menu_block' => 0,
-    'block-og_menu_single-menu' => 0,
     'block-search_api_sorts-search-sorts' => 0,
     'block-system-powered-by' => 0,
     'block-system-help' => 0,

@@ -24,16 +24,3 @@ function hr_discussions_og_features_registry() {
   return $registry;
 }
 
-/**
- * Implements hook_og_features_toggle().
- */
-function hr_discussions_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  $menus_to_create = array(
-    'hr_discussions' => array(
-      'title' => 'Discussions',
-      'path' => 'node/' . $entity_id . '/discussions',
-      'weight' => 18,
-    )
-  );
-  _hr_layout_og_menu_single_helper('hr_discussions', $features, $entity_id, $menus_to_create);
-}

@@ -25,21 +25,6 @@ function hr_documents_og_features_registry() {
 }
 
 /**
- * Implements hook_og_features_toggle().
- */
-function hr_documents_og_features_toggle($entity, $entity_id, $entity_type, $features) {
-  $menus_to_create = array(
-    'hr_documents' => array(
-      'title' => 'Documents',
-      'path' => 'node/' . $entity_id . '/documents',
-      'weight' => 6,
-    )
-  );
-
-  _hr_layout_og_menu_single_helper('hr_documents', $features, $entity_id, $menus_to_create);
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
