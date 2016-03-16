@@ -108,7 +108,8 @@ function j2h($mod_api='') {
     }
 
     // For GET requests, the query has to be appended to the URL and not entered as the $data parameter
-    $json = drupal_http_request($url_api);
+    $options = array('timeout' => 120);
+    $json = drupal_http_request($url_api, $options);
 
     if (!empty($json->error)) {
         $msg = t("The API: <a href='$url_api' target='_blank'>$url_api</a> shows this error: @error", array("@error" => $json->error));

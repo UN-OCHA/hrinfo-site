@@ -281,6 +281,11 @@ function hr_layout_block_view($delta = '') {
     case 'hr_layout_horz_menu':
       $block['content'] = '';
       $gid = og_context_determine_context('node');
+      $current_path = current_path();
+      // Handling special case for Colombia
+      if ($current_path == 'j2h/contactos') {
+        $gid = 77;
+      }
       if (!empty($gid)) {
         $order = array(
           'hid_contacts',
@@ -340,6 +345,10 @@ function hr_layout_block_view($delta = '') {
               'name' => $feature->name,
               'path' => 'node/'.$gid.'/'.$path
             );
+
+            if ($path == 'j2h/contactos') {
+              $paths[$key]['path'] = $path;
+            }
           }
         }
 
