@@ -353,7 +353,7 @@ function hr_layout_block_view($delta = '') {
 
         $block['content'] = '<ul class="menu nav nav-pills">';
         foreach ($order as $feature) {
-          if ($paths[$feature]) {
+          if (isset($paths[$feature])) {
             $items[] = $paths[$feature];
           }
         }
