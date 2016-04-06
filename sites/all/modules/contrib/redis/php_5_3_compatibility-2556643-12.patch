@@ -1,0 +1,46 @@
+diff --git a/lib/Redis/AbstractBackend.php b/lib/Redis/AbstractBackend.php
+index 90d1740..2ccedb7 100644
+--- a/lib/Redis/AbstractBackend.php
++++ b/lib/Redis/AbstractBackend.php
+@@ -80,9 +80,9 @@ abstract class Redis_AbstractBackend implements Redis_BackendInterface
+      *
+      * @return string
+      */
+-    public function getKey($parts = [])
++    public function getKey($parts = array())
+     {
+-        $key = [];
++        $key = array();
+ 
+         if (null !== $this->prefix) {
+             $key[] = $this->prefix;
+diff --git a/lib/Redis/Cache.php b/lib/Redis/Cache.php
+index 99b8a81..0feceb4 100644
+--- a/lib/Redis/Cache.php
++++ b/lib/Redis/Cache.php
+@@ -258,21 +258,21 @@ class Redis_Cache
+         list($flushPerm, $flushVolatile) = $this->backend->getLastFlushTime();
+ 
+         $checksum = $this->getValidChecksum(
+-            max([
++            max(array(
+                 $flushPerm,
+                 $flushVolatile,
+                 $permanent,
+                 time(),
+-            ])
++            ))
+         );
+ 
+         if ($permanent) {
+             $this->backend->setLastFlushTimeFor($checksum, false);
+             $this->backend->setLastFlushTimeFor($checksum, true);
+-            $this->flushCache = [$checksum, $checksum];
++            $this->flushCache = array($checksum, $checksum);
+         } else if ($volatile) {
+             $this->backend->setLastFlushTimeFor($checksum, true);
+-            $this->flushCache = [$flushPerm, $checksum];
++            $this->flushCache = array($flushPerm, $checksum);
+         }
+     }
+ 
