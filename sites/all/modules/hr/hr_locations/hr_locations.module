@@ -26,7 +26,7 @@ function hr_locations_taxonomy_term_presave($term) {
 function hr_locations_query_hr_locations_filter_parent_alter($query) {
   $conditions = &$query->conditions();
   foreach ($conditions as &$condition) {
-    if (is_array($condition) && $condition['field'] == 'taxonomy_term_data.parent') {
+    if (is_array($condition) && $condition['field'] == 'taxonomy_term_data.') {
       $condition['field'] = 'th.parent';
       $query->join('taxonomy_term_hierarchy', 'th', 'taxonomy_term_data.tid = th.tid');
     }
