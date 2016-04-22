@@ -95,3 +95,20 @@ function hr_documents_ctools_plugin_directory($module, $plugin) {
   }
 }
 
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function hr_documents_field_widget_form_alter(&$element, &$form_state, $context) {
+  if (isset($element['#options']) && $element['#field_name'] == 'field_document_type') {
+    foreach ($element['#options'] as $tid => &$option) {
+      if (is_numeric($tid)) {
+        $option_label = array();
+        $parents = taxonomy_get_parents_all($tid);
+        foreach ($parents as $parent_id => $parent) {
+          array_unshift($option_label, entity_label('taxonomy_term', $parent));
+        }
+        $option = implode(' > ', $option_label);
+      }
+    }
+  }
+}
