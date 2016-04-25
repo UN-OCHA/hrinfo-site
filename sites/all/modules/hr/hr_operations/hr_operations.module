@@ -44,7 +44,12 @@ function hr_operations_block_view($delta = '') {
 </div>
 <div>
   <div class="col-sm-12">
-    <p><strong><a href="/operations/burundi">Burundi</a></strong></p>
+    <p><strong><a href="/fr/operations/burundi">Burundi</a></strong></p>
+  </div>
+</div>
+<div>
+  <div class="col-sm-12">
+    <p><strong><a href="operations/ecuador">Ecuador</a></strong></p>
   </div>
 </div>
 <div>
@@ -59,12 +64,7 @@ function hr_operations_block_view($delta = '') {
 </div>
 <div>
   <div class="col-sm-12">
-    <p><strong><a href="/operations/nepal">Nepal</a></strong></p>
-  </div>
-</div>
-<div>
-  <div class="col-sm-12">
-    <p><strong><a href="/operations/democratic-republic-congo">République Démocratique du Congo</a></strong></p>
+    <p><strong><a href="/fr/operations/democratic-republic-congo">République Démocratique du Congo</a></strong></p>
   </div>
 </div>
 <div>
