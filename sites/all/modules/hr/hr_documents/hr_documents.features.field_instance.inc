@@ -219,7 +219,7 @@ function hr_documents_field_default_field_instances() {
     'label' => 'Body',
     'required' => FALSE,
     'settings' => array(
-      'display_summary' => TRUE,
+      'display_summary' => FALSE,
       'entity_translation_sync' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
@@ -415,7 +415,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Try to always include here the text of the document (like the entire press release or the executive summary in case of lengthy publications). If no text is available add a description of the file(s) you are publishing.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -460,7 +460,7 @@ function hr_documents_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'shs',
+      'module' => 'options',
       'settings' => array(
         'shs' => array(
           'create_new_levels' => 0,
@@ -470,7 +470,7 @@ function hr_documents_field_default_field_instances() {
           'use_chosen' => 'always',
         ),
       ),
-      'type' => 'taxonomy_shs',
+      'type' => 'options_select',
       'weight' => 1,
     ),
   );
