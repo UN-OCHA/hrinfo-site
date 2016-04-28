@@ -106,16 +106,16 @@ function hr_documents_strongarm() {
           'weight' => '-5',
         ),
         'path' => array(
-          'weight' => '17',
-        ),
-        'redirect' => array(
           'weight' => '18',
         ),
+        'redirect' => array(
+          'weight' => '19',
+        ),
         'language' => array(
-          'weight' => '-10',
+          'weight' => '0',
         ),
         'flag' => array(
-          'weight' => '10',
+          'weight' => '11',
         ),
       ),
       'display' => array(
