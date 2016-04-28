@@ -134,7 +134,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['fields']['field_organizations']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_organizations']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_organizations']['bypass_access'] = 0;
-  /* Field: Indexed Node: Publication Date */
+  /* Field: Indexed Node: Original Publication Date */
   $handler->display->display_options['fields']['field_publication_date']['id'] = 'field_publication_date';
   $handler->display->display_options['fields']['field_publication_date']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_publication_date']['field'] = 'field_publication_date';
@@ -290,7 +290,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['fields']['field_organizations']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_organizations']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_organizations']['bypass_access'] = 0;
-  /* Field: Indexed Node: Publication Date */
+  /* Field: Indexed Node: Original Publication Date */
   $handler->display->display_options['fields']['field_publication_date']['id'] = 'field_publication_date';
   $handler->display->display_options['fields']['field_publication_date']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_publication_date']['field'] = 'field_publication_date';
@@ -418,7 +418,7 @@ function hr_documents_views_default_views() {
     'title_link' => 'content',
     'title_class' => '',
   );
-  /* Field: Indexed Node: Publication Date */
+  /* Field: Indexed Node: Original Publication Date */
   $handler->display->display_options['fields']['field_publication_date']['id'] = 'field_publication_date';
   $handler->display->display_options['fields']['field_publication_date']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_publication_date']['field'] = 'field_publication_date';
@@ -515,7 +515,7 @@ function hr_documents_views_default_views() {
     'title_link' => 'content',
     'title_class' => '',
   );
-  /* Field: Indexed Node: Publication Date */
+  /* Field: Indexed Node: Original Publication Date */
   $handler->display->display_options['fields']['field_publication_date']['id'] = 'field_publication_date';
   $handler->display->display_options['fields']['field_publication_date']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_publication_date']['field'] = 'field_publication_date';
@@ -600,7 +600,7 @@ function hr_documents_views_default_views() {
     t('Title'),
     t('Document type'),
     t('Organization'),
-    t('Publication Date'),
+    t('Original Publication Date'),
     t('Files'),
     t('All'),
     t('Search Documents'),
