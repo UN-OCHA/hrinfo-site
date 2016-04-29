@@ -157,7 +157,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['sorts']['created']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Contextual filter: Indexed Node: Groups audience */
+  /* Contextual filter: Indexed Node: Space(s) */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -434,7 +434,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['sorts']['changed']['field'] = 'changed';
   $handler->display->display_options['sorts']['changed']['order'] = 'DESC';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Indexed Node: Groups audience */
+  /* Contextual filter: Indexed Node: Space(s) */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -1547,7 +1547,6 @@ return 0;';
     t('[field_event_date_2-rrule]'),
     t('Print Day'),
   );
-
   $export['hr_events_calendar'] = $view;
 
   $view = new view();
