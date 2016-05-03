@@ -192,7 +192,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Try to always include here the text of the document (like the entire press release or the executive summary in case of lengthy publications). If no text is available add a description of the file(s) you are publishing.',
+    'description' => 'Try to always include here the text (in full or part of it) of the document (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -242,7 +242,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => 'Indicate the cluster(s)/sector(s) the document refers to.',
+    'description' => 'Indicate the cluster(s)/sector(s) the document substantively refers to.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -366,7 +366,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Click on the field and select the disaster(s) the document is about.',
+    'description' => 'Click on the field and select the disaster(s) or emergency(ies) the document refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations. See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -486,7 +486,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Attach the file to publish and specify the language of the document from the drop-down menu. It is best to publish only one file per record.',
+    'description' => 'Attach the file to publish and specify the language of the document. It is best to publish one file per record.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -795,7 +795,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'You can add links to related content (example: language versions of the same document, or the link of the event the meeting minutes refer to) by adding the title of the content and its url.',
+    'description' => 'Add links of content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -978,7 +978,7 @@ function hr_documents_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => 'This field allows use to choose whether the document will be public, private or will keep the same setting of the group.',
+    'description' => 'Choose whether the document will be public, private or will have the same setting (private or public) as the group within which it has been published.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1036,7 +1036,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => 'Select the space where you want the document to be published.',
+    'description' => 'Click on the field and select the “space (country or region)” where you want the document to be published.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1114,7 +1114,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Type the original title of the document.',
+    'description' => 'Type the original title of the document. Try not to use abbreviations.',
     'display' => array(
       'default' => array(
         'label' => 'above',
