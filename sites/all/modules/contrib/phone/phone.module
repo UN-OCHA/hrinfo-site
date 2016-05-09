@@ -137,7 +137,7 @@ function phone_countries_alter(&$countries) {
  */
 function phone_countries($codes = NULL, $type = 'combined', $reset = FALSE) {
   // We don't need drupal_static() do we? Why would we reset this?
-  static $country_data = NULL;
+  static $country_data = array();
   global $language;
   $lang_code = $language->language;
 
@@ -146,23 +146,23 @@ function phone_countries($codes = NULL, $type = 'combined', $reset = FALSE) {
       $country_data[$lang_code] = $cache->data;
     }
 
-    if (!isset($country_data)) {
+    if (!isset($country_data[$lang_code])) {
       // Load libphonenumber.
       phone_libphonenumber();
 
-      $country_data = phone_libphonenumber_get_supported_country_lists();
-      cache_set('phone_countries_' . $lang_code, $country_data);
+      $country_data[$lang_code] = phone_libphonenumber_get_supported_country_lists();
+      cache_set('phone_countries_' . $lang_code, $country_data[$lang_code]);
     }
   }
 
   if (empty($codes)) {
-    return $country_data[$type];
+    return $country_data[$lang_code][$type];
   }
   elseif (is_array($codes)) {
-    return array_intersect_key($country_data[$type], drupal_map_assoc($codes));
+    return array_intersect_key($country_data[$lang_code][$type], drupal_map_assoc($codes));
   }
-  elseif (isset($country_data[$type][$codes])) {
-    return $country_data[$type][$codes];
+  elseif (isset($country_data[$lang_code][$type][$codes])) {
+    return $country_data[$lang_code][$type][$codes];
   }
   else {
     return FALSE;
