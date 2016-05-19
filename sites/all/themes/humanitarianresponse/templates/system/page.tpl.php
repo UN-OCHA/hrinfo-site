@@ -132,7 +132,7 @@
         <div class="column"><a href="http://fts.unocha.org" target="_blank"><div class="footer-logo footer-logos-fts"></div></a></div>
         <div class="column"><a href="http://www.irinnews.org" target="_blank"><div class="footer-logo footer-logos-irin"></div></a></div>
         <div class="column"><a href="http://www.gdacs.org" target="_blank"><div class="footer-logo footer-logos-gdacs"></div></a></div>
-        <div class="column"><a href="http://data.hdx.rwlabs.org" target="_blank"><div class="footer-logo footer-logos-hdx"></div></a></div>
+        <div class="column"><a href="<?php print variable_get('humdata_base_url', 'https://data.humdata.org'); ?>" target="_blank"><div class="footer-logo footer-logos-hdx"></div></a></div>
       </div>
 
       <div class="col-md-3">

@@ -13,7 +13,7 @@
         params: {},
         search: '',
         url: function () {
-          var url = 'https://data.hdx.rwlabs.org/api/3/action/package_search?q=groups:' + this.countryCodes(settings) + '&rows=' + this.limit + '&start=' + this.skip;
+          var url = 'https://data.humdata.org/api/3/action/package_search?q=groups:' + this.countryCodes(settings) + '&rows=' + this.limit + '&start=' + this.skip;
           var index = window.location.hash.indexOf('=');
           if (index != -1) {
             var params = window.location.hash.substr(index + 1);
@@ -42,7 +42,7 @@
             var date = new Date(resource.metadata_modified);
             var month = settings.hdx_datasets.month;
             var monthIndex = date.getMonth();
-            var resource_link = "https://data.hdx.rwlabs.org/dataset/" + resource.id;
+            var resource_link = "https://data.humdata.org/dataset/" + resource.id;
             fields.push({
               title: '<a href="' + resource_link + '">' + resource.title + '</a>',
               last_modified: date.getDate() + '-' + month[monthIndex + 1] + '-' + date.getFullYear(),

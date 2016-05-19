@@ -11,5 +11,5 @@ $plugin = array(
   'authentication_types' => TRUE,
   'authentication_optional' => TRUE,
   'allow_origin' => '*',
-  'menu_item' =>'https://data.hdx.rwlabs.org/faq#body-faq-HDX_API'
+  'menu_item' => variable_get('humdata_base_url', 'https://data.humdata.org') . '/faq#body-faq-HDX_API'
 );

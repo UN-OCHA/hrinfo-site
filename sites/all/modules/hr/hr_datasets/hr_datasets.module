@@ -102,5 +102,5 @@ function hr_datasets_menu_alter(&$items) {
  * Redirect hr datasets api to HDX.
  */
 function hr_datasets_redirect_api_datasets() {
-  drupal_goto('https://data.hdx.rwlabs.org/faq#body-faq-HDX_API');
+  drupal_goto(variable_get('humdata_base_url', 'https://data.humdata.org') . '/faq#body-faq-HDX_API');
 }
