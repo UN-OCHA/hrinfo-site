@@ -647,7 +647,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['fields']['title']['label'] = '';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Sort criterion: Content: Publication Date (field_publication_date) */
+  /* Sort criterion: Content: Original Publication Date (field_publication_date) */
   $handler->display->display_options['sorts']['field_publication_date_value']['id'] = 'field_publication_date_value';
   $handler->display->display_options['sorts']['field_publication_date_value']['table'] = 'field_data_field_publication_date';
   $handler->display->display_options['sorts']['field_publication_date_value']['field'] = 'field_publication_date_value';
@@ -973,7 +973,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Content: Publication Date (field_publication_date) */
+  /* Sort criterion: Content: Original Publication Date (field_publication_date) */
   $handler->display->display_options['sorts']['field_publication_date_value']['id'] = 'field_publication_date_value';
   $handler->display->display_options['sorts']['field_publication_date_value']['table'] = 'field_data_field_publication_date';
   $handler->display->display_options['sorts']['field_publication_date_value']['field'] = 'field_publication_date_value';
@@ -1066,7 +1066,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['sorts'] = FALSE;
-  /* Sort criterion: Content: Publication Date (field_publication_date) */
+  /* Sort criterion: Content: Original Publication Date (field_publication_date) */
   $handler->display->display_options['sorts']['field_publication_date_value']['id'] = 'field_publication_date_value';
   $handler->display->display_options['sorts']['field_publication_date_value']['table'] = 'field_data_field_publication_date';
   $handler->display->display_options['sorts']['field_publication_date_value']['field'] = 'field_publication_date_value';

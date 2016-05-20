@@ -11,3 +11,4 @@ features[features_api][] = api:2
 features[variable][] = restful_default_output_formatter
 features[variable][] = restful_enable_users_resource
 features[variable][] = restful_enable_user_login_resource
+features[variable][] = restful_page_cache

@@ -655,7 +655,7 @@ function hr_infographics_field_default_field_instances() {
   $field_instances['node-hr_infographic-field_publication_date'] = array(
     'bundle' => 'hr_infographic',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate when the document has originally been published.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -686,10 +686,10 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_publication_date',
-    'label' => 'Publication Date',
-    'required' => 0,
+    'label' => 'Original Publication Date',
+    'required' => 1,
     'settings' => array(
-      'default_value' => 'now',
+      'default_value' => 'blank',
       'default_value2' => 'same',
       'default_value_code' => '',
       'default_value_code2' => '',
@@ -1167,11 +1167,12 @@ function hr_infographics_field_default_field_instances() {
   t('Fundings');
   t('Global Clusters');
   t('Group content visibility');
+  t('Indicate when the document has originally been published.');
   t('Infographics');
   t('Locations');
   t('Name');
   t('Organization');
-  t('Publication Date');
+  t('Original Publication Date');
   t('Related content');
   t('Space(s)');
   t('Themes');

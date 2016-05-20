@@ -192,7 +192,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Try to always include here the text (in full or part of it) of the document (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -217,21 +217,22 @@ function hr_documents_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'body',
     'label' => 'Body',
-    'required' => FALSE,
+    'required' => 0,
     'settings' => array(
-      'display_summary' => FALSE,
+      'display_summary' => 0,
       'entity_translation_sync' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'text',
       'settings' => array(
         'rows' => 20,
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 13,
+      'weight' => 14,
     ),
   );
 
@@ -241,7 +242,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the cluster(s)/sector(s) the document substantively refers to.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -272,6 +273,7 @@ function hr_documents_field_default_field_instances() {
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
+          'access_override' => 0,
           'admin' => array(
             'widget_type' => 'options_select',
           ),
@@ -284,7 +286,10 @@ function hr_documents_field_default_field_instances() {
           'action' => 'none',
           'action_on_edit' => 0,
           'fallback' => 'none',
-          'og_context' => 0,
+          'providers' => array(
+            'og_context' => 0,
+            'url' => 1,
+          ),
           'skip_perm' => 0,
           'status' => 1,
         ),
@@ -297,7 +302,7 @@ function hr_documents_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 5,
+      'weight' => 8,
     ),
   );
 
@@ -307,7 +312,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select the coordination hub(s) the document refers to (if any).',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -351,7 +356,7 @@ function hr_documents_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 8,
+      'weight' => 9,
     ),
   );
 
@@ -361,7 +366,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select the disaster(s) or emergency(ies) the document refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations. See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -405,17 +410,17 @@ function hr_documents_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
   // Exported field_instance: 'node-hr_document-field_document_type'
   $field_instances['node-hr_document-field_document_type'] = array(
     'bundle' => 'hr_document',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Try to always include here the text of the document (like the entire press release or the executive summary in case of lengthy publications). If no text is available add a description of the file(s) you are publishing.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -462,6 +467,7 @@ function hr_documents_field_default_field_instances() {
       'active' => 1,
       'module' => 'options',
       'settings' => array(
+        'apply_chosen' => '',
         'shs' => array(
           'create_new_levels' => 0,
           'create_new_terms' => 0,
@@ -471,7 +477,7 @@ function hr_documents_field_default_field_instances() {
         ),
       ),
       'type' => 'options_select',
-      'weight' => 1,
+      'weight' => 2,
     ),
   );
 
@@ -480,7 +486,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Attach the file to publish and specify the language of the document. It is best to publish one file per record.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -528,7 +534,7 @@ function hr_documents_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -538,7 +544,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select the funding appeal the document refers to. Use this field only when the document is substantively related to a specific funding.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -582,7 +588,7 @@ function hr_documents_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 10,
+      'weight' => 12,
     ),
   );
 
@@ -592,7 +598,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -618,7 +624,7 @@ function hr_documents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_locations',
-    'label' => 'Locations',
+    'label' => 'Location(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -652,10 +658,10 @@ function hr_documents_field_default_field_instances() {
   // Exported field_instance: 'node-hr_document-field_organizations'
   $field_instances['node-hr_document-field_organizations'] = array(
     'bundle' => 'hr_document',
-    'default_value' => array(),
+    'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Type and select the source(s) of the document.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -684,7 +690,7 @@ function hr_documents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_organizations',
-    'label' => 'Organization',
+    'label' => 'Organization(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -716,7 +722,7 @@ function hr_documents_field_default_field_instances() {
   $field_instances['node-hr_document-field_publication_date'] = array(
     'bundle' => 'hr_document',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate when the document has originally been published.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -755,10 +761,10 @@ function hr_documents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_publication_date',
-    'label' => 'Publication Date',
-    'required' => 0,
+    'label' => 'Original Publication Date',
+    'required' => 1,
     'settings' => array(
-      'default_value' => 'now',
+      'default_value' => 'blank',
       'default_value2' => 'same',
       'default_value_code' => '',
       'default_value_code2' => '',
@@ -780,7 +786,7 @@ function hr_documents_field_default_field_instances() {
         'year_range' => '-10:+0',
       ),
       'type' => 'date_select',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -789,7 +795,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Add links of content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -819,6 +825,7 @@ function hr_documents_field_default_field_instances() {
       'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
+        'configurable_class' => 0,
         'configurable_title' => 0,
         'rel' => '',
         'target' => '_blank',
@@ -835,7 +842,7 @@ function hr_documents_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'required',
-      'title_label_use_field_label' => FALSE,
+      'title_label_use_field_label' => 0,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -847,7 +854,7 @@ function hr_documents_field_default_field_instances() {
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 14,
+      'weight' => 15,
     ),
   );
 
@@ -901,7 +908,7 @@ function hr_documents_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -911,7 +918,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select all relevant themes. Choose only themes the document substantively refers to.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -958,7 +965,7 @@ function hr_documents_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 12,
+      'weight' => 13,
     ),
   );
 
@@ -971,7 +978,7 @@ function hr_documents_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Choose whether the document will be public, private or will have the same setting (private or public) as the group within which it has been published.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -996,7 +1003,7 @@ function hr_documents_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'group_content_access',
     'label' => 'Group content visibility',
-    'required' => TRUE,
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
@@ -1012,12 +1019,13 @@ function hr_documents_field_default_field_instances() {
       ),
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'options',
       'settings' => array(
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 15,
+      'weight' => 16,
     ),
     'widget_type' => 'options_select',
   );
@@ -1028,7 +1036,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select the “space (country or region)” where you want the document to be published.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1056,6 +1064,7 @@ function hr_documents_field_default_field_instances() {
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
+          'access_override' => 0,
           'admin' => array(
             'widget_type' => 'entityreference_autocomplete',
           ),
@@ -1069,6 +1078,7 @@ function hr_documents_field_default_field_instances() {
           'action_on_edit' => 0,
           'fallback' => 'form_error',
           'providers' => array(
+            'og_context' => 0,
             'url' => 1,
           ),
           'skip_perm' => 'administer modules',
@@ -1095,7 +1105,7 @@ function hr_documents_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 16,
+      'weight' => 17,
     ),
   );
 
@@ -1104,7 +1114,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Type the original title of the document. Try not to use abbreviations.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1133,23 +1143,28 @@ function hr_documents_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'title_field',
     'label' => 'Title',
-    'required' => TRUE,
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'hide_label' => array(
-        'entity' => FALSE,
-        'page' => FALSE,
+        'entity' => 0,
+        'page' => 0,
+      ),
+      'linkit' => array(
+        'enable' => 0,
+        'insert_plugin' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'text',
       'settings' => array(
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 0,
+      'weight' => 1,
     ),
   );
 
@@ -1271,7 +1286,12 @@ function hr_documents_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Acronym');
+  t('Attach the file to publish and specify the language of the document from the drop-down menu. It is best to publish only one file per record.');
   t('Body');
+  t('Click on the field and select all relevant themes. Choose only themes the document substantively refers to.');
+  t('Click on the field and select the coordination hub(s) the document refers to (if any).');
+  t('Click on the field and select the disaster(s) the document is about.');
+  t('Click on the field and select the funding appeal the document refers to. Use this field only when the document is substantively related to a specific funding.');
   t('Clusters/Sectors');
   t('Coordination hubs');
   t('Description');
@@ -1283,15 +1303,24 @@ function hr_documents_field_default_field_instances() {
   t('Fundings');
   t('Global Clusters');
   t('Group content visibility');
+  t('Indicate the cluster(s)/sector(s) the document refers to.');
+  t('Indicate when the document has originally been published.');
   t('Language');
-  t('Locations');
+  t('Location(s)');
   t('Name');
-  t('Organization');
-  t('Publication Date');
+  t('Organization(s)');
+  t('Original Publication Date');
   t('Related content');
+  t('Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).');
+  t('Select the space where you want the document to be published.');
   t('Space(s)');
   t('Themes');
+  t('This field allows use to choose whether the document will be public, private or will keep the same setting of the group.');
   t('Title');
+  t('Try to always include here the text of the document (like the entire press release or the executive summary in case of lengthy publications). If no text is available add a description of the file(s) you are publishing.');
+  t('Type and select the source(s) of the document.');
+  t('Type the original title of the document.');
+  t('You can add links to related content (example: language versions of the same document, or the link of the event the meeting minutes refer to) by adding the title of the content and its url.');
 
   return $field_instances;
 }
