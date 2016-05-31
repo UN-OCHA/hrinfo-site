@@ -100,7 +100,7 @@ function humanitarianresponse_preprocess_page(&$variables) {
   ));
 
   if (user_is_anonymous()) {
-    $variables['follow_us_link_href'] = 'user/login';
+    $variables['follow_us_link_href'] = 'connect/oauthconnector_hid_oauth';
     $variables['follow_us_link_title'] = t('Login to follow us');
     $variables['follow_us_link_status'] = 'flag';
   }

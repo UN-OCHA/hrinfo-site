@@ -96,11 +96,6 @@ class RestfulEntityNodeEvents extends \RestfulEntityBaseNode {
       'process_callbacks' => array(array($this, 'getEntity')),
     );
 
-    $public_fields['fundings'] = array(
-      'property' => 'field_fundings',
-      'process_callbacks' => array(array($this, 'getFundings')),
-   );
-
     $public_fields['themes'] = array(
       'property' => 'field_themes',
       'resource' => array(
@@ -185,21 +180,6 @@ class RestfulEntityNodeEvents extends \RestfulEntityBaseNode {
     return $return;
   }
 
-  protected function getFundings($values) {
-    $return = array();
-    if (!empty($values)) {
-      foreach ($values as $value) {
-        $tmp = new stdClass();
-        $tmp->label = $value->title;
-        if (!empty($value->field_appeal_id)) {
-          $tmp->self = 'http://fts.unocha.org/api/v1/Appeal/id/'.$value->field_appeal_id[LANGUAGE_NONE][0]['value'].'.json';
-        }
-        $return[] = $tmp;
-      }
-    }
-    return $return;
-  }
-
   protected function getBodyRaw($value) {
     return strip_tags($value);
   }
@@ -221,5 +201,5 @@ class RestfulEntityNodeEvents extends \RestfulEntityBaseNode {
     unset($value['data']);
     return $value;
   }
-  
+
 }

@@ -5,3 +5,102 @@
  */
 
 include_once 'hr_tools.features.inc';
+
+
+/**
+ * Implements hook_menu().
+ */
+function hr_tools_menu() {
+  $items = array();
+
+  $items['xyzzy/stats/%'] = array(
+    'title' => 'Performance stats',
+    'page callback' => 'hr_tools_performace_stats',
+    'page arguments' => array(2),
+    'access callback' => TRUE,
+    'description' => 'Performance statistics',
+  );
+
+  return $items;
+}
+
+/**
+ * Return performance statistics.
+ *
+ * Call curl http://0.0.0.0:8088/xyzzy/stats/1 | python -m json.tool
+ */
+function hr_tools_performace_stats($param) {
+  // Disable page caching.
+  drupal_page_is_cacheable(FALSE);
+
+  // Time to render a group page.
+  $timer = '0011. Load group 1337 with reset';
+  timer_start($timer);
+  $node = node_load(1337, NULL, TRUE);
+  timer_stop($timer);
+
+  $timer = '0012. Load group 1337 with cache';
+  timer_start($timer);
+  $node = node_load(1337, NULL, FALSE);
+  timer_stop($timer);
+
+  $timer = '0013. Node view group 1337';
+  timer_start($timer);
+  $output = node_view($node);
+  timer_stop($timer);
+
+  // Time to render a node.
+  $timer = '0021. Load node 1138 with reset';
+  timer_start($timer);
+  $node = node_load(1138, NULL, TRUE);
+  timer_stop($timer);
+
+  $timer = '0022. Load node 1138 with cache';
+  timer_start($timer);
+  $node = node_load(1138, NULL, FALSE);
+  timer_stop($timer);
+
+  $timer = '0023. Node view 1138';
+  timer_start($timer);
+  $output = node_view($node);
+  timer_stop($timer);
+
+  $timer = '0022. Save node 1138';
+  $node = node_load(1138, NULL, FALSE);
+  timer_start($timer);
+  node_save($node);
+  timer_stop($timer);
+
+  // Time to render empty page.
+  $timer = '0031. Render empty page';
+  timer_start($timer);
+  $output = drupal_render_page('');
+  timer_stop($timer);
+
+  // Time to query database.
+  $timer = '0041. Query database: first node record';
+  timer_start($timer);
+  db_query('select * from {node} limit 1');
+  timer_stop($timer);
+
+  $timer = '0042. Query database: first document record';
+  timer_start($timer);
+  db_query("select * from {node} where type='hr_document' limit 1");
+  timer_stop($timer);
+
+  $timer = '0042. Query database: first document record ordered';
+  timer_start($timer);
+  db_query("select * from {node} where type='hr_document' order by nid asc limit 1");
+  timer_stop($timer);
+
+  $timer = '0042. Query database: first document record ordered reversed';
+  timer_start($timer);
+  db_query("select * from {node} where type='hr_document' order by nid desc limit 1");
+  timer_stop($timer);
+
+  // Stop drupal page timer.
+  timer_stop('page');
+
+  global $timers;
+  drupal_json_output($timers);
+}
