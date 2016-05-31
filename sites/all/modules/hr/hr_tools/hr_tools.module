@@ -42,27 +42,27 @@ function hr_tools_performace_stats($param) {
   try {
     timer_start($timer);
     $node = node_load(1337, NULL, TRUE);
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   $timer = '0012. Load group 1337 with cache';
   try {
     timer_start($timer);
     $node = node_load(1337, NULL, FALSE);
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   $timer = '0013. Node view group 1337';
   try {
     timer_start($timer);
     $output = node_view($node);
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   // Time to render a node.
@@ -70,27 +70,27 @@ function hr_tools_performace_stats($param) {
   try {
     timer_start($timer);
     $node = node_load(1138, NULL, TRUE);
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   $timer = '0022. Load node 1138 with cache';
   try {
     timer_start($timer);
     $node = node_load(1138, NULL, FALSE);
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   $timer = '0023. Node view 1138';
   try {
     timer_start($timer);
     $output = node_view($node);
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   $timer = '0022. Save node 1138';
@@ -98,9 +98,9 @@ function hr_tools_performace_stats($param) {
     $node = node_load(1138, NULL, FALSE);
     timer_start($timer);
     node_save($node);
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   // Time to render empty page.
@@ -108,9 +108,9 @@ function hr_tools_performace_stats($param) {
   try {
     timer_start($timer);
     $output = drupal_render_page('');
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   // Time to query database.
@@ -118,36 +118,36 @@ function hr_tools_performace_stats($param) {
   try {
     timer_start($timer);
     db_query('select * from {node} limit 1');
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   $timer = '0042. Query database: first document record';
   try {
     timer_start($timer);
     db_query("select * from {node} where type='hr_document' limit 1");
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   $timer = '0042. Query database: first document record ordered';
   try {
     timer_start($timer);
     db_query("select * from {node} where type='hr_document' order by nid asc limit 1");
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   $timer = '0042. Query database: first document record ordered reversed';
   try {
     timer_start($timer);
     db_query("select * from {node} where type='hr_document' order by nid desc limit 1");
+    timer_stop($timer);
   }
   catch (Exception $e) {
-    timer_stop($timer);
   }
 
   // Stop drupal page timer.
@@ -155,7 +155,7 @@ function hr_tools_performace_stats($param) {
 
   global $timers;
   global $hr_tools_external_calls;
-  
+
   drupal_json_output(array(
     'timers' => $timers,
     'external_calls' => $hr_tools_external_calls,
