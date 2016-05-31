@@ -31,8 +31,8 @@ function hr_tools_menu() {
  */
 function hr_tools_performace_stats($param) {
   // Capture external calls.
-  global $drupal_http_request_function;
-  $drupal_http_request_function = 'hr_tools_drupal_http_request';
+  global $conf;
+  $conf['drupal_http_request_function'] = 'hr_tools_drupal_http_request';
 
   $exceptions = array();
 
