@@ -34,6 +34,8 @@ function hr_tools_performace_stats($param) {
   global $drupal_http_request_function;
   $drupal_http_request_function = 'hr_tools_drupal_http_request';
 
+  $exceptions = array();
+
   // Disable page caching.
   drupal_page_is_cacheable(FALSE);
 
@@ -45,6 +47,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   $timer = '0012. Load group 1337 with cache';
@@ -54,6 +57,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   $timer = '0013. Node view group 1337';
@@ -63,6 +67,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   // Time to render a node.
@@ -73,6 +78,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   $timer = '0022. Load node 1138 with cache';
@@ -82,6 +88,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   $timer = '0023. Node view 1138';
@@ -91,6 +98,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   $timer = '0022. Save node 1138';
@@ -101,6 +109,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   // Time to render empty page.
@@ -111,6 +120,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   // Time to query database.
@@ -121,6 +131,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   $timer = '0042. Query database: first document record';
@@ -130,6 +141,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   $timer = '0042. Query database: first document record ordered';
@@ -139,6 +151,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   $timer = '0042. Query database: first document record ordered reversed';
@@ -148,6 +161,7 @@ function hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
+    $exceptions[$timer] = $e->getMessage();
   }
 
   // Stop drupal page timer.
@@ -159,6 +173,7 @@ function hr_tools_performace_stats($param) {
   drupal_json_output(array(
     'timers' => $timers,
     'external_calls' => $hr_tools_external_calls,
+    'exceptions' => $exceptions,
   ));
 }
 
