@@ -42,7 +42,7 @@ function hr_tools_performace_stats($param) {
   drupal_page_is_cacheable(FALSE);
 
   // Time to render a group page.
-  $timer = '0011. Load group 1337 with reset';
+  $timer = '0011 - Load group 1337 with reset';
   try {
     timer_start($timer);
     $node = node_load(1337, NULL, TRUE);
@@ -52,7 +52,7 @@ function hr_tools_performace_stats($param) {
     $exceptions[$timer] = $e->getMessage();
   }
 
-  $timer = '0012. Load group 1337 with cache';
+  $timer = '0012 - Load group 1337 with cache';
   try {
     timer_start($timer);
     $node = node_load(1337, NULL, FALSE);
@@ -62,7 +62,7 @@ function hr_tools_performace_stats($param) {
     $exceptions[$timer] = $e->getMessage();
   }
 
-  $timer = '0013. Node view group 1337';
+  $timer = '0013 - Node view group 1337';
   try {
     timer_start($timer);
     $output = node_view($node);
@@ -73,7 +73,7 @@ function hr_tools_performace_stats($param) {
   }
 
   // Time to render a node.
-  $timer = '0021. Load node 1138 with reset';
+  $timer = '0021 - Load node 1138 with reset';
   try {
     timer_start($timer);
     $node = node_load(1138, NULL, TRUE);
@@ -83,7 +83,7 @@ function hr_tools_performace_stats($param) {
     $exceptions[$timer] = $e->getMessage();
   }
 
-  $timer = '0022. Load node 1138 with cache';
+  $timer = '0022 - Load node 1138 with cache';
   try {
     timer_start($timer);
     $node = node_load(1138, NULL, FALSE);
@@ -93,7 +93,7 @@ function hr_tools_performace_stats($param) {
     $exceptions[$timer] = $e->getMessage();
   }
 
-  $timer = '0023. Node view 1138';
+  $timer = '0023 - Node view 1138';
   try {
     timer_start($timer);
     $output = node_view($node);
@@ -103,7 +103,7 @@ function hr_tools_performace_stats($param) {
     $exceptions[$timer] = $e->getMessage();
   }
 
-  $timer = '0022. Save node 1138';
+  $timer = '0022 - Save node 1138';
   try {
     $node = node_load(1138, NULL, FALSE);
     timer_start($timer);
@@ -115,7 +115,7 @@ function hr_tools_performace_stats($param) {
   }
 
   // Time to render empty page.
-  $timer = '0031. Render empty page';
+  $timer = '0031 - Render empty page';
   try {
     timer_start($timer);
     $output = drupal_render_page('');
@@ -126,7 +126,7 @@ function hr_tools_performace_stats($param) {
   }
 
   // Time to query database.
-  $timer = '0041. Query database: first node record';
+  $timer = '0041 - Query database: first node record';
   try {
     timer_start($timer);
     db_query('select * from {node} limit 1');
@@ -136,7 +136,7 @@ function hr_tools_performace_stats($param) {
     $exceptions[$timer] = $e->getMessage();
   }
 
-  $timer = '0042. Query database: first document record';
+  $timer = '0042 - Query database: first document record';
   try {
     timer_start($timer);
     db_query("select * from {node} where type='hr_document' limit 1");
@@ -146,7 +146,7 @@ function hr_tools_performace_stats($param) {
     $exceptions[$timer] = $e->getMessage();
   }
 
-  $timer = '0042. Query database: first document record ordered';
+  $timer = '0042 - Query database: first document record ordered';
   try {
     timer_start($timer);
     db_query("select * from {node} where type='hr_document' order by nid asc limit 1");
@@ -156,7 +156,7 @@ function hr_tools_performace_stats($param) {
     $exceptions[$timer] = $e->getMessage();
   }
 
-  $timer = '0042. Query database: first document record ordered reversed';
+  $timer = '0042 - Query database: first document record ordered reversed';
   try {
     timer_start($timer);
     db_query("select * from {node} where type='hr_document' order by nid desc limit 1");
@@ -172,7 +172,7 @@ function hr_tools_performace_stats($param) {
   foreach ($content_types as $id => $name) {
     $counter++;
     $prefix = '01' . str_pad($counter, 2, '0', STR_PAD_LEFT);
-    $timer = $prefix . '1. Query database: get 5 random nodes of type ' . $name;
+    $timer = $prefix . '1 - Query database: get 5 random nodes of type ' . $name;
     try {
       timer_start($timer);
       $results = db_query("SELECT nid FROM {node} WHERE type = :type AND status = 1 ORDER BY RANDOM() LIMIT 5", array(
@@ -181,12 +181,12 @@ function hr_tools_performace_stats($param) {
       timer_stop($timer);
 
       foreach ($results as $result) {
-        $timer = $prefix . '2. Load node ' . $result->nid;
+        $timer = $prefix . '2 - Load node ' . $result->nid;
         timer_start($timer);
         $node = node_load($result->nid);
         timer_stop($timer);
 
-        $timer = $prefix . '3. Render node ' . $result->nid;
+        $timer = $prefix . '3 - Render node ' . $result->nid;
         timer_start($timer);
         $output = node_view($node);
         timer_stop($timer);
@@ -218,6 +218,7 @@ function hr_tools_performace_stats($param) {
   }
 
   drupal_json_output(array(
+    'timestamp' => REQUEST_TIME,
     'timers' => $timers,
     'external_calls' => $hr_tools_external_calls,
     'exceptions' => $exceptions,
