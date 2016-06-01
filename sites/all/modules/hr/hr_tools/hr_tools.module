@@ -164,11 +164,56 @@ function hr_tools_performace_stats($param) {
     $exceptions[$timer] = $e->getMessage();
   }
 
+  // Random nodes rendering.
+  $content_types = node_type_get_names();
+  $counter = 0;
+  foreach ($content_types as $id => $name) {
+    $counter++;
+    $prefix = '01' . str_pad($counter, 2, '0', STR_PAD_LEFT);
+    $timer = $prefix . '1. Query database: get 5 random nodes of type ' . $name;
+    try {
+      timer_start($timer);
+      $results = db_query("SELECT nid FROM {node} WHERE type = :type AND status = 1 ORDER BY RANDOM() LIMIT 5", array(
+        ':type' => $id,
+      ));
+      timer_stop($timer);
+
+      foreach ($results as $result) {
+        $timer = $prefix . '2. Load node ' . $result->nid;
+        timer_start($timer);
+        $node = node_load($result->nid);
+        timer_stop($timer);
+
+        $timer = $prefix . '3. Render node ' . $result->nid;
+        timer_start($timer);
+        $output = node_view($node);
+        timer_stop($timer);
+      }
+    }
+    catch (Exception $e) {
+      $exceptions[$timer] = $e->getMessage();
+    }
+
+  }
+
   // Stop drupal page timer.
   timer_stop('page');
 
   global $timers;
   global $hr_tools_external_calls;
+
+  // Remove sensitive data.
+  if ($hr_tools_external_calls) {
+    foreach ($hr_tools_external_calls as $key => $hr_tools_external_call) {
+      if (isset($hr_tools_external_call['options']['headers'])) {
+        unset($hr_tools_external_calls[$key]['options']['headers']);
+      }
+      if (isset($hr_tools_external_call['options']['query']['_access_key'])) {
+        unset($hr_tools_external_calls[$key]['options']['query']['_access_key']);
+        $hr_tools_external_calls[$key]['url'] = substr($hr_tools_external_calls[$key]['url'], 0, strpos($hr_tools_external_calls[$key]['url'], '_access_key'));
+      }
+    }
+  }
 
   drupal_json_output(array(
     'timers' => $timers,
