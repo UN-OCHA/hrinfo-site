@@ -30,16 +30,17 @@ function hr_tools_menu() {
  * Call curl http://0.0.0.0:8088/xyzzy/stats/1 | python -m json.tool
  */
 function hr_tools_performace_stats($param) {
-  $data = _hr_tools_performace_stats($param);
+  $timers = _hr_tools_performace_stats($param);
   $output = array();
 
-  foreach ($data['timers'] as $label => $timer) {
+  foreach ($timers as $label => $timer) {
     $output[] = array(
       'timestamp' => REQUEST_TIME,
       'label' => $label,
       'time' => $timer['time'],
       'type' => $timer['type'],
       'exception' => isset($timer['exception']) ? $timer['exception'] : '',
+      'external_calls' => $timer['external_calls'],
     );
   }
 
@@ -59,6 +60,7 @@ function _hr_tools_performace_stats($param) {
   $conf['drupal_http_request_function'] = 'hr_tools_drupal_http_request';
 
   global $timers;
+  global $hr_tools_external_calls;
 
   $exceptions = array();
 
@@ -67,6 +69,7 @@ function _hr_tools_performace_stats($param) {
 
   // Time to render a group page.
   $timer = '0011 - Load group 1337 with reset';
+  $hr_tools_external_calls = array();
   try {
     timer_start($timer);
     $timers[$timer]['type'] = 'Load node reset';
@@ -76,8 +79,10 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
   $timer = '0012 - Load group 1337 with cache';
+  $hr_tools_external_calls = array();
   try {
     timer_start($timer);
     $timers[$timer]['type'] = 'Load node';
@@ -87,8 +92,10 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
   $timer = '0013 - Node view group 1337';
+  $hr_tools_external_calls = array();
   try {
     timer_start($timer);
     $timers[$timer]['type'] = 'View node';
@@ -98,9 +105,11 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-
   // Time to render a node.
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+
   $timer = '0021 - Load node 1138 with reset';
+  $hr_tools_external_calls = array();
   try {
     timer_start($timer);
     $timers[$timer]['type'] = 'Load node reset';
@@ -110,8 +119,10 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
   $timer = '0022 - Load node 1138 with cache';
+  $hr_tools_external_calls = array();
   try {
     timer_start($timer);
     $timers[$timer]['type'] = 'Load node';
@@ -121,8 +132,10 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
   $timer = '0023 - Node view 1138';
+  $hr_tools_external_calls = array();
   try {
     timer_start($timer);
     $timers[$timer]['type'] = 'View node';
@@ -132,8 +145,10 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
   $timer = '0022 - Save node 1138';
+  $hr_tools_external_calls = array();
   try {
     $node = node_load(1138, NULL, FALSE);
     timer_start($timer);
@@ -144,9 +159,11 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
   // Time to render empty page.
   $timer = '0031 - Render empty page';
+  $hr_tools_external_calls = array();
   try {
     timer_start($timer);
     $timers[$timer]['type'] = 'Render page';
@@ -156,9 +173,11 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
   // Time to query database.
   $timer = '0041 - Query database: first node record';
+  $hr_tools_external_calls = array();
   try {
     timer_start($timer);
     $timers[$timer]['type'] = 'Database';
@@ -168,8 +187,10 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
   $timer = '0042 - Query database: first document record';
+  $hr_tools_external_calls = array();
   try {
     timer_start($timer);
     $timers[$timer]['type'] = 'Database';
@@ -179,8 +200,10 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
   $timer = '0042 - Query database: first document record ordered';
+  $hr_tools_external_calls = array();
   try {
     timer_start($timer);
     $timers[$timer]['type'] = 'Database';
@@ -190,8 +213,10 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
   $timer = '0042 - Query database: first document record ordered reversed';
+  $hr_tools_external_calls = array();
   try {
     timer_start($timer);
     $timers[$timer]['type'] = 'Database';
@@ -201,6 +226,7 @@ function _hr_tools_performace_stats($param) {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
+  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
   // Random nodes rendering.
   $content_types = node_type_get_names();
@@ -209,6 +235,7 @@ function _hr_tools_performace_stats($param) {
     $counter++;
     $prefix = '01' . str_pad($counter, 2, '0', STR_PAD_LEFT);
     $timer = $prefix . '1 - Query database: get 5 random nodes of type ' . $name;
+    $hr_tools_external_calls = array();
     try {
       timer_start($timer);
       $timers[$timer]['type'] = 'Database';
@@ -219,16 +246,20 @@ function _hr_tools_performace_stats($param) {
 
       foreach ($results as $result) {
         $timer = $prefix . '2 - Load node ' . $result->nid;
+        $hr_tools_external_calls = array();
         timer_start($timer);
         $timers[$timer]['type'] = 'Load node';
         $node = node_load($result->nid);
         timer_stop($timer);
+        $timers[$timer]['external_calls'] = $hr_tools_external_calls;
 
         $timer = $prefix . '3 - Render node ' . $result->nid;
+        $hr_tools_external_calls = array();
         timer_start($timer);
         $timers[$timer]['type'] = 'View node';
         $output = node_view($node);
         timer_stop($timer);
+        $timers[$timer]['external_calls'] = $hr_tools_external_calls;
       }
     }
     catch (Exception $e) {
@@ -240,27 +271,21 @@ function _hr_tools_performace_stats($param) {
   // Stop drupal page timer.
   timer_stop('page');
 
-  global $hr_tools_external_calls;
 
   // Remove sensitive data.
-  if ($hr_tools_external_calls) {
-    foreach ($hr_tools_external_calls as $key => $hr_tools_external_call) {
-      if (isset($hr_tools_external_call['options']['headers'])) {
-        unset($hr_tools_external_calls[$key]['options']['headers']);
+  foreach ($timers as $key => $timer) {
+    foreach ($timers[$key]['external_calls'] as $key2 => $call) {
+      if (isset($timers[$key]['external_calls'][$key2]['options']['headers'])) {
+        unset($timers[$key]['external_calls'][$key2]['options']['headers']);
       }
-      if (isset($hr_tools_external_call['options']['query']['_access_key'])) {
-        unset($hr_tools_external_calls[$key]['options']['query']['_access_key']);
-        $hr_tools_external_calls[$key]['url'] = substr($hr_tools_external_calls[$key]['url'], 0, strpos($hr_tools_external_calls[$key]['url'], '_access_key'));
+      if (isset($timers[$key]['external_calls'][$key2]['options']['query']['_access_key'])) {
+        unset($timers[$key]['external_calls'][$key2]['options']['query']['_access_key']);
+        $timers[$key]['external_calls'][$key2]['url'] = substr($timers[$key]['external_calls'][$key2]['url'], 0, strpos($timers[$key]['external_calls'][$key2]['url'], '_access_key'));
       }
     }
   }
 
-  return array(
-    'timestamp' => REQUEST_TIME,
-    'timers' => $timers,
-    'external_calls' => $hr_tools_external_calls,
-    'exceptions' => $exceptions,
-  );
+  return $timers;
 }
 
 function hr_tools_drupal_http_request($url, array $options = array()) {
