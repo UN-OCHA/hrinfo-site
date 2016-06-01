@@ -39,6 +39,7 @@ function hr_tools_performace_stats($param) {
       'label' => $label,
       'time' => $timer['time'],
       'type' => $timer['type'],
+      'exception' => isset($timer['exception']) ? $timer['exception'] : '',
     );
   }
 
@@ -73,7 +74,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   $timer = '0012 - Load group 1337 with cache';
@@ -84,7 +85,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   $timer = '0013 - Node view group 1337';
@@ -95,7 +96,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   // Time to render a node.
@@ -107,7 +108,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   $timer = '0022 - Load node 1138 with cache';
@@ -118,7 +119,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   $timer = '0023 - Node view 1138';
@@ -129,7 +130,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   $timer = '0022 - Save node 1138';
@@ -141,7 +142,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   // Time to render empty page.
@@ -153,7 +154,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   // Time to query database.
@@ -165,7 +166,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   $timer = '0042 - Query database: first document record';
@@ -176,7 +177,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   $timer = '0042 - Query database: first document record ordered';
@@ -187,7 +188,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   $timer = '0042 - Query database: first document record ordered reversed';
@@ -198,7 +199,7 @@ function _hr_tools_performace_stats($param) {
     timer_stop($timer);
   }
   catch (Exception $e) {
-    $exceptions[$timer] = $e->getMessage();
+    $timers[$timer]['exception'] = $e->getMessage();
   }
 
   // Random nodes rendering.
@@ -231,7 +232,7 @@ function _hr_tools_performace_stats($param) {
       }
     }
     catch (Exception $e) {
-      $exceptions[$timer] = $e->getMessage();
+      $timers[$timer]['exception'] = $e->getMessage();
     }
 
   }
