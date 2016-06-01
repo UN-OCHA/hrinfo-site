@@ -34,13 +34,23 @@ function hr_tools_performace_stats($param) {
   $output = array();
 
   foreach ($timers as $label => $timer) {
+    $external_calls = array();
+    foreach ($timer['external_calls'] as $call) {
+      $external_calls[] = array(
+        'url' => $call['url'],
+        'caller' => $call['caller'],
+        'time' => $call['timing']['time'],
+      );
+    }
+
     $output[] = array(
       'timestamp' => REQUEST_TIME,
       'label' => $label,
       'time' => $timer['time'],
       'type' => $timer['type'],
       'exception' => isset($timer['exception']) ? $timer['exception'] : '',
-      'external_calls' => $timer['external_calls'],
+      'external_calls' => $external_calls,
+      'external_calls_debug' => $timer['external_calls'],
     );
   }
 
@@ -290,9 +300,12 @@ function _hr_tools_performace_stats($param) {
 
 function hr_tools_drupal_http_request($url, array $options = array()) {
   global $hr_tools_external_calls;
+  $caller = debug_backtrace();
+
   $hr_tools_external_calls[] = array(
     'url' => $url,
     'options' => $options,
+    'caller' => $caller[2]['function'],
   );
 
   $result = new stdClass();
