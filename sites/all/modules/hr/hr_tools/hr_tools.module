@@ -485,5 +485,9 @@ function hr_tools_drupal_http_request($url, array $options = array()) {
       $result->error = $result->status_message;
   }
 
+  $last = array_pop($hr_tools_external_calls);
+  $last['timing'] = timer_stop(__FUNCTION__);
+  $hr_tools_external_calls[] = $last;
+
   return $result;
 }
