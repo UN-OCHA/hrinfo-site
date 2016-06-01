@@ -30,6 +30,8 @@ function hr_tools_menu() {
  * Call curl http://0.0.0.0:8088/xyzzy/stats/1 | python -m json.tool
  */
 function hr_tools_performace_stats($param) {
+  drupal_set_time_limit(300);
+
   // Capture external calls.
   global $conf;
   $conf['drupal_http_request_function'] = 'hr_tools_drupal_http_request';
