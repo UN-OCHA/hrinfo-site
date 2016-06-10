@@ -123,26 +123,35 @@ function hid_organizations_autocomplete($org_names, $extended = FALSE) {
 
   if (!empty($organizations) && $terms = entity_load('taxonomy_term', array_keys($organizations))) {
     foreach ($terms as $term) {
-      $term_wrapper = entity_metadata_wrapper('taxonomy_term', $term);
-      $key = 'hrinfo_org_' . $term->tid;
-      $display_name = $term->name;
-      $acronym = $term_wrapper->field_acronym->value();
-      if (!empty($acronym)) {
-        $display_name .= ' (' . $acronym . ')';
-      }
+      if (isset($term->tid) && $term_wrapper = entity_metadata_wrapper('taxonomy_term', $term)) {
+        $key = 'hrinfo_org_' . $term->tid;
+        $display_name = $term->name;
+        $acronym = $term_wrapper->field_acronym->value();
+        if (!empty($acronym)) {
+          $display_name .= ' (' . $acronym . ')';
+        }
 
-      // If the request was simple, we return just the term name and the
-      // acronym, whereas for extended requests, the return array includes more
-      // data about the organization.
-      if (!$extended) {
-        $matches[$key] = $display_name;
-      }
-      else {
-        $matches[$key] = array(
-          'name' => $display_name,
-          'org_type_id' => 'hrinfo_org_type_' . $term_wrapper->field_organization_type->tid->value(),
-          'org_type_name' => $term_wrapper->field_organization_type->name->value(),
-        );
+        // If the request was simple, we return just the term name and the
+        // acronym, whereas for extended requests, the return array includes more
+        // data about the organization.
+        if (!$extended) {
+          $matches[$key] = $display_name;
+        }
+        else {
+          $org = $term_wrapper->field_organization_type->value();
+          if ($org) {
+            $matches[$key] = array(
+              'name' => $display_name,
+              'org_type_id' => 'hrinfo_org_type_' . $term_wrapper->field_organization_type->tid->value(),
+              'org_type_name' => $term_wrapper->field_organization_type->name->value(),
+            );
+          }
+          $matches[$key] = array(
+            'name' => $display_name,
+            'org_type_id' => '',
+            'org_type_name' => '',
+          );
+        }
       }
     }
   }
