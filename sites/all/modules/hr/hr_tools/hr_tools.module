@@ -108,6 +108,10 @@ function _hr_tools_performace_stats($set, $param) {
       _hr_tools_performace_stats_set6();
       break;
 
+    case '7':
+      _hr_tools_performace_stats_set7();
+      break;
+
     default:
       # code...
       break;
@@ -537,6 +541,7 @@ function _hr_tools_queries_get($name = 'hr_tools') {
         }
       }
       $output[] = array(
+        'sqlraw' => $query['query'],
         'sql' => strtr($query['query'], $quoted),
         'speed' => $speed,
         'caller' => $function,
