@@ -34,7 +34,7 @@ function panels_content_cache_requirements($phase) {
                 'severity' => REQUIREMENT_WARNING,
                 'title' => 'Panels Content Cache',
                 'value' => $t('Installing the <a href="@url">Cache Consistency</a> module is recommended.', array('@url' => 'https://www.drupal.org/project/cache_consistent')),
-                'description' => $t('There is <a href="@bug">a bug in Drupal core</a> that results in race conditions when not using the database as the primary cache. To work around this issue, it is recommended to install the <a href="@c">Cache Consistency</a> module until the core bug is fixed.', array('@bug' => 'https://www.drupal.org/node/1679344', '@cc' => 'https://www.drupal.org/project/cache_consistent')),
+                'description' => $t('There is <a href="@bug">a bug in Drupal core</a> that results in race conditions when not using the database as the primary cache. To work around this issue, it is recommended to install the <a href="@cc">Cache Consistency</a> module until the core bug is fixed.', array('@bug' => 'https://www.drupal.org/node/1679344', '@cc' => 'https://www.drupal.org/project/cache_consistent')),
               );
               continue;
             }

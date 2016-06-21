@@ -170,13 +170,15 @@ function panels_content_cache_types_set() {
 function panels_content_cache_save($content_cache = array()) {
   if (!empty($content_cache)) {
     foreach ($content_cache as $display) {
-      $types = array_filter($display->cache['settings']['content_types']);
-      foreach ($types as $type) {
-        $row = new stdClass();
-        $row->did = $display->did;
-        $row->type = $type;
-        $row->pid = isset($display->pid) ? $display->pid : NULL;
-        drupal_write_record('panels_content_cache', $row);
+      if (!empty($display->cache['settings']['content_types'])) {
+        $types = array_filter($display->cache['settings']['content_types']);
+        foreach ($types as $type) {
+          $row = new stdClass();
+          $row->did = $display->did;
+          $row->type = $type;
+          $row->pid = isset($display->pid) ? $display->pid : NULL;
+          drupal_write_record('panels_content_cache', $row);
+        }
       }
     }
   }
@@ -205,7 +207,9 @@ function panels_content_cache_node_clear_cache($node) {
     if (!empty($results)) {
       foreach ($results as $row) {
         $display = panels_load_display($row->did);
-        panels_content_cache_clear_cache($display);
+        if (is_object($display)) {
+          panels_content_cache_clear_cache($display);
+        }
       }
     }
   }
