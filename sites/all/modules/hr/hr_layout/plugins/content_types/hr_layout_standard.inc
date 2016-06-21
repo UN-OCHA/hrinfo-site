@@ -334,7 +334,7 @@ function _hr_layout_get_list_item($node, $term, $type, $prefix, $initial_state =
   $out = array();
   $file = _hr_layout_get_pdfpreview($node);
   if ($file) {
-    $image = theme_image_style(array('style_name' => 'medium', 'path' => $file, 'alt' => $node->title, 'title' => $node->title, 'attributes' => array('class' => array('img-responsive'))));
+    $image = theme_image_style(array('style_name' => 'medium', 'path' => $file, 'alt' => $node->title, 'title' => $node->title, 'attributes' => array('class' => array('img-responsive')), 'width' => NULL, 'height' => NULL));
     $img_link = l($image, 'node/'.$node->nid, array('html' => TRUE));
     $more_link = '';
     if (!empty($see_more_link)) {

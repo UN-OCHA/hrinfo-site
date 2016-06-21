@@ -143,7 +143,7 @@ function hr_events_views_pre_view(&$view, &$display_id, &$args) {
     $filters = $view->display_handler->get_option('filters');
     $i = 0;
     foreach ($filters as $key => $filter) {
-      if ($filter['exposed'] == TRUE && isset($_GET[$key]) && $_GET[$key] != 'All') {
+      if (isset($filter['exposed']) && $filter['exposed'] == TRUE && isset($_GET[$key]) && $_GET[$key] != 'All') {
         if ($i == 0) {
           $header .= '<div class="filters">'.t('Filter criteria');
         }
