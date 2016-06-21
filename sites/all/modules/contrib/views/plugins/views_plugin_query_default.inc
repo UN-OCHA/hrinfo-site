@@ -143,7 +143,7 @@ class views_plugin_query_default extends views_plugin_query {
     );
 
 /**
- * -- we no longer want the base field to appear automatigically.
+ * -- we no longer want the base field to appear automatically.
     if ($base_field) {
       $this->fields[$base_field] = array(
         'table' => $base_table,
@@ -888,7 +888,7 @@ class views_plugin_query_default extends views_plugin_query {
   /**
    * Add a complex WHERE clause to the query.
    *
-   * The caller is reponsible for ensuring that all fields are fully qualified
+   * The caller is responsible for ensuring that all fields are fully qualified
    * (TABLE.FIELD) and that the table already exists in the query.
    * Internally the dbtng method "where" is used.
    *
@@ -1205,9 +1205,7 @@ class views_plugin_query_default extends views_plugin_query {
       }
       // This is a formula, using no tables.
       elseif (empty($field['table'])) {
-        if (!in_array($fieldname, $non_aggregates)) {
-          $non_aggregates[] = $fieldname;
-        }
+        $non_aggregates[] = $fieldname;
         $placeholders = !empty($field['placeholders']) ? $field['placeholders'] : array();
         $query->addExpression($string, $fieldname, $placeholders);
       }
@@ -1215,15 +1213,10 @@ class views_plugin_query_default extends views_plugin_query {
       elseif ($this->distinct && !in_array($fieldname, $this->groupby)) {
         // d7cx: This code was there, apparently needed for PostgreSQL
         // $string = db_driver() == 'pgsql' ? "FIRST($string)" : $string;
-        if (!in_array($string, $non_aggregates)) {
-          $non_aggregates[] = $string;
-        }
         $query->addField(!empty($field['table']) ? $field['table'] : $this->base_table, $field['field'], $fieldname);
       }
       elseif (empty($field['aggregate'])) {
-        if (!in_array($string, $non_aggregates)) {
-          $non_aggregates[] = $string;
-        }
+        $non_aggregates[] = $fieldname;
         $query->addField(!empty($field['table']) ? $field['table'] : $this->base_table, $field['field'], $fieldname);
       }
 
@@ -1255,7 +1248,7 @@ class views_plugin_query_default extends views_plugin_query {
   function query($get_count = FALSE) {
     // Check query distinct value.
     if (empty($this->no_distinct) && $this->distinct && !empty($this->fields)) {
-      if ($this->pure_distinct === FALSE) {
+      if ($this->pure_distinct === FALSE){
         $base_field_alias = $this->add_field($this->base_table, $this->base_field);
         $this->add_groupby($base_field_alias);
       }
@@ -1599,7 +1592,7 @@ class views_plugin_query_default extends views_plugin_query {
           'sort' => 'views_handler_sort_group_by_numeric',
         ),
       )
-    );
+    ) + views_fetch_plugin_data('query_aggregate');
   }
 
   /**
@@ -1627,7 +1620,8 @@ class views_plugin_query_default extends views_plugin_query {
     }
     $entity_type = $table_data['table']['entity type'];
     $info = entity_get_info($entity_type);
-    $id_alias = $this->get_field_alias($base_table_alias, $info['entity keys']['id']);
+    $is_revision = !empty($table_data['table']['revision']);
+    $id_alias = $this->get_field_alias($base_table_alias, $info['entity keys'][$is_revision ? 'revision' : 'id']);
 
     // Assemble the ids of the entities to load.
     $ids = array();
@@ -1637,12 +1631,34 @@ class views_plugin_query_default extends views_plugin_query {
       }
     }
 
-    $entities = entity_load($entity_type, $ids);
-    // Re-key the array by row-index.
-    $result = array();
-    foreach ($ids as $key => $id) {
-      $result[$key] = isset($entities[$id]) ? $entities[$id] : FALSE;
+    if (!$is_revision) {
+      $entities = entity_load($entity_type, $ids);
+
+      // Re-key the array by row-index.
+      $result = array();
+      foreach ($ids as $key => $id) {
+        $result[$key] = isset($entities[$id]) ? $entities[$id] : FALSE;
+      }
     }
+    else {
+      // There's no way in core to load revisions in bulk.
+      $result = array();
+      foreach ($ids as $key => $id) {
+        // Nodes can be dealt with in core.
+        if ($entity_type == 'node') {
+          $result[$key] = node_load(NULL, $id);
+        }
+        // Otherwise see if entity is enabled.
+        elseif (module_exists('entity')) {
+          $result[$key] = entity_revision_load($entity_type, $id);
+        }
+        else {
+          // Otherwise this isn't supported.
+          watchdog('views', 'Attempt to load a revision on an unsupported entity type @entity_type.', array('@entity_type' => $entity_type), WATCHDOG_WARNING);
+        }
+      }
+    }
+
     return array($entity_type, $result);
   }
 }

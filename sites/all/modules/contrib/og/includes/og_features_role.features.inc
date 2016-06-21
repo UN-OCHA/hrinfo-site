@@ -10,7 +10,7 @@
 function og_features_role_features_export($data, &$export, $module_name = '') {
   $export['dependencies']['features'] = 'features';
   $export['dependencies']['og'] = 'og';
-  $map = features_get_default_map('og_features_role');
+  $map = features_get_default_map('og_default_roles');
   $og_roles = array(
     OG_ANONYMOUS_ROLE,
     OG_AUTHENTICATED_ROLE,
@@ -28,20 +28,13 @@ function og_features_role_features_export($data, &$export, $module_name = '') {
       }
     }
     else {
-      // Make sure the role hasn't already been exported in another module
-      if (in_array($value, array_keys($map)) && $map[$value] != $module_name) {
-        $export['dependencies'][$map[$value]] = $map[$value];
-      }
-      else {
-        // Add the role to the export since its not provided by a module.
-        $export['features']['og_features_role'][$value] = $value;
-      }
+      // Add the role to the export since its not provided by a module.
+      $export['features']['og_features_role'][$value] = $value;
     }
   }
 
   return array();
 }
-
 
 /**
  * Implements hook_features_export_options().
@@ -76,19 +69,17 @@ function og_features_role_features_export_render($module, $data) {
 
   foreach ($data as $name) {
     list($group_type, $bundle, $rolename) = explode(':', $name);
-    if (_og_features_role_exists($rolename, $group_type, $bundle) !== FALSE) {
-      $role = array(
-        'gid' => 0,
-        'group_type' => $group_type,
-        'group_bundle' => $bundle,
-        'name' => $rolename,
-      );
-      $role_identifier = features_var_export($name);
-      $role_export = features_var_export($role, '  ');
-      $code[] = "  // Exported OG Role: {$role_identifier}.";
-      $code[] = "  \$roles[{$role_identifier}] = ${role_export};";
-      $code[] = "";
-    }
+    $role = array(
+      'gid' => 0,
+      'group_type' => $group_type,
+      'group_bundle' => $bundle,
+      'name' => $rolename,
+    );
+    $role_identifier = features_var_export($name);
+    $role_export = features_var_export($role, '  ');
+    $code[] = "  // Exported OG Role: {$role_identifier}.";
+    $code[] = "  \$roles[{$role_identifier}] = ${role_export};";
+    $code[] = "";
   }
 
   $code[] = '  return $roles;';

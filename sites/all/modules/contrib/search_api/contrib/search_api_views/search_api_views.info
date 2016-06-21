@@ -25,12 +25,11 @@ files[] = includes/handler_filter_text.inc
 files[] = includes/handler_filter_user.inc
 files[] = includes/handler_sort.inc
 files[] = includes/plugin_cache.inc
-files[] = includes/plugin_content_cache.inc
 files[] = includes/query.inc
 
-; Information added by Drupal.org packaging script on 2015-06-03
-version = "7.x-1.15"
+; Information added by Drupal.org packaging script on 2016-04-20
+version = "7.x-1.18"
 core = "7.x"
 project = "search_api"
-datestamp = "1433352300"
+datestamp = "1461155351"
 
