@@ -132,26 +132,24 @@
         <div class="column"><a href="http://fts.unocha.org" target="_blank"><div class="footer-logo footer-logos-fts"></div></a></div>
         <div class="column"><a href="http://www.irinnews.org" target="_blank"><div class="footer-logo footer-logos-irin"></div></a></div>
         <div class="column"><a href="http://www.gdacs.org" target="_blank"><div class="footer-logo footer-logos-gdacs"></div></a></div>
-        <div class="column"><a href="<?php print variable_get('humdata_base_url', 'https://data.humdata.org'); ?>" target="_blank"><div class="footer-logo footer-logos-hdx"></div></a></div>
       </div>
 
       <div class="col-md-3">
         <div class="column"><a href="http://www.unocha.org/cerf/" target="_blank"><div class="footer-logo footer-logos-cerf"></div></a></div>
-        <div class="column"><a href="http://www.unocha.org/cap/" target="_blank"><div class="footer-logo footer-logos-cap"></div></a></div>
         <div class="column"><a href="http://www.reliefweb.int/" target="_blank"><div class="footer-logo footer-logos-reliefweb"></div></a></div>
         <div class="column"><a href="http://www.insarag.org/" target="_blank"><div class="footer-logo footer-logos-insarag"></div></a></div>
       </div>
 
       <div class="col-md-3">
-        <div class="column"><a href="http://www.humanitarianinfo.org/iasc/" target="_blank"><div class="footer-logo footer-logos-iasc"></div></a></div>
+        <div class="column"><a href="https://interagencystandingcommittee.org/" target="_blank"><div class="footer-logo footer-logos-iasc"></div></a></div>
         <div class="column"><a href="http://www.redhum.org" target="_blank"><div class="footer-logo footer-logos-redhum"></div></a></div>
         <div class="column"><a href="http://www.preventionweb.net/" target="_blank"><div class="footer-logo footer-logos-pw"></div></a></div>
       </div>
 
       <div class="col-md-3">
-        <div class="column"><a href="http://www.hewsweb.org" target="_blank"><div class="footer-logo footer-logos-hews"></div></a></div>
+        <div class="column"><a href="<?php print variable_get('humdata_base_url', 'https://data.humdata.org'); ?>" target="_blank"><div class="footer-logo footer-logos-hdx"></div></a></div>
         <div class="column"><a href="http://vosocc.unocha.org" target="_blank"><div class="footer-logo footer-logos-vosocc"></div></a></div>
-	<div class="column"><a href="http://www.worldhumanitariansummit.org" target="_blank"><div class="footer-logo footer-logos-whs"></div></a></div>
+        <div class="column"><a href="http://www.worldhumanitariansummit.org" target="_blank"><div class="footer-logo footer-logos-whs"></div></a></div>
       </div>
     </div>
     <div id = "footer-third" class="col-md-3">
