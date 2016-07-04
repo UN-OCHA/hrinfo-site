@@ -25,6 +25,36 @@ function radix_form($variables) {
 }
 
 /**
+ * Implements theme_container().
+ */
+function radix_container($variables) {
+  $element = $variables['element'];
+  // Ensure an array is always passed to drupal_attributes().
+  $element['#attributes'] = is_array($element['#attributes']) ? $element['#attributes'] : array();
+
+  // Special handling for form elements.
+  if (isset($element['#array_parents'])) {
+    // Assign an html ID.
+    if (!isset($element['#attributes']['id'])) {
+      $element['#attributes']['id'] = $element['#id'];
+    }
+
+    // Remove any set form-control class at this point.
+    // Not needed for form-wrappers.
+    if (!empty($element['#attributes']['class'])) {
+      if (($key = array_search('form-control', $element['#attributes']['class'])) !== false) {
+        unset($element['#attributes']['class'][$key]);
+      }
+    }
+
+    // Add the 'form-wrapper' class.
+    $element['#attributes']['class'][] = 'form-wrapper';
+  }
+
+  return '<div' . drupal_attributes($element['#attributes']) . '>' . $element['#children'] . '</div>';
+}
+
+/**
  * Implements hook_element_info_alter().
  */
 function radix_element_info_alter(&$elements) {
@@ -72,10 +102,21 @@ function _radix_process_input(&$element, &$form_state) {
     'searchfield',
     'telfield',
     'urlfield',
+    'email',
+    'webform_email',
+    'webform_number',
+    'number',
   );
-  if (!empty($element['#type']) && (in_array($element['#type'], $types))) {
+
+  // Skip elements with these #theme key.
+  $skip_themes = array(
+    'select_as_checkboxes',
+  );
+
+  if (!empty($element['#type']) && in_array($element['#type'], $types) && (empty($element['#theme']) || (!empty($element['#theme']) && !in_array($element['#theme'], $skip_themes)))) {
     $element['#attributes']['class'][] = 'form-control';
   }
+
   return $element;
 }
 
@@ -150,26 +191,47 @@ function radix_form_element($variables) {
   $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . $element['#field_suffix'] . '</span>' : '';
 
   switch ($element['#title_display']) {
-    case 'before':
     case 'invisible':
+      if ($is_radio || $is_checkbox) {
+        // render the normal invisible label for screen readers
+        $output .= ' ' . theme('form_element_label', $variables);
+        // but still ensure checkbox is wrapped in an empty label
+        $element['#title_display'] = 'before';
+        $element['#title'] = '';
+        $output .= ' ' . $prefix . theme('form_element_label', $variables) . $suffix . "\n";
+      }
+      else {
+        $output .= ' ' . theme('form_element_label', $variables);
+        $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      }
+      break;
+
+    case 'before':
       $output .= ' ' . theme('form_element_label', $variables);
       $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
 
     case 'after':
       if ($is_radio || $is_checkbox) {
-        $output .= ' ' . $prefix . theme('form_element_label', $variables) . $suffix;
+        $output .= ' ' . $prefix . theme('form_element_label', $variables) . $suffix . "\n";
       }
       else {
-        $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
+        $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
         $output .= ' ' . theme('form_element_label', $variables) . "\n";
       }
       break;
 
     case 'none':
     case 'attribute':
-      // Output no label and no required marker, only the children.
-      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      if ($is_radio || $is_checkbox) {
+        // ensure checkboxes still wrapped in a label
+        $element['#title_display'] = 'before';
+        $output .= ' ' . $prefix . theme('form_element_label', $variables) . $suffix;
+      }
+      else {
+        // Output no label and no required marker, only the children.
+        $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      }
       break;
   }
 
@@ -201,7 +263,7 @@ function radix_form_element_label($variables) {
   // If the element is required, a required marker is appended to the label.
   $required = !empty($element['#required']) ? theme('form_required_marker', array('element' => $element)) : '';
 
-  $title = filter_xss_admin($element['#title']);
+  $title = !empty($element['#title']) ? filter_xss_admin($element['#title']) : '';
 
   $attributes = array();
   // Style the label as class option to display inline with the element.
@@ -219,7 +281,7 @@ function radix_form_element_label($variables) {
 
   // Radio and checkboxes goes inside label.
   $output = '';
-  if ($is_radio_or_checkbox && isset($element['#children'])) {
+  if ($is_radio_or_checkbox && isset($element['#children']) && ($element['#title_display'] != 'invisible')) {
     $output .= $element['#children'];
   }
 
@@ -248,6 +310,14 @@ function radix_button($variables) {
   // Add a btn-primary class if submit button.
   if (isset($element['#parents']) && ($element['#parents'][0] == 'submit')) {
     $element['#attributes']['class'][] = 'btn-primary';
+  }
+
+  if (!empty($element['#button_icon'])) {
+    $value  = theme('radix_icon', array('icon' => $element['#button_icon']));
+    $value .= ' ';
+    $value .= '<span class="button-text">' . check_plain($element['#value']) . '</span>';
+
+    return '<button' . drupal_attributes($element['#attributes']) . '>' . $value . '</button>';
   }
 
   return '<input' . drupal_attributes($element['#attributes']) . ' />';
@@ -289,7 +359,7 @@ function radix_fieldset($variables) {
   if (!empty($element['#description'])) {
     $output .= '<p class="help-block">' . $element['#description'] . '</p>';
   }
-  $output .= $element['#children'];
+  $output .= render($element['#children']);
   if (isset($element['#value'])) {
     $output .= $element['#value'];
   }

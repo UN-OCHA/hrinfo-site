@@ -221,14 +221,20 @@ function chr_curl_http_request($url, array $options = array()) {
   // Parse response headers from the response body.
   // Be tolerant of malformed HTTP responses that separate header and body with
   // \n\n or \r\r instead of \r\n\r\n.
-  list($response, $result->data) = preg_split("/\r\n\r\n|\n\n|\r\r/", $result->data, 2);
+  $matches = preg_split("/\r\n\r\n|\n\n|\r\r/", $result->data, 2);
+  $response = isset($matches[0]) ? $matches[0] : NULL;
+  // Sometimes there isn't payload e.g. when a HEAD request is sent.
+  $result->data = isset($matches[1]) ? $matches[1] : NULL;
 
   // Sometimes when making an HTTP request via proxy using cURL, you end up with a multiple set of headers:
   // from the web server being the actual target, from the proxy itself, etc.
   // The following 'if' statement is to check for such a situation and make sure we get a proper split between
   // actual response body and actual response headers both coming from the web server.
   while ('HTTP/' == substr($result->data, 0, 5)) {
-    list($response, $result->data) = preg_split("/\r\n\r\n|\n\n|\r\r/", $result->data, 2);
+    $matches = preg_split("/\r\n\r\n|\n\n|\r\r/", $result->data, 2);
+    $response = isset($matches[0]) ? $matches[0] : NULL;
+    // Sometimes there isn't payload e.g. when a HEAD request is sent.
+    $result->data = isset($matches[1]) ? $matches[1] : NULL;
   }
 
   $response = preg_split("/\r\n|\n|\r/", $response);
@@ -279,7 +285,7 @@ function chr_curl_http_request($url, array $options = array()) {
       elseif ($options['max_redirects']) {
         // Redirect to the new location.
         $options['max_redirects']--;
-        $result = curl_http_request($location, $options);
+        $result = chr_curl_http_request($location, $options);
         $result->redirect_code = $code;
       }
       if (!isset($result->redirect_url)) {
@@ -518,18 +524,18 @@ function _chr_curl_set_cookie_settings(&$options, &$ch) {
  *  The proxy setting variable to retrieve.
  */
 function _chr_get_proxy_variable($proxy) {
-  // Attempt to retrieve $proxy_var, which could either 
+  // Attempt to retrieve $proxy_var, which could either
   // be 'http_proxy' or 'https_proxy'.
   $proxy_var = variable_get($proxy);
 
-  // If the requested $proxy_var hasn't been found, 
+  // If the requested $proxy_var hasn't been found,
   // let's try and work it out based on other variables.
   if (empty($proxy_var)) {
     switch ($proxy) {
       // Let's always assume to fall back on the HTTP proxy settings whenever
-      // HTTPS proxy settings are not found. 
+      // HTTPS proxy settings are not found.
       case 'https_proxy': {
-        // The first attempt is to see if the CHR-specific HTTP settings have 
+        // The first attempt is to see if the CHR-specific HTTP settings have
         // been set. If so, let's just use that to for 'https_proxy'.
         if ($proxy_var = variable_get('http_proxy')) {
           break;
@@ -560,6 +566,17 @@ function _chr_get_proxy_variable($proxy) {
         break;
       }
     }
+  }
+  $drupal_proxy_server = variable_get('proxy_server');
+  if (empty($proxy_var) and isset($drupal_proxy_server)) {
+    $proxy_var = array(
+      'server'     => $drupal_proxy_server,
+      'port'       => variable_get('proxy_port'),
+      'username'   => variable_get('proxy_username'),
+      'password'   => variable_get('proxy_password'),
+      'exceptions' => variable_get('proxy_exceptions'),
+    );
+    $proxy_var = array_filter($proxy_var);
   }
   // If a server wasn't set, $proxy_var remains NULL.
   // Either way, return $proxy_var.

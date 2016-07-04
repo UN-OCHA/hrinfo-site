@@ -66,6 +66,22 @@ function advagg_bundler_admin_settings_form() {
     ),
   );
 
+  $form['advagg_bundler_grouping_logic'] = array(
+    '#type' => 'radios',
+    '#title' => t('Grouping logic'),
+    '#default_value' => variable_get('advagg_bundler_grouping_logic', ADVAGG_BUNDLER_GROUPING_LOGIC),
+    '#options' => array(
+      0 => t('File count'),
+      1 => t('File size'),
+    ),
+    '#description' => t('If file count is selected then each bundle will try to have a similar number of original files aggregated inside of it. If file size is selected then each bundle will try to have a similar file size.'),
+    '#states' => array(
+      'disabled' => array(
+        '#edit-advagg-bundler-active' => array('checked' => FALSE),
+      ),
+    ),
+  );
+
   $form['info'] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
@@ -96,10 +112,8 @@ function advagg_bundler_admin_settings_form() {
  */
 function advagg_bundler_admin_settings_form_submit($form, &$form_state) {
   // Clear caches.
-  $cache_bins = advagg_flush_caches();
-  foreach ($cache_bins as $bin) {
-    cache_clear_all('*', $bin, TRUE);
-  }
+  advagg_cache_clear_admin_submit();
+
   // Unset advagg_bundler_info.
   if (isset($form_state['values']['advagg_bundler_info'])) {
     unset($form_state['values']['advagg_bundler_info']);

@@ -8,12 +8,13 @@
 /**
  * Run the check.
  *
- * @param string key
+ * @param {string} key
  *   The class name to add to the html tag.
- * @param string value
+ * @param {string} value
  *   The font name.
  */
 function advagg_run_check(key, value) {
+  "use strict";
   // Only run if window.FontFaceObserver is defined.
   if (window.FontFaceObserver) {
     new window.FontFaceObserver(value).check().then(function () {
@@ -21,19 +22,24 @@ function advagg_run_check(key, value) {
       key = key.replace(/[^a-zA-Z0-9\-]/g, '');
 
       // Set Class.
-      window.document.documentElement.className += ' ' + key;
+      if (Drupal.settings.advagg_font_no_fout != 1) {
+        window.document.documentElement.className += ' ' + key;
+      }
 
       // Set Cookie for a day.
-      expire_date = new Date(new Date().getTime() + 86400 * 1000);
-      document.cookie = 'advaggfont_' + key + '=' + value + ';'
-        + ' expires=' + expire_date.toGMTString() + ';'
-        + ' path=/;'
-        + ' domain=.' + document.location.hostname + ';';
-    }, function() {});
+      if (Drupal.settings.advagg_font_cookie == 1) {
+        var expire_date = new Date(new Date().getTime() + 86400 * 1000);
+        document.cookie = 'advaggfont_' + key + '=' + value + ';'
+          + ' expires=' + expire_date.toGMTString() + ';'
+          + ' path=/;'
+          + ' domain=.' + document.location.hostname + ';';
+      }
+    }, function () {}
+  );
   }
   else {
     // Try again in 100 ms.
-    window.setTimeout(function() {
+    window.setTimeout(function () {
       advagg_run_check(key, value);
     }, 100);
   }
@@ -43,6 +49,7 @@ function advagg_run_check(key, value) {
  * Get the list of fonts to check for.
  */
 function advagg_font_add_font_classes_on_load() {
+  "use strict";
   for (var key in Drupal.settings.advagg_font) {
     var html_class = (' ' + window.document.documentElement.className + ' ').indexOf(' ' + key + ' ');
     // If the class already exists in the html element do nothing.
@@ -57,6 +64,7 @@ function advagg_font_add_font_classes_on_load() {
  * Make sure jQuery and Drupal.settings are defined before running.
  */
 function advagg_font_check() {
+  "use strict";
   if (window.jQuery && window.Drupal && window.Drupal.settings) {
     advagg_font_add_font_classes_on_load();
   }
