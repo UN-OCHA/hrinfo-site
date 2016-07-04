@@ -79,6 +79,65 @@ function panels_content_cache_get_cid($conf, $display, $args, $contexts, $pane) 
     $conf['granularity'] = array($conf['granularity'] => $conf['granularity']);
   }
 
+  // Granularity: URL.
+  if (!empty($conf['granularity']['url']) && !empty($conf['granularity_url'])) {
+    switch ($conf['granularity_url']) {
+      // Example: 'http://example.com/site',
+      // How to generate: $GLOBALS['base_url'] . base_path()
+      case 'base_url':
+        $cid[] = $GLOBALS['base_url'];
+        break;
+
+      // Example: 'http://example.com/site/node/123',
+      // How to generate: $GLOBALS['base_url'] . base_path() . current_path()
+      case 'base_url_system':
+        $cid[] = $GLOBALS['base_url'] . base_path() . current_path();
+        break;
+
+      // Example: 'http://example.com/site/page/alias',
+      // How to generate: $GLOBALS['base_url'] . base_path() . request_path()
+      case 'base_url_alias':
+        $cid[] = $GLOBALS['base_url'] . base_path() . request_path();
+        break;
+
+      // Example: '/site/',
+      // How to generate: base_path()
+      case 'base_path':
+        $cid[] = base_path();
+        break;
+
+      // Example: '/site/node/123',
+      // How to generate: base_path() . current_path()
+      case 'base_path_system':
+        $cid[] = base_path() . current_path();
+        break;
+
+      // Example: '/site/page/alias',
+      // How to generate: base_path() . request_path()
+      case 'base_path_alias':
+        $cid[] = base_path() . request_path();
+        break;
+    }
+
+    // Optionally include the query string.
+    if (!empty($conf['granularity_url_query'])) {
+      $get = $_GET;
+      unset($get['q']);
+
+      if (!empty($get)) {
+        $cid[] = http_build_query($get);
+      }
+    }
+  }
+
+  // Support for the Domain Access module.
+  if (!empty($conf['granularity']['domain']) && module_exists('domain')) {
+    $current_domain = domain_get_domain();
+    if (is_array($current_domain) && isset($current_domain['domain_id'])) {
+      $cid[] = 'domain_' . $current_domain['domain_id'];
+    }
+  }
+
   // Granularity: Page arguments.
   if (!empty($conf['granularity']['args'])) {
     foreach ($args as $pos => $arg) {
@@ -194,8 +253,8 @@ function panels_content_cache_get_cid($conf, $display, $args, $contexts, $pane) 
     $cid[] = 'lang_' . $language->language;
   }
 
-  if (isset($pane->configuration, $pane->configuration['use_pager']) && $pane->configuration['use_pager'] == 1) {
-    $cid[] = 'page_' . check_plain($_GET['page']);
+  if (isset($_GET['page']) && !empty($pane->configuration['use_pager'])) {
+    $cid[] = 'page_' . intval($_GET['page']);
   }
 
   // Take into consideration all configuration values, to avoid multiple panes
@@ -207,7 +266,10 @@ function panels_content_cache_get_cid($conf, $display, $args, $contexts, $pane) 
     unset($options['use_pager']);
 
     // Remove empty values.
-    $cid = array_merge($cid, array_filter($options));
+    $options = array_filter($options);
+    if (!empty($options)) {
+      $cid += $options;
+    }
   }
 
   return implode(':', $cid);
@@ -225,7 +287,9 @@ function panels_content_cache_get_base_cid($display) {
     $cid[] = 'owner_' . $display->owner->id;
   }
 
-  $cid[] = 'did_' . $display->did;
+  if (isset($display->did)) {
+    $cid[] = 'did_' . $display->did;
+  }
 
   return $cid;
 }
@@ -233,7 +297,7 @@ function panels_content_cache_get_base_cid($display) {
 function panels_content_cache_settings_form($conf, $display, $pid) {
   ctools_include('dependent');
 
-  $options = array_merge(array('none' => 'none'), drupal_map_assoc(array(15, 30, 60, 120, 180, 240, 300, 600, 900, 1200, 1800, 3600, 7200, 14400, 28800, 43200, 86400, 172800, 259200, 345600, 604800), 'format_interval'));
+  $options = array('none' => 'none') + drupal_map_assoc(array(15, 30, 60, 120, 180, 240, 300, 600, 900, 1200, 1800, 3600, 7200, 14400, 28800, 43200, 86400, 172800, 259200, 345600, 604800), 'format_interval');
   $form['lifetime'] = array(
     '#title' => t('Lifetime'),
     '#type' => 'select',
@@ -261,6 +325,7 @@ function panels_content_cache_settings_form($conf, $display, $pid) {
     '#title' => t('Granularity'),
     '#type' => 'checkboxes',
     '#options' => array(
+      'url' => t('Current URL'),
       'args' => t('Arguments'),
       'context' => t('Context'),
       'user' => t('Active User'),
@@ -268,6 +333,50 @@ function panels_content_cache_settings_form($conf, $display, $pid) {
     ),
     '#description' => t('If "arguments" are selected, this content will be cached per individual argument to the entire display; if "contexts" are selected, this content will be cached per unique context in the pane or display; if "neither" there will be only one cache for this pane.'),
     '#default_value' => $conf['granularity'],
+  );
+
+  $form['granularity_url'] = array(
+    '#type' => 'radios',
+    '#title' => t('Which format should the URL use?'),
+    '#options' => array(
+      // Example: 'http://example.com/site',
+      // How to generate: $GLOBALS['base_url'] . base_path()
+      'base_url' => t('Absolute base URL: %url', array('%url' => $GLOBALS['base_url'] . base_path())),
+
+      // Example: 'http://example.com/site/node/123',
+      // How to generate: $GLOBALS['base_url'] . base_path() . current_path()
+      'base_url_system' => t('Absolute system URL: %url', array('%url' => $GLOBALS['base_url'] . base_path() . 'node/123')),
+
+      // Example: 'http://example.com/site/page/alias',
+      // How to generate: $GLOBALS['base_url'] . base_path() . request_path()
+      'base_url_alias' => t('Absolute URL alias: %url', array('%url' => $GLOBALS['base_url'] . base_path() . 'page/alias')),
+
+      // Example: '/site/',
+      // How to generate: base_path()
+      'base_path' => t('Relative base URL: %url', array('%url' => base_path())),
+
+      // Example: '/site/node/123',
+      // How to generate: base_path() . current_path()
+      'base_path_system' => t('Relative system URL: %url', array('%url' => base_path() . 'node/123')),
+
+      // Example: '/site/page/alias',
+      // How to generate: base_path() . request_path()
+      'base_path_alias' => t('Relative URL alias: %url', array('%url' => base_path() . 'page/alias')),
+    ),
+    '#default_value' => !empty($conf['granularity_base_url']) ? $conf['granularity_base_url'] : 'base_url_system',
+    '#description' => t('&bull; The correct prefix of "http://" or "https://" will be used automatically.<br />&bull; If the page does not have an alias, the system URL will be used.'),
+    '#dependency' => array(
+      'edit-settings-granularity-url' => array(1),
+    ),
+  );
+  $form['granularity_url_query'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Include full query string?'),
+    '#default_value' => !empty($conf['granularity_url_query']) ? $conf['granularity_url_query'] : FALSE,
+    // '#description' => t(''),
+    '#dependency' => array(
+      'edit-settings-granularity-url' => array(1),
+    ),
   );
 
   $roles = user_roles(TRUE);
@@ -296,6 +405,11 @@ function panels_content_cache_settings_form($conf, $display, $pid) {
       'edit-settings-granularity-user-role' => array(1),
     ),
   );
+
+  // Add support for the Domain Access module.
+  if (module_exists('domain')) {
+    $form['granularity']['#options']['domain'] = t('Current domain (Domain Access)');
+  }
 
   return $form;
 }

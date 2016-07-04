@@ -23,6 +23,9 @@ The primary features include:
 
 * Additional options to fine tune the cache granularity:
 
+  * Current URL.
+    * Provides several options to accommodate different scenarios.
+
   * Page arguments.
 
   * Panels contexts.
@@ -42,6 +45,8 @@ The primary features include:
     * In the interest of performance, it is possible to trigger caching based
       on a complete list of all a given user's roles, just the first one or
       just the last one; the default is to consider all of a user's roles.
+
+  * The current domain, as configured through Domain Access.
 
 
 Related modules
