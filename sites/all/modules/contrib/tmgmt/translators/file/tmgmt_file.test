@@ -130,6 +130,72 @@ class TMGMTFileTestCase extends TMGMTBaseTestCase {
   }
 
   /**
+   * Test the CDATA option for XLIFF export and import.
+   */
+  function testXLIFFCDATA() {
+    $translator = $this->createTranslator();
+    $translator->plugin = 'file';
+    $translator->settings = array(
+      'export_format' => 'xlf',
+      'xliff_cdata' => TRUE,
+    );
+    $translator->save();
+
+    // Get the source text.
+    $source_text = trim(file_get_contents(drupal_get_path('module', 'tmgmt') . '/tests/testing_html/sample.html'));
+
+    // Create a new job.
+    $job = $this->createJob();
+    $job->translator = $translator->name;
+    $job->addItem('test_html_source', 'test', '1');
+    $job->requestTranslation();
+    $messages = $job->getMessages();
+    $message = reset($messages);
+
+    $download_url = $message->variables['!link'];
+    // Get XLIFF content.
+    $xliff = file_get_contents($download_url);
+
+    $dom = new \DOMDocument();
+    $dom->loadXML($xliff);
+    $this->assertTrue($dom->schemaValidate(drupal_get_path('module', 'tmgmt_file') . '/xliff-core-1.2-strict.xsd'));
+
+    // "Translate" items.
+    $xml = simplexml_import_dom($dom);
+    $translated_text = array();
+    foreach ($xml->file->body->children() as $group) {
+      foreach ($group->children() as $transunit) {
+        if ($transunit->getName() == 'trans-unit') {
+          // The target should be empty.
+          $this->assertEqual($transunit->target, '');
+
+          // Update translations using CDATA.
+          $node = dom_import_simplexml($transunit->target);
+          $owner = $node->ownerDocument;
+          $node->appendChild($owner->createCDATASection($xml->file['target-language'] . '_' . (string) $transunit->source));
+
+          // Store the text to allow assertions later on.
+          $translated_text[(string) $group['id']][(string) $transunit['id']] = (string) $transunit->target;
+        }
+      }
+    }
+
+    $translated_file = 'public://tmgmt_file/translated file.xlf';
+    $xml->asXML($translated_file);
+
+    // Import the file and check translation for the "dummy" item.
+    $uri = $job->uri();
+    $edit = array(
+      'files[file]' => $translated_file,
+    );
+    $this->drupalPost($uri['path'] . '/manage', $edit, t('Import'));
+    $this->clickLink(t('review'));
+    foreach ($translated_text[1] as $key => $value) {
+      $this->assertText(htmlspecialchars($value));
+    }
+  }
+
+  /**
    * Gets trans-unit content from the XLIFF file that has been exported for the
    * given job as last.
    */
@@ -213,7 +279,7 @@ class TMGMTFileTestCase extends TMGMTBaseTestCase {
     variable_set('tmgmt_test_source_data', array(
       'dummy' => array(
         'deep_nesting' => array(
-          '#text' => 'Text of deep nested item @id.',
+          '#text' => file_get_contents(drupal_get_path('module', 'tmgmt') . '/tests/testing_html/sample.html') . ' @id.',
           '#label' => 'Label of deep nested item @id',
         ),
       ),
@@ -284,10 +350,10 @@ class TMGMTFileTestCase extends TMGMTBaseTestCase {
       'files[file]' => $wrong_file,
     );
     $this->drupalPost($uri['path'] . '/manage', $edit, t('Import'));
-    $uri = $second_job->uri();
-    $label = $second_job->label();
-    $this->assertRaw(t('Import file is from job <a href="@url">@label</a>, import aborted.', array('@url' => url($uri['path']), '@label' => $label)));
-
+    $this->assertRaw(t('The imported file job id @file_tjid does not match the job id @job_tjid.', array(
+      '@file_tjid' => $second_job->tjid,
+      '@job_tjid' => $job->tjid,
+    )));
 
     $translated_file = 'public://tmgmt_file/translated file.xlf';
     $xml->asXML($translated_file);
@@ -396,19 +462,19 @@ class TMGMTFileTestCase extends TMGMTBaseTestCase {
     // Review both items.
     $this->clickLink(t('review'));
     foreach ($translated_text[1] as $key => $value) {
-      $this->assertText($value);
+      $this->assertText(check_plain($value));
     }
     foreach ($translated_text[2] as $key => $value) {
-      $this->assertNoText($value);
+      $this->assertNoText(check_plain($value));
     }
     $this->drupalPost(NULL, array(), t('Save as completed'));
     // Review both items.
     $this->clickLink(t('review'));
     foreach ($translated_text[1] as $key => $value) {
-      $this->assertNoText($value);
+      $this->assertNoText(check_plain($value));
     }
     foreach ($translated_text[2] as $key => $value) {
-      $this->assertText($value);
+      $this->assertText(check_plain($value));
     }
     $this->drupalPost(NULL, array(), t('Save as completed'));
     // @todo: Enable this assertion once new releases for views and entity
