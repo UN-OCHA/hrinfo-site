@@ -135,6 +135,10 @@ function restclient_wsconfig_connector_info() {
  *
  * reset [optional] : Boolean flag to reset the cache. Defaults to FALSE.
  *
+ * authentication [optional] : Array ...
+ *     - oauth2_client: Authenticate using OAuth. Contains an array of values to pass through so oauth2_client creates the client. May contain just ['name'] to look up an existing client by name. See oauth2_client documentation.
+ *     - oauth_format [optional]: The format for the Authorization request header to accommodate different server implementations. The default format is 'Bearer :token' where :token is replaced with the OAuth token.
+ *
  * @return object
  *  Returns an object containing the response data, FALSE otherwise.
  */
@@ -179,6 +183,10 @@ function restclient_get($resource_path, $variables = array()) {
  * timeout [optional] : Timeout in seconds. Defaults to 30
  *
  * reset [optional] : Boolean flag to reset the cache. Defaults to FALSE.
+ *
+ * authentication [optional] : Array ...
+ *     - oauth2_client: Authenticate using OAuth. Contains an array of values to pass through so oauth2_client creates the client. May contain just ['name'] to look up an existing client by name. See oauth2_client documentation.
+ *     - oauth_format [optional]: The format for the Authorization request header to accommodate different server implementations. The default format is 'Bearer :token' where :token is replaced with the OAuth token.
  *
  * @return object
  *  Returns an object containing the response data, FALSE otherwise.
@@ -228,6 +236,10 @@ function restclient_post($resource_path, $variables = array()) {
  *
  * reset [optional] : Boolean flag to reset the cache. Defaults to FALSE.
  *
+ * authentication [optional] : Array ...
+ *     - oauth2_client: Authenticate using OAuth. Contains an array of values to pass through so oauth2_client creates the client. May contain just ['name'] to look up an existing client by name. See oauth2_client documentation.
+ *     - oauth_format [optional]: The format for the Authorization request header to accommodate different server implementations. The default format is 'Bearer :token' where :token is replaced with the OAuth token.
+ *
  * @return object
  *  Returns an object containing the response data, FALSE otherwise.
  *
@@ -267,6 +279,10 @@ function restclient_put($resource_path, $variables = array()) {
  * timeout [optional] : Timeout in seconds. Defaults to 30
  *
  * reset [optional] : Boolean flag to reset the cache. Defaults to FALSE.
+ *
+ * authentication [optional] : Array ...
+ *     - oauth2_client: Authenticate using OAuth. Contains an array of values to pass through so oauth2_client creates the client. May contain just ['name'] to look up an existing client by name. See oauth2_client documentation.
+ *     - oauth_format [optional]: The format for the Authorization request header to accommodate different server implementations. The default format is 'Bearer :token' where :token is replaced with the OAuth token.
  *
  * @return object
  *  Returns an object containing the response data, FALSE otherwise.
@@ -310,9 +326,30 @@ function _restclient_request(&$resource_path, &$variables = array(), $type = 'GE
     if (!$reset) {
       $data = cache_get($cid, 'cache_restclient');
       if (!empty($data) and REQUEST_TIME < $data->expire) {
+
+        // Debug output
+        if (variable_get("restclient_debug", FALSE)) {
+          // Temporarily add the response to the variables for display
+          $variables['from_cache'] = TRUE;
+          $variables['response_from_cache'] = $data->data;
+          $variables['resource_path'] = $resource_path;
+          _restclient_debug($variables);
+
+          // Cleanup
+          unset($variables['from_cache']);
+          unset($variables['response_from_cache']);
+          unset($variables['resource_path']);
+        }
+
         return $data->data;
       }
     }
+  }
+
+  // Authentication - done after checking the cache
+  if (!_restclient_prepare_authentication($variables)) {
+    // Already logged.
+    return FALSE;
   }
 
   // Make the HTTP request
@@ -329,13 +366,16 @@ function _restclient_request(&$resource_path, &$variables = array(), $type = 'GE
       $response = drupal_http_request($url, $variables);
   }
 
+  // Debug output
   if (variable_get("restclient_debug", FALSE)) {
     // Temporarily add the response to the variables for display
+    $variables['from_cache'] = FALSE;
     $variables['response'] = $response;
     $variables['resource_path'] = $resource_path;
     _restclient_debug($variables);
 
     // Cleanup
+    unset($variables['from_cache']);
     unset($variables['response']);
     unset($variables['resource_path']);
   }
@@ -377,11 +417,24 @@ function _restclient_request(&$resource_path, &$variables = array(), $type = 'GE
     return $response;
   }
 
-  // Log the error and return FALSE
+  // Log the error
   if (variable_get('restclient_watchdog', TRUE)) {
     _restclient_watchdog($type, $response->code,  $response->error, $url);
   }
 
+  // Handle authentication (oauth, hybridauth) related errors. The request
+  // may have failed due to an expired token, in which case we can re-authenticate
+  // and retry this request.
+  $retry = _restclient_authentication_request_error($response, $variables);
+  if ($retry and empty($variables['auth_retry'])) {
+    $variables['auth_retry'] = TRUE;
+    return _restclient_request($resource_path, $variables, $type);
+  }
+
+  // If error handling is set, return the response anyway, otherwise return FALSE
+  if (isset($variables['error_handling']) and $variables['error_handling']) {
+    return $response;
+  }
   return FALSE;
 }
 
@@ -415,6 +468,12 @@ function _restclient_request_with_body(&$resource_path, &$variables = array(), $
   // Build the URL
   $url = _restclient_build_resource_path($resource_path, $variables);
 
+  // Authentication
+  if (!_restclient_prepare_authentication($variables)) {
+    // Already logged.
+    return FALSE;
+  }
+
   switch (RESTCLIENT_ACTIVE_LIBRARY) {
     case RESTCLIENT_LIBRARY_CURL:
       $response = chr_curl_http_request($url, $variables);
@@ -424,6 +483,7 @@ function _restclient_request_with_body(&$resource_path, &$variables = array(), $
       $response = drupal_http_request($url, $variables);
   }
 
+  // Debug output
   if (variable_get("restclient_debug", FALSE)) {
     // Temporarily add the response to the variables for display
     $variables['response'] = $response;
@@ -439,8 +499,22 @@ function _restclient_request_with_body(&$resource_path, &$variables = array(), $
     // No error occured, return the response
     return $response;
   }
-  // Log the error and return FALSE
+  // Log the error
   _restclient_watchdog($type, $response->code,  $response->error, $url, $response);
+
+  // Handle authentication (oauth, hybridauth) related errors. The request
+  // may have failed due to an expired token, in which case we can re-authenticate
+  // and retry this request.
+  $retry = _restclient_authentication_request_error($response, $variables);
+  if ($retry and empty($variables['auth_retry'])) {
+    $variables['auth_retry'] = TRUE;
+    return _restclient_request($resource_path, $variables, $type);
+  }
+
+  // If error handling is set, return the response anyway, otherwise return FALSE
+  if (isset($variables['error_handling']) and $variables['error_handling']) {
+    return $response;
+  }
   return FALSE;
 }
 
@@ -631,15 +705,24 @@ function _restclient_multipart_encode_text($name, $text) {
 /**
  * Debug function
  */
-function _restclient_debug($options = array()) {
-  // @todo add watchdog logging on top of dpm output
+function _restclient_debug($values = array()) {
+  // Check if debug is turned on.
+  if (!variable_get("restclient_debug", FALSE)) {
+    return;
+  }
+
+  // Output to watchdog.
+  $values_string = 'Debug: <pre>' . print_r($values, TRUE) . '</pre>';
+  watchdog('restclient', $values_string, NULL, WATCHDOG_DEBUG);
+
+  // Output to devel dpm or debug.
   if (module_exists('devel')) {
-    dpm($options);
+    dpm($values);
   }
   else {
-    debug($options, 'RESTClient Debug', TRUE);
+    debug($values, 'RESTClient Debug', TRUE);
   }
- // @todo add debug output to use with SimpleTest
+  // @todo add debug output to use with SimpleTest
 }
 
 /**
@@ -651,12 +734,20 @@ function _restclient_debug($options = array()) {
  *  Returns a unique string to be used as a cache id, FALSE otherwise.
  */
 function _restclient_generate_cid($method, $url, $headers) {
+  $cid = '';
   if (empty($headers)) {
-    return $method . ":" . $url;
+    $cid = $method . ':' . $url;
   }
   else {
-    return $method . ":" . $url . ':' . serialize($headers);
+    $cid = $method . ':' . $url . ':' . serialize($headers);
   }
+
+  // Do not use drupal_strlen() here.
+  if (strlen($cid) > 255) {
+    $cid = $method . ':' . hash('sha512', $cid);
+  }
+
+  return $cid;
 }
 
 /**
@@ -741,6 +832,250 @@ function _restclient_build_resource_path(&$resource_path, &$variables) {
   $url = url($url, $options);
 
   return $url;
+}
+
+/**
+ * Prepare authentication for the request, if needed.
+ *
+ * @param array $variables [reference]
+ *  Array of URL variables
+ *  ['authentication']['type'] indicates which type of authentication
+ *  See _restclient_prepare_authentication_oauth2_client for additional settings when type is 'oauth2_client'.
+ *
+ * @return boolean
+ *  TRUE if authentication is ready or not needed, FALSE if there is an error.
+ */
+function _restclient_prepare_authentication(&$variables) {
+
+  // If authentication is not requested then return success.
+  if (!isset($variables['authentication'])) {
+    return TRUE;
+  }
+
+  // Prepare according to the authentication method.
+  $return_value = FALSE;
+  $authentication_type = '<unspecified>';
+  if (isset($variables['authentication']['type'])) {
+    $authentication_type = $variables['authentication']['type'];
+  }
+
+  switch ($authentication_type) {
+    case 'oauth2_client':
+      $return_value = _restclient_prepare_authentication_oauth2_client($variables);
+      break;
+    case 'hybridauth':
+      $return_value = _restclient_prepare_authentication_hybridauth($variables);
+      break;
+
+    default:
+      // The authentication method is not supported.
+      watchdog(
+        'restclient',
+        'Authentication method "%type" is not supported.',
+        array('%type' => $authentication_type),
+        WATCHDOG_ERROR
+      );
+      $return_value = FALSE;
+      break;
+  }
+
+  return $return_value;
+}
+
+/**
+ * Prepare authentication using oauth2 client.
+ *
+ * @param array $variables [reference]
+ *  Array of URL variables
+ *  - Incoming ['authentication']['oauth2_client'] - Array of values to pass through so oauth2_client creates the client. May contain just ['name'] to look up an existing client by name. See oauth2_client documentation.
+ *  - Incoming ['authentication']['oauth_format'] - Optional format for the Authorization request header to accommodate different server implementations. The default format is 'Bearer :token' where :token is replaced with the OAuth token.
+ *  - Outgoing ['headers']['Authorization'] - authorization header containing the oauth token
+ *
+ * @return boolean
+ *  TRUE if authentication is ready or not needed, FALSE if there is an error.
+ */
+function _restclient_prepare_authentication_oauth2_client(&$variables) {
+
+  $error_message = '';
+
+  // Check if restclient has oauth2_client turned off.
+  if (!variable_get('restclient_oauth2_client', FALSE)) {
+    $error_message = 'OAuth2 client authentication is required but restclient has oauth2_client turned off.';
+  }
+
+  // Check if oauth2_client is enabled.
+  else if (!module_exists('oauth2_client')) {
+    $error_message = 'OAuth2 client authentication is required but oauth2_client module is not enabled.';
+  }
+
+  // Check if oauth2_client is specified.
+  if (!isset($variables['authentication']['oauth2_client'])) {
+    $error_message = "Authorization parameters for ['oauth2_client'] not found.";
+  }
+
+  if (!empty($error_message)) {
+    watchdog( 'restclient', $error_message, NULL, WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  // Load the client and get the access token.
+  try {
+    // Method 1 - Look up the client by name in oauth2_client.
+    if (isset($variables['authentication']['oauth2_client']['name'])) {
+      $oauth2_client = oauth2_client_load($variables['authentication']['oauth2_client']['name']);
+    }
+    else {
+      // Method 2 - Pass the array through so oauth2_client creates the client.
+      $client_id = 'default_client_id';
+      if (isset($variables['authentication']['oauth2_client']['client_id'])) {
+        $client_id = $variables['authentication']['oauth2_client']['client_id'];
+      }
+      $oauth2_client = new OAuth2\Client($variables['authentication']['oauth2_client'], $client_id);
+    }
+    $oauth_token = $oauth2_client->getAccessToken();
+    if (empty($oauth_token)) {
+      $error_message = 'Retrieved OAuth2 token is empty';
+    }
+  }
+  catch (Exception $e) {
+    $error_message = 'Exception retrieving OAuth2 token: ' . $e->getMessage();
+  }
+
+  if (!empty($error_message)) {
+    watchdog('restclient', $error_message, NULL, WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  // Use the oauth token to prepare the authorization header according to
+  // the format specified in $variables['authentication']['oauth_format'].
+  $oauth_format = 'Bearer :token';  // Default
+  if (isset($variables['authentication']['oauth_format'])) {
+    $oauth_format = $variables['authentication']['oauth_format'];
+  }
+  $variables['headers']['Authorization'] = str_replace(':token', $oauth_token, $oauth_format);
+
+  return TRUE;
+}
+
+/**
+ * Prepare authentication using hybridauth.
+ *
+ * @param array $variables [reference]
+ *  Array of URL variables
+ *  - Incoming ['authentication']['hybridauth_client'] - Array of values to pass through so hybridauth creates the client. May contain just ['name'] to look up an existing client by name. See hybridauth documentation.
+ *  - Incoming ['authentication']['oauth_format'] - Optional format for the Authorization request header to accommodate different server implementations. The default format is 'Bearer :token' where :token is replaced with the OAuth token.
+ *  - Outgoing ['headers']['Authorization'] - authorization header containing the oauth token
+ *
+ * @return boolean
+ *  TRUE if authentication is ready or not needed, FALSE if there is an error.
+ */
+function _restclient_prepare_authentication_hybridauth(&$variables) {
+  $error_message = '';
+
+  // Check if restclient has hybridauth turned off.
+  if (!variable_get('restclient_hybridauth', FALSE)) {
+    $error_message = 'HybridAuth authentication is required but restclient has hybridauth turned off.';
+  }
+
+  // Check if hybridauth is enabled.
+  else if (!module_exists('hybridauth')) {
+    $error_message = 'HybridAuth authentication is required but hybridauth module is not enabled.';
+  }
+
+  // Check if hybridauth is specified.
+  if (!isset($variables['authentication']['hybridauth'])) {
+    $error_message = "Authorization parameters for ['hybridauth'] not found.";
+  }
+
+  if (!empty($error_message)) {
+    watchdog( 'restclient', $error_message, NULL, WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  $hybridauth_instance = hybridauth_get_instance();
+  $session_data = $hybridauth_instance->storage()->getSessionData();
+
+  global $user;
+  if (!empty($hybridauth_instance) and !empty($session_data) and $user->uid != 1) {
+    // Get the HybridAuth client ID
+    $hybridauth_client_id = $variables['authentication']['hybridauth']['client_id'];
+    $hybridauth_adapter = $hybridauth_instance->getAdapter($hybridauth_client_id);
+    try {
+      if (!$hybridauth_adapter->isUserConnected()) {
+        $hybridauth_instance->authenticate($hybridauth_adapter->id);
+      }
+      $hybridauth_tokens = $hybridauth_adapter->getAccessToken();
+      $oauth_token = $hybridauth_tokens['access_token'];
+    }
+    catch (Exception $e) {
+      // Something went wrong.
+      watchdog('restclient', 'An exception occurred during HybridAuth processing: @e', array('@e' => $e->getMessage()), WATCHDOG_ERROR);
+    }
+  }
+  // At this point, no point in continuing if the token is empty.
+  if (empty($oauth_token)) {
+    return FALSE;
+  }
+
+  // Use the oauth token to prepare the authorization header according to
+  // the format specified in $variables['authentication']['oauth_format'].
+  $oauth_format = 'Bearer :token';  // Default
+  if (isset($variables['authentication']['oauth_format'])) {
+    $oauth_format = $variables['authentication']['oauth_format'];
+  }
+  $variables['headers']['Authorization'] = str_replace(':token', $oauth_token, $oauth_format);
+
+  return TRUE;
+}
+
+/**
+ * Handle authentication-related request errors, and indicate
+ * if the request can be retried. This can be the case for situations
+ * where the token had expired: we re-authenticate and indicate that
+ * the request can be re-attempted.
+ */
+function _restclient_authentication_request_error($response, $variables) {
+  // If authentication is not specified for some reason, return FALSE;
+  if (!isset($variables['authentication'])) {
+    return FALSE;
+  }
+
+  $authentication_type = NULL;
+  if (isset($variables['authentication']['type'])) {
+    $authentication_type = $variables['authentication']['type'];
+  }
+
+  $return_value = FALSE;
+  switch ($authentication_type) {
+    case 'hybridauth':
+      $return_value = _restclient_authentication_hybridauth_request_error($response, $variables);
+      break;
+
+    default:
+      // The authentication method is not supported or was not specified. Do nothing.
+      break;
+  }
+
+  return $return_value;
+  return FALSE;
+}
+
+function _restclient_authentication_hybridauth_request_error($response, $variables) {
+  if ($response->code == '401') {
+    if ($response->headers['content-type'] == 'application/json') {
+      $data = drupal_json_decode($response->data);
+      if (!empty($data['error']) and
+          ($data['error'] == 'expired_token' or $data['error'] = 'invalid_token')) {
+        $hybridauth_instance = hybridauth_get_instance();
+        $hybridauth_client_id = $variables['authentication']['hybridauth']['client_id'];
+        $hybridauth_adapter = $hybridauth_instance->getAdapter($hybridauth_client_id);
+        $hybridauth_adapter->logout();
+        $hybridauth_instance->authenticate($hybridauth_client_id);
+        return TRUE;
+      }
+    }
+  }
+  return FALSE;
 }
 
 function _restclient_watchdog($method, $code, $error, $url, $extra = array()) {
