@@ -71,6 +71,11 @@ class SearchApiSavedSearch extends Entity {
   /**
    * @var integer
    */
+  public $last_queued;
+
+  /**
+   * @var integer
+   */
   public $last_execute;
 
   /**
@@ -145,7 +150,7 @@ class SearchApiSavedSearch extends Entity {
   }
 
   /**
-   * @return SearchApiIndex
+   * @return SearchApiSavedSearchesSettings
    *   The settings this saved search uses.
    *
    * @throws SearchApiException
