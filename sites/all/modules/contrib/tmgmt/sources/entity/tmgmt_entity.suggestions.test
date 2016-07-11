@@ -14,12 +14,15 @@ class TMGMTSuggestionsTestCase extends TMGMTBaseTestCase {
       'name' => 'Entity Suggestions tests',
       'description' => 'Tests suggestion implementation for the entity source plugin',
       'group' => 'Translation Management',
-      'dependencies' => array('file_entity'),
+      'dependencies' => array(
+        'file_entity',
+        'entityreference',
+      ),
     );
   }
 
   public function setUp() {
-    parent::setUp(array('file_entity', 'tmgmt_entity', 'tmgmt_ui'));
+    parent::setUp(array('file_entity', 'tmgmt_entity', 'tmgmt_ui', 'entityreference', 'tmgmt_i18n_string', 'i18n_menu'));
     $this->loginAsAdmin(array('administer entity translation'));
 
     $this->setEnvironment('de');
@@ -57,6 +60,19 @@ class TMGMTSuggestionsTestCase extends TMGMTBaseTestCase {
       'cardinality' => -1,
       'translatable' => TRUE,
     ));
+    $field3 = field_create_field(array(
+      'field_name' => 'field3',
+      'type' => 'entityreference',
+      'cardinality' => -1,
+      'settings' => array(
+        'target_type' => 'node',
+        'handler' => 'base',
+        'handler_settings' => array(
+          'target_bundles' => array($type->type => $type->type),
+          'sort' => array('type' => 'none'),
+        ),
+      ),
+    ));
 
     // Create field instances on the content type.
     field_create_instance(array(
@@ -74,6 +90,14 @@ class TMGMTSuggestionsTestCase extends TMGMTBaseTestCase {
       'label' => 'Field 2',
       'widget' => array('type' => 'file'),
       'settings' => array(),
+    ));
+    field_create_instance(array(
+      'field_name' => $field3['field_name'],
+      'entity_type' => 'node',
+      'bundle' => $type->type,
+      'label' => 'Field 3',
+      'settings' => array(),
+      'widget' => array('type' => 'entityreference_autocomplete_tags'),
     ));
 
     // Make the body field translatable from node.
@@ -115,6 +139,17 @@ class TMGMTSuggestionsTestCase extends TMGMTBaseTestCase {
     file_save($file3);
     file_save($file4);
 
+    // Create a dummy node that will be referenced
+    $referenced_node = $this->drupalCreateNode(array(
+      'type' => $type->type,
+      'language' => 'en',
+      'body' => array(
+        'en' => array(
+          array('value' => $this->randomName() . ' ' . $this->randomName()),
+        ),
+      ),
+    ));
+
     // Create a node with two translatable and two non-translatable files.
     $node = $this->drupalCreateNode(array(
       'type' => $type->type,
@@ -148,7 +183,32 @@ class TMGMTSuggestionsTestCase extends TMGMTBaseTestCase {
           'description' => '',
         ),
       )),
+      $field3['field_name'] => array(LANGUAGE_NONE => array(
+        array('target_id' => $referenced_node->nid),
+      )),
     ));
+
+    // Create a translatable menu.
+    $config = array(
+      'menu_name' => 'translatable-menu',
+      'title' => 'Translatable menu',
+      'description' => $this->randomName(),
+      'i18n_mode' => I18N_MODE_MULTIPLE,
+    );
+    menu_save($config);
+    $menu = menu_load($config['menu_name']);
+
+    // Create a menu link for the node.
+    $menu_link = array(
+      'link_path' => 'node/' . $node->nid,
+      'link_title' => 'Menu link one',
+      // i18n_menu_link::get_title() uses the title, set that too.
+      'title' => 'Menu link one',
+      'menu_name' => $menu['menu_name'],
+      'customized' => TRUE,
+    );
+    $node->link = menu_link_load(menu_link_save($menu_link));
+
     return $node;
   }
 
@@ -165,29 +225,45 @@ class TMGMTSuggestionsTestCase extends TMGMTBaseTestCase {
     $suggestions = $job->getSuggestions();
     $job->cleanSuggestionsList($suggestions);
 
-    // Check for one suggestion.
-    $this->assertEqual(count($suggestions), 2, 'Found two suggestions.');
+    // Check for suggestions.
+    $this->assertEqual(count($suggestions), 4, 'Found four suggestions.');
 
     // Check for valid attributes on the suggestions.
-    $suggestion = array_shift($suggestions);
-    $this->assertEqual($suggestion['job_item']->getWordCount(), 3, 'Three translatable words in the suggestion.');
-    $this->assertEqual($suggestion['job_item']->plugin, 'entity', 'Got an entity as plugin in the suggestion.');
-    $this->assertEqual($suggestion['job_item']->item_type, 'file', 'Got a file in the suggestion.');
-    $this->assertEqual($suggestion['job_item']->item_id, $node->field1[LANGUAGE_NONE][1]['fid'], 'File id match between node and suggestion.');
-    $this->assertEqual($suggestion['reason'], 'Field Field 1');
-    $this->assertEqual($suggestion['from_item'], $item->tjiid);
-    $job->addExistingItem($suggestion['job_item']);
+    foreach ($suggestions as $suggestion) {
+      switch ($suggestion['reason']) {
+        case 'Field Field 1':
+          $this->assertEqual($suggestion['job_item']->getWordCount(), 3, 'Three translatable words in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->plugin, 'entity', 'Got an entity as plugin in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_type, 'file', 'Got a file in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_id, $node->field1[LANGUAGE_NONE][1]['fid'], 'File id match between node and suggestion.');
+          break;
+        case 'Field Field 2':
+          $this->assertEqual($suggestion['job_item']->getWordCount(), 3, 'Three translatable words in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->plugin, 'entity', 'Got an entity as plugin in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_type, 'file', 'Got a file in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_id, $node->field2[LANGUAGE_NONE][1]['fid'], 'File id match between node and suggestion.');
+          break;
+        case 'Field Field 3':
+          $this->assertEqual($suggestion['job_item']->getWordCount(), 2, 'Two translatable words in the suggestion');
+          $this->assertEqual($suggestion['job_item']->plugin, 'entity', 'Got an entity as plugin in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_type, 'node', 'Got a node in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_id, $node->field3[LANGUAGE_NONE][0]['target_id'], 'File id match between node and suggestion.');
+          break;
+        case 'Menu link Menu link one':
+          $this->assertEqual($suggestion['job_item']->getWordCount(), 3, 'Three translatable words in the suggestion' . $suggestion['job_item']->plugin . $suggestion['job_item']->item_type);
+          $this->assertEqual($suggestion['job_item']->plugin, 'i18n_string', 'Got a string as plugin in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_type, 'menu_link', 'Got a menu link in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_id, 'menu:item:'. $node->link['mlid'], 'Menu link id match between menu link and suggestion.');
+          break;
+        default:
+          $this->fail('Found an invalid suggestion.');
+          break;
+      }
+      $this->assertEqual($suggestion['from_item'], $item->tjiid);
+      $job->addExistingItem($suggestion['job_item']);
+    }
 
-    $suggestion = array_shift($suggestions);
-    $this->assertEqual($suggestion['job_item']->getWordCount(), 3, 'Three translatable words in the suggestion.');
-    $this->assertEqual($suggestion['job_item']->plugin, 'entity', 'Got an entity as plugin in the suggestion.');
-    $this->assertEqual($suggestion['job_item']->item_type, 'file', 'Got a file in the suggestion.');
-    $this->assertEqual($suggestion['job_item']->item_id, $node->field2[LANGUAGE_NONE][1]['fid'], 'File id match between node and suggestion.');
-    $this->assertEqual($suggestion['reason'], 'Field Field 2');
-    $this->assertEqual($suggestion['from_item'], $item->tjiid);
-
-    // Add the suggestion to the job and re-get all suggestions.
-    $job->addExistingItem($suggestion['job_item']);
+    // Re-get all suggestions.
     $suggestions = $job->getSuggestions();
     $job->cleanSuggestionsList($suggestions);
 
