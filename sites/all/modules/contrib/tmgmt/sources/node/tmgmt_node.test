@@ -69,6 +69,52 @@ class TMGMTNodeSourceTestCase extends TMGMTEntityTestCaseUtility {
   }
 
   /**
+   * Test if the source is able to pull content in requested language.
+   */
+  function testRequestDataForSpecificLanguage() {
+    $this->setEnvironment('sk');
+    $this->setEnvironment('es');
+    $content_type = $this->drupalCreateContentType();
+
+    $node = $this->drupalCreateNode(array(
+      'title' => $this->randomName(),
+      'language' => 'sk',
+      'body' => array('sk' => array(array())),
+      'type' => $content_type->type,
+    ));
+
+    $this->drupalCreateNode(array(
+      'title' => 'en translation',
+      'language' => 'en',
+      'tnid' => $node->nid,
+      'body' => array('en' => array(array())),
+      'type' => $content_type->type,
+    ));
+
+    // Create a translation job.
+    $job = $this->createJob('en', 'de');
+    $job->save();
+    $job->addItem('node', 'node', $node->nid);
+
+    $data = $job->getData();
+    $this->assertEqual($data[1]['node_title']['#text'], 'en translation');
+
+    // Create new job item with a source language for which the translation
+    // does not exit.
+    $job = $this->createJob('es', 'cs');
+    $job->save();
+    try {
+      $job->addItem('node', 'node', $node->nid);
+      $this->fail('The job item should not be added as there is no translation for language "es"');
+    }
+    catch (TMGMTException $e) {
+      $languages = language_list();
+      $this->assertEqual(t('Unable to load %language translation for the node %title',
+        array('%language' => $languages['es']->name, '%title' => $node->title)), $e->getMessage());
+    }
+  }
+
+  /**
    * Compares the data from an entity with the translated data.
    *
    * @param $node
