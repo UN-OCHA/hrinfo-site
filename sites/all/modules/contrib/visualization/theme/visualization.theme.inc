@@ -11,7 +11,7 @@
  */
 function template_preprocess_visualization(&$vars) {
   $options = $vars['options'];
-
+  drupal_add_library('visualization', 'visualization');
   if (!empty($vars['view'])) {
     $view = $vars['view'];
 
