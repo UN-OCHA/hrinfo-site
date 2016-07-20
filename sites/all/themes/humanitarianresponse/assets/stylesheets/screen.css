@@ -4040,3 +4040,10 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
     width: auto;
   }
 }
+
+body .region-branding .block .views-exposed-form .views-exposed-widget .search-select-wrapper .dropdown-toggle {
+  padding: 0;
+  height: 30px;
+  margin: 0;
+  width: 20px;
+}
