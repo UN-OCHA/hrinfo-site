@@ -95,8 +95,10 @@ function entityreference_autocomplete_value_callback($element, $edit = FALSE, &$
       else if (is_array($element['#default_value'])) {
         $referenced_labels = array();
         foreach ($element['#default_value'] as $entity_id) {
-          $referenced_labels[] = entityreference_autocomplete_label_for_reference($element['#era_entity_type'], $entity_id);
-          $references_label = implode(', ', array_filter($referenced_labels));
+          if (is_numeric($entity_id)) {
+            $referenced_labels[] = entityreference_autocomplete_label_for_reference($element['#era_entity_type'], $entity_id);
+            $references_label = implode(', ', array_filter($referenced_labels));
+          }
         }
       }
 
