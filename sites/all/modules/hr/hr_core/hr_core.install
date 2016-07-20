@@ -138,9 +138,9 @@ function hr_core_update_7004() {
     $environment->disabled = FALSE;
     $environment->machine = 'hr_info';
     $environment->name = t('HR Live');
-    $environment->regexurl = 'hrtest.568elmp02.blackmesh.com';
+    $environment->regexurl = 'www.humanitarianresponse.info';
     $environment->settings = array(
-      'color' => '##0c17c1',
+      'color' => '#0c17c1',
       'text_color' => '#ffffff',
       'weight' => 99,
       'position' => 'top',
