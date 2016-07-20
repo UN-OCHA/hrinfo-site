@@ -3984,3 +3984,56 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
 .view-hr-news-panes .views-field-field-image a { margin: 10px; }
 
 /*# sourceMappingURL=screen.css.map */
+
+.container.header #navigation ul.menu {
+  position: relative;
+  top: auto;
+  padding-left: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .container.header #navigation ul.menu {
+    background: white;
+    z-index: 3;
+    margin-top: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container.header #navigation {
+    left: auto;
+    bottom: auto;
+    position: relative;
+    line-height: normal;
+    height: auto;
+    width: auto;
+  }
+}
+
+.pull-right {
+  float: none;
+}
+
+@media screen and (max-width: 768px) {
+  .pull-right {
+    float: right;
+  }
+}
+
+.container.header .region-branding {
+  position: relative;
+  top: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .container.header .region-branding {
+    position: absolute;
+    top: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: auto;
+  }
+}
