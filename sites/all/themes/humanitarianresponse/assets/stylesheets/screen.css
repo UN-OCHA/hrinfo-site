@@ -3985,6 +3985,8 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
 
 /*# sourceMappingURL=screen.css.map */
 
+// Fix responsive
+
 .container.header #navigation ul.menu {
   position: relative;
   top: auto;
@@ -4025,14 +4027,14 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
   top: 0;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 769px) {
   .container.header .region-branding {
     position: absolute;
     top: 0;
   }
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .container {
     width: auto;
   }
