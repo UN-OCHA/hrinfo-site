@@ -91,3 +91,12 @@ function hr_core_update_7002() {
   module_enable(array('elysia_cron'));
   variable_set('cron_safe_threshold', 60);
 }
+
+/**
+ * Enable entitycache.
+ */
+function hr_core_update_7003() {
+  if (!module_exists('entitycache')) {
+    module_enable(array('entitycache'));
+  }
+}

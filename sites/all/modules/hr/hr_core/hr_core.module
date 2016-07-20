@@ -184,9 +184,11 @@ function hr_core_og_context_handler($node = NULL) {
   $context = NULL;
   if ($node == NULL) {
     $nid = arg(1);
-    $node = node_load($nid);
-    if ($node) {
-      $context = og_context_handler_node($node);
+    if (is_numeric($nid)) {
+      $node = node_load($nid);
+      if ($node) {
+        $context = og_context_handler_node($node);
+      }
     }
   }
   return $context;
