@@ -68,14 +68,16 @@ function hr_documents_search_api_views_query_alter(&$view, &$query) {
       foreach ($condition_group['conditions'] as &$condition) {
         if (reset($condition) == 'og_group_ref') {
           $nid = $condition[1];
-          $node = node_load($nid);
-          if ($node->type == 'hr_disaster') {
-            $condition = array('field_disasters', $nid, '=');
-          }
-          // Clusters as spaces
-          // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
-          elseif ($node->type == 'hr_bundle') {
-            $condition = array('field_bundles', $nid, '=');
+          if (is_numeric($nid)) {
+            $node = node_load($nid);
+            if ($node->type == 'hr_disaster') {
+              $condition = array('field_disasters', $nid, '=');
+            }
+            // Clusters as spaces
+            // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
+            elseif ($node->type == 'hr_bundle') {
+              $condition = array('field_bundles', $nid, '=');
+            }
           }
         }
       }
