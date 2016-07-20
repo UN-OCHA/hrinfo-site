@@ -3989,12 +3989,13 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
 
 .container.header #navigation ul.menu {
   position: relative;
-  top: auto;
+  top: 17px;
   padding-left: 10px;
 }
 
 @media screen and (max-width: 768px) {
   .container.header #navigation ul.menu {
+    top: auto;
     background: white;
     z-index: 3;
     margin-top: 0;
