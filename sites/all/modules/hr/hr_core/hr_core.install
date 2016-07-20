@@ -100,3 +100,53 @@ function hr_core_update_7003() {
     module_enable(array('entitycache'));
   }
 }
+
+/**
+ * Enable environment indicator.
+ */
+function hr_core_update_7004() {
+  if (!module_exists('environment_indicator')) {
+    module_enable(array('environment_indicator'));
+  }
+
+  // Disable git branch support.
+  variable_set('environment_indicator_git_support', FALSE);
+
+  // Add staging.
+  if (!ctools_export_crud_load('environment_indicator_environment', 'hr_test')) {
+    $environment = ctools_export_crud_new('environment_indicator_environment', TRUE);
+    $environment->api_version = 1;
+    $environment->disabled = FALSE;
+    $environment->machine = 'hr_test';
+    $environment->name = t('HR Test');
+    $environment->regexurl = 'hrtest.568elmp02.blackmesh.com';
+    $environment->settings = array(
+      'color' => '#146205',
+      'text_color' => '#ffffff',
+      'weight' => 99,
+      'position' => 'top',
+      'fixed' => FALSE,
+    );
+
+    ctools_export_crud_save('environment_indicator_environment', $environment);
+  }
+
+  // Add production.
+  if (!ctools_export_crud_load('environment_indicator_environment', 'hr_info')) {
+    $environment = ctools_export_crud_new('environment_indicator_environment', TRUE);
+    $environment->api_version = 1;
+    $environment->disabled = FALSE;
+    $environment->machine = 'hr_info';
+    $environment->name = t('HR Live');
+    $environment->regexurl = 'hrtest.568elmp02.blackmesh.com';
+    $environment->settings = array(
+      'color' => '##0c17c1',
+      'text_color' => '#ffffff',
+      'weight' => 99,
+      'position' => 'top',
+      'fixed' => FALSE,
+    );
+
+    ctools_export_crud_save('environment_indicator_environment', $environment);
+  }
+}
