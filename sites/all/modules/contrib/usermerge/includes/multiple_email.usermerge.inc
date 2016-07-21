@@ -132,15 +132,14 @@ function multiple_email_usermerge_merge_accounts($user_to_delete, $user_to_keep,
  */
 function _multiple_email_usermerge_load_addresses($uid) {
   $addresses = multiple_email_load_addresses($uid);
+  unset($addresses[0]);
 
   $address_list = array();
   foreach ($addresses as $eid => $properties) {
-    if ($eid <> 0) {
-      $address_list[$eid] = $properties->email;
+    $address_list[$eid] = $properties->email;
 
-      if ($properties->email == $addresses[0][0]) {
-        $address_list[$eid] .= ' ' . t('(main)');
-      }
+    if ($properties->primary_address == TRUE) {
+      $address_list[$eid] .= ' ' . t('(main)');
     }
   }
 
