@@ -886,6 +886,24 @@ function tmgmt_ui_cart_content($form, &$form_state) {
     '#options' => $options,
   );
 
+  $form['enforced_source_language'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enforce source language'),
+    '#description' => t('The source language is by default determined from the items source language. Check to enforce a different language as source.')
+  );
+
+  $form['source_language'] = array(
+    '#type' => 'select',
+    '#title' => t('Source language'),
+    '#description' => t('If the enforced source language does not match the item source language then its translation will be used. This could result in loss of quality.'),
+    '#options' => $languages,
+    '#states' => array(
+      'visible' => array(
+        ':input[name="enforced_source_language"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+
   $form['target_language'] = array(
     '#type' => 'select',
     '#title' => t('Request translation into language/s'),
@@ -894,10 +912,11 @@ function tmgmt_ui_cart_content($form, &$form_state) {
     '#description' => t('If the item\'s source language will be the same as the target language the item will be ignored.'),
   );
 
-  $form['empty_cart'] = array(
+  $form['request_translation'] = array(
     '#type' => 'submit',
-    '#value' => t('Empty cart'),
-    '#submit' => array('tmgmt_ui_cart_empty_cart_form_submit'),
+    '#value' => t('Request translation'),
+    '#submit' => array('tmgmt_ui_cart_request_translation_form_submit'),
+    '#validate' => array('tmgmt_ui_cart_source_overview_validate'),
   );
 
   $form['remove_selected'] = array(
@@ -907,11 +926,11 @@ function tmgmt_ui_cart_content($form, &$form_state) {
     '#validate' => array('tmgmt_ui_cart_source_overview_validate'),
   );
 
-  $form['request_translation'] = array(
+  $form['empty_cart'] = array(
     '#type' => 'submit',
-    '#value' => t('Request translation'),
-    '#submit' => array('tmgmt_ui_cart_request_translation_form_submit'),
-    '#validate' => array('tmgmt_ui_cart_source_overview_validate'),
+    '#value' => t('Empty cart'),
+    '#submit' => array('tmgmt_ui_cart_empty_cart_form_submit'),
+    '#access' => tmgmt_ui_cart_get()->count(),
   );
 
   return $form;
@@ -944,11 +963,22 @@ function tmgmt_ui_cart_request_translation_form_submit($form, &$form_state) {
   global $user;
 
   $target_languages = array_filter($form_state['values']['target_language']);
+  $enforced_source_language = NULL;
+  if ($form_state['values']['enforced_source_language']) {
+    $enforced_source_language = $form_state['values']['source_language'];
+  }
 
+  $skipped_count = 0;
   $job_items_by_source_language = array();
   // Group the selected items by source language.
   foreach (tmgmt_job_item_load_multiple(array_filter($form_state['values']['items'])) as $job_item) {
-    $job_items_by_source_language[$job_item->getSourceLangCode()][$job_item->tjiid] = $job_item;
+    $source_language = $enforced_source_language ? $enforced_source_language : $job_item->getSourceLangCode();
+    if (in_array($source_language, $job_item->getExistingLangCodes())) {
+      $job_items_by_source_language[$source_language][$job_item->tjiid] = $job_item;
+    }
+    else {
+      $skipped_count++;
+    }
   }
 
   $jobs = array();
@@ -997,7 +1027,18 @@ function tmgmt_ui_cart_request_translation_form_submit($form, &$form_state) {
 
   // Start the checkout process if any jobs were created.
   if ($jobs) {
+    if ($enforced_source_language) {
+      if ($skipped_count) {
+        $languages = language_list();
+        drupal_set_message(format_plural($skipped_count, 'One item skipped. @language translation unavailable.',
+          '@count items skipped. @language translation unavailable.', array('@language' => $languages[$enforced_source_language]->name)), 'warning');
+      }
+    }
+
     tmgmt_ui_job_checkout_and_redirect($form_state, $jobs);
+  }
+  else {
+    drupal_set_message(t('It is not possible to create a translation job from the selection you made.'), 'error');
   }
 }
 
