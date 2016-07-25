@@ -66,7 +66,6 @@ function search_api_sorts_index_select(array $form, array &$form_state, SearchAp
       t('Field'),
       t('Type'),
       t('Name'),
-      t('Search IDs'),
       t('Weight'),
     ),
     '#table_empty' => t('There are currently no fields for which sorts can be displayed.'),
@@ -102,16 +101,12 @@ function search_api_sorts_index_select(array $form, array &$form_state, SearchAp
         t('Field'),
         t('Type'),
         t('Name'),
-        t('Search IDs'),
         t('Weight'),
       );
       $empty_status = ' ';
     }
 
     $types = search_api_field_types();
-
-    // Get list of search ids
-    $search_ids = variable_get('search_api_facets_search_ids', array());
 
     // need to get the index fields ordered by sort's weight
     $index_fields = $fields;
@@ -121,16 +116,6 @@ function search_api_sorts_index_select(array $form, array &$form_state, SearchAp
         $index_fields[$key] = $fields[$key];
       }
     }
-
-    // Order fields according to sorts weight.
-    $new_fields = array();
-    foreach ($sorts as $key => $sort) {
-      if (!empty($fields[$key])) {
-        $new_fields[$key] = $fields[$key];
-        unset($fields[$key]);
-      }
-    }
-    $fields = $new_fields + $fields;
 
     foreach ($fields as $key => $field) {
       if (!$field['indexed']) {
@@ -155,7 +140,6 @@ function search_api_sorts_index_select(array $form, array &$form_state, SearchAp
           'enabled' => 0,
           'options' => array(),
           'status' => 0,
-          'settings' => array(),
           'weight' => $weight,
         ));
         ++$weight;
@@ -221,27 +205,6 @@ function search_api_sorts_index_select(array $form, array &$form_state, SearchAp
           '#maxlength' => max(strlen($sort->name), 80),
           '#default_value' => $sort->name,
         );
-        $form['sorts'][$k]['search_ids'] = array(
-          '#type' => 'container',
-        );
-        $form['sorts'][$k]['search_ids']['default_true'] = array(
-          '#type' => 'select',
-          '#title' => t('Display for searches'),
-          '#options' => array(
-            TRUE => t('For all except the selected'),
-            FALSE => t('Only for the selected'),
-          ),
-          '#default_value' => isset($sort->settings['default_true']) ? $sort->settings['default_true'] : TRUE,
-        );
-        $form['sorts'][$k]['search_ids']['search_ids'] = array(
-          '#type' => 'select',
-          '#title' => t('Search IDs'),
-          '#options' => $search_ids,
-          '#size' => min(4, count($search_ids)),
-          '#multiple' => TRUE,
-          '#default_value' => isset($sort->settings['search_ids']) ? $sort->settings['search_ids'] : array(),
-        );
-
         $form['sorts'][$k]['weight'] = array(
           '#type' => 'weight',
           '#default_value' => isset($sort->weight) ? (int) $sort->weight : 0,
@@ -311,7 +274,7 @@ function search_api_sorts_index_select_submit(array $form, array &$form_state) {
     $f = $v['sort'];
     $default_sort = $form_state['values']['default_sort'] == $key;
     $default_sort_no_terms = $form_state['values']['default_sort_no_terms'] == $key;
-    $update = $f->enabled != $v['enabled'] || $f->name != $v['name'] || $f->weight != $v['weight'] || $f->default_sort != $default_sort || $f->default_sort_no_terms != $default_sort_no_terms || $f->default_order != $v['default_order'] || $f->settings != array('default_true' => $v['search_ids']['default_true'], 'search_ids' => $v['search_ids']['search_ids']);
+    $update = $f->enabled != $v['enabled'] || $f->name != $v['name'] || $f->weight != $v['weight'] || $f->default_sort != $default_sort || $f->default_sort_no_terms != $default_sort_no_terms || $f->default_order != $v['default_order'];
     if ($update) {
       $f = clone $f;
       $f->enabled = $v['enabled'];
@@ -319,7 +282,6 @@ function search_api_sorts_index_select_submit(array $form, array &$form_state) {
       $f->default_sort = $default_sort;
       $f->default_sort_no_terms = $default_sort_no_terms;
       $f->default_order = $v['default_order'];
-      $f->settings = array('default_true' => $v['search_ids']['default_true'], 'search_ids' => $v['search_ids']['search_ids']);
       $f->weight = $v['weight'];
       $f->save();
       ++$count;
