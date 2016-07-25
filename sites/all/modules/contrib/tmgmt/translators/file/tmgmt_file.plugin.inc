@@ -31,7 +31,7 @@ class TMGMTFileTranslatorPluginController extends TMGMTDefaultTranslatorPluginCo
     if (file_prepare_directory($dirname, FILE_CREATE_DIRECTORY)) {
       $file = file_save_data($export->export($job), $path);
       file_usage_add($file, 'tmgmt_file', 'tmgmt_job', $job->tjid);
-      $job->submitted('Exported file can be downloaded <a href="!link">here</a>.', array('!link' => file_create_url($path)));
+      $job->submitted('Exported file can be downloaded <a href="!link">here</a>.', array('!link' => file_create_url($file->uri)));
     }
   }
 
@@ -53,6 +53,7 @@ class TMGMTFileTranslatorPluginController extends TMGMTDefaultTranslatorPluginCo
       // Making this setting TRUE by default is more appropriate, however we
       // need to make it FALSE due to backwards compatibility.
       'xliff_processing' => FALSE,
+      'xliff_cdata' => FALSE,
     );
   }
 
