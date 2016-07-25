@@ -16,14 +16,37 @@ class TMGMTI18nStringSourcePluginController extends TMGMTDefaultSourcePluginCont
   public function getData(TMGMTJobItem $job_item) {
     $i18n_object = $this->getI18nObjectWrapper($job_item);
     $structure = array();
+    $languages = language_list();
+
     if ($i18n_object instanceof i18n_string_object_wrapper) {
       $i18n_strings = $i18n_object->get_strings();
+      $source_language = $job_item->getJob()->source_language;
       foreach ($i18n_strings as $string_id => $string) {
-        $structure[$string_id] = array(
-          '#label' => $string->title,
-          '#text' => $string->string,
-          '#translate' => TRUE
-        );
+        // If the job source language is different from the i18n source language
+        // try to load an existing translation for the language and use it as
+        // the source.
+        if ($source_language != i18n_string_source_language()) {
+          $translation = $string->get_translation($source_language);
+
+          if (empty($translation)) {
+            throw new TMGMTException(t('Unable to load %language translation for the string %title',
+              array('%language' => $languages[$source_language]->name, '%title' => $string->title)));
+          }
+          // If '#label' is empty theme_tmgmt_ui_translator_review_form() fails.
+          $structure[$string_id] = array(
+            '#label' => !empty($string->title) ? $string->title : $string->property,
+            '#text' => $translation,
+            '#translate' => TRUE
+          );
+        }
+        else {
+          // If '#label' is empty theme_tmgmt_ui_translator_review_form() fails.
+          $structure[$string_id] = array(
+            '#label' => !empty($string->title) ? $string->title : $string->property,
+            '#text' => $string->string,
+            '#translate' => TRUE
+          );
+        }
       }
     }
     return $structure;
