@@ -4047,3 +4047,7 @@ body .region-branding .block .views-exposed-form .views-exposed-widget .search-s
   margin: 0;
   width: 20px;
 }
+
+select.chosen-processed {
+  display: none !important;
+}
