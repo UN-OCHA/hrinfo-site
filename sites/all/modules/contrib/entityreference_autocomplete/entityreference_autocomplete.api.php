@@ -18,6 +18,7 @@
  *   An associative with metadata about every result contained in $matches. Each
  *   index in the array maps to an index in the $matches variables, and contains
  *   the following data:
+ *    'entity'        =>      The full entity object, as loaded via EFQ,
  *    'entity_id'     =>      The ID of the entity referenced,
  *    'entity_type'   =>      The type of the entity referenced,
  *    'entity_bundle' =>      The bundle that the entity referenced belogns to,

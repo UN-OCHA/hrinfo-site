@@ -3,7 +3,7 @@
  * @file
  * The helper functions for the visualization part of the module.
  */
- 
+
 /**
  * Implements hook_menu().
  */
@@ -42,6 +42,21 @@ function visualization_theme() {
       'path' => drupal_get_path('module', 'visualization') . '/theme',
     ),
   );
+}
+
+/**
+ * Implements hook_library().
+ */
+function visualization_library() {
+  $libraries['visualization'] = array(
+    'title' => 'Visualization',
+    'js' => array(
+      drupal_get_path('module', 'visualization') . '/js/visualization.js' => array(),
+    ),
+    'version' => '1.0',
+  );
+
+  return $libraries;
 }
 
 /**
