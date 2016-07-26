@@ -39,6 +39,7 @@ function chosen_field_widget_info_alter(&$info) {
   $widget_defaults = array(
     'options_select' => '',
     'select_or_other' => '',
+    'hser_hierarchy' => '',
     'date_combo' => 0,
   );
 
