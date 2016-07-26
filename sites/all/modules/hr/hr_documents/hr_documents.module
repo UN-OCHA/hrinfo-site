@@ -29,6 +29,19 @@ function hr_documents_og_features_registry() {
  */
 function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
   hr_sectors_hide_sectors($form, $form_state);
+  if (isset($form['field_locations']['und']['#config'])) {
+    $form['field_locations']['und']['#config']['dropbox']['title'] = t('Current selections');
+    $form['field_locations']['und']['#config']['animation_delay'] = 0;
+    $form['field_locations']['und']['#config']['level_labels'] = array(
+      'status' => 1,
+      'labels' => array(
+        0 => t('Country'),
+        1 => t('Admin 1'),
+        2 => t('Admin 2'),
+        3 => t('Admin 3'),
+      ),
+    );
+  }
 }
 
 /**
