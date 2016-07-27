@@ -104,3 +104,25 @@ function hr_datasets_menu_alter(&$items) {
 function hr_datasets_redirect_api_datasets() {
   drupal_goto(variable_get('humdata_base_url', 'https://data.humdata.org') . '/faq#body-faq-HDX_API');
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function hr_datasets_form_hr_dataset_node_form_alter(&$form, &$form_state) {
+  hr_sectors_hide_sectors($form, $form_state);
+  if (module_exists('hs_taxonomy')) {
+    if (isset($form['field_locations']['und']['#config'])) {
+      $form['field_locations']['und']['#config']['dropbox']['title'] = t('Current selections');
+      $form['field_locations']['und']['#config']['animation_delay'] = 0;
+      $form['field_locations']['und']['#config']['level_labels'] = array(
+        'status' => 1,
+        'labels' => array(
+          0 => t('Country'),
+          1 => t('Admin 1'),
+          2 => t('Admin 2'),
+          3 => t('Admin 3'),
+        ),
+      );
+    }
+  }
+}

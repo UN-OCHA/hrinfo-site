@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Install file for the locations.
+ */
+
+/**
+ * Swith to hierarchical select.
+ */
+function hr_locations_update_7000() {
+  $entity_type = 'node';
+  $field_name = 'field_locations';
+  $field_info = field_info_field($field_name);
+
+  $bundles = array(
+    'acc_incident',
+    'hr_news',
+    'acc_application',
+    'hr_contact',
+    'hr_assessment',
+    'hr_infographic',
+    'hr_dataset',
+    'hr_document',
+  );
+
+  foreach ($bundles as $bundle) {
+    if ($field_instance = field_info_instance($entity_type, $field_name, $bundle)) {
+      $field_instance['description'] = 'Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).';
+      $field_instance['widget']['type'] = 'hser_hierarchy';
+      $field_instance['widget']['module'] = 'hser';
+      $field_instance['widget']['active'] = TRUE;
+      $field_instance['widget']['settings']['editable'] = FALSE;
+      $field_instance['widget']['settings']['apply_chosen'] = FALSE;
+      unset($field_instance['widget']['settings']['shs']);
+      field_update_instance($field_instance);
+    }
+  }
+}

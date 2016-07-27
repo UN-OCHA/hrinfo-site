@@ -54,14 +54,16 @@ function hr_assessments_search_api_views_query_alter(&$view, &$query) {
       foreach ($condition_group['conditions'] as &$condition) {
         if (reset($condition) == 'og_group_ref') {
           $nid = $condition[1];
-          $node = node_load($nid);
-          if ($node->type == 'hr_disaster') {
-            $condition = array('field_disasters', $nid, '=');
-          }
-          // Clusters as spaces
-          // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
-          elseif ($node->type == 'hr_bundle') {
-            $condition = array('field_bundles', $nid, '=');
+          if (is_numeric($nid)) {
+            $node = node_load($nid);
+            if ($node->type == 'hr_disaster') {
+              $condition = array('field_disasters', $nid, '=');
+            }
+            // Clusters as spaces
+            // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
+            elseif ($node->type == 'hr_bundle') {
+              $condition = array('field_bundles', $nid, '=');
+            }
           }
         }
       }
@@ -105,4 +107,26 @@ function hr_assessments_global_map() {
     return node_view($map_node);
   }
   return drupal_access_denied();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function hr_assessments_form_hr_assessment_node_form_alter(&$form, &$form_state) {
+  hr_sectors_hide_sectors($form, $form_state);
+  if (module_exists('hs_taxonomy')) {
+    if (isset($form['field_locations']['und']['#config'])) {
+      $form['field_locations']['und']['#config']['dropbox']['title'] = t('Current selections');
+      $form['field_locations']['und']['#config']['animation_delay'] = 0;
+      $form['field_locations']['und']['#config']['level_labels'] = array(
+        'status' => 1,
+        'labels' => array(
+          0 => t('Country'),
+          1 => t('Admin 1'),
+          2 => t('Admin 2'),
+          3 => t('Admin 3'),
+        ),
+      );
+    }
+  }
 }
