@@ -122,6 +122,23 @@ function hr_contacts_form_og_ui_confirm_subscribe_alter(&$form, &$form_state) {
     $node_form['og_group_ref'][LANGUAGE_NONE][0]['default']['#type'] = 'hidden';
 
   }
+
+  if (module_exists('hs_taxonomy')) {
+    if (isset($form['field_locations']['und']['#config'])) {
+      $form['field_locations']['und']['#config']['dropbox']['title'] = t('Current selections');
+      $form['field_locations']['und']['#config']['animation_delay'] = 0;
+      $form['field_locations']['und']['#config']['level_labels'] = array(
+        'status' => 1,
+        'labels' => array(
+          0 => t('Country'),
+          1 => t('Admin 1'),
+          2 => t('Admin 2'),
+          3 => t('Admin 3'),
+        ),
+      );
+    }
+  }
+
 }
 
 /**
@@ -263,4 +280,3 @@ function hr_contacts_pdf_output($node) {
   echo $output->data;
   exit;
 }
-

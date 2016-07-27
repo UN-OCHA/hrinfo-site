@@ -24,3 +24,23 @@ function acc_applications_og_features_registry() {
   return $registry;
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function acc_applications_form_acc_application_node_form_alter(&$form, &$form_state) {
+  if (module_exists('hs_taxonomy')) {
+    if (isset($form['field_locations']['und']['#config'])) {
+      $form['field_locations']['und']['#config']['dropbox']['title'] = t('Current selections');
+      $form['field_locations']['und']['#config']['animation_delay'] = 0;
+      $form['field_locations']['und']['#config']['level_labels'] = array(
+        'status' => 1,
+        'labels' => array(
+          0 => t('Country'),
+          1 => t('Admin 1'),
+          2 => t('Admin 2'),
+          3 => t('Admin 3'),
+        ),
+      );
+    }
+  }
+}
