@@ -37,3 +37,41 @@ function hr_locations_update_7000() {
     }
   }
 }
+
+/**
+ * Swith to simple hierarchical select.
+ */
+function hr_locations_update_7001() {
+  $entity_type = 'node';
+  $field_name = 'field_locations';
+  $field_info = field_info_field($field_name);
+
+  $bundles = array(
+    'acc_incident',
+    'hr_news',
+    'acc_application',
+    'hr_contact',
+    'hr_assessment',
+    'hr_infographic',
+    'hr_dataset',
+    'hr_document',
+  );
+
+  foreach ($bundles as $bundle) {
+    if ($field_instance = field_info_instance($entity_type, $field_name, $bundle)) {
+      $field_instance['description'] = 'Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).';
+      $field_instance['widget']['type'] = 'taxonomy_shs';
+      $field_instance['widget']['module'] = 'shs';
+      $field_instance['widget']['active'] = TRUE;
+
+      $field_instance['widget']['settings']['node_count'] = 0;
+      $field_instance['widget']['settings']['create_new_terms'] = 0;
+      $field_instance['widget']['settings']['create_new_levels'] = 0;
+      $field_instance['widget']['settings']['force_deepest'] = 0;
+      $field_instance['widget']['settings']['use_chosen'] = 'chosen';
+      unset($field_instance['widget']['settings']['editable']);
+      unset($field_instance['widget']['settings']['apply_chosen']);
+      field_update_instance($field_instance);
+    }
+  }
+}
