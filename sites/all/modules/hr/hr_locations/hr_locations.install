@@ -64,11 +64,11 @@ function hr_locations_update_7001() {
       $field_instance['widget']['module'] = 'shs';
       $field_instance['widget']['active'] = TRUE;
 
-      $field_instance['widget']['settings']['node_count'] = 0;
-      $field_instance['widget']['settings']['create_new_terms'] = 0;
-      $field_instance['widget']['settings']['create_new_levels'] = 0;
-      $field_instance['widget']['settings']['force_deepest'] = 0;
-      $field_instance['widget']['settings']['use_chosen'] = 'chosen';
+      $field_instance['widget']['settings']['shs']['node_count'] = 0;
+      $field_instance['widget']['settings']['shs']['create_new_terms'] = 0;
+      $field_instance['widget']['settings']['shs']['create_new_levels'] = 0;
+      $field_instance['widget']['settings']['shs']['force_deepest'] = 0;
+      $field_instance['widget']['settings']['shs']['use_chosen'] = 'chosen';
       unset($field_instance['widget']['settings']['editable']);
       unset($field_instance['widget']['settings']['apply_chosen']);
       field_update_instance($field_instance);
