@@ -32,3 +32,56 @@ function hr_locations_query_hr_locations_filter_parent_alter($query) {
     }
   }
 }
+
+/**
+ * Implements hook_shs_json_callbacks_alter()
+ * Allows filter by parent in the API
+ */
+function hr_locations_shs_json_callbacks_alter(&$callbacks) {
+  $callbacks['shs_json_term_get_children']['callback'] = 'hr_locations_shs_json_term_get_children';
+}
+
+function hr_locations_shs_json_term_get_children($vid, $parent = array(), $settings = array(), $field = NULL) {
+  $scope = $result = array();
+  foreach ($parent as $tid) {
+    $scope[] = shs_term_get_children($vid, $tid, $settings);
+    if (shs_add_term_access($vid, $tid, $field)) {
+      $result[] = array(
+        'vid' => $vid,
+      );
+    }
+  }
+
+  $has_children = _hr_locations_taxonomy_get_all_children($scope);
+
+  // Rewrite result set to preserve original sort of terms through JSON request.
+  foreach ($scope as $terms) {
+    foreach ($terms as $tid => $label) {
+      $result[] = array(
+        'tid' => $tid,
+        'label' => $label,
+        'has_children' => array_key_exists($tid, $has_children) ? TRUE : FALSE,
+      );
+    }
+  }
+
+  return $result;
+}
+
+function _hr_locations_taxonomy_get_all_children($scope) {
+  $tids = array();
+  foreach ($scope as $terms) {
+    foreach ($terms as $tid => $label) {
+      $tids[$tid] = $tid;
+    }
+  }
+
+  if (empty($tids)) {
+    return array();
+  }
+
+  $sql = 'SELECT DISTINCT parent, 1 FROM {taxonomy_term_hierarchy} WHERE parent IN (:tids)';
+  $result = db_query($sql, array(':tids' => array_keys($tids)))->fetchAllAssoc('parent', PDO::FETCH_ASSOC);
+
+  return $result;
+}
