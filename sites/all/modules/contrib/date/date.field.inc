@@ -19,6 +19,7 @@ function date_field_formatter_info() {
         'multiple_from' => '',
         'multiple_to' => '',
         'fromto' => 'both',
+        'show_remaining_days' => FALSE,
       ),
     ),
     'format_interval' => array(
@@ -48,6 +49,7 @@ function date_field_formatter_settings_form($field, $instance, $view_mode, $form
     case 'format_interval':
       $form = date_interval_formatter_settings_form($field, $instance, $view_mode, $form, $form_state);
       break;
+
     default:
       $form = date_default_formatter_settings_form($field, $instance, $view_mode, $form, $form_state);
       break;
@@ -72,6 +74,7 @@ function date_field_formatter_settings_summary($field, $instance, $view_mode) {
     case 'format_interval':
       $summary = date_interval_formatter_settings_summary($field, $instance, $view_mode);
       break;
+
     default:
       $summary = date_default_formatter_settings_summary($field, $instance, $view_mode);
       break;
@@ -169,11 +172,16 @@ function date_field_formatter_view($entity_type, $entity, $field, $instance, $la
             $element[$delta] = array('#markup' => $item['value']);
           }
           else {
-            $element[$delta] = array('#markup' => t('!start-date to !end-date', array('!start-date' => $item['value'], '!end-date' => $item['value2'])));
+            $element[$delta] = array(
+              '#markup' => t('!start-date to !end-date', array(
+                '!start-date' => $item['value'],
+                '!end-date' => $item['value2']
+              )));
           }
         }
       }
       break;
+
     case 'format_interval':
       foreach ($items as $delta => $item) {
         if (!empty($entity->date_id) && !in_array($delta, $selected_deltas)) {
@@ -188,6 +196,7 @@ function date_field_formatter_view($entity_type, $entity, $field, $instance, $la
         }
       }
       break;
+
     default:
       foreach ($items as $delta => $item) {
         if (!empty($entity->date_id) && !in_array($delta, $selected_deltas)) {
@@ -198,6 +207,7 @@ function date_field_formatter_view($entity_type, $entity, $field, $instance, $la
           $variables['item'] = $item;
           $variables['dates'] = date_formatter_process($formatter, $entity_type, $entity, $field, $instance, $langcode, $item, $display);
           $variables['attributes'] = !empty($rdf_mapping) ? rdf_rdfa_attributes($rdf_mapping, $item['value']) : array();
+          $variables['show_remaining_days'] = $display['settings']['show_remaining_days'];
           $output = theme('date_display_combination', $variables);
           if (!empty($output)) {
             $element[$delta] = array('#markup' => $output);
@@ -231,10 +241,11 @@ function date_field_is_empty($item, $field) {
  * Implements hook_field_info().
  */
 function date_field_info() {
+  $granularity = array('year', 'month', 'day', 'hour', 'minute');
   $settings = array(
     'settings' => array(
       'todate' => '',
-      'granularity' => drupal_map_assoc(array('year', 'month', 'day', 'hour', 'minute')),
+      'granularity' => drupal_map_assoc($granularity),
       'tz_handling' => 'site',
       'timezone_db' => 'UTC',
     ),
@@ -250,26 +261,26 @@ function date_field_info() {
   );
   return array(
     'datetime' => array(
-      'label' => 'Date',
+      'label' => t('Date'),
       'description' => t('Store a date in the database as a datetime field, recommended for complete dates and times that may need timezone conversion.'),
       'default_widget' => 'date_select',
       'default_formatter' => 'date_default',
       'default_token_formatter' => 'date_plain',
-      ) + $settings,
+    ) + $settings,
     'date' => array(
-      'label' => 'Date (ISO format)',
+      'label' => t('Date (ISO format)'),
       'description' => t('Store a date in the database as an ISO date, recommended for historical or partial dates.'),
       'default_widget' => 'date_select',
       'default_formatter' => 'date_default',
       'default_token_formatter' => 'date_plain',
-      ) + $settings,
+    ) + $settings,
     'datestamp' => array(
-      'label' => 'Date (Unix timestamp)',
+      'label' => t('Date (Unix timestamp)'),
       'description' => t('Store a date in the database as a timestamp, deprecated format to support legacy data.'),
       'default_widget' => 'date_select',
       'default_formatter' => 'date_default',
       'default_token_formatter' => 'date_plain',
-      ) + $settings,
+    ) + $settings,
   );
 }
 
@@ -294,18 +305,18 @@ function date_field_widget_info() {
 
   $info = array(
     'date_select' => array(
-      'label' =>  t('Select list'),
+      'label' => t('Select list'),
       'field types' => array('date', 'datestamp', 'datetime'),
     ) + $settings,
     'date_text' => array(
-      'label' =>  t('Text field'),
+      'label' => t('Text field'),
       'field types' => array('date', 'datestamp', 'datetime'),
-     ) + $settings,
+    ) + $settings,
   );
 
   if (module_exists('date_popup')) {
     $info['date_popup'] = array(
-      'label' =>  t('Pop-up calendar'),
+      'label' => t('Pop-up calendar'),
       'field types' => array('date', 'datestamp', 'datetime'),
     ) + $settings;
   }
@@ -320,6 +331,7 @@ function date_field_widget_info() {
  * Implements hook_field_load().
  */
 function date_field_load($entity_type, $entities, $field, $instances, $langcode, &$items, $age) {
+  $timezone_db = date_get_timezone_db($field['settings']['tz_handling']);
   $db_format = date_type_format($field['type']);
   $process = date_process_values($field);
   foreach ($entities as $id => $entity) {
@@ -327,7 +339,7 @@ function date_field_load($entity_type, $entities, $field, $instances, $langcode,
       // If the file does not exist, mark the entire item as empty.
       if (is_array($item)) {
         $timezone = isset($item['timezone']) ? $item['timezone'] : '';
-        $timezone_db = date_get_timezone_db($field['settings']['tz_handling'], $timezone);
+        $item['timezone'] = date_get_timezone($field['settings']['tz_handling'], $timezone);
         $item['timezone_db'] = $timezone_db;
         $item['date_type'] = $field['type'];
         if (!empty($field['settings']['cache_enabled']) && ($delta < $field['settings']['cache_count'] || $field['settings']['cache_count'] == 0)) {
@@ -404,7 +416,7 @@ function date_field_presave($entity_type, $entity, $field, $instance, $langcode,
     $timezone = isset($item['timezone']) ? $item['timezone'] : '';
     if (is_array($item)) {
       $items[$delta]['timezone'] = date_get_timezone($field['settings']['tz_handling'], $timezone);
-      $items[$delta]['timezone_db'] = date_get_timezone_db($field['settings']['tz_handling'], $timezone);
+      $items[$delta]['timezone_db'] = date_get_timezone_db($field['settings']['tz_handling']);
       $items[$delta]['date_type'] = $field['type'];
     }
   }
