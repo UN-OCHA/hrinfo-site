@@ -42,30 +42,37 @@ function hr_locations_shs_json_callbacks_alter(&$callbacks) {
 }
 
 function hr_locations_shs_json_term_get_children($vid, $parent = array(), $settings = array(), $field = NULL) {
-  $scope = $result = array();
-  foreach ($parent as $tid) {
-    $scope[] = shs_term_get_children($vid, $tid, $settings);
-    if (shs_add_term_access($vid, $tid, $field)) {
-      $result[] = array(
-        'vid' => $vid,
-      );
+  $cache_key = "hr_location_cache:" . $vid . '_' . md5(serialize($parent));
+  $cache = cache_get($cache_key);
+
+  if (!$cache || ($cache->expire && time() > $cache->expire)) {
+    $scope = $result = array();
+    foreach ($parent as $tid) {
+      $scope[] = shs_term_get_children($vid, $tid, $settings);
+      if (shs_add_term_access($vid, $tid, $field)) {
+        $result[] = array(
+          'vid' => $vid,
+        );
+      }
     }
+
+    $has_children = _hr_locations_taxonomy_get_all_children($scope);
+
+    // Rewrite result set to preserve original sort of terms through JSON request.
+    foreach ($scope as $terms) {
+      foreach ($terms as $tid => $label) {
+        $result[] = array(
+          'tid' => $tid,
+          'label' => $label,
+          'has_children' => array_key_exists($tid, $has_children) ? TRUE : FALSE,
+        );
+      }
+    }
+    cache_set($cache_key, $result, 'cache', REQUEST_TIME + 2*60*60);
+    return $result;
   }
 
-  $has_children = _hr_locations_taxonomy_get_all_children($scope);
-
-  // Rewrite result set to preserve original sort of terms through JSON request.
-  foreach ($scope as $terms) {
-    foreach ($terms as $tid => $label) {
-      $result[] = array(
-        'tid' => $tid,
-        'label' => $label,
-        'has_children' => array_key_exists($tid, $has_children) ? TRUE : FALSE,
-      );
-    }
-  }
-
-  return $result;
+  return $cache->data;
 }
 
 function _hr_locations_taxonomy_get_all_children($scope) {
