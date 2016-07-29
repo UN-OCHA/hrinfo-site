@@ -1,0 +1,134 @@
+<?php
+/**
+ * @file   filefield_nginx_progress.module
+ * @author Ben Osman <dev@smoothify.com>
+ *         António P. P. Almeida <appa@perusio.net>
+ * @date   Sun Oct 21 14:31:03 2012
+ *
+ * @brief  Adds upload progress bar support for Nginx based on the
+ *         3rd party Nginx Upload Progress module.
+ *         https://github.com/masterzen/nginx-upload-progress-module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function filefield_nginx_progress_menu() {
+  $items = array();
+
+  $items['filefield_nginx_progress'] = array(
+    'page callback' => 'filefield_nginx_progress_ajax',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+} // filefield_nginx_progress_menu
+
+/**
+ * Menu callback for nginx upload progress.
+ *
+ * @param integer $key
+ *   The upload element ID to be used by the nginx progress upload module to
+ *   identify a particular upload.
+ *
+ * @return string
+ *   The response given by the Nginx module in JSON.
+ *
+ */
+function filefield_nginx_progress_ajax($key) {
+  $progress = array(
+    'message' => t('Starting upload...'),
+    'percentage' => -1,
+  );
+  // Get the status.
+  $status = nginx_progress_fetch($key);
+  if ($status['state'] == 'uploading') {
+    // We set a message only when the upload is in progress.
+    $progress['message'] = t('Uploading... (@current of @total)', array('@current' => format_size($status['received']), '@total' => format_size($status['size'])));
+    $progress['percentage'] = round(100 * $status['received'] / $status['size']);
+  }
+  // Output as JSON so that the JS progress bar can use it.
+  drupal_json_output($progress);
+} // filefield_nginx_progress_ajax
+
+/**
+ * Implements hook_element_info().
+ */
+function filefield_nginx_progress_element_info() {
+  $elements = array();
+
+  foreach (module_invoke_all('filefield_nginx_progress_widgets') as $widget) {
+    $elements[$widget]['#process'] = array('filefield_nginx_progress_element_process');
+  }
+  return $elements;
+} // filefield_nginx_progress_element_info
+
+/**
+ * Implements hook_filefield_nginx_progress_widgets().
+ *
+ * This returns a list of widgets that are compatible with FileField Nginx Progress.
+ */
+function filefield_nginx_progress_filefield_nginx_progress_widgets() {
+  return array('managed_file');
+}
+
+/**
+ * A #process callback to extend the file_widget element type.
+ *
+ * To get the field working with nginx upload progress, we need to enable the
+ *  progress bar and modify the ahah paths to work with the nginx redirection.
+ *
+ */
+function filefield_nginx_progress_element_process($element, &$form_state, $form) {
+  // Generate a random upload progress key.
+  $upload_progress_key = mt_rand();
+
+  // Nginx really wants us to send a get value, but form_expand_ahah doesn't
+  // allow query strings in paths. The work around is to add the progress id
+  // into the path and to rewrite at the nginx level to the required url.
+  $element['upload_button']['#ajax']['path'] .= '/x-progress-id:' . $upload_progress_key;
+
+  // Add the upload key to the form, in a manner compatible with the existing
+  // javascript
+  $element['UPLOAD_IDENTIFIER'] = array(
+    '#type' => 'hidden',
+    '#value' => $upload_progress_key,
+    '#attributes' => array('class' => array('file-progress')),
+  );
+
+  // Unset this as a precaution in the unlikely event that apc upload progress
+  // is enabled in php.ini.
+  if (isset($element['APC_UPLOAD_PROGRESS'])) {
+    unset($element['APC_UPLOAD_PROGRESS']);
+  }
+
+  // Enable the progress bar.
+  $element['upload_button']['#ajax']['progress']['type'] = 'bar';
+
+  // Modify the upload progress callback to use our own menu callback.
+  $element['upload_button']['#ajax']['progress']['path'] = 'filefield_nginx_progress/' . $upload_progress_key;
+
+  return $element;
+} // filefield_nginx_progress_element_process
+
+/**
+ *
+ * Fetch the upload progress from nginx using the X-Progress-ID header.
+ *
+ * @param integer $key
+ *   The key generated when processing the upload button element.
+ * @return array
+ *   An array with the status information for the progress bar.
+ */
+function nginx_progress_fetch($key) {
+  global $base_url;
+
+  $url = url("$base_url/progress", array('absolute' => TRUE, 'external' => TRUE));
+  // We get the response using an header instead of a query string. This
+  // mimics what is given as example on the module README.
+  $response = drupal_http_request($url, array('headers' => array('X-Progress-ID' => $key)));
+
+  // Decode the JSON response.
+  return drupal_json_decode($response->data);
+} // nginx_progress_fetch
