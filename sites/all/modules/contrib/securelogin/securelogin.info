@@ -4,11 +4,12 @@ core = 7.x
 files[] = securelogin.admin.inc
 files[] = securelogin.install
 files[] = securelogin.module
+files[] = securelogin.test
 configure = admin/config/people/securelogin
 
-; Information added by Drupal.org packaging script on 2015-01-08
-version = "7.x-1.5"
+; Information added by Drupal.org packaging script on 2015-10-28
+version = "7.x-1.6"
 core = "7.x"
 project = "securelogin"
-datestamp = "1420710788"
+datestamp = "1446062040"
 
