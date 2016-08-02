@@ -8,6 +8,10 @@ include_once 'hr_events.features.inc';
 
 define('HR_EVENTS_WKHTMLTOPDF', 'http://localhost:8441/htmltopdf');
 
+function hr_events_wkhtmltopdf_url() {
+  return variable_get('hr_events_wkhtmltopdf_url', HR_EVENTS_WKHTMLTOPDF);
+}
+
 /**
  * Implements hook_og_features_registry()
  */
@@ -222,7 +226,9 @@ function hr_events_pdf_output($nid) {
       'footer-spacing' => '2',
     ),
   );
-  $url = HR_EVENTS_WKHTMLTOPDF.'?'.http_build_query($params, NULL, '&');
+
+  $url = hr_events_wkhtmltopdf_url();
+  $url .= '?' . http_build_query($params, NULL, '&');
   $req_params = array(
     'method' => 'POST',
   );

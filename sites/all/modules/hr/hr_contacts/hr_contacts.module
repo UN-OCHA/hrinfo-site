@@ -270,7 +270,9 @@ function hr_contacts_pdf_output($node) {
       'footer-spacing' => '2',
     ),
   );
-  $url = HR_EVENTS_WKHTMLTOPDF.'?'.http_build_query($params, NULL, '&');
+
+  $url = hr_events_wkhtmltopdf_url();
+  $url .= '?' . http_build_query($params, NULL, '&');
   $req_params = array(
     'method' => 'POST',
   );
