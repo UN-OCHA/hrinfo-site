@@ -34,6 +34,8 @@ class TMGMTDefaultTranslatorUIController extends TMGMTPluginBase implements TMGM
         $options[$language] = $language;
       }
 
+      ksort($options);
+
       foreach ($controller->getRemoteLanguagesMappings($translator) as $local_language => $remote_language) {
         $form['remote_languages_mappings'][$local_language] = array(
           '#type' => 'textfield',
