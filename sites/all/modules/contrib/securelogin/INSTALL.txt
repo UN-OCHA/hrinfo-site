@@ -5,10 +5,18 @@ SECURE LOGIN MODULE INSTALLATION
    environments, you may need to set PHP's $_SERVER['HTTPS'] variable to "on"
    when the site is accessed via HTTPS (either in your webserver configuration
    or in your settings.php file).
-2. Untar the module into your Drupal modules directory.
-3. Read the README.txt before enabling the module and before upgrading!
-4. Enable the module at admin/modules.
-5. Configure the module at admin/config/people/securelogin.
+2. If you have set the $base_url variable in your settings.php file, ensure that
+   the URL scheme matches the scheme used to access the site.  For example:
+   if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') {
+     $base_url = 'https://www.example.org';
+   }
+   else {
+     $base_url = 'http://www.example.org';
+   }
+3. Untar the module into your Drupal modules directory.
+4. Read the README.txt before enabling the module and before upgrading!
+5. Enable the module at admin/modules.
+6. Configure the module at admin/config/people/securelogin.
 
 SECURE LOGIN MODULE UNINSTALLATION
 ----------------------------------
