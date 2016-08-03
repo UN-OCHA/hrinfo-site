@@ -72,11 +72,6 @@ function search_api_sorts_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
-      'settings' => array(
-        'description' => 'Serialized storage of general settings.',
-        'type' => 'blob',
-        'serialize' => TRUE,
-      ),
     ) + entity_exportable_schema_fields(),
     'indexes' => array(
       'field' => array('index_id', array('field', 50)),
@@ -162,13 +157,3 @@ function search_api_sorts_update_7204() {
   ));
 }
 
-/**
- * Add serialized storage of general settings
- */
-function search_api_sorts_update_7205() {
-  db_add_field('search_api_sort', 'settings', array(
-    'description' => 'Serialized storage of general settings.',
-    'type' => 'blob',
-    'serialize' => TRUE,
-  ));
-}
