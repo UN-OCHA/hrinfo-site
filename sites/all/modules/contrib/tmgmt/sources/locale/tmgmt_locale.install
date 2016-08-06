@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Installation hooks for tmgmt_locale module.
+ */
+
+/**
+ * Update existing {locales_target}.l10n_status if any.
+ */
+function tmgmt_locale_update_7000() {
+  if (module_exists('l10n_update')) {
+    module_load_include('inc', 'l10n_update');
+    $query = db_select('tmgmt_job_item', 'ji')
+      ->condition('ji.plugin', 'locale')
+      ->condition('ji.state', TMGMT_JOB_ITEM_STATE_ACCEPTED);
+    $query->innerJoin('tmgmt_job', 'j', 'j.tjid = ji.tjid');
+    $query->addField('ji', 'item_id', 'lid');
+    $query->addField('j', 'target_language', 'language');
+    foreach ($query->execute() as $row) {
+      db_update('locales_target')
+        ->condition('lid', $row->lid)
+        ->condition('language', $row->language)
+        ->fields(array('l10n_status' => L10N_UPDATE_STRING_CUSTOM))
+        ->execute();
+    }
+  }
+}
