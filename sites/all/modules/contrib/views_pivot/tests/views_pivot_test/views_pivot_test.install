@@ -1,0 +1,88 @@
+<?php
+
+/**
+ * @file views_pivot_test.install
+ * Contains install hooks.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function views_pivot_test_install() {
+  // Favourite colour field on pivot nodes.
+  $field = array(
+    'field_name'  => 'field_test_pivot_colour',
+    'cardinality' => 1,
+    'type'        => 'list_text',
+    'settings'    => array(
+      'allowed_values' => array(
+        'red' => 'Red',
+        'blue' => 'Blue',
+        'green' => 'Green',
+      ),
+    ),
+  );
+  field_create_field($field);
+
+  $instance = array(
+    'field_name'  => 'field_test_pivot_colour',
+    'entity_type' => 'node',
+    'bundle'      => 'pivot',
+    'label'       => 'Colour',
+    'widget'      => array(
+      'type'      => 'options_buttons',
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'list_default',
+      ),
+    ),
+  );
+  field_create_instance($instance);
+
+  $node = (object) array(
+    'type' => 'pivot',
+    'uid' => 1,
+    'title' => 'Red - January',
+    'created' => strtotime('2013-01-01 00:00'),
+  );
+  $node->field_test_pivot_colour[LANGUAGE_NONE][0]['value'] = 'red';
+  node_save($node);
+
+  $node = (object) array(
+    'type' => 'pivot',
+    'uid' => 1,
+    'title' => 'Red - February',
+    'created' => strtotime('2013-02-01 00:00'),
+  );
+  $node->field_test_pivot_colour[LANGUAGE_NONE][0]['value'] = 'red';
+  node_save($node);
+
+  $node = (object) array(
+    'type' => 'pivot',
+    'uid' => 1,
+    'title' => 'Blue - February',
+    'created' => strtotime('2013-02-01 00:00'),
+  );
+  $node->field_test_pivot_colour[LANGUAGE_NONE][0]['value'] = 'blue';
+  node_save($node);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function views_pivot_test_uninstall() {
+  // Clean up. This is not necessary for tests, but allows clean reinstall of
+  // this module using Devel while developing tests.
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node');
+  $query->entityCondition('bundle', 'pivot');
+  $result = $query->execute();
+  if (isset($result['node'])) {
+    $nodes = entity_load('node', array_keys($result['node']));
+    foreach ($nodes as $node) {
+      node_delete($node);
+    }
+  }
+}
