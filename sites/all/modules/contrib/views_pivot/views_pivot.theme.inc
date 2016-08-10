@@ -13,11 +13,15 @@ function template_preprocess_views_view_pivot_table(&$vars) {
   // therefore swap the raw data out to a new variable and reset $vars['rows']
   // so that it can get rebuilt.
   // Store rows so that they may be used by further preprocess functions.
-  $result   = $vars['result'] = $vars['rows'];
+  $result = $vars['result'] = $vars['rows'];
   $vars['rows'] = array();
   $vars['field_classes'] = array();
   $vars['header'] = array();
+  $vars['hide_subheader'] = TRUE;
+  $vars['aggregate_columns'] = array();
 
+  /* @var $options array */
+  /* @var $handler views_plugin_style_pivot */
   $options  = $view->style_plugin->options;
   $handler  = $view->style_plugin;
 
@@ -34,6 +38,7 @@ function template_preprocess_views_view_pivot_table(&$vars) {
   $active   = !empty($handler->active) ? $handler->active : '';
   $order    = !empty($handler->order) ? $handler->order : 'asc';
 
+  $aggregates = array();
   $pivot_extra = array();
   foreach ($columns as $field => $column) {
     if (!empty($options['info'][$field]['pivot_row_extra'])) {
@@ -53,10 +58,12 @@ function template_preprocess_views_view_pivot_table(&$vars) {
   $renders = $handler->render_fields($result);
 
   foreach ($result as $num => $row) {
-    _views_pivot_add_field_to_row($vars, $options, $renders, $fields, $num, VIEWS_PIVOT_HEADER_KEY, $pivot_col, $renders[$num][$pivot_col], FALSE);
-    _views_pivot_add_field_to_row($vars, $options, $renders, $fields, $num, $renders[$num][$pivot_row], $pivot_row, $columns[$pivot_row], FALSE);
+    _views_pivot_add_field_to_row($vars, $options, $renders, $fields, $num, VIEWS_PIVOT_HEADER_KEY, $pivot_col, $renders[$num][$pivot_col], $renders[$num][$pivot_col], FALSE);
+    _views_pivot_add_field_to_row($vars, $options, $renders, $fields, $num, $renders[$num][$pivot_row], $pivot_row, $columns[$pivot_row], $columns[$pivot_row], FALSE);
   }
   foreach ($columns as $field => $column) {
+    /* @var $field_handler views_handler_field_field */
+    $field_handler = $fields[$field];
     // Create a second variable so we can easily find what fields we have and what the
     // CSS classes should be.
     $vars['fields'][$field] = drupal_clean_css_identifier($field);
@@ -65,8 +72,8 @@ function template_preprocess_views_view_pivot_table(&$vars) {
     }
 
     // render the header labels
-    if ($field == $column && empty($fields[$field]->options['exclude'])) {
-      $label = check_plain(!empty($fields[$field]) ? $fields[$field]->label() : '');
+    if ($field == $column && empty($field_handler->options['exclude'])) {
+      $label = check_plain(!empty($field_handler) ? $field_handler->label() : '');
       if ($field == $pivot_col) {
         if (!empty($vars['pivotheader'])) {
           foreach ($vars['pivotheader'] as $key => $value) {
@@ -82,7 +89,7 @@ function template_preprocess_views_view_pivot_table(&$vars) {
       else if (in_array($column, $pivot_extra)) {
         $header_area = 'header';
       }
-      if (empty($options['info'][$field]['sortable']) || !$fields[$field]->click_sortable()) {
+      if (empty($options['info'][$field]['sortable']) || !$field_handler->click_sortable()) {
         $vars[$header_area][$field] = $label;
       }
       else {
@@ -109,10 +116,10 @@ function template_preprocess_views_view_pivot_table(&$vars) {
 
       $vars['header_classes'][$field] = '';
       // Set up the header label class.
-      if ($fields[$field]->options['element_default_classes']) {
+      if ($field_handler->options['element_default_classes']) {
         $vars['header_classes'][$field] .= "views-field views-field-" . $vars['fields'][$field];
       }
-      $class = $fields[$field]->element_label_classes(0);
+      $class = $field_handler->element_label_classes(0);
       if ($class) {
         if ($vars['header_classes'][$field]) {
           $vars['header_classes'][$field] .= ' ';
@@ -126,7 +133,7 @@ function template_preprocess_views_view_pivot_table(&$vars) {
 
       // Add a header label wrapper if one was selected.
       if (!empty($vars['header'][$field])) {
-        $element_label_type = $fields[$field]->element_label_type(TRUE, TRUE);
+        $element_label_type = $field_handler->element_label_type(TRUE, TRUE);
         if ($element_label_type) {
           $vars['header'][$field] = '<' . $element_label_type . '>' . $vars['header'][$field] . '</' . $element_label_type . '>';
         }
@@ -146,26 +153,105 @@ function template_preprocess_views_view_pivot_table(&$vars) {
     foreach ($result as $num => $row) {
       if (($column == $pivot_row) || ($column == $pivot_col)) {
         // OK, we will append to one of those columns.
-        $col = $column;
+        $column_key = $column;
       }
       else if (in_array($column, $pivot_extra)) {
-        $col = $column;
+        $column_key = $column;
       }
       else {
-        $col = $column . ':' . $renders[$num][$pivot_col];
+        $column_key = $column . ':' . $renders[$num][$pivot_col];
       }
-      _views_pivot_add_field_to_row($vars, $options, $renders, $fields, $num, $renders[$num][$pivot_row], $field, $col);
+      $row_key = $renders[$num][$pivot_row];
+
+      // Handle the Pivot aggregates
+      $full_field_name = 'field_' . $field;
+      $full_field_alias = isset($field_handler->field_alias) ? $field_handler->field_alias : FALSE;
+      if (isset($view->result[$num]->{$full_field_name})) {
+        if (is_array($view->result[$num]->{$full_field_name})) {
+          $value = $view->result[$num]->{$full_field_name}[0]['raw']['value'];
+        }
+        else {
+          $value = $view->result[$num]->{$full_field_name};
+        }
+      }
+      else if (isset($view->result[$num]->{$field})) {
+        $value = $view->result[$num]->{$field};
+      }
+      else if (isset($view->result[$num]->{$full_field_alias})) {
+        if (is_array($view->result[$num]->{$full_field_alias})) {
+          $value = $view->result[$num]->{$full_field_alias}[0]['raw']['value'];
+        }
+        else {
+          $value = $view->result[$num]->{$full_field_alias};
+        }
+      }
+      else if (isset($view->result[$num]->{$full_field_alias})) {
+        $value = $view->result[$num]->{$full_field_alias};
+      }
+      else {
+        $value = 0;
+      }
+
+      if (!empty($options['info'][$field]['pivot_row_aggregate'])) {
+        $aggregates['row'][$row_key][$field][] = $value;
+        $aggregates['overall'][$field][] = $value;
+      }
+      if (!empty($options['info'][$field]['pivot_col_aggregate'])) {
+        $aggregates['col'][$column_key][] = $value;
+      }
+
+      _views_pivot_add_field_to_row($vars, $options, $renders, $fields, $num, $row_key, $field, $column_key, $column);
     }
   }
 
-  foreach ($vars['rows'][VIEWS_PIVOT_HEADER_KEY] as $key => $value) {
-    $vars['header'][$key] = $value;
+  if (!empty($aggregates['row'])) {
+    foreach ($aggregates['row'] as $row_key => $agg_columns) {
+      foreach ($agg_columns as $column_key => $values) {
+        $agg_key = 'agg:' . $column_key;
+        $vars['rows'][VIEWS_PIVOT_HEADER_KEY][$agg_key] = $options['info'][$column_key]['pivot_row_aggregate_label'];
+        $vars['aggregate_columns'][$agg_key] = TRUE;
+        $renders[$agg_key][$column_key] = _views_pivot_format_aggregate_field($view, $fields, $column_key, $values, $options['info'][$column_key]['pivot_row_aggregate']);
+        _views_pivot_add_field_to_row($vars, $options, $renders, $fields, $agg_key, $row_key, $column_key, $agg_key, '');
+      }
+    }
   }
-  unset($vars['rows'][VIEWS_PIVOT_HEADER_KEY]);
+  if (!empty($aggregates['col'])) {
+    foreach ($aggregates['col'] as $column_key => $values) {
+      $parts = explode(':', $column_key);
+      $field = $parts[0];
+
+      $row_key = 'agg:' . $field;
+
+      $renders[$row_key][$field] = $options['info'][$field]['pivot_col_aggregate_label'];
+      _views_pivot_add_field_to_row($vars, $options, $renders, $fields, $row_key, $row_key, $field, $pivot_row, '');
+
+      $renders[$row_key][$field] = _views_pivot_format_aggregate_field($view, $fields, $field, $values, $options['info'][$field]['pivot_col_aggregate']);
+      _views_pivot_add_field_to_row($vars, $options, $renders, $fields, $row_key, $row_key, $field, $column_key, '');
+    }
+  }
+  if (!empty($aggregates['overall'])) {
+    foreach ($aggregates['overall'] as $field => $values) {
+      $agg_key = 'agg:' . $field;
+      $renders[$agg_key][$field] = _views_pivot_format_aggregate_field($view, $fields, $field, $values, $options['info'][$field]['pivot_col_aggregate']);
+      _views_pivot_add_field_to_row($vars, $options, $renders, $fields, $agg_key, $agg_key, $field, $agg_key, '');
+    }
+  }
+
+  if (!empty($vars['rows'][VIEWS_PIVOT_HEADER_KEY]) ) {
+    foreach ($vars['rows'][VIEWS_PIVOT_HEADER_KEY] as $key => $value) {
+      $vars['header'][$key] = $value;
+    }
+    unset($vars['rows'][VIEWS_PIVOT_HEADER_KEY]);
+  }
 
   // Hide table header if all labels are empty.
   if (!array_filter($vars['header'])) {
     $vars['header'] = array();
+  }
+
+  // Show table subheader if labels are not empty.
+  if (array_filter($vars['subheader'])) {
+    $vars['hide_subheader'] = FALSE;
   }
 
   $count = 0;
@@ -203,20 +289,111 @@ function template_preprocess_views_view_pivot_table(&$vars) {
     $vars['attributes_array'] = array('summary' => $handler->options['summary']);
   }
 
+  $c = count($vars['subheader']);
+  $row_span_extra_header = $vars['hide_subheader'] ? 1 : ($vertical ? ($c + 1) : 2);
   array_unshift($pivot_extra, $pivot_row);
   foreach ($pivot_extra as $field) {
-    $vars['header_attributes'][$field]['rowspan'] = 2;
+    $vars['header_attributes'][$field]['rowspan'] = $row_span_extra_header;
     $vars['pivot_rows'][$field] = $vars['header'][$field];
     unset($vars['header'][$field]);
   }
 
   // Do this for horizontal multi field setting only.
-  $c = count($vars['subheader']);
-  if (!$vertical && $c > 1) {
-    foreach ($vars['header'] as $field) {
-      $vars['header_attributes'][$field]['colspan'] = $c;
+  if ($c > 0) {
+    if ($vertical) {
+      foreach ($vars['rows'] as $key => $values) {
+        $vars['row_attributes'][$key]['rowspan'] = $c;
+      }
+    }
+    else {
+      foreach ($vars['header'] as $field) {
+        $vars['header_attributes'][$field]['colspan'] = $c;
+      }
     }
   }
+
+  $vars['vertical'] = $vertical;
+}
+
+/**
+ * @param $view
+ * @param $fields
+ * @param $field
+ * @param $values
+ * @param $mode
+ * @return mixed
+ */
+function _views_pivot_format_aggregate_field($view, $fields, $field, $values, $mode) {
+  /* @var $field_handler views_handler_field_field */
+  $field_handler = $fields[$field];
+  $value = '';
+  switch ($mode) {
+    case 'sum':
+      $value = array_sum($values);
+      break;
+
+    case 'avg':
+      $sum = 0.0;
+      $count = 0;
+      foreach ($values as $value) {
+        // Do not count empty or non-numeric cells.
+        // Strip out any spaces and thousand makers.
+        $stripped = str_replace(array(' ', ','), '', $value);
+        $value = preg_match('/[-+]?\d*\.?\d+/', $stripped, $matches) ? (double)$matches[0] : FALSE;
+        if ($value !== FALSE) {
+          $sum += $value;
+          $count++;
+        }
+      }
+      $value = ($count == 0) ? 0.0 : $sum / $count;
+      break;
+
+    case 'count':
+      // Counting most likely doesn't require the rendering like the field.
+      return count($values);
+      break;
+
+    case 'max':
+      $value = max($values);
+      break;
+
+    case 'min':
+      $value = min($values);
+      break;
+
+  }
+  $alias = empty($field_handler->aliases[$field_handler->real_field]) ? $field_handler->real_field : $field_handler->aliases[$field_handler->real_field];
+
+  // Let's "compile" an aggregate that has all the fields with their aliases with an empty value.
+  static $aggregate;
+  if (!isset($aggregate)) {
+    $field_data = NULL;
+    $names = array();
+    foreach ($view->result as $result) {
+      $names += array_keys((array) $result);
+      if (!isset($field_data) && isset($result->_field_data)) {
+        $field_data = $result->_field_data;
+      }
+    }
+    $aggregate = new stdClass();
+    foreach ($names as $name) {
+      $aggregate->{$name} = '';
+    }
+    $aggregate->_field_data = $field_data;
+  }
+
+  $aggregate->{$alias} = $value;
+
+  if (method_exists($field_handler, 'set_items')) {
+    $rendered = $field_handler->set_items($aggregate, 0);
+    return $rendered[0]['rendered']['#markup'];
+  }
+
+  if (method_exists($field_handler, 'render')) {
+    return $field_handler->render($aggregate);
+  }
+
+  return $value;
 }
 
 /**
@@ -231,12 +408,14 @@ function template_preprocess_views_view_pivot_table(&$vars) {
  * @see _views_pivot_add_field_to_row
  */
 function _views_pivot_add_field_classes(&$vars, $fields, $num, $row_key, $field) {
+  /* @var $field_handler views_handler_field_field */
+  $field_handler = $fields[$field];
   // Add field classes
   $vars['field_classes'][$field][$row_key] = '';
-  if ($fields[$field]->options['element_default_classes']) {
+  if ($field_handler->options['element_default_classes']) {
     $vars['field_classes'][$field][$row_key] = "views-field views-field-" . $field;
   }
-  if ($classes = $fields[$field]->element_classes($num)) {
+  if ($classes = $field_handler->element_classes($num)) {
     if ($vars['field_classes'][$field][$row_key]) {
       $vars['field_classes'][$field][$row_key] .= ' ';
     }
@@ -257,46 +436,59 @@ function _views_pivot_add_field_classes(&$vars, $fields, $num, $row_key, $field)
  * @param $num
  * @param $row_key
  * @param $field
+ * @param $column_key
  * @param $column
  * @param bool $append
  *
  * @see template_preprocess_views_view_pivot_table
  */
-function _views_pivot_add_field_to_row(&$vars, $options, $renders, $fields, $num, $row_key, $field, $column, $append = TRUE) {
+function _views_pivot_add_field_to_row(&$vars, $options, $renders, $fields, $num, $row_key, $field, $column_key, $column, $append = TRUE) {
   if (!isset($fields[$field])) {
     // Maybe no fields defined yet.
     return;
   }
 
+  /* @var $field_handler views_handler_field_field */
+  $field_handler = $fields[$field];
   _views_pivot_add_field_classes($vars, $fields, $num, $row_key, $field);
 
-  if (!empty($fields[$field]) && empty($fields[$field]->options['exclude'])) {
+  if (!empty($field_handler) && empty($field_handler->options['exclude'])) {
     $field_output = $renders[$num][$field];
-    $element_type = $fields[$field]->element_type(TRUE, TRUE);
+    $element_type = $field_handler->element_type(TRUE, TRUE);
     if ($element_type) {
       $field_output = '<' . $element_type . '>' . $field_output . '</' . $element_type . '>';
     }
 
     // Don't bother with separators and stuff if the field does not show up.
-    if (empty($field_output) && !empty($vars['rows'][$row_key][$column])) {
+    if (empty($field_output) && !empty($vars['rows'][$row_key][$column_key])) {
+      return;
+    }
+
+    // Let's see if we have an aggregated field
+    $pivot_agg_mode = (strpos($column_key, 'agg:') === 0 || strpos($row_key, 'agg:') === 0);
+    if (!$pivot_agg_mode && $append && !empty($field_handler->options['group_type']) && $field_handler->options['group_type'] == 'count') {
+      if (empty($vars['rows'][$row_key][$column_key])) {
+        $vars['rows'][$row_key][$column_key] = 0;
+      }
+      $vars['rows'][$row_key][$column_key]++;
       return;
     }
 
     // Place the field into the column, along with an optional separator.
-    if ($append && !empty($vars['rows'][$row_key][$column])) {
-      if (strrpos($vars['rows'][$row_key][$column], $field_output) !== FALSE) {
+    if ($append && !empty($vars['rows'][$row_key][$column_key])) {
+      if (strrpos($vars['rows'][$row_key][$column_key], $field_output) !== FALSE) {
         // Ignore it as we seem to have added that already
         return;
       }
       if (!empty($options['info'][$column]['separator'])) {
-        $vars['rows'][$row_key][$column] .= filter_xss_admin($options['info'][$column]['separator']);
+        $vars['rows'][$row_key][$column_key] .= filter_xss_admin($options['info'][$column]['separator']);
       }
     }
     else {
-      $vars['rows'][$row_key][$column] = '';
+      $vars['rows'][$row_key][$column_key] = '';
     }
 
-    $vars['rows'][$row_key][$column] .= $field_output;
+    $vars['rows'][$row_key][$column_key] .= $field_output;
   }
 }
 
@@ -326,6 +518,14 @@ function theme_views_ui_style_plugin_pivot($variables) {
     ),
     array(
       'data' => t('Pivot Column'),
+      'align' => 'center',
+    ),
+    array(
+      'data' => t('Column Aggregate'),
+      'align' => 'center',
+    ),
+    array(
+      'data' => t('Row Aggregate'),
       'align' => 'center',
     ),
     array(
@@ -364,6 +564,14 @@ function theme_views_ui_style_plugin_pivot($variables) {
       'data' => drupal_render($form['info'][$id]['pivot_col']),
       'align' => 'center',
     );
+    $row[] = array(
+      'data' => drupal_render($form['info'][$id]['pivot_col_aggregate']) . drupal_render($form['info'][$id]['pivot_col_aggregate_label']),
+      'align' => 'center',
+    );
+    $row[] = array(
+      'data' => drupal_render($form['info'][$id]['pivot_row_aggregate']) . drupal_render($form['info'][$id]['pivot_row_aggregate_label']),
+      'align' => 'center',
+    );
     if (!empty($form['info'][$id]['sortable'])) {
       $row[] = array(
         'data' => drupal_render($form['info'][$id]['sortable']),
@@ -391,7 +599,7 @@ function theme_views_ui_style_plugin_pivot($variables) {
   }
 
   // Add the special 'None' row.
-  $rows[] = array(t('None'), '', '', '', '', '', '', '', '', array('align' => 'center', 'data' => drupal_render($form['default'][-1])), '');
+  $rows[] = array(t('None'), '', '', '', '', '', '', '', '', '', '', array('align' => 'center', 'data' => drupal_render($form['default'][-1])), '');
 
   $output .= theme('table', array('header' => $header, 'rows' => $rows));
   $output .= drupal_render_children($form);
