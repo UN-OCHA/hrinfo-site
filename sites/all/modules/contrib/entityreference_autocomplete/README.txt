@@ -10,7 +10,7 @@ CONTENTS OF THIS FILE
  * INSTALLATION
  * USAGE
  * ELEMENT PROPERTIES
- * ROADMAP
+ * REPORTED ISSUES WITH OTHER MODULES
 
 
 INTRODUCTION
@@ -58,7 +58,7 @@ After installing the module:
               // 'entity property', 'filter value', 'operator'.
               array('uid', 30, '>'),
             ),
-            'field_contitions' => array(
+            'field_conditions' => array(
               // 'field name', 'column', 'value', 'op', 'delta', 'language'.
               array('field_test_field', 'value', 'test'),
             ),
@@ -145,3 +145,14 @@ and any Form API standard properties which use might not be clear:
                      should be as Entity IDs. For single values, just pass the
                      ID of the referenced entity. For multiple values, an array
                      of Entity IDs is expected.
+
+KNOWN ISSUES WITH OTHER MODULES
+-------------------------------
+
+1.- A performance issue has been reported when using this module and the
+entityreference module alongside Fast 404 module.
+
+Reported Issue: https://www.drupal.org/node/2544794
+Proposed solution: Add the following line to your settings.php.
+
+$conf['fast_404_string_whitelisting'] = array('entityreference_autocomplete/autocomplete', 'entityreference/autocomplete' 'system/ajax');
