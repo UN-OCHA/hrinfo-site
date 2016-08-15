@@ -34,6 +34,7 @@ Installation
 1. Download and install RESTClient module
 2. (Optional) To enable cURL support, download and install cURL HTTP REQUEST.
     - At the moment, you need the 7.x-restclient-merge branch of cURL HTTP Request. Once the features stabilize the normal release copy will work just fine.
+3. (Optional) To enable OAuth2 clients, download and install oauth2_client.
 
 Configuration
 -------------
@@ -55,6 +56,17 @@ Ex:
     
     
     variable_set('restclient_additional_headers', array('MyCustomHeaderName' => 'MyCustomHeaderValue'));
+
+OAuth headers can be specified directly without using OAuth2 clients. For convenience, OAuth2 clients can be configured and looked up by name as follows:
+  1. Install and enable the oauth2_client module.
+  2. Configure RESTClient to enable OAuth2 clients.
+  3. Define OAuth2 clients in a module by using hook_oauth2_clients as specified in the documentation for oauth2_client.
+  4. On a REST request, specify authentication as follows.
+     ['authentication']['type'] = 'oauth2_client'
+     ['authentication']['oauth2_client'] = <array>
+     The array contains values that are passed through to oauth2_client so it can create the client. Alternatively the array can just contain ['name'] = <client_name> to look up an Oauth2 client that is already defined. See oauth2_client documentation for details.
+  5. The format for the Authorization request header depends on the server. If needed, the format can be specified as follows. Note that <format> must include :token as a placeholder for the OAuth token. The default format is 'Bearer :token'.
+     ['authentication']['oauth_format'] = <format>
 
 Troubleshooting
 ===============
