@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * @file
+ * Contains TMGMTSharemessageIntegrationTestCase.
+ */
+
+/**
+ * Tests integration with the sharemessage module.
+ */
+class TMGMTSharemessageIntegrationTestCase extends TMGMTBaseTestCase {
+
+  static function getInfo() {
+    return array(
+      'name' => 'Sharemessage translation',
+      'description' => 'Checks entity translation for an entity without a URL',
+      'group' => 'Translation Management',
+      'dependencies' => array('sharemessage', 'entity_translation'),
+    );
+  }
+
+  function setUp() {
+    // Sharemessage is an entity that doesn't provide entity URLs, necessary for
+    // testReviewForm().
+    $modules = array(
+      'tmgmt_ui',
+      'tmgmt_entity_ui',
+      'tmgmt_file',
+      'image',
+      'block',
+      'sharemessage',
+    );
+    parent::setUp($modules);
+    parent::createLanguagesLoginTranslator(array(
+      'administer sharemessage entities',
+      'view sharemessage entities',
+      'administer entity translation',
+      'translate any entity',
+    ));
+  }
+
+  /**
+   * Test whether the review form is accessible.
+   */
+  function testReviewForm() {
+    // First create a sharemessage.
+    $sharemessage = array(
+      'label' => 'ShareMessage Test Label',
+      'name' => 'sharemessage_test_label',
+      'sharemessage_title[en][0][value]' => 'Test title',
+      'sharemessage_long[en][0][value]' => 'Test description long',
+      'block' => 1,
+    );
+    $this->drupalPost('admin/config/services/sharemessage/add', $sharemessage, t('Save share message'));
+    $this->assertText(t('Message @label saved.', array('@label' => $sharemessage['label'])));
+
+    // Enable translation for sharemessage entities.
+    $edit = array(
+      'entity_translation_entity_types[sharemessage]' => TRUE,
+    );
+    $this->drupalPost('admin/config/regional/entity_translation', $edit, t('Save configuration'));
+
+    // Create a corresponding translation job via the UI (spanish translation).
+    $this->drupalPost('admin/config/services/sharemessage/manage/' . $sharemessage['name'] . '/translate', array('languages[es]' => TRUE), t('Request translation'));
+
+    // Submit the job to the file translator.
+    $this->drupalPost('admin/tmgmt/jobs/1', array('translator' => 'file'), t('Submit to translator'));
+
+    // Make sure the job status is on "In progress" after submission.
+    $this->drupalGet('admin/config/services/sharemessage/manage/' . $sharemessage['name'] . '/translate');
+    $this->assertText(t('In progress'));
+
+    // Check that the entity label is there even though there is no entity uri
+    // available.
+    $this->drupalGet('admin/tmgmt/items/1');
+    $this->assertText('ShareMessage');
+  }
+}

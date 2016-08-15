@@ -195,5 +195,25 @@ class TMGMTBaseTestCase extends DrupalWebTestCase {
     $this->assertEqual($existing, $actual_lang_codes);
   }
 
+  /**
+   * Adds languages as admin user and switches to a translator user.
+   */
+  protected function createLanguagesLoginTranslator($permissions = NULL) {
+    // Login as admin to be able to set environment variables.
+    $this->loginAsAdmin();
+    $this->setEnvironment('de');
+    $this->setEnvironment('es');
+    $this->setEnvironment('el');
+
+    $base_permissions = array(
+      'access administration pages',
+      'create translation jobs',
+      'submit translation jobs',
+    );
+    $permissions = $permissions ? array_merge($permissions, $base_permissions) : $base_permissions;
+    // Login as translator only with limited permissions to run these tests.
+    $this->loginAsTranslator($permissions, TRUE);
+  }
+
 }
 
