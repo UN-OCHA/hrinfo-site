@@ -15,7 +15,7 @@ class TMGMTI18nStringSourceTestCase extends TMGMTBaseTestCase {
   }
 
   function setUp() {
-    parent::setUp(array('tmgmt_ui', 'tmgmt_i18n_string', 'taxonomy', 'i18n_taxonomy', 'i18n_block', 'i18n_field', 'list'));
+    parent::setUp(array('tmgmt_ui', 'tmgmt_i18n_string', 'taxonomy', 'i18n_taxonomy', 'i18n_block', 'i18n_field', 'list', 'i18n_menu'));
     $this->setEnvironment('de');
     $this->translator = $this->createTranslator();
   }
@@ -98,10 +98,50 @@ class TMGMTI18nStringSourceTestCase extends TMGMTBaseTestCase {
 
   }
 
+  /**
+   * Test if the source is able to pull content in requested language.
+   */
+  function testRequestDataForSpecificLanguage() {
+    $this->setEnvironment('es');
+    $this->setEnvironment('cs');
+
+    $config = array(
+      'name' => $this->randomName(),
+      'machine_name' => 'test_vocab',
+      'i18n_mode' => I18N_MODE_LOCALIZE,
+    );
+    $vocabulary = entity_create('taxonomy_vocabulary', $config);
+    taxonomy_vocabulary_save($vocabulary);
+
+    $string_object_name = "taxonomy:vocabulary:" . $vocabulary->vid;
+
+    i18n_string_translation_update($string_object_name . ':name', 'de translation', 'de');
+
+    // Create new job item with a source language for which the translation
+    // exits.
+    $job = $this->createJob('de', 'cs');
+    $job->save();
+    $job->addItem('i18n_string', 'taxonomy_vocabulary', $string_object_name);
+
+    $data = $job->getData();
+    $this->assertEqual($data[1][$string_object_name . ':name']['#text'], 'de translation');
+
+    // Create new job item with a source language for which the translation
+    // does not exit.
+    $job = $this->createJob('es', 'cs');
+    $job->save();
+    try {
+      $job->addItem('i18n_string', 'taxonomy_vocabulary', $string_object_name);
+      $this->fail('The job item should not be added as there is no translation for language "es"');
+    }
+    catch (TMGMTException $e) {
+      $languages = language_list();
+      $this->assertEqual(t('Unable to load %language translation for the string %title',
+        array('%language' => $languages['es']->name, '%title' => 'Name')), $e->getMessage());
+    }
+  }
+
   function testI18nStringSourceMenu() {
-    // Enabling this here as enabling it with tmgmt_ui results in missing views
-    // handlers errors. Not sure why, but this way it at least works.
-    module_enable(array('i18n_menu'));
     drupal_static_reset('_tmgmt_plugin_info');
     drupal_static_reset('_tmgmt_plugin_controller');
 
