@@ -30,6 +30,10 @@ class TMGMTLocaleSourceUIController extends TMGMTDefaultSourceUIController {
     $select = db_select('locales_source', 'ls')
       ->fields('ls', array('lid', 'source'));
 
+    $select->addTag('tmgmt_sources_search');
+    $select->addMetaData('plugin', 'locale');
+    $select->addMetaData('type', $textgroup);
+
     $select->condition('ls.textgroup', $textgroup);
     if (!empty($search_label)) {
       $select->condition('ls.source', "%$search_label%", 'LIKE');
@@ -38,13 +42,27 @@ class TMGMTLocaleSourceUIController extends TMGMTDefaultSourceUIController {
       $select->isNull("lt_$missing_target_language.language");
     }
 
+    // Join locale targets for each language.
+    // We want all joined fields to be named as langcodes, but langcodes could
+    // contain hyphens in their names, which is not allowed by the most database
+    // engines. So we create a langcode-to-filed_alias map, and rename fields
+    // later.
+    $langcode_to_filed_alias_map = array();
     foreach ($languages as $langcode) {
-      $langcode = str_replace('-', '', $langcode);
-      $select->leftJoin('locales_target', "lt_$langcode", "ls.lid = %alias.lid AND %alias.language = '$langcode'");
-      $select->addField("lt_$langcode", 'language', "lang_$langcode");
+      $table_alias = $select->leftJoin('locales_target', db_escape_field("lt_$langcode"), "ls.lid = %alias.lid AND %alias.language = '$langcode'");
+      $langcode_to_filed_alias_map[$langcode] = $select->addField($table_alias, 'language');
     }
+
     $select = $select->extend('PagerDefault')->limit(variable_get('tmgmt_source_list_limit', 20));
-    return $select->execute()->fetchAll();
+    $rows = $select->execute()->fetchAll();
+    foreach ($rows as $row) {
+      foreach ($langcode_to_filed_alias_map as $langcode => $field_alias) {
+        $row->{$langcode} = $row->{$field_alias};
+        unset($row->{$field_alias});
+      }
+    }
+
+    return $rows;
   }
 
   /**
@@ -56,7 +74,6 @@ class TMGMTLocaleSourceUIController extends TMGMTDefaultSourceUIController {
   public function overviewFormHeader() {
     $languages = array();
     foreach (language_list() as $langcode => $language) {
-      $langcode = str_replace('-', '', $langcode);
       $languages['langcode-' . $langcode] = array(
         'data' => check_plain($language->name),
       );
@@ -123,14 +140,12 @@ class TMGMTLocaleSourceUIController extends TMGMTDefaultSourceUIController {
       );
       // Load entity translation specific data.
       foreach (language_list() as $langcode => $language) {
-        $langcode = str_replace('-', '', $langcode);
-
         $translation_status = 'current';
 
         if ($langcode == $source_language) {
           $translation_status = 'original';
         }
-        elseif ($string->{'lang_' . $langcode} === NULL) {
+        elseif ($string->{$langcode} === NULL) {
           $translation_status = 'missing';
         }
 
@@ -237,7 +252,6 @@ class TMGMTLocaleSourceUIController extends TMGMTDefaultSourceUIController {
     );
 
     foreach (language_list() as $langcode => $language) {
-      $langcode = str_replace('-', '', $langcode);
       $row['langcode-' . $langcode] = theme('tmgmt_ui_translation_language_status_single', array(
         'translation_status' => $data['translation_statuses'][$langcode],
         'job_item' => isset($data['current_job_items'][$langcode]) ? $data['current_job_items'][$langcode] : NULL,
