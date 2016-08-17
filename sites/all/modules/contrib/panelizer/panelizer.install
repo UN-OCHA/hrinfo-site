@@ -750,7 +750,6 @@ function panelizer_update_7115(&$sandbox) {
       // corrupting data during hook_panels_display_save.
       $display->did = db_insert('panels_display')
         ->fields(array(
-          'did' => NULL,
           'layout' => $display->layout,
           'layout_settings' => serialize($display->layout_settings),
           'panel_settings' => serialize($display->panel_settings),
