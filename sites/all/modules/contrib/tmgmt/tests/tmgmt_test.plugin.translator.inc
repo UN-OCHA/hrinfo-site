@@ -85,7 +85,7 @@ class TMGMTTestTranslatorPluginController extends TMGMTDefaultTranslatorPluginCo
    * {@inheritdoc}
    */
   public function getSupportedTargetLanguages(TMGMTTranslator $translator, $source_language) {
-    $languages = drupal_map_assoc(array('en', 'de', 'es', 'it', 'zh-hans'));
+    $languages = drupal_map_assoc(array('en', 'de', 'es', 'it', 'zh-hans', 'gsw-berne'));
     unset($languages[$source_language]);
     return $languages;
   }
