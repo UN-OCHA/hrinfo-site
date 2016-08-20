@@ -280,7 +280,7 @@ You can configure your saved searches at the following address:
   $form['options']['interval']['set_interval_custom'] = array(
     '#type' => 'textfield',
     '#description' => t('Enter the custom notification interval, in seconds. Use a negative value to disable notifications.'),
-    '#default_value' => isset($interval_options[$options['set_interval']]) ? $options['set_interval'] : 0,
+    '#default_value' => $options['set_interval'],
     '#parents' => array('options', 'set_interval_custom'),
     '#states' => array(
       'visible' => array(
@@ -343,7 +343,8 @@ You can configure your saved searches at the following address:
     '#type' => 'textfield',
     '#title' => t('Subject'),
     '#description' => t("Enter the mail's subject.") . ' ' . t('Available variables are: @vars.',
-        array('@vars' => '[site:name], [user:name], [user:mail]')),
+        array('@vars' => '[site:name], [user:name], [user:mail], [search-api-saved-search:name], [search-api-saved-search:created]')) . '<br />' .
+        t('The search-specific variables are taken from the first saved search of the mail. (Alerts from multiple searches are sent at the same time.)'),
     '#default_value' => $options['mail']['notify']['title'],
     '#required' => TRUE,
   );
@@ -352,8 +353,12 @@ You can configure your saved searches at the following address:
     '#title' => t('Body'),
     '#description' => t("Enter the mail's body.") . ' ' . t('Available variables are: @vars.',
         array('@vars' => '[site:name], [site:url], [user:name], [user:mail], [site:url-brief], ' .
-            '[search-api-saved-searches:results], [user:search-api-saved-searches-url]')) . ' ' .
+            '[search-api-saved-searches:results], [user:search-api-saved-searches-url], ' .
+            '[search-api-saved-search:name], [search-api-saved-search:created], ' .
+            '[search-api-saved-search:results-capped], [search-api-saved-search:view-url], ' .
+            '[search-api-saved-search:edit-url], [search-api-saved-search:delete-url]')) . ' ' .
         t('The replacement for @var can be configured below.', array('@var' => '[search-api-saved-searches:results]')) . '<br />' .
+        t('The search-specific variables are taken from the first saved search of the mail. (Alerts from multiple searches are sent at the same time.)') . '<br />' .
         t('Please note: For anonymous users, the [user:*] variables will be empty.'),
     '#default_value' => $options['mail']['notify']['body'],
     '#rows' => 12,
