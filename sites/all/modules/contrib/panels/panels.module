@@ -335,17 +335,6 @@ function panels_permission() {
 }
 
 /**
- * Implementation of hook_flush_caches().
- *
- * We implement this so that we can be sure our legacy rendering state setting
- * in $conf is updated whenever caches are cleared.
- */
-//function panels_flush_caches() {
-//  $legacy = panels_get_legacy_state();
-//  $legacy->determineStatus();
-//}
-
-/**
  * Implements hook_flush_caches().
  */
 function panels_flush_caches() {
@@ -664,7 +653,6 @@ function panels_edit_layout($display, $finish, $destination = NULL, $allowed_lay
 
 /**
  * Forms the basis of a panel display
- *
  */
 class panels_display {
   var $args = array();
@@ -1810,6 +1798,32 @@ function panels_form_page_manager_handler_add_alter(&$form, &$form_state) {
 function panels_page_manager_handler_add_validate($form, &$form_state) {
   if($form_state['values']['handler'] == 'panel_context') {
     $form_state['page']->storage_type = 'page_manager';
+  }
+}
+
+/**
+ * Implements hook_default_page_manager_handlers_alter().
+ *
+ * If a default Panels display has no storage type, set it.
+ */
+function panels_default_page_manager_handlers_alter(&$handlers) {
+  foreach ($handlers as &$handler) {
+    if ($handler->handler == 'panel_context') {
+      $display =& $handler->conf['display'];
+      if (empty($display->storage_type)) {
+        $display->storage_type = 'page_manager';
+        $display->storage_id = $handler->name;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_default_page_manager_pages_alter().
+ */
+function panels_default_page_manager_pages_alter(&$pages) {
+  foreach ($pages as &$page) {
+    panels_default_page_manager_handlers_alter($page->default_handlers);
   }
 }
 
