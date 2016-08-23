@@ -287,7 +287,7 @@ function panels_panel_context_render($handler, $base_contexts, $args, $test = TR
   $display->context = $contexts;
   $display->args = $args;
   $page_css_id = ctools_context_keyword_substitute($handler->conf['css_id'], array(), $contexts);
-  $display->css_id = drupal_html_id($page_css_id);
+  $display->css_id = check_plain($page_css_id);
   $task_name = page_manager_make_task_name($handler->task, $handler->subtask);
 
   $display->cache_key = panels_panel_context_cache_key($task_name, $handler->name, $args);
@@ -323,19 +323,19 @@ function panels_panel_context_render($handler, $base_contexts, $args, $test = TR
   if (isset($handler->conf['body_classes_to_remove'])) {
     $classes = ctools_context_keyword_substitute($handler->conf['body_classes_to_remove'], array(), $contexts, array('css safe' => TRUE));
     if (!isset($panel_body_css['body_classes_to_remove'])) {
-      $panel_body_css['body_classes_to_remove'] = check_plain(drupal_strtolower($classes));
+      $panel_body_css['body_classes_to_remove'] = check_plain($classes);
     }
     else{
-      $panel_body_css['body_classes_to_remove'] .= ' ' . check_plain(drupal_strtolower($classes));
+      $panel_body_css['body_classes_to_remove'] .= ' ' . check_plain($classes);
     }
   }
   if (isset($handler->conf['body_classes_to_add'])) {
     $classes = ctools_context_keyword_substitute($handler->conf['body_classes_to_add'], array(), $contexts, array('css safe' => TRUE));
     if (!isset($panel_body_css['body_classes_to_add'])) {
-    $panel_body_css['body_classes_to_add'] = check_plain(drupal_strtolower($classes));
+    $panel_body_css['body_classes_to_add'] = check_plain($classes);
     }
     else {
-      $panel_body_css['body_classes_to_add'] .= ' '. check_plain(drupal_strtolower($classes));
+      $panel_body_css['body_classes_to_add'] .= ' '. check_plain($classes);
     }
   }
 

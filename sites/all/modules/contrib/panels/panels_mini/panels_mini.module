@@ -313,9 +313,6 @@ function panels_mini_load_all($reset = FALSE) {
       foreach ($panel_names as $name) {
         $cids[] = 'panels_mini_load:' . $name->name;
       }
-      if (empty($cids)) {
-        return array_filter($cache);
-      }
       $output = cache_get_multiple($cids, 'cache_panels');
       foreach ($output as $mini) {
         if (!empty($mini->data)) {
@@ -427,6 +424,21 @@ function panels_mini_ctools_plugin_directory($module, $plugin) {
   }
   if ($module == 'panels' && $plugin == 'panels_storage') {
     return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Implements hook_default_panels_mini_alter().
+ *
+ * If a default Panels display has no storage type, set it.
+ */
+function panels_default_panels_mini_alter(&$mini_panels) {
+  foreach ($mini_panels as &$mini_panel) {
+    $display =& $mini_panel->display;
+    if (empty($display->storage_type)) {
+      $display->storage_type = 'panels_mini';
+      $display->storage_id = $mini_panel->name;
+    }
   }
 }
 
