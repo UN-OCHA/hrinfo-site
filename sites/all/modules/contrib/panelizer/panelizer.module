@@ -518,6 +518,15 @@ function panelizer_panelizer_defaults_alter(&$items) {
     $handler->hook_panelizer_defaults($items);
   }
 
+  // If a default Panels display has no storage type, set it.
+  foreach ($items as &$panelizer) {
+    $display =& $panelizer->display;
+    if (empty($display->storage_type)) {
+      $display->storage_type = 'panelizer_default';
+      $display->storage_id = $panelizer->name;
+    }
+  }
+
   // Allow features_overrides to alter the config.
   drupal_alter('panelizer_defaults_override', $items);
 }
