@@ -4,9 +4,9 @@ core = 7.x
 
 dependencies[] = entity
 
-; Information added by Drupal.org packaging script on 2015-05-31
-version = "7.x-1.9"
+; Information added by Drupal.org packaging script on 2016-03-25
+version = "7.x-1.11"
 core = "7.x"
 project = "entityreference_autocomplete"
-datestamp = "1433094482"
+datestamp = "1458928140"
 
