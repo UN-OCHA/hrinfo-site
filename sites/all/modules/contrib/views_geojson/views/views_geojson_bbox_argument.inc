@@ -143,26 +143,30 @@ class views_geojson_bbox_argument extends views_handler_argument {
       // wraps around. We need to turn these into BETWEENs with OR.
       if ($right - $left < 360) {
         $group = $this->query->set_where_group('AND');
-        if ($left > -180) {
+        if ($left > -180 && $left <= 180) {
           $this->query->add_where($group, "$lon_field_table.$lon_field_name", $left, '>=');
         }
         else {
           $this->query->set_where_group('OR', $group);
-          $left = -1 * ($left % 180);
+          $left = ($left + 180) % 360;
+          if ($left <= 0) $left += 360; // -12 % 7 will result in -5 and not 2 as expected
+          $left -= 180;
           $this->query->add_where($group, "$lon_field_table.$lon_field_name", array(
             $left,
-            0,
+            180,
           ), 'BETWEEN');
         }
-        if ($right < 180) {
+        if ($right > -180 && $right <= 180) {
           $this->query->add_where($group, "$lon_field_table.$lon_field_name", $right, '<=');
         }
         else {
           $this->query->set_where_group('OR', $group);
-          $right = -1 * ($right % 180);
+          $right = ($right + 180) % 360;
+          if ($right <= 0) $right += 360; // -12 % 7 will result in -5 and not 2 as expected
+          $right -= 180;
           $this->query->add_where($group, "$lon_field_table.$lon_field_name", array(
+            -180,
             $right,
-            0,
           ), 'BETWEEN');
         }
       }
@@ -227,4 +231,5 @@ class views_geojson_bbox_argument extends views_handler_argument {
     }
     return TRUE;
   }
+
 }
