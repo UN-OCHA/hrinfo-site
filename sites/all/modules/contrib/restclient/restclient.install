@@ -20,11 +20,16 @@ function restclient_install() {
  * Implements hook_uninstall().
  */
 function restclient_uninstall() {
+  variable_del('restclient_oauth2_client');
+  variable_del('restclient_hybridauth');
   variable_del('restclient_caching');
   variable_del('restclient_hostname');
   variable_del('restclient_additional_headers');
   variable_del('restclient_testing');
   variable_del('restclient_filepath');
+  variable_del('restclient_active_library');
+  variable_del('restclient_watchdog');
+  variable_del('restclient_debug');
 }
 
 /**
