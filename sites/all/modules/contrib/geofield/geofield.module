@@ -298,44 +298,82 @@ function geofield_field_presave($entity_type, $entity, $field, $instance, $langc
 }
 
 /**
+ * Convert data from one geo format to another.
+ *
+ * @param $geom
+ * @param string $source
+ * @param string $destinaton
+ *
+ * @return mixed
+ * @throws \exception
+ */
+function geofield_convert_data($geom, $source = 'WKB', $destinaton = 'WKT') {
+  geophp_load();
+  if (geoPHP::geosInstalled()) {
+    static $reader = NULL;
+    static $writer = NULL;
+    if (empty($reader)) {
+      $reader = new GEOSWKBReader();
+      $writer = new GEOSWKTWriter();
+      $writer->setTrim(TRUE);
+    }
+    if (strpos($geom, 'POINT') === 0) {
+      $geom = geophp::load($geom);
+      if ($geom) {
+        $result = $geom->out('wkt');
+      }
+    }
+    else {
+      $raw_geom = unpack('H*', $geom);
+      try {
+        $geom = $reader->readHEX($raw_geom[1]);
+        $result = $writer->write($geom);
+      }
+      catch (Exception $e) {
+        watchdog(WATCHDOG_ERROR, 'Cannot render poorly formatted WKB value %message', array('%message' => $e->getMessage()));
+       }
+     }
+   }
+   else {
+    $geom = geophp::load($geom);
+    if ($geom) {
+      $result = $geom->out('wkt');
+    }
+  }
+  return $result;
+}
+
+/**
+ * Class GeoWrapper
+ *
+ * Provides wrapper for geom field wrapper to transform data on call,
+ * instead of on loading field data.
+ */
+class GeoWrapper {
+  private $geom;
+
+  public function __construct($geom) {
+    $this->geom = $geom;
+  }
+
+  public function __toString() {
+    return geofield_convert_data($this->geom);
+  }
+}
+
+/**
  * Implements hook_field_load().
  *
- * Geofield stores it's data as WKB, but a binary format can cause 
+ * Geofield stores it's data as WKB, but a binary format can cause
  * issues/confusion with working with other modules, notably Services.
  * To improve DX/discoverability of what we're storing, we convert
  * to WKT on load.
  */
 function geofield_field_load($entity_type, $entities, $field, $instances, $langcode, &$items, $age) {
-  geophp_load();
-  if (geoPHP::geosInstalled()) {
-    // process geometry directly with GEOS to help with performance/memory issues.
-    $reader = new GEOSWKBReader();
-    $writer = new GEOSWKTWriter();
-    $writer->setTrim(TRUE);
-    foreach ($entities as $id => $entity) {
-      foreach ($items[$id] as $delta => $item) {
-        if (!empty($item['geom'])) {
-          $raw_geom = unpack('H*', $item['geom']);
-          try {
-            $geom = $reader->readHEX($raw_geom[1]);
-            $items[$id][$delta]['geom'] = $writer->write($geom);
-          }
-          catch (Exception $e) {
-            watchdog(WATCHDOG_ERROR, 'Cannot render poorly formatted WKB value %message', array('%message' => $e->getMessage()));
-          }
-        }
-      }
-    }
-  }
-  else {
-    foreach ($entities as $id => $entity) {
-      foreach ($items[$id] as $delta => $item) {
-        if (!empty($item['geom'])) {
-          $geom = geophp::load($item['geom']);
-          if ($geom) {
-            $items[$id][$delta]['geom'] = $geom->out('wkt');
-          }
-        }
+  foreach ($entities as $id => $entity) {
+    foreach ($items[$id] as $delta => $item) {
+      if (!empty($item['geom'])) {
+        $items[$id][$delta]['geom'] = new GeoWrapper($item['geom']);
       }
     }
   }
