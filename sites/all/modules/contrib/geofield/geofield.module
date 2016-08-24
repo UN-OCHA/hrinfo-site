@@ -357,7 +357,7 @@ class GeoWrapper {
   }
 
   public function __toString() {
-    return geofield_convert_data($this->geom);
+    return (string) geofield_convert_data($this->geom);
   }
 }
 
