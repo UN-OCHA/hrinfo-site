@@ -309,6 +309,7 @@ function geofield_field_presave($entity_type, $entity, $field, $instance, $langc
  */
 function geofield_convert_data($geom, $source = 'WKB', $destinaton = 'WKT') {
   geophp_load();
+  $result = '';
   if (geoPHP::geosInstalled()) {
     static $reader = NULL;
     static $writer = NULL;
