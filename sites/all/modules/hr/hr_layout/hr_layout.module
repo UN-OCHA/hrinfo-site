@@ -228,7 +228,7 @@ function hr_layout_block_view($delta = '') {
       break;
     case 'hr_layout_key_documents':
       drupal_add_library('chosen', 'drupal.chosen');
-      $block['subject'] = t('Documents');
+      $block['subject'] = t('Documents, Maps, & Assessments');
       $block['content'] = '<ul>';
       $block['content'] .= '<li>'.l(t('3W / 4W'), 'infographics/infographic-type/3w').'</li>';
       $block['content'] .= '<li>'.l(t('Appeals'), 'documents/document-type/appeal').'</li>';
