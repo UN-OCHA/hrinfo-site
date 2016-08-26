@@ -112,6 +112,7 @@ function hr_locations_update_7002(&$sandbox) {
           ':nids' => $nids,
         ));
       }
+      variable_set('path_alias_whitelist', array('admin' => TRUE));
       taxonomy_term_delete($term_id);
     }
     $sandbox['progress']++;
@@ -161,6 +162,7 @@ function hr_locations_update_7003(&$sandbox) {
           ':nids' => $nids,
         ));
       }
+      variable_set('path_alias_whitelist', array('admin' => TRUE));
       taxonomy_term_delete($term_id);
     }
     $sandbox['progress']++;
