@@ -75,3 +75,100 @@ function hr_locations_update_7001() {
     }
   }
 }
+
+/**
+ * Remove location terms level 5.
+ */
+function hr_locations_update_7002(&$sandbox) {
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = (float)0;
+    $sandbox['max'] = 100;
+  }
+
+  $voc_name = 'hr_location';
+  $vocabulary = taxonomy_vocabulary_machine_name_load($voc_name);
+
+  // Load all terms of admi level 4 or higher.
+  $query = new EntityFieldQuery();
+  $result = $query->entityCondition('entity_type', 'taxonomy_term')
+    ->propertyCondition('vid', $vocabulary->vid)
+    ->fieldCondition('field_loc_admin_level', 'value', '5', '>=')
+    ->range(0, 100)
+    ->execute();
+
+  if (!empty($result['taxonomy_term'])) {
+    $term_ids = array_keys($result['taxonomy_term']);
+    foreach ($term_ids as $term_id) {
+      // Check if any node is tagged with this term.
+      $nids = taxonomy_select_nodes($term_id, FALSE);
+      if ($nids) {
+        // Get parent from term.
+        $parent = taxonomy_get_parents($term_id);
+        $parent_id = reset(array_keys($parent));
+        $sql = "update {field_data_field_locations} set field_locations_target_id = :parent where field_locations_target_id = :term and entity_id IN (:nids)";
+        db_query($sql, array(
+          ':parent' => $parent_id,
+          ':term' => $term_id,
+          ':nids' => $nids,
+        ));
+      }
+      taxonomy_term_delete($term_id);
+    }
+    $sandbox['progress']++;
+    $sandbox['#finished'] = FALSE;
+  }
+  else {
+    $sandbox['progress'] = 10000;
+    $sandbox['#finished'] = TRUE;
+  }
+}
+
+/**
+ * Remove location terms level 4.
+ */
+function hr_locations_update_7003(&$sandbox) {
+  watchdog('hr location', 'Deleting location terms, please stand by');
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = (float)0;
+    $sandbox['max'] = 100;
+  }
+
+  $voc_name = 'hr_location';
+  $vocabulary = taxonomy_vocabulary_machine_name_load($voc_name);
+
+  // Load all terms of admi level 4 or higher.
+  $query = new EntityFieldQuery();
+  $result = $query->entityCondition('entity_type', 'taxonomy_term')
+    ->propertyCondition('vid', $vocabulary->vid)
+    ->fieldCondition('field_loc_admin_level', 'value', '4', '>=')
+    ->range(0, 100)
+    ->execute();
+
+  if (!empty($result['taxonomy_term'])) {
+    watchdog('hr location', 'Found terms');
+    $term_ids = array_keys($result['taxonomy_term']);
+    foreach ($term_ids as $term_id) {
+      // Check if any node is tagged with this term.
+      $nids = taxonomy_select_nodes($term_id, FALSE);
+      if ($nids) {
+        // Get parent from term.
+        $parent = taxonomy_get_parents($term_id);
+        $parent_id = reset(array_keys($parent));
+        $sql = "update {field_data_field_locations} set field_locations_target_id = :parent where field_locations_target_id = :term and entity_id IN (:nids)";
+        db_query($sql, array(
+          ':parent' => $parent_id,
+          ':term' => $term_id,
+          ':nids' => $nids,
+        ));
+      }
+      taxonomy_term_delete($term_id);
+    }
+    $sandbox['progress']++;
+    $sandbox['#finished'] = FALSE;
+  }
+  else {
+    watchdog('hr location', 'Done');
+    $sandbox['progress'] = 10000;
+    $sandbox['#finished'] = TRUE;
+  }
+}
