@@ -129,9 +129,16 @@ function hr_locations_update_7002(&$sandbox) {
 }
 
 /**
- * Remove location terms level 4 - Test.
+ * Used to be admin level 4.
  */
 function hr_locations_update_7003(&$sandbox) {
+  // Empty
+}
+
+/**
+ * Remove location terms level 4 - Test.
+ */
+function hr_locations_update_7004(&$sandbox) {
   watchdog('hr location', 'Deleting location terms, please stand by');
   if (!isset($sandbox['progress'])) {
     $sandbox['progress'] = (float)0;
