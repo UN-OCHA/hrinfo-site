@@ -187,6 +187,13 @@ function hr_locations_update_7004(&$sandbox) {
 }
 
 /**
+ * Disable lazy_panelizer.
+ */
+function hr_locations_update_7005(&$sandbox) {
+  module_disable(array('lazy_panelizer'));
+}
+
+/**
  * Remove location terms level 4 for real.
  */
 function xxx_hr_locations_update_7004(&$sandbox) {
