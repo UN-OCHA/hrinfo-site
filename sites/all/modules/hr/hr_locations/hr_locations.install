@@ -241,3 +241,10 @@ function hr_locations_update_7007(&$sandbox) {
     $sandbox['#finished'] = TRUE;
   }
 }
+
+/**
+ * Set maintenance page code to 203.
+ */
+function hr_locations_update_7008(&$sandbox) {
+  variable_set('maintenance_mode_status', '203 Non-Authoritative Information');
+}
