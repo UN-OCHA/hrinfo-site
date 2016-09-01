@@ -196,7 +196,7 @@ function hr_locations_update_7005(&$sandbox) {
 /**
  * Remove location terms level 4 for real.
  */
-function xxx_hr_locations_update_7004(&$sandbox) {
+function hr_locations_update_7006(&$sandbox) {
   watchdog('hr location', 'Deleting location terms, please stand by');
   if (!isset($sandbox['progress'])) {
     $sandbox['progress'] = (float)0;
@@ -223,19 +223,6 @@ function xxx_hr_locations_update_7004(&$sandbox) {
     watchdog('hr location', 'Found terms');
     $term_ids = array_keys($result['taxonomy_term']);
     foreach ($term_ids as $term_id) {
-      // Check if any node is tagged with this term.
-      $nids = taxonomy_select_nodes($term_id, FALSE);
-      if ($nids) {
-        // Get parent from term.
-        $parent = taxonomy_get_parents($term_id);
-        $parent_id = reset(array_keys($parent));
-        $sql = "update {field_data_field_locations} set field_locations_target_id = :parent where field_locations_target_id = :term and entity_id IN (:nids)";
-        db_query($sql, array(
-          ':parent' => $parent_id,
-          ':term' => $term_id,
-          ':nids' => $nids,
-        ));
-      }
       taxonomy_term_delete($term_id);
     }
     $sandbox['progress']++;
