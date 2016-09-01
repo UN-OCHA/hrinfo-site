@@ -194,9 +194,16 @@ function hr_locations_update_7005(&$sandbox) {
 }
 
 /**
- * Remove location terms level 4 for real.
+ * Enable maintenance page.
  */
 function hr_locations_update_7006(&$sandbox) {
+  module_enable(array('maintenance200'));
+}
+
+/**
+ * Remove location terms level 4 for real.
+ */
+function hr_locations_update_7007(&$sandbox) {
   watchdog('hr location', 'Deleting location terms, please stand by');
   if (!isset($sandbox['progress'])) {
     $sandbox['progress'] = (float)0;
