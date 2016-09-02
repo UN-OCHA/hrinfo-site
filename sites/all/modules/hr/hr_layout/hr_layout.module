@@ -228,7 +228,7 @@ function hr_layout_block_view($delta = '') {
       break;
     case 'hr_layout_key_documents':
       drupal_add_library('chosen', 'drupal.chosen');
-      $block['subject'] = t('Documents, Maps, & Assessments');
+      $block['subject'] = t('Assessments, Documents, & Maps');
       $block['content'] = '<ul>';
       $block['content'] .= '<li>'.l(t('3W / 4W'), 'infographics/infographic-type/3w').'</li>';
       $block['content'] .= '<li>'.l(t('Appeals'), 'documents/document-type/appeal').'</li>';
@@ -236,7 +236,7 @@ function hr_layout_block_view($delta = '') {
       $block['content'] .= '<li>'.l(t('Humanitarian Bulletin'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/humanitarian-bulletin').'</li>';
       $block['content'] .= '<li>'.l(t('Humanitarian Needs Overview - HNO'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/humanitarian-needs-overview').'</li>';
       $block['content'] .= '<li>'.l(t('Humanitarian Response Plan - HRP'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/strategic-response-plan').'</li>';
-      $block['content'] .= '<li>'.l(t('Maps'), 'infographics').'</li>';
+      $block['content'] .= '<li>'.l(t('Maps/Infographics'), 'infographics').'</li>';
       $block['content'] .= '<li>'.l(t('Situation Reports'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/situation-report').'</li>';
       $block['content'] .= '</ul>';
       $block['content'] .= '<div class=view-all-hr-layout-key-documents><p class="text-center">'.l(t('View All Documents'), 'documents').'</p></div>';
