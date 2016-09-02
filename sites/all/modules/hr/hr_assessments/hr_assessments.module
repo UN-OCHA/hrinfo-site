@@ -130,3 +130,21 @@ function hr_assessments_form_hr_assessment_node_form_alter(&$form, &$form_state)
     }
   }
 }
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function hr_assessments_field_widget_form_alter(&$element, &$form_state, $context) {
+  if (isset($element['#options']) && $element['#field_name'] == 'field_population_types') {
+    foreach ($element['#options'] as $tid => &$option) {
+      if (is_numeric($tid)) {
+        $option_label = array();
+        $parents = taxonomy_get_parents_all($tid);
+        foreach ($parents as $parent_id => $parent) {
+          array_unshift($option_label, entity_label('taxonomy_term', $parent));
+        }
+        $option = implode(' > ', $option_label);
+      }
+    }
+  }
+}
