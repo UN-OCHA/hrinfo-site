@@ -2753,6 +2753,18 @@ function _menu_check_rebuild() {
  *   in parallel and the current thread just waited for completion.
  */
 function menu_rebuild() {
+  // Log to NR.
+  if (function_exists('newrelic_record_custom_event')) {
+    $callers = array();
+    $traces = debug_backtrace();
+    foreach ($traces as $trace) {
+      $callers[] = array(
+        'caller' => $trace['function'],
+      );
+	}
+	newrelic_record_custom_event('menu_rebuild', $callers);
+  }
+
   if (!lock_acquire('menu_rebuild')) {
     // Wait for another request that is already doing this work.
     // We choose to block here since otherwise the router item may not
