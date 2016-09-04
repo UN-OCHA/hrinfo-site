@@ -2758,9 +2758,7 @@ function menu_rebuild() {
     $callers = array();
     $traces = debug_backtrace();
     foreach ($traces as $trace) {
-      $callers[] = array(
-        'caller' => $trace['function'],
-      );
+      $callers[$trace['function']] = $trace['file'];
 	}
 	newrelic_record_custom_event('menu_rebuild', $callers);
   }
