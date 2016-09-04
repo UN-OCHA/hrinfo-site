@@ -21,7 +21,7 @@ class TMGMTLocaleSourceUiTestCase extends TMGMTBaseTestCase {
     $file->uri = drupal_realpath(drupal_get_path('module', 'tmgmt_locale') . '/tests/test.xx.po');
     $this->pofile = file_save($file);
     $this->setEnvironment($this->langcode);
-    $this->setEnvironment('es');
+    $this->setEnvironment('gsw-berne');
   }
 
 
@@ -58,14 +58,14 @@ class TMGMTLocaleSourceUiTestCase extends TMGMTBaseTestCase {
     );
     $this->drupalPost(NULL, $edit, t('Add to cart'));
     $this->assertRaw(t('@count content source was added into the <a href="@url">cart</a>.', array('@count' => 1, '@url' => url('admin/tmgmt/cart'))));
-    $edit['target_language[]'] = array('es');
+    $edit['target_language[]'] = array('gsw-berne');
     $this->drupalPost('admin/tmgmt/cart', $edit, t('Request translation'));
 
     // Assert that the job item is displayed.
     $this->assertText('Hello World');
     $this->assertText(t('Locale'));
     $this->assertText('2');
-    $this->drupalPost(NULL, array('target_language' => 'es'), t('Submit to translator'));
+    $this->drupalPost(NULL, array('target_language' => 'gsw-berne'), t('Submit to translator'));
 
     // Test for the translation flag title.
     $this->drupalGet('admin/tmgmt/sources/locale_default');
@@ -73,8 +73,8 @@ class TMGMTLocaleSourceUiTestCase extends TMGMTBaseTestCase {
 
     // Review and accept the job item.
     $job_items = tmgmt_job_item_load_latest('locale', 'default', $locale_object->lid, 'en');
-    $this->drupalGet('admin/tmgmt/items/' . $job_items['es']->tjiid);
-    $this->assertRaw('es_Hello World');
+    $this->drupalGet('admin/tmgmt/items/' . $job_items['gsw-berne']->tjiid);
+    $this->assertRaw('gsw-berne_Hello World');
     $this->drupalPost(NULL, array(), t('Save as completed'));
     $this->drupalGet('admin/tmgmt/sources/locale_default');
 
@@ -95,9 +95,9 @@ class TMGMTLocaleSourceUiTestCase extends TMGMTBaseTestCase {
     $this->assertTrue(empty($elements));
 
     // Filter on the "Not translated to".
-    $edit = array('search[missing_target_language]' => 'es');
+    $edit = array('search[missing_target_language]' => 'gsw-berne');
     $this->drupalPost(NULL, $edit, t('Search'));
-    // Hello World is translated to "es" therefore it must not show up in the
+    // Hello World is translated to "gsw-berne" therefore it must not show up in the
     // list.
     $this->assertNoText('Hello World');
   }
