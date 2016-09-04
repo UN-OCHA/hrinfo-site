@@ -2761,6 +2761,9 @@ function menu_rebuild() {
       $callers[$trace['function']] = $trace['file'];
 	}
 	newrelic_record_custom_event('menu_rebuild', $callers);
+
+	$info = new Exception('menu_rebuild');
+	newrelic_notice_error('menu_rebuild', $info);
   }
 
   if (!lock_acquire('menu_rebuild')) {
