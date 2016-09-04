@@ -2419,7 +2419,7 @@ function menu_set_active_trail($new_trail = NULL) {
           // argument placeholders (%). Such links are not contained in regular
           // menu trees, and have only been loaded for the additional
           // translation that happens here, so as to be able to display them in
-          // the breadcumb for the current page.
+          // the breadcrumb for the current page.
           // @see _menu_tree_check_access()
           // @see _menu_link_translate()
           if (strpos($link['href'], '%') !== FALSE) {
@@ -2753,19 +2753,6 @@ function _menu_check_rebuild() {
  *   in parallel and the current thread just waited for completion.
  */
 function menu_rebuild() {
-  // Log to NR.
-  if (function_exists('newrelic_record_custom_event')) {
-    $callers = array();
-    $traces = debug_backtrace();
-    foreach ($traces as $trace) {
-      $callers[$trace['function']] = $trace['file'];
-	}
-	newrelic_record_custom_event('menu_rebuild', $callers);
-
-	$info = new Exception('menu_rebuild');
-	newrelic_notice_error('menu_rebuild', $info);
-  }
-
   if (!lock_acquire('menu_rebuild')) {
     // Wait for another request that is already doing this work.
     // We choose to block here since otherwise the router item may not
