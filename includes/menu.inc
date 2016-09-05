@@ -2757,13 +2757,15 @@ function menu_rebuild() {
   if (function_exists('newrelic_record_custom_event')) {
     $callers = array();
     $traces = debug_backtrace();
+    $counter = 0;
     foreach ($traces as $trace) {
-      $callers[$trace['function']] = $trace['file'];
-	}
-	newrelic_record_custom_event('menu_rebuild', $callers);
+      $callers['l' . $counter] = $trace['function'] . '::' . $trace['line'] . '::' . $trace['file'];
+      $counter++;
+    }
+    newrelic_record_custom_event('menu_rebuild', $callers);
 
-	$info = new Exception('menu_rebuild');
-	newrelic_notice_error('menu_rebuild', $info);
+    $info = new Exception('menu_rebuild');
+    newrelic_notice_error('menu_rebuild', $info);
   }
 
   if (!lock_acquire('menu_rebuild')) {
