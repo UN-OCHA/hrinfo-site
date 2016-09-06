@@ -13,6 +13,7 @@ foreach ($data as $row) {
   $name = $row->name;
   drush_log('Removing all memberships of ' . $name . ' (' . $uid . ')');
   $account = user_load($uid);
+
   $groups = og_get_groups_by_user($account);
   if ($groups) {
     foreach ($groups as $group_type => $gids) {
@@ -25,6 +26,13 @@ foreach ($data as $row) {
       }
     }
   }
+
+  // Remove stale records in the {og_users_roles} table.
+  db_delete('og_users_roles')
+    ->condition('uid', $og_membership->etid)
+    ->execute();
+
+  // Remove all roles from user.
   user_save($account, array('roles' => array(
     '2' => 'authenticated user',
   )));
