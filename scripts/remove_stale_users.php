@@ -14,12 +14,14 @@ foreach ($data as $row) {
   drush_log('Removing all memberships of ' . $name . ' (' . $uid . ')');
   $account = user_load($uid);
   $groups = og_get_groups_by_user($account);
-  foreach ($groups as $group_type => $gids) {
-    foreach ($gids as $gid) {
-      // Load membership.
-      $membership = og_get_membership($group_type, $gid, 'user', $uid);
-      if ($membership) {
-        $mids[$membership->id] = $membership->id;
+  if ($groups) {
+    foreach ($groups as $group_type => $gids) {
+      foreach ($gids as $gid) {
+        // Load membership.
+        $membership = og_get_membership($group_type, $gid, 'user', $uid);
+        if ($membership) {
+          $mids[$membership->id] = $membership->id;
+        }
       }
     }
   }
