@@ -29,6 +29,7 @@ function hr_documents_og_features_registry() {
  */
 function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
   hr_sectors_hide_sectors($form, $form_state);
+
   if (module_exists('hs_taxonomy')) {
     if (isset($form['field_locations']['und']['#config'])) {
       $form['field_locations']['und']['#config']['dropbox']['title'] = t('Current selections');
@@ -44,6 +45,25 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
       );
     }
   }
+
+  // Show multiple empty ones for locations.
+  $field_name = 'field_locations';
+  $field_language = $form[$field_name]['#language'];
+  $max_delta = $form[$field_name][$field_language]['#max_delta'];
+  $form[$field_name][$field_language][] = $form[$field_name][$field_language][$max_delta];
+  $form[$field_name][$field_language][] = $form[$field_name][$field_language][$max_delta];
+  $form[$field_name][$field_language][] = $form[$field_name][$field_language][$max_delta];
+  $form[$field_name][$field_language]['#max_delta'] = $max_delta + 3;
+
+  // Show multiple empty ones for files.
+  $field_name = 'field_files_collection';
+  $field_language = $form[$field_name]['#language'];
+  $max_delta = $form[$field_name][$field_language]['#max_delta'];
+  $form[$field_name][$field_language][] = $form[$field_name][$field_language][$max_delta];
+  $form[$field_name][$field_language][] = $form[$field_name][$field_language][$max_delta];
+  $form[$field_name][$field_language][] = $form[$field_name][$field_language][$max_delta];
+  $form[$field_name][$field_language]['#max_delta'] = $max_delta + 3;
+
 }
 
 /**
