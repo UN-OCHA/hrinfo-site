@@ -29,7 +29,7 @@ foreach ($data as $row) {
 
   // Remove stale records in the {og_users_roles} table.
   db_delete('og_users_roles')
-    ->condition('uid', $og_membership->etid)
+    ->condition('uid', $uid)
     ->execute();
 
   // Remove all roles from user.
