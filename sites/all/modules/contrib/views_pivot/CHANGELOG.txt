@@ -1,0 +1,23 @@
+views_pivot 7.x-1.x-dev
+-----------------------
+
+views_pivot 7.x-1.1, 2015-05-18
+-------------------------------
+#2374947 by jurgenhaas: Create additional column for calculations (sum, difference, average)
+#2374947 Handle views counts aggregates
+#2396801 Fix warning when now view results exist
+#2374947 Fix the rendering of aggregated values where field is a property and not a field
+#2374947 Improve the rendering of aggregated values
+#2374947 Columns and rows for aggregation: implement more aggregation methods like average, count, min and max
+#2374947 Columns and rows for aggregation
+#2319189 Column separator is not applied
+#2286307 Eliminate PHP strict warnings from nested array function calls
+#2273467 by @solotandem: correct spelling of a constant
+#2222623 Implement vertical mode
+#2223307 also add views_ui as a dependency
+#2223307 by @joachim: integrate a test module
+#2222621 by @joachim: do not output empty sub-headers
+
+views_pivot 7.x-1.0, 2014-03-03
+-------------------------------
+First public release
