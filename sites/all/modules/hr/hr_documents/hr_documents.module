@@ -47,13 +47,14 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
   }
 
 
+  // Show multiple empty ones for locations.
   if (!isset($form['#node']->nid)) {
     $items_count = 4;
     $field_name = 'field_locations';
     _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
   }
 
-  // Show multiple empty ones for locations.
+  // Show multiple empty ones for files.
   if (!isset($form['#node']->nid)) {
     $items_count = 4;
     $field_name = 'field_files_collection';
@@ -62,22 +63,25 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
 }
 
 function _hr_document_render_multiple_input_lines($field_name, $items_count, &$form, &$form_state) {
-  $field_language = $form[$field_name]['#language'];
+  if (!isset($form[$field_name])) {
+    return;
+  }
 
+  $field_language = $form[$field_name]['#language'];
   $form_theme = $form[$field_name][$field_language]['#theme'];
 
-  // Remove delete and add more buttons
+  // Remove delete and add more buttons.
   $form[$field_name][$field_language][0]['remove_button']['#access'] = FALSE;
   $form[$field_name][$field_language]['add_more']['#access'] = FALSE;
 
   $items = &$form_state['field'][$field_name][$field_language];
 
-  // Generate required number of fields collection
+  // Generate required number of fields collection.
   if ($items_count > 1 and $items['items_count'] != $items_count) {
     $items['items_count'] = $items_count;
     $items['field']['cardinality'] = $items_count;
     $form[$field_name][$field_language] = field_multiple_value_form($items['field'], $items['instance'], $field_language, array(), $form, $form_state);
-    // Reset theme function, as field_multiple_value_form hijacks it
+    // Reset theme function.
     $form[$field_name][$field_language]['#theme'] = $form_theme;
   }
 }

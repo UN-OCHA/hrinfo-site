@@ -41,6 +41,20 @@ function hr_infographics_form_hr_infographic_node_form_alter(&$form, &$form_stat
       );
     }
   }
+
+  // Show multiple empty ones for locations.
+  if (!isset($form['#node']->nid)) {
+    $items_count = 4;
+    $field_name = 'field_locations';
+    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
+  }
+
+  // Show multiple empty ones for files.
+  if (!isset($form['#node']->nid)) {
+    $items_count = 4;
+    $field_name = 'field_files_collection';
+    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
+  }
 }
 
 /**
