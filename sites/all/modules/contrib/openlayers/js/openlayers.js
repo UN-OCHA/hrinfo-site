@@ -20,8 +20,9 @@ document.namespaces;
 
 (function($) {
 
-Drupal.settings.openlayers = {};
-Drupal.settings.openlayers.maps = {};
+// Initialize openlayers data objects if undefined.
+Drupal.settings.openlayers = Drupal.settings.openlayers || {};
+Drupal.settings.openlayers.maps = Drupal.settings.openlayers.maps || {};
 
 /**
  * Minimal OpenLayers map bootstrap.

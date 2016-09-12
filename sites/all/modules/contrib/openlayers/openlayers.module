@@ -1057,6 +1057,9 @@ function openlayers_get_projection($authority, $code) {
  * @return openlayers_projection
  */
 function openlayers_get_projection_by_identifier($identifier) {
+  if (empty($identifier)) {
+    return;
+  }
   ctools_include('export');
 
   $records = ctools_export_load_object('openlayers_projections', 'names', array($identifier));
@@ -1296,8 +1299,12 @@ class openlayers_layer_type {
     $projections = array();
     // TODO Ignore incomplete data until cause is fixed (projection for every layer set during migration)
     if (isset($this->data['projection'])) {
-      foreach ($this->data['projection'] as $projection) {
-        $projections[] = openlayers_get_projection_by_identifier($projection);
+      if (!empty($this->data['projection'])) {
+        foreach ($this->data['projection'] as $projection) {
+          if (!empty($projection)) {
+            $projections[] = openlayers_get_projection_by_identifier($projection);
+          }
+        }
       }
     }
     return $projections;

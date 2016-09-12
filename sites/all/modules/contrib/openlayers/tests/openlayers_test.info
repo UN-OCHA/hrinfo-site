@@ -8,9 +8,9 @@ files[] = openlayers.test
 files[] = includes/openlayers_test.maps.inc
 files[] = includes/openlayers_test.views.inc
 
-; Information added by Drupal.org packaging script on 2015-03-05
-version = "7.x-2.0-beta11+19-dev"
+; Information added by Drupal.org packaging script on 2015-05-08
+version = "7.x-2.0-beta11+23-dev"
 core = "7.x"
 project = "openlayers"
-datestamp = "1425586389"
+datestamp = "1431069487"
 
