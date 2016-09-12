@@ -1,0 +1,12 @@
+name = Panels NewRelic Insight
+description = Enables page requests to be properly named in NewRelic
+package = Panels
+core = 7.x
+dependencies[] = panels
+dependencies[] = page_manager
+; Information added by Drupal.org packaging script on 2015-08-12
+version = "7.x-1.2"
+core = "7.x"
+project = "pni"
+datestamp = "1439386440"
+
