@@ -84,11 +84,6 @@ function filefield_nginx_progress_element_process($element, &$form_state, $form)
   // Generate a random upload progress key.
   $upload_progress_key = mt_rand();
 
-  // Nginx really wants us to send a get value, but form_expand_ahah doesn't
-  // allow query strings in paths. The work around is to add the progress id
-  // into the path and to rewrite at the nginx level to the required url.
-  $element['upload_button']['#ajax']['path'] .= '/x-progress-id:' . $upload_progress_key;
-
   // Add the upload key to the form, in a manner compatible with the existing
   // javascript
   $element['UPLOAD_IDENTIFIER'] = array(
@@ -103,14 +98,38 @@ function filefield_nginx_progress_element_process($element, &$form_state, $form)
     unset($element['APC_UPLOAD_PROGRESS']);
   }
 
-  // Enable the progress bar.
-  $element['upload_button']['#ajax']['progress']['type'] = 'bar';
+  // Save upload identifier for upload button process callback
+  $element['upload_button']['#upload_identifier'] = $upload_progress_key;
 
-  // Modify the upload progress callback to use our own menu callback.
-  $element['upload_button']['#ajax']['progress']['path'] = 'filefield_nginx_progress/' . $upload_progress_key;
-
+  // Add upload button proccess callback
+  if (empty($element['upload_button']['#process'])) {
+    $element['upload_button']['#process'] = array('filefield_nginx_progress_upload_button_process', 'ajax_process_form');
+  } else {
+    array_unshift($element['upload_button']['#process'], 'filefield_nginx_progress_upload_button_process');
+  }
+  
   return $element;
 } // filefield_nginx_progress_element_process
+
+/**
+ * A #process callback to extend the file_widget element upload button.
+ *
+ */
+function filefield_nginx_progress_upload_button_process($element, &$form_state, $form) {
+
+  // Enable the progress bar.
+  $element['#ajax']['progress']['type'] = 'bar';
+
+  // Modify the upload progress callback to use our own menu callback.
+  $element['#ajax']['progress']['path'] = 'filefield_nginx_progress/' . $element['#upload_identifier'];
+
+  // Nginx really wants us to send a get value, but form_expand_ahah doesn't
+  // allow query strings in paths. The work around is to add the progress id
+  // into the path and to rewrite at the nginx level to the required url.
+  $element['#ajax']['path'] .= '/x-progress-id:' . $element['#upload_identifier'];
+
+  return $element;
+}
 
 /**
  *
