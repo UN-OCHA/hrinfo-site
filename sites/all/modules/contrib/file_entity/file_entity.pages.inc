@@ -106,7 +106,7 @@ function file_entity_add_upload_step_upload($form, &$form_state, array $options 
     '#title' => t('Upload a new file'),
     '#upload_location' => file_entity_upload_destination_uri($options),
     '#upload_validators' => file_entity_get_upload_validators($options),
-    '#progress_indicator' => 'bar',
+    '#progress_indicator' => 'throbber',
     '#required' => TRUE,
     '#pre_render' => array('file_managed_file_pre_render', 'file_entity_upload_validators_pre_render'),
     '#default_value' => isset($form_state['storage']['upload']) ? $form_state['storage']['upload'] : NULL,
@@ -1095,7 +1095,7 @@ function file_entity_upload_archive_form($form, &$form_state) {
     '#title' => t('Upload an archive file'),
     '#upload_location' => NULL, // Upload to the temporary directory.
     '#upload_validators' => file_entity_get_upload_validators($options),
-    '#progress_indicator' => 'bar',
+    '#progress_indicator' => 'throbber',
     '#required' => TRUE,
     '#pre_render' => array('file_managed_file_pre_render', 'file_entity_upload_validators_pre_render'),
   );
