@@ -150,3 +150,13 @@ function hr_core_update_7004() {
     ctools_export_crud_save('environment_indicator_environment', $environment);
   }
 }
+
+/**
+ * Change the hostname on the staging site environment indicator.
+ */
+function hr_core_update_7005() {
+  // Update staging.
+  $environment = ctools_export_crud_load('environment_indicator_environment', 'hr_test');
+  $environment->regexurl = 'hrinfo.568elmp03.blackmesh.com';
+  ctools_export_crud_save('environment_indicator_environment', $environment);
+}
