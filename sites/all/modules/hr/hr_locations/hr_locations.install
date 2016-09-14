@@ -248,3 +248,20 @@ function hr_locations_update_7007(&$sandbox) {
 function hr_locations_update_7008(&$sandbox) {
   variable_set('maintenance_mode_status', '203 Non-Authoritative Information');
 }
+
+/**
+ * Change progress bar to throbber.
+ */
+function hr_locations_update_7009(&$sandbox) {
+  $entity_type = 'field_collection_item';
+  $field_name = 'field_file';
+  $field_info = field_info_field($field_name);
+
+  $bundle = 'field_files_collection';
+  $field_instance = field_info_instance($entity_type, $field_name, $bundle);
+  $field_instance['widget']['settings']['progress_indicator'] = 'throbber';
+  field_update_instance($field_instance);
+
+  // Disable nginx.
+  module_disable(array('filefield_nginx_progress'));
+}
