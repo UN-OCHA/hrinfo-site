@@ -265,3 +265,10 @@ function hr_locations_update_7009(&$sandbox) {
   // Disable nginx.
   module_disable(array('filefield_nginx_progress'));
 }
+
+/**
+ * Enable new relic.
+ */
+function hr_locations_update_7010(&$sandbox) {
+  module_enable(array('panels_newrelic_insight'));
+}
