@@ -260,4 +260,11 @@ function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id)
     $field_name = 'field_event_agenda';
     _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
   }
+
+  // Show multiple empty ones for contacts.
+  if (!isset($form['#node']->nid)) {
+    $items_count = 2;
+    $field_name = 'field_hid_contact_ref';
+    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
+  }
 }
