@@ -169,3 +169,14 @@ function hr_documents_field_widget_form_alter(&$element, &$form_state, $context)
     }
   }
 }
+
+/**
+ * Implements hook_clone_node_alter.
+ */
+function hr_documents_clone_node_alter(&$node, $context) {
+  dpm($node);
+  unset($node->field_files_collection);
+  unset($node->field_publication_date);
+  unset($node->body);
+  unset($node->field_related_content);
+}

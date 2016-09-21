@@ -160,3 +160,10 @@ function hr_core_update_7005() {
   $environment->regexurl = 'hrinfo.568elmp03.blackmesh.com';
   ctools_export_crud_save('environment_indicator_environment', $environment);
 }
+
+/**
+ * Enable node clone module.
+ */
+function hr_core_update_7006() {
+  module_enable(array('clone'));
+}

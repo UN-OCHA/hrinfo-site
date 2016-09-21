@@ -157,3 +157,39 @@ function hr_assessments_field_widget_form_alter(&$element, &$form_state, $contex
     }
   }
 }
+
+/**
+ * Implements hook_clone_node_alter.
+ */
+function hr_assessments_clone_node_alter(&$node, $context) {
+  if ($node->type != 'hr_assessment') {
+    return;
+  }
+
+  unset($node->field_organizations2);
+  unset($node->field_locations);
+  unset($node->field_asst_other_location);
+  unset($node->field_asst_subject);
+  unset($node->field_asst_methodology);
+  unset($node->field_asst_key_findings);
+  unset($node->field_asst_sample_size);
+  unset($node->field_asst_date);
+  unset($node->field_asst_report);
+  unset($node->field_asst_questionnaire);
+  unset($node->field_asst_data);
+  unset($node->field_related_content);
+}
+
+/**
+ * Implements hook_clone_access_alter.
+ */
+function hr_assessments_clone_access_alter(&$access, $node) {
+  global $user;
+  // Only allow cloning of nodes posted to groups you belong to.
+  // This function doesn't really exist, but you get the idea...
+
+  if (og_user_access_entity($perm, 'node', $node, $account = NULL))
+  if (!og_user_is_member_of_group_the_node_is_in($user, $node)) {
+    $access = FALSE;
+  }
+}
