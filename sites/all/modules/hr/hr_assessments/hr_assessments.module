@@ -184,12 +184,9 @@ function hr_assessments_clone_node_alter(&$node, $context) {
  * Implements hook_clone_access_alter.
  */
 function hr_assessments_clone_access_alter(&$access, $node) {
-  global $user;
-  // Only allow cloning of nodes posted to groups you belong to.
-  // This function doesn't really exist, but you get the idea...
-
-  if (og_user_access_entity($perm, 'node', $node, $account = NULL))
-  if (!og_user_is_member_of_group_the_node_is_in($user, $node)) {
-    $access = FALSE;
+  if ($node->type != 'hr_assessment') {
+    return;
   }
+
+  return node_access('update', $node);
 }

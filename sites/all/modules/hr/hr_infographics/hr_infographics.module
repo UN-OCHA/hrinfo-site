@@ -152,9 +152,24 @@ function hr_infographics_field_widget_form_alter(&$element, &$form_state, $conte
  * Implements hook_clone_node_alter.
  */
 function hr_infographics_clone_node_alter(&$node, $context) {
-  dpm($node);
+  if ($node->type != 'hr_infographic') {
+    return;
+  }
+
   unset($node->field_files_collection);
   unset($node->field_publication_date);
   unset($node->body);
   unset($node->field_related_content);
+}
+
+
+/**
+ * Implements hook_clone_access_alter.
+ */
+function hr_infographics_clone_access_alter(&$access, $node) {
+  if ($node->type != 'hr_infographic') {
+    return;
+  }
+
+  return node_access('update', $node);
 }
