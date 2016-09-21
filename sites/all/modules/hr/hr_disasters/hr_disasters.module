@@ -4,7 +4,7 @@
  * Code for the Disasters feature.
  */
 
-define('HR_DISASTERS_RELIEFWEB_API', 'http://api.rwlabs.org/v1/disasters');
+define('HR_DISASTERS_RELIEFWEB_API', 'http://api.reliefweb.int/v1/disasters');
 
 include_once 'hr_disasters.features.inc';
 

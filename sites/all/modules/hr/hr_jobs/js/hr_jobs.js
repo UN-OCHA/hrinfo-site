@@ -14,7 +14,7 @@ Drupal.behaviors.hrJobs = {
     model: Job,
     params: {},
     url: function() {
-      var url = 'http://api.rwlabs.org/v1/jobs?offset=' + this.skip + '&limit=' + this.limit + '&query[fields][]=country&fields[include][]=url&query[value]=' + settings.hr_jobs.operation;
+      var url = 'http://api.reliefweb.int/v1/jobs?offset=' + this.skip + '&limit=' + this.limit + '&query[fields][]=country&fields[include][]=url&query[value]=' + settings.hr_jobs.operation;
       var index = window.location.hash.indexOf('=');
       if(index != -1) {
         var params = window.location.hash.substr(index + 1);
