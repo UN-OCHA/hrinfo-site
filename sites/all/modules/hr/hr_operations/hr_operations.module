@@ -120,3 +120,16 @@ function _hr_operations_get_active_operation_labels() {
   asort($labels);
   return $labels;
 }
+
+function hr_operations_form_hr_operation_node_form_alter(&$form, &$form_state) {
+  // Disable title and country in edit mode.
+  if (isset($form['#node']->nid)) {
+    $user_roles = user_roles();
+    $user_roles = array_flip($user_roles);
+    if (!user_has_role($user_roles['administrator'])) {
+      $form['title_field']['#disabled'] = TRUE;
+      $form['field_operation_type']['#disabled'] = TRUE;
+      $form['field_operation_region']['#disabled'] = TRUE;
+    }
+  }
+}
