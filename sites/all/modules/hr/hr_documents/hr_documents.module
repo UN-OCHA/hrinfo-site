@@ -96,7 +96,8 @@ function _hr_document_clone_disable_language(&$form, &$form_state) {
 function _hr_document_check_clone_title($form, &$form_state) {
   if (isset($form_state['values']['title_field'][$form_state['node']->language][0]['value'])) {
     if (strpos($form_state['values']['title_field'][$form_state['node']->language][0]['value'], '[CLONED]') !== FALSE) {
-       form_set_error('title_field', t('Please adjust the title before saving this document.'));
+      $types = node_type_get_types();
+      form_set_error('title_field', t('Please adjust the title before saving this @name', array('@name' => $types[$form_state['node']->type]->name)));
     }
   }
 }
@@ -240,6 +241,7 @@ function hr_documents_clone_access_alter(&$access, $node) {
     'hr_assessment',
     'hr_document',
     'hr_infographic',
+    'hr_event',
   );
 
   if (in_array($node->type, $allowed_types)) {
