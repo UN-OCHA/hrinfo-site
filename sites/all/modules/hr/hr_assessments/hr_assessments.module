@@ -136,6 +136,22 @@ function hr_assessments_form_hr_assessment_node_form_alter(&$form, &$form_state)
     $field_name = 'field_locations';
     _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
   }
+
+  // If it's a clone, validate the title.
+  if (isset($form['clone_from_original_nid'])) {
+    // Add title validation.
+    if (!isset($form['#validate'])) {
+      $form['#validate'] = array();
+    }
+    $form['#validate'][] = '_hr_document_check_clone_title';
+
+    // Disable language changing.
+    if (!isset($form['#after_build'])) {
+      $form['#after_build'] = array();
+    }
+    $form['#after_build'][] = '_hr_document_clone_disable_language';
+  }
+
 }
 
 /**
@@ -166,6 +182,12 @@ function hr_assessments_clone_node_alter(&$node, $context) {
     return;
   }
 
+  // Mark title field as clone.
+  if (isset($node->title_field[$node->language][0]['value'])) {
+    $node->title_field[$node->language][0]['value'] .= ' [CLONED]';
+    $node->title_field[$node->language][0]['safe_value'] .= ' [CLONED]';
+  }
+
   unset($node->field_organizations2);
   unset($node->field_locations);
   unset($node->field_asst_other_location);
@@ -178,15 +200,4 @@ function hr_assessments_clone_node_alter(&$node, $context) {
   unset($node->field_asst_questionnaire);
   unset($node->field_asst_data);
   unset($node->field_related_content);
-}
-
-/**
- * Implements hook_clone_access_alter.
- */
-function hr_assessments_clone_access_alter(&$access, $node) {
-  if ($node->type != 'hr_assessment') {
-    return;
-  }
-
-  return node_access('update', $node);
 }

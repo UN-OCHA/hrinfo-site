@@ -46,7 +46,6 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
     }
   }
 
-
   // Show multiple empty ones for locations.
   if (!isset($form['#node']->nid)) {
     $items_count = 4;
@@ -60,8 +59,51 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
     $field_name = 'field_files_collection';
     _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
   }
+
+  // If it's a clone, validate the title.
+  if (isset($form['clone_from_original_nid'])) {
+    // Add title validation.
+    if (!isset($form['#validate'])) {
+      $form['#validate'] = array();
+    }
+    $form['#validate'][] = '_hr_document_check_clone_title';
+
+    // Disable language changing.
+    if (!isset($form['#after_build'])) {
+      $form['#after_build'] = array();
+    }
+    $form['#after_build'][] = '_hr_document_clone_disable_language';
+  }
 }
 
+/**
+ * Disable language field on clones.
+ */
+function _hr_document_clone_disable_language(&$form, &$form_state) {
+  $form['language']['#disabled'] = TRUE;
+
+  if (!isset($form['language']['#attributes'])) {
+    $form['language']['#attributes'] = array();
+  }
+
+  $form['language']['#attributes']['disabled'] = TRUE;
+  return $form;
+}
+
+/**
+ * Make sure title is changed in cloned node.
+ */
+function _hr_document_check_clone_title($form, &$form_state) {
+  if (isset($form_state['values']['title_field'][$form_state['node']->language][0]['value'])) {
+    if (strpos($form_state['values']['title_field'][$form_state['node']->language][0]['value'], '[CLONED]') !== FALSE) {
+       form_set_error('title_field', t('Please adjust the title before saving this document.'));
+    }
+  }
+}
+
+/**
+ * Helper to render multiple input fields.
+ */
 function _hr_document_render_multiple_input_lines($field_name, $items_count, &$form, &$form_state) {
   if (!isset($form[$field_name])) {
     return;
@@ -80,7 +122,7 @@ function _hr_document_render_multiple_input_lines($field_name, $items_count, &$f
   if ($items_count > 1 and $items['items_count'] != $items_count) {
     $items['items_count'] = $items_count;
     $items['field']['cardinality'] = $items_count;
-    $form[$field_name][$field_language] = field_multiple_value_form($items['field'], $items['instance'], $field_language, array(), $form, $form_state);
+    $form[$field_name][$field_language] += field_multiple_value_form($items['field'], $items['instance'], $field_language, array(), $form, $form_state);
     // Reset theme function.
     $form[$field_name][$field_language]['#theme'] = $form_theme;
   }
@@ -178,6 +220,12 @@ function hr_documents_clone_node_alter(&$node, $context) {
     return;
   }
 
+  // Mark title field as clone.
+  if (isset($node->title_field[$node->language][0]['value'])) {
+    $node->title_field[$node->language][0]['value'] .= ' [CLONED]';
+    $node->title_field[$node->language][0]['safe_value'] .= ' [CLONED]';
+  }
+
   unset($node->field_files_collection);
   unset($node->field_publication_date);
   unset($node->body);
@@ -188,9 +236,32 @@ function hr_documents_clone_node_alter(&$node, $context) {
  * Implements hook_clone_access_alter.
  */
 function hr_documents_clone_access_alter(&$access, $node) {
-  if ($node->type != 'hr_document') {
+  $allowed_types = array(
+    'hr_assessment',
+    'hr_document',
+    'hr_infographic',
+  );
+
+  if (in_array($node->type, $allowed_types)) {
+    $access = node_access('update', $node);
+  }
+  else {
+    // Deny access for other content types.
+    $access = FALSE;
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter.
+ */
+function hr_documents_module_implements_alter(&$implementations, $hook) {
+  if ($hook != 'clone_access_alter') {
     return;
   }
 
-  return node_access('update', $node);
+  // Move our alter to the end.
+  $module = 'hr_documents';
+  $my_alter = array($module => $implementations[$module]);
+  unset($implementations[$module]);
+  $implementations = $implementations + $my_alter;
 }
