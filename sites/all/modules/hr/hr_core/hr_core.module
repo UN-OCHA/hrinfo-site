@@ -275,7 +275,11 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
     }
   }
   else {
-    if (!isset($node->nid)) {
+    if (isset($node->clone_from_original_nid)) {
+      $form['actions']['submit']['#value'] = t('Publish');
+      $form['actions']['draft'] = _hr_core_draft_button('Save As Draft');
+    }
+    else if (!isset($node->nid)) {
       $form['actions']['submit']['#value'] = t('Save As Draft');
     }
   }
@@ -346,6 +350,7 @@ function hr_core_publishcontent_publish_access($node, $account) {
           'publish editable ' . check_plain($node->type) . ' content',
           $account
         ) && node_access('update', $node));
+
     return $access ? PUBLISHCONTENT_ACCESS_ALLOW : PUBLISHCONTENT_ACCESS_IGNORE;
   }
   else {
