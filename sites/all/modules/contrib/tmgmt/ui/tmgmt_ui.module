@@ -579,7 +579,7 @@ function tmgmt_ui_translation_review_form_defaults($form, &$form_state, TMGMTJob
   $form['info']['source'] = array(
     '#type' => 'item',
     '#title' => t('Source'),
-    '#markup' => l($item->getSourceLabel(), $uri['path'], $uri['options']),
+    '#markup' => !empty($uri) ? l($item->getSourceLabel(), $uri['path'], $uri['options']) : $item->getSourceLabel(),
     '#prefix' => '<div class="tmgmt-ui-source tmgmt-ui-info-item">',
     '#suffix' => '</div>',
   );
@@ -800,7 +800,7 @@ function _tmgmt_ui_review_form_element(&$form_state, $data, TMGMTJobItem $job_it
         $revisions = array();
 
         foreach ($data[$key]['#translation']['#text_revisions'] as $revision) {
-          $revisions[] = t('Origin: %origin, Created: %created</br>%text', array(
+          $revisions[] = t('Origin: %origin, Created: %created<br />%text', array(
             '%origin' => $revision['#origin'],
             '%created' => format_date($revision['#timestamp']),
             '%text' => filter_xss($revision['#text']),
@@ -828,6 +828,7 @@ function _tmgmt_ui_review_form_element(&$form_state, $data, TMGMTJobItem $job_it
         '#default_value' => $data[$key]['#text'],
         '#title' => t('Source'),
         '#disabled' => TRUE,
+        '#allow_focus' => TRUE,
       );
 
       // Give the translator ui controller a chance to affect the data item element.
