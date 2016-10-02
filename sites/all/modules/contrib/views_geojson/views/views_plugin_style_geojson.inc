@@ -30,6 +30,9 @@ class views_plugin_style_geojson extends views_plugin_style {
   function init(&$view, &$display, $options = NULL) {
     parent::init($view, $display, $options);
 
+    // Pretty-print the JSON.
+    module_load_include('inc', 'views_geojson', 'views_geojson.helpers');
+
     // Search api indexes store the entity metadata in the views data array.
     if (strpos($view->base_table, 'search_api_index_') === 0) {
       $views_data = views_fetch_data();
@@ -39,8 +42,6 @@ class views_plugin_style_geojson extends views_plugin_style {
       }
     }
     else {
-      // Pretty-print the JSON.
-      module_load_include('inc', 'views_geojson', 'views_geojson.helpers');
       foreach (entity_get_info() as $key => $info) {
         if ($view->base_table == $info['base table']) {
           $this->entity_type = $key;
@@ -312,6 +313,10 @@ class views_plugin_style_geojson extends views_plugin_style {
       if ($this->display->display_plugin == 'page') {
         $json = "<pre>$json</pre>";
       }
+    }
+    elseif ($this->display->display_plugin == 'feed') {
+      $content_type = ($this->options['content_type'] == 'default') ? 'application/json' : $this->options['content_type'];
+      drupal_add_http_header("Content-Type", "$content_type; charset=utf-8");
     }
     else {
       if ($this->display->display_plugin == 'page' && !$this->options['using_views_api_mode']) {
