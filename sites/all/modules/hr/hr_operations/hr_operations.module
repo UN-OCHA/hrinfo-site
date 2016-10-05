@@ -44,12 +44,12 @@ function hr_operations_block_view($delta = '') {
 </div>
 <div>
   <div class="col-sm-12">
-    <p><strong><a href="/fr/operations/burundi">Burundi</a></strong></p>
+    <p><strong><a href="/operations/ethiopia">Ethiopia</a></strong></p>
   </div>
 </div>
 <div>
   <div class="col-sm-12">
-    <p><strong><a href="/operations/ethiopia">Ethiopia</a></strong></p>
+    <p><strong><a href="en/operations/haiti">Haiti</a></strong></p>
   </div>
 </div>
 <div>
