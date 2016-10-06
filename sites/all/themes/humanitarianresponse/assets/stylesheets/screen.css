@@ -4054,11 +4054,13 @@ table.stylish-table {
   margin: 10px auto;
 }
 
-table.stylish-table td {
+table.stylish-table td,
+table.stylish-table th {
   border: solid 1px black;
 }
 
-table.stylish-table thead td {
+table.stylish-table thead td,
+table.stylish-table thead th {
   font-weight: bold;
   background-color: #9a9a9a;
 }
