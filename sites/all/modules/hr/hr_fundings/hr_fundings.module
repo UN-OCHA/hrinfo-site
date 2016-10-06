@@ -23,7 +23,7 @@ function hr_fundings_cron() {
           ->entityCondition('bundle', 'hr_funding')
           ->fieldCondition('field_appeal_id', 'value', $appeal->id, '=')
           ->execute();
-        if (empty($results['node'])) {
+        if (!isset($results['node'])) {
           $type = _hr_fundings_map_fts_appeal_type($appeal->type);
           if ($type != NULL) {
             // Create appeal
@@ -52,17 +52,23 @@ function hr_fundings_cron() {
 
 function _hr_fundings_map_fts_appeal_type($type) {
   $term_name = '';
-  switch($type) {
-    case 'CAP':
-      $term_name = 'Consolidated Appeal Process (CAP)';
-      break;
-    case 'FLASH':
-      $term_name = 'Flash Appeal';
-      break;
-    case 'SRP':
-      $term_name = 'Strategic Response Plan (SRP)';
-      break;
+  $mapping = variable_get('hr_fundings_mapping', array(
+    'CERF' => 'Central Emergency Response Fund (CERF)',
+    'CHAP' => 'Common Humanitarian Action Plan (CHAP)',
+    'CAPOLD' => 'Consolidated Appeal (CAP)',
+    'CAP' => 'Consolidated Appeal Process (CAP)',
+    'FTS' => 'Financial Tracking (FTS)',
+    'FLASH' => 'Flash Appeal',
+    'HRP' => 'Humanitarian Response Plan (HRP)',
+    'POOLED' => 'Pooled Fund',
+    'SRP' => 'Strategic Response Plan',
+    'RRP Detail' => 'Regional Response Plan (RRP)',
+  ));
+  
+  if (isset($mapping[$type])) {
+    $term_name = $mapping[$type];
   }
+
   if (!empty($term_name)) {
     return reset(taxonomy_get_term_by_name($term_name, 'hr_funding_type'));
   }
