@@ -4048,3 +4048,21 @@ body .region-branding .block .views-exposed-form .views-exposed-widget .search-s
   width: 20px;
 }
 
+table.stylish-table {
+  float: none;
+  width: 90%;
+  margin: 10px auto;
+}
+
+table.stylish-table td {
+  border: solid 1px black;
+}
+
+table.stylish-table thead td {
+  font-weight: bold;
+  background-color: #9a9a9a;
+}
+
+table.stylish-table tr:nth-child(2n) {
+  background-color: #dedede;
+}
