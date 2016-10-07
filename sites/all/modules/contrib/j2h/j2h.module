@@ -107,19 +107,26 @@ function j2h($mod_api='') {
         $url_api .= '&'.$_SERVER['QUERY_STRING'];
     }
 
-    // For GET requests, the query has to be appended to the URL and not entered as the $data parameter
-    $options = array('timeout' => 120);
-    $json = drupal_http_request($url_api, $options);
+    $cache_id = 'j2h:' . $url_api;
+    $cache = cache_get($cache_id, 'cache');
+    if ($cache && !empty($cache->data)) {
+      $variables = $cache->data;
+    }
+    else {
+      $options = array('timeout' => 120);
+      $json = drupal_http_request($url_api, $options);
 
-    if (!empty($json->error)) {
-        $msg = t("The API: <a href='$url_api' target='_blank'>$url_api</a> shows this error: @error", array("@error" => $json->error));
+      if (!empty($json->error)) {
+        watchdog('j2h', "The API: <a href='$url_api' target='_blank'>$url_api</a> shows this error: @error", array("@error" => $json->error));
         return "<div></div>";
+      }
+
+      $json_data = drupal_json_decode($json->data);
+
+      $variables = $json_data;
+      cache_set($cache_id, $variables, REQUEST_TIME + 60 * 60);
     }
 
-    $json_data = drupal_json_decode($json->data);
-
-    $variables = $json_data;
-    
     return theme('j2h', $variables);
 }
 
