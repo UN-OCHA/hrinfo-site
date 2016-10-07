@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file views_pivot_test.module
+ * Test module for Views Pivot.
+ */
+
+/**
+ * Implements hook_node_info().
+ */
+function views_pivot_test_node_info() {
+  // Define a custom node type to use as our data.
+  // Note that because we define this type but don't bother defining its
+  // hook_form(), this will not appear on the content types admin list.
+  return array(
+    'pivot' => array(
+      'name' => t('Pivot data'),
+      'base' => 'pivot',
+      'description' => t('Test node type for Views Pivot module.'),
+    )
+  );
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function views_pivot_test_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'example') . '/includes/views',
+    'template path' => drupal_get_path('module', 'example') . '/themes',
+  );
+}
