@@ -122,9 +122,12 @@ function j2h($mod_api='') {
       }
 
       $json_data = drupal_json_decode($json->data);
-
       $variables = $json_data;
-      cache_set($cache_id, $variables, REQUEST_TIME + 60 * 60);
+      
+      // Only cache real data.
+      if ($json_data) {
+        cache_set($cache_id, $variables, REQUEST_TIME + 60 * 60);
+      }
     }
 
     return theme('j2h', $variables);
