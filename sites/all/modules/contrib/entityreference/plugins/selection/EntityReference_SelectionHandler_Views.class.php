@@ -9,16 +9,12 @@ class EntityReference_SelectionHandler_Views implements EntityReference_Selectio
    * Implements EntityReferenceHandler::getInstance().
    */
   public static function getInstance($field, $instance = NULL, $entity_type = NULL, $entity = NULL) {
-    return new EntityReference_SelectionHandler_Views($field, $instance, $entity_type, $entity);
+    return new EntityReference_SelectionHandler_Views($field, $instance);
   }
 
-  protected function __construct($field, $instance, $entity_type, $entity) {
+  protected function __construct($field, $instance) {
     $this->field = $field;
     $this->instance = $instance;
-    $this->entity = $entity;
-    // Get the entity token type of the entity type.
-    $entity_info = entity_get_info($entity_type);
-    $this->entity_type_token = isset($entity_info['token type']) ? $entity_info['token type'] : $entity_type;
   }
 
   /**
@@ -56,37 +52,13 @@ class EntityReference_SelectionHandler_Views implements EntityReference_Selectio
       );
 
       $default = !empty($view_settings['args']) ? implode(', ', $view_settings['args']) : '';
-      $description = t('Provide a comma separated list of arguments to pass to the view.') . '<br />' . t('This field supports tokens.');
-
-      if (!module_exists('token')) {
-        $description .= '<br>' . t('Install the <a href="@url">token module</a> to get more tokens and display available once.', array('@url' => 'http://drupal.org/project/token'));
-      }
-
       $form['view']['args'] = array(
         '#type' => 'textfield',
         '#title' => t('View arguments'),
         '#default_value' => $default,
         '#required' => FALSE,
-        '#description' => $description,
-        '#maxlength' => '512',
+        '#description' => t('Provide a comma separated list of arguments to pass to the view.'),
       );
-      if (module_exists('token')) {
-        // Get the token type for the entity type our field is in (a type 'taxonomy_term' has a 'term' type token).
-        $instance_entity_info = entity_get_info($instance['entity_type']);
-        $token_type = isset($instance_entity_info['token type']) ? $instance_entity_info['token type'] : $instance['entity_type'];
-
-        $form['view']['tokens'] = array(
-          '#theme' => 'token_tree',
-          // The token types that have specific context. Can be multiple token types like 'term' and/or 'user'.
-          '#token_types' => array($token_type),
-          // A boolean TRUE or FALSE whether to include 'global' context tokens like [current-user:*]
-          // or [site:*]. Defaults to TRUE.
-          '#global_types' => TRUE,
-          // A boolean whether to include the 'Click this token to insert in into the the focused textfield'
-          // JavaScript functionality. Defaults to TRUE.
-          '#click_insert' => TRUE,
-        );
-      }
     }
     else {
       $form['view']['no_view_help'] = array(
@@ -132,11 +104,11 @@ class EntityReference_SelectionHandler_Views implements EntityReference_Selectio
    */
   public function getReferencableEntities($match = NULL, $match_operator = 'CONTAINS', $limit = 0) {
     $display_name = $this->field['settings']['handler_settings']['view']['display_name'];
-    $args = $this->handleArgs($this->field['settings']['handler_settings']['view']['args']);
+    $args = $this->field['settings']['handler_settings']['view']['args'];
     $result = array();
     if ($this->initializeView($match, $match_operator, $limit)) {
       // Get the results.
-      $result = $this->view->execute_display($display_name, (!array_filter($args) ? array() : $args));
+      $result = $this->view->execute_display($display_name, $args);
     }
 
     $return = array();
@@ -161,12 +133,14 @@ class EntityReference_SelectionHandler_Views implements EntityReference_Selectio
 
   function validateReferencableEntities(array $ids) {
     $display_name = $this->field['settings']['handler_settings']['view']['display_name'];
-    $args = $this->handleArgs($this->field['settings']['handler_settings']['view']['args']);
+    $args = $this->field['settings']['handler_settings']['view']['args'];
     $result = array();
     if ($this->initializeView(NULL, 'CONTAINS', 0, $ids)) {
       // Get the results.
       $entities = $this->view->execute_display($display_name, $args);
-      $result = array_keys($entities);
+      if (!empty($entities)) {
+        $result = array_keys($entities);
+      }
     }
     return $result;
   }
@@ -175,39 +149,9 @@ class EntityReference_SelectionHandler_Views implements EntityReference_Selectio
    * Implements EntityReferenceHandler::validateAutocompleteInput().
    */
   public function validateAutocompleteInput($input, &$element, &$form_state, $form) {
-    $entities = array();
-    foreach ($this->getReferencableEntities($input, '=', 6) as $bundle => $bundle_entities) {
-      $entities += $bundle_entities;
-    }
-    if (empty($entities)) {
-      // Error if there are no entities available for a required field.
-      form_error($element, t('The %label field has no values matching "%value"', array('%label' => $element['#title'], '%value' => $input)));
-    }
-    elseif (count($entities) > 5) {
-      // Error if there are more than 5 matching entities.
-      form_error($element, t('The %label field has many entities are called "%value". Specify the one you want by appending the id in parentheses, like "@value (@id)"', array(
-        '%label' => $element['#title'],
-        '%value' => $input,
-        '@value' => $input,
-        '@id' => key($entities),
-      )));
-    }
-    elseif (count($entities) > 1) {
-      // More helpful error if there are only a few matching entities.
-      $multiples = array();
-      foreach ($entities as $id => $name) {
-        $multiples[] = $name . ' (' . $id . ')';
-      }
-      form_error($element, t('The %label field has multiple entities that match this reference: "%multiple"', array(
-        '%label' => $element['#title'],
-        '%multiple' => implode('", "', $multiples),
-      )));
-    }
-    else {
-      // Take the one and only matching entity.
-      return key($entities);
-    }
+    return NULL;
   }
+
   /**
    * Implements EntityReferenceHandler::getLabel().
    */
@@ -222,36 +166,6 @@ class EntityReference_SelectionHandler_Views implements EntityReference_Selectio
 
   }
 
-  /**
-   * Handles arguments for views.
-   *
-   * Replaces tokens using token_replace().
-   *
-   * @param array $args
-   *   Usually $this->field['settings']['handler_settings']['view']['args'].
-   *
-   * @return array
-   *   The arguments to be send to the View.
-   */
-  protected function handleArgs($args) {
-    // Parameters for token_replace().
-    $data = array();
-    $options = array('clear' => TRUE);
-
-    // Check if the entity has an ID. If not, don't pass the entity to token_replace().
-    if ($this->entity) {
-      list($id, $vid, $bundle) = entity_extract_ids($this->instance['entity_type'], $this->entity);
-      if (!empty($id)) {
-        // Only pass the entity to token_replace() if it has a valid ID.
-        $data = array($this->entity_type_token => $this->entity);
-      }
-    }
-    // Replace tokens for each argument.
-    foreach ($args as $key => $arg) {
-      $args[$key] = token_replace($arg, $data, $options);
-    }
-    return array_filter($args);
-  }
 }
 
 function entityreference_view_settings_validate($element, &$form_state, $form) {
