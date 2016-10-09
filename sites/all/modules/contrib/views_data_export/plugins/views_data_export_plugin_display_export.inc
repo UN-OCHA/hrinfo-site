@@ -297,8 +297,11 @@ class views_data_export_plugin_display_export extends views_plugin_display_feed 
     $this->initialize_index();
     //$this->batched_execution_state->fid = $this->outputfile_create();
 
-    // Initialize the progress counter
-    $this->batched_execution_state->sandbox['max'] = db_query('SELECT COUNT(*) FROM {' . $this->index_tablename() . '}')->fetchField();
+    // Initialize the progress counter.
+    if (db_table_exists($this->index_tablename())) {
+      $this->batched_execution_state->sandbox['max'] = db_query('SELECT COUNT(*) FROM {' . $this->index_tablename() . '}')->fetchField();
+    }
+
     // Record the time we started.
     list($usec, $sec) = explode(' ', microtime());
     $this->batched_execution_state->sandbox['started'] = (float) $usec + (float) $sec;
@@ -401,6 +404,9 @@ class views_data_export_plugin_display_export extends views_plugin_display_feed 
         break;
 
       case VIEWS_DATA_EXPORT_FOOTER:
+        // Update the temporary file size, otherwise we would get a problematic
+        // "Content-Length: 0" HTTP header, that may break the export download.
+        $this->outputfile_update_size();
         $sandbox['finished'] = 1;
         $state->batch_state = VIEWS_DATA_EXPORT_FINISHED;
         break;
@@ -495,30 +501,20 @@ class views_data_export_plugin_display_export extends views_plugin_display_feed 
           // TODO: Handle external databases.
           $result = db_query_range('SELECT * FROM {' . $this->index_tablename() . '} ORDER BY ' . $this->batched_execution_state->sandbox['weight_field_alias'] . ' ASC', 0, $this->get_option('segment_size'));
           $this->view->result = array();
-          $query_plugin = get_class($this->view->query);
-          if ($query_plugin == 'views_plugin_query_default') {
-            foreach ($result as $item_hashed) {
-              $item = new stdClass();
-              // We had to shorten some of the column names in the index, restore
-              // those now.
-              foreach ($item_hashed as $hash => $value) {
-                if (isset($this->batched_execution_state->sandbox['field_aliases'][$hash])) {
-                  $item->{$this->batched_execution_state->sandbox['field_aliases'][$hash]} = $value;
-                }
-                else {
-                  $item->{$hash} = $value;
-                }
+          foreach ($result as $item_hashed) {
+            $item = new stdClass();
+            // We had to shorten some of the column names in the index, restore
+            // those now.
+            foreach ($item_hashed as $hash => $value) {
+              if (isset($this->batched_execution_state->sandbox['field_aliases'][$hash])) {
+                $item->{$this->batched_execution_state->sandbox['field_aliases'][$hash]} = $value;
               }
-              // Push the restored $item in the views result array.
-              $this->view->result[] = $item;
+              else {
+                $item->{$hash} = $value;
+              }
             }
-          }
-          elseif ($query_plugin == 'SearchApiViewsQuery') {
-            foreach ($result as $row) {
-              $item = unserialize($row->data);
-              $item->{$this->batched_execution_state->sandbox['weight_field_alias']} = $row->{$this->batched_execution_state->sandbox['weight_field_alias']};
-              $this->view->result[] = $item;
-            }
+            // Push the restored $item in the views result array.
+            $this->view->result[] = $item;
           }
           $this->view->_post_execute();
           break;
@@ -581,9 +577,28 @@ class views_data_export_plugin_display_export extends views_plugin_display_feed 
     if (!$this->view->init_style()) {
       $this->view->build_info['fail'] = TRUE;
     }
-    // Set the headers.
-    $this->add_http_headers();
-    file_transfer($this->outputfile_path(), array());
+
+    $uri = $this->outputfile_path();
+    $scheme = file_uri_scheme($uri);
+    if (file_stream_wrapper_valid_scheme($scheme) && file_exists($uri)) {
+      $headers = file_download_headers($uri);
+      if (count($headers)) {
+        // Set our headers and ensure no other one conflicts with them.
+        $this->add_http_headers();
+        $reserved_headers = array_flip(array('content-type', 'cache-control', 'content-disposition'));
+        foreach ($headers as $name => $value) {
+          if (isset($reserved_headers[drupal_strtolower($name)])) {
+            unset($headers[$name]);
+          }
+        }
+        file_transfer($uri, $headers);
+      }
+      drupal_access_denied();
+    }
+    else {
+      drupal_not_found();
+    }
+    drupal_exit();
   }
 
   /**
@@ -600,31 +615,25 @@ class views_data_export_plugin_display_export extends views_plugin_display_feed 
     // Get views to build the query.
     $view->build();
 
-    $query_plugin = get_class($view->query);
-    if ($query_plugin == 'views_plugin_query_default') {
-      // Change the query object to use our custom one.
-      switch ($this->_get_database_driver()) {
-        case 'pgsql':
-          $query_class = 'views_data_export_plugin_query_pgsql_batched';
-          break;
+    // Change the query object to use our custom one.
+    switch ($this->_get_database_driver()) {
+      case 'pgsql':
+        $query_class = 'views_data_export_plugin_query_pgsql_batched';
+        break;
 
-        default:
-          $query_class = 'views_data_export_plugin_query_default_batched';
-          break;
-      }
-      $query = new $query_class();
-      // Copy the query over:
-      foreach ($view->query as $property => $value) {
-        $query->$property = $value;
-      }
-      // Replace the query object.
-      $view->query = $query;
+      default:
+        $query_class = 'views_data_export_plugin_query_default_batched';
+        break;
+    }
+    $query = new $query_class();
+    // Copy the query over:
+    foreach ($view->query as $property => $value) {
+      $query->$property = $value;
+    }
+    // Replace the query object.
+    $view->query = $query;
 
-      $view->execute();
-    }
-    elseif ($query_plugin == 'SearchApiViewsQuery') {
-      $this->store_search_api_result(clone($view));
-    }
+    $view->execute();
   }
 
   /**
@@ -729,6 +738,18 @@ class views_data_export_plugin_display_export extends views_plugin_display_feed 
     }
   }
 
+  /**
+   * Updates the file size in the file entity.
+   */
+  protected function outputfile_update_size() {
+    $output_file = $this->outputfile_path();
+    $file = current(file_load_multiple(array(), array('uri' => $output_file)));
+    if ($file) {
+      $file->filesize = filesize($output_file);
+      file_save($file);
+    }
+  }
+
   function abort_export($errors) {
     // Just cause the next batch to do the clean-up
     if (!is_array($errors)) {
@@ -804,55 +825,6 @@ class views_data_export_plugin_display_export extends views_plugin_display_feed 
     $name = !empty($this->view->base_database) ? $this->view->base_database : 'default';
     $conn_info = Database::getConnectionInfo($name);
     return $conn_info['default']['driver'];
-  }
-
-  /**
-   * Based on views_data_export_plugin_query_default_batched::execute().
-   */
-  function store_search_api_result($view) {
-    $display_handler = &$view->display_handler;
-    $start = microtime(TRUE);
-
-    try {
-      // Get all the view results.
-      $view->query->set_limit(NULL);
-      $view->query->set_offset(0);
-      $view->query->execute($view);
-      $weight_alias = 'vde_weight';
-      $display_handler->batched_execution_state->sandbox['weight_field_alias'] = $weight_alias;
-
-      $schema = array(
-        'fields' => array(
-          $weight_alias => array('type' => 'int'),
-          'data' => array('type' => 'blob'),
-      ));
-
-      db_create_table($display_handler->index_tablename(), $schema);
-
-      if (!empty($view->result)) {
-        $insert_query = db_insert($display_handler->index_tablename())->fields(array($weight_alias, 'data'));
-        $weight = 0;
-        foreach ($view->result as $item) {
-          $insert_query->values(array(
-            $weight_alias => $weight,
-            'data' => serialize($item),
-          ));
-          $weight++;
-        }
-        $insert_query->execute();
-      }
-
-      $view->result = array();
-      // Now create an index for the weight field, otherwise the queries on the
-      // index will take a long time to execute.
-      db_add_unique_key($display_handler->index_tablename(), $weight_alias, array($weight_alias));
-    }
-    catch (Exception $e) {
-      $view->result = array();
-      debug('Exception: ' . $e->getMessage());
-    }
-
-    $view->execute_time = microtime(TRUE) - $start;
   }
 }
 
