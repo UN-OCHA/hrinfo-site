@@ -10,7 +10,20 @@
  * Page callback for the entityreference elements autocomplete path.
  */
 function entityreference_autocomplete_autocomplete_callback($entity_type, $bundles, $encoded_query_settings, $string = '') {
+  // If search string contains a slash "/", menu system will think it's a new
+  // argument. In such case, reassemble the whole search string.
+  $args = func_get_args();
+  if (count($args) > 4) {
+    array_shift($args);
+    array_shift($args);
+    array_shift($args);
+    $string = implode('/', $args);
+  }
+
   $matches = array();
+  // $context will hold the metadata of entities found, so that modules
+  // can alter the results in any way they want.
+  $context = array();
 
   // Decode the query settings passed and then parse the result string to get
   // the actual settings array.
@@ -20,6 +33,9 @@ function entityreference_autocomplete_autocomplete_callback($entity_type, $bundl
   // the last label.
   $labels_typed = entityreference_autocomplete_explode_tags($string);
   $last_label = drupal_strtolower(array_pop($labels_typed));
+
+  // Prefix string to add to every result.
+  $prefix = '';
   if (!empty($last_label)) {
     $prefix = count($labels_typed) ? implode(', ', $labels_typed) . ', ' : '';
   }
@@ -66,6 +82,10 @@ function entityreference_autocomplete_autocomplete_callback($entity_type, $bundl
       $query->range(0, $query_settings['limit']);
     }
 
+    // Add a tag to the query so modules can alter it.
+    $query->addTag('era_query');
+    $query->addMetaData('era_search_string', $last_label);
+
     // Execute query and log any unexpected errors.
     try {
       $result = $query->execute();
@@ -77,9 +97,6 @@ function entityreference_autocomplete_autocomplete_callback($entity_type, $bundl
 
     if (!empty($result[$entity_type])) {
       $entities = entity_load($entity_type, array_keys($result[$entity_type]));
-      // $context will hold the metadata of entities found, so that modules
-      // can alter the results in any way they want.
-      $context = array();
 
       // Iterate through all entities retrieved and process the data to return
       // it as expected by Drupal javascript.
@@ -97,6 +114,7 @@ function entityreference_autocomplete_autocomplete_callback($entity_type, $bundl
           // Store metadata about the entity returned in a variable.
           list(, , $bundle) = entity_extract_ids($entity_type, $entity);
           $context[$prefix . $key] = array(
+            'entity' => $entity,
             'entity_id' => $entity_id,
             'entity_type' => $entity_type,
             'entity_bundle' => $bundle,
@@ -111,28 +129,4 @@ function entityreference_autocomplete_autocomplete_callback($entity_type, $bundl
   drupal_alter('entityreference_autocomplete_matches', $matches, $context);
   // Finally, output matches in json, as they're are expected by Drupal's ajax.
   drupal_json_output($matches);
-}
-
-/**
- * Explodes a string of tags into an array.
- *
- * This is almost a clone of drupal's drupal_explode_tags() function. The reason
- * to use this custom function is because drupal_explode_tags() assumes that the
- * tags entered will be saved straight into the database after being returned,
- * so it removes any escape formatting of the tags. That will make the
- * autocomplete callback to remove any quotes added to tags when users add a
- * different tag, making the escaping of previous ones to disappear, which
- * ultimately will result in an invalid value error in the validation callback.
- *
- * This function does the same as drupal_explode_tags() in terms of exploding
- * the tags, but it doesn't remove any escape formatting from the tags to be
- * returned.
- *
- * @see drupal_explode_tags()
- */
-function entityreference_autocomplete_explode_tags($tags) {
-  $regexp = '%(?:^|,\ *)("(?>[^"]*)(?>""[^"]* )*"|(?: [^",]*))%x';
-  preg_match_all($regexp, $tags, $matches);
-  $typed_tags = array_unique($matches[1]);
-  return $typed_tags;
 }
