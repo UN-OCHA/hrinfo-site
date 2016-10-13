@@ -4068,3 +4068,6 @@ table.stylish-table thead th {
 table.stylish-table tr:nth-child(2n) {
   background-color: #dedede;
 }
+
+.front .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents { margin-bottom: 30px; }
+.front .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system { margin-bottom: 30px; }
