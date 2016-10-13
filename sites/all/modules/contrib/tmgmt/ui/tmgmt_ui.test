@@ -19,20 +19,8 @@ class TMGMTUITestCase extends TMGMTBaseTestCase {
   }
 
   function setUp() {
-    parent::setUp(array('tmgmt_ui'));
-
-    // Login as admin to be able to set environment variables.
-    $this->loginAsAdmin();
-    $this->setEnvironment('de');
-    $this->setEnvironment('es');
-    $this->setEnvironment('el');
-
-    // Login as translator only with limited permissions to run these tests.
-    $this->loginAsTranslator(array(
-      'access administration pages',
-      'create translation jobs',
-      'submit translation jobs',
-    ), TRUE);
+    parent::setup(array('tmgmt_ui'));
+    parent::createLanguagesLoginTranslator();
   }
 
   /**
@@ -553,6 +541,79 @@ class TMGMTUITestCase extends TMGMTBaseTestCase {
     $this->assertNoText($job_items[5]->label());
     // One de item is in the cart as it was not selected for checkout.
     $this->assertText($job_items[6]->label());
+  }
+
+  /**
+   * Test if the source is able to pull content in requested language.
+   */
+  function testCartEnforceSourceLanguage() {
+    $this->setEnvironment('sk');
+    $this->setEnvironment('cs');
+
+    module_enable(array('tmgmt_node'));
+
+    $content_type = $this->drupalCreateContentType();
+
+    $node_sk = $this->drupalCreateNode(array(
+      'title' => $this->randomName(),
+      'language' => 'sk',
+      'body' => array('sk' => array(array($this->randomName()))),
+      'type' => $content_type->type,
+    ));
+
+    $this->drupalCreateNode(array(
+      'title' => $this->randomName(),
+      'language' => 'en',
+      'tnid' => $node_sk->nid,
+      'body' => array('en' => array(array($this->randomName()))),
+      'type' => $content_type->type,
+    ));
+
+    $node_cs = $this->drupalCreateNode(array(
+      'title' => $this->randomName(),
+      'language' => 'cs',
+      'body' => array('cs' => array(array($this->randomName()))),
+      'type' => $content_type->type,
+    ));
+
+    $this->loginAsTranslator();
+
+    $job_item_sk = tmgmt_job_item_create('node', 'node', $node_sk->nid);
+    $job_item_sk->save();
+    $this->drupalGet('tmgmt-add-to-cart/' . $job_item_sk->tjiid);
+    $job_items_data[$job_item_sk->item_id] = $job_item_sk->item_type;
+
+    $job_item_cs = tmgmt_job_item_create('node', 'node', $node_cs->nid);
+    $job_item_cs->save();
+    $this->drupalGet('tmgmt-add-to-cart/' . $job_item_cs->tjiid);
+    $job_items_data[$job_item_cs->item_id] = $job_item_cs->item_type;
+
+    $this->drupalPost('admin/tmgmt/cart', array(
+      'enforced_source_language' => TRUE,
+      'source_language' => 'en',
+      'items[' . $job_item_cs->tjiid .']' => TRUE,
+      'items[' . $job_item_sk->tjiid .']' => TRUE,
+      'target_language[]' => array('es')
+    ), t('Request translation'));
+
+    $this->assertText(t('One job needs to be checked out.'));
+    $this->assertRaw(t('One item skipped. @language translation unavailable.', array('@language' => 'English')));
+
+    $args = explode('/', $this->getUrl());
+    $tjid = array_pop($args);
+
+    $this->drupalPost(NULL, array(), t('Submit to translator'));
+
+    // We cannot test for the item data as items without a job are not able to
+    // get the data in case the source language is overridden. Therefore only
+    // testing for item_id and item_type values.
+    foreach (tmgmt_job_load($tjid)->getItems() as $job_item) {
+      $this->assertEqual($job_items_data[$job_item->item_id], $job_item->item_type);
+    }
+
+    $this->drupalGet('admin/tmgmt/cart');
+    $this->assertText($node_cs->title);
+    $this->assertNoText($node_sk->title);
   }
 
 }
