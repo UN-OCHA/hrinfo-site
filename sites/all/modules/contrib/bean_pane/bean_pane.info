@@ -7,9 +7,9 @@ dependencies[] = bean
 dependencies[] = ctools
 dependencies[] = panels
 
-; Information added by Drupal.org packaging script on 2015-07-02
-version = "7.x-1.1"
+; Information added by Drupal.org packaging script on 2016-07-22
+version = "7.x-1.2"
 core = "7.x"
 project = "bean_pane"
-datestamp = "1435814644"
+datestamp = "1469193855"
 

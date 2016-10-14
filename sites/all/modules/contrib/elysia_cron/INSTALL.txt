@@ -16,8 +16,7 @@ up and running.
 You can stop here if you don't need a great precision over task execution and
 you don't have to execute a task more often than once an hour.  
 For example, if you need only the "Once a day", "Once a week" or "Once a month" 
-schedule rules the basic install is fine. (For D6 users that want to stop here: 
-you should have installed Drupal crontab as described in Drupal INSTALL guide).
+schedule rules the basic install is fine.
 
 Instead, if you need:
 - to run some tasks more often than once an hour (eg: you have a function that
