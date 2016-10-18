@@ -126,7 +126,7 @@ You can use the "hook_cron_alter" function to edit cronapi data of other
 modules.
 
 Example:
-function module_cron_alter($data) {
+function module_cron_alter(&$data) {
   $data['key']['rule'] = '0 */6 * * *';
 }
 
