@@ -134,6 +134,30 @@ class TMGMTEntitySourceTestCase extends TMGMTEntityTestCaseUtility {
   }
 
   /**
+   * Test if the source is able to pull content in requested language.
+   */
+  function testRequestDataForSpecificLanguage() {
+    $this->setEnvironment('de');
+    $this->setEnvironment('cs');
+
+    $this->createNodeType('article', 'Article', ENTITY_TRANSLATION_ENABLED);
+
+    // Create a translation job.
+    $job = $this->createJob('en', 'de');
+    $job->translator = $this->default_translator->name;
+    $job->settings = array();
+    $job->save();
+
+    $node = $this->createNode('article', 'cs');
+    $node->body['en'][0]['value'] = 'en translation';
+    node_save($node);
+    $job->addItem('entity', 'node', $node->nid);
+
+    $data = $job->getData();
+    $this->assertEqual($data[1]['body'][0]['value']['#text'], 'en translation');
+  }
+
+  /**
    * Compares the data from an entity with the translated data.
    *
    * @param $tentity
