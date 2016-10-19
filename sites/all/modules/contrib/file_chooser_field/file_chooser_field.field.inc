@@ -117,7 +117,7 @@ function file_chooser_field_field_widget_process($element, &$form_state, $form) 
     '#upload_location' => $element['#upload_location'],
     '#file_chooser_field_upload_validators' => $upload_validators,
     '#prefix' => '<div class="file-chooser-field-wrapper">' . theme('file_chooser_field', array(
-        'label' => t('Browse'),
+        'label' => t('Browse your computer'),
         'class' => 'browse',
         'attributes' => array(),
       ))
