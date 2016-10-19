@@ -14,3 +14,7 @@
 .file-chooser-field-wrapper a.button.disabled {
   pointer-events: none;
 }
+
+.file-chooser-field-wrapper a.button:hover {
+  text-decoration: none;
+}
