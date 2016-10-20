@@ -5,6 +5,7 @@
   background: -webkit-linear-gradient(top,#ffffff 20%,#f6f6f6 50%,#eeeeee 52%,#f4f4f4 100%);
   background: linear-gradient(top,#ffffff 20%,#f6f6f6 50%,#eeeeee 52%,#f4f4f4 100%);
   border: 1px solid #e3e3e3;
+  text-decoration: none;
 }
 
 .file-chooser-field-wrapper a.button + a.button {
@@ -13,6 +14,8 @@
 
 .file-chooser-field-wrapper a.button.disabled {
   pointer-events: none;
+  color: #b3b3b3;
+  cursor: not-allowed;
 }
 
 .file-chooser-field-wrapper a.button:hover {
