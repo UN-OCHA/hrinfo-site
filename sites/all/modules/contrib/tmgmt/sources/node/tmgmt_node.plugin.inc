@@ -15,6 +15,27 @@ class TMGMTNodeSourcePluginController extends TMGMTDefaultSourcePluginController
    */
   public function getData(TMGMTJobItem $job_item) {
     $node = node_load($job_item->item_id);
+    $source_language = $job_item->getJob()->source_language;
+    $languages = language_list();
+
+    // If the node language is not the same as the job source language try to
+    // load its translation for the job source language.
+    if ($node->language != $source_language) {
+      $translation_loaded = FALSE;
+      foreach (translation_node_get_translations($node->nid) as $language => $translation) {
+        if ($language == $source_language) {
+          $node = node_load($translation->nid);
+          $translation_loaded = TRUE;
+          break;
+        }
+      }
+
+      if (!$translation_loaded) {
+        throw new TMGMTException(t('Unable to load %language translation for the node %title',
+          array('%language' => $languages[$source_language]->name, '%title' => $node->title)));
+      }
+    }
+
     $type = node_type_get_type($node);
     // Get all the fields that can be translated and arrange their values into
     // a specific structure.
@@ -48,6 +69,11 @@ class TMGMTNodeSourcePluginController extends TMGMTDefaultSourcePluginController
         $tnode->language = $job->target_language;
         $tnode->translation_source = $node;
       }
+
+      // Allow modules and translator plugins to alter, for example in the
+      // case of creating revisions for translated nodes, or altering
+      // properties of the tnode before saving.
+      drupal_alter('tmgmt_before_update_node_translation', $tnode, $node, $job_item);
 
       // Time to put the translated data into the node.
       $data = $job_item->getData();
