@@ -149,6 +149,7 @@ function hr_bundles_node_og_context_handler($node = NULL) {
 function hr_bundles_form_node_form_alter(&$form, &$form_state) {
   global $user;
   if (isset($form['field_bundles'])) {
+    $op_gid = FALSE;
     $node = $form_state['node'];
     if (!isset($node->nid) && isset($form_state['entityreference_prepopulate'])) {
       // Get operation gid
@@ -159,23 +160,30 @@ function hr_bundles_form_node_form_alter(&$form, &$form_state) {
       if (isset($_GET[OG_AUDIENCE_FIELD])) {
         $op_gid = $_GET[OG_AUDIENCE_FIELD];
       }
-      else {
+      elseif (isset($node->{OG_AUDIENCE_FIELD})) {
         $op_gid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
       }
     }
-    // Make sure it is an operation
-    $op = entity_load('node', array($op_gid));
-    $op = $op[$op_gid];
-    if ($op->type == 'hr_operation') {
-      $roles = og_get_user_roles('node', $op_gid);
-      if (!in_array('manager', $roles) && !in_array('editor', $roles) && !in_array('contributor', $roles) && $op->uid != $user->uid && !in_array('editor', $user->roles)) {
-        // If user is not a manager or editor of operation, make bundles field required
-        $form['field_bundles'][LANGUAGE_NONE][0]['#required'] = TRUE;
-        $form['field_bundles'][LANGUAGE_NONE][0]['default']['#required'] = TRUE;
+
+    // Make sure it is an operation.
+    if ($op_gid) {
+      $op = entity_load('node', array($op_gid));
+      $op = $op[$op_gid];
+      if ($op->type == 'hr_operation') {
+        $roles = og_get_user_roles('node', $op_gid);
+        if (!in_array('manager', $roles) && !in_array('editor', $roles) && !in_array('contributor', $roles) && $op->uid != $user->uid && !in_array('editor', $user->roles)) {
+          // If user is not a manager or editor of operation, make bundles field required
+          $form['field_bundles'][LANGUAGE_NONE][0]['#required'] = TRUE;
+          $form['field_bundles'][LANGUAGE_NONE][0]['default']['#required'] = TRUE;
+        }
+        // If we are within an operation, hide the global clusters field
+        if (isset($form['field_sectors'])) {
+          $form['field_sectors']['#attributes']['class'][] = 'hidden';
+        }
       }
-      // If we are within an operation, hide the global clusters field
-      if (isset($form['field_sectors'])) {
-        $form['field_sectors']['#attributes']['class'][] = 'hidden';
+      else {
+        // Otherwise hide the bundles field
+        $form['field_bundles']['#attributes']['class'][] = 'hidden';
       }
     }
     else {
