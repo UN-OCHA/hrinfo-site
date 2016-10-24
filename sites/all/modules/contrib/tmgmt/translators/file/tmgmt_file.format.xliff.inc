@@ -97,7 +97,10 @@ class TMGMTFileformatXLIFF extends XMLWriter implements TMGMTFileFormatInterface
     $this->startElement('source');
     $this->writeAttribute('xml:lang', $this->job->getTranslator()->mapToRemoteLanguage($this->job->source_language));
 
-    if ($job->getSetting('xliff_processing')) {
+    if ($job->getSetting('xliff_cdata')) {
+      $this->writeCdata(trim($element['#text']));
+    }
+    elseif ($job->getSetting('xliff_processing')) {
       $this->writeRaw($this->processForExport($element['#text'], $key_array));
     }
     else {
@@ -127,7 +130,7 @@ class TMGMTFileformatXLIFF extends XMLWriter implements TMGMTFileFormatInterface
   /**
    * {@inheritdoc}
    */
-  public function export(TMGMTJob $job) {
+  public function export(TMGMTJob $job, $conditions = array()) {
 
     $this->job = $job;
 
@@ -170,7 +173,7 @@ class TMGMTFileformatXLIFF extends XMLWriter implements TMGMTFileFormatInterface
 
     $this->startElement('body');
 
-    foreach ($job->getItems() as $item) {
+    foreach ($job->getItems($conditions) as $item) {
       $this->addItem($item);
     }
 
@@ -185,8 +188,10 @@ class TMGMTFileformatXLIFF extends XMLWriter implements TMGMTFileFormatInterface
   /**
    * {@inheritdoc}
    */
-  public function import($imported_file) {
-    $this->getImportedXML($imported_file);
+  public function import($imported_file, $is_file = TRUE) {
+    if (!$this->getImportedXML($imported_file, $is_file)) {
+      return FALSE;
+    }
     $phase = $this->importedXML->xpath("//xliff:phase[@phase-name='extraction']");
     $phase = reset($phase);
     $job = tmgmt_job_load((string) $phase['job-id']);
@@ -194,42 +199,69 @@ class TMGMTFileformatXLIFF extends XMLWriter implements TMGMTFileFormatInterface
   }
 
   /**
-   * Validates imported XLIFF file.
-   *
-   * Checks:
-   * - Job ID.
-   * - Target ans source languages
-   * - Content integrity by
+   * {@inheritdoc}
    */
   public function validateImport($imported_file) {
-    $xml = $this->getImportedXML($imported_file);
+    // Validates imported XLIFF file.
+    // Checks:
+    // - Job ID
+    // - Target ans source languages
+    // - Content integrity.
+
+    if (!($xml = $this->getImportedXML($imported_file))) {
+      drupal_set_message(t('The imported file is not a valid XML.'), 'error');
+      return FALSE;
+    }
     // Check if our phase information is there.
     $phase = $xml->xpath("//xliff:phase[@phase-name='extraction']");
     if ($phase) {
       $phase = reset($phase);
     }
     else {
+      drupal_set_message(t('The imported file is missing required XLIFF phase information.'), 'error');
       return FALSE;
     }
 
-    // Check if the job can be loaded.
-    if (!isset($phase['job-id']) || (!$job = tmgmt_job_load((string) $phase['job-id']))) {
+    // Check if the job has a valid job reference.
+    if (!isset($phase['job-id'])) {
+      drupal_set_message(t('The imported file does not contain a job reference.'), 'error');
       return FALSE;
     }
+
+    // Attempt to load the job if none passed.
+    $job = tmgmt_job_load((int) $phase['job-id']);
+    if (empty($job)) {
+      drupal_set_message(t('The imported file job id @file_tjid is not available.', array(
+        '@file_tjid' => $phase['job-id'],
+      )), 'error');
+      return FALSE;
+    }
+
+    // @todo We use the $job to addMessage in case of failure. However the job
+    //   context is not safe at this point.
 
     // Compare source language.
     if (!isset($xml->file['source-language']) || $job->getTranslator()->mapToRemoteLanguage($job->source_language) != $xml->file['source-language']) {
+      $job->addMessage('The imported file source language @file_language does not match the job source language @job_language.', array(
+        '@file_language' => empty($xml->file['source-language']) ? t('none') : $xml->file['source-language'],
+        '@job_language' => $job->source_language,
+      ), 'error');
       return FALSE;
     }
 
     // Compare target language.
     if (!isset($xml->file['target-language']) || $job->getTranslator()->mapToRemoteLanguage($job->target_language) != $xml->file['target-language']) {
+      $job->addMessage('The imported file target language @file_language does not match the job target language @job_language.', array(
+        '@file_language' => empty($xml->file['target-language']) ? t('none') : $xml->file['target-language'],
+        '@job_language' => $job->target_language,
+      ), 'error');
       return FALSE;
     }
 
     $targets = $this->getImportedTargets($job);
 
     if (empty($targets)) {
+      $job->addMessage('The imported file seems to be missing translation.', 'error');
       return FALSE;
     }
 
@@ -264,13 +296,29 @@ class TMGMTFileformatXLIFF extends XMLWriter implements TMGMTFileFormatInterface
     return $job;
   }
 
-  protected function getImportedXML($imported_file) {
+  /**
+   * Returns the simple XMLElement object.
+   *
+   * @param string $imported_file
+   *   Path to a file or an XML string to import.
+   * @param bool $is_file
+   *   (optional) Whether $imported_file is the path to a file or not.
+   *
+   * @return bool|\SimpleXMLElement
+   *   The parsed SimpleXMLElement object. FALSE in case of failed parsing.
+   */
+  protected function getImportedXML($imported_file, $is_file = TRUE) {
     if (empty($this->importedXML)) {
       // It is not possible to load the file directly with simplexml as it gets
       // url encoded due to the temporary://. This is a PHP bug, see
       // https://bugs.php.net/bug.php?id=61469
-      $xml_string = file_get_contents($imported_file);
-      $this->importedXML = simplexml_load_string($xml_string);
+      if ($is_file) {
+        $imported_file = file_get_contents($imported_file);
+      }
+
+      if (!($this->importedXML = simplexml_load_string($imported_file))) {
+        return FALSE;
+      }
       // Register the XLIFF namespace, required for xpath.
       $this->importedXML->registerXPathNamespace('xliff', 'urn:oasis:names:tc:xliff:document:1.2');
     }
@@ -286,6 +334,11 @@ class TMGMTFileformatXLIFF extends XMLWriter implements TMGMTFileFormatInterface
     if (empty($this->importedTransUnits)) {
       $reader = new XMLReader();
       foreach ($this->importedXML->xpath('//xliff:trans-unit') as $unit) {
+        if (!$job->getSetting('xliff_processing')) {
+          $this->importedTransUnits[(string) $unit['id']]['#text'] = (string) $unit->target;
+          continue;
+        }
+
         $reader->XML($unit->target->asXML());
         $reader->read();
         $this->importedTransUnits[(string) $unit['id']]['#text'] =
