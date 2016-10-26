@@ -59,12 +59,19 @@ function _hr_disasters_reliefweb_disaster($id) {
     $glide = $fields->glide;
     if (!empty($glide)) {
       // Does this disaster already exist ?
+      // Check related glides as well.
+      $glides = array();
+      $glides[] = $glide;
+      if (isset($fields->related_glide) && is_array($fields->related_glide)) {
+        $glides = array_merge($glides, $fields->related_glide);
+      }
       $query = new EntityFieldQuery();
       $results = $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'hr_disaster')
-        ->fieldCondition('field_glide_number', 'value', $glide, '=')
+        ->fieldCondition('field_glide_number', 'value', $glides, 'IN')
         ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT')
         ->execute();
+
       if (!empty($results['node'])) {
         $nids = array_keys($results['node']);
         $nid = reset($nids);
@@ -73,8 +80,9 @@ function _hr_disasters_reliefweb_disaster($id) {
         if(isset($wrapper->field_hr_disaster_sync_disaster)) {
           $field_sync_disaster = $wrapper->field_hr_disaster_sync_disaster->value();
           if(empty($field_sync_disaster)) {
-            $node = _hr_disasters_reliefweb_disaster_map($node, $fields);
-            node_save($node);
+            if (_hr_disasters_reliefweb_disaster_map($node, $fields)) {
+              node_save($node);
+            }
           }
         }
       }
@@ -84,7 +92,8 @@ function _hr_disasters_reliefweb_disaster($id) {
         $node = new stdClass();
         $node->type = 'hr_disaster';
         $node->language = 'en';
-        $node = _hr_disasters_reliefweb_disaster_map($node, $fields);
+        $node->is_new = TRUE;
+        _hr_disasters_reliefweb_disaster_map($node, $fields);
         node_save($node);
       }
     }
@@ -94,30 +103,91 @@ function _hr_disasters_reliefweb_disaster($id) {
 /**
  * Helper function: maps disaster fields from Reliefweb API to hr_disaster nodes
  */
-function _hr_disasters_reliefweb_disaster_map($node, $fields) {
+function _hr_disasters_reliefweb_disaster_map(&$node, $fields) {
   $glide_type = taxonomy_get_term_by_name($fields->type[0]->name, 'hr_glide_type');
   $type = reset($glide_type);
-  $node->title = $fields->name;
-  $node->field_glide_number = array(LANGUAGE_NONE => array(0 => array('value' => $fields->glide)));
-  $node->field_glide_type = array(LANGUAGE_NONE => array(0 => array('target_id' => $type->tid)));
-  $node->field_disaster_status = array(LANGUAGE_NONE => array(0 => array('value' => $fields->status)));
-  $node->field_reliefweb_id = array(LANGUAGE_NONE => array(0 => array('value' => $fields->id)));
-  $node->body = array('en' => array(0 => array('value' => $fields->description, 'format' => 'panopoly_wysiwyg_text')));
-  $node->created = strtotime($fields->date->created);
-  $node->path = array('pathauto' => TRUE);
-  $node->uid = 1;
-  $node->og_group_ref = array();
-  $i = 0;
+
+  $changed = FALSE;
+  if (!isset($node->is_new)) {
+    $node->is_new = FALSE;
+  }
+
+  if ($node->is_new || $node->title != $fields->name) {
+    $node->title = $fields->name;
+    $changed = TRUE;
+  }
+
+  if ($node->is_new || $node->field_glide_number[LANGUAGE_NONE][0]['value'] != $fields->glide) {
+    $node->field_glide_number = array(LANGUAGE_NONE => array(0 => array('value' => $fields->glide)));
+    $changed = TRUE;
+  }
+
+  if ($node->is_new || $node->field_glide_type[LANGUAGE_NONE][0]['target_id'] != $type->tid) {
+    $node->field_glide_type = array(LANGUAGE_NONE => array(0 => array('target_id' => $type->tid)));
+    $changed = TRUE;
+  }
+
+  if ($node->is_new || $node->field_disaster_status[LANGUAGE_NONE][0]['value'] != $fields->status) {
+    $node->field_disaster_status = array(LANGUAGE_NONE => array(0 => array('value' => $fields->status)));
+    $changed = TRUE;
+  }
+
+  if ($node->is_new || $node->field_reliefweb_id[LANGUAGE_NONE][0]['value'] != $fields->id) {
+    $node->field_reliefweb_id = array(LANGUAGE_NONE => array(0 => array('value' => $fields->id)));
+    $changed = TRUE;
+  }
+
+  if ($node->is_new || $node->body['en'][0]['value'] != $fields->description) {
+    $node->body = array('en' => array(0 => array('value' => $fields->description, 'format' => 'panopoly_wysiwyg_text')));
+    $changed = TRUE;
+  }
+
+  $glides = array();
+  $glides[] = $fields->glide;
+  if (isset($fields->related_glide) && is_array($fields->related_glide)) {
+    $glides = array_merge($glides, $fields->related_glide);
+  }
+  asort($glides);
+  $glides = implode(', ', $glides);
+
+  if ($node->is_new || $node->field_related_glides[LANGUAGE_NONE][0]['value'] != $glides) {
+    $node->field_related_glides = array(LANGUAGE_NONE => array(0 => array('value' => $glides)));
+    $changed = TRUE;
+  }
+
+  if ($node->is_new || $node->field_glide_number[LANGUAGE_NONE][0]['value'] != $fields->glide) {
+    $node->field_glide_number = array(LANGUAGE_NONE => array(0 => array('value' => $fields->glide)));
+    $changed = TRUE;
+  }
+
+  if ($node->is_new || $changed) {
+    $node->created = strtotime($fields->date->created);
+    $node->path = array('pathauto' => TRUE);
+    $node->uid = 1;
+  }
+
+  $current_locations = array();
+  if (isset($node->og_group_ref[LANGUAGE_NONE])) {
+    foreach ($node->og_group_ref[LANGUAGE_NONE] as $key => $value) {
+      $current_locations[] = $value['target_id'];
+    }
+  }
+  else {
+    $node->og_group_ref = array();
+  }
+
   foreach ($fields->country as $country) {
     // Make sure country exists as an operation
     $nid = _hr_disasters_get_operation_by_name($country->name);
     if (!empty($nid)) {
-      $node->og_group_ref[LANGUAGE_NONE][$i]['target_id'] = $nid;
-      $i++;
+      if (!in_array($nid, $current_locations)) {
+        $node->og_group_ref[LANGUAGE_NONE][] = array('target_id' => $nid);
+        $changed = TRUE;
+      }
     }
   }
 
-  return $node;
+  return $node->is_new || $changed;
 }
 
 /**
