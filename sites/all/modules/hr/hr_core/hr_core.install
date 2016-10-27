@@ -167,3 +167,10 @@ function hr_core_update_7005() {
 function hr_core_update_7006() {
   module_enable(array('clone'));
 }
+
+/**
+ * Enable field_extrawidgets module.
+ */
+function hr_core_update_7007() {
+  module_enable(array('field_extrawidgets'));
+}
