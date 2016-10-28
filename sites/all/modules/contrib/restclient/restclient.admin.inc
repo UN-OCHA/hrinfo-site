@@ -45,9 +45,26 @@ function restclient_admin_settings($form, &$form_state) {
     // @todo add attributes to store pattern to check in browser
   );
 
-  $form['restclient_watchdog'] = array(
-    '#title' => t('Log all error to Watchdog'),
+  $form['restclient_oauth2_client'] = array(
+    '#title' => t('Enable OAuth2 client'),
+    '#description' => t('Look up OAuth2 tokens using the oauth2_client module.'),
     '#type' => 'checkbox',
+    '#disabled' => !module_exists('oauth2_client'),
+    '#default_value' => isset($form_state['values']['restclient_oauth2_client']) ? $form_state['values']['restclient_oauth2_client'] : variable_get('restclient_oauth2_client', FALSE),
+  );
+
+  $form['restclient_hybridauth'] = array(
+    '#title' => t('Enable HybridAuth'),
+    '#description' => t('Look up HybridAuth tokens using the hybridauth module.'),
+    '#type' => 'checkbox',
+    '#disabled' => !module_exists('hybridauth'),
+    '#default_value' => isset($form_state['values']['restclient_hybridauth']) ? $form_state['values']['restclient_hybridauth'] : variable_get('restclient_hybridauth', FALSE),
+  );
+
+  $form['restclient_watchdog'] = array(
+    '#title' => t('Enable logging'),
+    '#type' => 'checkbox',
+    '#description' => t('Log error, redirect or not found responses.'),
     '#default_value' => isset($form_state['values']['restclient_watchdog']) ? $form_state['values']['restclient_watchdog'] : variable_get('restclient_watchdog', TRUE),
   );
 

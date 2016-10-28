@@ -652,11 +652,6 @@ class TMGMTJob extends Entity {
     // We don't know if the translator plugin was able to abort the translation
     // job after this point. That means that the plugin has to set the
     // 'aborted' state on its own.
-    if (method_exists($controller, 'cancelTranslation')) {
-      // We keep the compatibility with previous API method cancelTranslation().
-      // This compatibility check will be removed in 8.x-1.x.
-      return $controller->cancelTranslation($this);
-    }
     return $controller->abortTranslation($this);
   }
 
