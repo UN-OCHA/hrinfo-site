@@ -9,14 +9,11 @@ files[] = includes/interfaces.inc
 ; Views plugin
 files[] = includes/views/visualization_plugin_style.inc
 
-; Javascript
-scripts[] = js/visualization.js
-
 configure = admin/config/system/visualization
 
-; Information added by Drupal.org packaging script on 2015-03-26
-version = "7.x-1.0-beta1"
+; Information added by Drupal.org packaging script on 2015-08-08
+version = "7.x-1.0-beta2"
 core = "7.x"
 project = "visualization"
-datestamp = "1427407684"
+datestamp = "1439073240"
 
