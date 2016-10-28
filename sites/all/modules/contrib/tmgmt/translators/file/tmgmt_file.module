@@ -42,15 +42,16 @@ function tmgmt_file_import_form_submit($form, &$form_state) {
     $extension = pathinfo($file->uri, PATHINFO_EXTENSION);
     $controller = tmgmt_file_format_controller($extension);
     if ($controller) {
-      // Validate the file.
-      $validated_job = $controller->validateImport($file->uri);
+      // Validate the file on job.
+      $validated_job = $controller->validateImport($file->uri, $job);
       if (!$validated_job) {
         $job->addMessage('Failed to validate file, import aborted.', array(), 'error');
       }
       elseif ($validated_job->tjid != $job->tjid) {
-        $uri = $validated_job->uri();
-        $label = $validated_job->label();
-        $job->addMessage('Import file is from job <a href="@url">@label</a>, import aborted.', array('@url' => url($uri['path']), '@label' => $label));
+        $job->addMessage('The imported file job id @file_tjid does not match the job id @job_tjid.', array(
+          '@file_tjid' => $validated_job->tjid,
+          '@job_tjid' => $job->tjid,
+        ), 'error');
       }
       else {
         try {
