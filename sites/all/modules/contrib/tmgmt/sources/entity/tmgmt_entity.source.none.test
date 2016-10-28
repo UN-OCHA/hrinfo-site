@@ -1,0 +1,101 @@
+<?php
+
+/**
+ * Entity source LANGUAGE_NONE tests.
+ *
+ * Splitted into a separate test because of https://www.drupal.org/node/2675230.
+ */
+class TMGMTEntitySourceLanguageNoneTestCase extends TMGMTEntityTestCaseUtility {
+
+  public $vocabulary;
+
+  static function getInfo() {
+    return array(
+      'name' => 'Entity Source Neutral tests',
+      'description' => 'Tests that LANGUAGE_NONE entities can not be translated',
+      'group' => 'Translation Management',
+      'dependencies' => array('entity_translation'),
+    );
+  }
+
+  function setUp() {
+    parent::setUp(array('tmgmt_entity', 'taxonomy', 'entity_translation'));
+
+    // Admin user to perform settings on setup.
+    $this->loginAsAdmin(array('administer entity translation'));
+
+    $this->vocabulary = $this->createTaxonomyVocab(strtolower($this->randomName()), $this->randomName(), array(FALSE, TRUE, TRUE, TRUE));
+
+    // Enable entity translations for taxonomy.
+    $edit['entity_translation_entity_types[taxonomy_term]'] = 1;
+    $this->drupalPost('admin/config/regional/entity_translation', $edit, t('Save configuration'));
+  }
+
+  /**
+   * Test if language neutral entities are not allowed for translation.
+   *
+   * That behaviour is described in the entity_translation documentation:
+   * https://www.drupal.org/node/1280934
+   */
+  function testLanguageNeutral() {
+    $this->setEnvironment('de');
+
+    // Structure: array({entity-type} => array({source-langcode} => {entity}))
+    $test_data = array();
+
+    $this->createNodeType('article', 'Article', ENTITY_TRANSLATION_ENABLED);
+    $test_data['node'][LANGUAGE_NONE] = $this->createNode('article', LANGUAGE_NONE);
+    $test_data['node']['en'] = $this->createNode('article', 'en');
+    $test_data['node']['de'] = $this->createNode('article', 'de');
+
+    $test_data['taxonomy_term'][LANGUAGE_NONE] = $this->createTaxonomyTerm($this->vocabulary, LANGUAGE_NONE);
+    $test_data['taxonomy_term']['en'] = $this->createTaxonomyTerm($this->vocabulary, 'en');
+    $test_data['taxonomy_term']['de'] = $this->createTaxonomyTerm($this->vocabulary, 'de');
+
+    // Test if tmgmt_entity_get_translatable_entities() function excludes
+    // language neutral entities.
+    foreach ($test_data as $entity_type => $entities) {
+      $translatable_entities = tmgmt_entity_get_translatable_entities($entity_type);
+      foreach ($entities as $langcode => $entity) {
+        list($id, , ) = entity_extract_ids($entity_type, $entity);
+        if ($langcode == LANGUAGE_NONE) {
+          $this->assert(!isset($translatable_entities[$id]), "Language neutral $entity_type entity does not exist in the translatable entities list.");
+        }
+        else {
+          $this->assert(isset($translatable_entities[$id]), "$langcode $entity_type entity exists in the translatable entities list.");
+        }
+      }
+    }
+
+    // Test if language neutral entities can't be added to a translation job.
+    $job = $this->createJob();
+    $job->translator = $this->default_translator->name;
+    $job->settings = array();
+    $job->save();
+    foreach ($test_data as $entity_type => $entities) {
+      foreach ($entities as $langcode => $entity) {
+        list($id, , ) = entity_extract_ids($entity_type, $entity);
+        try {
+          $job->addItem('entity', $entity_type, $id);
+          if ($langcode == LANGUAGE_NONE) {
+            $this->fail("Adding of language neutral $entity_type entity to a translation job did not fail.");
+          }
+          else {
+            $this->pass("Adding of $langcode $entity_type entity node to a translation job did not fail.");
+          }
+        }
+        catch (TMGMTException $e) {
+          if ($langcode == LANGUAGE_NONE) {
+            $this->pass("Adding of language neutral $entity_type entity to a translation job did fail.");
+          }
+          else {
+            $this->fail("Adding of $langcode $entity_type entity node to a translation job did fail.");
+          }
+        }
+      }
+    }
+
+    $GLOBALS['TMGMT_DEBUG'] = FALSE;
+  }
+
+}
