@@ -81,11 +81,6 @@ class RestfulEntityNodeInfographics extends \RestfulEntityBaseNode {
       'process_callbacks' => array(array($this, 'getEntity')),
     );
 
-    $public_fields['fundings'] = array(
-      'property' => 'field_fundings',
-      'process_callbacks' => array(array($this, 'getFundings')),
-   );
-
     $public_fields['publication_date'] = array(
       'property' => 'field_publication_date',
       'process_callbacks' => array(array($this, 'formatTimestamp')),
@@ -161,21 +156,6 @@ class RestfulEntityNodeInfographics extends \RestfulEntityBaseNode {
         $tmp->label = $value->title;
         if (!empty($value->field_reliefweb_id)) {
           $tmp->self = 'http://api.reliefweb.int/v1/disasters/'.$value->field_reliefweb_id[LANGUAGE_NONE][0]['value'];
-        }
-        $return[] = $tmp;
-      }
-    }
-    return $return;
-  }
-
-  protected function getFundings($values) {
-    $return = array();
-    if (!empty($values)) {
-      foreach ($values as $value) {
-        $tmp = new stdClass();
-        $tmp->label = $value->title;
-        if (!empty($value->field_appeal_id)) {
-          $tmp->self = 'http://fts.unocha.org/api/v1/Appeal/id/'.$value->field_appeal_id[LANGUAGE_NONE][0]['value'].'.json';
         }
         $return[] = $tmp;
       }
