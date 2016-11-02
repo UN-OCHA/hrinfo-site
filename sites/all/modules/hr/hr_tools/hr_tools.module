@@ -21,7 +21,297 @@ function hr_tools_menu() {
     'description' => 'Performance statistics',
   );
 
+  $items['node/%node/analytics'] = array(
+    'title' => 'Analytics',
+    'page callback' => 'hr_tools_ga_report',
+    'page arguments' => array(1),
+    'access callback' => 'hr_tools_ga_report_access',
+    'access arguments' => array(1),
+    'description' => 'Google Analytics report',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 999,
+  );
+
   return $items;
+}
+
+function hr_tools_ga_report_access($node) {
+  if (og_is_group('node', $node)) {
+    return user_access('hr_tools_view_google_analytics');
+  }
+  return FALSE;
+}
+
+/*
+ * Implements hook_permission().
+ */
+function hr_tools_permission() {
+  return array(
+    'hr_tools_view_google_analytics' => array(
+      'title' => t('View google analytics'),
+      'description' => t('View google analytics of a group.'),
+    ),
+  );
+}
+
+/**
+ * Return google analytics.
+ */
+function hr_tools_ga_report($node) {
+  dpm($node);
+  dpm(request_path());
+  $path = request_path();
+  // Remove language prefixes.
+  $path = str_replace(array('en/', 'fr/', 'ru/', 'es/'), '', $path);
+  // Strip analytics.
+  $path = str_replace('/analytics', '', $path);
+
+  module_load_include('php', 'hr_tools', 'google-api-php-client/vendor/autoload');
+
+  $key_file =  drupal_get_path('module', 'hr_tools') . '/service-account-credentials.json';
+  $client = new Google_Client();
+  $client->setApplicationName("Hello Analytics Reporting");
+  $client->setAuthConfig($key_file);
+  $client->setScopes(['https://www.googleapis.com/auth/analytics.readonly']);
+  $client->useApplicationDefaultCredentials();
+
+  $tokenArray = $client->fetchAccessTokenWithAssertion();
+  $accessToken = $tokenArray['access_token'];
+
+  $test  = <<< EOF
+
+  <script>
+  (function(w,d,s,g,js,fs){
+    g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
+    js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
+    js.src='https://apis.google.com/js/platform.js';
+    fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
+  }(window,document,'script'));
+  </script>
+
+
+  <ul id="chart-wrapper" class="clearfix">
+    <li class="w-small"><h2>Number of visitors</h2><div id="chart-num-visitors"></div></li>
+    <li class="w-small"><h2>Number of hits</h2><div id="chart-num-hits"></div></li>
+    <li class="w-large"><h2>Sessions</h2><div id="chart-sessions"></div></li>
+    <li class="w-medium"><h2>Top countries</h2><div id="chart-top-countries"></div></li>
+    <li class="w-medium"><h2>Top languages</h2><div id="chart-top-languages"></div></li>
+    <li class="w-large"><h2>Top pages</h2><div id="table-top-pages"></div></li>
+  </ul>
+
+  <script>
+    gapi.analytics.ready(function() {
+
+      /**
+       * Authorize the user with an access token obtained server side.
+       */
+      gapi.analytics.auth.authorize({
+        'serverAuth': {
+          'access_token': '$accessToken'
+        }
+      });
+
+      var topCountries = new gapi.analytics.googleCharts.DataChart({
+        'query': {
+          'ids': 'ga:112786249', // <-- Replace with the ids value for your view.
+          'metrics': 'ga:sessions',
+          'dimensions': 'ga:country',
+          'start-date': '30daysAgo',
+          'end-date': 'yesterday',
+          'max-results': 6,
+          'sort': '-ga:sessions'
+        },
+        'chart': {
+          'container': 'chart-top-countries',
+          'type': 'PIE',
+          'options': {
+            'width': '100%',
+            'pieHole': 4/9
+          }
+        }
+      });
+
+      /**
+       * Creates a new DataChart instance showing sessions over the past 30 days.
+       * It will be rendered inside an element with the id "chart-1-container".
+       */
+      var sessions = new gapi.analytics.googleCharts.DataChart({
+        query: {
+          'ids': 'ga:112786249', // <-- Replace with the ids value for your view.
+          'start-date': '30daysAgo',
+          'end-date': 'yesterday',
+          'metrics': 'ga:sessions,ga:users,ga:uniquePageviews',
+          'dimensions': 'ga:date'
+        },
+        chart: {
+          'container': 'chart-sessions',
+          'type': 'LINE',
+          'options': {
+            'width': '100%'
+          }
+        }
+      });
+
+
+      /**
+       * Creates a new DataChart instance showing top 5 most popular demos/tools
+       * amongst returning users only.
+       * It will be rendered inside an element with the id "chart-3-container".
+       */
+      var topPages = new gapi.analytics.googleCharts.DataChart({
+        query: {
+          'ids': 'ga:112786249', // <-- Replace with the ids value for your view.
+          'start-date': '30daysAgo',
+          'end-date': 'yesterday',
+          'metrics': 'ga:pageviews',
+          'dimensions': 'ga:pagePathLevel1',
+          'sort': '-ga:pageviews',
+          'max-results': 10
+        },
+        chart: {
+          'container': 'chart-top-languages',
+          'type': 'PIE',
+          'options': {
+            'width': '100%',
+            'pieHole': 4/9,
+          }
+        }
+      });
+
+      topCountries.set({'query': {'filters': 'ga:pagePath=@$path'}}).execute();
+      sessions.set({'query': {'filters': 'ga:pagePath=@$path'}}).execute();
+      topPages.set({'query': {'filters': 'ga:pagePath=@$path'}}).execute();
+
+      gapi.client.request({
+          path: '/v4/reports:batchGet',
+          root: 'https://analyticsreporting.googleapis.com/',
+          method: 'POST',
+          body: {
+            reportRequests: [
+              {
+                viewId: 'ga:112786249',
+                dateRanges: [
+                  {
+                    startDate: '30daysAgo',
+                    endDate: 'yesterday'
+                  }
+                ],
+                metrics: [
+                  {
+                    expression: 'ga:sessions'
+                  },
+                  {
+                    expression: 'ga:hits'
+                  },
+
+                ],
+                dimensionFilterClauses: [{
+                  filters: [{
+                    dimensionName: "ga:pagePath",
+                    operator: "PARTIAL",
+                    expressions: ["$path"]
+                  }]
+                }]
+              }
+            ]
+          }
+        }).then(function (response) {
+          console.log(response);
+          console.log(JSON.stringify(response.result, null, 2));
+          console.log(response.result.reports[0].data.totals[0].values[0]);
+          document.getElementById('chart-num-visitors').innerText = 'Total number of sessions: ' + response.result.reports[0].data.totals[0].values[0];
+          document.getElementById('chart-num-hits').innerText = 'Total number of hits: ' + response.result.reports[0].data.totals[0].values[1];
+        }, console.error.bind(console));
+
+        function handleReportingResults(results) {
+          var output = [];
+          if (!results.code) {
+            for( var i = 0, report; report = results.reports[i]; ++i ) {
+              if (report.data.rows && report.data.rows.length) {
+                var table = ['<table>'];
+
+                // Put headers in table.
+                table.push('<tr><th>', report.columnHeader.dimensions.join('</th><th>').replace('ga:', ''), '</th>');
+
+                for (var i=0, header; header = report.columnHeader.metricHeader.metricHeaderEntries[i]; ++i) {
+                  table.push('<th>', header.name.replace('ga:', ''), '</th>');
+                }
+
+                table.push('</tr>');
+
+                // Put cells in table.
+                for (var rowIndex=0, row; row = report.data.rows[rowIndex]; ++rowIndex) {
+                  for(var dateRangeIndex=0, dateRange; dateRange = row.metrics[dateRangeIndex]; ++dateRangeIndex) {
+                    // Put dimension values
+                    table.push('<tr><td>', row.dimensions.join('</td><td>'), '</td>');
+                    // Put metric values for the current date range
+                    table.push('<td>', dateRange.values.join('</td><td>'), '</td></tr>');
+                  }
+                }
+                table.push('</table>');
+
+                output.push(table.join(''));
+              } else {
+                output.push('<p>No rows found.</p>');
+              }
+            }
+            return output;
+          } else {
+            console.log('There was an error: ' + results.message);
+          }
+        }
+
+        gapi.client.request({
+            path: '/v4/reports:batchGet',
+            root: 'https://analyticsreporting.googleapis.com/',
+            method: 'POST',
+            body: {
+              reportRequests: [
+                {
+                  viewId: 'ga:112786249',
+                  pageSize: 10,
+                  dateRanges: [
+                    {
+                      startDate: '30daysAgo',
+                      endDate: 'yesterday'
+                    }
+                  ],
+                  metrics: [
+                    {
+                      expression: 'ga:pageviews'
+                    },
+                    {
+                      expression: 'ga:uniquePageviews'
+                    }
+                  ],
+                  dimensions: [
+                    {
+                      name: 'ga:pageTitle'
+                    }
+                  ],
+                  dimensionFilterClauses: [{
+                    filters: [{
+                      dimensionName: "ga:pagePath",
+                      operator: "PARTIAL",
+                      expressions: ["$path"]
+                    }]
+                  }],
+                  orderBys: [
+                    {"fieldName": "ga:pageviews", "sortOrder": "DESCENDING"}
+                  ]                }
+              ]
+            }
+          }).then(function (response) {
+            console.log(response);
+            console.log(JSON.stringify(response.result, null, 2));
+            document.getElementById('table-top-pages').innerHTML = handleReportingResults(response.result);
+
+          }, console.error.bind(console));
+
+    });
+  </script>
+EOF;
+  return $test;
 }
 
 /**
