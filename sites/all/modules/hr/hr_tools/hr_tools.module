@@ -32,7 +32,48 @@ function hr_tools_menu() {
     'weight' => 999,
   );
 
+  $items['admin/config/system/hr-analytics'] = array(
+    'title' => 'Analytics',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hr_tools_ga_report_settings_form'),
+    'access arguments' => array('hr_tools_manage_google_analytics'),
+    'description' => 'Google Analytics report settings',
+    'weight' => 999,
+  );
+
   return $items;
+}
+
+function hr_tools_ga_report_settings_form($form, $form_state) {
+  $form['hr_tools_analytics_private_key_id'] = array(
+    '#title' => 'Private key Id',
+    '#type' => 'textfield',
+    '#default_value' => variable_get('hr_tools_analytics_private_key_id', ''),
+    '#required' => TRUE,
+  );
+
+  $form['hr_tools_analytics_private_key'] = array(
+    '#title' => 'Private key',
+    '#type' => 'textarea',
+    '#default_value' => variable_get('hr_tools_analytics_private_key', ''),
+    '#required' => TRUE,
+  );
+
+  $form['hr_tools_analytics_client_email'] = array(
+    '#title' => 'Client email',
+    '#type' => 'textfield',
+    '#default_value' => variable_get('hr_tools_analytics_client_email', ''),
+    '#required' => TRUE,
+  );
+
+  $form['hr_tools_analytics_client_id'] = array(
+    '#title' => 'Client Id',
+    '#type' => 'textfield',
+    '#default_value' => variable_get('hr_tools_analytics_client_id', ''),
+    '#required' => TRUE,
+  );
+
+  return system_settings_form($form);
 }
 
 function hr_tools_ga_report_access($node) {
@@ -51,6 +92,11 @@ function hr_tools_permission() {
       'title' => t('View google analytics'),
       'description' => t('View google analytics of a group.'),
     ),
+    'hr_tools_manage_google_analytics' => array(
+      'title' => t('Manage google analytics'),
+      'description' => t('Manage google analytics.'),
+      'restrict access' => TRUE,
+    ),
   );
 }
 
@@ -58,6 +104,10 @@ function hr_tools_permission() {
  * Return google analytics.
  */
 function hr_tools_ga_report($node) {
+  if (empty(variable_get('hr_tools_analytics_private_key_id', ''))) {
+    return;
+  }
+
   $path = request_path();
   // Remove language prefixes.
   $path = str_replace(array('en/', 'fr/', 'ru/', 'es/'), '', $path);
@@ -65,11 +115,21 @@ function hr_tools_ga_report($node) {
   $path = str_replace('/analytics', '', $path);
 
   module_load_include('php', 'hr_tools', 'google-api-php-client/vendor/autoload');
-
-  $key_file =  drupal_get_path('module', 'hr_tools') . '/service-account-credentials.json';
   $client = new Google_Client();
-  $client->setApplicationName("Hello Analytics Reporting");
-  $client->setAuthConfig($key_file);
+  $client->setApplicationName('Google Analytics Reporting');
+  $client->setAuthConfig(array(
+    'type' => 'service_account',
+    'project_id' => 'hr-info-analytics',
+    'auth_uri' => 'https://accounts.google.com/o/oauth2/auth',
+    'token_uri' => 'https://accounts.google.com/o/oauth2/token',
+    'auth_provider_x509_cert_url' => 'https://www.googleapis.com/oauth2/v1/certs',
+    'client_x509_cert_url' => 'https://www.googleapis.com/robot/v1/metadata/x509/drupal%40hr-info-analytics.iam.gserviceaccount.com',
+    'private_key_id' => variable_get('hr_tools_analytics_private_key_id', ''),
+    'private_key' => variable_get('hr_tools_analytics_private_key', ''),
+    'client_email' => variable_get('hr_tools_analytics_client_email', ''),
+    'client_id' => variable_get('hr_tools_analytics_client_id', ''),
+  ));
+
   $client->setScopes(['https://www.googleapis.com/auth/analytics.readonly']);
   $client->useApplicationDefaultCredentials();
 
