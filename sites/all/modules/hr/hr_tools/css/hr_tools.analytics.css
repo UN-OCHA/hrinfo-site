@@ -1,0 +1,43 @@
+.hrtools-analytics {
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.hrtools-analytics table {
+  table-layout: auto;
+}
+
+.hrtools-analytics h2 {
+  color: #232323;
+}
+
+.hrtools-analytics li {
+  list-style-type: none;
+  flex: 0 0 19%;
+  border: solid 1px black;
+  background-color: #ffffff;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.hrtools-analytics .w-small {
+  flex: 0 0 24%;
+}
+.hrtools-analytics .w-medium {
+  flex: 0 0 49%;
+}
+.hrtools-analytics .w-large {
+  flex: 0 0 100%;
+}
+
+.hrtools-analytics .type-counter h2 {
+  text-align: center;
+}
+
+.hrtools-analytics .type-counter div {
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
+}
