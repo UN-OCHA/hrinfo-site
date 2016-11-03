@@ -158,17 +158,11 @@
                     }
                   ],
                   metrics: [
-                    {
-                      expression: 'ga:pageviews'
-                    },
-                    {
-                      expression: 'ga:uniquePageviews'
-                    }
+                    {expression: 'ga:pageviews'},
+                    {expression: 'ga:uniquePageviews'}
                   ],
                   dimensions: [
-                    {
-                      name: 'ga:pageTitle'
-                    }
+                    {name: 'ga:pageTitle'}
                   ],
                   dimensionFilterClauses: [{
                     filters: [{
