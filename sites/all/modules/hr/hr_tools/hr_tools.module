@@ -138,14 +138,14 @@ function hr_tools_ga_report($node) {
 
   $output = '<h1>Analytics last 30 days</h1>';
   $output .= '<ul id="chart-wrapper" class="hrtools-analytics">';
-  $output .= '<li class="w-small type-counter"><h2># of visitors</h2><div id="chart-num-visitors"></div></li>';
-  $output .= '<li class="w-small type-counter"><h2># of hits</h2><div id="chart-num-hits"></div></li>';
-  $output .= '<li class="w-small type-counter"><h2>% new</h2><div id="chart-num-new"></div></li>';
-  $output .= '<li class="w-small type-counter"><h2>Duration</h2><div id="chart-num-duration"></div></li>';
-  $output .= '<li class="w-large type-chart"><h2>Sessions</h2><div id="chart-sessions"></div></li>';
-  $output .= '<li class="w-medium type-chart"><h2>Top countries</h2><div id="chart-top-countries"></div></li>';
-  $output .= '<li class="w-medium type-chart"><h2>Top languages</h2><div id="chart-top-languages"></div></li>';
-  $output .= '<li class="w-large type-table"><h2>Top pages</h2><div id="table-top-pages"></div></li>';
+  $output .= '<li class="w-small type-counter"><h2># of visitors</h2><div id="chart-num-visitors">Loading data ...</div></li>';
+  $output .= '<li class="w-small type-counter"><h2># of hits</h2><div id="chart-num-hits">Loading data ...</div></li>';
+  $output .= '<li class="w-small type-counter"><h2>% new</h2><div id="chart-num-new">Loading data ...</div></li>';
+  $output .= '<li class="w-small type-counter"><h2>Duration</h2><div id="chart-num-duration">Loading data ...</div></li>';
+  $output .= '<li class="w-large type-chart"><h2>Sessions</h2><div id="chart-sessions">Loading data ...</div></li>';
+  $output .= '<li class="w-medium type-chart"><h2>Top countries</h2><div id="chart-top-countries">Loading data ...</div></li>';
+  $output .= '<li class="w-medium type-chart"><h2>Top languages</h2><div id="chart-top-languages">Loading data ...</div></li>';
+  $output .= '<li class="w-large type-table"><h2>Top pages</h2><div id="table-top-pages">Loading data ...</div></li>';
   $output .= '</ul>';
 
   return array(
