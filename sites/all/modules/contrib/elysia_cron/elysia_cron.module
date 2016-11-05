@@ -1038,10 +1038,10 @@ function elysia_cron_module_jobs() {
             }
 
             $jobs[$job] = $jobs[$job] + array(
-                'module' => $module,
-                'callback' => is_callable($job) ? $job : $function,
-                'arguments' => is_callable($job) ? array() : array('execute', $job),
-              );
+              'module' => $module,
+              'callback' => is_callable($job) ? $job : $function,
+              'arguments' => is_callable($job) ? array() : array('execute', $job),
+            );
           }
         }
       }
@@ -1233,14 +1233,20 @@ function elysia_cron_build_semaphore_name($channel) {
  *   Run the channel (and all it's jobs) even if already running.
  */
 function elysia_cron_run($manual_run = FALSE, $ignore_disable = FALSE, $ignore_time = FALSE, $ignore_running = FALSE) {
+  global $_elysia_cron_exit_phase;
+
   // If DISABLED block the execution.
   if (!$ignore_disable && variable_get('elysia_cron_disabled', FALSE)) {
     elysia_cron_debug('Cron globally disabled, skipping run');
     return;
   }
 
-  // Check for CRON_KEY or ALLOWED_HOSTS.
-  if (!$manual_run) {
+  if (!empty($_elysia_cron_exit_phase)) {
+    // We on "poormanscron" mode,
+    // not necessary to do checks for cron_key or host or permission.
+  }
+  elseif (!$manual_run) {
+    // Check for CRON_KEY or ALLOWED_HOSTS.
     if (!drupal_is_cli()) {
       $cron_key = variable_get('cron_key', '');
       if ($cron_key && (empty($_GET['cron_key']) || $_GET['cron_key'] != $cron_key)) {
@@ -1254,7 +1260,8 @@ function elysia_cron_run($manual_run = FALSE, $ignore_disable = FALSE, $ignore_t
       }
     }
   }
-  elseif (!user_access('execute elysia_cron')) {
+  elseif (!elysia_cron_access('execute elysia_cron')) {
+    elysia_cron_debug('Access denied for cron launching');
     return;
   }
 
@@ -1291,7 +1298,7 @@ function elysia_cron_run($manual_run = FALSE, $ignore_disable = FALSE, $ignore_t
  *   Run the channel (and all it's jobs) even if disabled.
  * @param bool $ignore_time
  *   Run channel (and all it's jobs) job even if not ready.
- * @param bool $ignore_running.
+ * @param bool $ignore_running
  *   Run the channel (and all it's jobs) even if already running.
  */
 function elysia_cron_run_channel($channel, $ignore_disable = FALSE, $ignore_time = FALSE, $ignore_running = FALSE) {
@@ -1678,7 +1685,7 @@ function elysia_cron_description($job) {
  ******************************************************************************/
 
 /**
- * Implementation of hook_theme(). [Only D6+D7]
+ * Implementation of hook_theme().
  */
 function elysia_cron_theme() {
   return array(
@@ -1698,64 +1705,94 @@ function theme_elysia_cron_description($variables) {
   switch ($variables['job']) {
     case 'search_cron':
       return 'Update search database index';
+
     case 'activitystream_cron':
       return 'Fetch RSS feeds and web calls for activitystream';
+
     case 'mailhandler_cron':
       return 'Fetch POP3/IMAP accounts managed by MailHandler';
+
     case 'watchdog_cron':
       return 'Remove expired log messages and flood control events';
+
     case 'filter_cron':
       return 'Expire outdated filter cache entries';
+
     case 'node_cron':
       return 'History table cleanup';
+
     case 'system_cron':
       return 'Remove older rows from flood and batch table. Remove old temporary files.';
+
     case 'aggregation_cron':
       return 'Fetch RSS feeds for aggregation module';
+
     case 'amazon_cron':
       return 'Refresh Amazon products';
+
     case 'image_cron':
       return 'Deletes old temp images';
+
     case 'persistent_login_cron':
       return 'Expire persistent login';
+
     case 'trackback_cron':
       return 'Process trackback ping queue';
+
     case 'update_status_cron':
       return 'Checks for drupal module updates (Note: own frequency check ignore cron rules)';
+
     case 'user_karma_cron':
       return 'User karma expiration / rebuild (Note: own frequency check ignore cron rules)';
+
     case 'votingapi_cron':
       return 'Update votes (if not configured for immediate calculation)';
+
     case 'statistics_cron':
       return 'Reset day counts / Clean expired access logs';
+
     case 'googleanalytics_cron':
       return 'Delete cached version of ga.js/urchin.js.';
+
     case 'xmlsitemap_cron':
       return 'XML sitemap ping.';
+
     case 'xmlsitemap_node_cron':
       return 'Update XML sitemap with new nodes';
+
     case 'xmlsitemap_term_cron':
       return 'Update XML sitemap with new terms';
+
     case 'lm_paypal_cron':
       return 'Remove old IPN records';
+
     case 'user_import_cron':
       return 'Continue partial imports';
+
     case 'dblog_cron':
       return 'Remove expired log messages and flood control events';
+
     case 'field_cron':
       return 'Purges some deleted Field API data, if any exists';
+
     case 'trigger_cron':
       return 'Triggers cron actions';
+
     case 'update_cron':
       return 'Checks for available updates of Drupal core, contributed modules and themes';
+
     case 'search_api_cron':
       return 'Will index items for each enabled index.';
+
     case 'redirect_cron':
       return 'Purge inactive self-managed redirects from the database.';
+
     case 'ctools_cron':
       return 'Clean up old caches';
+
     case 'l10n_update_cron':
       return 'Check one project/language at a time, download and import if update available';
+
     default:
       return '-';
   }
@@ -1849,9 +1886,9 @@ function elysia_cron_queue_exec($queue_name, $info) {
  * ADMIN_MENU SUPPORT
  ******************************************************************************/
 
-// TODO: Deve gestire hook_admin_menu_map, vedi hook_admin_menu.php e admin_menu.map.inc
+// @todo Deve gestire hook_admin_menu_map, vedi hook_admin_menu.php e admin_menu.map.inc
 /**
- * Implementation of hook_admin_menu().
+ * Implements hook_admin_menu().
  *
  * @param array &$deleted
  *   Array of links under admin/* that were removed by
