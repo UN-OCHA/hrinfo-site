@@ -866,7 +866,7 @@ function hid_profiles_country_select() {
     ->propertyOrderBy('name')
     ->execute();
   $terms = taxonomy_term_load_multiple(array_keys($entities['taxonomy_term']));
-  $html = '<div id="block-hid-profiles-filters-countries" class="block"><select id="countries" class="form-control form-select" tabindex="1" data-placeholder="Filter by Cluster/Sector">';
+  $html = '<div id="block-hid-profiles-filters-countries" class="block"><select id="countries" class="form-control form-select" tabindex="1" data-placeholder="Filter by Country">';
   $html .= '<option value=""></option>';
   foreach ($terms as $term) {
     $label = entity_label('taxonomy_term', $term);
