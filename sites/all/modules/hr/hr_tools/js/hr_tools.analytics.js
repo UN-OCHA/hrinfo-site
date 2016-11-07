@@ -5,18 +5,25 @@
       var pathFilter = Drupal.settings.hr_tools.pathFilter;
       var viewId = 'ga:112786249';
 
-      function handleReportingResults(results) {
+      function handleReportingResults(results, headers) {
         var output = [];
         if (!results.code) {
           for( var i = 0, report; report = results.reports[i]; ++i ) {
             if (report.data.rows && report.data.rows.length) {
               var table = ['<table>'];
 
-              table.push('<tr><th>', report.columnHeader.dimensions.join('</th><th>').replace('ga:', ''), '</th>');
-              for (var i=0, header; header = report.columnHeader.metricHeader.metricHeaderEntries[i]; ++i) {
-                table.push('<th>', header.name.replace('ga:', ''), '</th>');
+              if (headers) {
+                table.push('<tr><th>');
+                table.push(headers.join('</th><th>'));
+                table.push('</th></tr>');
               }
-              table.push('</tr>');
+              else {
+                table.push('<tr><th>', report.columnHeader.dimensions.join('</th><th>').replace('ga:', ''), '</th>');
+                for (var i=0, header; header = report.columnHeader.metricHeader.metricHeaderEntries[i]; ++i) {
+                  table.push('<th>', header.name.replace('ga:', ''), '</th>');
+                }
+                table.push('</tr>');
+              }
 
               for (var rowIndex=0, row; row = report.data.rows[rowIndex]; ++rowIndex) {
                 for(var dateRangeIndex=0, dateRange; dateRange = row.metrics[dateRangeIndex]; ++dateRangeIndex) {
@@ -81,7 +88,7 @@
           }
         });
 
-        var topPages = new gapi.analytics.googleCharts.DataChart({
+        var topLanguages = new gapi.analytics.googleCharts.DataChart({
           query: {
             'ids': viewId,
             'start-date': '30daysAgo',
@@ -103,7 +110,7 @@
 
         topCountries.set({'query': {'filters': 'ga:pagePath=@' + pathFilter}}).execute();
         sessions.set({'query': {'filters': 'ga:pagePath=@' + pathFilter}}).execute();
-        topPages.set({'query': {'filters': 'ga:pagePath=@' + pathFilter}}).execute();
+        topLanguages.set({'query': {'filters': 'ga:pagePath=@' + pathFilter}}).execute();
 
         gapi.client.request({
           path: '/v4/reports:batchGet',
@@ -177,7 +184,7 @@
               ]
             }
           }).then(function (response) {
-            document.getElementById('table-top-pages').innerHTML = handleReportingResults(response.result);
+            document.getElementById('table-top-pages').innerHTML = handleReportingResults(response.result, ['Page', '# views', '# unique views']);
           });
       });
     }
