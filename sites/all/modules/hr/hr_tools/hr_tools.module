@@ -78,9 +78,22 @@ function hr_tools_ga_report_settings_form($form, $form_state) {
 
 function hr_tools_ga_report_access($node) {
   if (og_is_group('node', $node)) {
-    return user_access('hr_tools_view_google_analytics');
+    return user_access('hr_tools_view_google_analytics') || og_user_access('node', $node->nid, 'hr_tools_group_view_google_analytics');
   }
   return FALSE;
+}
+
+/**
+ * Implement hook_og_permission().
+ */
+function hr_tools_og_permission() {
+  return array(
+    'hr_tools_group_view_google_analytics' => array(
+      'title' => t('View google analytics of a group'),
+      'description' => t('View google analytics of a group.'),
+      'default role' => array(OG_ADMINISTRATOR_ROLE),
+    ),
+  );
 }
 
 /*
