@@ -1033,3 +1033,62 @@ function hr_tools_drupal_http_request($url, array $options = array()) {
 
   return $result;
 }
+
+/**
+ * Implements hook_token_info().
+ */
+function hr_tools_token_info() {
+  // Analytics tokens.
+  $info['tokens']['node']['spaces'] = array(
+    'name' => t('Spaces'),
+    'description' => t('The spaces the node belongs to'),
+  );
+  $info['tokens']['node']['bundles'] = array(
+    'name' => t('Bundles'),
+    'description' => t('The bundles the node belongs to'),
+  );
+
+  return $info;
+}
+
+/**
+* Implements hook_tokens().
+*/
+function hr_tools_tokens($type, $tokens, array $data = array(), array $options = array()) {
+ $replacements = array();
+ if ($type == 'node' && !empty($data['node'])) {
+    $node = $data['node'];
+    $wrapper = entity_metadata_wrapper('node', $node);
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'spaces':
+          $replacements[$original] = '';
+          if (isset($wrapper->{OG_AUDIENCE_FIELD})) {
+            $spaces = array();
+            foreach ($wrapper->{OG_AUDIENCE_FIELD} as $space) {
+              $spaces[] = $space->getIdentifier();
+            }
+            $replacements[$original] = implode(';', $spaces);
+          }
+          elseif (og_is_group('node', $node->nid)) {
+            $replacements[$original] = $node->nid;
+          }
+          break;
+        case 'bundles':
+          $replacements[$original] = '';
+          if (isset($wrapper->field_bundles)) {
+            $bundles = array();
+            foreach ($wrapper->field_bundles as $bundle) {
+              $bundles[] = $bundle->getIdentifier();
+            }
+            $replacements[$original] = implode(';', $bundles);
+          }
+          elseif ($node->type == 'hr_bundle') {
+            $replacements[$original] = $node->nid;
+          }
+          break;
+      }
+    }
+  }
+  return $replacements;
+}

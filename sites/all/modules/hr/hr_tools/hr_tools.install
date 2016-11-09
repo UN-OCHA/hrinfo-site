@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Install file for hr_tools.
+ */
+
+/**
+ * Disable piwik.
+ */
+function hr_tools_update_7001() {
+  module_disable(array('piwik'));
+  module_disable(array('hr_stats'));
+}
