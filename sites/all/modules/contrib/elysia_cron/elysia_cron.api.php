@@ -72,7 +72,7 @@ function hook_cronapi($op, $job = NULL) {
 
   // Run function example_sendmail_cron() every 2 hours.
   // Note: i don't need to define a callback, i'll use "example_sendmail_cron"
-  // function
+  // function.
   $items['example_sendmail_cron'] = array(
     'description' => 'Send mail with news',
     'rule' => '0 */2 * * *',
@@ -104,11 +104,11 @@ function hook_cronapi($op, $job = NULL) {
     // Embedded code.
     switch ($job) {
       case 'job1':
-        // ... job1 code
+        // ... job1 code.
         break;
 
       case 'job2':
-        // ... job2 code
+        // ... job2 code.
         break;
     }
   }
