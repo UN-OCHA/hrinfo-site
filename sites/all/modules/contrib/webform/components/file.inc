@@ -27,6 +27,7 @@ function _webform_defaults_file() {
       'progress_indicator' => 'throbber',
       'title_display' => 0,
       'description' => '',
+      'description_above' => FALSE,
       'attributes' => array(),
       'private' => FALSE,
       'analysis' => FALSE,
@@ -168,6 +169,7 @@ function _webform_edit_file($component) {
       '#description' => t('You may optionally use tokens to create a pattern used to rename files upon submission. Omit the extension; it will be added automatically.') . ' ' . theme('webform_token_help', array('groups' => array('node', 'submission'))),
       '#weight' => 6,
       '#element_validate' => array('_webform_edit_file_rename_validate'),
+      '#access' => webform_variable_get('webform_token_access'),
     );
 
     $form['display']['progress_indicator'] = array(
@@ -311,12 +313,14 @@ function theme_webform_edit_file_extensions($variables) {
   }
 
   // Add the row for additional types.
-  $row = array();
-  $title = $element['addextensions']['#title'];
-  $element['addextensions']['#title'] = NULL;
-  $row[] = array('data' => $title, 'colspan' => 2);
-  $row[] = drupal_render($element['addextensions']);
-  $rows[] = $row;
+  if (!isset($element['addextensions']['#access']) || $element['addextensions']['#access']) {
+    $row = array();
+    $title = $element['addextensions']['#title'];
+    $element['addextensions']['#title'] = NULL;
+    $row[] = array('data' => $title, 'colspan' => 2);
+    $row[] = drupal_render($element['addextensions']);
+    $rows[] = $row;
+  }
 
   $header = array(array('data' => t('Category'), 'colspan' => '2'), array('data' => t('Types')));
 
