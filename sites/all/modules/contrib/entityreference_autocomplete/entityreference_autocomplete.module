@@ -46,7 +46,7 @@ function entityreference_autocomplete_element_info() {
     '#size' => 60,
     '#autocomplete_path' => FALSE,
     '#value_callback' => 'entityreference_autocomplete_value_callback',
-    '#process' => array('entityreference_autocomplete_process_entityreference', 'form_process_autocomplete', 'ajax_process_form'),
+    '#process' => array('ajax_process_form', 'entityreference_autocomplete_process_entityreference'),
     '#element_validate' => array('entityreference_autocomplete_validate_entityreference'),
     '#theme' => 'textfield',
     '#theme_wrappers' => array('form_element'),
@@ -60,6 +60,13 @@ function entityreference_autocomplete_element_info() {
       'limit' => '50',
     ),
   );
+  // Since Drupal core 7.39, additional processing is necessary for
+  // autocomplete text fields. See https://www.drupal.org/node/2561431
+  // In prior versions of Drupal core, form_process_autocomplete() is not
+  // available.
+  if (function_exists('form_process_autocomplete')) {
+    $types['entityreference']['#process'][] = 'form_process_autocomplete';
+  }
   return $types;
 }
 
@@ -95,10 +102,8 @@ function entityreference_autocomplete_value_callback($element, $edit = FALSE, &$
       else if (is_array($element['#default_value'])) {
         $referenced_labels = array();
         foreach ($element['#default_value'] as $entity_id) {
-          if (is_numeric($entity_id)) {
-            $referenced_labels[] = entityreference_autocomplete_label_for_reference($element['#era_entity_type'], $entity_id);
-            $references_label = implode(', ', array_filter($referenced_labels));
-          }
+          $referenced_labels[] = entityreference_autocomplete_label_for_reference($element['#era_entity_type'], $entity_id);
+          $references_label = implode(', ', array_filter($referenced_labels));
         }
       }
 
@@ -145,7 +150,7 @@ function entityreference_autocomplete_process_entityreference($element, &$form_s
     // Merge effective settings with the default settings array.
     $element_info = entityreference_autocomplete_element_info();
     $query_settings = array_merge($element_info['entityreference']['#era_query_settings'], $element['#era_query_settings']);
-    $autocomplete_path .= '/' . urlencode(http_build_query($query_settings));
+    $autocomplete_path .= '/' . http_build_query($query_settings);
     $element['#autocomplete_path'] = $autocomplete_path;
   }
   return $element;
@@ -158,8 +163,10 @@ function entityreference_autocomplete_process_entityreference($element, &$form_s
  */
 function entityreference_autocomplete_validate_entityreference(&$element, &$form_state) {
   $labels_string = $element['#value'];
-  $input_labels = drupal_explode_tags($labels_string);
+  $input_labels = entityreference_autocomplete_explode_tags($labels_string, TRUE);
+  $uuid_exists = function_exists('entity_get_uuid_by_id');
   $entity_type = $element['#era_entity_type'];
+  $entity_info = entity_get_info($entity_type);
   $query_settings = $element['#era_query_settings'];
   $values = array();
 
@@ -213,6 +220,10 @@ function entityreference_autocomplete_validate_entityreference(&$element, &$form
       }
     }
 
+    // Add a tag to the query so modules can alter it.
+    $query->addTag('era_query');
+    $query->addMetaData('era_search_string', $entity_label);
+
     $matching_entities = $query->execute();
 
     // No matches found.
@@ -251,6 +262,12 @@ function entityreference_autocomplete_validate_entityreference(&$element, &$form
             'entity_type' => $entity_type,
             'entity_bundle' => $bundle,
           );
+
+          // If uuid module is available.
+          if ($uuid_exists) {
+            $uuid = entity_get_uuid_by_id($entity_type, array($entity_id));
+            $values[$entity_id]['entity_uuid'] = !empty($uuid) ? reset($uuid) : NULL;
+          }
         }
       }
     }
@@ -278,9 +295,10 @@ function entityreference_autocomplete_label_for_reference($entity_type, $entity_
   if ($entity_referenced = entity_load_single($entity_type, $entity_id)) {
     $reference_label = entity_label($entity_type, $entity_referenced) . ' (' . $entity_id . ')';
 
-    // Names containing commas or quotes must be wrapped in quotes.
+    // Names containing commas, preceding or trailing spaces, or quotes, must be
+    // wrapped in quotes.
     if ($quote_wrap) {
-      if (strpos($reference_label, ',') !== FALSE || strpos($reference_label, '"') !== FALSE) {
+      if (strpos($reference_label, ',') !== FALSE || strpos($reference_label, '"') !== FALSE || (strlen(trim($reference_label)) != strlen($reference_label))) {
         $reference_label = '"' . str_replace('"', '""', $reference_label) . '"';
       }
     }
@@ -323,4 +341,46 @@ function entityreference_autocomplete_resolve_entity_label_column($entity_type) 
     return $label_column;
   }
   return $label_column;
+}
+
+/**
+ * Explodes a string of tags into an array.
+ *
+ * This is almost a clone of drupal's drupal_explode_tags() function. The reason
+ * to use this custom function is because drupal_explode_tags() assumes that the
+ * tags entered will be saved straight into the database after being returned,
+ * so it removes any escape formatting of the tags. That will make the
+ * autocomplete callback to remove any quotes added to tags when users add a
+ * different tag, making the escaping of previous ones to disappear, which
+ * ultimately will result in an invalid value error in the validation callback.
+ *
+ * This function does the same as drupal_explode_tags() in terms of exploding
+ * the tags, but it doesn't remove any escape formatting from the tags to be
+ * returned, unless it's explicitly requested.
+ *
+ * @param array $tags
+ *  Array of tags to explode.
+ * @param bool $remove_escape_formatting
+ *  Flag indicating whether to remove the escape formatting for the tags.
+ *
+ * @see drupal_explode_tags()
+ */
+function entityreference_autocomplete_explode_tags($tags, $remove_escape_formatting = FALSE) {
+  $regexp = '%(?:^|,\ *)("(?>[^"]*)(?>""[^"]* )*"|(?: [^",]*))%x';
+  preg_match_all($regexp, $tags, $matches);
+  $typed_tags = array_unique($matches[1]);
+
+  if ($remove_escape_formatting) {
+    $tags = array();
+    foreach ($typed_tags as $tag) {
+      // If a user has escaped a term (to demonstrate that it is a group,
+      // or includes a comma or quote character), remove the escape formatting.
+      $tag = str_replace('""', '"', preg_replace('/^"(.*)"$/', '\1', $tag));
+      if ($tag != "") {
+        $tags[] = $tag;
+      }
+    }
+    $typed_tags = $tags;
+  }
+  return $typed_tags;
 }
