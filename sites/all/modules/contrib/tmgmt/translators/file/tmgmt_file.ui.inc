@@ -22,11 +22,25 @@ class TMGMTFileTranslatorUIController extends TMGMTDefaultTranslatorUIController
       '#description' => t('Please select the format you want to export data.'),
     );
 
+    $form['xliff_cdata'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('XLIFF CDATA'),
+      '#description' => t('Check to use CDATA for import/export.'),
+      '#default_value' => $translator->getSetting('xliff_cdata'),
+    );
+
     $form['xliff_processing'] = array(
       '#type' => 'checkbox',
       '#title' => t('Extended XLIFF processing'),
       '#description' => t('Check to further process content semantics and mask HTML tags instead just escaping it.'),
       '#default_value' => $translator->getSetting('xliff_processing'),
+    );
+
+    $form['xliff_message'] = array(
+      '#type' => 'item',
+      '#markup' => t('By selecting CDATA option, XLIFF processing will be ignored.'),
+      '#prefix' => '<div class="messages warning">',
+      '#suffix' => '</div>',
     );
 
     $form['allow_override'] = array(

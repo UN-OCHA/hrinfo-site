@@ -18,9 +18,9 @@ files[] = views/handlers/tmgmt_node_handler_field_translation_language_status_si
 files[] = views/handlers/tmgmt_node_handler_filter_node_translatable_types.inc
 files[] = views/handlers/tmgmt_node_handler_filter_missing_translation.inc
 
-; Information added by Drupal.org packaging script on 2014-03-04
-version = "7.x-1.0-rc1"
+; Information added by Drupal.org packaging script on 2016-07-01
+version = "7.x-1.0-rc2"
 core = "7.x"
 project = "tmgmt"
-datestamp = "1393965810"
+datestamp = "1467358441"
 
