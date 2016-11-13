@@ -75,6 +75,8 @@ function tmgmt_field_get_source_data($entity_type, $entity, $langcode, $only_tra
       }
     }
   }
+
+  drupal_alter('tmgmt_field_source_data', $fields, $entity_type, $entity, $langcode);
   return $fields;
 }
 
@@ -93,6 +95,8 @@ function tmgmt_field_get_source_data($entity_type, $entity, $langcode, $only_tra
  *   TRUE if field translation is being used.
  */
 function tmgmt_field_populate_entity($entity_type, $entity, $langcode, $data, $use_field_translation = TRUE) {
+  drupal_alter('tmgmt_field_pre_populate_entity', $data, $entity, $entity_type, $langcode);
+
   foreach (element_children($data) as $field_name) {
     if ($field = field_info_field($field_name)) {
       $function = $field['module'] . '_field_type_tmgmt_populate_entity';
@@ -130,5 +134,7 @@ function tmgmt_field_populate_entity($entity_type, $entity, $langcode, $data, $u
       }
     }
   }
+
+  drupal_alter('tmgmt_field_post_populate_entity', $entity, $entity_type, $data, $langcode);
 }
 
