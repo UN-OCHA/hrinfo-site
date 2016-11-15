@@ -312,14 +312,14 @@ function bean_form($form, &$form_state, Bean $bean, $type = NULL) {
   $form['actions']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
-    '#weight' => 200,
+    '#weight' => 0,
     '#submit' => array('bean_form_submit'),
   );
   if (!empty($bean->bid) && entity_access('delete', 'bean', $bean)) {
     $form['actions']['delete'] = array(
       '#type' => 'submit',
       '#value' => t('Delete'),
-      '#weight' => 201,
+      '#weight' => 1,
       '#submit' => array('bean_form_delete_submit'),
     );
   }
@@ -392,7 +392,7 @@ function bean_form_submit($form, &$form_state) {
   $bean->save();
   $form_state['values']['bean'] = $bean;
 
-  $watchdog_args = array('@type' => $bean->typeName(), '%title' => $bean->label());
+  $watchdog_args = array('@type' => $bean->type, '%title' => $bean->label());
   $t_args = array('@type' => $bean->typeName(), '%title' => $bean->label());
 
   if (!$insert) {
