@@ -64,13 +64,11 @@ class entityreference_plugin_display extends views_plugin_display {
     // Restrict the autocomplete options based on what's been typed already.
     if (isset($options['match'])) {
       $style_options = $this->get_option('style_options');
-      $value = db_like($options['match']);
-      if ($options['match_operator'] !='=') {
-        $value = $value . '%';
-        if ($options['match_operator'] != 'STARTS_WITH') {
-          $value = '%' . $value;
-        }
+      $value = db_like($options['match']) . '%';
+      if ($options['match_operator'] != 'STARTS_WITH') {
+        $value = '%' . $value;
       }
+
       // Multiple search fields are OR'd together
       $conditions = db_or();
 
