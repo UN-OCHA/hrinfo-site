@@ -202,10 +202,24 @@ abstract class TMGMTEntityTestCaseUtility extends TMGMTBaseTestCase {
    * @param object $vocabulary
    *   Vocabulary object for which the term should be created.
    *
+   * @param string $langcode
+   *   The language code to be set as the entity source language.
+   *
    * @return object
    *   Newly created node object.
    */
-  function createTaxonomyTerm($vocabulary) {
+  function createTaxonomyTerm($vocabulary, $langcode = 'en') {
+
+    // When an entity is being saved, the entity_translation module initializes
+    // a translation fetching the language from an entity. But the taxonomy
+    // terms have no entity language key, so its langcode will be the set to the
+    // default one.
+    /* @see entity_translation_field_attach_insert() */
+    /* @see EntityTranslationDefaultHandler::initTranslations() */
+    /* @see EntityTranslationDefaultHandler::getLanguage() */
+    $settings_variable_name = 'entity_translation_settings_taxonomy_term__' . $vocabulary->machine_name;
+    variable_set($settings_variable_name, array('default_language' => $langcode));
+
     $term = new stdClass();
     $term->name = $this->randomName();
     $term->description = $this->randomName();
@@ -214,7 +228,7 @@ abstract class TMGMTEntityTestCaseUtility extends TMGMTBaseTestCase {
     foreach ($this->field_names['taxonomy_term'][$vocabulary->machine_name] as $field_name) {
       $field_info = field_info_field($field_name);
       $cardinality = $field_info['cardinality'] == FIELD_CARDINALITY_UNLIMITED ? 1 : $field_info['cardinality'];
-      $field_lang = $field_info['translatable'] ? 'en' : LANGUAGE_NONE;
+      $field_lang = $field_info['translatable'] ? $langcode : LANGUAGE_NONE;
 
       // Create two deltas for each field.
       for ($delta = 0; $delta <= $cardinality; $delta++) {
