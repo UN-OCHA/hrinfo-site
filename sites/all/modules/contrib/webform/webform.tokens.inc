@@ -64,7 +64,7 @@ function webform_token_info() {
   );
   $info['tokens']['submission']['values'] = array(
     'name' => t('Webform submission values'),
-    'description' => '<div>' . t('Webform tokens from submitted data. Replace the "?" with the "field key", including any parent field keys separated by colons. You can append:') . '</div>' .
+    'description' => '<div>' . t('Webform tokens from submitted data. Replace the "?" with the "form key", including any parent form keys separated by colons. You can append:') . '</div>' .
                      '<ul>' .
                      '<li>' . t('the question key for just that one question (grid components).') . '</li>' .
                      '<li>' . t('the option key for just that one option (grid and select components).') . '</li>' .
@@ -86,7 +86,7 @@ function webform_tokens($type, $tokens, array $data = array(), array $options = 
   static $recursion_level = 0;
 
   // Return early unless submission tokens are needed and there is a submission.
-  if ($type != 'submission' || empty($data['webform-submission'])) {
+  if ($type != 'submission' || empty($data['webform-submission']) || !webform_variable_get('webform_token_access')) {
     return array();
   }
 
