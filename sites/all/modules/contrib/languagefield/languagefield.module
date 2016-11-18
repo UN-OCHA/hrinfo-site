@@ -39,58 +39,9 @@ function languagefield_field_info() {
 //                             ),
       'default_widget' => 'options_select',
       'default_formatter' => 'language_default',
-      'property_type' => 'text',
-      'property_callbacks' => array('languagefield_property_info_callback'),
+      'property_type' => 'token',
     ),
   );
-}
-
-/**
- * Callback to alter the 'property_type' info.
- *
- * @see languagefield_field_info().
- */
-function languagefield_property_info_callback(&$info, $entity_type, $field, $instance, $field_type) {
-  $name = $field['field_name'];
-  $property = &$info[$entity_type]['bundles'][$instance['bundle']]['properties'][$name];
-
-  $property['type'] = ($field['cardinality'] != 1) ? 'list<languagefield>' : 'languagefield';
-  $property['getter callback'] = 'entity_metadata_field_verbatim_get';
-  $property['setter callback'] = 'entity_metadata_field_verbatim_set';
-  $property['property info'] = languagefield_data_property_info();
-
-  unset($property['query callback']);
-}
-
-/**
- * Defines info for the properties of the address field data structure.
- */
-function languagefield_data_property_info($name = NULL) {
-  // Build an array of basic property information.
-  $properties = array(
-    'value' => array(
-      'label' => t('ISO 639 code'),
-      'type' => 'token',
-    ),
-    'safe_value' => array(
-      'label' => t('Name'),
-    ),
-    'safe_value_with_native' => array(
-      'label' => t('Name (with native)'),
-//       'options list' => 'languagefield_options',
-    ),
-  );
-
-  // Add the default values for each of the field properties.
-  foreach ($properties as &$value) {
-    $value += array(
-      'description' => !empty($name) ? t('!label of field %name', array('!label' => $value['label'], '%name' => $name)) : '',
-      'getter callback' => 'entity_property_verbatim_get',
-      'setter callback' => 'entity_property_verbatim_set',
-    );
-    $value['type'] = isset($value['type']) ? $value['type'] : 'text';
-  }
-  return $properties;
 }
 
 /**
@@ -213,7 +164,7 @@ function languagefield_field_settings_form($field, $instance, $has_data) {
  * Implements hook_field_prepare_view().
  */
 function languagefield_field_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items) {
-  // Get all possible languages, even if not settable. 
+  // Get all possible languages, even if not settable.
   $languages = _languagefield_options(NULL, $langcode);
   foreach ($entities as $id => $object) {
     foreach ($items[$id] as $delta => $item) {
@@ -283,7 +234,7 @@ function languagefield_field_formatter_settings_summary($field, $instance, $view
     foreach ($settings as $value) {
       switch ($value) {
         case '0':
-          // Option is not selected. 
+          // Option is not selected.
           break;
         default:
           $summary[] = isset($options[$value]) ? $options[$value] : '...';
@@ -353,7 +304,7 @@ function _languagefield_theme_option($item, &$settings) {
     $markup[] = $item['name_native'];
   }
 
-  $markup = (empty($markup)) ? $item['name'] : implode( ' ', $markup);
+  $markup = (empty($markup) && isset($item['name'])) ? $item['name'] : implode( ' ', $markup);
   return $markup;
 }
 
@@ -624,10 +575,6 @@ function _languagefield_options($subsets = NULL, $langcode = LANGUAGE_NONE) {
     }
   }
   asort($languages);
-
-  // Let other modules change the default sort.
-  drupal_alter('languagefield_options', $languages, $subsets, $langcode);
-
   return $languages;
 }
 

@@ -265,7 +265,7 @@ function languagefield_field_views_data_alter(&$result, &$field, &$module) {
     foreach ($result as &$table_name) {
       if (isset($table_name[$field_name])) {
         if (isset($table_name[$field_name]['filter'])) {
-          $table_name[$field_name]['filter']['handler'] = 'views_handler_filter_locale_language';
+          $table_name[$field_name]['filter']['handler'] = 'languagefield_handler_filter_locale_language';
         }
         $table_name[$field_name]['relationship'] = array(
           'handler' => 'views_handler_relationship',

@@ -5,6 +5,11 @@
  * Contains the MigrateLanguagefieldFieldHandler class.
  */
 
+// Avoid issues when migrate module is disabled.
+if (!class_exists('MigrateSimpleFieldHandler')) {
+  return;
+}
+
 /**
  * Migrate field handler for language fields.
  */
