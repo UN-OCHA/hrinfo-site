@@ -1092,3 +1092,16 @@ function hr_tools_tokens($type, $tokens, array $data = array(), array $options =
   }
   return $replacements;
 }
+
+/**
+ * Implements hook_url_outbound_alter().
+ */
+function hr_tools_url_outbound_alter(&$path, &$options, $original_path) {
+  $parts = explode('/', $path);
+  if (is_array($parts) && isset($parts[0]) && isset($parts[1]) && $parts[0] === 'system' && $parts[1] === 'files') {
+    $language = new stdClass();
+    $language->language = LANGUAGE_NONE;
+    $language->prefix = '';
+    $options['language'] = $language;
+  }
+}
