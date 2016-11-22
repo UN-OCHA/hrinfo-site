@@ -632,3 +632,30 @@ function hr_core_group_tab_access($entity_type, $etid) {
   // Fallback to the original callback.
   return og_ui_get_group_admin($entity_type, $etid);
 }
+
+/**
+ * Set caching of panel pane.
+ */
+function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types) {
+  $sql = "SELECT * FROM {panels_pane} WHERE type='$type'";
+  if (!empty($subtype)) {
+    $sql .= " AND subtype='$subtype'";
+  }
+  $result = db_query($sql);
+  foreach ($result as $obj) {
+    $cache_settings = array(
+      'method' => 'content',
+      'granularity' => 'context',
+      'settings' => array(
+        'lifetime' => 'none',
+        'content_types' => $node_types,
+      ),
+    );
+
+    db_update('panels_pane')
+      ->fields(array('cache' => serialize($cache_settings)))
+      ->condition('pid', $obj->pid, '=')
+      ->condition('did', $obj->did, '=')
+      ->execute();
+  }
+}
