@@ -215,3 +215,10 @@ function hr_core_update_7009() {
   _hr_core_pane_cache_simple('bean_pane', 'existing_bean');
   _hr_core_pane_cache_simple('block', 'j2h-j2h_4w', 15);
 }
+
+/**
+ * Fix panels caching - displays.
+ */
+function hr_core_update_7010() {
+  _hr_core_display_cache_simple();
+}

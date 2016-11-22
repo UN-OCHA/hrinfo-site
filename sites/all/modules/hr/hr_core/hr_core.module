@@ -685,3 +685,48 @@ function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 5) {
       ->execute();
   }
 }
+
+/**
+ * Set caching of panel display.
+ */
+function _hr_core_display_cache_simple($minutes = 5) {
+  $sql = "SELECT * FROM {panels_display}";
+  $result = db_query($sql);
+  foreach ($result as $obj) {
+    $cache_settings = array(
+      'method' => 'content',
+      'settings' => array(
+        'granularity' => 'context',
+        'lifetime' => 60 * $minutes,
+        'content_types' => array(
+          'acc_application' => 'acc_application',
+          'acc_incident' => 'acc_incident',
+          'hr_assessment' => 'hr_assessment',
+          'hr_news' => 'hr_news',
+          'hr_bundle' => 'hr_bundle',
+          'hr_contact' => 'hr_contact',
+          'hr_dataset' => 'hr_dataset',
+          'hr_disaster' => 'hr_disaster',
+          'hr_discussion' => 'hr_discussion',
+          'hr_document' => 'hr_document',
+          'hr_event' => 'hr_event',
+          'hr_funding' => 'hr_funding',
+          'hr_funding_method' => 'hr_funding_method',
+          'hr_geographic_level' => 'hr_geographic_level',
+          'hr_sector' => 'hr_sector',
+          'hr_indicator' => 'hr_indicator',
+          'hr_infographic' => 'hr_infographic',
+          'hr_office' => 'hr_office',
+          'hr_operation' => 'hr_operation',
+          'hr_page' => 'hr_page',
+          'hr_space' => 'hr_space',
+        ),
+      ),
+    );
+
+    db_update('panels_display')
+      ->fields(array('cache' => serialize($cache_settings)))
+      ->condition('did', $obj->did, '=')
+      ->execute();
+  }
+}
