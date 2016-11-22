@@ -181,6 +181,7 @@ function hr_core_update_7007() {
 function hr_core_update_7008() {
   _hr_core_pane_cache_content_by_type('hr_documents_key_documents', '', array('hr_document' => 'hr_document'));
   _hr_core_pane_cache_content_by_type('hr_infographics_key_infographics', '', array('hr_infographic' => 'hr_infographic'));
+  _hr_core_pane_cache_content_by_type('hr_contacts_key_contacts', '', array('hr_contact' => 'hr_contact'));
 
   _hr_core_pane_cache_content_by_type('views_panes', 'hr_documents_panes-list', array('hr_document' => 'hr_document'));
   _hr_core_pane_cache_content_by_type('views_panes', 'hr_documents_panes-mm_from_context', array('hr_document' => 'hr_document'));
@@ -198,4 +199,19 @@ function hr_core_update_7008() {
 
   _hr_core_pane_cache_content_by_type('views_panes', 'hr_news_panes-list', array('hr_news' => 'hr_news'));
   _hr_core_pane_cache_content_by_type('views_panes', 'hr_contacts_panes-list', array('hr_contact' => 'hr_contact'));
+}
+
+/**
+ * Fix panels caching - part 2.
+ */
+function hr_core_update_7009() {
+  hr_core_update_7008();
+  _hr_core_pane_cache_content_by_type('hr_layout_standard', '', array('hr_document' => 'hr_document', 'hr_operation' => 'hr_operation'));
+  _hr_core_pane_cache_simple('hr_layout_reliefweb');
+  _hr_core_pane_cache_simple('hid_profiles_list');
+  _hr_core_pane_cache_simple('hr_layout_rss_feeds');
+  _hr_core_pane_cache_simple('twitter', '', 30);
+  _hr_core_pane_cache_simple('bean_pane', 'fts_visualization', 60);
+  _hr_core_pane_cache_simple('bean_pane', 'existing_bean');
+  _hr_core_pane_cache_simple('block', 'j2h-j2h_4w', 15);
 }
