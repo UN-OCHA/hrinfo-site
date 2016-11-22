@@ -636,7 +636,7 @@ function hr_core_group_tab_access($entity_type, $etid) {
 /**
  * Set caching of panel pane.
  */
-function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minutes = 5) {
+function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minutes = 'none') {
   $sql = "SELECT * FROM {panels_pane} WHERE type='$type'";
   if (!empty($subtype)) {
     $sql .= " AND subtype='$subtype'";
@@ -647,7 +647,7 @@ function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minu
       'method' => 'content',
       'settings' => array(
         'granularity' => 'context',
-        'lifetime' => 60 * $minutes,
+        'lifetime' => $minutes === 'none' ? $minutes : 60 * $minutes,
         'content_types' => $node_types,
       ),
     );
@@ -663,7 +663,7 @@ function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minu
 /**
  * Set caching of panel pane.
  */
-function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 5) {
+function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 15) {
   $sql = "SELECT * FROM {panels_pane} WHERE type='$type'";
   if (!empty($subtype)) {
     $sql .= " AND subtype='$subtype'";
@@ -689,7 +689,7 @@ function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 5) {
 /**
  * Set caching of panel display.
  */
-function _hr_core_display_cache_simple($minutes = 5) {
+function _hr_core_display_cache_simple($minutes = 'none') {
   $sql = "SELECT * FROM {panels_display}";
   $result = db_query($sql);
   foreach ($result as $obj) {
@@ -697,7 +697,7 @@ function _hr_core_display_cache_simple($minutes = 5) {
       'method' => 'content',
       'settings' => array(
         'granularity' => 'context',
-        'lifetime' => 60 * $minutes,
+        'lifetime' => $minutes === 'none' ? $minutes : 60 * $minutes,
         'content_types' => array(
           'acc_application' => 'acc_application',
           'acc_incident' => 'acc_incident',

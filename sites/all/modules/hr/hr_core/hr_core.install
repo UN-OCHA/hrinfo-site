@@ -205,15 +205,14 @@ function hr_core_update_7008() {
  * Fix panels caching - part 2.
  */
 function hr_core_update_7009() {
-  hr_core_update_7008();
   _hr_core_pane_cache_content_by_type('hr_layout_standard', '', array('hr_document' => 'hr_document', 'hr_operation' => 'hr_operation'));
   _hr_core_pane_cache_simple('hr_layout_reliefweb');
   _hr_core_pane_cache_simple('hid_profiles_list');
   _hr_core_pane_cache_simple('hr_layout_rss_feeds');
-  _hr_core_pane_cache_simple('twitter', '', 30);
+  _hr_core_pane_cache_simple('twitter', '', 60);
   _hr_core_pane_cache_simple('bean_pane', 'fts_visualization', 60);
   _hr_core_pane_cache_simple('bean_pane', 'existing_bean');
-  _hr_core_pane_cache_simple('block', 'j2h-j2h_4w', 15);
+  _hr_core_pane_cache_simple('block', 'j2h-j2h_4w', 60);
 }
 
 /**
@@ -221,4 +220,13 @@ function hr_core_update_7009() {
  */
 function hr_core_update_7010() {
   _hr_core_display_cache_simple();
+}
+
+/**
+ * Fix panels caching - reset all.
+ */
+function hr_core_update_7011() {
+  hr_core_update_7008();
+  hr_core_update_7009();
+  hr_core_update_7010();
 }
