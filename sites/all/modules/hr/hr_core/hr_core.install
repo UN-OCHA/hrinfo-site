@@ -222,12 +222,3 @@ function hr_core_update_7009() {
 function hr_core_update_7010() {
   _hr_core_display_cache_simple(15);
 }
-
-/**
- * Fix panels caching - reset all.
- */
-function hr_core_update_7011() {
-  hr_core_update_7008();
-  hr_core_update_7009();
-  hr_core_update_7010();
-}
