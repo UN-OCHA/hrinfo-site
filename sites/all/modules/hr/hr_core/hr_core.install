@@ -199,13 +199,14 @@ function hr_core_update_7008() {
 
   _hr_core_pane_cache_content_by_type('views_panes', 'hr_news_panes-list', array('hr_news' => 'hr_news'));
   _hr_core_pane_cache_content_by_type('views_panes', 'hr_contacts_panes-list', array('hr_contact' => 'hr_contact'));
+
+  _hr_core_pane_cache_content_by_type('hr_layout_standard', '', array('hr_document' => 'hr_document', 'hr_operation' => 'hr_operation'));
 }
 
 /**
  * Fix panels caching - part 2.
  */
 function hr_core_update_7009() {
-  _hr_core_pane_cache_content_by_type('hr_layout_standard', '', array('hr_document' => 'hr_document', 'hr_operation' => 'hr_operation'));
   _hr_core_pane_cache_simple('hr_layout_reliefweb');
   _hr_core_pane_cache_simple('hid_profiles_list');
   _hr_core_pane_cache_simple('hr_layout_rss_feeds');
@@ -219,7 +220,7 @@ function hr_core_update_7009() {
  * Fix panels caching - displays.
  */
 function hr_core_update_7010() {
-  _hr_core_display_cache_simple();
+  _hr_core_display_cache_simple(15);
 }
 
 /**
