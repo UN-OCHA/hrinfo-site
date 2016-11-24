@@ -199,11 +199,15 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
   $hpc_images = '';
   $hpc_links = '';
   foreach ($hpc as $hpc_doc) {
-    $hpc_images .= $hpc_doc['image'];
-    $hpc_links .= $hpc_doc['link'];
+    if (isset($hpc_doc['image'])) {
+      $hpc_images .= $hpc_doc['image'];
+    }
+    if (isset($hpc_doc['link'])) {
+      $hpc_links .= $hpc_doc['link'];
+    }
   }
 
-  
+
   // initial content is blank
   $block->title = '';
   $block->content = '';
@@ -219,7 +223,7 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
   }
   $block->content .= '<a href="#ocha" role="tab" data-toggle="tab">'.t('OCHA Products').'</a></li>
   </ul>
-  
+
   <!-- Tab panes -->
   <div class="tab-content">';
   if (!empty($hpc)) {
@@ -259,7 +263,7 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
         function() { });
     })(jQuery);
   </script>';
-  
+
   return $block;
 }
 
@@ -357,4 +361,3 @@ function _hr_layout_get_list_item($node, $term, $type, $prefix, $initial_state =
   }
   return $out;
 }
- 
