@@ -696,7 +696,10 @@ function _hr_core_display_cache_simple($minutes = 'none') {
     $cache_settings = array(
       'method' => 'content',
       'settings' => array(
-        'granularity' => 'context',
+        'granularity' => array(
+          'context' => 'context',
+          'user_role' => 'user_role',
+        ),
         'lifetime' => $minutes === 'none' ? $minutes : 60 * $minutes,
         'content_types' => array(
           'acc_application' => 'acc_application',
