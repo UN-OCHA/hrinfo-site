@@ -228,6 +228,7 @@ function hr_infographics_feeds_importer_default() {
         'input_format' => 'plain_text',
         'skip_hash_check' => 0,
         'bundle' => 'hr_infographic',
+        'update_non_existent' => 'skip',
       ),
     ),
     'content_type' => '',
