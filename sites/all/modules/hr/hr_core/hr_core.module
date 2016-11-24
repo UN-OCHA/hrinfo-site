@@ -104,24 +104,30 @@ function hr_core_entity_presave($node, $type) {
  * Implements hook_field_extra_fields()
  */
 function hr_core_field_extra_fields() {
-  $extra['node']['hr_document']['display'] = array(
-    'hr_core_share_button' => array(
-      'label' => t('Share button'),
-      'description' => t('Share button'),
-      'weight' => 0,
-    ),
-    'hr_core_read_more_button' => array(
-      'label' => t('Read more button'),
-      'description' => t('Read more button'),
-      'weight' => 0,
-    ),
-    'hr_core_files_download_button' => array(
-      'label' => t('Download button'),
-      'description' => t('Download button'),
-      'weight' => 0,
-      'callback' => '_hr_core_files_download_button',
-    ),
+  $content_types = array(
+    'hr_document',
+    'hr_infographic',
   );
+  foreach ($content_types as $content_type) {
+    $extra['node'][$content_type]['display'] = array(
+      'hr_core_share_button' => array(
+        'label' => t('Share button'),
+        'description' => t('Share button'),
+        'weight' => 0,
+      ),
+      'hr_core_read_more_button' => array(
+        'label' => t('Read more button'),
+        'description' => t('Read more button'),
+        'weight' => 0,
+      ),
+      'hr_core_files_download_button' => array(
+        'label' => t('Download button'),
+        'description' => t('Download button'),
+        'weight' => 0,
+        'callback' => '_hr_core_files_download_button',
+      ),
+    );
+  }
 
   return $extra;
 }
