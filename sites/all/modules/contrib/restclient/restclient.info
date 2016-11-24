@@ -5,7 +5,9 @@ description = Enables a standard REST API to connect to RESTful services
 core = 7.x
 package = Web Services
 
-dependencies[] = chr
+suggests[] = chr
+suggests[] = oauth2_client
+suggests[] = hybridauth
 
 ; Files
 files[] = restclient.test
@@ -14,9 +16,9 @@ files[] = restclient.wsconnector.inc
 ; Configuration page
 configure = admin/config/services/restclient
 
-; Information added by Drupal.org packaging script on 2014-05-05
-version = "7.x-2.0-beta3"
+; Information added by Drupal.org packaging script on 2016-09-19
+version = "7.x-2.0"
 core = "7.x"
 project = "restclient"
-datestamp = "1399320228"
+datestamp = "1474305840"
 

@@ -632,3 +632,101 @@ function hr_core_group_tab_access($entity_type, $etid) {
   // Fallback to the original callback.
   return og_ui_get_group_admin($entity_type, $etid);
 }
+
+/**
+ * Set caching of panel pane.
+ */
+function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minutes = 'none') {
+  $sql = "SELECT * FROM {panels_pane} WHERE type='$type'";
+  if (!empty($subtype)) {
+    $sql .= " AND subtype='$subtype'";
+  }
+  $result = db_query($sql);
+  foreach ($result as $obj) {
+    $cache_settings = array(
+      'method' => 'content',
+      'settings' => array(
+        'granularity' => 'context',
+        'lifetime' => $minutes === 'none' ? $minutes : 60 * $minutes,
+        'content_types' => $node_types,
+      ),
+    );
+
+    db_update('panels_pane')
+      ->fields(array('cache' => serialize($cache_settings)))
+      ->condition('pid', $obj->pid, '=')
+      ->condition('did', $obj->did, '=')
+      ->execute();
+  }
+}
+
+/**
+ * Set caching of panel pane.
+ */
+function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 15) {
+  $sql = "SELECT * FROM {panels_pane} WHERE type='$type'";
+  if (!empty($subtype)) {
+    $sql .= " AND subtype='$subtype'";
+  }
+  $result = db_query($sql);
+  foreach ($result as $obj) {
+    $cache_settings = array(
+      'method' => 'simple',
+      'settings' => array(
+        'lifetime' => 60 * $minutes,
+        'granularity' => 'context',
+      ),
+    );
+
+    db_update('panels_pane')
+      ->fields(array('cache' => serialize($cache_settings)))
+      ->condition('pid', $obj->pid, '=')
+      ->condition('did', $obj->did, '=')
+      ->execute();
+  }
+}
+
+/**
+ * Set caching of panel display.
+ */
+function _hr_core_display_cache_simple($minutes = 'none') {
+  $sql = "SELECT * FROM {panels_display}";
+  $result = db_query($sql);
+  foreach ($result as $obj) {
+    $cache_settings = array(
+      'method' => 'content',
+      'settings' => array(
+        'granularity' => 'context',
+        'lifetime' => $minutes === 'none' ? $minutes : 60 * $minutes,
+        'content_types' => array(
+          'acc_application' => 'acc_application',
+          'acc_incident' => 'acc_incident',
+          'hr_assessment' => 'hr_assessment',
+          'hr_news' => 'hr_news',
+          'hr_bundle' => 'hr_bundle',
+          'hr_contact' => 'hr_contact',
+          'hr_dataset' => 'hr_dataset',
+          'hr_disaster' => 'hr_disaster',
+          'hr_discussion' => 'hr_discussion',
+          'hr_document' => 'hr_document',
+          'hr_event' => 'hr_event',
+          'hr_funding' => 'hr_funding',
+          'hr_funding_method' => 'hr_funding_method',
+          'hr_geographic_level' => 'hr_geographic_level',
+          'hr_sector' => 'hr_sector',
+          'hr_indicator' => 'hr_indicator',
+          'hr_infographic' => 'hr_infographic',
+          'hr_office' => 'hr_office',
+          'hr_operation' => 'hr_operation',
+          'hr_page' => 'hr_page',
+          'hr_space' => 'hr_space',
+        ),
+      ),
+    );
+
+    db_update('panels_display')
+      ->fields(array('cache' => serialize($cache_settings)))
+      ->condition('did', $obj->did, '=')
+      ->execute();
+  }
+}

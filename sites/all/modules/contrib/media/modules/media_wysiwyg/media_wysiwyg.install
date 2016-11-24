@@ -6,6 +6,13 @@
  */
 
 /**
+ * Implements hook_install().
+ */
+function media_wysiwyg_install() {
+  media_wysiwyg_update_7204();
+}
+
+/**
  * Implements hook_uninstall().
  */
 function media_wysiwyg_uninstall() {
@@ -17,6 +24,7 @@ function media_wysiwyg_uninstall() {
   variable_del('media_wysiwyg_wysiwyg_allowed_types');
   variable_del('media_wysiwyg_wysiwyg_allowed_attributes');
   variable_del('media_wysiwyg_wysiwyg_browser_plugins');
+  variable_del('media_wysiwyg_wysiwyg_override_field_types');
 }
 
 /**
@@ -51,4 +59,50 @@ function media_wysiwyg_update_7201() {
  */
 function media_wysiwyg_update_7202() {
   variable_set('media_wysiwyg_default_render', 'field_attach');
+}
+
+/**
+ * Move integration with the stand-alone CKEditor module into the Media CKEditor module.
+ */
+function media_wysiwyg_update_7203() {
+  $output = '';
+
+  if (module_exists('ckeditor')) {
+    $output .= t('CKEditor integration has been moved to the Media CKEditor module.');
+    $output .= t('If you are using the stand-alone CKEditor module in combination with the CKEditor plugin provided by Media WYSIWYG then you must download and enable the <a href="@url">Media CKEditor</a> module.', array('@url' => 'https://www.drupal.org/project/media_ckeditor'));
+  }
+
+  return $output;
+}
+/**
+ * Whitelists certain fields for WYSIWYG overriding.
+ */
+function media_wysiwyg_update_7204() {
+  $instances = field_read_instances(array('entity_type' => 'file'));
+  $updated = array();
+  $set_to_default = array();
+  foreach ($instances as $instance) {
+    $field_info = field_info_field($instance['field_name']);
+    $allowed_field_types = variable_get('media_wysiwyg_wysiwyg_override_field_types', array('text', 'text_long'));
+    if (in_array($field_info['type'], $allowed_field_types)) {
+      if (!isset($instance['settings']['wysiwyg_override'])) {
+        $instance['settings']['wysiwyg_override'] = 1;
+        field_update_instance($instance);
+        $set_to_default[] = $instance['field_name'];
+      }
+    }
+    elseif (isset($instance['settings']['wysiwyg_override'])) {
+      unset($instance['settings']['wysiwyg_override']);
+      field_update_instance($instance);
+      $updated[] = $instance['field_name'];
+    }
+  }
+  if (count($updated) || count($set_to_default)) {
+    $updated_string = implode(', ', $updated);
+    $default_string = implode(', ', $set_to_default);
+    return t("Updated the following field instances: @updated_string so they can't be overridden when the file is inserted in the WYSIWYG. Updated the following fields @default_string so that they continue to show up when a file is inserted.", array(
+      '@updated_string' => $updated_string,
+      '@default_string' => $default_string,
+    ));
+  }
 }

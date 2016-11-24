@@ -25,6 +25,7 @@ function googleanalytics_uninstall() {
   variable_del('googleanalytics_roles');
   variable_del('googleanalytics_site_search');
   variable_del('googleanalytics_trackadsense');
+  variable_del('googleanalytics_trackcolorbox');
   variable_del('googleanalytics_trackdoubleclick');
   variable_del('googleanalytics_tracker_anonymizeip');
   variable_del('googleanalytics_trackfiles');

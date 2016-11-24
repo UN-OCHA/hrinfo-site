@@ -12,3 +12,59 @@ function hr_tools_update_7001() {
   module_disable(array('piwik'));
   module_disable(array('hr_stats'));
 }
+
+/**
+ * Change all file fields to throbber.
+ */
+function hr_tools_update_7002() {
+  $fields = array(
+    array(
+      'entity_type' => 'field_collection_item',
+      'bundle' => 'field_files_collection',
+      'field_name' => 'field_file',
+    ),
+    array(
+      'entity_type' => 'field_collection_item',
+      'bundle' => 'field_asst_data',
+      'field_name' => 'field_asst_file',
+    ),
+    array(
+      'entity_type' => 'field_collection_item',
+      'bundle' => 'field_asst_data',
+      'field_name' => 'field_asst_file_rest',
+    ),
+    array(
+      'entity_type' => 'field_collection_item',
+      'bundle' => 'field_asst_questionnaire',
+      'field_name' => 'field_asst_file',
+    ),
+    array(
+      'entity_type' => 'field_collection_item',
+      'bundle' => 'field_asst_questionnaire',
+      'field_name' => 'field_asst_file_rest',
+    ),
+    array(
+      'entity_type' => 'field_collection_item',
+      'bundle' => 'field_asst_report',
+      'field_name' => 'field_asst_file',
+    ),
+    array(
+      'entity_type' => 'field_collection_item',
+      'bundle' => 'field_asst_report',
+      'field_name' => 'field_asst_file_rest',
+    ),
+  );
+
+  foreach ($fields as $field) {
+    $entity_type = $field['entity_type'];
+    $field_name = $field['field_name'];
+    $field_info = field_info_field($field_name);
+
+    $bundle = $field['bundle'];
+    $field_instance = field_info_instance($entity_type, $field_name, $bundle);
+    if ($field_instance['widget']['settings']['progress_indicator'] != 'throbber') {
+      $field_instance['widget']['settings']['progress_indicator'] = 'throbber';
+      field_update_instance($field_instance);
+    }
+  }
+}

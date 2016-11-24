@@ -12,12 +12,20 @@ Requirements
 
 * Google Analytics user account
 
-
 Installation
 ============
 Copy the 'googleanalytics' module directory in to your Drupal
 sites/all/modules directory as usual.
 
+Upgrading from 6.x-3.x and 7.x-1.x
+==================================
+If you upgrade from 6.x-3.x and 7.x-1.x (ga.js) to 7.x-2.x (analytics.js) you
+should verify if you used custom variables. Write down your settings or make a 
+screenshot. You need to re-configure the settings to use custom dimensions or
+metrics. There is no automatic upgrade path for custom variables feature. All
+other module settings are upgraded automatically.
+
+See https://support.google.com/analytics/answer/2795983?hl=en for more details.
 
 Usage
 =====

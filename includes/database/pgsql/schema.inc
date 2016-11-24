@@ -493,7 +493,8 @@ class DatabaseSchema_pgsql extends DatabaseSchema {
       return FALSE;
     }
 
-    $this->connection->query('DROP INDEX ' . $this->prefixNonTable($table, $name, 'idx'));
+    $index_name = '{' . $table . '}_' . $name . '_idx';
+    $this->connection->query('DROP INDEX ' . $index_name);
     return TRUE;
   }
 

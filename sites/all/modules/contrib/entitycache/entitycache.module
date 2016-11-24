@@ -201,6 +201,11 @@ class EntityCacheNodeController extends NodeController {
     parent::resetCache($ids);
   }
   public function load($ids = array(), $conditions = array()) {
+    foreach ($ids as $key => $value) {
+      if (!is_numeric($value)) {
+        unset($ids[$key]);
+      }
+    }
     return EntityCacheControllerHelper::entityCacheLoad($this, $ids, $conditions);
   }
 }

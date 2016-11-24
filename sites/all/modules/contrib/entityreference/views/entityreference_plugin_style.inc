@@ -55,7 +55,7 @@ class entityreference_plugin_style extends views_plugin_style {
       foreach ($records as $index => $values) {
         $this->view->row_index = $index;
         // Sanitize html, remove line breaks and extra whitespace.
-        $results[$values->{$id_field_alias}] = trim(filter_xss_admin(preg_replace('/\s\s+/', ' ', str_replace("\n", '', $this->row_plugin->render($values)))));
+        $results[$values->{$id_field_alias}] = filter_xss_admin(preg_replace('/\s\s+/', ' ', str_replace("\n", '', $this->row_plugin->render($values))));
       }
     }
     unset($this->view->row_index);
