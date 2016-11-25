@@ -229,3 +229,14 @@ function hr_core_update_7010() {
 function hr_core_update_7011() {
   _hr_core_display_cache_content(15);
 }
+
+/**
+ * Disable discussions and comments.
+ */
+function hr_core_update_7012() {
+  module_disable(array(
+    'hr_discussions',
+    'comment_og',
+    'comment',
+  ));
+}
