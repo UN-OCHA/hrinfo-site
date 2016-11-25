@@ -715,7 +715,7 @@ function hr_core_group_tab_access($entity_type, $etid) {
 /**
  * Set caching of panel pane.
  */
-function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minutes = 'none') {
+function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minutes = 'none', $margin = 5) {
   $sql = "SELECT * FROM {panels_pane} WHERE type='$type'";
   if (!empty($subtype)) {
     $sql .= " AND subtype='$subtype'";
@@ -726,7 +726,7 @@ function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minu
       'method' => 'content',
       'settings' => array(
         'granularity' => 'context',
-        'lifetime' => $minutes === 'none' ? $minutes : 60 * $minutes,
+        'lifetime' => $minutes === 'none' ? $minutes : rand(60 * $minutes, 60 * ($minutes + $margin)),
         'content_types' => $node_types,
       ),
     );
@@ -742,7 +742,7 @@ function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minu
 /**
  * Set caching of panel pane.
  */
-function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 15) {
+function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 15, $margin = 5) {
   $sql = "SELECT * FROM {panels_pane} WHERE type='$type'";
   if (!empty($subtype)) {
     $sql .= " AND subtype='$subtype'";
@@ -752,7 +752,7 @@ function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 15) {
     $cache_settings = array(
       'method' => 'simple',
       'settings' => array(
-        'lifetime' => 60 * $minutes,
+        'lifetime' => $minutes === 'none' ? $minutes : rand(60 * $minutes, 60 * ($minutes + $margin)),
         'granularity' => 'context',
       ),
     );
@@ -768,7 +768,7 @@ function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 15) {
 /**
  * Set caching of panel display.
  */
-function _hr_core_display_cache_simple($minutes = 'none') {
+function _hr_core_display_cache_content($minutes = 'none', $margin = 5) {
   $sql = "SELECT * FROM {panels_display}";
   $result = db_query($sql);
   foreach ($result as $obj) {
@@ -779,7 +779,7 @@ function _hr_core_display_cache_simple($minutes = 'none') {
           'context' => 'context',
           'user_role' => 'user_role',
         ),
-        'lifetime' => $minutes === 'none' ? $minutes : 60 * $minutes,
+        'lifetime' => $minutes === 'none' ? $minutes : rand(60 * $minutes, 60 * ($minutes + $margin)),
         'content_types' => array(
           'acc_application' => 'acc_application',
           'acc_incident' => 'acc_incident',

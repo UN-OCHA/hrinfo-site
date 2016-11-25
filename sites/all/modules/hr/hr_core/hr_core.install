@@ -220,12 +220,12 @@ function hr_core_update_7009() {
  * Fix panels caching - displays.
  */
 function hr_core_update_7010() {
-  _hr_core_display_cache_simple(15);
+  _hr_core_display_cache_content(15);
 }
 
 /**
  * Fix panels caching - displays user role.
  */
 function hr_core_update_7011() {
-  _hr_core_display_cache_simple(15);
+  _hr_core_display_cache_content(15);
 }
