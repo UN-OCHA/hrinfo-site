@@ -11,7 +11,7 @@ function hr_infographics_field_default_field_instances() {
   $field_instances = array();
 
   // Exported field_instance:
-  // 'fieldable_panels_pane-hr_infographics-field_infographics'
+  // 'fieldable_panels_pane-hr_infographics-field_infographics'.
   $field_instances['fieldable_panels_pane-hr_infographics-field_infographics'] = array(
     'bundle' => 'hr_infographics',
     'default_value' => NULL,
@@ -24,6 +24,7 @@ function hr_infographics_field_default_field_instances() {
         'module' => 'entityreference',
         'settings' => array(
           'links' => TRUE,
+          'use_content_language' => TRUE,
           'view_mode' => 'default',
         ),
         'type' => 'entityreference_entity_view',
@@ -33,6 +34,7 @@ function hr_infographics_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => 1,
         ),
         'type' => 'entityreference_label',
@@ -43,6 +45,7 @@ function hr_infographics_field_default_field_instances() {
         'module' => 'entityreference',
         'settings' => array(
           'links' => 0,
+          'use_content_language' => TRUE,
           'view_mode' => 'teaser',
         ),
         'type' => 'entityreference_entity_view',
@@ -75,12 +78,12 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-body'
+  // Exported field_instance: 'node-hr_infographic-body'.
   $field_instances['node-hr_infographic-body'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Try to always include here the text of the document (like the entire press release or the executive summary in case of lengthy publications). If no text is available add a description of the file(s) you are publishing.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -108,14 +111,15 @@ function hr_infographics_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'body',
     'label' => 'Body',
-    'required' => FALSE,
+    'required' => 0,
     'settings' => array(
-      'display_summary' => TRUE,
+      'display_summary' => 0,
       'entity_translation_sync' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'text',
       'settings' => array(
         'rows' => 20,
@@ -126,7 +130,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_bundles'
+  // Exported field_instance: 'node-hr_infographic-field_bundles'.
   $field_instances['node-hr_infographic-field_bundles'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
@@ -138,6 +142,7 @@ function hr_infographics_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -187,7 +192,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_coordination_hubs'
+  // Exported field_instance: 'node-hr_infographic-field_coordination_hubs'.
   $field_instances['node-hr_infographic-field_coordination_hubs'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
@@ -199,6 +204,7 @@ function hr_infographics_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -241,7 +247,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_data_sources'
+  // Exported field_instance: 'node-hr_infographic-field_data_sources'.
   $field_instances['node-hr_infographic-field_data_sources'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
@@ -308,7 +314,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_disasters'
+  // Exported field_instance: 'node-hr_infographic-field_disasters'.
   $field_instances['node-hr_infographic-field_disasters'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
@@ -320,6 +326,7 @@ function hr_infographics_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -362,7 +369,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_files_collection'
+  // Exported field_instance: 'node-hr_infographic-field_files_collection'.
   $field_instances['node-hr_infographic-field_files_collection'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
@@ -412,7 +419,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_fundings'
+  // Exported field_instance: 'node-hr_infographic-field_fundings'.
   $field_instances['node-hr_infographic-field_fundings'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
@@ -424,6 +431,7 @@ function hr_infographics_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -466,7 +474,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_infographic_type'
+  // Exported field_instance: 'node-hr_infographic-field_infographic_type'.
   $field_instances['node-hr_infographic-field_infographic_type'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
@@ -478,6 +486,7 @@ function hr_infographics_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -529,18 +538,19 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_locations'
+  // Exported field_instance: 'node-hr_infographic-field_locations'.
   $field_instances['node-hr_infographic-field_locations'] = array(
     'bundle' => 'hr_infographic',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).',
     'display' => array(
       'default' => array(
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -576,23 +586,27 @@ function hr_infographics_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 1,
+      'active' => TRUE,
       'module' => 'shs',
       'settings' => array(
+        'create_new_levels' => 0,
+        'create_new_terms' => 0,
+        'force_deepest' => 0,
+        'node_count' => 0,
         'shs' => array(
-          'create_new_levels' => 0,
-          'create_new_terms' => 0,
-          'force_deepest' => 0,
-          'node_count' => 0,
-          'use_chosen' => 'always',
+          'create_new_levels' => FALSE,
+          'create_new_terms' => FALSE,
+          'force_deepest' => FALSE,
+          'node_count' => FALSE,
         ),
+        'use_chosen' => 'chosen',
       ),
       'type' => 'taxonomy_shs',
       'weight' => 7,
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_organizations'
+  // Exported field_instance: 'node-hr_infographic-field_organizations'.
   $field_instances['node-hr_infographic-field_organizations'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => array(),
@@ -604,6 +618,7 @@ function hr_infographics_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -651,11 +666,11 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_publication_date'
+  // Exported field_instance: 'node-hr_infographic-field_publication_date'.
   $field_instances['node-hr_infographic-field_publication_date'] = array(
     'bundle' => 'hr_infographic',
     'deleted' => 0,
-    'description' => 'Indicate when the document has originally been published.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -666,6 +681,7 @@ function hr_infographics_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
           'show_repeat_rule' => 'show',
         ),
         'type' => 'date_default',
@@ -714,12 +730,12 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_related_content'
+  // Exported field_instance: 'node-hr_infographic-field_related_content'.
   $field_instances['node-hr_infographic-field_related_content'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Add links of content that is related to the map/infographic you are publishing (example: language versions of the same map/infographic) by indicating the title of the content and its url. When using the Search function make sure to search by content title.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -749,6 +765,7 @@ function hr_infographics_field_default_field_instances() {
       'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
+        'configurable_class' => 0,
         'configurable_title' => 0,
         'rel' => '',
         'target' => '_blank',
@@ -765,7 +782,7 @@ function hr_infographics_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'required',
-      'title_label_use_field_label' => FALSE,
+      'title_label_use_field_label' => 0,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -781,7 +798,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_sectors'
+  // Exported field_instance: 'node-hr_infographic-field_sectors'.
   $field_instances['node-hr_infographic-field_sectors'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
@@ -793,6 +810,7 @@ function hr_infographics_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -835,7 +853,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-field_themes'
+  // Exported field_instance: 'node-hr_infographic-field_themes'.
   $field_instances['node-hr_infographic-field_themes'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
@@ -847,6 +865,7 @@ function hr_infographics_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -892,7 +911,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-group_content_access'
+  // Exported field_instance: 'node-hr_infographic-group_content_access'.
   $field_instances['node-hr_infographic-group_content_access'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => array(
@@ -952,7 +971,7 @@ function hr_infographics_field_default_field_instances() {
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_infographic-og_group_ref'
+  // Exported field_instance: 'node-hr_infographic-og_group_ref'.
   $field_instances['node-hr_infographic-og_group_ref'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
@@ -1030,7 +1049,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-title_field'
+  // Exported field_instance: 'node-hr_infographic-title_field'.
   $field_instances['node-hr_infographic-title_field'] = array(
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
@@ -1079,7 +1098,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_infographic_type-field_acronym'
+  // Exported field_instance: 'taxonomy_term-hr_infographic_type-field_acronym'.
   $field_instances['taxonomy_term-hr_infographic_type-field_acronym'] = array(
     'bundle' => 'hr_infographic_type',
     'default_value' => NULL,
@@ -1118,7 +1137,7 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_infographic_type-name_field'
+  // Exported field_instance: 'taxonomy_term-hr_infographic_type-name_field'.
   $field_instances['taxonomy_term-hr_infographic_type-name_field'] = array(
     'bundle' => 'hr_infographic_type',
     'default_value' => NULL,
@@ -1158,6 +1177,7 @@ function hr_infographics_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Acronym');
+  t('Add links of content that is related to the map/infographic you are publishing (example: language versions of the same map/infographic) by indicating the title of the content and its url. When using the Search function make sure to search by content title.');
   t('Body');
   t('Clusters/Sectors');
   t('Coordination hubs');
@@ -1167,16 +1187,17 @@ function hr_infographics_field_default_field_instances() {
   t('Fundings');
   t('Global Clusters');
   t('Group content visibility');
-  t('Indicate when the document has originally been published.');
   t('Infographics');
   t('Locations');
   t('Name');
   t('Organization');
   t('Original Publication Date');
   t('Related content');
+  t('Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).');
   t('Space(s)');
   t('Themes');
   t('Title');
+  t('Try to always include here the text of the document (like the entire press release or the executive summary in case of lengthy publications). If no text is available add a description of the file(s) you are publishing.');
   t('Type');
 
   return $field_instances;

@@ -10,7 +10,7 @@
 function hr_infographics_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_data_sources'
+  // Exported field_base: 'field_data_sources'.
   $field_bases['field_data_sources'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -44,7 +44,7 @@ function hr_infographics_field_default_field_bases() {
     'type' => 'link_field',
   );
 
-  // Exported field_base: 'field_infographic_type'
+  // Exported field_base: 'field_infographic_type'.
   $field_bases['field_infographic_type'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -81,7 +81,7 @@ function hr_infographics_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_infographics'
+  // Exported field_base: 'field_infographics'.
   $field_bases['field_infographics'] = array(
     'active' => 1,
     'cardinality' => -1,

@@ -4071,3 +4071,17 @@ table.stylish-table tr:nth-child(2n) {
 
 .front .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents { margin-bottom: 30px; }
 .front .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system { margin-bottom: 30px; }
+
+.pane-node-hr-core-files-download-button {
+  display: inline-block;
+}
+
+.radix-layouts-footer .panel-panel-inner {
+  text-align: right;
+}
+
+.radix-layouts-footer .panel-pane,
+.radix-layouts-footer .panel-separator {
+  display: inline-block;
+}
+

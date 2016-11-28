@@ -106,7 +106,8 @@
 
 
   .pane-node-hr-core-share-button,
-  .pane-node-field-files-collection {
+  .pane-node-field-files-collection,
+  .pane-node-hr-core-files-download-button {
     display: inline-block;
   }
 
@@ -632,4 +633,13 @@
 
 .form-item-range {
   margin-top: 0;
+}
+
+.radix-layouts-footer .panel-panel-inner {
+  text-align: right;
+}
+
+.radix-layouts-footer .panel-pane,
+.radix-layouts-footer .panel-separator {
+  display: inline-block;
 }

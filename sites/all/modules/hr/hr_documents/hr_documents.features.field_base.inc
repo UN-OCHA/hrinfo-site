@@ -10,13 +10,16 @@
 function hr_documents_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_document_type'
+  // Exported field_base: 'field_document_type'.
   $field_bases['field_document_type'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_document_type',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -47,7 +50,7 @@ function hr_documents_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_documents'
+  // Exported field_base: 'field_documents'.
   $field_bases['field_documents'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -83,13 +86,16 @@ function hr_documents_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_file'
+  // Exported field_base: 'field_file'.
   $field_bases['field_file'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_file',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'fid' => array(
         0 => 'fid',
@@ -110,7 +116,7 @@ function hr_documents_field_default_field_bases() {
     'type' => 'file',
   );
 
-  // Exported field_base: 'field_files_collection'
+  // Exported field_base: 'field_files_collection'.
   $field_bases['field_files_collection'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -124,12 +130,16 @@ function hr_documents_field_default_field_bases() {
       'revision_id' => array(
         0 => 'revision_id',
       ),
+      'value' => array(
+        0 => 'value',
+      ),
     ),
     'locked' => 0,
     'module' => 'field_collection',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'hide_blank_items' => 1,
+      'hide_blank_items' => 0,
+      'hide_initial_item' => 0,
       'path' => '',
       'profile2_private' => FALSE,
     ),
@@ -137,7 +147,7 @@ function hr_documents_field_default_field_bases() {
     'type' => 'field_collection',
   );
 
-  // Exported field_base: 'field_language'
+  // Exported field_base: 'field_language'.
   $field_bases['field_language'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -171,7 +181,7 @@ function hr_documents_field_default_field_bases() {
     'type' => 'language_field',
   );
 
-  // Exported field_base: 'field_publication_date'
+  // Exported field_base: 'field_publication_date'.
   $field_bases['field_publication_date'] = array(
     'active' => 1,
     'cardinality' => 1,

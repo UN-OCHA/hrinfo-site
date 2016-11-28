@@ -12,7 +12,6 @@ dependencies[] = hr_assessments
 dependencies[] = hr_bookmarks
 dependencies[] = hr_contacts
 dependencies[] = hr_datasets
-dependencies[] = hr_discussions
 dependencies[] = hr_events
 dependencies[] = hr_help
 dependencies[] = hr_indicators

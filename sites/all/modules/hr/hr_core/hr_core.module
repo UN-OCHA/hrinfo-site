@@ -16,6 +16,10 @@ function hr_core_entity_info_alter(&$entity_info) {
     'label' => t('Search result'),
     'custom settings' => TRUE,
   );
+  $entity_info['field_collection_item']['view modes']['search_result'] = array(
+    'label' => t('Search result'),
+    'custom settings' => TRUE,
+  );
   $entity_info['fieldable_panels_pane']['view modes']['teaser'] = array(
     'label' => t('Teaser'),
     'custom settings' => TRUE,
@@ -100,20 +104,95 @@ function hr_core_entity_presave($node, $type) {
  * Implements hook_field_extra_fields()
  */
 function hr_core_field_extra_fields() {
-  $extra['node']['hr_document']['display'] = array(
-    'hr_core_share_button' => array(
-      'label' => t('Share button'),
-      'description' => t('Share button'),
-      'weight' => 0,
-    ),
-    'hr_core_read_more_button' => array(
-      'label' => t('Read more button'),
-      'description' => t('Read more button'),
-      'weight' => 0,
-    ),
+  $content_types = array(
+    'hr_document',
+    'hr_infographic',
   );
+  foreach ($content_types as $content_type) {
+    $extra['node'][$content_type]['display'] = array(
+      'hr_core_share_button' => array(
+        'label' => t('Share button'),
+        'description' => t('Share button'),
+        'weight' => 0,
+      ),
+      'hr_core_read_more_button' => array(
+        'label' => t('Read more button'),
+        'description' => t('Read more button'),
+        'weight' => 0,
+      ),
+      'hr_core_files_download_button' => array(
+        'label' => t('Download button'),
+        'description' => t('Download button'),
+        'weight' => 0,
+        'callback' => '_hr_core_files_download_button',
+      ),
+    );
+  }
 
   return $extra;
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function hr_core_entity_view($entity, $type, $view_mode, $langcode) {
+  if ($type == 'node' && isset($entity->type)) {
+    $extra_fields = field_info_extra_fields($type, $entity->type, 'display');
+    $field_name = 'hr_core_files_download_button';
+    if(!empty($extra_fields[$field_name]['display'][$view_mode]['visible'])) {
+      $entity->content[$field_name] = array(
+        '#type' => 'item',
+        '#title' => '',
+        '#markup' => _hr_core_files_download_button($entity, $type),
+      );
+    }
+  }
+}
+
+/**
+ * Render files as dropdown button.
+ */
+function _hr_core_files_download_button($entity, $type) {
+  $output = '';
+
+  $output .= '<div>';
+  $output .= '<div class="btn-group">';
+  $output .= '<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> download <span class="caret"></span></button>';
+  $output .= '<ul class="dropdown-menu">';
+
+  $language_list = _languagefield_options();
+  $items = field_get_items($type, $entity, 'field_files_collection');
+
+  foreach ($items as $delta => $item) {
+    $fc = field_collection_item_revision_load($item['revision_id']);
+
+    $file = field_get_items('field_collection_item', $fc, 'field_file');
+    // Continue is the file no longer exists.
+    if (!$file) {
+      continue;
+    }
+    $file = reset($file);
+
+    $language = field_get_items('field_collection_item', $fc, 'field_language');
+    $file_language = '';
+    if ($language) {
+      $language = reset($language);
+      $file_language = !empty($language['value']) ? '(' . $language_list[$language['value']]['name_native'] . ')' : '';
+    }
+
+    $file_title = $file['title'] ? $file['title'] : $file['filename'];
+    $file_url = file_create_url($file['uri']);
+
+    $output .= '<li>' . l($file_title . ' ' . $file_language, $file_url, array(
+      'attributes' => array('target'=>'_blank')
+    )) . '</li>';
+  }
+
+  $output .= '</ul>';
+  $output .= '</div>';
+  $output .= '</div>';
+
+  return $output;
 }
 
 /**
@@ -636,7 +715,7 @@ function hr_core_group_tab_access($entity_type, $etid) {
 /**
  * Set caching of panel pane.
  */
-function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minutes = 'none') {
+function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minutes = 'none', $margin = 5) {
   $sql = "SELECT * FROM {panels_pane} WHERE type='$type'";
   if (!empty($subtype)) {
     $sql .= " AND subtype='$subtype'";
@@ -647,7 +726,7 @@ function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minu
       'method' => 'content',
       'settings' => array(
         'granularity' => 'context',
-        'lifetime' => $minutes === 'none' ? $minutes : 60 * $minutes,
+        'lifetime' => $minutes === 'none' ? $minutes : rand(60 * $minutes, 60 * ($minutes + $margin)),
         'content_types' => $node_types,
       ),
     );
@@ -663,7 +742,7 @@ function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minu
 /**
  * Set caching of panel pane.
  */
-function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 15) {
+function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 15, $margin = 5) {
   $sql = "SELECT * FROM {panels_pane} WHERE type='$type'";
   if (!empty($subtype)) {
     $sql .= " AND subtype='$subtype'";
@@ -673,7 +752,7 @@ function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 15) {
     $cache_settings = array(
       'method' => 'simple',
       'settings' => array(
-        'lifetime' => 60 * $minutes,
+        'lifetime' => $minutes === 'none' ? $minutes : rand(60 * $minutes, 60 * ($minutes + $margin)),
         'granularity' => 'context',
       ),
     );
@@ -689,7 +768,7 @@ function _hr_core_pane_cache_simple($type, $subtype = '', $minutes = 15) {
 /**
  * Set caching of panel display.
  */
-function _hr_core_display_cache_simple($minutes = 'none') {
+function _hr_core_display_cache_content($minutes = 'none', $margin = 5) {
   $sql = "SELECT * FROM {panels_display}";
   $result = db_query($sql);
   foreach ($result as $obj) {
@@ -700,28 +779,28 @@ function _hr_core_display_cache_simple($minutes = 'none') {
           'context' => 'context',
           'user_role' => 'user_role',
         ),
-        'lifetime' => $minutes === 'none' ? $minutes : 60 * $minutes,
+        'lifetime' => $minutes === 'none' ? $minutes : rand(60 * $minutes, 60 * ($minutes + $margin)),
         'content_types' => array(
-          'acc_application' => 'acc_application',
-          'acc_incident' => 'acc_incident',
-          'hr_assessment' => 'hr_assessment',
-          'hr_news' => 'hr_news',
-          'hr_bundle' => 'hr_bundle',
-          'hr_contact' => 'hr_contact',
-          'hr_dataset' => 'hr_dataset',
-          'hr_disaster' => 'hr_disaster',
-          'hr_discussion' => 'hr_discussion',
-          'hr_document' => 'hr_document',
-          'hr_event' => 'hr_event',
-          'hr_funding' => 'hr_funding',
-          'hr_funding_method' => 'hr_funding_method',
-          'hr_geographic_level' => 'hr_geographic_level',
-          'hr_sector' => 'hr_sector',
-          'hr_indicator' => 'hr_indicator',
-          'hr_infographic' => 'hr_infographic',
-          'hr_office' => 'hr_office',
+          'acc_application' => 0,
+          'acc_incident' => 0,
+          'hr_assessment' => 0,
+          'hr_news' => 0,
+          'hr_bundle' => 0,
+          'hr_contact' => 0,
+          'hr_dataset' => 0,
+          'hr_disaster' => 0,
+          'hr_discussion' => 0,
+          'hr_document' => 0,
+          'hr_event' => 0,
+          'hr_funding' => 0,
+          'hr_funding_method' => 0,
+          'hr_geographic_level' => 0,
+          'hr_sector' => 0,
+          'hr_indicator' => 0,
+          'hr_infographic' => 0,
+          'hr_office' => 0,
           'hr_operation' => 'hr_operation',
-          'hr_page' => 'hr_page',
+          'hr_page' => 0,
           'hr_space' => 'hr_space',
         ),
       ),
