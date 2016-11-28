@@ -245,5 +245,5 @@ function hr_core_update_7012() {
  * Fix panels caching - displays user role.
  */
 function hr_core_update_7013() {
-  _hr_core_display_cache_simple(15);
+  _hr_core_display_cache_content(15);
 }
