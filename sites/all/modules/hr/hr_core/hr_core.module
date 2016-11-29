@@ -163,6 +163,10 @@ function _hr_core_files_download_button($entity, $type) {
   $language_list = _languagefield_options();
   $items = field_get_items($type, $entity, 'field_files_collection');
 
+  if (empty($items) || !is_array($items)) {
+    return;
+  }
+
   foreach ($items as $delta => $item) {
     $fc = field_collection_item_revision_load($item['revision_id']);
 
