@@ -102,6 +102,7 @@ function hr_notifications_mailchimp_get_api_object($api_key) {
  * Implements hook_form_BASE_FORM_ID_alter()
  */
 function hr_notifications_form_node_form_alter(&$form, &$form_state) {
+  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
   if (isset($form['field_mailchimp_list'])) {
     $node = $form_state['build_info']['args'][0];
     if (!empty($node->field_mailchimp_api_key)) {
@@ -152,9 +153,8 @@ function hr_notifications_flag_unflag($flag, $entity_id, $account, $flagging) {
       $api_key = $node->field_mailchimp_api_key[LANGUAGE_NONE][0]['value'];
       $list_id = $node->field_mailchimp_list[LANGUAGE_NONE][0]['value'];
       $api = hr_notifications_mailchimp_get_api_object($api_key);
-      // Unsubscribe user 
+      // Unsubscribe user
       $api->listUnsubscribe($list_id, $user->mail);
-    } 
-  } 
+    }
+  }
 }
-

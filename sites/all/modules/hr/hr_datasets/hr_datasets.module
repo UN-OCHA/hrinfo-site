@@ -109,6 +109,7 @@ function hr_datasets_redirect_api_datasets() {
  * Implements hook_form_FORM_ID_alter().
  */
 function hr_datasets_form_hr_dataset_node_form_alter(&$form, &$form_state) {
+  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
   hr_sectors_hide_sectors($form, $form_state);
   if (module_exists('hs_taxonomy')) {
     if (isset($form['field_locations']['und']['#config'])) {

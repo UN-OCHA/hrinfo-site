@@ -24,29 +24,6 @@ function hr_documents_og_features_registry() {
   return $registry;
 }
 
-function _hr_core_fix_entity_reference_ajax_calls(&$form, &$form_state) {
-  $fields_to_save = array(
-    'og_group_ref',
-    'field_coordination_hubs',
-    'field_disasters',
-  );
-
-  foreach ($fields_to_save as $field_to_save) {
-    // Store the options.
-    if (isset($form[$field_to_save])) {
-      if (!isset($form_state['storage'][$field_to_save])) {
-        $form_state['storage'][$field_to_save] = $form[$field_to_save];
-      }
-      // If it is set, re-fill it.
-      else {
-        if (isset($form_state['storage'][$field_to_save]) && empty($form[$field_to_save][LANGUAGE_NONE]['#default_value'])) {
-          $form[$field_to_save] = $form_state['storage'][$field_to_save];
-        }
-      }
-    }
-  }
-}
-
 /**
  * Implements hook_form_FORM_ID_alter().
  */

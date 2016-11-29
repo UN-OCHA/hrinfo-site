@@ -243,6 +243,7 @@ function hr_events_pdf_output($nid) {
  * Implements hook_form_FORM_ID_alter()
  */
 function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id) {
+  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
   $form['#attached']['js'] = array(
     drupal_get_path('module', 'hr_events') . '/js/hr_events.js',
   );
