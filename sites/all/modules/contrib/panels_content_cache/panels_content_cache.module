@@ -193,6 +193,10 @@ function panels_content_cache_save($content_cache = array()) {
  *   The node object for the current node being saved.
  */
 function panels_content_cache_node_clear_cache($node) {
+  drupal_register_shutdown_function('_panels_content_cache_node_clear_cache', $node);
+}
+
+function _panels_content_cache_node_clear_cache($node) {
   // Check if the $node->type is in panels_content_cache table. If it exists
   // then we want to try and lookup the display ID from panels_content_cache to
   // see if we need to clear the cache on any panels.
