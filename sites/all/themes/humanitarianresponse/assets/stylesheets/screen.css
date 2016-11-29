@@ -4085,3 +4085,15 @@ table.stylish-table tr:nth-child(2n) {
   display: inline-block;
 }
 
+.footer-logos-hdx { 
+  background-image: url('../images/footer-logos/hdx.png');
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+
+.footer-logos-hid { 
+  background-image: url('../images/footer-logos/hid.png');
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: contain;
+}

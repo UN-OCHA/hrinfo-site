@@ -130,7 +130,7 @@
     <div id="footer-second" class="col-md-6">
       <div class="col-md-3">
         <div class="column"><a href="http://fts.unocha.org" target="_blank"><div class="footer-logo footer-logos-fts"></div></a></div>
-        <div class="column"><a href="http://www.irinnews.org" target="_blank"><div class="footer-logo footer-logos-irin"></div></a></div>
+        <div class="column"><a href="https://humanitarian.id" target="_blank"><div class="footer-logo footer-logos-hid"></div></a></div>
         <div class="column"><a href="http://www.gdacs.org" target="_blank"><div class="footer-logo footer-logos-gdacs"></div></a></div>
       </div>
 
