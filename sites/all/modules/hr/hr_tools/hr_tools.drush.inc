@@ -58,7 +58,7 @@ function drush_hr_tools_access_rebuild() {
   }
 }
 
-function _drush_hr_tools__node_access_rebuild_batch_operation(&$context, $offset = 0) {
+function _drush_hr_tools__node_access_rebuild_batch_operation($offset = 0, &$context) {
   if (empty($context['sandbox'])) {
     // Initiate multistep processing.
     $context['sandbox']['progress'] = 0;
@@ -71,7 +71,7 @@ function _drush_hr_tools__node_access_rebuild_batch_operation(&$context, $offset
       if ($record) {
         $context['sandbox']['current_node'] = $record;
         $context['sandbox']['progress'] = $offset;
-        $context['message'] = 'Starting node access rebuild from .' . $offset;
+        $context['message'] = 'Starting node access rebuild from ' . $offset;
       }
     }
   }
