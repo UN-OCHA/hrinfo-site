@@ -73,6 +73,10 @@ function _drush_hr_tools__node_access_rebuild_batch_operation($offset = 0, &$con
         $context['sandbox']['progress'] = $offset;
         $context['message'] = 'Starting node access rebuild from ' . $offset;
       }
+      else {
+        drush_print('Nothing to process.');
+        return;
+      }
     }
   }
 
