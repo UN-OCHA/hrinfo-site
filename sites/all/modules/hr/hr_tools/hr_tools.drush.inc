@@ -10,13 +10,21 @@ function hr_tools_drush_help($section) {
   }
 }
 
+/**
+ * Implements hook_drush_command().
+ */
 function hr_tools_drush_command() {
   $items = array();
 
   $items['hr-tools-access-rebuild'] = array(
     'description' => 'Rebuild the node access table',
     'callback' => 'drush_hr_tools_access_rebuild',
-    'options' => array(),
+    'options' => array(
+      'offset' => array(
+        'description' => 'The amount of records to skip. Defaults to 0.',
+        'example-value' => '30',
+      ),
+    ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
     'aliases' => array('hrnar'),
   );
@@ -28,11 +36,14 @@ function drush_hr_tools_access_rebuild() {
   if (!drush_bootstrap_to_phase(DRUSH_BOOTSTRAP_DRUPAL_DATABASE)) {
     return drush_set_error('DRUPAL_SITE_NOT_FOUND', dt('You need to specify an alias or run this command within a drupal site.'));
   }
+
+  $offset = drush_get_option('offset', 0);
+
   if (count(module_implements('node_grants'))) {
     $batch = array(
       'title' => t('Rebuilding content access permissions'),
       'operations' => array(
-        array('_drush_hr_tools__node_access_rebuild_batch_operation', array()),
+        array('_drush_hr_tools__node_access_rebuild_batch_operation', array($offset)),
       ),
       'finished' => '_drush_hr_tools__node_access_rebuild_batch_finished',
     );
@@ -47,13 +58,22 @@ function drush_hr_tools_access_rebuild() {
   }
 }
 
-function _drush_hr_tools__node_access_rebuild_batch_operation(&$context) {
+function _drush_hr_tools__node_access_rebuild_batch_operation(&$context, $offset = 0) {
   if (empty($context['sandbox'])) {
     // Initiate multistep processing.
     $context['sandbox']['progress'] = 0;
     $context['sandbox']['current_node'] = 0;
     $context['sandbox']['max'] = db_query('SELECT COUNT(nid) FROM {node}')->fetchField();
     $context['message'] = 'Starting node access rebuild.';
+
+    if ($offset > 0) {
+      $record = db_query_range('SELECT nid FROM {node}', $offset, 1)->fetchField();
+      if ($record) {
+        $context['sandbox']['current_node'] = $record;
+        $context['sandbox']['progress'] = $offset;
+        $context['message'] = 'Starting node access rebuild from .' . $offset;
+      }
+    }
   }
 
   // Process the next 20 nodes.
