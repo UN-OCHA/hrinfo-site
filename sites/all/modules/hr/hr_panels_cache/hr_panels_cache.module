@@ -42,146 +42,10 @@ function hr_panels_cache_node_update($node) {
 }
 
 /**
- * Implements hook_node_type_delete().
+ * Implements hook_workbench_moderation_transition().
  */
-function hr_panels_cache_node_type_delete($info) {
-  $node_types = variable_get('hr_panels_cache_types', array());
-
-  if (!empty($node_types)) {
-    if ($pos = array_search($info->type, $node_types)) {
-      unset($node_types[$pos]);
-      variable_set('hr_panels_cache_types', $node_types);
-    }
-  }
-}
-
-/**
- * Comment integration.
- */
-
-/**
- * Implements hook_comment_insert().
- */
-function hr_panels_cache_comment_insert($comment) {
-  hr_panels_cache_comment_clear_cache($comment);
-}
-
-/**
- * Implements hook_comment_update().
- */
-function hr_panels_cache_comment_update($comment) {
-  hr_panels_cache_comment_clear_cache($comment);
-}
-
-/**
- * Implements hook_comment_delete().
- */
-function hr_panels_cache_comment_delete($comment) {
-  hr_panels_cache_comment_clear_cache($comment);
-}
-
-/**
- * Implements hook_comment_publish().
- */
-function hr_panels_cache_comment_publish($comment) {
-  hr_panels_cache_comment_clear_cache($comment);
-}
-
-/**
- * Implements hook_comment_unpublish().
- */
-function hr_panels_cache_comment_unpublish($comment) {
-  hr_panels_cache_comment_clear_cache($comment);
-}
-
-/**
- * Clear the cache bin for this comment's content type.
- */
-function hr_panels_cache_comment_clear_cache($comment) {
-  if (!empty($comment->nid) && ($node = node_load($comment->nid))) {
-    hr_panels_cache_node_clear_cache($node);
-  }
-}
-
-/**
- * Implements hook_panels_display_save().
- */
-function hr_panels_cache_panels_display_save($display) {
-  $content_cache = array();
-  // First clear down any rows in hr_panels_cache associated with this
-  // display. We do this incase content caching was previously enabled for a
-  // display/pane and it was subsequenty turned off before the panel was saved
-  // again, therefore we want to clear out those records from
-  // hr_panels_cache. The table will be updated again with any panes that
-  // have content caching enabled.
-  db_delete('hr_panels_cache')->condition('did', $display->did)->execute();
-
-  // First check if we have set content caching on the entire display.
-  // If the entire display has content caching on then we dont even need
-  if (isset($display->cache['method']) && $display->cache['method'] == 'content') {
-    $content_cache[] = $display;
-  }
-
-  // Next we check any panes on the display to see if any of those have content
-  // caching enabled.
-  if (!empty($display->content)) {
-    foreach ($display->content as $pane) {
-      if (isset($pane->cache['method']) && $pane->cache['method'] == 'content') {
-        $content_cache[] = $pane;
-      }
-    }
-  }
-
-  // Save the cached items to hr_panels_cache table.
-  if (!empty($content_cache)) {
-    hr_panels_cache_save($content_cache);
-
-    // Cache the content types in the lookup table. We do this to potentially
-    // save a database query on the node hook lookup.
-    hr_panels_cache_types_set();
-  }
-}
-
-/**
- * Store the content types that are in the hr_panels_cache database table.
- */
-function hr_panels_cache_types_set() {
-  $node_types = array();
-
-  // Cache the content types in hr_panels_cache.
-  $results = db_select('hr_panels_cache', 'p')
-    ->fields('p', array('type'))
-    ->distinct()
-    ->execute();
-  foreach ($results as $type) {
-    $node_types[] = $type->type;
-  }
-
-  variable_set('hr_panels_cache_types', $node_types);
-}
-
-/**
- * Helper function to save items into the hr_panels_cache table.
- *
- * @param array $content_cache
- *   An array of panels display or pane objects to save to hr_panels_cache
- *   table.
- */
-function hr_panels_cache_save($content_cache = array()) {
-  if (!empty($content_cache)) {
-    foreach ($content_cache as $display) {
-      if (!empty($display->cache['settings']['content_types'])) {
-        $types = array_filter($display->cache['settings']['content_types']);
-        foreach ($types as $type) {
-          $row = new stdClass();
-          $row->did = $display->did;
-          $row->type = $type;
-          $row->pid = isset($display->pid) ? $display->pid : NULL;
-          drupal_write_record('hr_panels_cache', $row);
-        }
-      }
-    }
-  }
+function hr_panels_cache_workbench_moderation_transition($node, $previous_state, $new_state) {
+  hr_panels_cache_node_clear_cache($node);
 }
 
 /**
@@ -200,7 +64,6 @@ function hr_panels_cache_node_clear_cache($node) {
 function _hr_panels_cache_node_clear_cache($node) {
   // If the node is a group, clear the display of the group.
   if (og_is_group('node', $node)) {
-    dpm($node, 'group');
     $cids = array('hr_panels_cache');
     $cids[] = 'gid_' . $node->nid;
     $cids[] = 'did_';
@@ -212,7 +75,6 @@ function _hr_panels_cache_node_clear_cache($node) {
     if ($groups) {
       foreach (og_get_entity_groups('node', $node) as $entity_type => $og_memberships) {
         foreach ($og_memberships as $membership_id => $group_id) {
-          dpm($group_id, '$group_id');
           // Clear node in all groups.
           $cids = array('hr_panels_cache');
           $cids[] = 'gid_' . $group_id;
@@ -240,13 +102,5 @@ function _hr_panels_cache_node_clear_cache($node) {
 
 function _hr_panels_cache_node_clear_cache_by_cid($cids) {
   $cid = implode(':', $cids);
-  dpm($cid, 'Cid to clear');
   cache_clear_all($cid, 'cache_panels', TRUE);
-}
-
-/**
- * Implements hook_workbench_moderation_transition().
- */
-function hr_panels_cache_workbench_moderation_transition($node, $previous_state, $new_state) {
-  hr_panels_cache_node_clear_cache($node);
 }

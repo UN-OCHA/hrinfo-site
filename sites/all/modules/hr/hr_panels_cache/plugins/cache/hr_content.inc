@@ -25,7 +25,6 @@ $plugin = array(
 function hr_panels_cache_get_cache($conf, $display, $args, $contexts, $pane = NULL) {
   $cid = hr_panels_cache_get_cid($conf, $display, $args, $contexts, $pane);
   $cache = cache_get($cid, 'cache_panels');
-  dpm($cache, $cid);
   if (!$cache) {
     return FALSE;
   }
@@ -33,7 +32,6 @@ function hr_panels_cache_get_cache($conf, $display, $args, $contexts, $pane = NU
   if ($conf['lifetime'] != 'none' && (time() - $cache->created) > $conf['lifetime']) {
     return FALSE;
   }
-
   return $cache->data;
 }
 
@@ -47,18 +45,9 @@ function hr_panels_cache_set_cache($conf, $content, $display, $args, $contexts, 
 
 /**
  * Clear cached content.
- *
- * Cache clears are always for an entire display, regardless of arguments.
- *
- * Have not altered this function to take into account pane IDs (so we can
- * clear individual panes) because all the other panels caching plugins I
- * looked at did not do this either, so have left this for now as it requires
- * further investigation.
  */
 function hr_panels_cache_clear_cache($display) {
-  $cid = hr_panels_cache_get_base_cid($display);
-
-  cache_clear_all(implode(':', $cid), 'cache_panels', TRUE);
+  // Nothing to do, cache will be cleared by node save.
 }
 
 /**
@@ -131,14 +120,6 @@ function hr_panels_cache_get_cid($conf, $display, $args, $contexts, $pane) {
     }
   }
 
-  // Support for the Domain Access module.
-  if (!empty($conf['granularity']['domain']) && module_exists('domain')) {
-    $current_domain = domain_get_domain();
-    if (is_array($current_domain) && isset($current_domain['domain_id'])) {
-      $cid[] = 'domain_' . $current_domain['domain_id'];
-    }
-  }
-
   // Granularity: Page arguments.
   if (!empty($conf['granularity']['args'])) {
     foreach ($args as $pos => $arg) {
@@ -202,9 +183,12 @@ function hr_panels_cache_get_cid($conf, $display, $args, $contexts, $pane) {
     // Authenticated roles.
     else {
       // Clean up the settings.
-      if (!empty($conf['granularity_roles_as_anon']) && is_array($conf['granularity_roles_as_anon'])) {
+      if (isset($conf['granularity_roles_as_anon']) && !empty($conf['granularity_roles_as_anon']) && is_array($conf['granularity_roles_as_anon'])) {
         // Filter out the empty values.
         $conf['granularity_roles_as_anon'] = array_filter($conf['granularity_roles_as_anon']);
+      }
+      else {
+        $conf['granularity_roles_as_anon'] = array();
       }
 
       // User only has one role, i.e. 'authenticated user'.
@@ -280,27 +264,17 @@ function hr_panels_cache_get_cid($conf, $display, $args, $contexts, $pane) {
  * Construct base cid for display.
  */
 function hr_panels_cache_get_base_cid($display, $pane = NULL) {
-  dpm($display, 'display');
   $cid = array('hr_panels_cache');
-
-  // This is used in case this is an in-code display, which means did will be
-  // something like 'new-1'.
-  if (isset($display->owner) && isset($display->owner->id)) {
-    $cid[] = 'owner_' . $display->owner->id;
-    return;
-  }
 
   if (module_exists('og')) {
     $node = menu_get_object();
     if ($node) {
-      dpm($node, 'group from menu');
       if (og_is_group('node', $node)) {
         $cid[] = 'gid_' . $node->nid;
       }
       else {
         // Use context to get current group.
         $group = og_context();
-        dpm($group, 'group from context');
         if ($group) {
           if (isset($group['group_type'])) {
             $cid[] = 'gid_' . $group['gid'];
@@ -313,7 +287,6 @@ function hr_panels_cache_get_base_cid($display, $pane = NULL) {
     }
     else {
       $group = og_context();
-      dpm($group, 'group from context');
       if ($group) {
         if (isset($group['group_type'])) {
           $cid[] = 'gid_' . $group['gid'];
@@ -326,18 +299,23 @@ function hr_panels_cache_get_base_cid($display, $pane = NULL) {
   }
 
   // Add content type from pane.
-  dpm($pane, 'pane');
   if ($pane) {
-    if (isset($pane->cache['settings']['content_types'])) {
-      $cid[] = 'type_' . $pane->cache['settings']['content_types'];
+    if (isset($pane->cache['settings']['content_type'])) {
+      $cid[] = 'type_' . $pane->cache['settings']['content_type'];
     }
   }
 
-  if (isset($display->did)) {
-    $cid[] = 'did_' . $display->did;
+  // This is used in case this is an in-code display, which means did will be
+  // something like 'new-1'.
+  if (isset($display->owner) && isset($display->owner->id)) {
+    $cid[] = 'owner_' . $display->owner->id;
+  }
+  else {
+    if (isset($display->did)) {
+      $cid[] = 'did_' . $display->did;
+    }
   }
 
-  dpm($cid, 'cid');
   return $cid;
 }
 
@@ -353,12 +331,12 @@ function hr_panels_cache_settings_form($conf, $display, $pid) {
     '#description' => t('The cache lifetime is the minimum amount of time that will elapse before the cache is emptied and recreated. If set to none the cache will not be recreated unless a content update triggers a rebuild.')
   );
 
-  $form['content_types'] = array(
+  $form['content_type'] = array(
     '#title' => t('Node types'),
-    '#description' => t('Checks for new or updated nodes of any of the selected types.'),
+    '#description' => t('Checks for new or updated nodes of this type.'),
     '#type' => 'radios',
     '#options' => node_type_get_names(),
-    '#default_value' => isset($conf['content_types']) ? $conf['content_types'] : '',
+    '#default_value' => isset($conf['content_type']) ? $conf['content_type'] : '',
     '#required' => TRUE,
   );
 
@@ -452,11 +430,6 @@ function hr_panels_cache_settings_form($conf, $display, $pid) {
       'edit-settings-granularity-user-role' => array(1),
     ),
   );
-
-  // Add support for the Domain Access module.
-  if (module_exists('domain')) {
-    $form['granularity']['#options']['domain'] = t('Current domain (Domain Access)');
-  }
 
   return $form;
 }
