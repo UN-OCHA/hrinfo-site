@@ -179,28 +179,28 @@ function hr_core_update_7007() {
  * Fix panels caching.
  */
 function hr_core_update_7008() {
-  _hr_core_pane_cache_content_by_type('hr_documents_key_documents', '', array('hr_document' => 'hr_document'));
-  _hr_core_pane_cache_content_by_type('hr_infographics_key_infographics', '', array('hr_infographic' => 'hr_infographic'));
-  _hr_core_pane_cache_content_by_type('hr_contacts_key_contacts', '', array('hr_contact' => 'hr_contact'));
+  _hr_core_pane_cache_content_by_type('hr_documents_key_documents', '', 'hr_document');
+  _hr_core_pane_cache_content_by_type('hr_infographics_key_infographics', '', 'hr_infographic');
+  _hr_core_pane_cache_content_by_type('hr_contacts_key_contacts', '', 'hr_contact');
 
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_documents_panes-list', array('hr_document' => 'hr_document'));
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_documents_panes-mm_from_context', array('hr_document' => 'hr_document'));
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_documents_panes-documents_from_context', array('hr_document' => 'hr_document'));
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_documents_panes-thumbnail', array('hr_document' => 'hr_document'));
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_documents_panes-list', 'hr_document');
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_documents_panes-mm_from_context', 'hr_document');
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_documents_panes-documents_from_context', 'hr_document');
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_documents_panes-thumbnail', 'hr_document');
 
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_assessments_panes-panel_pane_1', array('hr_assessment' => 'hr_assessment'));
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_assessments_panes-list', array('hr_assessment' => 'hr_assessment'));
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_assessments_panes-panel_pane_1', 'hr_assessment');
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_assessments_panes-list', 'hr_assessment');
 
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_infographics_panes-infographics_from_context', array('hr_infographic' => 'hr_infographic'));
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_infographics_panes-list', array('hr_infographic' => 'hr_infographic'));
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_infographics_panes-infographics_from_context', 'hr_infographic');
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_infographics_panes-list', 'hr_infographic');
 
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_events_panes-upcoming', array('hr_event' => 'hr_event'));
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_events_panes-upcoming_from_context', array('hr_event' => 'hr_event'));
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_events_panes-upcoming', 'hr_event');
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_events_panes-upcoming_from_context', 'hr_event');
 
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_news_panes-list', array('hr_news' => 'hr_news'));
-  _hr_core_pane_cache_content_by_type('views_panes', 'hr_contacts_panes-list', array('hr_contact' => 'hr_contact'));
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_news_panes-list', 'hr_news');
+  _hr_core_pane_cache_content_by_type('views_panes', 'hr_contacts_panes-list', 'hr_contact');
 
-  _hr_core_pane_cache_content_by_type('hr_layout_standard', '', array('hr_document' => 'hr_document', 'hr_operation' => 'hr_operation'));
+  _hr_core_pane_cache_content_by_type('hr_layout_standard', '', 'hr_document');
 }
 
 /**
@@ -246,4 +246,16 @@ function hr_core_update_7012() {
  */
 function hr_core_update_7013() {
   _hr_core_display_cache_content(15);
+}
+
+/**
+ * Switch to HR caching.
+ */
+function hr_core_update_7014() {
+  module_enable(array('hr_panels_cache'));
+  hr_core_update_7008();
+  hr_core_update_7013();
+  module_disable(array(
+    'panels_content_cache',
+  ));
 }

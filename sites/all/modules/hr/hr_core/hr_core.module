@@ -720,7 +720,7 @@ function hr_core_group_tab_access($entity_type, $etid) {
 /**
  * Set caching of panel pane.
  */
-function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minutes = 'none', $margin = 5) {
+function _hr_core_pane_cache_content_by_type($type, $subtype, $node_type, $minutes = 'none', $margin = 5) {
   $sql = "SELECT * FROM {panels_pane} WHERE type='$type'";
   if (!empty($subtype)) {
     $sql .= " AND subtype='$subtype'";
@@ -728,11 +728,17 @@ function _hr_core_pane_cache_content_by_type($type, $subtype, $node_types, $minu
   $result = db_query($sql);
   foreach ($result as $obj) {
     $cache_settings = array(
-      'method' => 'content',
+      'method' => 'hr_content',
       'settings' => array(
-        'granularity' => 'context',
+        'granularity' => array(
+          'args' => 'args',
+          'user_role' => 'user_role',
+        ),
+        'granularity_url' => 'base_url_system',
+        'granularity_roles_as_anon' => array(),
+        'granularity_role_selection' => 'all',
         'lifetime' => $minutes === 'none' ? $minutes : rand(60 * $minutes, 60 * ($minutes + $margin)),
-        'content_types' => $node_types,
+        'content_type' => $node_type,
       ),
     );
 
@@ -778,36 +784,17 @@ function _hr_core_display_cache_content($minutes = 'none', $margin = 5) {
   $result = db_query($sql);
   foreach ($result as $obj) {
     $cache_settings = array(
-      'method' => 'content',
+      'method' => 'hr_content',
       'settings' => array(
         'granularity' => array(
-          'context' => 'context',
+          'args' => 'args',
           'user_role' => 'user_role',
         ),
+        'granularity_url' => 'base_url_system',
+        'granularity_roles_as_anon' => array(),
+        'granularity_role_selection' => 'all',
         'lifetime' => $minutes === 'none' ? $minutes : rand(60 * $minutes, 60 * ($minutes + $margin)),
-        'content_types' => array(
-          'acc_application' => 0,
-          'acc_incident' => 0,
-          'hr_assessment' => 0,
-          'hr_news' => 0,
-          'hr_bundle' => 0,
-          'hr_contact' => 0,
-          'hr_dataset' => 0,
-          'hr_disaster' => 0,
-          'hr_discussion' => 0,
-          'hr_document' => 0,
-          'hr_event' => 0,
-          'hr_funding' => 0,
-          'hr_funding_method' => 0,
-          'hr_geographic_level' => 0,
-          'hr_sector' => 0,
-          'hr_indicator' => 0,
-          'hr_infographic' => 0,
-          'hr_office' => 0,
-          'hr_operation' => 'hr_operation',
-          'hr_page' => 0,
-          'hr_space' => 'hr_space',
-        ),
+        'content_type' => 'hr_operation',
       ),
     );
 
