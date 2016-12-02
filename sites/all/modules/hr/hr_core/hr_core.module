@@ -806,6 +806,35 @@ function _hr_core_display_cache_content($minutes = 'none', $margin = 5) {
 }
 
 /**
+ * Set caching of panel display.
+ */
+function _hr_core_display_cache_content_defaults($minutes = 'none', $margin = 5, $content_type) {
+  $sql = "SELECT * FROM {panels_display} WHERE storage_id LIKE 'node:$content_type%'";
+  $result = db_query($sql);
+  foreach ($result as $obj) {
+    $cache_settings = array(
+      'method' => 'hr_content',
+      'settings' => array(
+        'granularity' => array(
+          'args' => 'args',
+          'user_role' => 'user_role',
+        ),
+        'granularity_url' => 'base_url_system',
+        'granularity_roles_as_anon' => array(),
+        'granularity_role_selection' => 'all',
+        'lifetime' => $minutes === 'none' ? $minutes : rand(60 * $minutes, 60 * ($minutes + $margin)),
+        'content_type' => $content_type,
+      ),
+    );
+
+    db_update('panels_display')
+      ->fields(array('cache' => serialize($cache_settings)))
+      ->condition('did', $obj->did, '=')
+      ->execute();
+  }
+}
+
+/**
  * Store initial form values when rendering for the first time.
  *
  * Needed to solve problems with entity reference and AJAX.

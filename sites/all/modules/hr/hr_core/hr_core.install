@@ -259,3 +259,12 @@ function hr_core_update_7014() {
     'panels_content_cache',
   ));
 }
+
+/**
+ * Set caching by content type.
+ */
+function hr_core_update_7015() {
+  foreach (node_type_get_names() as $type => $name) {
+    _hr_core_display_cache_content_defaults('none', $margin = 5, $type);
+  }
+}
