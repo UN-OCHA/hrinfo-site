@@ -4097,3 +4097,7 @@ table.stylish-table tr:nth-child(2n) {
   background-position: 0 0;
   background-size: contain;
 }
+
+.node-full .container-fluid .row {
+  overflow: visible;
+}
