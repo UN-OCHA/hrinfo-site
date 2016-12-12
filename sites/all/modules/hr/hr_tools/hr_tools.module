@@ -153,7 +153,8 @@ function hr_tools_ga_report($node) {
   $tokenArray = $client->fetchAccessTokenWithAssertion();
   $accessToken = $tokenArray['access_token'];
 
-  $output = '<h1>Analytics last 30 days</h1>';
+  $output = '<h1><span id="report--tile">Analytics last 30 days</span></h1>';
+  $output .= '<div><select id="report--start-date"><option value="30">Last 30 days</option><option value="90">Last 3 months</option><option value="365">Last year</option></select></div>';
   $output .= '<ul id="chart-wrapper" class="hrtools-analytics">';
   $output .= '<li class="w-small type-counter"><h2># of visitors</h2><div id="chart-num-visitors">Loading data ...</div></li>';
   $output .= '<li class="w-small type-counter"><h2># of page views</h2><div id="chart-num-hits">Loading data ...</div></li>';

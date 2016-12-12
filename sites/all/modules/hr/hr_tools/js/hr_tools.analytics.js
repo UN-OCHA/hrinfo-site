@@ -4,6 +4,14 @@
       var token = Drupal.settings.hr_tools.token;
       var pathFilter = Drupal.settings.hr_tools.pathFilter;
       var viewId = 'ga:112786249';
+      var startDate = '30daysAgo';
+
+      document.getElementById('report--start-date').addEventListener('change', function () {
+        startDate = document.getElementById('report--start-date').value;
+        document.getElementById('report--tile').innerHTML = 'Analytics (last ' + startDate + ' days)';
+        startDate = startDate + 'daysAgo';
+        queryReports();
+      });
 
       function handleReportingResults(results, headers) {
         var output = [];
@@ -44,19 +52,13 @@
         }
       }
 
-      gapi.analytics.ready(function() {
-        gapi.analytics.auth.authorize({
-          'serverAuth': {
-            'access_token': token
-          }
-        });
-
+      function queryReports() {
         var topCountries = new gapi.analytics.googleCharts.DataChart({
           'query': {
             'ids': viewId,
             'metrics': 'ga:sessions',
             'dimensions': 'ga:country',
-            'start-date': '30daysAgo',
+            'start-date': startDate,
             'end-date': 'yesterday',
             'max-results': 6,
             'sort': '-ga:sessions'
@@ -74,7 +76,7 @@
         var sessions = new gapi.analytics.googleCharts.DataChart({
           query: {
             'ids': viewId,
-            'start-date': '30daysAgo',
+            'start-date': startDate,
             'end-date': 'yesterday',
             'metrics': 'ga:sessions,ga:users,ga:uniquePageviews,ga:newUsers',
             'dimensions': 'ga:date'
@@ -91,7 +93,7 @@
         var topLanguages = new gapi.analytics.googleCharts.DataChart({
           query: {
             'ids': viewId,
-            'start-date': '30daysAgo',
+            'start-date': startDate,
             'end-date': 'yesterday',
             'metrics': 'ga:pageviews',
             'dimensions': 'ga:pagePathLevel1',
@@ -122,7 +124,7 @@
                 viewId: viewId,
                 dateRanges: [
                   {
-                    startDate: '30daysAgo',
+                    startDate: startDate,
                     endDate: 'yesterday'
                   }
                 ],
@@ -150,42 +152,51 @@
         });
 
         gapi.client.request({
-            path: '/v4/reports:batchGet',
-            root: 'https://analyticsreporting.googleapis.com/',
-            method: 'POST',
-            body: {
-              reportRequests: [
-                {
-                  viewId: viewId,
-                  pageSize: 10,
-                  dateRanges: [
-                    {
-                      startDate: '30daysAgo',
-                      endDate: 'yesterday'
-                    }
-                  ],
-                  metrics: [
-                    {expression: 'ga:pageviews'},
-                    {expression: 'ga:uniquePageviews'}
-                  ],
-                  dimensions: [
-                    {name: 'ga:pageTitle'}
-                  ],
-                  dimensionFilterClauses: [{
-                    filters: [{
-                      dimensionName: "ga:pagePath",
-                      operator: "PARTIAL",
-                      expressions: [pathFilter]
-                    }]
-                  }],
-                  orderBys: [
-                    {"fieldName": "ga:pageviews", "sortOrder": "DESCENDING"}
-                  ]                }
-              ]
-            }
-          }).then(function (response) {
-            document.getElementById('table-top-pages').innerHTML = handleReportingResults(response.result, ['Page', '# views', '# unique views']);
-          });
+          path: '/v4/reports:batchGet',
+          root: 'https://analyticsreporting.googleapis.com/',
+          method: 'POST',
+          body: {
+            reportRequests: [
+              {
+                viewId: viewId,
+                pageSize: 10,
+                dateRanges: [
+                  {
+                    startDate: startDate,
+                    endDate: 'yesterday'
+                  }
+                ],
+                metrics: [
+                  {expression: 'ga:pageviews'},
+                  {expression: 'ga:uniquePageviews'}
+                ],
+                dimensions: [
+                  {name: 'ga:pageTitle'}
+                ],
+                dimensionFilterClauses: [{
+                  filters: [{
+                    dimensionName: "ga:pagePath",
+                    operator: "PARTIAL",
+                    expressions: [pathFilter]
+                  }]
+                }],
+                orderBys: [
+                  {"fieldName": "ga:pageviews", "sortOrder": "DESCENDING"}
+                ]                }
+            ]
+          }
+        }).then(function (response) {
+          document.getElementById('table-top-pages').innerHTML = handleReportingResults(response.result, ['Page', '# views', '# unique views']);
+        });
+      }
+
+      gapi.analytics.ready(function() {
+        gapi.analytics.auth.authorize({
+          'serverAuth': {
+            'access_token': token
+          }
+        });
+        queryReports();
       });
     }
   }
