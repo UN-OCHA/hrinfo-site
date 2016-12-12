@@ -122,8 +122,12 @@ function hr_tools_ga_report($node) {
   }
 
   $path = request_path();
+
   // Remove language prefixes.
-  $path = str_replace(array('en/', 'fr/', 'ru/', 'es/'), '', $path);
+  if (strpos($path, 'en/') === 0 || strpos($path, 'fr/') === 0 || strpos($path, 'ru/') === 0 || strpos($path, 'es/') === 0) {
+    $path = substr($path, 3);
+  }
+
   // Strip analytics.
   $path = str_replace('/analytics', '', $path);
 
