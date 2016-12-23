@@ -281,7 +281,9 @@ class date_views_plugin_pager extends views_plugin_pager {
         else {
           $this->view->date_info->prev_date = clone($argument->min_date);
           date_modify($this->view->date_info->prev_date, '-1 ' . $argument->date_handler->granularity);
-          $this->view->date_info->next_date = clone($argument->max_date);
+          // Patch from https://www.drupal.org/node/2375235#comment-10205617
+          // $this->view->date_info->next_date = clone($argument->max_date);
+          $this->view->date_info->next_date = clone($argument->min_date);
           date_modify($this->view->date_info->next_date, '+1 ' . $argument->date_handler->granularity);
         }
         // Write the date_info properties that depend on the current value.
