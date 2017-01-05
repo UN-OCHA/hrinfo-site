@@ -4,6 +4,76 @@
 @import "compass/utilities/sprites";
 @import "search/checks/*.png";
 
+
+//Hide secondary nav where og-context not present (nav is same as main menu)
+#secondary-navigation {
+  display: none;
+
+  .og-context & {
+    display: block;
+  }
+
+  border-bottom: 2px solid #CFD1D2;
+  margin-top: 10px;
+
+  a {
+    color: $text-color;
+    position: relative;
+    margin-bottom: 2px;
+
+    &:after {
+      content: "";
+      width: 100%;
+      height: 0;
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      border-bottom: 2px solid transparent;
+    }
+
+    &.active {
+      &:after {
+        border-color: $p-main;
+      }
+    }
+
+    &:hover, &:focus {
+      color: $p-main;
+    }
+
+  }
+
+  // highlight first item in secondary nav  
+  .menu li {
+    float: none;
+
+    &:first-child {
+      font-weight: bold;
+      text-transform: uppercase;
+      padding-right: 30px;
+    }
+  }
+
+  @media (min-width: $screen-xs) {
+    .menu li {
+      float: left;
+    }
+
+    a {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Add spacing below header if no og-context menu and not homepage
+.cd-hri-header {
+  margin-bottom: 35px;
+
+  .og-context &, .front & {
+    margin-bottom: 0;
+  }
+}
+
 // Hide titles of menu blocks
 .block-menu h2,
 .block-menu-block h2,

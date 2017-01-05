@@ -36,6 +36,9 @@
 @import "partials/structure";
 @import "partials/user";
 @import "partials/view";
+@import "partials/breadcrumbs";
+@import "cd-header/cd-header";
+
 
 // Fix responsive
 
@@ -99,3 +102,27 @@ body .region-branding .block .views-exposed-form .views-exposed-widget .search-s
   margin: 0;
   width: 20px;
 }
+
+table.stylish-table {
+  float: none;
+  width: 90%;
+  margin: 10px auto;
+}
+
+table.stylish-table td,
+table.stylish-table th {
+  border: solid 1px black;
+}
+
+table.stylish-table thead td,
+table.stylish-table thead th {
+  font-weight: bold;
+  background-color: #9a9a9a;
+}
+
+table.stylish-table tr:nth-child(2n) {
+  background-color: #dedede;
+}
+
+.front .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents { margin-bottom: 30px; }
+.front .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system { margin-bottom: 30px; }
