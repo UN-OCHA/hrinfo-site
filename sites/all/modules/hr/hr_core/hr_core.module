@@ -328,7 +328,6 @@ function _hr_core_draft_button($label) {
  * Alter the node edit forms.
  */
 function hr_core_form_node_form_alter(&$form, &$form_state) {
-  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
   $node = $form['#node'];
   if (isset($_GET[OG_AUDIENCE_FIELD])) {
     $node->{HR_CORE_OG_AUDIENCE_FIELD} = $_GET[OG_AUDIENCE_FIELD];
@@ -352,6 +351,65 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
     return;
   }
 
+  // Limit disasters/hubs to selected groups on node edit.
+  if (isset($form['field_disasters']) || isset($form['field_coordination_hubs'])) {
+    $groups = array();
+    if (isset($form['#node']->og_group_ref) && isset($form['#node']->og_group_ref['und'])) {
+      foreach ($form['#node']->og_group_ref['und'] as $group_ref) {
+        $groups[] = $group_ref['target_id'];
+      }
+    }
+
+    if (empty($groups)) {
+      $group = og_context();
+      if (!empty($group) ) {
+        $groups = array($group['gid']);
+      }
+    }
+
+    if (!empty($groups)) {
+      if (isset($form['field_disasters'])) {
+        $efq = new EntityFieldQuery();
+        $results = $efq->entityCondition('entity_type', 'node')
+          ->entityCondition('bundle', 'hr_disaster')
+          ->fieldCondition('og_group_ref', 'target_id', $groups, 'IN')
+          ->execute();
+        if (isset($results['node'])) {
+          $options = array(
+            '_none' => '- None -',
+          );
+          $disasters = entity_load('node', array_keys($results['node']));
+          foreach ($disasters as $nid => $disaster) {
+            $options[$nid] = $disaster->title;
+          }
+          asort($options);
+
+          $form['field_disasters']['und']['#options'] = $options;
+        }
+      }
+
+      if (isset($form['field_coordination_hubs'])) {
+        $efq = new EntityFieldQuery();
+        $results = $efq->entityCondition('entity_type', 'node')
+          ->entityCondition('bundle', 'hr_office')
+          ->fieldCondition('og_group_ref', 'target_id', $groups, 'IN')
+          ->execute();
+        if (isset($results['node'])) {
+          $options = array(
+            '_none' => '- None -',
+          );
+          $offices = entity_load('node', array_keys($results['node']));
+          foreach ($offices as $nid => $office) {
+            $options[$nid] = $office->title;
+          }
+          asort($options);
+
+          $form['field_coordination_hubs']['und']['#options'] = $options;
+        }
+      }
+    }
+  }
+
   if (publishcontent_publish_access($node)) {
     if (!isset($node->nid)) {
       $form['actions']['submit']['#value'] = t('Publish');
@@ -367,6 +425,8 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
       $form['actions']['submit']['#value'] = t('Save As Draft');
     }
   }
+
+  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
 }
 
 /**
