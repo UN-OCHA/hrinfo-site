@@ -97,9 +97,19 @@ function hr_layout_reliefweb_render($subtype, $conf, $panel_args, $context = NUL
     }
   }
   else{
-    $api_path .= '?offset=0&limit=50&preset=minimal&fields[include][]=url&query[value]='.$country.'&query[fields][]=country';
-    $path = $api_path;
+    //$api_path .= '?offset=0&limit=50&preset=minimal&fields[include][]=url&query[value]='.$country.'&query[fields][]=country';
+    $params = array(
+      'offset' => 0,
+      'limit' => isset($no_of_items) ? ($no_of_items + 1) : 50,
+      'preset' => 'minimal',
+      'fields[include][]' => 'url',
+      'query[value]' => $country,
+      'query[fields][]' => 'country',
+    );
+
+    $path = $api_path . '?' . drupal_http_build_query($params);
   }
+
   $api_data = hr_layout_reliefweb_content($path);
   $content = '';
   if (isset($no_of_items)) {
@@ -148,11 +158,9 @@ function hr_layout_reliefweb_content($path) {
     $data = $response['data'];
     $data_array = array();
     foreach ($data as $value) {
-      foreach ($value as $subvalue) {
-        $url = $value['fields']['url'];
-        $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
-        $data_array[$title] = $url;
-      }
+      $url = $value['fields']['url'];
+      $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
+      $data_array[$title] = $url;
     }
     return $data_array;
   }
