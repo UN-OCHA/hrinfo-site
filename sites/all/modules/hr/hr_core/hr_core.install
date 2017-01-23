@@ -284,7 +284,7 @@ function hr_core_update_7016() {
     $environment->settings = array(
       'color' => '#a40071',
       'text_color' => '#ffffff',
-      'weight' => 99,
+      'weight' => 90,
       'position' => 'top',
       'fixed' => FALSE,
     );
@@ -303,11 +303,21 @@ function hr_core_update_7016() {
     $environment->settings = array(
       'color' => '#017585',
       'text_color' => '#ffffff',
-      'weight' => 99,
+      'weight' => 91,
       'position' => 'top',
       'fixed' => FALSE,
     );
 
     ctools_export_crud_save('environment_indicator_environment', $environment);
   }
+
+  // Update staging, ensure the regex only matches the main test environment.
+  $environment = ctools_export_crud_load('environment_indicator_environment', 'hr_test');
+  $environment->regexurl = '^(www.)?hrinfo.568elmp03.blackmesh.com';
+  ctools_export_crud_save('environment_indicator_environment', $environment);
+
+  // Update default, since the first regex match is applied. This should always be listed last.
+  $environment = ctools_export_crud_load('environment_indicator_environment', 'default_environment');
+  $environment->settings['weight'] = 100;
+  ctools_export_crud_save('environment_indicator_environment', $environment);
 }
