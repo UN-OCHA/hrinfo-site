@@ -61,7 +61,6 @@ class RestfulEntityNodeBundles extends \RestfulEntityBaseNode {
 
     $public_fields['hid_access'] = array(
       'property' => 'field_bundle_hid_access',
-      'process_callbacks' => array(array($this, 'getHidAccess')),
     );
 
     $public_fields['operation'] = array(
@@ -81,21 +80,6 @@ class RestfulEntityNodeBundles extends \RestfulEntityBaseNode {
     );
 
     return $public_fields;
-  }
-
-  protected function getHidAccess($wrapper) {
-    $access = $wrapper->field_bundle_hid_access->value();
-    if (!empty($wrapper->og_group_ref)) {
-      if (is_array($wrapper->og_group_ref->value())) {
-        if (isset($wrapper->og_group_ref[0]->field_hid_access)) {
-          // If parent access is not open, use parent value.
-          if ($wrapper->og_group_ref[0]->field_hid_access->value() != 'open') {
-            $access = $wrapper->og_group_ref[0]->field_hid_access->value();
-          }
-        }
-      }
-    }
-    return $access;
   }
 
   protected function getEntity($wrapper) {
