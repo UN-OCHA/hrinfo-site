@@ -4135,3 +4135,31 @@ table.stylish-table tr:nth-child(2n) {
   padding: 0;
   padding-bottom: auto;
 }
+
+#operations_map {
+    border: 1px solid #FFF;
+    box-shadow: 1px 2px 3px rgba(0,0,0,0.1);
+    margin: -10px 0 17px;
+    height: 400px;
+    background-color: #E0ECED;
+    position: relative;
+}
+
+#operations_map .item-list ul {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 20px;
+    margin-bottom: 17px;
+    border-radius: 2px;
+    background-color: #F9F9F9;
+    border: 1px solid #FFF;
+    box-shadow: 1px 2px 3px rgba(0,0,0,0.1);
+}
+
+#operations_map .item-list ul li {
+    margin: 0;
+    padding: 10px;
+    flex: 0 0 25%;
+    list-style-type: none;
+}
