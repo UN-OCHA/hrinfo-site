@@ -643,3 +643,41 @@
 .radix-layouts-footer .panel-separator {
   display: inline-block;
 }
+
+.node-full.node-hr-document .container-fluid .row,
+.node-full.node-hr-infographic .container-fluid .row,
+.node-full.node-hr-news .container-fluid .row,
+.node-full.node-hr-event .container-fluid .row,
+.node-full.node-hr-dataset .container-fluid .row,
+.node-full.node-hr-indicator .container-fluid .row,
+.node-full.node-hr-contact .container-fluid .row,
+.node-full.node-hr-assessment .container-fluid .row,
+.node-full.node-hr-office .container-fluid .row,
+.page-node.node-type-hr-disaster:not(.hr-group-context) .node-full.node-hr-disaster .container-fluid .row,
+.node-full.node-hr-funding .container-fluid .row,
+.node-full.node-hr-discussion .container-fluid .row,
+.node-full.node-acc-incident .container-fluid .row,
+.node-full.node-hr-toolbox-item .container-fluid .row,
+.user-full .container-fluid .row {
+  overflow: visible;
+}
+
+.node-full.node-hr-document .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-hr-infographic .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-hr-news .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-hr-event .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-hr-dataset .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-hr-indicator .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-hr-contact .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-hr-assessment .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-hr-office .container-fluid .row .radix-layouts-sidebar,
+.page-node.node-type-hr-disaster:not(.hr-group-context) .node-full.node-hr-disaster .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-hr-funding .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-hr-discussion .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-acc-incident .container-fluid .row .radix-layouts-sidebar,
+.node-full.node-hr-toolbox-item .container-fluid .row .radix-layouts-sidebar,
+.user-full .container-fluid .row .radix-layouts-sidebar {
+  margin-bottom: auto;
+  padding: 0;
+  padding-bottom: auto;
+}

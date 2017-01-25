@@ -11,61 +11,76 @@
  */
 ?>
 <div id="root">
-  <header id="header" class="header hidden-print" role="header">
-    <div class="container">
-      <div id="top">
-        <nav class="navbar navbar-default">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header top">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-            </div>
-
-            <div class="collapse navbar-collapse">
-              <?php print $hr_favorite_spaces; ?>
-              <ul id="hr-space-tab" class="nav nav-tabs navbar-left">
-                <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#"> MENU <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <?php print render($main_menu_dropdown); ?>
-                  </ul>
-                </li>
-                <?php if ($hr_tabs): ?>
-                  <?php $num_hr_tabs = count($hr_tabs); foreach ($hr_tabs as $i => $hr_tab) { ?>
-                    <li <?php if ($i == $num_hr_tabs - 1) { print 'class="active"'; } ?>><?php print $hr_tab; ?></li>
-                  <?php } ?>
-                <?php endif; ?>
-              </ul>
-              <div class="navbar-right">
-                <?php print render($page['top']); ?>
-              </div>
-            </div><!-- .navbar-collapse -->
-        </nav>
-      </div><!-- #top -->
-    </div><!-- .container -->
-    <div class="container-outer header">
-    <div class="container header">
-      <div id="branding">
-          <?php if ($logo): ?>
-            <a href="<?php print $front_page; ?>" id="logo">
-              <img src="<?php print $logo; ?>" alt="Humanitarianresponse Logo" />
-            </a>
-          <?php endif; ?>
-          <div class="pull-right">
-            <div id="header-image"><?php print $og_group_header_image; ?></div>
-            <?php print render($page['branding']); ?>
+  <header class="cd-hri-header hidden-print" role="banner">
+    <div class="cd-hri-global-header">
+      <div class="cd-hri-container cd-hri-global-header__inner container">
+        <div class="cd-hri-global-header__sites cd-hri-dropdown">
+          <button type="button" class="cd-hri-global-header__sites-btn" data-toggle="dropdown" id="cd-hri-related-platforms-toggle">
+            <?php print t('Related platforms'); ?>
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
+          </button>
+          <ul class="cd-hri-dropdown-menu dropdown-menu" role="menu" id="cd-hri-related-platforms" aria-hidden="true" aria-labelledby="cd-hri-related-platforms-toggle">
+            <li><a href="https://fts.unocha.org/">Financial Tracking Services</a></li>
+            <li><a href="https://humdata.org/">Humanitarian Data eXchange</a></li>
+            <li><a href="https://humanitarian.id/">Humanitarian ID</a></li>
+            <li><a href="https://reliefweb.int/">ReliefWeb</a></li>
+          </ul>
+        </div>
+        <div class="cd-hri-global-header__nav">
+          <div class="cd-hri-nav cd-hri-nav--secondary">
+            <?php print $hr_favorite_spaces; ?>
+            <?php print render($page['top']); ?>
           </div>
+
+        </div>
       </div>
-      <div id="navigation">
-        <?php print render($page['navigation']); ?>
-      </div><!-- /.navigation -->
-    </div> <!-- /.container -->
-    </div> <!-- /.container-outer -->
+    </div>
+    <div class="cd-hri-site-header">
+      <div class="cd-hri-container cd-hri-site-header__inner container">
+        <a href="<?php print $front_page; ?>" class="cd-hri-site-header__logo">
+          <span class="sr-only">Humanitarian Response</span>
+        </a>
+        <div class="cd-hri-site-header__search">
+          <?php print render($page['branding']); ?>
+        </div>
+        <div class="cd-hri-dropdown">
+          <button type="button" id="cd-hri-nav-toggle" class="cd-hri-site-header__nav-toggle" data-toggle="dropdown">
+            <span class="cd-hri-site-header__nav-toggle-inner" aria-hidden="true">
+            </span>
+            <span class="sr-only"><?php print t('Main menu') ?></span>
+          </button>
+          <nav role="navigation" class="cd-hri-site-header__nav dropdown-menu" aria-labelledby="cd-hri-nav-toggle">
+            <ul class="cd-hri-nav cd-hri-nav--primary">
+              <?php print render($main_menu_dropdown); ?>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
   </header>
+
+  <?php if ($hr_tabs): ?>
+    <div class="container">
+      <div class="col-sm-12">
+        <ul class="breadcrumbs">
+          <li class="breadcrumbs-item">
+            <a href="<?php print $front_page; ?>">
+              <?php print t('Home') ?>
+            </a>
+          </li>
+          <?php $num_hr_tabs = count($hr_tabs); foreach ($hr_tabs as $i => $hr_tab) { ?>
+            <li class="breadcrumbs-item <?php if ($i == $num_hr_tabs - 1) { print ' active'; } ?>"><?php print $hr_tab; ?></li>
+          <?php } ?>
+        </ul>
+      </div>
+    </div>
+  <?php endif; ?>
+
+  <div id="secondary-navigation">
+    <div class="container">
+      <?php print render($page['navigation']); ?>
+    </div>
+  </div>
 
   <?php if($is_front): ?>
 
