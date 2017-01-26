@@ -83,6 +83,10 @@ function hr_layout_reliefweb_render($subtype, $conf, $panel_args, $context = NUL
   $api_path = $conf['api_path'];
   $api_path_advanced = $conf['api_path_advanced'];
   $no_of_items  = $conf['no_of_items'];
+  $jobs = FALSE;
+  if (substr($api_path, -5) == '/jobs') {
+    $jobs = TRUE;
+  }
 
   $path = '';
   if(!empty($api_path_advanced)){
@@ -96,31 +100,71 @@ function hr_layout_reliefweb_render($subtype, $conf, $panel_args, $context = NUL
       $path = $api_path_advanced;
     }
   }
-  else{
-    //$api_path .= '?offset=0&limit=50&preset=minimal&fields[include][]=url&query[value]='.$country.'&query[fields][]=country';
+  else {
     $params = array(
       'offset' => 0,
       'limit' => isset($no_of_items) ? ($no_of_items + 1) : 50,
       'preset' => 'minimal',
-      'fields[include][]' => 'url',
+      'fields[include]' => array(
+        'url',
+      ),
       'query[value]' => $country,
       'query[fields][]' => 'country',
     );
 
+    if ($jobs) {
+      $params['fields[include]'] = array(
+        'url',
+        'date.closing',
+        'source.name',
+      );
+    }
+
     $path = $api_path . '?' . drupal_http_build_query($params);
   }
-
   $api_data = hr_layout_reliefweb_content($path);
-  $content = '';
+
   if (isset($no_of_items)) {
     $result = array_slice($api_data, 0, $no_of_items + 1, true);
+  }
+  else {
+    $result = $api_data;
+  }
+
+  // Render jobs as table.
+  if ($jobs) {
+    $headers = array(
+      t('Job'),
+      t('Closing date'),
+      t('Source'),
+    );
+
+    $rows = array();
+    foreach ($result as $key => $value) {
+      $rows[] = array(
+        '<a href = ' . $value['url'] . '> '. $value['title'] . '</a>',
+        isset($value['closing_date']) ? format_date(strtotime($value['closing_date']), 'search_api_facetapi_DAY') : '',
+        $value['source'],
+      );
+    }
+
+    $block->content = theme('table', array(
+      'header' => $headers,
+      'rows' => $rows,
+      'sticky' => FALSE,
+      'empty' => t('No open vacancies currently available.'),
+    ));
+  }
+  else {
+    $content = '';
     $content .= '<ul>';
     foreach ($result as $key => $value) {
-      $content .= '<li><a href = '.$value.'> '.$key . '</a></li>';
+      $content .= '<li><a href = ' . $value['url'] . '> '. $value['title'] . '</a></li>';
     }
     $content .= '</ul>';
+    $block->content = $content;
   }
-  $block->content = $content;
+
   return $block;
 }
 
@@ -160,7 +204,12 @@ function hr_layout_reliefweb_content($path) {
     foreach ($data as $value) {
       $url = $value['fields']['url'];
       $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
-      $data_array[$title] = $url;
+      $data_array[$title] = array(
+        'title' => $title,
+        'url' => $url,
+        'closing_date' => isset($value['fields']['date']['closing']) ? $value['fields']['date']['closing'] : NULL,
+        'source' => isset($value['fields']['source'][0]['name']) ? $value['fields']['source'][0]['name'] : '',
+      );
     }
     return $data_array;
   }
