@@ -3566,6 +3566,7 @@ body table tbody tr td, body .table tbody tr td { border: 0; border-color: #FFFF
 .footer-logos-hid { background-image: url("../images/footer-logos/hid.png"); background-repeat: no-repeat; background-position: 0 0; background-size: contain; }
 
 .page-header { border: none; }
+.page-header h1.title { margin-top: 15px; }
 
 h1, h2, h3, h4, h5, h6 { color: #0fa4de; font-weight: bold; }
 
