@@ -391,14 +391,16 @@ function _oauth_common_provider_token_schema() {
  * Add callback_url field to {oauth_common_token} table.
  */
 function oauth_common_update_7100() {
-  $spec = array(
-    'description' => 'Callback url.',
-    'type'        => 'varchar',
-    'length'      => 255,
-    'not null'    => TRUE,
-    'default'     => '',
-  );
-  db_add_field('oauth_common_token', 'callback_url', $spec);
+  if (!db_field_exists('oauth_common_token', 'callback_url')) {
+    $spec = array(
+      'description' => 'Callback url.',
+      'type'        => 'varchar',
+      'length'      => 255,
+      'not null'    => TRUE,
+      'default'     => '',
+    );
+    db_add_field('oauth_common_token', 'callback_url', $spec);
+  }
 }
 
 /**
