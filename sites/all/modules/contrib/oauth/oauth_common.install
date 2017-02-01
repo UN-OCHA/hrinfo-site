@@ -227,6 +227,7 @@ function _oauth_common_provider_consumer_schema() {
         'type'        => 'varchar',
         'length'      => 255,
         'not null'    => TRUE,
+        'default'     => '',
       ),
     ),
     'primary key' => array('consumer_key'),
@@ -395,6 +396,21 @@ function oauth_common_update_7100() {
     'type'        => 'varchar',
     'length'      => 255,
     'not null'    => TRUE,
+    'default'     => '',
   );
-  db_add_field( 'oauth_common_token', 'callback_url', $spec);
+  db_add_field('oauth_common_token', 'callback_url', $spec);
+}
+
+/**
+ * Fix callback_url field in {oauth_common_token} table.
+ */
+function oauth_common_update_7101() {
+  $spec = array(
+    'description' => 'Callback url.',
+    'type'        => 'varchar',
+    'length'      => 255,
+    'not null'    => TRUE,
+    'default'     => '',
+  );
+  db_change_field('oauth_common_token', 'callback_url', 'callback_url', $spec);
 }
