@@ -851,6 +851,7 @@ function _hr_core_display_cache_content($minutes = 'none', $margin = 5) {
         'granularity' => array(
           'args' => 'args',
           'user_role' => 'user_role',
+          'context' => 'context',
         ),
         'granularity_url' => 'base_url_system',
         'granularity_roles_as_anon' => array(),
@@ -880,6 +881,7 @@ function _hr_core_display_cache_content_defaults($minutes = 'none', $margin = 5,
         'granularity' => array(
           'args' => 'args',
           'user_role' => 'user_role',
+          'context' => 'context',
         ),
         'granularity_url' => 'base_url_system',
         'granularity_roles_as_anon' => array(),
