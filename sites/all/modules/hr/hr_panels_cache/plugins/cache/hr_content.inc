@@ -15,7 +15,11 @@ $plugin = array(
   'settings form submit' => 'hr_panels_cache_settings_form_submit',
   'defaults' => array(
     'lifetime' => 'none',
-    'granularity' => 'none',
+    'granularity' => array(
+      'args' => 'args',
+      'user_role' => 'user_role',
+      'context' => 'context',
+    ),
   ),
 );
 

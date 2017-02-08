@@ -321,3 +321,12 @@ function hr_core_update_7016() {
   $environment->settings['weight'] = 100;
   ctools_export_crud_save('environment_indicator_environment', $environment);
 }
+
+/**
+ * Set caching by content type, add context.
+ */
+function hr_core_update_7017() {
+  foreach (node_type_get_names() as $type => $name) {
+    _hr_core_display_cache_content_defaults('none', $margin = 5, $type);
+  }
+}
