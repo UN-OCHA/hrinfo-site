@@ -66,7 +66,7 @@ function hr_documents_key_documents_edit_form($form, &$form_state) {
       'default' => t('Full'),
       'link' => t('Links'),
     ),
-    '#default_value' => isset($conf['view_more']) ? $conf['view_more'] : '',
+    '#default_value' => isset($conf['view_mode']) ? $conf['view_mode'] : '',
   );
 
   return $form;
@@ -95,7 +95,7 @@ function hr_documents_key_documents_render($subtype, $conf, $panel_args, $contex
   $block = new stdClass();
 
   $documents = $conf['documents'];
-  $conf['view_mode'] = !empty($conf['view_mode']) ? $conf['view_mode'] : 'teaser';
+  $view_mode = !empty($conf['view_mode']) ? $conf['view_mode'] : 'teaser';
 
   // initial content is blank
   $block->title = '';
@@ -112,7 +112,8 @@ function hr_documents_key_documents_render($subtype, $conf, $panel_args, $contex
             $block->content .= '<li>'.l(entity_label('node', $entity), 'node/'.$nid).'</li>';
           }
           else {
-            $block->content .= drupal_render(node_view($node, $conf['view_mode']));
+            $node_view = node_view($node, $view_mode);
+            $block->content .= drupal_render($node_view);
           }
         }
       }
@@ -129,4 +130,3 @@ function hr_documents_key_documents_render($subtype, $conf, $panel_args, $contex
 
   return $block;
 }
-
