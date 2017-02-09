@@ -71,7 +71,6 @@ features[field_instance][] = node-hr_document-field_coordination_hubs
 features[field_instance][] = node-hr_document-field_disasters
 features[field_instance][] = node-hr_document-field_document_type
 features[field_instance][] = node-hr_document-field_files_collection
-features[field_instance][] = node-hr_document-field_fundings
 features[field_instance][] = node-hr_document-field_locations
 features[field_instance][] = node-hr_document-field_organizations
 features[field_instance][] = node-hr_document-field_publication_date

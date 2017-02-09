@@ -40,7 +40,21 @@ function hr_documents_panelizer_defaults() {
       'sidebar' => NULL,
     ),
   );
-  $display->cache = array();
+  $display->cache = array(
+    'method' => 'hr_content',
+    'settings' => array(
+      'granularity' => array(
+        'args' => 'args',
+        'user_role' => 'user_role',
+        'context' => 'context',
+      ),
+      'granularity_url' => 'base_url_system',
+      'granularity_roles_as_anon' => array(),
+      'granularity_role_selection' => 'all',
+      'lifetime' => 'none',
+      'content_type' => 'hr_document',
+    ),
+  );
   $display->title = '%node:title';
   $display->uuid = '6a4de020-4f65-496e-af53-3ddfef226a2f';
   $display->storage_type = 'panelizer_default';

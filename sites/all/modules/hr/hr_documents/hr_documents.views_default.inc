@@ -127,7 +127,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['fields']['field_document_type']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_document_type']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_document_type']['bypass_access'] = 0;
-  /* Field: Indexed Node: Managed by */
+  /* Field: Indexed Node: Organization(s) */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -154,7 +154,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['fields']['field_files_collection']['display'] = 'view';
   $handler->display->display_options['fields']['field_files_collection']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_files_collection']['bypass_access'] = 0;
-  /* Contextual filter: Indexed Node: Groups audience */
+  /* Contextual filter: Indexed Node: Webspace(s) */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -283,7 +283,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['fields']['field_document_type']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_document_type']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_document_type']['bypass_access'] = 0;
-  /* Field: Indexed Node: Managed by */
+  /* Field: Indexed Node: Organization(s) */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -562,7 +562,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['sorts']['changed']['field'] = 'changed';
   $handler->display->display_options['sorts']['changed']['order'] = 'DESC';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Indexed Node: Groups audience */
+  /* Contextual filter: Indexed Node: Webspace(s) */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -599,7 +599,7 @@ function hr_documents_views_default_views() {
     t('There are no results'),
     t('Title'),
     t('Document type'),
-    t('Managed by'),
+    t('Organization(s)'),
     t('Original Publication Date'),
     t('Files'),
     t('All'),
@@ -661,7 +661,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
   $handler->display->display_options['sorts']['created']['exposed'] = TRUE;
   $handler->display->display_options['sorts']['created']['expose']['label'] = 'Post date';
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -714,7 +714,7 @@ function hr_documents_views_default_views() {
     'hr_document' => 'hr_document',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filter criterion: Content: Space(s) (og_group_ref) */
+  /* Filter criterion: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['filters']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['filters']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['filters']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -730,7 +730,7 @@ function hr_documents_views_default_views() {
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Clusters/Sectors (field_bundles) (reference filter) */
+  /* Filter criterion: Content: Cluster(s)/Sector(s) (field_bundles) (reference filter) */
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['id'] = 'field_bundles_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['table'] = 'og_membership';
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['field'] = 'field_bundles_target_id_entityreference_filter';
@@ -749,7 +749,7 @@ function hr_documents_views_default_views() {
     30037204 => 0,
   );
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['reference_display'] = 'hr_bundles:entityreference_1';
-  /* Filter criterion: Content: Coordination hubs (field_coordination_hubs) */
+  /* Filter criterion: Content: Coordination hub(s) (field_coordination_hubs) */
   $handler->display->display_options['filters']['field_coordination_hubs_target_id']['id'] = 'field_coordination_hubs_target_id';
   $handler->display->display_options['filters']['field_coordination_hubs_target_id']['table'] = 'field_data_field_coordination_hubs';
   $handler->display->display_options['filters']['field_coordination_hubs_target_id']['field'] = 'field_coordination_hubs_target_id';
@@ -764,7 +764,7 @@ function hr_documents_views_default_views() {
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Disasters (field_disasters) */
+  /* Filter criterion: Content: Disaster(s)/Emergency (field_disasters) */
   $handler->display->display_options['filters']['field_disasters_target_id']['id'] = 'field_disasters_target_id';
   $handler->display->display_options['filters']['field_disasters_target_id']['table'] = 'field_data_field_disasters';
   $handler->display->display_options['filters']['field_disasters_target_id']['field'] = 'field_disasters_target_id';
@@ -779,7 +779,7 @@ function hr_documents_views_default_views() {
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Locations (field_locations) */
+  /* Filter criterion: Content: Location(s) (field_locations) */
   $handler->display->display_options['filters']['field_locations_target_id']['id'] = 'field_locations_target_id';
   $handler->display->display_options['filters']['field_locations_target_id']['table'] = 'field_data_field_locations';
   $handler->display->display_options['filters']['field_locations_target_id']['field'] = 'field_locations_target_id';
@@ -794,7 +794,7 @@ function hr_documents_views_default_views() {
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Themes (field_themes) (reference filter) */
+  /* Filter criterion: Content: Theme(s) (field_themes) (reference filter) */
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['id'] = 'field_themes_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['table'] = 'field_data_field_themes';
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['field'] = 'field_themes_target_id_entityreference_filter';
@@ -935,7 +935,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Space(s) */
+  /* Field: Content: Webspace(s) */
   $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['fields']['og_group_ref']['table'] = 'og_membership';
   $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
@@ -984,7 +984,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -995,7 +995,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['validate']['type'] = 'og';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['validate']['fail'] = 'ignore';
-  /* Contextual filter: Content: Clusters/Sectors (field_bundles) */
+  /* Contextual filter: Content: Cluster(s)/Sector(s) (field_bundles) */
   $handler->display->display_options['arguments']['field_bundles_target_id']['id'] = 'field_bundles_target_id';
   $handler->display->display_options['arguments']['field_bundles_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['field_bundles_target_id']['field'] = 'field_bundles_target_id';
@@ -1077,7 +1077,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1086,7 +1086,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary_options']['items_per_page'] = '25';
-  /* Contextual filter: Content: Clusters/Sectors (field_bundles) */
+  /* Contextual filter: Content: Cluster(s)/Sector(s) (field_bundles) */
   $handler->display->display_options['arguments']['field_bundles_target_id']['id'] = 'field_bundles_target_id';
   $handler->display->display_options['arguments']['field_bundles_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['field_bundles_target_id']['field'] = 'field_bundles_target_id';

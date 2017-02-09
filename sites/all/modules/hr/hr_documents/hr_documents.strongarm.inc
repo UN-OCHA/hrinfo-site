@@ -115,7 +115,7 @@ function hr_documents_strongarm() {
           'weight' => '0',
         ),
         'flag' => array(
-          'weight' => '11',
+          'weight' => '12',
         ),
       ),
       'display' => array(

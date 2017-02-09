@@ -20,9 +20,11 @@ function hr_documents_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'file',
-        'settings' => array(),
-        'type' => 'file_url_plain',
+        'module' => 'file_entity',
+        'settings' => array(
+          'file_view_mode' => 'preview',
+        ),
+        'type' => 'file_rendered',
         'weight' => 0,
       ),
       'search_result' => array(
@@ -75,15 +77,8 @@ function hr_documents_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'languagefield',
-        'settings' => array(
-          'format' => array(
-            'iso' => 0,
-            'name' => 'name',
-            'name_native' => 0,
-          ),
-        ),
-        'type' => 'language_default',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 1,
       ),
       'search_result' => array(
@@ -232,7 +227,7 @@ function hr_documents_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 14,
+      'weight' => 7,
     ),
   );
 
@@ -242,7 +237,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => 'Indicate the cluster(s)/sector(s) the document substantively refers to.',
+    'description' => 'Indicate the cluster(s)/sector(s) the document refers to.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -269,7 +264,7 @@ function hr_documents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_bundles',
-    'label' => 'Clusters/Sectors',
+    'label' => 'Cluster(s)/Sector(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -303,7 +298,7 @@ function hr_documents_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 8,
+      'weight' => 6,
     ),
   );
 
@@ -340,7 +335,7 @@ function hr_documents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_coordination_hubs',
-    'label' => 'Coordination hubs',
+    'label' => 'Coordination hub(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -358,7 +353,7 @@ function hr_documents_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
@@ -368,7 +363,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Click on the field and select the disaster(s) or emergency(ies) the document refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations. See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.',
+    'description' => 'Click on the field and select the disaster(s) or emergency the document refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -395,7 +390,7 @@ function hr_documents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_disasters',
-    'label' => 'Disasters',
+    'label' => 'Disaster(s)/Emergency',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -413,7 +408,7 @@ function hr_documents_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 10,
+      'weight' => 11,
     ),
   );
 
@@ -423,7 +418,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select the document type and sub-type that best describes the document.',
+    'description' => 'Select the document type and sub-type that best describe the document.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -484,7 +479,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Attach the file to publish and specify the language of the document. It is best to publish one file per record. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
+    'description' => 'Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the document. It is best to publish one file per record, however you can add up to four. In case you need to upload more than four files save the document as draft then edit it to add more files. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -530,67 +525,9 @@ function hr_documents_field_default_field_instances() {
     'widget' => array(
       'active' => 0,
       'module' => 'field_collection',
-      'settings' => array(
-        'multiple_value_limit' => 4,
-        'multiple_value_widget' => 'table',
-      ),
+      'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 3,
-    ),
-  );
-
-  // Exported field_instance: 'node-hr_document-field_fundings'.
-  $field_instances['node-hr_document-field_fundings'] = array(
-    'bundle' => 'hr_document',
-    'default_value' => array(),
-    'default_value_function' => '',
-    'deleted' => 0,
-    'description' => 'Click on the field and select the funding appeal the document refers to. Use this field only when the document is substantively related to a specific funding.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'bypass_access' => FALSE,
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 18,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_fundings',
-    'label' => 'Fundings',
-    'required' => 0,
-    'settings' => array(
-      'behaviors' => array(
-        'prepopulate' => array(
-          'status' => 0,
-        ),
-      ),
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'field_extrawidgets',
-      'settings' => array(
-        'apply_chosen' => 1,
-      ),
-      'type' => 'field_extrawidgets_hidden',
-      'weight' => 12,
+      'weight' => 8,
     ),
   );
 
@@ -600,7 +537,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).',
+    'description' => 'Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your document as draft then edit it to add more locations.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -645,8 +582,6 @@ function hr_documents_field_default_field_instances() {
       'active' => 1,
       'module' => 'shs',
       'settings' => array(
-        'multiple_value_limit' => 4,
-        'multiple_value_widget' => 'table',
         'shs' => array(
           'create_new_levels' => 0,
           'create_new_terms' => 0,
@@ -656,7 +591,7 @@ function hr_documents_field_default_field_instances() {
         ),
       ),
       'type' => 'taxonomy_shs',
-      'weight' => 6,
+      'weight' => 9,
     ),
   );
 
@@ -666,7 +601,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Type and select the source(s) of the document.',
+    'description' => 'Type in and select the source(s) of the document. To indicate multiple organizations add a comma after each entry.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -720,8 +655,8 @@ function hr_documents_field_default_field_instances() {
         'path' => '',
         'size' => 60,
       ),
-      'type' => 'entityreference_autocomplete',
-      'weight' => 7,
+      'type' => 'entityreference_autocomplete_tags',
+      'weight' => 4,
     ),
   );
 
@@ -787,15 +722,16 @@ function hr_documents_field_default_field_instances() {
         'apply_chosen' => 0,
         'display_all_day' => 0,
         'increment' => 15,
-        'input_format' => 'm/d/Y - H:i:s',
+        'input_format' => 'd/m/Y - H:i:s',
         'input_format_custom' => '',
         'label_position' => 'above',
+        'no_fieldset' => 0,
         'repeat_collapsed' => 0,
         'text_parts' => array(),
-        'year_range' => '-10:+0',
+        'year_range' => '-15:+0',
       ),
       'type' => 'date_select',
-      'weight' => 4,
+      'weight' => 3,
     ),
   );
 
@@ -804,7 +740,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Add links of content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url. When using the Search function make sure to search by content title. ',
+    'description' => 'Add links to content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url. When using the Search function make sure to search by content title. ',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -873,7 +809,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the global cluster(s) the document refers to.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -900,7 +836,7 @@ function hr_documents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_sectors',
-    'label' => 'Global Clusters',
+    'label' => 'Global Cluster(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -955,7 +891,7 @@ function hr_documents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_themes',
-    'label' => 'Themes',
+    'label' => 'Theme(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -976,7 +912,7 @@ function hr_documents_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 13,
+      'weight' => 14,
     ),
   );
 
@@ -989,7 +925,7 @@ function hr_documents_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => 'Choose whether the document will be public, private or will have the same setting (private or public) as the group within which it has been published.',
+    'description' => 'Choose whether the document will be public, private or will have the same setting (private or public)as the webspace or sub-space (cluster, sector or working group) within which it has been published.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1013,7 +949,7 @@ function hr_documents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'group_content_access',
-    'label' => 'Group content visibility',
+    'label' => 'Content visibility',
     'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
@@ -1036,7 +972,7 @@ function hr_documents_field_default_field_instances() {
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 16,
+      'weight' => 17,
     ),
     'widget_type' => 'options_select',
   );
@@ -1047,7 +983,8 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => 'Click on the field and select the “space (country or region)” where you want the document to be published.',
+    'description' => 'Click on the field and select where to publish the document (operation, regional site or thematic site).
+',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1070,7 +1007,7 @@ function hr_documents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Space(s)',
+    'label' => 'Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -1116,7 +1053,7 @@ function hr_documents_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 17,
+      'weight' => 16,
     ),
   );
 
@@ -1298,27 +1235,26 @@ function hr_documents_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Acronym');
-  t('Add links of content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url. When using the Search function make sure to search by content title. ');
-  t('Attach the file to publish and specify the language of the document. It is best to publish one file per record. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
-  t('Choose whether the document will be public, private or will have the same setting (private or public) as the group within which it has been published.');
+  t('Add links to content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url. When using the Search function make sure to search by content title. ');
+  t('Choose whether the document will be public, private or will have the same setting (private or public)as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
   t('Click on the field and select all relevant themes. Choose only themes the document substantively refers to.');
   t('Click on the field and select the coordination hub(s) the document refers to (if any).');
-  t('Click on the field and select the disaster(s) or emergency(ies) the document refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations. See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.');
-  t('Click on the field and select the funding appeal the document refers to. Use this field only when the document is substantively related to a specific funding.');
-  t('Click on the field and select the “space (country or region)” where you want the document to be published.');
-  t('Clusters/Sectors');
-  t('Coordination hubs');
+  t('Click on the field and select the disaster(s) or emergency the document refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.');
+  t('Click on the field and select where to publish the document (operation, regional site or thematic site).
+');
+  t('Cluster(s)/Sector(s)');
+  t('Content visibility');
+  t('Coordination hub(s)');
   t('Description');
   t('Description or Summary of content');
-  t('Disasters');
+  t('Disaster(s)/Emergency');
   t('Document type');
   t('Documents');
   t('File');
   t('File(s)');
-  t('Fundings');
-  t('Global Clusters');
-  t('Group content visibility');
-  t('Indicate the cluster(s)/sector(s) the document substantively refers to.');
+  t('Global Cluster(s)');
+  t('Indicate the cluster(s)/sector(s) the document refers to.');
+  t('Indicate the global cluster(s) the document refers to.');
   t('Indicate when the document has originally been published.');
   t('Language');
   t('Location(s)');
@@ -1326,14 +1262,15 @@ function hr_documents_field_default_field_instances() {
   t('Organization(s)');
   t('Original Publication Date');
   t('Related content');
-  t('Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).');
-  t('Select the document type and sub-type that best describes the document.');
-  t('Space(s)');
-  t('Themes');
+  t('Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your document as draft then edit it to add more locations.');
+  t('Select the document type and sub-type that best describe the document.');
+  t('Theme(s)');
   t('Title');
   t('Try to always include here the text (in full or part of it) of the document (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.');
-  t('Type and select the source(s) of the document.');
+  t('Type in and select the source(s) of the document. To indicate multiple organizations add a comma after each entry.');
   t('Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
+  t('Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the document. It is best to publish one file per record, however you can add up to four. In case you need to upload more than four files save the document as draft then edit it to add more files. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
+  t('Webspace(s)');
 
   return $field_instances;
 }
