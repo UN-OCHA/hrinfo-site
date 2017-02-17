@@ -1,0 +1,140 @@
+<?php
+/**
+ * @file
+ * Code for the Reliefweb integration.
+ */
+
+/**
+ * Implements hook_og_features_registry()
+ */
+function hr_reliefweb_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'hr_reliefweb';
+  $feature->name = 'Documents from Reliefweb';
+  $feature->description = t('Provide documents, maps and infographics to your space directly from Reliefweb.');
+  $feature->components = array(
+    'node' => array(
+      'hr_infographic',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function hr_reliefweb_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Implements hook_menu()
+ */
+function hr_reliefweb_menu() {
+  $items = array();
+
+  $items['node/%node/reliefweb'] = array(
+    'title' => 'Reliefweb documents',
+    'page callback' => 'hr_reliefweb_document_list',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'file' => 'hr_reliefweb.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Fetcfh documents from Reliefweb.
+ */
+function hr_reliefweb_fetch_documents($country, $no_of_items = 50) {
+  $endpoint = 'https://api.reliefweb.int/v1/reports';
+  $params = array(
+    'appname' => 'hrinfo',
+    'offset' => 0,
+    'limit' => $no_of_items,
+    'preset' => 'latest',
+    'query[fields][]' => 'country.iso3',
+    'query[value]' => implode(',', $country),
+    'fields[include]' => array(
+      'disaster_type.name',
+      'url',
+      'title',
+      'date.changed',
+      'source.name',
+      'country.name',
+      'file.url',
+      'file.preview.url-thumb',
+      'format.name',
+    ),
+  );
+
+  $url = $endpoint . '?' . drupal_http_build_query($params);
+  return hr_reliefweb_content($url);
+}
+
+/**
+*  Function to return content given an api path.
+*/
+function hr_reliefweb_content($path) {
+  $request = drupal_http_request($path);
+  if (isset($request->data)) {
+    $response = drupal_json_decode($request->data);
+    $data = $response['data'];
+    $data_array = array();
+    foreach ($data as $value) {
+      $url = $value['fields']['url'];
+      $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
+      $data_array[$title] = array(
+        'title' => $title,
+        'url' => $url,
+        'date_changed' => $value['date']['changed'],
+        'format' => $value['fields']['format'][0]['name'],
+      );
+
+      if (isset($value['fields']['source'])) {
+        $sources = array();
+        foreach ($value['fields']['source'] as $source) {
+          $sources[] = $source['name'];
+        }
+        $data_array[$title]['sources'] = $sources;
+      }
+
+      if (isset($value['fields']['disaster_type'])) {
+        $disaster_types = array();
+        foreach ($value['fields']['disaster_type'] as $disaster_type) {
+          $disaster_types[] = $disaster_type['name'];
+        }
+        $data_array[$title]['disaster_types'] = $disaster_types;
+      }
+
+      if (isset($value['fields']['country'])) {
+        $countries = array();
+        foreach ($value['fields']['country'] as $country) {
+          $countries[] = $country['name'];
+        }
+        $data_array[$title]['countries'] = $countries;
+      }
+
+      if (isset($value['fields']['file'])) {
+        $files = array();
+        foreach ($value['fields']['file'] as $file) {
+          $files[] = array(
+            'preview' => $file['preview']['url-thumb'],
+            'url' => str_replace(' ', '%20', $file['url']),
+          );
+        }
+        $data_array[$title]['files'] = $files;
+      }
+
+    }
+    return $data_array;
+  }
+  else{
+    drupal_set_message('Could not fetch content for the given API path, please consult your site administrator');
+  }
+}

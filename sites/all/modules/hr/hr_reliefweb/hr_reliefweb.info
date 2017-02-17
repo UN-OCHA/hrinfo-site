@@ -1,0 +1,4 @@
+name = HR Reliefweb
+description = Reliefweb integration for Humanitarianresponse
+core = 7.x
+package = Humanitarianresponse
