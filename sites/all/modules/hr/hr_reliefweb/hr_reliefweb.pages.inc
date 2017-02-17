@@ -48,7 +48,42 @@ function hr_reliefweb_document_list($node) {
     }
   }
 
-  $result = hr_reliefweb_fetch_documents($country_codes, 10);
+  // Fetch arguments.
+  $args = arg();
+  // First 3 are base url of the page.
+  $page_url = implode('/', array_slice($args, 0, 3));
+
+  // Remove first 3: node - nid - reliefweb.
+  $args = array_slice($args, 3);
+
+  // Create optional filters.
+  $filters = array();
+  $active_filters = array();
+
+  if (!empty($args)) {
+    for ($i = 0; $i < count($args); $i += 2) {
+      $active_filters[] = array(
+        'name' => $args[$i],
+        'value' => $args[$i + 1],
+        'path' => '/' . $args[$i] . '/' . $args[$i + 1],
+      );
+
+      $filters[] = array(
+        'field' => $args[$i],
+        'value' => $args[$i + 1],
+        'operator' => 'OR',
+      );
+    }
+  }
+
+  $limit = 10;
+
+  // Do a count only query.
+  $data = hr_reliefweb_fetch_documents($country_codes, 0, 0, $filters);
+
+  // Fetch current page and do a real query.
+  $current_page = pager_default_initialize($data['total'], $limit);
+  $data = hr_reliefweb_fetch_documents($country_codes, $limit, $current_page * $limit, $filters);
 
   $headers = array(
     t('Type'),
@@ -60,7 +95,7 @@ function hr_reliefweb_document_list($node) {
   );
 
   $rows = array();
-  foreach ($result as $key => $value) {
+  foreach ($data['data'] as $key => $value) {
     $downloads = array();
     if (isset($value['files'])) {
       foreach ($value['files'] as $file) {
@@ -82,13 +117,73 @@ function hr_reliefweb_document_list($node) {
     );
   }
 
-  return theme('table', array(
-    'header' => $headers,
-    'rows' => $rows,
-    'sticky' => TRUE,
-    'empty' => t('No open vacancies currently available.'),
-  ));
+  $remove_facets = array();
+  if (!empty($active_filters)) {
+    $links = array();
+    foreach ($active_filters as $active_filter) {
+      $links[] = array(
+        'title' => hr_reliefweb_get_filters($active_filter['name']) . ': ' . $active_filter['value'],
+        'href' => str_replace($active_filter['path'], '', drupal_get_path_alias()),
+      );
+    }
+    $remove_facets = array(
+      '#theme' => 'links',
+      '#links' => $links,
+      '#heading' => 'Remove active filter',
+    );
+  }
 
+  $facets = array();
+  $facets_weight = 0;
+  foreach ($data['facets'] as $name => $facet) {
+    $links = array();
+    foreach ($facet['data'] as $term) {
+      $links[] = array(
+        'title' => $term['value'] . ' (' . $term['count'] . ')',
+        'href' => drupal_get_path_alias() . '/' . $name . '/' . $term['value'],
+      );
+    }
+    $facets[] = array(
+      '#theme' => 'links',
+      '#links' => $links,
+      '#heading' => hr_reliefweb_get_filters($name),
+    );
+  }
+
+  return array(
+    'summary' => array(
+      '#type' => 'container',
+      'total' => array(
+        '#type' => 'markup',
+        '#markup' => $data['total'] . ' records found',
+      ),
+    ),
+    'clearall' => array(
+      '#type' => 'container',
+      'total' => array(
+        '#type' => 'markup',
+        '#markup' => l('Remove all filters', $page_url),
+      ),
+    ),
+    'removefacets' => array(
+      '#type' => 'container',
+      $remove_facets,
+    ),
+    'facets' => array(
+      '#type' => 'container',
+      $facets,
+    ),
+    'data' => array(
+      '#theme' => 'table',
+      '#header' => $headers,
+      '#rows' => $rows,
+      '#sticky' => TRUE,
+      '#empty' => t('No open vacancies currently available.'),
+    ),
+    'pager' => array(
+      '#theme' => 'pager',
+    ),
+  );
 }
 
 /**
