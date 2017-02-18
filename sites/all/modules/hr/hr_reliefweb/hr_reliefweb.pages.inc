@@ -168,7 +168,7 @@ function hr_reliefweb_document_list($node) {
         '#type' => 'container',
         'total' => array(
           '#type' => 'markup',
-          '#markup' => $data['total'] . ' records found',
+          '#markup' => format_plural($data['total'], ' record found', ' records found'),
         ),
       ),
 
