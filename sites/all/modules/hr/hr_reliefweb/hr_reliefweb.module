@@ -5,24 +5,6 @@
  */
 
 /**
- * Implements hook_og_features_registry()
- */
-function hr_reliefweb_og_features_registry() {
-  $registry = array();
-  $feature = new stdClass();
-  $feature->id = 'hr_reliefweb';
-  $feature->name = 'Documents from Reliefweb';
-  $feature->description = t('Provide documents, maps and infographics to your space directly from Reliefweb.');
-  $feature->components = array(
-    'node' => array(
-      'hr_infographic',
-    ),
-  );
-  $registry[$feature->id] = $feature;
-  return $registry;
-}
-
-/**
  * Implements hook_ctools_plugin_directory().
  */
 function hr_reliefweb_ctools_plugin_directory($module, $plugin) {
@@ -46,6 +28,29 @@ function hr_reliefweb_menu() {
   );
 
   return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function hr_reliefweb_theme($existing, $type, $theme, $path) {
+  $theme = array();
+
+  $theme['hr_reliefweb_overview'] = array(
+    'template' => 'hr-reliefweb-overview',
+    'path' => drupal_get_path('module', 'hr_reliefweb') . '/templates',
+    'variables' => array(
+      'contents' => array(),
+      'summary' => NULL,
+      'clearall' => NULL,
+      'removefacets' => NULL,
+      'facets' => NULL,
+      'data' => NULL,
+      'pager' => NULL,
+    ),
+   );
+
+  return $theme;
 }
 
 /**

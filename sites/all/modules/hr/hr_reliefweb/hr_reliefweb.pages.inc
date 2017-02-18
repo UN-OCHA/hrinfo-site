@@ -146,42 +146,65 @@ function hr_reliefweb_document_list($node) {
     $facets[] = array(
       '#theme' => 'links',
       '#links' => $links,
-      '#heading' => hr_reliefweb_get_filters($name),
+      '#prefix' => '<div class="reliefweb--facet"><details><summary>' . hr_reliefweb_get_filters($name) . '</summary>',
+      '#suffix' => '</details></div>',
     );
   }
 
   return array(
-    'summary' => array(
-      '#type' => 'container',
-      'total' => array(
-        '#type' => 'markup',
-        '#markup' => $data['total'] . ' records found',
+    'hr_reliefweb_overview' => array(
+      '#theme' => 'hr_reliefweb_overview',
+
+      '#contents' => array(
+        '#markup' => t('Reliefweb document overview ...'),
+        '#prefix' => '<div id="my_page_data">',
+        '#suffix' => '</div>',
+      ),
+
+      '#summary' => array(
+        '#type' => 'container',
+        'total' => array(
+          '#type' => 'markup',
+          '#markup' => $data['total'] . ' records found',
+        ),
+      ),
+
+      '#clearall' => array(
+        '#type' => 'container',
+        'total' => array(
+          '#type' => 'markup',
+          '#markup' => l('Remove all filters', $page_url),
+        ),
+      ),
+
+      '#removefacets' => array(
+        '#type' => 'container',
+        $remove_facets,
+      ),
+
+      '#facets' => array(
+        '#type' => 'container',
+        $facets,
+      ),
+      '#data' => array(
+        '#theme' => 'table',
+        '#header' => $headers,
+        '#rows' => $rows,
+        '#sticky' => TRUE,
+        '#empty' => t('No open vacancies currently available.'),
+      ),
+
+      '#pager' => array(
+        '#theme' => 'pager',
       ),
     ),
-    'clearall' => array(
-      '#type' => 'container',
-      'total' => array(
-        '#type' => 'markup',
-        '#markup' => l('Remove all filters', $page_url),
+    '#attached' => array (
+      'css' => array (
+        array (
+          'type' => 'file',
+          'data' => drupal_get_path('module', 'hr_reliefweb') . '/css/hr_reliefweb_overview.css',
+        ),
       ),
-    ),
-    'removefacets' => array(
-      '#type' => 'container',
-      $remove_facets,
-    ),
-    'facets' => array(
-      '#type' => 'container',
-      $facets,
-    ),
-    'data' => array(
-      '#theme' => 'table',
-      '#header' => $headers,
-      '#rows' => $rows,
-      '#sticky' => TRUE,
-      '#empty' => t('No open vacancies currently available.'),
-    ),
-    'pager' => array(
-      '#theme' => 'pager',
     ),
   );
 }

@@ -1,0 +1,16 @@
+.reliefweb--wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.reliefweb--intro {
+  flex: 0 0 100%;
+}
+
+.reliefweb--sidebar {
+  flex: 0 0 30%;
+}
+
+.reliefweb--content {
+  flex: 0 0 70%;
+}
