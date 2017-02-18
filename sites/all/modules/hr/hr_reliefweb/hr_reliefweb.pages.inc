@@ -62,7 +62,7 @@ function hr_reliefweb_document_list($node) {
 
   if (!empty($args)) {
     for ($i = 0; $i < count($args); $i += 2) {
-      $active_filters[] = array(
+      $active_filters['/' . $args[$i] . '/' . $args[$i + 1]] = array(
         'name' => $args[$i],
         'value' => $args[$i + 1],
         'path' => '/' . $args[$i] . '/' . $args[$i + 1],
@@ -99,7 +99,7 @@ function hr_reliefweb_document_list($node) {
     $downloads = array();
     if (isset($value['files'])) {
       foreach ($value['files'] as $file) {
-        if (isset($file['preview'])) {
+        if (isset($file['preview']) && !empty($file['preview'])) {
           $downloads[] = '<a target="reliefweb" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
         }
         else {
@@ -113,7 +113,7 @@ function hr_reliefweb_document_list($node) {
       isset($value['date_changed']) ? format_date(strtotime($value['date_changed']), 'search_api_facetapi_DAY') : '',
       isset($value['sources']) ? implode(', ', $value['sources']) : '',
       isset($value['countries']) ? implode(', ', $value['countries']) : '',
-      !empty($downloads) ? implode(', ', $downloads) : '',
+      !empty($downloads) ? implode(' ', $downloads) : '',
     );
   }
 
@@ -138,10 +138,13 @@ function hr_reliefweb_document_list($node) {
   foreach ($data['facets'] as $name => $facet) {
     $links = array();
     foreach ($facet['data'] as $term) {
-      $links[] = array(
-        'title' => $term['value'] . ' (' . $term['count'] . ')',
-        'href' => drupal_get_path_alias() . '/' . $name . '/' . $term['value'],
-      );
+      $filter_path = '/' . $name . '/' . $term['value'];
+      if (!array_key_exists($filter_path, $active_filters)) {
+        $links[] = array(
+          'title' => $term['value'] . ' (' . $term['count'] . ')',
+          'href' => drupal_get_path_alias() . $filter_path,
+        );
+      }
     }
     $facets[] = array(
       '#theme' => 'links',

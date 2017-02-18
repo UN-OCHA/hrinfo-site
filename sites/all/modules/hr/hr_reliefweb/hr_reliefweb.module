@@ -195,7 +195,7 @@ function hr_reliefweb_content($path) {
         $files = array();
         foreach ($value['fields']['file'] as $file) {
           $files[] = array(
-            'preview' => str_replace('#', '%23', str_replace(' ', '%20', $file['preview']['url-thumb'])),
+            'preview' => isset($file['preview']['url-thumb']) ? str_replace('#', '%23', str_replace(' ', '%20', $file['preview']['url-thumb'])) : '',
             'url' => str_replace(' ', '%20', $file['url']),
           );
         }
