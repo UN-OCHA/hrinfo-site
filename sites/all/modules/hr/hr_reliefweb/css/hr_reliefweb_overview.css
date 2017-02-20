@@ -22,3 +22,11 @@
 .reliefweb--data tbody [data-title="Download"] {
   text-align: center;
 }
+
+.reliefweb--facet .processed {
+  display: none;
+}
+
+.reliefweb--facet select {
+  width: 90%;
+}
