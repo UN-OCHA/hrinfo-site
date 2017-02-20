@@ -11,12 +11,8 @@ function hr_reliefweb_document_list($node) {
   // Make sure that the og single menu is not displayed.
   context_set('context', 'hr_space_menu', FALSE);
 
-  $templates = array(
-    'hdx_datasets_list_view',
-  );
-  foreach ($templates as $template) {
-    hdx_datasets_load_template($template, $template);
-  }
+  // Set active menu item.
+  menu_set_active_item('node/' . $node->nid . '/reliefweb');
 
   $operation = $node->type == 'hr_bundle' ? $op = node_load(_hr_bundles_get_operation($node->nid)) : $node;
   $operation_wrapper = entity_metadata_wrapper('node', $operation);
