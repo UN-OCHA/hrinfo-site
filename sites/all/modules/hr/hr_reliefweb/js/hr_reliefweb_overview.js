@@ -6,6 +6,31 @@
       return;
     }
 
+    // Bind to search.
+    if (document.getElementById('block-hr-reliefweb-hr-reliefweb-search')) {
+      // Redirect to search, overwrite previous search.
+      var handleSearch = function () {
+        var q = document.querySelector('#block-hr-reliefweb-hr-reliefweb-search input').value;
+        window.location = window.location.pathname + '?s=' + q;
+      };
+
+      var search = document.querySelector('#block-hr-reliefweb-hr-reliefweb-search input');
+      if (search) {
+        search.addEventListener('keyup', function (e) {
+          if (event.keyCode == 13) {
+            handleSearch();
+          }
+        });
+      }
+
+      var searchButton = document.querySelector('#block-hr-reliefweb-hr-reliefweb-search button');
+      if (searchButton) {
+        searchButton.addEventListener('click', function (e) {
+          handleSearch();
+        });
+      }
+    }
+
     // Redirect to selected option.
     var handleSelect = function (e) {
       if (e.target.value) {

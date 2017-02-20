@@ -69,14 +69,20 @@ function hr_reliefweb_document_list($node) {
     }
   }
 
+  // Handle search parameter.
+  $query = NULL;
+  if ($_GET['s']) {
+    $query = check_plain($_GET['s']);
+  }
+
   $limit = 10;
 
   // Do a count only query.
-  $data = hr_reliefweb_fetch_documents($country_codes, 0, 0, $filters);
+  $data = hr_reliefweb_fetch_documents($country_codes, 0, 0, $filters, $query);
 
   // Fetch current page and do a real query.
   $current_page = pager_default_initialize($data['total'], $limit);
-  $data = hr_reliefweb_fetch_documents($country_codes, $limit, $current_page * $limit, $filters);
+  $data = hr_reliefweb_fetch_documents($country_codes, $limit, $current_page * $limit, $filters, $query);
 
   $headers = array(
     t('Type'),

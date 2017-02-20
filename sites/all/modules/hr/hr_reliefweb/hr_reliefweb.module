@@ -14,6 +14,15 @@ function hr_reliefweb_ctools_plugin_directory($module, $plugin) {
 }
 
 /**
+ * Implementation of hook_ctools_plugin_api().
+ */
+function hr_reliefweb_ctools_plugin_api($module, $api) {
+  if ($module == 'context' && ($api == 'plugins' || $api == 'context')) {
+    return array('version' => '3');
+  }
+}
+
+/**
  * Implements hook_og_features_registry()
  */
 function hr_reliefweb_og_features_registry() {
@@ -72,6 +81,41 @@ function hr_reliefweb_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_block_info().
+ */
+function hr_reliefweb_block_info() {
+  $blocks['hr_reliefweb_search'] = array(
+    'info' => t('Reliefweb documents search'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function hr_reliefweb_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'hr_reliefweb_search':
+      $block['content'] = '<div><div class="views-exposed-form">
+        <div class="views-exposed-widgets clearfix">
+          <div id="edit-search-wrapper" class="views-exposed-widget form-group">
+          <div class="input-group">
+            <input class="form-control form-text" id="search" name="text" value="" size="30" maxlength="128" type="text" placeholder="' . t('Search RW Documents') . '">
+            <span class="input-group-btn">
+              <button id="search-button" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+            </span>
+          </div>
+        </div>
+      </div></div></div>';
+      break;
+
+  }
+  return $block;
+}
+
+/**
  * Allowed filters.
  */
 function hr_reliefweb_get_filters($key = NULL) {
@@ -96,7 +140,7 @@ function hr_reliefweb_get_filters($key = NULL) {
 /**
  * Fetch documents from Reliefweb.
  */
-function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filters = array()) {
+function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filters = array(), $query = NULL) {
   $endpoint = 'https://api.reliefweb.int/v1/reports';
   $params = array(
     'appname' => 'hrinfo',
@@ -135,6 +179,10 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
       'format.name',
     ),
   );
+
+  if (!empty($query)) {
+    $params['query']['value'] = $query;
+  }
 
   if (!empty($filters)) {
     $params['filter']['conditions'] = array_merge($params['filter']['conditions'], $filters);
