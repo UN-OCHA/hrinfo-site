@@ -10,6 +10,10 @@
     <?php print render($contents); ?>
   </div>
   <div class="reliefweb--sidebar">
+    <div class="reliefweb--powered-by">
+      <p><?php print t('Powered by'); ?></p>
+      <img src="/<?php print drupal_get_path('module', 'hr_reliefweb') ?>/assets/reliefweb.svg">
+    </div>
     <div class="reliefweb--summary">
       <?php print render($summary); ?>
     </div>
