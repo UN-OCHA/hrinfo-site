@@ -191,7 +191,7 @@ function hr_reliefweb_document_list($node) {
         '#header' => $headers,
         '#rows' => $rows,
         '#sticky' => FALSE,
-        '#empty' => t('No open vacancies currently available.'),
+        '#empty' => t('No documents found.'),
       ),
 
       '#pager' => array(
