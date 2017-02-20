@@ -208,6 +208,12 @@ function hr_reliefweb_document_list($node) {
           'data' => drupal_get_path('module', 'hr_reliefweb') . '/css/hr_reliefweb_overview.css',
         ),
       ),
+      'js' => array (
+        array (
+          'type' => 'file',
+          'data' => drupal_get_path('module', 'hr_reliefweb') . '/js/hr_reliefweb_overview.js',
+        ),
+      ),
     ),
   );
 }
