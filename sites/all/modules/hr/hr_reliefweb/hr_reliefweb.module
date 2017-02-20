@@ -14,6 +14,24 @@ function hr_reliefweb_ctools_plugin_directory($module, $plugin) {
 }
 
 /**
+ * Implements hook_og_features_registry()
+ */
+function hr_reliefweb_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'hr_reliefweb_documents';
+  $feature->name = 'RW Documents';
+  $feature->description = t('Provide access to RW Documents.');
+  $feature->components = array(
+    'path' => array(
+      'node/%node/reliefweb',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
  * Implements hook_menu()
  */
 function hr_reliefweb_menu() {
