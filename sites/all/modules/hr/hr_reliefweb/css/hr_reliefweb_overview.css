@@ -14,3 +14,11 @@
 .reliefweb--content {
   flex: 0 0 70%;
 }
+
+.reliefweb--data table.table {
+  table-layout: auto;
+}
+
+.reliefweb--data tbody [data-title="Download"] {
+  text-align: center;
+}

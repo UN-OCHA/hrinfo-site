@@ -193,7 +193,7 @@ function hr_reliefweb_document_list($node) {
         '#theme' => 'table',
         '#header' => $headers,
         '#rows' => $rows,
-        '#sticky' => TRUE,
+        '#sticky' => FALSE,
         '#empty' => t('No open vacancies currently available.'),
       ),
 
