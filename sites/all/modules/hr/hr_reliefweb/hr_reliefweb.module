@@ -195,8 +195,8 @@ function hr_reliefweb_content($path) {
         $files = array();
         foreach ($value['fields']['file'] as $file) {
           $files[] = array(
-            'preview' => isset($file['preview']['url-thumb']) ? str_replace('#', '%23', str_replace(' ', '%20', $file['preview']['url-thumb'])) : '',
-            'url' => str_replace(' ', '%20', $file['url']),
+            'preview' => isset($file['preview']['url-thumb']) ? _hr_reliefweb_fix_url($file['preview']['url-thumb']) : '',
+            'url' => _hr_reliefweb_fix_url($file['url']),
           );
         }
         $data_array[$title]['files'] = $files;
@@ -210,4 +210,15 @@ function hr_reliefweb_content($path) {
     'facets' => $facets,
     'total' => $total_count,
   );
+}
+
+/**
+ * Fix URL for reliefweb.
+ */
+function _hr_reliefweb_fix_url($url) {
+  $url = str_replace('#', '%23', $url);
+  $url = str_replace(' ', '%20', $url);
+  $url = str_replace('http://', 'https://', $url);
+
+  return $url;
 }
