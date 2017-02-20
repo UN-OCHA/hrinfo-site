@@ -144,7 +144,7 @@ function hr_reliefweb_document_list($node) {
         $facets[] = array(
           '#theme' => 'links',
           '#links' => $links,
-          '#prefix' => '<div class="reliefweb--facet"><details><summary>' . hr_reliefweb_get_filters($name) . '</summary>',
+          '#prefix' => '<div class="reliefweb--facet"><details><summary>' . t('Filter by !name', array('!name' => hr_reliefweb_get_filters($name))) . '</summary>',
           '#suffix' => '</details></div>',
         );
       }

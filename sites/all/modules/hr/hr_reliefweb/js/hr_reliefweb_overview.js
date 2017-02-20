@@ -20,6 +20,7 @@
       // Construct label.
       var newLabel = document.createElement('label');
       newLabel.innerText = detail.querySelector('summary').innerText;
+      newLabel.classList.add('invisible');
 
       // Construct select.
       var newSelect = document.createElement('select');
@@ -28,7 +29,7 @@
       // Add empty option.
       var newOption = document.createElement('option');
       newOption.value = '';
-      newOption.text = Drupal.t('Select a filter');
+      newOption.text = newLabel.innerText;
       newSelect.appendChild(newOption);
 
       // Add options.
