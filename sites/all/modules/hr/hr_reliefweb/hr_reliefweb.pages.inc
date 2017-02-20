@@ -130,21 +130,25 @@ function hr_reliefweb_document_list($node) {
   $facets_weight = 0;
   foreach ($data['facets'] as $name => $facet) {
     $links = array();
-    foreach ($facet['data'] as $term) {
-      $filter_path = '/' . $name . '/' . $term['value'];
-      if (!array_key_exists($filter_path, $active_filters)) {
-        $links[] = array(
-          'title' => $term['value'] . ' (' . $term['count'] . ')',
-          'href' => drupal_get_path_alias() . $filter_path,
+    if (isset($facet['data']) && count($facet['data']) > 1) {
+      foreach ($facet['data'] as $term) {
+        $filter_path = '/' . $name . '/' . $term['value'];
+        if (!array_key_exists($filter_path, $active_filters)) {
+          $links[] = array(
+            'title' => $term['value'] . ' (' . $term['count'] . ')',
+            'href' => drupal_get_path_alias() . $filter_path,
+          );
+        }
+      }
+      if (count($links) > 1) {
+        $facets[] = array(
+          '#theme' => 'links',
+          '#links' => $links,
+          '#prefix' => '<div class="reliefweb--facet"><details><summary>' . hr_reliefweb_get_filters($name) . '</summary>',
+          '#suffix' => '</details></div>',
         );
       }
     }
-    $facets[] = array(
-      '#theme' => 'links',
-      '#links' => $links,
-      '#prefix' => '<div class="reliefweb--facet"><details><summary>' . hr_reliefweb_get_filters($name) . '</summary>',
-      '#suffix' => '</details></div>',
-    );
   }
 
   // Set active menu item.
