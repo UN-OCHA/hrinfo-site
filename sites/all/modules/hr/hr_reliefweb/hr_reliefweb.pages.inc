@@ -74,8 +74,10 @@ function hr_reliefweb_document_list($node) {
   if ($_GET['s']) {
     // Be safe.
     $query = check_plain($_GET['s']);
-    // Change &quot; back to ".
-    $query = str_replace('&quot;', '"', $query);
+    // Remove &quot;.
+    $query = str_replace('&quot;', '', $query);
+    // Search exact.
+    $query = '"' . $query . '"';
   }
 
   $limit = 10;
