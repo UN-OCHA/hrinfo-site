@@ -71,7 +71,7 @@ function hr_reliefweb_document_list($node) {
 
   // Handle search parameter.
   $query = NULL;
-  if ($_GET['s']) {
+  if (isset($_GET['s']) && $_GET['s']) {
     // Be safe.
     $query = check_plain($_GET['s']);
     // Remove &quot;.
@@ -190,6 +190,7 @@ function hr_reliefweb_document_list($node) {
           '#type' => 'markup',
           '#markup' => l('Remove all filters', $page_url),
         ),
+        '#access' => count($active_filters) > 0 || !empty($query),
       ),
 
       '#removefacets' => array(
