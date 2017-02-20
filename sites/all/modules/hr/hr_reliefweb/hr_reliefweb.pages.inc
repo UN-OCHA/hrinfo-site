@@ -93,10 +93,10 @@ function hr_reliefweb_document_list($node) {
     if (isset($value['files'])) {
       foreach ($value['files'] as $file) {
         if (isset($file['preview']) && !empty($file['preview'])) {
-          $downloads[] = '<a target="reliefweb" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
+          $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
         }
         else {
-          $downloads[] = '<a target="reliefweb" href = ' . $file['url'] . '>' . t('Download') . '</a>';
+          $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
         }
       }
     }

@@ -130,6 +130,8 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
       'country.name',
       'file.url',
       'file.preview.url-thumb',
+      'file.description',
+      'file.filename',
       'format.name',
     ),
   );
@@ -215,6 +217,8 @@ function hr_reliefweb_content($path) {
           $files[] = array(
             'preview' => isset($file['preview']['url-thumb']) ? _hr_reliefweb_fix_url($file['preview']['url-thumb']) : '',
             'url' => _hr_reliefweb_fix_url($file['url']),
+            'filename' => isset($file['filename']) ? $file['filename'] : '',
+            'description' => isset($file['description']) ? $file['description'] : '',
           );
         }
         $data_array[$title]['files'] = $files;
