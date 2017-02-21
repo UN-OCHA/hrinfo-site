@@ -55,17 +55,37 @@ function hr_reliefweb_document_list($node) {
 
   if (!empty($args)) {
     for ($i = 0; $i < count($args); $i += 2) {
-      $active_filters['/' . $args[$i] . '/' . $args[$i + 1]] = array(
-        'name' => $args[$i],
-        'value' => $args[$i + 1],
-        'path' => '/' . $args[$i] . '/' . $args[$i + 1],
-      );
+      // Date is a special case.
+      if (strpos($args[$i], 'date') !== FALSE) {
+        $from_to = explode(':', $args[$i + 1]);
+        $active_filters['/' . $args[$i] . '/' . $args[$i + 1]] = array(
+          'name' => $args[$i],
+          'value' => format_date(strtotime($from_to[0]), 'custom', 'F Y'),
+          'path' => '/' . $args[$i] . '/' . $args[$i + 1],
+        );
 
-      $filters[] = array(
-        'field' => $args[$i],
-        'value' => $args[$i + 1],
-        'operator' => 'OR',
-      );
+        $filters[] = array(
+          'field' => $args[$i],
+          'value' => array(
+            'from' => $from_to[0]. 'T00:00:00+00:00',
+            'to' => $from_to[1] . 'T23:59:59+00:00',
+          ),
+          'operator' => 'AND',
+        );
+      }
+      else {
+        $active_filters['/' . $args[$i] . '/' . $args[$i + 1]] = array(
+          'name' => $args[$i],
+          'value' => $args[$i + 1],
+          'path' => '/' . $args[$i] . '/' . $args[$i + 1],
+        );
+
+        $filters[] = array(
+          'field' => $args[$i],
+          'value' => $args[$i + 1],
+          'operator' => 'OR',
+        );
+      }
     }
   }
 
@@ -143,12 +163,30 @@ function hr_reliefweb_document_list($node) {
     $links = array();
     if (isset($facet['data']) && count($facet['data']) > 1) {
       foreach ($facet['data'] as $term) {
-        $filter_path = '/' . $name . '/' . $term['value'];
+        // Date is a special case.
+        if (strpos($name, 'date') !== FALSE) {
+          $filter_path = '/' . $name . '/' . format_date(strtotime($term['value']), 'custom', 'Y-m-d') . ':' . format_date(strtotime($term['value']), 'custom', 'Y-m-t');
+        }
+        else {
+          $filter_path = '/' . $name . '/' . $term['value'];
+        }
+
         if (!array_key_exists($filter_path, $active_filters)) {
-          $links[] = array(
-            'title' => $term['value'] . ' (' . $term['count'] . ')',
-            'href' => drupal_get_path_alias() . $filter_path,
-          );
+          // Date is a special case.
+          if (strpos($name, 'date') !== FALSE) {
+            if ($term['count'] > 0) {
+              $links[] = array(
+                'title' => format_date(strtotime($term['value']), 'custom', 'F Y') . ' (' . $term['count'] . ')',
+                'href' => drupal_get_path_alias() . $filter_path,
+              );
+            }
+          }
+          else {
+            $links[] = array(
+              'title' => $term['value'] . ' (' . $term['count'] . ')',
+              'href' => drupal_get_path_alias() . $filter_path,
+            );
+          }
         }
       }
       if (count($links) > 1) {

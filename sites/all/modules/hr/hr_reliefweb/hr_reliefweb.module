@@ -194,7 +194,7 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
     if (strpos($key, 'date') !== FALSE) {
       $params['facets'][] = array(
         'field' => $key,
-        'interval' => 'year',
+        'interval' => 'month',
       );
     }
     else {
