@@ -189,6 +189,12 @@ function hr_reliefweb_document_list($node) {
           }
         }
       }
+
+      // Reverse order for date filter.
+      if (strpos($name, 'date') !== FALSE) {
+        $links = array_reverse($links);
+      }
+
       if (count($links) > 1) {
         $facets[] = array(
           '#theme' => 'links',
