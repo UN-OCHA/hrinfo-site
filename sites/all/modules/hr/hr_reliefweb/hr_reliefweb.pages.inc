@@ -209,9 +209,8 @@ function hr_reliefweb_document_list($node) {
       '#theme' => 'hr_reliefweb_overview',
 
       '#contents' => array(
-        '#markup' => t('Reliefweb document overview ...'),
-        '#prefix' => '<div id="my_page_data">',
-        '#suffix' => '</div>',
+        '#markup' => t('No intro needed ...'),
+        '#access' => FALSE,
       ),
 
       '#summary' => array(

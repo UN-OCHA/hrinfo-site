@@ -6,9 +6,11 @@
 ?>
 
 <div class="reliefweb--wrapper">
+  <?php if ($contents): ?>
   <div class="reliefweb--intro">
     <?php print render($contents); ?>
   </div>
+<?php endif ?>
   <div class="reliefweb--sidebar">
     <div class="reliefweb--powered-by">
       <p><?php print t('Powered by'); ?></p>
