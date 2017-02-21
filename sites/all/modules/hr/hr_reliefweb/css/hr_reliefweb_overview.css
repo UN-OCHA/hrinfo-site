@@ -48,6 +48,29 @@
   table-layout: auto;
 }
 
+.reliefweb--data table.table-striped > tbody > tr
+.reliefweb--data table.table-striped > tbody > tr:nth-of-type(even),
+.reliefweb--data table.table-striped > tbody > tr:nth-of-type(odd) {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.3em;
+  background-color: #f4f4f4;
+}
+
+[class*="reliefweb--doc-type--"] div {
+  background-color: #27b298;
+  display: block;
+  padding: 10px;
+}
+.reliefweb--doc-type--map div {
+  background-color: #60b75a;
+}
+.reliefweb--doc-type--infographic div {
+  background-color: #60b75a;
+}
+.reliefweb--doc-type--situation-report div {
+  background-color: #ffb347;
+}
+
 .reliefweb--data tbody [data-title="Download"] {
   text-align: center;
 }

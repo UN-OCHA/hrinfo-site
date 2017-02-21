@@ -132,7 +132,10 @@ function hr_reliefweb_document_list($node) {
       }
     }
     $rows[] = array(
-      isset($value['format']) ? $value['format'] : '',
+      array(
+        'data' => '<div>' . (isset($value['format']) ? $value['format'] : '') . '</div>',
+        'class' => isset($value['format']) ? drupal_html_class('reliefweb--doc-type--' . $value['format']) : '',
+      ),
       '<a target="reliefweb" href = ' . $value['url'] . '> '. $value['title'] . '</a>',
       isset($value['date_changed']) ? format_date(strtotime($value['date_changed']), 'search_api_facetapi_DAY') : '',
       isset($value['sources']) ? implode(', ', $value['sources']) : '',
