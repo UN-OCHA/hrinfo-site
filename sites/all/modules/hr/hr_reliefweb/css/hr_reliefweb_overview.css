@@ -71,7 +71,18 @@
   background-color: #ffb347;
 }
 
-.reliefweb--data tbody [data-title="Download"] {
+td.reliefweb--doc-type--country {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 10vw;
+}
+td.reliefweb--doc-type--country:hover {
+  text-overflow: visible;
+  white-space: normal;
+}
+
+.reliefweb--data tbody .reliefweb--doc-type--download {
   text-align: center;
 }
 
