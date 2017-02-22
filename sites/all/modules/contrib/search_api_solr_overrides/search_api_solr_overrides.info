@@ -1,0 +1,11 @@
+name = Search API Solr Overrides
+description = Provides site specific overrides for search_api_solr configuration.
+core = 7.x
+dependencies[] = search_api_solr
+
+; Information added by drupal.org packaging script on 2012-11-05
+version = "7.x-1.0-rc1"
+core = "7.x"
+project = "search_api_solr_overrides"
+datestamp = "1352088127"
+
