@@ -120,7 +120,7 @@ function hr_reliefweb_block_view($delta = '') {
  */
 function hr_reliefweb_get_filters($key = NULL) {
   $filters = array(
-    'source.name' => t('Organisation'),
+    'source.shortname' => t('Organisation'),
     'theme.name' => t('Theme'),
     'format.name' => t('Document type'),
     'disaster_type' => t('Disaster type'),
@@ -170,7 +170,7 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
       'url',
       'title',
       'date.changed',
-      'source.name',
+      'source.shortname',
       'country.name',
       'file.url',
       'file.preview.url-thumb',
@@ -239,7 +239,7 @@ function hr_reliefweb_content($path) {
       if (isset($value['fields']['source'])) {
         $sources = array();
         foreach ($value['fields']['source'] as $source) {
-          $sources[] = $source['name'];
+          $sources[] = $source['shortname'];
         }
         $data_array[$title]['sources'] = $sources;
       }
