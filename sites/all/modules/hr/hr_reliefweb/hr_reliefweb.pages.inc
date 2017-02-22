@@ -136,11 +136,26 @@ function hr_reliefweb_document_list($node) {
         'data' => '<div>' . (isset($value['format']) ? $value['format'] : '') . '</div>',
         'class' => isset($value['format']) ? drupal_html_class('reliefweb--doc-type--' . $value['format']) : '',
       ),
-      '<a target="reliefweb" href = ' . $value['url'] . '> '. $value['title'] . '</a>',
-      isset($value['date_changed']) ? format_date(strtotime($value['date_changed']), 'search_api_facetapi_DAY') : '',
-      isset($value['sources']) ? implode(', ', $value['sources']) : '',
-      isset($value['countries']) ? implode(', ', $value['countries']) : '',
-      !empty($downloads) ? implode(' ', $downloads) : '',
+      array(
+        'data' => '<a target="reliefweb" href = ' . $value['url'] . '> '. $value['title'] . '</a>',
+        'class' => 'reliefweb--doc-type--title',
+      ),
+      array(
+        'data' => isset($value['date_changed']) ? format_date(strtotime($value['date_changed']), 'search_api_facetapi_DAY') : '',
+        'class' => 'reliefweb--doc-type--date',
+      ),
+      array(
+        'data' => isset($value['sources']) ? implode(', ', $value['sources']) : '',
+        'class' => 'reliefweb--doc-type--source',
+      ),
+      array(
+        'data' => isset($value['countries']) ? implode(', ', $value['countries']) : '',
+        'class' => 'reliefweb--doc-type--country',
+      ),
+      array(
+        'data' => !empty($downloads) ? implode(' ', $downloads) : '',
+        'class' => 'reliefweb--doc-type--download',
+      ),
     );
   }
 
