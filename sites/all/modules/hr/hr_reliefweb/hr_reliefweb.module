@@ -120,7 +120,7 @@ function hr_reliefweb_block_view($delta = '') {
  */
 function hr_reliefweb_get_filters($key = NULL) {
   $filters = array(
-    'source.shortname' => t('Organisation'),
+    'source.name' => t('Organisation'),
     'theme.name' => t('Theme'),
     'format.name' => t('Document type'),
     'disaster_type' => t('Disaster type'),
