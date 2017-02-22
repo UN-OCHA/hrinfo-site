@@ -330,3 +330,10 @@ function hr_core_update_7017() {
     _hr_core_display_cache_content_defaults('none', $margin = 5, $type);
   }
 }
+
+/**
+ * Enable the search_api_solr_overrides module.
+ */
+function hr_core_update_7018() {
+  module_enable(array('search_api_solr_overrides'));
+}
