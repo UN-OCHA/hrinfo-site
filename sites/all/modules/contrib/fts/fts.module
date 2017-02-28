@@ -14,6 +14,7 @@ define('FTS_URL', 'http://fts.unocha.org/api/v1/');
  * Get all appeals for the current year
  */
 function fts_get_appeals($year = '') {
+  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/emergency/year/2017?format=xml
   if (empty($year)) {
     $year = date('Y');
   }
@@ -39,6 +40,7 @@ function fts_get_appeals($year = '') {
  * Get appeal information by appeal ID
  */
 function fts_get_appeal($id) {
+  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/emergency/id/xyzzy?format=xml
   if(empty($id)){
     return NULL;
   }
@@ -63,6 +65,7 @@ function fts_get_appeal($id) {
  * Get all countries
  */
 function fts_get_countries() {
+  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/location?format=xml
   $cache = cache_get('fts_countries', 'cache');
   if(!$cache){
     $xml = simplexml_load_file(FTS_URL . 'Country.xml');
@@ -152,4 +155,3 @@ function fts_get_cluster_by_appeal($appeal, $cluster_name) {
   }
   return $cluster_found;
 }
-
