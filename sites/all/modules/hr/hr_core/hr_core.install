@@ -337,3 +337,26 @@ function hr_core_update_7017() {
 function hr_core_update_7018() {
   module_enable(array('search_api_solr_overrides'));
 }
+
+/**
+ * Fix panels allowed types.
+ */
+function hr_core_update_7019() {
+  $allowed = array();
+  $allowed_types = db_select('panels_allowed_types', 'pat')
+    ->fields('pat', array('module', 'type', 'allowed'))
+    ->condition('allowed', 1)
+    ->execute()
+    ->fetchAll();
+
+  foreach($allowed_types as $allowed_type) {
+    if (!isset($allowed[$allowed_type->module])) {
+      $allowed[$allowed_type->module] = array();
+    }
+    $allowed[$allowed_type->module][$allowed_type->type] = $allowed_type->allowed;
+  }
+
+  foreach ($allowed as $module => $data) {
+    variable_set($module . '_allowed_types', $data);
+  }
+}
