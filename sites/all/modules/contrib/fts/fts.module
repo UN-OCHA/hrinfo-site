@@ -8,31 +8,41 @@
 /**
  *  FTS URL
  */
-define('FTS_URL', 'http://fts.unocha.org/api/v1/');
+define('FTS_URL', 'https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/');
 
 /**
- * Get all appeals for the current year
+ * Returns API endpoint.
+ */
+function _fts_get_api_endpoint() {
+  return variable_get('fts_api_endpoint', FTS_URL);
+}
+
+/**
+ * Get all appeals for the current year.
  */
 function fts_get_appeals($year = '') {
-  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/emergency/year/2017?format=xml
   if (empty($year)) {
     $year = date('Y');
   }
-  $cache = cache_get('fts_appeals_cache'.$year, 'cache');
-  if(!$cache){
-    $xml = simplexml_load_file(FTS_URL . 'appeal/year/'.$year.'.xml');
+
+  $cache = cache_get('fts_appeals_cache' . $year, 'cache');
+  if (!$cache) {
+    $response = drupal_http_request(_fts_get_api_endpoint() . 'plan/year/' . $year);
+    $data = json_decode($response->data);
     $appeals = array();
-    if (isset($xml->Appeal)) {
-      foreach ($xml->Appeal as $appeal) {
-        $tmp = json_decode(json_encode($appeal));
-        $appeals[$tmp->id] = $tmp;
+    if (isset($data->data)) {
+      foreach ($data->data as $plan) {
+        $appeal = (object) $plan;
+        $appeal->title = $plan->name;
+        $appeals[$plan->id] = $appeal;
       }
-      cache_set('fts_appeals_cache'.$year, $appeals, 'cache', REQUEST_TIME + 24*60*60);
+      cache_set('fts_appeals_cache' . $year, $appeals, 'cache', REQUEST_TIME + 24 * 60 * 60);
     }
   }
-  else{
+  else {
     $appeals = $cache->data;
   }
+
   return $appeals;
 }
 
@@ -40,25 +50,34 @@ function fts_get_appeals($year = '') {
  * Get appeal information by appeal ID
  */
 function fts_get_appeal($id) {
-  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/emergency/id/xyzzy?format=xml
-  if(empty($id)){
-    return NULL;
+  $appeal = NULL;
+  if (empty($id)) {
+    return $appeal;
   }
-  $cache = cache_get('fts_appeal_by_id_cache'.$id, 'cache');
-  if(!$cache){
-    $xml = simplexml_load_file(FTS_URL . 'appeal/id/' . $id . '.xml');
-    if (isset($xml->Appeal)) {
-      $appeal = json_decode(json_encode($xml->Appeal));
-      cache_set('fts_appeal_by_id_cache'.$id, $appeal, 'cache', REQUEST_TIME + 24*60*60);
-      return $appeal;
+
+  //$cache = cache_get('fts_appeal_by_id_cache' . $id, 'cache');
+  if (!$cache) {
+    $response = drupal_http_request(_fts_get_api_endpoint() . 'plan/id/' . $id);
+    $data = json_decode($response->data);
+    if (isset($data->data)) {
+      $appeal = $data->data;
+      $appeal->title = $appeal->name;
+
+      $response = drupal_http_request(_fts_get_api_endpoint() . 'fts/flow?planId=' . $id);
+      $data = json_decode($response->data);
+      if (isset($data->data)) {
+        $appeal->current_requirements = $data->data->incoming->fundingTotal;
+        $appeal->funding = $data->data->incoming->pledgeTotal;
+      }
+      dpm($appeal, 'flow data');
+      cache_set('fts_appeal_by_id_cache' . $id, $appeal, 'cache', REQUEST_TIME + 24 * 60 * 60);
     }
-    else {
-      return NULL;
-    }
   }
-  else{
-    return $cache->data;
+  else {
+    $appeal = $cache->data;
   }
+
+  return $appeal;
 }
 
 /**
