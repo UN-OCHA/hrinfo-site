@@ -9,6 +9,9 @@
 @import "global/mixin";
 
 @media print {
+  #secondary-navigation, .breadcrumbs {
+    display: none!important;
+  }
   #content-wrapper,
   .container {
     padding-left: 0;

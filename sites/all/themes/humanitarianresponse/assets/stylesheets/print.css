@@ -1,4 +1,5 @@
-@media print { #content-wrapper, .container { padding-left: 0; padding-right: 0; width: 100% !important; }
+@media print { #secondary-navigation, .breadcrumbs { display: none !important; }
+  #content-wrapper, .container { padding-left: 0; padding-right: 0; width: 100% !important; }
   body { font-family: 'Liberation Sans', sans-serif; }
   h1.title { font-family: 'Exo' !important; text-transform: uppercase; color: #54b1c8 !important; }
   .table-responsive { overflow: visible !important; }
