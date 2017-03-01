@@ -138,6 +138,7 @@ function fts_get_funding($params) {
  * Get clusters information by appeal
  */
 function fts_get_clusters_by_appeal($id) {
+  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/global-cluster
   if (empty($id)) {
     return array();
   }
