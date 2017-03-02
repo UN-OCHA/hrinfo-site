@@ -45,18 +45,6 @@ function _fts_visualization_get_appeal_options() {
 }
 
 /**
- * Helper function: get countries options
- */
-function _fts_visualization_get_countries_options() {
-  $countries = fts_get_countries();
-  $countries_options = array();
-  foreach ($countries as $iso3 => $country) {
-    $countries_options[$iso3] = $country->name;
-  }
-  return $countries_options;
-}
-
-/**
  * Helper function: get cluster options by appeal
  */
 function _fts_visualization_get_cluster_options_by_appeal($id) {
@@ -94,16 +82,6 @@ function _fts_visualization_get_country_data($appeal) {
     $data['not_financed_percentage'] = 100 - $data['financed_percentage'];
     $data['label'] = $appeal->locations[0]->name;
   }
-  else {
-    $country = fts_get_country($appeal);
-    $funding = fts_get_funding(array('country' => $appeal, 'year' => date('Y')));
-    $total = (int)$funding->total;
-    $data['financed'] = $total;
-    $data['not_financed'] = 0;
-    $data['total'] = $total;
-    $data['financed_percentage'] = 100;
-    $data['label'] = $country->name;
-  }
   return $data;
 }
 
@@ -112,8 +90,6 @@ function _fts_visualization_get_country_data($appeal) {
  */
 function _fts_visualization_get_data($settings) {
   extract($settings);
-  // Bind countries and appeals
-  $appeals = array_merge($appeals, $countries);
   $series = array();
   $categories = array();
   $data = array();
@@ -139,10 +115,7 @@ function _fts_visualization_get_data($settings) {
         if (is_numeric($appeal)) {
           $params['appeal'] = $appeal;
         }
-        else {
-          $params['country'] = $appeal;
-          $params['year'] = date('Y');
-        }
+
         $params['groupby'] = $groupby;
         $funding = fts_get_funding($params);
         $groups = $funding->grouping->group;

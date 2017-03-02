@@ -80,42 +80,6 @@ function fts_get_appeal($id) {
 }
 
 /**
- * Get all countries
- */
-function fts_get_countries() {
-  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/location?format=xml
-  $cache = cache_get('fts_countries', 'cache');
-  if(!$cache){
-    $xml = simplexml_load_file(FTS_URL . 'Country.xml');
-    $countries = array();
-    if(isset($xml->Country)) {
-      foreach ($xml->Country as $country) {
-        $tmp = json_decode(json_encode($country));
-        $countries[$tmp->iso_code_A] = $tmp;
-      }
-      cache_set('fts_countries', $countries, 'cache', REQUEST_TIME + 24*60*60);
-    }
-    return $countries;
-  }
-  else{
-    return $cache->data;
-  }
-}
-
-/**
- * Get country by ISO code
- */
-function fts_get_country($iso3) {
-  $countries = fts_get_countries();
-  if (isset($countries[$iso3])) {
-    return $countries[$iso3];
-  }
-  else {
-    return NULL;
-  }
-}
-
-/**
  * Get general funding information
  */
 function fts_get_funding($params) {

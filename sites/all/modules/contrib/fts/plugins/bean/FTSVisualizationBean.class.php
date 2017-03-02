@@ -24,13 +24,13 @@ class FTSVisualizationBean extends BeanPlugin {
    * Builds extra settings for the block edit form.
    */
   public function form($bean, $form, &$form_state) {
-    $form = array();   
+    $form = array();
     $form['settings'] = array(
       '#type' => 'fieldset',
       '#tree' => 1,
       '#title' => t('Settings'),
     );
-    
+
     $type_options = array(
       'pie' => t('Pie'),
       'line' =>t('Line'),
@@ -38,7 +38,7 @@ class FTSVisualizationBean extends BeanPlugin {
       'bar' => t('Bar'),
       'table' => t('Table'),
     );
-    
+
     $form['settings']['type'] = array(
       '#type' => 'select',
       '#title' => t('Type'),
@@ -46,25 +46,25 @@ class FTSVisualizationBean extends BeanPlugin {
       '#default_value' => isset($bean->settings['type']) ? $bean->settings['type'] : 'pie',
       '#required' => TRUE,
     );
-	
+
     $form['settings']['appeals'] = array(
       '#type' => 'select',
       '#title' => t('Appeal(s)'),
       '#multiple' => TRUE,
-      '#options' => _fts_visualization_get_appeal_options(),    
+      '#options' => _fts_visualization_get_appeal_options(),
       '#default_value' => isset($bean->settings['appeals']) ? $bean->settings['appeals'] : '',
       '#ajax' => array(
         'callback' => '_fts_visualization_appeals_callback',
         'wrapper' => 'cluster'
       ),
     );
-    
+
     $selected = '';
     // If only one appeal is selected
     if (isset($form_state['input']['settings']['appeals']) && count($form_state['input']['settings']['appeals']) == 1) {
       $selected = $form_state['input']['settings']['appeals'][0];
     }
-    
+
     $form['settings']['cluster'] = array(
       '#type' => 'select',
       '#title' => t('Cluster'),
@@ -74,21 +74,13 @@ class FTSVisualizationBean extends BeanPlugin {
       '#suffix' => '</div>',
       '#options' => _fts_visualization_get_cluster_options_by_appeal($selected),
     );
-    
-    $form['settings']['countries'] = array(
-      '#type' => 'select',
-      '#title' => t('Countries'),
-      '#multiple' => TRUE,
-      '#options' => _fts_visualization_get_countries_options(),    
-      '#default_value' => isset($bean->settings['countries']) ? $bean->settings['countries'] : '',
-    );
-    
+
     $groupby_options = array(
       '' => t('None'),
       'cluster' => t('Cluster'),
       'donor' => t('Donor'),
     );
-    
+
     $form['settings']['groupby'] = array(
       '#type' => 'select',
       '#title' => t('Group By'),
