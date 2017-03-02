@@ -53,10 +53,6 @@ class FTSVisualizationBean extends BeanPlugin {
       '#multiple' => TRUE,
       '#options' => _fts_visualization_get_appeal_options(),
       '#default_value' => isset($bean->settings['appeals']) ? $bean->settings['appeals'] : '',
-      '#ajax' => array(
-        'callback' => '_fts_visualization_appeals_callback',
-        'wrapper' => 'cluster'
-      ),
     );
 
     $form['settings']['cluster'] = array(

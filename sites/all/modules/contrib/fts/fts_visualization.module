@@ -50,31 +50,11 @@ function _fts_visualization_get_appeal_options() {
 function _fts_visualization_get_global_cluster_options() {
   $clusters = fts_get_global_clusters();
   $cluster_options = array();
-  $cluster_options[] = '';
+  $cluster_options[''] = ' - None - ';
   foreach ($clusters as $cluster) {
     $cluster_options[$cluster->name] = $cluster->name;
   }
   return $cluster_options;
-}
-
-/**
- * Helper function: get cluster options by appeal
- */
-function _fts_visualization_get_cluster_options_by_appeal($id) {
-  $clusters = fts_get_clusters_by_appeal($id);
-  $cluster_options = array();
-  $cluster_options[] = '';
-  foreach ($clusters as $cluster) {
-    $cluster_options[$cluster->name] = $cluster->name;
-  }
-  return $cluster_options;
-}
-
-/**
- * Callback function
- */
-function _fts_visualization_appeals_callback($form, $form_state) {
-  return $form['settings']['cluster'];
 }
 
 /**
@@ -184,25 +164,12 @@ function _fts_visualization_get_data($settings) {
           'label' => t('Value'),
           'enabled' => TRUE,
         );
-        if (empty($cluster)) {
-          $data = array(
-            array('label' => 'Funded '.$appeal_data['financed_percentage'].'%', 'val' => $appeal_data['financed']),
-            array('label' => 'Unmet Requirements '.$appeal_data['not_financed_percentage'].'%', 'val' => $appeal_data['not_financed']),
-          );
-          $total = $appeal_data['financed'] + $appeal_data['not_financed'];
-        }
-        else {
-          $cluster_data = fts_get_cluster_by_appeal($appeal, $cluster);
-          $funded = (int)$cluster_data->funding;
-	  $unmet = (int)$cluster_data->current_requirement - (int)$cluster_data->funding;
-          $funded_percentage = round(($funded / (int)$cluster_data->current_requirement) * 100);
-          $not_funded_percentage = 100 - $funded_percentage;
-          $data = array(
-            array('label' => 'Funded '.$funded_percentage.'%', 'val' => $funded),
-            array('label' => 'Unmet Requirements '.$not_funded_percentage.'%', 'val' => $unmet),
-          );
-          $total = (int)$cluster_data->current_requirement;
-        }
+
+        $data = array(
+          array('label' => 'Funded '.$appeal_data['financed_percentage'].'%', 'val' => $appeal_data['financed']),
+          array('label' => 'Unmet Requirements '.$appeal_data['not_financed_percentage'].'%', 'val' => $appeal_data['not_financed']),
+        );
+        $total = $appeal_data['financed'] + $appeal_data['not_financed'];
       }
       else {
         if ($appeal_data['not_financed'] > 0) {
@@ -215,19 +182,9 @@ function _fts_visualization_get_data($settings) {
           'label' => t('Funded '.$appeal_data['financed_percentage']."%"),
           'enabled' => TRUE,
         );
-        if (empty($cluster)) {
-          $label = $appeal_data['label'];
-          $data[$label] = $appeal_data;
-        }
-        else {
-          $cluster_data = fts_get_cluster_by_appeal($appeal, $cluster);
-          $data[$cluster]['label'] = $cluster;
-          $data[$cluster]['financed'] = (int)$cluster_data->funding;
-          $data[$cluster]['not_financed'] = (int)$cluster_data->current_requirement - (int)$cluster_data->funding;
-          $data[$cluster]['total'] = (int)$cluster_data->current_requirement;
-          $data[$cluster]['financed_percentage'] = round(($data[$cluster]['financed'] / $data[$cluster]['total']) * 100);
-          $data[$cluster]['not_financed_percentage'] = round(($data[$cluster]['not_financed'] / $data[$cluster]['total']) * 100);
-        }
+
+        $label = $appeal_data['label'];
+        $data[$label] = $appeal_data;
       }
     }
   }
