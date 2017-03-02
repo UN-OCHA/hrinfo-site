@@ -59,12 +59,6 @@ class FTSVisualizationBean extends BeanPlugin {
       ),
     );
 
-    $selected = '';
-    // If only one appeal is selected
-    if (isset($form_state['input']['settings']['appeals']) && count($form_state['input']['settings']['appeals']) == 1) {
-      $selected = $form_state['input']['settings']['appeals'][0];
-    }
-
     $form['settings']['cluster'] = array(
       '#type' => 'select',
       '#title' => t('Cluster'),
@@ -72,7 +66,7 @@ class FTSVisualizationBean extends BeanPlugin {
       '#default_value' => isset($bean->settings['cluster']) ? $bean->settings['cluster'] : '',
       '#prefix' => '<div id="cluster">',
       '#suffix' => '</div>',
-      '#options' => _fts_visualization_get_cluster_options_by_appeal($selected),
+      '#options' => _fts_visualization_get_global_cluster_options(),
     );
 
     $groupby_options = array(

@@ -45,6 +45,19 @@ function _fts_visualization_get_appeal_options() {
 }
 
 /**
+ * Helper function: get global cluster options.
+ */
+function _fts_visualization_get_global_cluster_options() {
+  $clusters = fts_get_global_clusters();
+  $cluster_options = array();
+  $cluster_options[] = '';
+  foreach ($clusters as $cluster) {
+    $cluster_options[$cluster->name] = $cluster->name;
+  }
+  return $cluster_options;
+}
+
+/**
  * Helper function: get cluster options by appeal
  */
 function _fts_visualization_get_cluster_options_by_appeal($id) {

@@ -99,6 +99,29 @@ function fts_get_funding($params) {
 }
 
 /**
+ * Get global clusters.
+ */
+function fts_get_global_clusters() {
+  $clusters = array();
+  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/global-cluster
+
+  $cache = cache_get('fts_appeals_cache_global_clusters', 'cache');
+  if (!$cache) {
+    $response = drupal_http_request(_fts_get_api_endpoint() . 'global-cluster');
+    $data = json_decode($response->data);
+    if (isset($data->data)) {
+      $clusters = $data->data;
+      cache_set('fts_appeals_cache_global_clusters', $clusters, 'cache', REQUEST_TIME + 24 * 60 * 60);
+    }
+  }
+  else {
+    $clusters = $cache->data;
+  }
+
+  return $clusters;
+}
+
+/**
  * Get clusters information by appeal
  */
 function fts_get_clusters_by_appeal($id) {
