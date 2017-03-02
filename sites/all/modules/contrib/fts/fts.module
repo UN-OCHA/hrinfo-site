@@ -63,6 +63,7 @@ function fts_get_appeal($id) {
       $appeal = $data->data;
       $appeal->title = $appeal->name;
 
+      // @todo Move to fts_get_funding.
       $response = drupal_http_request(_fts_get_api_endpoint() . 'fts/flow?planId=' . $id);
       $data = json_decode($response->data);
       if (isset($data->data)) {
@@ -123,6 +124,8 @@ function fts_get_global_clusters() {
 
 /**
  * Get clusters information by appeal
+ *
+ * @todo: remove.
  */
 function fts_get_clusters_by_appeal($id) {
   // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/global-cluster
@@ -149,6 +152,8 @@ function fts_get_clusters_by_appeal($id) {
 
 /**
  * Get information for a specific cluster within a specific appeal
+ *
+ * @todo: remove.
  */
 function fts_get_cluster_by_appeal($appeal, $cluster_name) {
   $clusters = fts_get_clusters_by_appeal($appeal);

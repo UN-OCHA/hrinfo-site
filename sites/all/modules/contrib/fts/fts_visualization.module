@@ -122,6 +122,7 @@ function _fts_visualization_get_data($settings) {
           }
         }
       }
+      // Group by cluster.
       else {
         $fields['not_financed'] = array(
           'label' => t('Unmet Requirements'),
@@ -132,6 +133,7 @@ function _fts_visualization_get_data($settings) {
           'enabled' => TRUE,
         );
         $clusters = fts_get_clusters_by_appeal($appeal);
+        // @todo curl "https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/fts/flow?year=2017&planId=537&groupby=Cluster"
         foreach ($clusters as $cluster) {
           if (!empty($cluster->name)) {
             $data[$cluster->name]['label'] = $cluster->name;
