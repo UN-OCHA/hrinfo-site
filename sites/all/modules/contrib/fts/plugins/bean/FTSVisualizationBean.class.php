@@ -67,8 +67,9 @@ class FTSVisualizationBean extends BeanPlugin {
 
     $groupby_options = array(
       '' => t('None'),
-      'cluster' => t('Cluster'),
-      'donor' => t('Donor'),
+      'Organization' => t('Organization'),
+      'Cluster' => t('Cluster'),
+      'GlobalCluster' => t('Global cluster'),
     );
 
     $form['settings']['groupby'] = array(

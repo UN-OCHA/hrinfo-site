@@ -62,14 +62,6 @@ function fts_get_appeal($id) {
     if (isset($data->data)) {
       $appeal = $data->data;
       $appeal->title = $appeal->name;
-
-      // @todo Move to fts_get_funding.
-      $response = drupal_http_request(_fts_get_api_endpoint() . 'fts/flow?planId=' . $id);
-      $data = json_decode($response->data);
-      if (isset($data->data)) {
-        $appeal->current_requirements = $data->data->incoming->fundingTotal;
-        $appeal->funding = $data->data->incoming->pledgeTotal;
-      }
       cache_set('fts_appeal_by_id_cache' . $id, $appeal, 'cache', REQUEST_TIME + 24 * 60 * 60);
     }
   }
@@ -84,19 +76,46 @@ function fts_get_appeal($id) {
  * Get general funding information
  */
 function fts_get_funding($params) {
-    $id_string = 'params'. implode(',', $params);
-    $md5_string = md5($id_string);
-    $cache = cache_get('fts_funding'.$md5_string, 'cache');
-    if(!$cache){
-      $url = FTS_URL . 'funding.xml?'.http_build_query($params, '', '&');
-      $xml = simplexml_load_file($url);
-      $funding = json_decode(json_encode($xml));
-      cache_set('fts_funding'.$md5_string, $funding, 'cache', REQUEST_TIME + 24*60*60);
-      return $funding;
+  $funding = array();
+
+  $query = drupal_http_build_query($params);
+  $cache = cache_get('fts_funding::' . md5($query), 'cache');
+  if (!$cache) {
+    $response = drupal_http_request(_fts_get_api_endpoint() . 'fts/flow?' . $query);
+    $data = json_decode($response->data);
+    if (isset($data->data)) {
+      $funding = new stdClass();
+
+      if (isset($data->data->report1)) {
+        $report1 = $data->data->report1;
+        $funding->current_requirements = $report1->fundingTotals->total;
+        $funding->funding = $report1->pledgeTotals->total;
+
+        if (isset($report1->fundingTotals->objects[0]->singleFundingObjects)) {
+          foreach ($report1->fundingTotals->objects[0]->singleFundingObjects as $funding_object) {
+            $funding->data[$funding_object->name] = $funding_object->totalFunding;
+          }
+        }
+
+        if (isset($report1->pledgeTotals->objects[0]->singleFundingObjects)) {
+          foreach ($report1->pledgeTotals->objects[0]->singleFundingObjects as $funding_object) {
+            $funding->data[$funding_object->name] = $funding_object->totalFunding;
+          }
+        }
+      }
+      else {
+        $funding->current_requirements = $data->data->incoming->fundingTotal;
+        $funding->funding = $data->data->incoming->pledgeTotal;
+      }
+
+      cache_set('fts_funding' . md5($query), $funding, 'cache', REQUEST_TIME + 24 * 60 * 60);
     }
     else{
-      return $cache->data;
+      $funding = $cache->data;
     }
+  }
+
+  return $funding;
 }
 
 /**
