@@ -109,108 +109,45 @@ function _fts_visualization_get_data($settings) {
     // Get latest FTS data
     $appeal_data = _fts_visualization_get_appeal_data($appeal, $groupby);
     $funding_data = array();
-    if (FALSE && !empty($groupby)) {
-      if ($groupby != 'cluster') {
-        $fields['financed'] = array(
-          'label' => t('Funded'),
-          'enabled' => TRUE,
-        );
-        $params = array();
-        if (is_numeric($appeal)) {
-          $params['appeal'] = $appeal;
-        }
+    if ($type == 'pie') {
+      $fields['val'] = array(
+        'label' => t('Value'),
+        'enabled' => TRUE,
+      );
 
-        $params['groupby'] = $groupby;
-        $funding = fts_get_funding($params);
-        $groups = $funding->grouping->group;
-        foreach ($groups as $group) {
-          if (is_string($group->type)) {
-            $data[$group->type]['label'] = $group->type;
-            $data[$group->type]['financed'] = (int)$group->amount;
-            $data[$group->type]['not_financed'] = 0;
-            $data[$group->type]['total'] = (int)$group->amount;
-            $data[$group->type]['financed_percentage'] = 100;
-          }
-        }
+      if (empty($groupby)) {
+        $data = array(
+          array('label' => 'Funded '. $appeal_data['financed_percentage']. '%', 'val' => $appeal_data['financed']),
+          array('label' => 'Unmet Requirements ' . $appeal_data['not_financed_percentage'] . '%', 'val' => $appeal_data['not_financed']),
+        );
       }
-      // Group by cluster.
       else {
-        $fields['not_financed'] = array(
-          'label' => t('Unmet Requirements'),
-          'enabled' => TRUE,
-        );
-        $fields['financed'] = array(
-          'label' => t('Funded'),
-          'enabled' => TRUE,
-        );
-        $clusters = fts_get_clusters_by_appeal($appeal);
-        // @todo curl "https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/fts/flow?year=2017&planId=537&groupby=Cluster"
-        foreach ($clusters as $cluster) {
-          if (!empty($cluster->name)) {
-            $data[$cluster->name]['label'] = $cluster->name;
-            $data[$cluster->name]['financed'] = (int)$cluster->funding;
-            $data[$cluster->name]['not_financed'] = (int)$cluster->current_requirement - (int)$cluster->funding;
-            if ($data[$cluster->name]['not_financed'] < 0) {
-              $data[$cluster->name]['not_financed'] = 0;
-            }
-            $data[$cluster->name]['total'] = (int)$cluster->current_requirement;
-            if ($data[$cluster->name]['financed'] > 0 && $data[$cluster->name]['total'] > 0) {
-              $data[$cluster->name]['financed_percentage'] = round(($data[$cluster->name]['financed']/$data[$cluster->name]['total']) * 100);
-            }
-            else {
-              $data[$cluster->name]['financed_percentage'] = 0;
-            }
-            if ($data[$cluster->name]['not_financed'] > 0 && $data[$cluster->name]['total'] > 0) {
-              $data[$cluster->name]['not_financed_percentage'] = round(($data[$cluster->name]['not_financed']/$data[$cluster->name]['total']) * 100);
-            }
-            else {
-              $data[$cluster->name]['not_financed_percentage'] = 0;
-            }
-          }
+        $data = array();
+        foreach ($appeal_data['data'] as $name => $total) {
+          $data[] = array('label' => $name, 'val' => $total);
         }
+        $data[] = array('label' => 'Unmet Requirements ' . $appeal_data['not_financed_percentage'] . '%', 'val' => $appeal_data['not_financed']);
       }
-      uasort($data, "_fts_visualization_sort_data");
+      $total = $appeal_data['financed'] + $appeal_data['not_financed'];
     }
     else {
-      if ($type == 'pie') {
-        $fields['val'] = array(
-          'label' => t('Value'),
+      if ($appeal_data['not_financed'] > 0) {
+        $fields['not_financed'] = array(
+          'label' => t('Unmet Requirements '.$appeal_data['not_financed_percentage']."%"),
           'enabled' => TRUE,
         );
-
-        if (empty($groupby)) {
-          $data = array(
-            array('label' => 'Funded '. $appeal_data['financed_percentage']. '%', 'val' => $appeal_data['financed']),
-            array('label' => 'Unmet Requirements ' . $appeal_data['not_financed_percentage'] . '%', 'val' => $appeal_data['not_financed']),
-          );
-        }
-        else {
-          $data = array();
-          foreach ($appeal_data['data'] as $name => $total) {
-            $data[] = array('label' => $name, 'val' => $total);
-          }
-          $data[] = array('label' => 'Unmet Requirements ' . $appeal_data['not_financed_percentage'] . '%', 'val' => $appeal_data['not_financed']);
-        }
-        $total = $appeal_data['financed'] + $appeal_data['not_financed'];
       }
-      else {
-        if ($appeal_data['not_financed'] > 0) {
-          $fields['not_financed'] = array(
-            'label' => t('Unmet Requirements '.$appeal_data['not_financed_percentage']."%"),
-            'enabled' => TRUE,
-          );
-        }
-        $fields['financed'] = array(
-          'label' => t('Funded '.$appeal_data['financed_percentage']."%"),
-          'enabled' => TRUE,
-        );
+      $fields['financed'] = array(
+        'label' => t('Funded '.$appeal_data['financed_percentage']."%"),
+        'enabled' => TRUE,
+      );
 
-        $label = $appeal_data['label'];
-        $data[$label] = $appeal_data;
-      }
+      $label = $appeal_data['label'];
+      $data[$label] = $appeal_data;
     }
   }
   else {
+    // Multiple appeals.
     $fields['not_financed'] = array(
       'label' => t('Unmet Requirements'),
       'enabled' => TRUE,
