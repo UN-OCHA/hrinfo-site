@@ -1,0 +1,5 @@
+name = Assessments Registry Integration
+description = Pulls assessments from the assessments registry and displays them on an hrinfo page.
+core = 7.x
+package = Humanitarianresponse
+version = 7.x-1.0
