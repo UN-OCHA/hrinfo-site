@@ -62,7 +62,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           else {
             url += 'filter[operation][value]=' + settings.ar_assessments.operation_id;
           }
-          url += '&fields=id,label,status,bundles&limit=' + this.limit + '&skip=' + this.skip;
+          url += '&fields=id,label,status,bundles,organizations&limit=' + this.limit + '&skip=' + this.skip;
           if (index != -1) {
             var params = window.location.hash.substr(index + 1);
             url += '&' + params;
