@@ -113,10 +113,10 @@ Drupal.behaviors.arAssessmentsAssessments = {
             success: function (assessments) {
               var template = _.template($('#ar_assessments_list').html());
               var pdf_url = that.contactsList.url();
-              pdf_url = pdf_url.replace('&limit=' + that.numItems + '&skip=' + that.contactsList.skip, '');
+              pdf_url = pdf_url.replace('&limit=' + that.numItems + '&skip=' + that.assessmentsList.skip, '');
               var csv_url = pdf_url + '&export=csv';
               //$('#contacts-list-csv').attr('href', csv_url);
-              $('#assessments-list-table tbody').append(template({contacts: contacts.models}));
+              $('#assessments-list-table tbody').append(template({assessments: assessments.models}));
               that.finishedLoading();
             },
           });
