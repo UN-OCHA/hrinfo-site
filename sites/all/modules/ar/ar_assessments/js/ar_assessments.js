@@ -112,9 +112,9 @@ Drupal.behaviors.arAssessmentsAssessments = {
           this.assessmentsList.fetch({
             success: function (assessments) {
               var template = _.template($('#ar_assessments_list').html());
-              var pdf_url = that.contactsList.url();
-              pdf_url = pdf_url.replace('&limit=' + that.numItems + '&skip=' + that.assessmentsList.skip, '');
-              var csv_url = pdf_url + '&export=csv';
+              //var pdf_url = that.assessmentsList.url();
+              //pdf_url = pdf_url.replace('&limit=' + that.numItems + '&skip=' + that.assessmentsList.skip, '');
+              //var csv_url = pdf_url + '&export=csv';
               //$('#contacts-list-csv').attr('href', csv_url);
               $('#assessments-list-table tbody').append(template({assessments: assessments.models}));
               that.finishedLoading();
@@ -141,7 +141,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           this.loading();
           this.currentPage = page;
           this.clear();
-          this.contactsList.skip = this.numItems * (page - 1);
+          this.assessmentsList.skip = this.numItems * (page - 1);
           this.loadResults();
         },
 
@@ -164,16 +164,16 @@ Drupal.behaviors.arAssessmentsAssessments = {
         finishedLoading: function() {
           $('#loading').hide();
           this.show();
-          $('.current-search-item .facetapi-active').html(this.contactsList.count + ' items');
+          $('.current-search-item .facetapi-active').html(this.assessmentsList.count + ' items');
           this.pager();
         },
 
         pager: function() {
           var nextPage = parseInt(this.currentPage) + 1;
           var previousPage = parseInt(this.currentPage) - 1;
-          var count = this.contactsList.count;
+          var count = this.assessmentsList.count;
           var itemsPerPage = this.numItems;
-          var paramsString = $.param(this.contactsList.params);
+          var paramsString = $.param(this.assessmentsList.params);
           if (paramsString != '') {
             paramsString = '?' + paramsString;
           }
@@ -195,104 +195,104 @@ Drupal.behaviors.arAssessmentsAssessments = {
         filterByProtectedRoles: function(event) {
           var val = $('#protectedRoles').val();
           if (val != '') {
-            this.contactsList.params.protectedRoles = val;
+            this.assessmentsList.params.protectedRoles = val;
           }
           else {
-            delete this.contactsList.params.protectedRoles;
+            delete this.assessmentsList.params.protectedRoles;
           }
-          this.router.navigateWithParams('table/1', this.contactsList.params);
+          this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
         filterByBundles: function(event) {
           var val = $('#bundles').val();
           if (val != '') {
             if (val.charAt(0) == '#') {
-              this.contactsList.params.protectedBundles = val.substr(1);
+              this.assessmentsList.params.protectedBundles = val.substr(1);
             }
             else {
-              this.contactsList.params.bundle = val;
+              this.assessmentsList.params.bundle = val;
             }
           }
           else {
-            delete this.contactsList.params.bundle;
-            delete this.contactsList.params.protectedBundles;
+            delete this.assessmentsList.params.bundle;
+            delete this.assessmentsList.params.protectedBundles;
           }
-          this.router.navigateWithParams('table/1', this.contactsList.params);
+          this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
         filterByOrganization: function(event, ui) {
           var val = ui.item.label;
           if (val != '') {
-            this.contactsList.params.organization_name = val;
+            this.assessmentsList.params.organization_name = val;
           }
           else {
-            delete this.contactsList.params.organization_name;
+            delete this.assessmentsList.params.organization_name;
           }
-          this.router.navigateWithParams('table/1', this.contactsList.params);
+          this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
         filterByCountry: function(event) {
           var val = $('#countries').val();
           if (val != '') {
-            this.contactsList.params.address_country = val;
+            this.assessmentsList.params.address_country = val;
           }
           else {
-            delete this.contactsList.params.address_country;
+            delete this.assessmentsList.params.address_country;
           }
-          this.router.navigateWithParams('table/1', this.contactsList.params);
+          this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
         filterByLocation: function(event) {
           var val = $('#locations').val();
           if (val != '') {
-            this.contactsList.params.address_administrative_area = val;
+            this.assessmentsList.params.address_administrative_area = val;
           }
           else {
-            delete this.contactsList.params.address_administrative_area;
+            delete this.assessmentsList.params.address_administrative_area;
           }
-          this.router.navigateWithParams('table/1', this.contactsList.params);
+          this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
         filterByOffice: function(event) {
           var val = $('#offices').val();
           if (val != '') {
-            this.contactsList.params.office_name = val;
+            this.assessmentsList.params.office_name = val;
           }
           else {
-            delete this.contactsList.params.office_name;
+            delete this.assessmentsList.params.office_name;
           }
-          this.router.navigateWithParams('table/1', this.contactsList.params);
+          this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
         filterByDisaster: function(event) {
           var val = $('#disasters').val();
           if (val != '') {
-            this.contactsList.params.disasters_remote_id = val;
+            this.assessmentsList.params.disasters_remote_id = val;
           }
           else {
-            delete this.contactsList.params.disasters_remote_id;
+            delete this.assessmentsList.params.disasters_remote_id;
           }
-          this.router.navigateWithParams('table/1', this.contactsList.params);
+          this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
         filterByKeyContact: function(event) {
           if ($('#key-contact').prop('checked') == true) {
-            this.contactsList.params.keyContact = true;
+            this.assessmentsList.params.keyContact = true;
           }
           else {
-            delete this.contactsList.params.keyContact;
+            delete this.assessmentsList.params.keyContact;
           }
-          this.router.navigateWithParams('table/1', this.contactsList.params);
+          this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
         filterByVerified: function(event) {
           if ($('#verified').prop('checked') == true) {
-            this.contactsList.params.verified = true;
+            this.assessmentsList.params.verified = true;
           }
           else {
-            delete this.contactsList.params.verified;
+            delete this.assessmentsList.params.verified;
           }
-          this.router.navigateWithParams('table/1', this.contactsList.params);
+          this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
         search: function(event) {
