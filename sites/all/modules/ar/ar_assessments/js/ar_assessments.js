@@ -1,5 +1,5 @@
 (function($) {
-Drupal.behaviors.hidProfilesContacts = {
+Drupal.behaviors.arAssessmentsAssessments = {
   attach: function (context, settings) {
     Assessment = Backbone.Model.extend({
       url: function() {
@@ -50,7 +50,7 @@ Drupal.behaviors.hidProfilesContacts = {
     });
 
     AsssessmentList = Backbone.Collection.extend({
-        model: Contact,
+        model: Assessment,
         params: { },
 
         url: function() {
@@ -97,7 +97,7 @@ Drupal.behaviors.hidProfilesContacts = {
 
     });
 
-    AssessmentTableView = ContactView.extend({
+    AssessmentTableView = AssessmentView.extend({
 
         numItems: 10,
         currentPage: 1,
@@ -330,11 +330,11 @@ Drupal.behaviors.hidProfilesContacts = {
       },
 
       tableView: new AssessmentTableView({el: 'body'}),
-      contactView: new AssessmentItemView({el: '#assessments-view'}),
+      assessmentView: new AssessmentItemView({el: '#assessments-view'}),
 
       initialize: function() {
         this.tableView.router = this;
-        this.contactView.router = this;
+        this.assessmentView.router = this;
       },
 
       defaultRoute: function (actions) {
@@ -342,21 +342,21 @@ Drupal.behaviors.hidProfilesContacts = {
       },
 
       table: function(page) {
-        this.contactView.hide();
+        this.assessmentView.hide();
         this.tableView.page(page);
       },
 
-      contact: function(id) {
-        this.contactView.loading();
+      assessment: function(id) {
+        this.assessmentView.loading();
         var that = this;
         this.tableView.hide();
-        this.contactView.clear();
-        var contact = new Contact({_id: id});
-        contact.fetch({
-          success: function(contact) {
-            that.contactView.clear();
-            that.contactView.render(contact);
-            that.contactView.finishedLoading();
+        this.assessmentView.clear();
+        var assessment = new Assessment({id: id});
+        assessment.fetch({
+          success: function(assessment) {
+            that.assessmentView.clear();
+            that.assessmentView.render(assessment);
+            that.assessmentView.finishedLoading();
           },
         });
       },
