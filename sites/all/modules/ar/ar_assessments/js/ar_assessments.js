@@ -49,7 +49,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
       },*/
     });
 
-    AsssessmentList = Backbone.Collection.extend({
+    AssessmentList = Backbone.Collection.extend({
         model: Assessment,
         params: { },
 
