@@ -309,16 +309,16 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
     AssessmentItemView = AssessmentView.extend({
       render: function (model) {
-        var template = _.template($('#contacts_view').html());
-        this.$el.html(template({contact: model}));
+        var template = _.template($('#ar_assessments_assessment').html());
+        this.$el.html(template({assessment: model}));
       },
       show: function() {
         this.$el.show();
-        $('#block-hid-profiles-hid-profiles-sidebar').show();
+        //$('#block-hid-profiles-hid-profiles-sidebar').show();
       },
       hide: function() {
         this.$el.hide();
-        $('#block-hid-profiles-hid-profiles-sidebar').hide();
+        //$('#block-hid-profiles-hid-profiles-sidebar').hide();
       },
     });
 

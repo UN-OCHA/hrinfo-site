@@ -1,0 +1,47 @@
+<div class="panelizer-view-mode node node-full node-hr-contact node-33275 node-promoted">
+  <div class="panel-display bryant-flipped clearfix radix-bryant-flipped" >
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-9 radix-layouts-content panel-panel">
+          <div class="panel-panel-inner">
+            <div class="panel-pane pane-node-title" >
+              <div class="pane-content">
+                <h2><%= assessment.get('label') %></h2>
+              </div>
+            </div>
+            <div class="panel-separator"></div>
+            <div class="panel-pane pane-entity-field-extra pane-node-hr-core-share-button" >
+              <div class="pane-content">
+                <div class="form-item form-type-item form-group">
+                  <a href="http://www.addtoany.com/share_save" class="a2a_dd btn btn-secondary btn-sm"><i class="fa fa-share"></i> share</a>
+                </div>
+                <!-- <script type="text/javascript">a2a_config.linkname = "Alaa Abou Zeid";a2a_config.linkurl = "http://www.humanitarianresponse.info/operations/iraq/contact/alaa-abou-zeid";a2a.init("page");</script> -->
+              </div>
+            </div>
+            <div class="panel-separator"></div>
+            <div class="panel-pane pane-entity-field pane-node-field-email" >
+              <div class="pane-content">
+                <div class="field field-name-field-email field-type-email field-label-above">
+                  <div class="field-label">Assessment Report:&nbsp;</div>
+                  <div class="field-items">
+                    Test
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 radix-layouts-sidebar panel-panel">
+          <div class="panel-panel-inner">
+            <div class="panel-pane pane-entity-field pane-node-og-group-ref" >
+              <div class="pane-content">
+                <div class="field field-name-og-group-ref field-type-entityreference field-label-above"><div class="field-label">Webspace(s):&nbsp;</div><div class="field-items"><div class="field-item even"><%= contact.get('operation').label %></div></div></div>
+              </div>
+            </div>
+            <div class="panel-separator"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /.bryant-flipped -->
+</div>
