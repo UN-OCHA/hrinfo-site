@@ -6,7 +6,7 @@
       <td><% _.each(assessment.get('participating_organizations'), function (org) { %><%= org.label %>, <% }); %></td>
       <td><% _.each(assessment.get('bundles'), function (bundle) { %><%= bundle.label %>, <% }); %></td>
       <td><%= assessment.get('status') %></td>
-      <td>From <%= assessment.get('date').from %> to <%= assessment.get('date').to %></td>
-      <td><strong>Report:</strong><%= assessment.get('report').accessibility %><br /><strong>Questionnaire:</strong><%= assessment.get('questionnaire').accessibility %><br /><strong>Data:</strong></td>
+      <td><% if (assessment.get('date') { %>From <%= assessment.get('date').from %> to <%= assessment.get('date').to %><% } %></td>
+      <td><strong>Report:</strong><% if(assessment.get('report')) { %><%= assessment.get('report').accessibility %><% } %><br /><strong>Questionnaire:</strong><% if(assessment.get('questionnaire')) { %><%= assessment.get('questionnaire').accessibility %><% } %><br /><strong>Data:</strong></td>
     </tr>
   <% }); %>
