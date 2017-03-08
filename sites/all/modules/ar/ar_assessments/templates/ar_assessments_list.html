@@ -1,10 +1,10 @@
 <% _.each(assessments, function(assessment) { %>
     <tr>
       <td><%= assessment.get('label') %></td>
-      <td></td>
-      <td><% _.each(assessment.get('organizations'), function (org) { %><%= org.label %> <% }); %></td>
-      <td></td>
-      <td><% _.each(assessment.get('bundles'), function (bundle) { %><%= bundle.label %> <% }); %></td>
+      <td><% _.each(assessment.get('locations'), function (loc) { %><%= loc.label %>, <% }); %></td>
+      <td><% _.each(assessment.get('organizations'), function (org) { %><%= org.label %>, <% }); %></td>
+      <td><% _.each(assessment.get('participating_organizations'), function (org) { %><%= org.label %>, <% }); %></td>
+      <td><% _.each(assessment.get('bundles'), function (bundle) { %><%= bundle.label %>, <% }); %></td>
       <td><%= assessment.get('status') %></td>
       <td></td>
       <td></td>
