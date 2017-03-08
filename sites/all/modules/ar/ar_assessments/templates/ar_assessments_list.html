@@ -4,8 +4,8 @@
       <td></td>
       <td></td>
       <td></td>
-      <td></td>
-      <td></td>
+      <td><% _.each(assessment.bundles, function (bundle) { %><%= bundle.label %> <% }); %></td>
+      <td><%= assessment.get('status') %></td>
       <td></td>
       <td></td>
     </tr>
