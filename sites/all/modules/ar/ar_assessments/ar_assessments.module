@@ -1,0 +1,34 @@
+<?php
+/**
+ * @file ar_assessments.module
+ * The main module file for Assessments integration.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function ar_assessments_menu() {
+  $items = array();
+
+  $items['node/%node/ar_assessments'] = array(
+    'title' => 'Assessments',
+    'page callback' => 'ar_assessments_page',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'file' => 'ar_assessments.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ar_assessments_theme() {
+  return array(
+    'ar_assessments_assessments' => array(
+      'variables' => array(),
+      'template' => 'templates/ar-assessments',
+    ),
+  );
+}
