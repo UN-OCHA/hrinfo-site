@@ -42,8 +42,8 @@ function ar_assessments_page($node) {
     '#theme' => 'ar_assessments_assessments',
     '#attached' => array(
       'js' => array(
-        '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js' => array('type' => 'external'),
-        '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js' => array('type' => 'external'),
+        '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js' => array('type' => 'external'),
+        '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js' => array('type' => 'external'),
         drupal_get_path('module', 'ar_assessments') . '/js/ar_assessments.js',
         array(
           'data' => array('ar_assessments' => $settings),
