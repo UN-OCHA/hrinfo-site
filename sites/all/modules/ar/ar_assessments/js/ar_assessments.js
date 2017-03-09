@@ -62,7 +62,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           else {
             url += 'filter[operation][value]=' + settings.ar_assessments.operation_id;
           }
-          url += '&fields=id,label,status,bundles,organizations,participating_organizations,locations,report,questionnaire,date&limit=' + this.limit + '&skip=' + this.skip;
+          url += '&fields=id,label,status,bundles,organizations,participating_organizations,locations,report,questionnaire,date&page=' + this.currentPage;
           if (index != -1) {
             var params = window.location.hash.substr(index + 1);
             url += '&' + params;
@@ -141,7 +141,6 @@ Drupal.behaviors.arAssessmentsAssessments = {
           this.loading();
           this.currentPage = page;
           this.clear();
-          this.assessmentsList.skip = this.numItems * (page - 1);
           this.loadResults();
         },
 
