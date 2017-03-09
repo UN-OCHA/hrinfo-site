@@ -1,6 +1,6 @@
 <% _.each(assessments, function(assessment) { %>
     <tr>
-      <td><a href="#assessment/<%= assessment.get('_id') %>"><%= assessment.get('label') %></a></td>
+      <td><a href="#assessment/<%= assessment.get('id') %>"><%= assessment.get('label') %></a></td>
       <td><% _.each(assessment.get('locations'), function (loc) { %><%= loc.label %>, <% }); %></td>
       <td><% _.each(assessment.get('organizations'), function (org) { %><%= org.label %>, <% }); %></td>
       <td><% _.each(assessment.get('participating_organizations'), function (org) { %><%= org.label %>, <% }); %></td>
