@@ -54,7 +54,7 @@ function ar_assessments_block_info() {
 /**
  * Implements hook_block_view().
  */
-function hid_profiles_block_view($delta = '') {
+function ar_assessments_block_view($delta = '') {
   $block = array();
   switch ($delta) {
     case 'ar_assessments_search':
