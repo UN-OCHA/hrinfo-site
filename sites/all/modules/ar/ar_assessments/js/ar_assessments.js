@@ -62,7 +62,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           else {
             url += 'filter[operation][value]=' + settings.ar_assessments.operation_id;
           }
-          url += '&fields=id,label,status,bundles,organizations,participating_organizations,locations,report,questionnaire,date&page=' + this.currentPage;
+          url += '&fields=id,label,status,bundles,organizations,participating_organizations,locations,report,questionnaire,date&page=' + this.page;
           if (index != -1) {
             var params = window.location.hash.substr(index + 1);
             url += '&' + params;
@@ -73,8 +73,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
            this.count = response.count;
            return response.data;
         },
-        limit: 5,
-        skip: 0,
+        page: 1,
         count: 0,
     });
 
@@ -140,6 +139,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
         page: function(page) {
           this.loading();
           this.currentPage = page;
+          this.assessmentsList.page = page;
           this.clear();
           this.loadResults();
         },
