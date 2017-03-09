@@ -224,17 +224,11 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
         filterByBundles: function(event) {
           var val = $('#bundles').val();
-          if (val != '') {
-            if (val.charAt(0) == '#') {
-              this.assessmentsList.params.protectedBundles = val.substr(1);
-            }
-            else {
-              this.assessmentsList.params['filters[bundle][value]'] = val;
-            }
+          if (val !== '') {
+            this.assessmentsList.params['filter[bundle][value]'] = val;
           }
           else {
-            delete this.assessmentsList.params.bundle;
-            delete this.assessmentsList.params.protectedBundles;
+            delete this.assessmentsList.params['filter[bundle][value]'];
           }
           this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
