@@ -229,7 +229,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
               this.assessmentsList.params.protectedBundles = val.substr(1);
             }
             else {
-              this.assessmentsList.params.bundle = val;
+              this.assessmentsList.params['filters[bundle][value]'] = val;
             }
           }
           else {
