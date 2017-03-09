@@ -4,6 +4,8 @@
  * The main module file for Assessments integration.
  */
 
+ include_once 'ar_assessments.features.inc';
+
 /**
  * Implements hook_menu().
  */
@@ -31,4 +33,101 @@ function ar_assessments_theme() {
       'template' => 'templates/ar-assessments',
     ),
   );
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function ar_assessments_block_info() {
+  $blocks['ar_assessments_search'] = array(
+    'info' => t('Assessments search'),
+  );
+  $blocks['ar_assessments_filters'] = array(
+    'info' => t('Assessments filters'),
+  );
+  $blocks['ar_assessments_sidebar'] = array(
+    'info' => t('Assessments back button'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function hid_profiles_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'ar_assessments_search':
+      $block['content'] = '<div><div class="views-exposed-form">
+  <div class="views-exposed-widgets clearfix">
+                <div id="edit-search-wrapper" class="views-exposed-widget form-group">
+        <div class="input-group">
+          <input class="form-control form-text" id="search" name="text" value="" size="30" maxlength="128" type="text" placeholder="Search Assessments">
+          <span class="input-group-btn">
+            <button id="search-button" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+          </span>
+        </div>
+      </div>
+      </div>
+</div>  </div>';
+      break;
+    case 'ar_assessments_filters':
+      $nid = arg(1);
+      if (is_numeric($nid)) {
+        $node = node_load($nid);
+        $operation = $node;
+        if ($node->type == 'hr_bundle') {
+          $operation_id = _hr_bundles_get_operation($node->nid);
+          if ($operation_id) {
+            $operation = node_load($operation_id);
+          }
+        }
+        $block['content'] = '<div id="block-current-search-hr-current-search" class="block block-current-search">
+
+      <h2>Current search</h2>
+
+    <div class="content">
+      <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter"><p>Filter: <span class="facetapi-active">216 items</span> displayed</p></div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/'.drupal_get_path_alias(current_path()).'"><i class="reset"></i></a> <span>Reset all filters</span></div></div>  </div>
+  </div>';
+        //$block['content'] .= hid_profiles_protected_roles_select();
+        if ($node->type == 'hr_operation') {
+          $block['content'] .= ar_assessments_bundles_select($operation);
+        }
+        /*$block['content'] .= hid_profiles_organization_autocomplete();
+        $block['content'] .= hid_profiles_country_select();
+        $block['content'] .= hid_profiles_location_select($operation);
+        $block['content'] .= hid_profiles_office_select($operation);
+        $block['content'] .= hid_profiles_disaster_select($operation);
+        $block['content'] .= '<hr /><span title="Verified"><i class="fa fa-check-circle fa-lg"></i></span> Verified User <input type="checkbox" id="verified" name="verified" /><hr />';*/
+      }
+      break;
+    case 'ar_assessments_sidebar':
+      $block['content'] = '<button class="btn btn-primary btn-lg btn-block" id="back"><i class="fa fa-arrow-circle-left"></i> Back</button>';
+      break;
+  }
+  return $block;
+}
+
+function ar_assessments_bundles_select($operation) {
+  $query = new EntityFieldQuery();
+  $entities = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'hr_bundle')
+    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
+    ->propertyOrderBy('title')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->execute();
+  $nodes = node_load_multiple(array_keys($entities['node']));
+  $html = '<div id="block-hid-profiles-filters-bundles" class="block"><select id="bundles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Cluster/Sector">';
+  $html .= '<option value=""></option>';
+  foreach ($nodes as $node) {
+    $label = entity_label('node', $node);
+    if ($node->field_bundle_hid_access[LANGUAGE_NONE][0]['value'] == 'closed') {
+      $html .= '<option value="#'.$label.'">'.$label.'</option>';
+    }
+    else {
+      $html .= '<option value="'.$label.'">'.$label.'</option>';
+    }
+  }
+  $html .= '</select></div>';
+  return $html;
 }
