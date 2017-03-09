@@ -13,6 +13,26 @@ Drupal.behaviors.arAssessmentsAssessments = {
           return response;
         }
       },
+      getFromDate: function () {
+        var d = this.get('date');
+        if (d) {
+          var from = new Date(d.from);
+          return from.toLocaleDateString();
+        }
+        else {
+          return '';
+        }
+      },
+      getToDate: function () {
+        var d = this.get('date');
+        if (d) {
+          var to = new Date(d.to);
+          return to.toLocaleDateString();
+        }
+        else {
+          return '';
+        }
+      }
       /*getFullName: function() {
         return this.get('nameGiven') + ' ' + this.get('nameFamily');
       },

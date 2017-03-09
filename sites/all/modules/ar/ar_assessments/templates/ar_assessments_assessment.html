@@ -61,7 +61,7 @@
             <div class="panel-separator"></div>
             <div class="panel-pane pane-entity-field pane-node-og-group-ref" >
               <div class="pane-content">
-                <div class="field field-name-og-group-ref field-type-entityreference field-label-above"><div class="field-label">Assessment Date(s):&nbsp;</div><div class="field-items"><div class="field-item even"><%= assessment.get('operation')[0].label %></div></div></div>
+                <div class="field field-name-og-group-ref field-type-entityreference field-label-above"><div class="field-label">Assessment Date(s):&nbsp;</div><div class="field-items"><div class="field-item even"><% if (assessment.get('date')) { %>From <%= assessment.getFromDate() %> to <%= assessment.getToDate() %><% } %></div></div></div>
               </div>
             </div>
             <div class="panel-separator"></div>
@@ -74,28 +74,28 @@
             <div class="panel-pane pane-entity-field pane-node-og-group-ref" >
               <div class="pane-content">
                 <div class="field field-name-og-group-ref field-type-entityreference field-label-above"><div class="field-label">Population Type(s):&nbsp;</div>
-                <div class="field-items"><div class="field-item even"><% _.each(assessment.get('population_types'), function (pop) { %><%= pop.label %><% }); %></div></div></div>
+                <div class="field-items"><div class="field-item even"><% _.each(assessment.get('population_types'), function (pop) { %><%= pop.label %><br /><% }); %></div></div></div>
               </div>
             </div>
             <div class="panel-separator"></div>
             <div class="panel-pane pane-entity-field pane-node-og-group-ref" >
               <div class="pane-content">
                 <div class="field field-name-og-group-ref field-type-entityreference field-label-above"><div class="field-label">Cluster(s)/Sector(s):&nbsp;</div>
-                <div class="field-items"><div class="field-item even"><% _.each(assessment.get('bundles'), function (bundle) { %><%= bundle.label %><% }); %></div></div></div>
+                <div class="field-items"><div class="field-item even"><% _.each(assessment.get('bundles'), function (bundle) { %><%= bundle.label %><br /><% }); %></div></div></div>
               </div>
             </div>
             <div class="panel-separator"></div>
             <div class="panel-pane pane-entity-field pane-node-og-group-ref" >
               <div class="pane-content">
                 <div class="field field-name-og-group-ref field-type-entityreference field-label-above"><div class="field-label">Leading/Coordinating Organization(s):&nbsp;</div>
-                <div class="field-items"><div class="field-item even"><% _.each(assessment.get('organizations'), function (org) { %><%= org.label %><% }); %></div></div></div>
+                <div class="field-items"><div class="field-item even"><% _.each(assessment.get('organizations'), function (org) { %><%= org.label %><br /><% }); %></div></div></div>
               </div>
             </div>
             <div class="panel-separator"></div>
             <div class="panel-pane pane-entity-field pane-node-og-group-ref" >
               <div class="pane-content">
                 <div class="field field-name-og-group-ref field-type-entityreference field-label-above"><div class="field-label">Location(s):&nbsp;</div>
-                <div class="field-items"><div class="field-item even"><% _.each(assessment.get('locations'), function (loc) { %><%= loc.label %><% }); %></div></div></div>
+                <div class="field-items"><div class="field-item even"><% _.each(assessment.get('locations'), function (loc) { %><%= loc.label %><br /><% }); %></div></div></div>
               </div>
             </div>
             <div class="panel-separator"></div>
@@ -109,7 +109,7 @@
             <div class="panel-pane pane-entity-field pane-node-og-group-ref" >
               <div class="pane-content">
                 <div class="field field-name-og-group-ref field-type-entityreference field-label-above"><div class="field-label">Disaster(s)/Emergency:&nbsp;</div>
-                <div class="field-items"><div class="field-item even"><% _.each(assessment.get('disasters'), function (dis) { %><%= dis.label %><% }); %></div></div></div>
+                <div class="field-items"><div class="field-item even"><% _.each(assessment.get('disasters'), function (dis) { %><%= dis.label %><br /><% }); %></div></div></div>
               </div>
             </div>
             <div class="panel-separator"></div>
