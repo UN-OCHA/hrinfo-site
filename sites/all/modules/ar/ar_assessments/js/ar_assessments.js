@@ -77,10 +77,10 @@ Drupal.behaviors.arAssessmentsAssessments = {
           var index = window.location.hash.indexOf('?');
           var url = 'https://assessmentregistry.hrinfo.568elmp03.blackmesh.com/en/api/v1.0/assessments/?';
           if (settings.ar_assessments.bundle != '') {
-            url += '&filter[bundles][value]=' + settings.ar_assessments.bundle;
+            this.params['filter[bundles][value]'] = settings.ar_assessments.bundle;
           }
           else {
-            url += 'filter[operation][value]=' + settings.ar_assessments.operation_id;
+            this.params['filter[operation][value]'] = settings.ar_assessments.operation_id;
           }
           url += '&fields=id,label,status,bundles,organizations,participating_organizations,locations,report,questionnaire,date&page=' + this.page;
           if (index != -1) {
@@ -226,6 +226,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           var val = $('#bundles').val();
           if (val !== '') {
             this.assessmentsList.params['filter[bundle][value]'] = val;
+            delete this.assessmentsList.params['filter[operation][value]'];
           }
           else {
             delete this.assessmentsList.params['filter[bundle][value]'];
