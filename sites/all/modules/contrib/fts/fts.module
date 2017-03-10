@@ -85,21 +85,29 @@ function fts_get_funding($params) {
     $data = json_decode($response->data);
     if (isset($data->data)) {
       $funding = new stdClass();
-
       if (isset($data->data->report1)) {
         $report1 = $data->data->report1;
         $funding->current_requirements = $report1->fundingTotals->total;
-        $funding->funding = $report1->pledgeTotals->total;
+        $funding->funding = $report1->pledgeTotals->total + $report1->fundingTotals->total;
 
-        if (isset($report1->fundingTotals->objects[0]->singleFundingObjects)) {
-          foreach ($report1->fundingTotals->objects[0]->singleFundingObjects as $funding_object) {
-            $funding->data[$funding_object->name] = $funding_object->totalFunding;
+        if (isset($data->data->report3)) {
+          $report3 = $data->data->report3;
+          if (isset($report3->fundingTotals->objects[0]->singleFundingObjects)) {
+            foreach ($report3->fundingTotals->objects[0]->singleFundingObjects as $funding_object) {
+              if (!isset($funding->data[$funding_object->name])) {
+                $funding->data[$funding_object->name] = 0;
+              }
+              $funding->data[$funding_object->name] = $funding_object->totalFunding;
+            }
           }
-        }
 
-        if (isset($report1->pledgeTotals->objects[0]->singleFundingObjects)) {
-          foreach ($report1->pledgeTotals->objects[0]->singleFundingObjects as $funding_object) {
-            $funding->data[$funding_object->name] = $funding_object->totalFunding;
+          if (isset($report3->pledgeTotals->objects[0]->singleFundingObjects)) {
+            foreach ($report3->pledgeTotals->objects[0]->singleFundingObjects as $funding_object) {
+              if (!isset($funding->data[$funding_object->name])) {
+                $funding->data[$funding_object->name] = 0;
+              }
+              $funding->data[$funding_object->name] = $funding_object->totalFunding;
+            }
           }
         }
       }
@@ -107,7 +115,6 @@ function fts_get_funding($params) {
         $funding->current_requirements = $data->data->incoming->fundingTotal;
         $funding->funding = $data->data->incoming->pledgeTotal + $data->data->incoming->fundingTotal;
       }
-
       cache_set('fts_funding' . md5($query), $funding, 'cache', REQUEST_TIME + 24 * 60 * 60);
     }
     else{
