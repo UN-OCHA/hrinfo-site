@@ -93,8 +93,11 @@ function ar_assessments_block_view($delta = '') {
         if ($node->type == 'hr_operation') {
           $block['content'] .= ar_assessments_bundles_select($operation);
         }
-        /*$block['content'] .= hid_profiles_organization_autocomplete();
-        $block['content'] .= hid_profiles_country_select();
+        $block['content'] .= ar_assessments_organization_autocomplete();
+        $block['content'] .= ar_assessments_part_organization_autocomplete();
+        $block['content'] .= ar_assessements_location_select($operation);
+        $block['content'] .= ar_assessments_status_select();
+        /*$block['content'] .= hid_profiles_country_select();
         $block['content'] .= hid_profiles_location_select($operation);
         $block['content'] .= hid_profiles_office_select($operation);
         $block['content'] .= hid_profiles_disaster_select($operation);
@@ -119,10 +122,50 @@ function ar_assessments_bundles_select($operation) {
   $nodes = node_load_multiple(array_keys($entities['node']));
   $html = '<div id="block-hid-profiles-filters-bundles" class="block"><select id="bundles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Cluster/Sector">';
   $html .= '<option value=""></option>';
-  foreach ($nodes as $nid => $node) {
+  foreach ($nodes as $node) {
     $label = entity_label('node', $node);
-    $html .= '<option value="'.$nid.'">'.$label.'</option>';
+    if ($node->field_bundle_hid_access[LANGUAGE_NONE][0]['value'] == 'closed') {
+      $html .= '<option value="#'.$label.'">'.$label.'</option>';
+    }
+    else {
+      $html .= '<option value="'.$label.'">'.$label.'</option>';
+    }
   }
+  $html .= '</select></div>';
+  return $html;
+}
+
+function ar_assessments_organization_autocomplete() {
+  $html = '<div id="block-hid-profiles-filters-organization" class="block"><input type="text" id="organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Organization" /></div>';
+  return $html;
+}
+
+function ar_assessments_part_organization_autocomplete() {
+  $html = '<div id="block-hid-profiles-filters-organization" class="block"><input type="text" id="organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Participating Organizations" /></div>';
+  return $html;
+}
+
+function ar_assessments_location_select($operation) {
+  $loc_vocabulary = taxonomy_vocabulary_machine_name_load('hr_location');
+  $parent = $operation->field_country[LANGUAGE_NONE][0]['target_id'];
+  $tree = taxonomy_get_tree($loc_vocabulary->vid, $parent, 1);
+  $html = '<div id="block-hid-profiles-filters-locations" class="block"><select id="locations" class="form-control form-select" tabindex="1" data-placeholder="Filter by Location">';
+  $html .= '<option value=""></option>';
+  foreach ($tree as $term) {
+    $html .= '<option value="'.$term->name.'">'.$term->name.'</option>';
+  }
+  $html .= '</select></div>';
+  return $html;
+}
+
+function ar_assessments_status_select() {
+  $html = '<div id="block-hid-profiles-filters-status" class="block"><select id="locations" class="form-control form-select" tabindex="1" data-placeholder="Filter by Status">';
+  $html .= '<option value=""></option>';
+  $html .= '<option value="Planned">Planned</option>';
+  $html .= '<option value="Ongoing">Ongoing</option>';
+  $html .= '<option value="Draft">Draft</option>';
+  $html .= '<option value="Field work completed">Field work completed</option>';
+  $html .= '<option value="Report completed">Report completed</option>';
   $html .= '</select></div>';
   return $html;
 }
