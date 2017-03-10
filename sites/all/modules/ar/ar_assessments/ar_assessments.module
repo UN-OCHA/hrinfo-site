@@ -95,7 +95,7 @@ function ar_assessments_block_view($delta = '') {
         }
         $block['content'] .= ar_assessments_organization_autocomplete();
         $block['content'] .= ar_assessments_part_organization_autocomplete();
-        $block['content'] .= ar_assessements_location_select($operation);
+        $block['content'] .= ar_assessments_location_select($operation);
         $block['content'] .= ar_assessments_status_select();
         $block['content'] .= ar_assessments_population_types_select();
         $block['content'] .= ar_assessments_disaster_select($operation);
