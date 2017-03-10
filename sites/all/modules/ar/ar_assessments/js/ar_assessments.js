@@ -116,7 +116,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           'autocompleteselect #part_organizations': 'filterByPartOrganization',
           'change #status': 'filterByStatus',
           'change #locations': 'filterByLocation',
-          'change #population_types': 'filterByPopulationType',
+          'change #population-types': 'filterByPopulationType',
           'change #disasters': 'filterByDisaster',
         },
 
