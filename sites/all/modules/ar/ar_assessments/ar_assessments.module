@@ -161,7 +161,7 @@ function ar_assessments_location_select($operation) {
 }
 
 function ar_assessments_status_select() {
-  $html = '<div id="block-hid-profiles-filters-status" class="block"><select id="locations" class="form-control form-select" tabindex="1" data-placeholder="Filter by Status">';
+  $html = '<div id="block-hid-profiles-filters-status" class="block"><select id="status" class="form-control form-select" tabindex="1" data-placeholder="Filter by Status">';
   $html .= '<option value=""></option>';
   $html .= '<option value="Planned">Planned</option>';
   $html .= '<option value="Ongoing">Ongoing</option>';
