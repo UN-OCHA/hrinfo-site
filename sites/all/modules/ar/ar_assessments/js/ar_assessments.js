@@ -33,40 +33,6 @@ Drupal.behaviors.arAssessmentsAssessments = {
           return '';
         }
       }
-      /*getFullName: function() {
-        return this.get('nameGiven') + ' ' + this.get('nameFamily');
-      },
-
-      getMainOrganizationName: function() {
-        var organizations = this.get('organization');
-        if (organizations.length > 0 && organizations[0] !== null) {
-          return organizations[0].name;
-        }
-      },
-      getLocationName: function() {
-        var address = this.get('address');
-        if (address.length > 0) {
-          return address[0].locality;
-        }
-      },
-
-      getBundles: function() {
-        var bundles = this.get('bundle');
-        if (bundles.length > 0) {
-          return bundles.join(", ");
-        }
-      },
-
-      getEmails: function() {
-        var emails = this.get('email');
-        if (emails.length > 0) {
-          var addresses = new Array();
-          _.each(emails, function(email) {
-            addresses.push(email.address);
-          });
-          return addresses.join(", ");
-        }
-      },*/
     });
 
     AssessmentList = Backbone.Collection.extend({
@@ -150,7 +116,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           'autocompleteselect #part_organizations': 'filterByPartOrganization',
           'change #status': 'filterByStatus',
           'change #locations': 'filterByLocation',
-          'change #offices': 'filterByOffice',
+          'change #population_types': 'filterByPopulationType',
           'change #disasters': 'filterByDisaster',
         },
 
@@ -275,6 +241,17 @@ Drupal.behaviors.arAssessmentsAssessments = {
           this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
+        filterByPopulationType: function(event) {
+          var val = $('#population_types').val();
+          if (val != '') {
+            this.assessmentsList.params['filter[population_types][value]'] = val;
+          }
+          else {
+            delete this.assessmentsList.params['filter[population_types][value]'];
+          }
+          this.router.navigateWithParams('table/1', this.assessmentsList.params);
+        },
+
         search: function(event) {
           if (event.type == 'keyup' && event.keyCode == 13 || event.type == 'click') {
             this.router.navigate('table/1?text='+$('#search').val(), {trigger: true});
@@ -348,21 +325,27 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
     var assessment_router = new AssessmentRouter;
 
+    var orgAutocompleteCallback = function (request, response) {
+      $.ajax({
+        url: "/hid/organizations/autocomplete/"+request.term,
+        dataType: "json",
+        success: function( data ) {
+          var orgs = [];
+          _.each(data, function(element, index) {
+            orgs.push({'label': element, 'value': index.replace('hrinfo_org_', '')});
+          });
+          response( orgs );
+        }
+      });
+    };
+
     // Autocomplete for organization
     $('#organizations').autocomplete({
-      source: function (request, response) {
-        $.ajax({
-          url: "/hid/organizations/autocomplete/"+request.term,
-          dataType: "json",
-          success: function( data ) {
-            var orgs = new Array();
-            _.each(data, function(element, index) {
-              orgs.push({'label': element, 'value': index.replace('hrinfo_org_', '')});
-            });
-            response( orgs );
-          }
-        });
-      },
+      source: orgAutocompleteCallback
+    });
+
+    $('#part_organizations').autocomplete({
+      source: orgAutocompleteCallback
     });
 
     // Chosen configuration
