@@ -138,7 +138,7 @@ function ar_assessments_organization_autocomplete() {
 }
 
 function ar_assessments_part_organization_autocomplete() {
-  $html = '<div id="block-hid-profiles-filters-organization" class="block"><input type="text" id="organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Participating Organizations" /></div>';
+  $html = '<div id="block-hid-profiles-filters-organization" class="block"><input type="text" id="part_organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Participating Organizations" /></div>';
   return $html;
 }
 
@@ -194,8 +194,7 @@ function ar_assessments_disaster_select($operation) {
     $output .= '<div id="block-hid-profiles-filters-disasters" class="block"><select id="disasters" class="form-control form-select" tabindex="1" data-placeholder="Filter by Disaster">';
     $output .= '<option value=""></option>';
     foreach ($nodes as $node) {
-      $id = 'hrinfo:' . $node->nid;
-      $output .= '<option value="' . $id . '">' . entity_label('node', $node) . '</option>';
+      $output .= '<option value="' . $node->nid . '">' . entity_label('node', $node) . '</option>';
     }
     $output .= '</select></div>';
   }
