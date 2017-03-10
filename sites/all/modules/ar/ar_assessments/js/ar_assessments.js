@@ -242,7 +242,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
         },
 
         filterByPopulationType: function(event) {
-          var val = $('#population_types').val();
+          var val = $('#population-types').val();
           if (val != '') {
             this.assessmentsList.params['filter[population_types][value]'] = val;
           }
