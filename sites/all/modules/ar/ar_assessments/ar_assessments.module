@@ -48,6 +48,9 @@ function ar_assessments_block_info() {
   $blocks['ar_assessments_sidebar'] = array(
     'info' => t('Assessments back button'),
   );
+  $blocks['ar_assessments_powered_by'] = array(
+    'info' => t('Assessments powered by'),
+  );
   return $blocks;
 }
 
@@ -108,6 +111,9 @@ function ar_assessments_block_view($delta = '') {
       break;
     case 'ar_assessments_sidebar':
       $block['content'] = '<button class="btn btn-primary btn-lg btn-block" id="back"><i class="fa fa-arrow-circle-left"></i> Back</button>';
+      break;
+    case 'ar_assessments_powered_by':
+      $block['content'] = '<p class="text-center">Powerered by:</p><a class="text-center" href="http://www.humanitarian.id"><img src="/sites/all/themes/humanitarianresponse/assets/images/ar_logo.svg" alt="Assessments Registry logo" width="250" /></a>';
       break;
   }
   return $block;
