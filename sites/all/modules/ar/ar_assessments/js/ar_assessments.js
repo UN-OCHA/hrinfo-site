@@ -53,6 +53,14 @@ Drupal.behaviors.arAssessmentsAssessments = {
             var params = window.location.hash.substr(index + 1);
             url += '&' + params;
           }
+          else {
+            if (settings.ar_assessments.bundle != '') {
+              url += '&filter[bundles][value]=' + settings.ar_assessments.bundle;
+            }
+            else {
+              url += '&filter[operation][value]=' + settings.ar_assessments.operation_id;
+            }
+          }
           return url;
         },
         parse: function(response) {
@@ -134,13 +142,13 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
         show: function() {
           $('#assessments-list').show();
-          //$('#block-hid-profiles-hid-profiles-filters').show();
+          $('#block-ar-assessments-ar-assessments-filters').show();
           //$('.feed-icon').show();
         },
 
         hide: function() {
           $('#assessments-list').hide();
-          //$('#block-hid-profiles-hid-profiles-filters').hide();
+          $('#block-ar-assessments-ar-assessments-filters').hide();
           //$('.feed-icon').hide();
         },
 
@@ -271,11 +279,11 @@ Drupal.behaviors.arAssessmentsAssessments = {
       },
       show: function() {
         this.$el.show();
-        //$('#block-hid-profiles-hid-profiles-sidebar').show();
+        $('#block-ar-assessments-ar-assessments-sidebar').show();
       },
       hide: function() {
         this.$el.hide();
-        //$('#block-hid-profiles-hid-profiles-sidebar').hide();
+        $('#block-ar-assessments-ar-assessments-sidebar').hide();
       },
     });
 
