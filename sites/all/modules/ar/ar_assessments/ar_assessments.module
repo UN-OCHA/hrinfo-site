@@ -124,14 +124,9 @@ function ar_assessments_bundles_select($operation) {
   $nodes = node_load_multiple(array_keys($entities['node']));
   $html = '<div id="block-hid-profiles-filters-bundles" class="block"><select id="bundles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Cluster/Sector">';
   $html .= '<option value=""></option>';
-  foreach ($nodes as $node) {
+  foreach ($nodes as $nid => $node) {
     $label = entity_label('node', $node);
-    if ($node->field_bundle_hid_access[LANGUAGE_NONE][0]['value'] == 'closed') {
-      $html .= '<option value="#'.$label.'">'.$label.'</option>';
-    }
-    else {
-      $html .= '<option value="'.$label.'">'.$label.'</option>';
-    }
+    $html .= '<option value="'.$nid.'">'.$label.'</option>';
   }
   $html .= '</select></div>';
   return $html;
@@ -154,7 +149,7 @@ function ar_assessments_location_select($operation) {
   $html = '<div id="block-hid-profiles-filters-locations" class="block"><select id="locations" class="form-control form-select" tabindex="1" data-placeholder="Filter by Location">';
   $html .= '<option value=""></option>';
   foreach ($tree as $term) {
-    $html .= '<option value="'.$term->name.'">'.$term->name.'</option>';
+    $html .= '<option value="'.$term->tid.'">'.$term->name.'</option>';
   }
   $html .= '</select></div>';
   return $html;

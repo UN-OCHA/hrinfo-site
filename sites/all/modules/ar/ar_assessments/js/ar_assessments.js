@@ -378,7 +378,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           success: function( data ) {
             var orgs = new Array();
             _.each(data, function(element, index) {
-              orgs.push({'label': element, 'value': index});
+              orgs.push({'label': element, 'value': index.replace('hrinfo_org_', '')});
             });
             response( orgs );
           }
