@@ -44,6 +44,12 @@ function ar_assessments_context_default_contexts() {
           'region' => 'sidebar_first',
           'weight' => '-10',
         ),
+        'ar_assessments-ar_assessments_powered_by' => array(
+          'module' => 'ar_assessments',
+          'delta' => 'ar_assessments_powered_by',
+          'region' => 'sidebar_first',
+          'weight' => '0',
+        ),
       ),
     ),
   );
