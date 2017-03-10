@@ -82,7 +82,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           else {
             this.params['filter[operation][value]'] = settings.ar_assessments.operation_id;
           }
-          url += '&fields=id,label,status,bundles,organizations,participating_organizations,locations,report,questionnaire,date&page=' + this.page;
+          url += '&fields=id,label,status,bundles,organizations,participating_organizations,locations,report,questionnaire,date,disasters,population_types&page=' + this.page;
           if (index != -1) {
             var params = window.location.hash.substr(index + 1);
             url += '&' + params;
@@ -147,8 +147,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           'keyup #search': 'search',
           'click #back': 'back',
           'autocompleteselect #organizations': 'filterByOrganization',
-          'click #key-contact': 'filterByKeyContact',
-          'click #verified': 'filterByVerified',
+          'autocompleteselect #part_organizations': 'filterByPartOrganization',
           'change #status': 'filterByStatus',
           'change #locations': 'filterByLocation',
           'change #offices': 'filterByOffice',
@@ -232,6 +231,17 @@ Drupal.behaviors.arAssessmentsAssessments = {
           this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
+        filterByPartOrganization: function(event, ui) {
+          var val = ui.item.value;
+          if (val != '') {
+            this.assessmentsList.params['filter[participating_organizations][value]'] = val;
+          }
+          else {
+            delete this.assessmentsList.params['filter[participating_organizations][value]'];
+          }
+          this.router.navigateWithParams('table/1', this.assessmentsList.params);
+        },
+
         filterByStatus: function(event) {
           var val = $('#status').val();
           if (val != '') {
@@ -246,21 +256,10 @@ Drupal.behaviors.arAssessmentsAssessments = {
         filterByLocation: function(event) {
           var val = $('#locations').val();
           if (val != '') {
-            this.assessmentsList.params.address_administrative_area = val;
+            this.assessmentsList.params['filter[locations][value]'] = val;
           }
           else {
-            delete this.assessmentsList.params.address_administrative_area;
-          }
-          this.router.navigateWithParams('table/1', this.assessmentsList.params);
-        },
-
-        filterByOffice: function(event) {
-          var val = $('#offices').val();
-          if (val != '') {
-            this.assessmentsList.params.office_name = val;
-          }
-          else {
-            delete this.assessmentsList.params.office_name;
+            delete this.assessmentsList.params['filter[locations][value]'];
           }
           this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
@@ -268,30 +267,10 @@ Drupal.behaviors.arAssessmentsAssessments = {
         filterByDisaster: function(event) {
           var val = $('#disasters').val();
           if (val != '') {
-            this.assessmentsList.params.disasters_remote_id = val;
+            this.assessmentsList.params['filter[disasters][value]'] = val;
           }
           else {
-            delete this.assessmentsList.params.disasters_remote_id;
-          }
-          this.router.navigateWithParams('table/1', this.assessmentsList.params);
-        },
-
-        filterByKeyContact: function(event) {
-          if ($('#key-contact').prop('checked') == true) {
-            this.assessmentsList.params.keyContact = true;
-          }
-          else {
-            delete this.assessmentsList.params.keyContact;
-          }
-          this.router.navigateWithParams('table/1', this.assessmentsList.params);
-        },
-
-        filterByVerified: function(event) {
-          if ($('#verified').prop('checked') == true) {
-            this.assessmentsList.params.verified = true;
-          }
-          else {
-            delete this.assessmentsList.params.verified;
+            delete this.assessmentsList.params['filter[disasters][value]'];
           }
           this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
