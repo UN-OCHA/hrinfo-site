@@ -105,7 +105,7 @@ function fts_get_funding($params) {
       }
       else {
         $funding->current_requirements = $data->data->incoming->fundingTotal;
-        $funding->funding = $data->data->incoming->pledgeTotal;
+        $funding->funding = $data->data->incoming->pledgeTotal + $data->data->incoming->fundingTotal;
       }
 
       cache_set('fts_funding' . md5($query), $funding, 'cache', REQUEST_TIME + 24 * 60 * 60);
