@@ -142,7 +142,6 @@ Drupal.behaviors.arAssessmentsAssessments = {
         },
 
         events: {
-          'change #protectedRoles': 'filterByProtectedRoles',
           'change #bundles': 'filterByBundles',
           'click #search-button': 'search',
           'keyup #search': 'search',
@@ -150,7 +149,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           'autocompleteselect #organizations': 'filterByOrganization',
           'click #key-contact': 'filterByKeyContact',
           'click #verified': 'filterByVerified',
-          'change #countries': 'filterByCountry',
+          'change #status': 'filterByStatus',
           'change #locations': 'filterByLocation',
           'change #offices': 'filterByOffice',
           'change #disasters': 'filterByDisaster',
@@ -210,48 +209,36 @@ Drupal.behaviors.arAssessmentsAssessments = {
           }
         },
 
-
-        filterByProtectedRoles: function(event) {
-          var val = $('#protectedRoles').val();
-          if (val != '') {
-            this.assessmentsList.params.protectedRoles = val;
-          }
-          else {
-            delete this.assessmentsList.params.protectedRoles;
-          }
-          this.router.navigateWithParams('table/1', this.assessmentsList.params);
-        },
-
         filterByBundles: function(event) {
           var val = $('#bundles').val();
           if (val !== '') {
-            this.assessmentsList.params['filter[bundle][value]'] = val;
+            this.assessmentsList.params['filter[bundles][value]'] = val;
             delete this.assessmentsList.params['filter[operation][value]'];
           }
           else {
-            delete this.assessmentsList.params['filter[bundle][value]'];
+            delete this.assessmentsList.params['filter[bundles][value]'];
           }
           this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
         filterByOrganization: function(event, ui) {
-          var val = ui.item.label;
+          var val = ui.item.value;
           if (val != '') {
-            this.assessmentsList.params.organization_name = val;
+            this.assessmentsList.params['filter[organizations][value]'] = val;
           }
           else {
-            delete this.assessmentsList.params.organization_name;
+            delete this.assessmentsList.params['filter[organizations][value]'];
           }
           this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
-        filterByCountry: function(event) {
-          var val = $('#countries').val();
+        filterByStatus: function(event) {
+          var val = $('#status').val();
           if (val != '') {
-            this.assessmentsList.params.address_country = val;
+            this.assessmentsList.params['filter[status][value]'] = val;
           }
           else {
-            delete this.assessmentsList.params.address_country;
+            delete this.assessmentsList.params['filter[status][value]'];
           }
           this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
@@ -391,7 +378,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           success: function( data ) {
             var orgs = new Array();
             _.each(data, function(element, index) {
-              orgs.push({'label': element, 'value': element});
+              orgs.push({'label': element, 'value': index});
             });
             response( orgs );
           }
