@@ -55,7 +55,7 @@ function hr_layout_block_info() {
  * Implements hook_block_view().
  */
 function hr_layout_block_view($delta = '') {
-  global $user;
+  global $user, $base_url;
   $block = array();
 
   switch ($delta) {
@@ -121,7 +121,7 @@ function hr_layout_block_view($delta = '') {
       $block['content'] = '';
       if (!user_is_logged_in()) {
         if (module_exists('hid_auth')) {
-          $block['content'] = l(t('Log in'), 'https://www.humanitarianresponse.info/connect/oauthconnector_hid_oauth', array('attributes' => array('class' => array('btn', 'btn-default')), 'query' => drupal_get_destination()));
+          $block['content'] = l(t('Log in'), $base_url.'/connect/oauthconnector_hid_oauth', array('attributes' => array('class' => array('btn', 'btn-default')), 'query' => drupal_get_destination()));
         }
         else {
           $block['content'] = l(t('Log in'), 'user/login', array('attributes' => array('class' => array('btn', 'btn-default')), 'query' => drupal_get_destination()));
