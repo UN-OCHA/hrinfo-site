@@ -1,6 +1,22 @@
 (function($) {
 Drupal.behaviors.hidProfilesContacts = {
   attach: function (context, settings) {
+
+    var _sync = Backbone.sync;
+    Backbone.sync = function(method, model, options) {
+
+        /*if( model && (method === 'create' || method === 'update' || method === 'patch') ) {
+            options.contentType = 'application/json';
+            options.data = JSON.stringify(options.attrs || model.toJSON());
+        }*/
+
+        if (settings.hid_profiles.v2) {
+          options.headers.Authorization = 'Bearer ' + settings.hid_profiles.token;
+        }
+
+        return _sync.call( this, method, model, options );
+    };
+
     Contact = Backbone.Model.extend({
       url: function() {
         return window.location.protocol + '//' + window.location.host + '/hid/proxy?api_path=v0/contact/view&_id='+this.get('_id');
