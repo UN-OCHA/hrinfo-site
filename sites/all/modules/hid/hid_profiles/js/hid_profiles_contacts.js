@@ -26,37 +26,86 @@ Drupal.behaviors.hidProfilesContacts = {
         }
       },
       getFullName: function() {
-        return this.get('nameGiven') + ' ' + this.get('nameFamily');
+        if (settings.hid_profiles.v2) {
+          return this.get('name');
+        }
+        else {
+          return this.get('nameGiven') + ' ' + this.get('nameFamily');
+        }
       },
 
       getMainOrganizationName: function() {
-        var organizations = this.get('organization');
-        if (organizations.length > 0 && organizations[0] !== null) {
-          return organizations[0].name;
+        if (settings.hid_profiles.v2) {
+          var org = this.get('organization');
+          if (org) {
+            return org.name;
+          }
+          else {
+            return '';
+          }
+        }
+        else {
+          var organizations = this.get('organization');
+          if (organizations.length > 0 && organizations[0] !== null) {
+            return organizations[0].name;
+          }
         }
       },
       getLocationName: function() {
-        var address = this.get('address');
-        if (address.length > 0) {
-          return address[0].locality;
+        if (settings.hid_profiles.v2) {
+          return '';
+        }
+        else {
+          var address = this.get('address');
+          if (address.length > 0) {
+            return address[0].locality;
+          }
         }
       },
 
       getBundles: function() {
-        var bundles = this.get('bundle');
-        if (bundles.length > 0) {
-          return bundles.join(", ");
+        if (settings.hid_profiles.v2) {
+          return '';
+        }
+        else {
+          var bundles = this.get('bundle');
+          if (bundles.length > 0) {
+            return bundles.join(", ");
+          }
+        }
+      },
+
+      getJobTitle: function() {
+        if (settings.hid_profiles.v2) {
+          return this.get('job_title');
+        }
+        else {
+          return this.get('jobtitle');
+        }
+      },
+
+      getVerified: function () {
+        if (settings.hid_profiles.v2) {
+          return this.get('verified');
+        }
+        else {
+          return this.get('_profile').verified;
         }
       },
 
       getEmails: function() {
-        var emails = this.get('email');
-        if (emails.length > 0) {
-          var addresses = new Array();
-          _.each(emails, function(email) {
-            addresses.push(email.address);
-          });
-          return addresses.join(", ");
+        if (settings.hid_profiles.v2) {
+          return this.get('email');
+        }
+        else {
+          var emails = this.get('email');
+          if (emails.length > 0) {
+            var addresses = new Array();
+            _.each(emails, function(email) {
+              addresses.push(email.address);
+            });
+            return addresses.join(", ");
+          }
         }
       },
     });

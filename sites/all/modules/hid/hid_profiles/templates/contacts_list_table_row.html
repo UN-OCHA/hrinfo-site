@@ -1,9 +1,9 @@
 <% _.each(contacts, function(contact) { %>
     <tr>
       <td><%= contact.getBundles() %></td>
-      <td><a href="#contact/<%= contact.get('_id') %>"><%= contact.getFullName() %></a> <% if (contact.get('_profile').verified == true) { %><span title="Verified"><i class="fa fa-check-circle fa-lg"></i></span><% } %></td>
+      <td><a href="#contact/<%= contact.get('_id') %>"><%= contact.getFullName() %></a> <% if (contact.getVerified() == true) { %><span title="Verified"><i class="fa fa-check-circle fa-lg"></i></span><% } %></td>
       <td><%= contact.getEmails() %></td>
-      <td><%= contact.get('jobtitle') %></td>
+      <td><%= contact.getJobTitle() %></td>
       <td><%= contact.getMainOrganizationName() %></td>
       <td><%= contact.getLocationName() %></td>
     </tr>
