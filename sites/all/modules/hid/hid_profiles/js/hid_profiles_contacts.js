@@ -5,11 +5,6 @@ Drupal.behaviors.hidProfilesContacts = {
     var _sync = Backbone.sync;
     Backbone.sync = function(method, model, options) {
 
-        /*if( model && (method === 'create' || method === 'update' || method === 'patch') ) {
-            options.contentType = 'application/json';
-            options.data = JSON.stringify(options.attrs || model.toJSON());
-        }*/
-
         if (settings.hid_profiles.v2) {
           options.headers = {};
           options.headers.Authorization = 'Bearer ' + settings.hid_profiles.token;
@@ -66,15 +61,20 @@ Drupal.behaviors.hidProfilesContacts = {
       },
     });
 
+    Lists = Backbone.Collection.extend({
+      url: 'https://api2.dev.humanitarian.id/api/v2/list'
+    });
+
     ContactList = Backbone.Collection.extend({
         model: Contact,
         params: { },
+        listId: '',
 
         url: function() {
           var index = window.location.hash.indexOf('?');
           var url = '';
           if (settings.hid_profiles.v2) {
-            url = 'https://api2.dev.humanitarian.id/api/v2/user?limit=' + this.limit;
+            url = 'https://api2.dev.humanitarian.id/api/v2/user?limit=' + this.limit + '&operations.list=' + this.listId + '&sort=name';
           }
           else {
             url = window.location.protocol + '//' + window.location.host + '/hid/proxy?api_path=v0/contact/view&locationId=hrinfo:' + settings.hid_profiles.operation_id + '&status=1&type=local&limit=' + this.limit + '&skip=' + this.skip;
@@ -122,11 +122,21 @@ Drupal.behaviors.hidProfilesContacts = {
         currentPage: 1,
 
         initialize: function() {
-            this.contactsList = new ContactList;
+            this.contactsList = new ContactList();
             this.contactsList.limit = this.numItems;
+            this.lists = new Lists();
         },
 
-        loadResults: function() {
+        loadResults: function () {
+          if (settings.hid_profiles.v2) {
+            this.loadResultsV2();
+          }
+          else {
+            this.loadResultsV1();
+          }
+        },
+
+        loadResultsV1: function() {
           var that = this;
           this.contactsList.fetch({
             success: function (contacts) {
@@ -140,6 +150,29 @@ Drupal.behaviors.hidProfilesContacts = {
               $('#contacts-list-table tbody').append(template({contacts: contacts.models}));
               that.finishedLoading();
             },
+          });
+        },
+
+        loadResultsV2: function () {
+          var that = this;
+          this.lists.fetch({
+            data: { 'remote_id': settings.hid_profiles.operation_id},
+            success: function (lists) {
+              that.contactsList.listId = lists[0]._id;
+              that.contactsList.fetch({
+                success: function (contacts) {
+                  var template = _.template($('#contacts_list_table_row').html());
+                  var pdf_url = that.contactsList.url();
+                  pdf_url = pdf_url.replace('&limit=' + that.numItems + '&skip=' + that.contactsList.skip, '');
+                  var csv_url = pdf_url + '&export=csv';
+                  pdf_url = pdf_url + '&export=pdf';
+                  $('#contacts-list-pdf').attr('href', pdf_url);
+                  $('#contacts-list-csv').attr('href', csv_url);
+                  $('#contacts-list-table tbody').append(template({contacts: contacts.models}));
+                  that.finishedLoading();
+                },
+              });
+            }
           });
         },
 
