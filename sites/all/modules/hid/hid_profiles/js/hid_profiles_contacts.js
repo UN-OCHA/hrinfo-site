@@ -89,8 +89,14 @@ Drupal.behaviors.hidProfilesContacts = {
           return url;
         },
         parse: function(response) {
-           this.count = response.count;
-           return response.contacts;
+          if (settings.hid_profiles.v2) {
+            console.log(response);
+            return response;
+          }
+          else {
+            this.count = response.count;
+            return response.contacts;
+          }
         },
         limit: 5,
         skip: 0,
@@ -158,7 +164,7 @@ Drupal.behaviors.hidProfilesContacts = {
           this.lists.fetch({
             data: { 'remote_id': settings.hid_profiles.operation_id},
             success: function (lists) {
-              that.contactsList.listId = lists[0]._id;
+              that.contactsList.listId = lists.models[0].get('_id');
               that.contactsList.fetch({
                 success: function (contacts) {
                   var template = _.template($('#contacts_list_table_row').html());
