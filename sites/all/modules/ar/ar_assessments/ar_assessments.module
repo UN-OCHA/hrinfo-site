@@ -36,6 +36,25 @@ function ar_assessments_theme() {
 }
 
 /**
+ * Implements hook_og_features_registry()
+ */
+function ar_assessments_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'ar_assessments';
+  $feature->name = 'Assessments (Remote)';
+  $feature->description = t('Provide remote assessments to your space.');
+  $feature->components = array(
+    'path' => array(
+      'node/%node/ar_assessments',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+
+/**
  * Implements hook_block_info().
  */
 function ar_assessments_block_info() {
