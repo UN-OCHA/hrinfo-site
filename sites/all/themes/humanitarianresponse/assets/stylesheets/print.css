@@ -1,13 +1,13 @@
 @media print { #secondary-navigation, .breadcrumbs { display: none !important; }
   #content-wrapper, .container { padding-left: 0; padding-right: 0; width: 100% !important; }
   body { font-family: 'Liberation Sans', sans-serif; }
-  h1.title { font-family: 'Exo' !important; text-transform: uppercase; color: #54b1c8 !important; }
+  h1.title { text-transform: uppercase; color: #54b1c8 !important; }
   .table-responsive { overflow: visible !important; }
   table.table, table { background-color: #F1F1F1 !important; border: 0 !important; }
   tr { page-break-inside: avoid !important; }
   table thead tr { border: 0 !important; }
   table.table td, table.table th, table.table span, table td, table th, table span { background-color: #F1F1F1 !important; border: 0 !important; }
-  table.table thead th, table.table thead span, table thead th, table thead span { background-color: #54b1c8 !important; color: #fff !important; text-transform: uppercase; font-weight: bold !important; border: 0 !important; font-family: 'Exo' !important; }
+  table.table thead th, table.table thead span, table thead th, table thead span { background-color: #54b1c8 !important; color: #fff !important; text-transform: uppercase; font-weight: bold !important; border: 0 !important; }
   table.table.table-striped > tbody > tr:nth-child(odd), table.table-striped > tbody > tr:nth-child(odd) { background-color: #fafafa !important; }
   table.table.table-striped > tbody > tr:nth-child(odd) td, table.table.table-striped > tbody > tr:nth-child(odd) th, table.table.table-striped > tbody > tr:nth-child(odd) span, table.table-striped > tbody > tr:nth-child(odd) td, table.table-striped > tbody > tr:nth-child(odd) th, table.table-striped > tbody > tr:nth-child(odd) span { background-color: #fafafa !important; }
   table.table.table-striped > tbody > tr:nth-child(odd) td.badge-rrule, table.table.table-striped > tbody > tr:nth-child(odd) th.badge-rrule, table.table.table-striped > tbody > tr:nth-child(odd) span.badge-rrule, table.table-striped > tbody > tr:nth-child(odd) td.badge-rrule, table.table-striped > tbody > tr:nth-child(odd) th.badge-rrule, table.table-striped > tbody > tr:nth-child(odd) span.badge-rrule { background-color: #0fa4de !important; }
@@ -15,7 +15,7 @@
   .badge-rrule, table tbody span.badge-rrule { background-color: #0fa4de !important; color: white !important; }
   .avoid { page-break-inside: avoid !important; }
   .page-node-events-print h1.title .hr-events-location { color: #2a5d81 !important; }
-  .page-node-events-print .view-header, .page-node-events-print h3 { text-transform: uppercase; color: #54b1c8 !important; font-weight: bold; font-family: 'Exo' !important; }
+  .page-node-events-print .view-header, .page-node-events-print h3 { text-transform: uppercase; color: #54b1c8 !important; font-weight: bold; }
   .page-node-events-print .view-header { margin-bottom: 1em; }
   .page-node-events-print td.views-field-field-event-date, .page-node-events-print td.views-field-field-event-date-1 { font-weight: bold; }
   .page-node-events-print .filters, .page-node-events-print .filter { background-color: #2a5d81 !important; color: white !important; text-transform: capitalize; line-height: 2em; }
