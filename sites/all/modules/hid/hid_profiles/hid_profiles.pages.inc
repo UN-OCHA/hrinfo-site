@@ -53,6 +53,13 @@ function hid_profiles_settings_form($form, &$form_state) {
     '#default_value' => variable_get('hid_profiles_api_secret', NULL),
     '#required' => TRUE,
   );
+  $form['hid_profiles_v2'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('HID v2'),
+    '#description' => t('Check this box if using the v2 API.'),
+    '#default_value' => variable_get('hid_profiles_v2', FALSE),
+    '#required' => TRUE,
+  );
   return system_settings_form($form);
 }
 
@@ -275,6 +282,7 @@ function hid_profiles_local_contacts($node) {
     $settings['operation_id'] = $operation->nid;
     // Get the operation id from the cluster.
     $settings['bundle'] = $node->type == 'hr_bundle' ? $node->title : '';
+    $settings['v2'] = variable_get('hid_profiles_v2', FALSE);
 
     return array(
       '#theme' => 'hid_profiles_local_contacts',

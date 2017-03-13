@@ -55,9 +55,15 @@ Drupal.behaviors.hidProfilesContacts = {
 
         url: function() {
           var index = window.location.hash.indexOf('?');
-          var url = window.location.protocol + '//' + window.location.host + '/hid/proxy?api_path=v0/contact/view&locationId=hrinfo:' + settings.hid_profiles.operation_id + '&status=1&type=local&limit=' + this.limit + '&skip=' + this.skip;
-          if (settings.hid_profiles.bundle != '') {
-            url += '&bundle=' + settings.hid_profiles.bundle;
+          var url = '';
+          if (settings.hid_profiles.v2) {
+            url = 'https://api2.dev.humanitarian.id/api/v2/user?limit=' + this.limit;
+          }
+          else {
+            url = window.location.protocol + '//' + window.location.host + '/hid/proxy?api_path=v0/contact/view&locationId=hrinfo:' + settings.hid_profiles.operation_id + '&status=1&type=local&limit=' + this.limit + '&skip=' + this.skip;
+            if (settings.hid_profiles.bundle != '') {
+              url += '&bundle=' + settings.hid_profiles.bundle;
+            }
           }
           if (index != -1) {
             var params = window.location.hash.substr(index + 1);
@@ -92,12 +98,12 @@ Drupal.behaviors.hidProfilesContacts = {
       },
 
     });
-    
+
     ContactTableView = ContactView.extend({
-        
+
         numItems: 10,
         currentPage: 1,
-        
+
         initialize: function() {
             this.contactsList = new ContactList;
             this.contactsList.limit = this.numItems;
@@ -105,7 +111,7 @@ Drupal.behaviors.hidProfilesContacts = {
 
         loadResults: function() {
           var that = this;
-          this.contactsList.fetch({ 
+          this.contactsList.fetch({
             success: function (contacts) {
               var template = _.template($('#contacts_list_table_row').html());
               var pdf_url = that.contactsList.url();
@@ -282,7 +288,7 @@ Drupal.behaviors.hidProfilesContacts = {
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
- 
+
         filterByVerified: function(event) {
           if ($('#verified').prop('checked') == true) {
             this.contactsList.params.verified = true;
@@ -385,7 +391,7 @@ Drupal.behaviors.hidProfilesContacts = {
 
     // Chosen configuration
     $('select').chosen({allow_single_deselect: true});
-        
+
 
     Backbone.history.start();
 
