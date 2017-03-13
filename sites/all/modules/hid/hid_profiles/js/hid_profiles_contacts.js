@@ -11,6 +11,7 @@ Drupal.behaviors.hidProfilesContacts = {
         }*/
 
         if (settings.hid_profiles.v2) {
+          options.headers = {};
           options.headers.Authorization = 'Bearer ' + settings.hid_profiles.token;
         }
 
