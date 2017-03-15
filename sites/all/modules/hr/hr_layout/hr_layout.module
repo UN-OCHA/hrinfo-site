@@ -298,7 +298,8 @@ function hr_layout_block_view($delta = '') {
           'hr_assessments',
           'hr_news',
           'acc_applications',
-          'acc_incidents'
+          'acc_incidents',
+          'ar_assessments'
         );
         $og_group = entity_load('node', array($gid));
         $og_group = $og_group[$gid];
@@ -330,6 +331,9 @@ function hr_layout_block_view($delta = '') {
                 break;
               case 'hr_reliefweb_documents':
                 $path = 'reliefweb';
+                break;
+              case 'ar_assessments':
+                $path = 'ar_assessments';
                 break;
               case 'hdx_datasets':
                 $path = 'hdx-datasets';
