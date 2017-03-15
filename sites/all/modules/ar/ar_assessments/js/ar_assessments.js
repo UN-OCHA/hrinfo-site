@@ -6,7 +6,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
         return 'https://assessmentregistry.hrinfo.568elmp03.blackmesh.com/en/api/v1.0/assessments/' + this.get('id');
       },
       parse: function(response) {
-        if (response.data != undefined) {
+        if (response.data !== undefined) {
           return response.data[0];
         }
         else {
@@ -42,7 +42,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
         url: function() {
           var index = window.location.hash.indexOf('?');
           var url = 'https://assessmentregistry.hrinfo.568elmp03.blackmesh.com/en/api/v1.0/assessments/?';
-          if (settings.ar_assessments.bundle != '') {
+          if (settings.ar_assessments.bundle !== '') {
             this.params['filter[bundles][value]'] = settings.ar_assessments.bundle;
           }
           else {
@@ -54,7 +54,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
             url += '&' + params;
           }
           else {
-            if (settings.ar_assessments.bundle != '') {
+            if (settings.ar_assessments.bundle !== '') {
               url += '&filter[bundles][value]=' + settings.ar_assessments.bundle;
             }
             else {
@@ -77,7 +77,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
       currentPage: 1,
 
       initialize: function() {
-          this.assessmentsList = new AssessmentList;
+          this.assessmentsList = new AssessmentList();
           this.assessmentsList.limit = this.numItems;
       },
 
@@ -146,7 +146,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
       filterByOrganization: function(event, ui) {
         var val = ui.item.value;
-        if (val != '') {
+        if (val !== '') {
           this.assessmentsList.params['filter[organizations][value]'] = val;
         }
         else {
@@ -157,7 +157,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
       filterByPartOrganization: function(event, ui) {
         var val = ui.item.value;
-        if (val != '') {
+        if (val !== '') {
           this.assessmentsList.params['filter[participating_organizations][value]'] = val;
         }
         else {
@@ -168,7 +168,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
       filterByStatus: function(event) {
         var val = $('#status').val();
-        if (val != '') {
+        if (val !== '') {
           this.assessmentsList.params['filter[status][value]'] = val;
         }
         else {
@@ -179,7 +179,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
       filterByLocation: function(event) {
         var val = $('#locations').val();
-        if (val != '') {
+        if (val !== '') {
           this.assessmentsList.params['filter[locations][value]'] = val;
         }
         else {
@@ -190,7 +190,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
       filterByDisaster: function(event) {
         var val = $('#disasters').val();
-        if (val != '') {
+        if (val !== '') {
           this.assessmentsList.params['filter[disasters][value]'] = val;
         }
         else {
@@ -201,7 +201,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
       filterByPopulationType: function(event) {
         var val = $('#population-types').val();
-        if (val != '') {
+        if (val !== '') {
           this.assessmentsList.params['filter[population_types][value]'] = val;
         }
         else {
@@ -246,7 +246,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           var count = this.assessmentsList.count;
           var itemsPerPage = this.numItems;
           var paramsString = $.param(this.assessmentsList.params);
-          if (paramsString != '') {
+          if (paramsString !== '') {
             paramsString = '?' + paramsString;
           }
           if (this.currentPage * itemsPerPage < count) {
@@ -302,7 +302,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           var count = this.assessmentsList.count;
           var itemsPerPage = this.numItems;
           var paramsString = $.param(this.assessmentsList.params);
-          if (paramsString != '') {
+          if (paramsString !== '') {
             paramsString = '?' + paramsString;
           }
           if (this.currentPage * itemsPerPage < count) {
@@ -378,7 +378,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
         this.assessmentView.hide();
         this.tableView.hide();
         this.listView.page(page);
-      }
+      },
 
       assessment: function(id) {
         this.assessmentView.loading();
@@ -401,7 +401,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
       },
     });
 
-    var assessment_router = new AssessmentRouter;
+    var assessment_router = new AssessmentRouter();
 
     var orgAutocompleteCallback = function (request, response) {
       $.ajax({
@@ -433,5 +433,5 @@ Drupal.behaviors.arAssessmentsAssessments = {
     Backbone.history.start();
 
   }
-}
+};
 })(jQuery);
