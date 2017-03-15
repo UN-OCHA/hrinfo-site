@@ -369,10 +369,12 @@ Drupal.behaviors.arAssessmentsAssessments = {
         this.$el.html(template({assessment: model}));
       },
       show: function() {
+        $('#assessments-list').hide();
         this.$el.show();
         $('#block-ar-assessments-ar-assessments-sidebar').show();
       },
       hide: function() {
+        $('#assessments-list').show();
         this.$el.hide();
         $('#block-ar-assessments-ar-assessments-sidebar').hide();
       },

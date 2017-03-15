@@ -1,5 +1,75 @@
 <% _.each(assessments, function(assessment) { %>
-    <div>
-      <a href="#assessment/<%= assessment.get('id') %>"><%= assessment.get('label') %></a>
+<div class="views-row">
+  <div class="panelizer-view-mode node node-search-result node-hr-assessment">
+    <h2>
+      <a href="#assessment/<%= assessment.get('id')"><%= assessment.get('label') %></a>
+    </h2>
+
+    <div class="panel-display boxton clearfix radix-boxton">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12 radix-layouts-content panel-panel">
+            <div class="panel-panel-inner">
+              <div class="panel-pane pane-entity-field pane-node-field-organizations">
+                <div class="pane-content">
+                  <div class="field field-name-field-organizations field-type-entityreference field-label-inline clearfix">
+                    <div class="field-label">Leading/Coordinating Organization(s):&nbsp;</div>
+                    <div class="field-items">Ethiopia Red Cross</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-separator"></div>
+            <div class="panel-pane pane-entity-field pane-node-field-asst-status">
+              <div class="pane-content">
+                <div class="field field-name-field-asst-status field-type-list-text field-label-inline clearfix">
+                  <div class="field-label">Status:&nbsp;</div>
+                  <div class="field-items"><%= assessment.get('status') %></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-separator"></div>
+          <div class="panel-pane pane-entity-field pane-node-field-asst-date">
+            <div class="pane-content">
+              <div class="field field-name-field-asst-date field-type-datetime field-label-inline clearfix">
+                <div class="field-label">Assessment Date(s):&nbsp;</div>
+                <div class="field-items">
+                  <div class="field-item"><div class="date-display-range"><span class="date-display-start">16 Nov 2016</span> to <span class="date-display-end">23 Nov 2016</span></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-separator"></div>
+          <div class="panel-pane pane-panels-mini pane-hr-node-links">
+            <div class="pane-content">
+              <div class="panel-display panel-1col clearfix" id="mini-panel-hr_node_links">
+                <div class="panel-panel panel-col">
+                  <div>
+                    <div class="panel-pane pane-entity-field-extra pane-node-hr-core-read-more-button">
+                      <div class="pane-content">
+                        <div class="form-item form-type-item form-group">
+                          <a href="/en/operations/ethiopia/assessment/rapid-drought-assessment-ercs-leading-water-office-health-office" class="btn btn-secondary btn-sm"><i class="fa fa-eye"></i> read more</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="panel-separator"></div>
+                    <div class="panel-pane pane-entity-field-extra pane-node-hr-core-share-button">
+                      <div class="pane-content">
+                        <div class="form-item form-type-item form-group">
+                          <a href="https://www.addtoany.com/share#url=https%3A%2F%2Fstaging.humanitarianresponse.info%2Fen%2Foperations%2Fethiopia%2Fassessment%2Frapid-drought-assessment-ercs-leading-water-office-health-office&amp;title=Rapid%20drought%20assessment%2C%20ERCS%20(Leading)%20Water%20office%2F%20Health%20office%2F%20Education%20office%2F%20DPPO%20(Participating)" class="a2a_dd btn btn-secondary btn-sm"><i class="fa fa-share"></i> share</a>
+                        </div>
+                        <script type="text/javascript">a2a_config.linkname = "Rapid drought assessment, ERCS (Leading) Water office/ Health office/ Education office/ DPPO (Participating)";a2a_config.linkurl = "https://staging.humanitarianresponse.info/en/operations/ethiopia/assessment/rapid-drought-assessment-ercs-leading-water-office-health-office";a2a.init("page");</script>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</div><!-- /.boxton -->
   <% }); %>
