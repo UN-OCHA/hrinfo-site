@@ -1,0 +1,12 @@
+<% _.each(assessments, function(assessment) { %>
+    <tr>
+      <td><a href="#assessment/<%= assessment.get('id') %>"><%= assessment.get('label') %></a></td>
+      <td><% _.each(assessment.get('locations'), function (loc) { %><%= loc.label %>, <% }); %></td>
+      <td><% _.each(assessment.get('organizations'), function (org) { %><%= org.label %>, <% }); %></td>
+      <td><% _.each(assessment.get('participating_organizations'), function (org) { %><%= org.label %>, <% }); %></td>
+      <td><% _.each(assessment.get('bundles'), function (bundle) { %><%= bundle.label %>, <% }); %></td>
+      <td><%= assessment.get('status') %></td>
+      <td><% if (assessment.get('date')) { %>From <%= assessment.getFromDate() %> to <%= assessment.getToDate() %><% } %></td>
+      <td><strong>Report:</strong><% if(assessment.get('report')) { %><%= assessment.get('report').accessibility %><% } %><br /><strong>Questionnaire:</strong><% if(assessment.get('questionnaire')) { %><%= assessment.get('questionnaire').accessibility %><% } %><br /><strong>Data:</strong></td>
+    </tr>
+  <% }); %>

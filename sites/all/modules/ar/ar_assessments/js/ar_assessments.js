@@ -73,6 +73,13 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
     AssessmentView = Backbone.View.extend({
       router: null,
+      numItems: 10,
+      currentPage: 1,
+
+      initialize: function() {
+          this.assessmentsList = new AssessmentList;
+          this.assessmentsList.limit = this.numItems;
+      },
 
       clear: function() {
         this.$el.empty();
@@ -86,6 +93,30 @@ Drupal.behaviors.arAssessmentsAssessments = {
       finishedLoading: function() {
         $('#loading').hide();
         this.show();
+      },
+
+      show: function() {
+        $('#assessments-list').show();
+        $('#block-ar-assessments-ar-assessments-filters').show();
+        //$('.feed-icon').show();
+      },
+
+      hide: function() {
+        $('#assessments-list').hide();
+        $('#block-ar-assessments-ar-assessments-filters').hide();
+        //$('.feed-icon').hide();
+      },
+
+      page: function(page) {
+        this.loading();
+        this.currentPage = page;
+        this.assessmentsList.page = page;
+        this.clear();
+        this.loadResults();
+      },
+
+      back: function(event) {
+        history.back();
       },
 
       events: {
@@ -183,19 +214,11 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
     AssessmentTableView = AssessmentView.extend({
 
-        numItems: 10,
-        currentPage: 1,
-
-        initialize: function() {
-            this.assessmentsList = new AssessmentList;
-            this.assessmentsList.limit = this.numItems;
-        },
-
         loadResults: function() {
           var that = this;
           this.assessmentsList.fetch({
             success: function (assessments) {
-              var template = _.template($('#ar_assessments_list').html());
+              var template = _.template($('#ar_assessments_row').html());
               //var pdf_url = that.assessmentsList.url();
               //pdf_url = pdf_url.replace('&limit=' + that.numItems + '&skip=' + that.assessmentsList.skip, '');
               //var csv_url = pdf_url + '&export=csv';
@@ -206,28 +229,8 @@ Drupal.behaviors.arAssessmentsAssessments = {
           });
         },
 
-        page: function(page) {
-          this.loading();
-          this.currentPage = page;
-          this.assessmentsList.page = page;
-          this.clear();
-          this.loadResults();
-        },
-
         clear: function() {
           $('#assessments-list-table tbody').empty();
-        },
-
-        show: function() {
-          $('#assessments-list').show();
-          $('#block-ar-assessments-ar-assessments-filters').show();
-          //$('.feed-icon').show();
-        },
-
-        hide: function() {
-          $('#assessments-list').hide();
-          $('#block-ar-assessments-ar-assessments-filters').hide();
-          //$('.feed-icon').hide();
         },
 
         finishedLoading: function() {
@@ -270,8 +273,60 @@ Drupal.behaviors.arAssessmentsAssessments = {
           }
         },
 
-        back: function(event) {
-          history.back();
+    });
+
+    AssessmentListView = AssessmentView.extend({
+
+        loadResults: function() {
+          var that = this;
+          this.assessmentsList.fetch({
+            success: function (assessments) {
+              var template = _.template($('#ar_assessments_list').html());
+              //var pdf_url = that.assessmentsList.url();
+              //pdf_url = pdf_url.replace('&limit=' + that.numItems + '&skip=' + that.assessmentsList.skip, '');
+              //var csv_url = pdf_url + '&export=csv';
+              //$('#contacts-list-csv').attr('href', csv_url);
+              $('#assessments-list-view').append(template({assessments: assessments.models}));
+              that.finishedLoading();
+            },
+          });
+        },
+
+        clear: function() {
+          $('#assessments-list-view').empty();
+        },
+
+        pager: function() {
+          var nextPage = parseInt(this.currentPage) + 1;
+          var previousPage = parseInt(this.currentPage) - 1;
+          var count = this.assessmentsList.count;
+          var itemsPerPage = this.numItems;
+          var paramsString = $.param(this.assessmentsList.params);
+          if (paramsString != '') {
+            paramsString = '?' + paramsString;
+          }
+          if (this.currentPage * itemsPerPage < count) {
+            $('#next').attr('href', '#list/' + nextPage + paramsString);
+          }
+          else {
+            $('#next').attr('href', '#list/' + this.currentPage + paramsString);
+          }
+          if (previousPage > 0) {
+            $('#previous').attr('href', '#list/' + previousPage + paramsString);
+          }
+          else {
+            $('#previous').attr('href', '#list/' + this.currentPage + paramsString);
+          }
+        },
+
+        navigate: function() {
+          this.router.navigateWithParams('list/1', this.assessmentsList.params);
+        },
+
+        search: function(event) {
+          if (event.type == 'keyup' && event.keyCode == 13 || event.type == 'click') {
+            this.router.navigate('list/1?text='+$('#search').val(), {trigger: true});
+          }
         },
 
     });
@@ -294,15 +349,18 @@ Drupal.behaviors.arAssessmentsAssessments = {
     AssessmentRouter = Backbone.Router.extend({
       routes: {
         "assessment/:id" : "assessment",
+        "list/:page" : "list",
         "table/:page" : "table",
         "*actions": "defaultRoute",
       },
 
       tableView: new AssessmentTableView({el: 'body'}),
+      listView: new AssessmentListView({el: 'body'}),
       assessmentView: new AssessmentItemView({el: '#assessments-view'}),
 
       initialize: function() {
         this.tableView.router = this;
+        this.listView.router = this;
         this.assessmentView.router = this;
       },
 
@@ -312,13 +370,21 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
       table: function(page) {
         this.assessmentView.hide();
+        this.listView.hide();
         this.tableView.page(page);
       },
+
+      list: function(page) {
+        this.assessmentView.hide();
+        this.tableView.hide();
+        this.listView.page(page);
+      }
 
       assessment: function(id) {
         this.assessmentView.loading();
         var that = this;
         this.tableView.hide();
+        this.listView.hide();
         this.assessmentView.clear();
         var assessment = new Assessment({id: id});
         assessment.fetch({

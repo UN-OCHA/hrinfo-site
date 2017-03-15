@@ -28,6 +28,7 @@ function ar_assessments_page($node) {
   $operation_wrapper = entity_metadata_wrapper('node', $operation);
   $templates = array(
     'ar_assessments_list',
+    'ar_assessments_row',
     'ar_assessments_assessment'
   );
   foreach ($templates as $template) {
