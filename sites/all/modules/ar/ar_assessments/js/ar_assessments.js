@@ -372,16 +372,16 @@ Drupal.behaviors.arAssessmentsAssessments = {
     AssessmentItemView = AssessmentView.extend({
       render: function (model) {
         var template = _.template($('#ar_assessments_assessment').html());
-        this.$el.html(template({assessment: model}));
+        $('#assessments-view').html(template({assessment: model}));
       },
       show: function() {
         $('#assessments-list').hide();
-        this.$el.show();
+        $('#assessments-view').show();
         $('#block-ar-assessments-ar-assessments-sidebar').show();
       },
       hide: function() {
         $('#assessments-list').show();
-        this.$el.hide();
+        $('#assessments-view').hide();
         $('#block-ar-assessments-ar-assessments-sidebar').hide();
       },
       events: {
@@ -402,7 +402,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
       tableView: new AssessmentTableView({el: 'body'}),
       listView: new AssessmentListView({el: 'body'}),
-      assessmentView: new AssessmentItemView({el: '#assessments-view'}),
+      assessmentView: new AssessmentItemView({el: 'body'}),
 
       initialize: function() {
         this.tableView.router = this;
