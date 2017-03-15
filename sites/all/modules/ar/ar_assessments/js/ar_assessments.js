@@ -328,6 +328,13 @@ Drupal.behaviors.arAssessmentsAssessments = {
           $('#assessments-list-view').empty();
         },
 
+        finishedLoading: function() {
+          $('#loading').hide();
+          this.show();
+          $('.current-search-item .facetapi-active').html(this.assessmentsList.count + ' items');
+          this.pager();
+        },
+
         pager: function() {
           var nextPage = parseInt(this.currentPage) + 1;
           var previousPage = parseInt(this.currentPage) - 1;
