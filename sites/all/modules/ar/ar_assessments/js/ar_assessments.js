@@ -229,6 +229,22 @@ Drupal.behaviors.arAssessmentsAssessments = {
           });
         },
 
+        show: function() {
+          $('#assessments-list-table').show();
+          $('#li-table').addClass('active');
+          $('#li-table a').addClass('active');
+          $('#block-ar-assessments-ar-assessments-filters').show();
+          //$('.feed-icon').show();
+        },
+
+        hide: function() {
+          $('#assessments-list-table').hide();
+          $('#li-table').removeClass('active');
+          $('#li-table a').removeClass('active');
+          $('#block-ar-assessments-ar-assessments-filters').hide();
+          //$('.feed-icon').hide();
+        },
+
         clear: function() {
           $('#assessments-list-table tbody').empty();
         },
@@ -290,6 +306,22 @@ Drupal.behaviors.arAssessmentsAssessments = {
               that.finishedLoading();
             },
           });
+        },
+
+        show: function() {
+          $('#assessments-list-view').show();
+          $('#li-list').addClass('active');
+          $('#li-list a').addClass('active');
+          $('#block-ar-assessments-ar-assessments-filters').show();
+          //$('.feed-icon').show();
+        },
+
+        hide: function() {
+          $('#assessments-list-view').hide();
+          $('#li-list').removeClass('active');
+          $('#li-list a').removeClass('active');
+          $('#block-ar-assessments-ar-assessments-filters').hide();
+          //$('.feed-icon').hide();
         },
 
         clear: function() {
@@ -365,7 +397,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
       },
 
       defaultRoute: function (actions) {
-        this.navigate('table/1', {trigger: true});
+        this.navigate('list/1', {trigger: true});
       },
 
       table: function(page) {

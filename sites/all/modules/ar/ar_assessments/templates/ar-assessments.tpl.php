@@ -2,8 +2,8 @@
 </div>
 <div id="assessments-list">
   <ul class="nav nav-tabs primary">
-    <li><a href="#list/1">List</a></li>
-    <li class="active"><a href="#table/1" class="active">Table</a></li>
+    <li class="active" id="li-list"><a href="#list/1" class="active">List</a></li>
+    <li id="li-table"><a href="#table/1">Table</a></li>
   </ul>
 
   <div id="assessments-list-view">
