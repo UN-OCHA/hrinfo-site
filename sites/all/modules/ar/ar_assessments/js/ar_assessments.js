@@ -41,7 +41,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
         url: function() {
           var index = window.location.hash.indexOf('?');
-          var url = 'https://assessmentregistry.hrinfo.568elmp03.blackmesh.com/en/api/v1.0/assessments/?';
+          var url = 'https://assessmentregistry.hrinfo.568elmp03.blackmesh.com/en/api/v1.0/assessments/?sort=-date';
           if (settings.ar_assessments.bundle !== '') {
             this.params['filter[bundles][value]'] = settings.ar_assessments.bundle;
           }
