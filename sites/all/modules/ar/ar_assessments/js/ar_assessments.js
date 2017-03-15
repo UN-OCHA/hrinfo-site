@@ -115,15 +115,10 @@ Drupal.behaviors.arAssessmentsAssessments = {
         this.loadResults();
       },
 
-      back: function(event) {
-        history.back();
-      },
-
       events: {
         'change #bundles': 'filterByBundles',
         'click #search-button': 'search',
         'keyup #search': 'search',
-        'click #back': 'back',
         'autocompleteselect #organizations': 'filterByOrganization',
         'autocompleteselect #part_organizations': 'filterByPartOrganization',
         'change #status': 'filterByStatus',
@@ -389,6 +384,12 @@ Drupal.behaviors.arAssessmentsAssessments = {
         this.$el.hide();
         $('#block-ar-assessments-ar-assessments-sidebar').hide();
       },
+      events: {
+        'click #back': 'back'
+      },
+      back: function(event) {
+        history.back();
+      }
     });
 
     AssessmentRouter = Backbone.Router.extend({
