@@ -230,6 +230,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
         },
 
         show: function() {
+          this.delegateEvents();
           $('#assessments-list-table').show();
           $('#li-table').addClass('active');
           $('#li-table a').addClass('active');
@@ -238,6 +239,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
         },
 
         hide: function() {
+          this.undelegateEvents();
           $('#assessments-list-table').hide();
           $('#li-table').removeClass('active');
           $('#li-table a').removeClass('active');
@@ -309,6 +311,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
         },
 
         show: function() {
+          this.delegateEvents();
           $('#assessments-list-view').show();
           $('#li-list').addClass('active');
           $('#li-list a').addClass('active');
@@ -317,6 +320,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
         },
 
         hide: function() {
+          this.undelegateEvents();
           $('#assessments-list-view').hide();
           $('#li-list').removeClass('active');
           $('#li-list a').removeClass('active');
