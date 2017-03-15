@@ -115,15 +115,10 @@ Drupal.behaviors.arAssessmentsAssessments = {
         this.loadResults();
       },
 
-      back: function(event) {
-        history.back();
-      },
-
       events: {
         'change #bundles': 'filterByBundles',
         'click #search-button': 'search',
         'keyup #search': 'search',
-        'click #back': 'back',
         'autocompleteselect #organizations': 'filterByOrganization',
         'autocompleteselect #part_organizations': 'filterByPartOrganization',
         'change #status': 'filterByStatus',
@@ -240,7 +235,6 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
         hide: function() {
           this.undelegateEvents();
-          this.delegateEvents({'click #back': 'back'});
           $('#assessments-list-table').hide();
           $('#li-table').removeClass('active');
           $('#li-table a').removeClass('active');
@@ -322,7 +316,6 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
         hide: function() {
           this.undelegateEvents();
-          this.delegateEvents({'click #back': 'back'});
           $('#assessments-list-view').hide();
           $('#li-list').removeClass('active');
           $('#li-list a').removeClass('active');
@@ -475,6 +468,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
     // Chosen configuration
     $('select').chosen({allow_single_deselect: true});
+    $('#back').click(function (event) { history.back(); });
 
 
     Backbone.history.start();
