@@ -88,6 +88,97 @@ Drupal.behaviors.arAssessmentsAssessments = {
         this.show();
       },
 
+      events: {
+        'change #bundles': 'filterByBundles',
+        'click #search-button': 'search',
+        'keyup #search': 'search',
+        'click #back': 'back',
+        'autocompleteselect #organizations': 'filterByOrganization',
+        'autocompleteselect #part_organizations': 'filterByPartOrganization',
+        'change #status': 'filterByStatus',
+        'change #locations': 'filterByLocation',
+        'change #population-types': 'filterByPopulationType',
+        'change #disasters': 'filterByDisaster',
+      },
+
+      filterByBundles: function(event) {
+        var val = $('#bundles').val();
+        if (val !== '') {
+          this.assessmentsList.params['filter[bundles][value]'] = val;
+          delete this.assessmentsList.params['filter[operation][value]'];
+        }
+        else {
+          delete this.assessmentsList.params['filter[bundles][value]'];
+        }
+        this.navigate();
+      },
+
+      filterByOrganization: function(event, ui) {
+        var val = ui.item.value;
+        if (val != '') {
+          this.assessmentsList.params['filter[organizations][value]'] = val;
+        }
+        else {
+          delete this.assessmentsList.params['filter[organizations][value]'];
+        }
+        this.navigate();
+      },
+
+      filterByPartOrganization: function(event, ui) {
+        var val = ui.item.value;
+        if (val != '') {
+          this.assessmentsList.params['filter[participating_organizations][value]'] = val;
+        }
+        else {
+          delete this.assessmentsList.params['filter[participating_organizations][value]'];
+        }
+        this.navigate();
+      },
+
+      filterByStatus: function(event) {
+        var val = $('#status').val();
+        if (val != '') {
+          this.assessmentsList.params['filter[status][value]'] = val;
+        }
+        else {
+          delete this.assessmentsList.params['filter[status][value]'];
+        }
+        this.navigate();
+      },
+
+      filterByLocation: function(event) {
+        var val = $('#locations').val();
+        if (val != '') {
+          this.assessmentsList.params['filter[locations][value]'] = val;
+        }
+        else {
+          delete this.assessmentsList.params['filter[locations][value]'];
+        }
+        this.navigate();
+      },
+
+      filterByDisaster: function(event) {
+        var val = $('#disasters').val();
+        if (val != '') {
+          this.assessmentsList.params['filter[disasters][value]'] = val;
+        }
+        else {
+          delete this.assessmentsList.params['filter[disasters][value]'];
+        }
+        this.navigate();
+      },
+
+      filterByPopulationType: function(event) {
+        var val = $('#population-types').val();
+        if (val != '') {
+          this.assessmentsList.params['filter[population_types][value]'] = val;
+        }
+        else {
+          delete this.assessmentsList.params['filter[population_types][value]'];
+        }
+        this.navigate();
+      },
+
     });
 
     AssessmentTableView = AssessmentView.extend({
@@ -113,19 +204,6 @@ Drupal.behaviors.arAssessmentsAssessments = {
               that.finishedLoading();
             },
           });
-        },
-
-        events: {
-          'change #bundles': 'filterByBundles',
-          'click #search-button': 'search',
-          'keyup #search': 'search',
-          'click #back': 'back',
-          'autocompleteselect #organizations': 'filterByOrganization',
-          'autocompleteselect #part_organizations': 'filterByPartOrganization',
-          'change #status': 'filterByStatus',
-          'change #locations': 'filterByLocation',
-          'change #population-types': 'filterByPopulationType',
-          'change #disasters': 'filterByDisaster',
         },
 
         page: function(page) {
@@ -182,81 +260,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           }
         },
 
-        filterByBundles: function(event) {
-          var val = $('#bundles').val();
-          if (val !== '') {
-            this.assessmentsList.params['filter[bundles][value]'] = val;
-            delete this.assessmentsList.params['filter[operation][value]'];
-          }
-          else {
-            delete this.assessmentsList.params['filter[bundles][value]'];
-          }
-          this.router.navigateWithParams('table/1', this.assessmentsList.params);
-        },
-
-        filterByOrganization: function(event, ui) {
-          var val = ui.item.value;
-          if (val != '') {
-            this.assessmentsList.params['filter[organizations][value]'] = val;
-          }
-          else {
-            delete this.assessmentsList.params['filter[organizations][value]'];
-          }
-          this.router.navigateWithParams('table/1', this.assessmentsList.params);
-        },
-
-        filterByPartOrganization: function(event, ui) {
-          var val = ui.item.value;
-          if (val != '') {
-            this.assessmentsList.params['filter[participating_organizations][value]'] = val;
-          }
-          else {
-            delete this.assessmentsList.params['filter[participating_organizations][value]'];
-          }
-          this.router.navigateWithParams('table/1', this.assessmentsList.params);
-        },
-
-        filterByStatus: function(event) {
-          var val = $('#status').val();
-          if (val != '') {
-            this.assessmentsList.params['filter[status][value]'] = val;
-          }
-          else {
-            delete this.assessmentsList.params['filter[status][value]'];
-          }
-          this.router.navigateWithParams('table/1', this.assessmentsList.params);
-        },
-
-        filterByLocation: function(event) {
-          var val = $('#locations').val();
-          if (val != '') {
-            this.assessmentsList.params['filter[locations][value]'] = val;
-          }
-          else {
-            delete this.assessmentsList.params['filter[locations][value]'];
-          }
-          this.router.navigateWithParams('table/1', this.assessmentsList.params);
-        },
-
-        filterByDisaster: function(event) {
-          var val = $('#disasters').val();
-          if (val != '') {
-            this.assessmentsList.params['filter[disasters][value]'] = val;
-          }
-          else {
-            delete this.assessmentsList.params['filter[disasters][value]'];
-          }
-          this.router.navigateWithParams('table/1', this.assessmentsList.params);
-        },
-
-        filterByPopulationType: function(event) {
-          var val = $('#population-types').val();
-          if (val != '') {
-            this.assessmentsList.params['filter[population_types][value]'] = val;
-          }
-          else {
-            delete this.assessmentsList.params['filter[population_types][value]'];
-          }
+        navigate: function() {
           this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 

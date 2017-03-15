@@ -1,6 +1,11 @@
 <div id="assessments-view">
 </div>
 <div id="assessments-list">
+  <ul class="nav nav-tabs primary">
+    <li class="active"><a href="#list/1">List</a></li>
+    <li><a href="#table/1" class="active">Table</a></li>
+  </ul>
+
   <table id="assessments-list-table" class="table table-striped">
     <thead>
     <tr>
