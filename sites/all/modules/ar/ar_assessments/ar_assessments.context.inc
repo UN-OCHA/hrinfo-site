@@ -26,6 +26,12 @@ function ar_assessments_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'ar_assessments-ar_assessments_powered_by' => array(
+          'module' => 'ar_assessments',
+          'delta' => 'ar_assessments_powered_by',
+          'region' => 'sidebar_first',
+          'weight' => '0',
+        ),
         'ar_assessments-ar_assessments_search' => array(
           'module' => 'ar_assessments',
           'delta' => 'ar_assessments_search',
@@ -43,12 +49,6 @@ function ar_assessments_context_default_contexts() {
           'delta' => 'ar_assessments_filters',
           'region' => 'sidebar_first',
           'weight' => '-10',
-        ),
-        'ar_assessments-ar_assessments_powered_by' => array(
-          'module' => 'ar_assessments',
-          'delta' => 'ar_assessments_powered_by',
-          'region' => 'sidebar_first',
-          'weight' => '0',
         ),
       ),
     ),
