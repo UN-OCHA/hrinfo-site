@@ -60,15 +60,20 @@ function _fts_visualization_get_global_cluster_options() {
 /**
  * Helper function
  */
-function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL) {
+function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster = NULL) {
   if (is_numeric($plan_id)) {
     // Get plan.
     $appeal = fts_get_appeal($plan_id);
     $params = array(
       'planId' => $plan_id,
     );
+
     if ($group_by) {
       $params['groupby'] = $group_by;
+    }
+
+    if ($cluster) {
+      $params['globalclusterid'] = $cluster;
     }
 
     // Get funding.
@@ -76,7 +81,7 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL) {
     $data['financed'] = (int) $funding->funding;
     $data['data'] = $funding->data;
 
-    $data['total'] = (int) $appeal->revisedRequirements;
+    $data['total'] = (int) $funding->current_requirements;
     $data['not_financed'] = $data['total'] - $data['financed'];
     if ((int) $data['total'] > 0) {
       $data['financed_percentage'] = round($data['financed'] / $data['total'] * 100);
@@ -108,7 +113,8 @@ function _fts_visualization_get_data($settings) {
   if (count($appeals) == 1) {
     $appeal = array_shift($appeals);
     // Get latest FTS data
-    $appeal_data = _fts_visualization_get_appeal_data($appeal, $groupby);
+    // @todo add cluster to query.
+    $appeal_data = _fts_visualization_get_appeal_data($appeal, $groupby, $cluster);
     $funding_data = array();
     if ($type == 'pie') {
       $fields['val'] = array(
