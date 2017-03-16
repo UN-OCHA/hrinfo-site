@@ -30,7 +30,7 @@ function ar_assessments_context_default_contexts() {
           'module' => 'ar_assessments',
           'delta' => 'ar_assessments_powered_by',
           'region' => 'sidebar_first',
-          'weight' => '0',
+          'weight' => '-30',
         ),
         'ar_assessments-ar_assessments_search' => array(
           'module' => 'ar_assessments',
