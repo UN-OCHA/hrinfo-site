@@ -149,7 +149,7 @@ function hr_reliefweb_document_list($node) {
         'class' => 'reliefweb--doc-type--source',
       ),
       array(
-        'data' => isset($value['countries']) ? implode(', ', $value['countries']) : '',
+        'data' => isset($value['primary_country']) ? $value['primary_country'] : '',
         'class' => 'reliefweb--doc-type--country',
       ),
       array(

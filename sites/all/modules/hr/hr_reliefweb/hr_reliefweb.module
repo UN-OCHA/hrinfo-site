@@ -172,6 +172,7 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
       'date.changed',
       'source.shortname',
       'country.name',
+      'primary_country.name',
       'file.url',
       'file.preview.url-thumb',
       'file.description',
@@ -234,6 +235,7 @@ function hr_reliefweb_content($path) {
         'url' => $url,
         'date_changed' => $value['fields']['date']['changed'],
         'format' => $value['fields']['format'][0]['name'],
+        'primary_country' => $value['fields']['primary_country']['name'],
       );
 
       if (isset($value['fields']['source'])) {
