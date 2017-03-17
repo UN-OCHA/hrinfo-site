@@ -276,6 +276,9 @@ function hr_reliefweb_document_list($node) {
       ),
     ),
     '#attached' => array (
+      'library' => array(
+        array('chosen', 'drupal.chosen'),
+      ),
       'css' => array (
         array (
           'type' => 'file',

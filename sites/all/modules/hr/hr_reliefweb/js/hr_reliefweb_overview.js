@@ -69,6 +69,7 @@
 
       // Construct select.
       var newSelect = document.createElement('select');
+      newSelect.classList.add('chosen-enable');
       var options = detail.querySelectorAll('li a');
 
       // Add empty option.
@@ -90,6 +91,13 @@
       detail.classList.add('processed');
       detail.parentNode.appendChild(newLabel);
       detail.parentNode.appendChild(newSelect);
+
+      if (Drupal.behaviors && Drupal.behaviors.chosen) {
+        Drupal.behaviors.chosen.attach(newSelect, Drupal.settings);
+        jQuery(newSelect).chosen().change(function(e) {
+          handleSelect(e);
+        });
+      }
     }
 
     // Listen for change events.
