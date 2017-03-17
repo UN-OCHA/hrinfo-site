@@ -126,7 +126,9 @@ function hr_reliefweb_get_filters($key = NULL) {
     'disaster_type' => t('Disaster type'),
     'vulnerable_groups.name' => t('Vulnerable group'),
     'language.name' => t('Language'),
+    'date.original' => t('Original publication date'),
     'date.changed' => t('Date'),
+
   );
 
   if ($key) {
@@ -224,7 +226,13 @@ function hr_reliefweb_content($path) {
   if (isset($request->data)) {
     $response = drupal_json_decode($request->data);
     $total_count = $response['totalCount'];
-    $facets = $response['embedded']['facets'];
+
+    // Re-order facets.
+    $facets = array();
+    $allowed_filters = hr_reliefweb_get_filters();
+    foreach ($allowed_filters as $key => $allowed_filter) {
+      $facets[$key] = $response['embedded']['facets'][$key];
+    }
 
     $data = $response['data'];
     foreach ($data as $value) {
