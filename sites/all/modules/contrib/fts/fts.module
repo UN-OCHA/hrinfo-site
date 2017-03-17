@@ -115,6 +115,13 @@ function fts_get_funding($params) {
         $funding->current_requirements = $data->data->incoming->fundingTotal;
         $funding->funding = $data->data->incoming->pledgeTotal + $data->data->incoming->fundingTotal;
       }
+
+      // Check requirements.
+      if (isset($data->data->requirements->totalRevisedReqs)) {
+        $requirements = $data->data->requirements;
+        $funding->current_requirements = $requirements->totalRevisedReqs;
+      }
+
       cache_set('fts_funding' . md5($query), $funding, 'cache', REQUEST_TIME + 24 * 60 * 60);
     }
     else{

@@ -52,7 +52,7 @@ function _fts_visualization_get_global_cluster_options() {
   $cluster_options = array();
   $cluster_options[''] = ' - None - ';
   foreach ($clusters as $cluster) {
-    $cluster_options[$cluster->name] = $cluster->name;
+    $cluster_options[$cluster->id] = $cluster->name;
   }
   return $cluster_options;
 }
@@ -73,7 +73,7 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
     }
 
     if ($cluster) {
-      $params['globalclusterid'] = $cluster;
+      $params['filterBy'][] = 'destinationGlobalClusterId:' . $cluster;
     }
 
     // Get funding.
