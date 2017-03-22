@@ -57,7 +57,34 @@ function hr_reliefweb_menu() {
     'file' => 'hr_reliefweb.pages.inc',
   );
 
+  $items['reliefweb/autocomplete'] = array(
+    'title' => 'Reliefweb autocomplete',
+    'page callback' => 'hr_reliefweb_autocomplete',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete($string) {
+  $matches = array();
+  if ($string) {
+    $query = '"' . $string . '"';
+    $data = hr_reliefweb_fetch_documents('', 20, 0, array(), $query);
+
+    if (!empty($data['data'])) {
+      foreach ($data['data'] as $key => $value) {
+        $matches[$value['title']] = $value['title'] . ' (' . $value['id'] . ')';
+      }
+    }
+  }
+
+  drupal_json_output($matches);
 }
 
 /**
@@ -153,6 +180,7 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
     'preset' => 'latest',
 
     'fields[include]' => array(
+      'id',
       'disaster_type.name',
       'url',
       'title',
@@ -256,6 +284,7 @@ function hr_reliefweb_content($path) {
       $url = $value['fields']['url'];
       $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
       $data_array[$title] = array(
+        'id' => $value['fields']['id'],
         'title' => $title,
         'url' => $url,
         'date_changed' => $value['fields']['date']['changed'],
