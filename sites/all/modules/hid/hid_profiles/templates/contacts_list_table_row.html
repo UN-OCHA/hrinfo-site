@@ -2,7 +2,7 @@
     <tr>
       <td><%= contact.getBundles() %></td>
       <td><a href="#contact/<%= contact.get('_id') %>"><%= contact.getFullName() %></a> <% if (contact.getVerified() == true) { %><span title="Verified"><i class="fa fa-check-circle fa-lg"></i></span><% } %></td>
-      <td><%= contact.getEmails() %></td>
+      <td><%= contact.getEmail() %></td>
       <td><%= contact.getJobTitle() %></td>
       <td><%= contact.getMainOrganizationName() %></td>
       <td><%= contact.getLocationName() %></td>

@@ -15,7 +15,7 @@
                 <div class="field field-name-field-email field-type-email field-label-above">
                   <div class="field-label">Emails:&nbsp;</div>
                   <div class="field-items">
-                    <% _.each(contact.get('email'), function(email) { %>
+                    <% _.each(contact.getEmails(), function(email) { %>
                       <div class="field-item"><a href="mailto:<%= email.address %>"><%= email.address %></a></div>
                     <% }); %>
                   </div>

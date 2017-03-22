@@ -108,11 +108,9 @@ Drupal.behaviors.hidProfilesContacts = {
         }
       },
 
-      getEmails: function() {
+      getEmail: function() {
         if (settings.hid_profiles.v2) {
-          var out = [];
-          out.push({address: this.get('email')});
-          return out;
+          return this.get('email');
         }
         else {
           var emails = this.get('email');
@@ -123,6 +121,17 @@ Drupal.behaviors.hidProfilesContacts = {
             });
             return addresses.join(", ");
           }
+        }
+      },
+
+      getEmails: function() {
+        if (settings.hid_profiles.v2) {
+          var out = [];
+          out.push({address: this.get('email')});
+          return out;
+        }
+        else {
+          return this.get('email');
         }
       },
 
@@ -137,7 +146,12 @@ Drupal.behaviors.hidProfilesContacts = {
 
       getWebsites: function() {
         if (settings.hid_profiles.v2) {
-          return this.get('websites');
+          var webs = this.get('websites');
+          var websites = [];
+          _.each(webs, function (web) {
+            websites.push(web.uri);
+          });
+          return websites;
         }
         else {
           return this.get('uri');
@@ -167,11 +181,11 @@ Drupal.behaviors.hidProfilesContacts = {
           var index = window.location.hash.indexOf('?');
           var url = '';
           if (settings.hid_profiles.v2) {
-            url = 'https://api2.dev.humanitarian.id/api/v2/user?limit=' + this.limit + '&operations.list=' + this.listId + '&sort=name';
+            url = 'https://api2.dev.humanitarian.id/api/v2/user?limit=' + this.limit + '&offset=' + this.skip + '&operations.list=' + this.listId + '&sort=name';
           }
           else {
             url = window.location.protocol + '//' + window.location.host + '/hid/proxy?api_path=v0/contact/view&locationId=hrinfo:' + settings.hid_profiles.operation_id + '&status=1&type=local&limit=' + this.limit + '&skip=' + this.skip;
-            if (settings.hid_profiles.bundle != '') {
+            if (settings.hid_profiles.bundle !== '') {
               url += '&bundle=' + settings.hid_profiles.bundle;
             }
           }
@@ -262,7 +276,7 @@ Drupal.behaviors.hidProfilesContacts = {
                 success: function (contacts) {
                   var template = _.template($('#contacts_list_table_row').html());
                   var pdf_url = that.contactsList.url();
-                  pdf_url = pdf_url.replace('&limit=' + that.numItems + '&skip=' + that.contactsList.skip, '');
+                  pdf_url = pdf_url.replace('&limit=' + that.numItems + '&offset=' + that.contactsList.skip, '');
                   var csv_url = pdf_url + '&export=csv';
                   pdf_url = pdf_url + '&export=pdf';
                   $('#contacts-list-pdf').attr('href', pdf_url);
