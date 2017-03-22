@@ -58,7 +58,12 @@ Drupal.behaviors.hidProfilesContacts = {
       },
       getLocationName: function() {
         if (settings.hid_profiles.v2) {
-          return '';
+          var ops = this.get('operations');
+          var names = [];
+          _.each(operations, function (operation) {
+            names.push(operation.name);
+          });
+          return names.join(", ");
         }
         else {
           var address = this.get('address');
@@ -70,7 +75,12 @@ Drupal.behaviors.hidProfilesContacts = {
 
       getBundles: function() {
         if (settings.hid_profiles.v2) {
-          return '';
+          var bundles = this.get('bundles');
+          var names = [];
+          _.each(bundles, function (bundle) {
+            names.push(bundle.name);
+          });
+          return names.join(", ");
         }
         else {
           var bundles = this.get('bundle');
@@ -100,7 +110,9 @@ Drupal.behaviors.hidProfilesContacts = {
 
       getEmails: function() {
         if (settings.hid_profiles.v2) {
-          return this.get('email');
+          var out = [];
+          out.push({address: this.get('email')});
+          return out;
         }
         else {
           var emails = this.get('email');
