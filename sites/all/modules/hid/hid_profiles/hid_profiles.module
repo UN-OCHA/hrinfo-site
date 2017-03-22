@@ -824,19 +824,22 @@ function hid_profiles_block_view($delta = '') {
   return $block;
 }
 
+function hid_v2_get_lists($params) {
+  $token = hid_profiles_get_token();
+  $req = hid_profiles_restclient_get('api/v2/list', array(
+    'query' => $params,
+    'headers' => array(
+      'Authorization' => 'Bearer '.$token->key
+    )
+  ));
+  $lists = json_decode($req->data);
+  return $lists;
+}
+
 function hid_profiles_protected_roles_select() {
   $html = '';
   if (variable_get('hid_profiles_v2', FALSE)) {
-    $token = hid_profiles_get_token();
-    $req = hid_profiles_restclient_get('api/v2/list', array(
-      'query' => array(
-        'type' => 'functional_role'
-      ),
-      'headers' => array(
-        'Authorization' => 'Bearer '.$token->key
-      )
-    ));
-    $lists = json_decode($req->data);
+    $lists = hid_v2_get_lists(array('type' => 'functional_role'));
     $html = '<div id="block-hid-profiles-filters-roles" class="block"><select id="protectedRoles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Role">';
     $html .= '<option value=""></option>';
     foreach ($lists as $list) {
@@ -863,26 +866,38 @@ function hid_profiles_protected_roles_select() {
 }
 
 function hid_profiles_bundles_select($operation) {
-  $query = new EntityFieldQuery();
-  $entities = $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'hr_bundle')
-    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
-    ->propertyOrderBy('title')
-    ->propertyCondition('status', NODE_PUBLISHED)
-    ->execute();
-  $nodes = node_load_multiple(array_keys($entities['node']));
-  $html = '<div id="block-hid-profiles-filters-bundles" class="block"><select id="bundles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Cluster/Sector">';
-  $html .= '<option value=""></option>';
-  foreach ($nodes as $node) {
-    $label = entity_label('node', $node);
-    if ($node->field_bundle_hid_access[LANGUAGE_NONE][0]['value'] == 'closed') {
-      $html .= '<option value="#'.$label.'">'.$label.'</option>';
+  $html = '';
+  if (variable_get('hid_profiles_v2', FALSE)) {
+    $lists = hid_v2_get_lists(array('type' => 'bundle', 'metadata.operation.id' => $operation->nid));
+    $html = '<div id="block-hid-profiles-filters-bundles" class="block"><select id="bundles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Cluster/Sector">';
+    $html .= '<option value=""></option>';
+    foreach ($lists as $list) {
+      $html .= '<option value="'.$list->_id.'">'.$list->name.'</option>';
     }
-    else {
-      $html .= '<option value="'.$label.'">'.$label.'</option>';
-    }
+    $html .= '</select></div>';
   }
-  $html .= '</select></div>';
+  else {
+    $query = new EntityFieldQuery();
+    $entities = $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'hr_bundle')
+      ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
+      ->propertyOrderBy('title')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->execute();
+    $nodes = node_load_multiple(array_keys($entities['node']));
+    $html = '<div id="block-hid-profiles-filters-bundles" class="block"><select id="bundles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Cluster/Sector">';
+    $html .= '<option value=""></option>';
+    foreach ($nodes as $node) {
+      $label = entity_label('node', $node);
+      if ($node->field_bundle_hid_access[LANGUAGE_NONE][0]['value'] == 'closed') {
+        $html .= '<option value="#'.$label.'">'.$label.'</option>';
+      }
+      else {
+        $html .= '<option value="'.$label.'">'.$label.'</option>';
+      }
+    }
+    $html .= '</select></div>';
+  }
   return $html;
 }
 

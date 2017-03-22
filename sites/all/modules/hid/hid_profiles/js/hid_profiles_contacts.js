@@ -329,17 +329,27 @@ Drupal.behaviors.hidProfilesContacts = {
 
         filterByBundles: function(event) {
           var val = $('#bundles').val();
-          if (val != '') {
-            if (val.charAt(0) == '#') {
-              this.contactsList.params.protectedBundles = val.substr(1);
+          if (settings.hid_profiles.v2) {
+            if (val !== '') {
+              this.contactsList.params['bundles.list'] = val;
             }
             else {
-              this.contactsList.params.bundle = val;
+              delete this.contactsList.params['bundles.list'];
             }
           }
           else {
-            delete this.contactsList.params.bundle;
-            delete this.contactsList.params.protectedBundles;
+            if (val !== '') {
+              if (val.charAt(0) == '#') {
+                this.contactsList.params.protectedBundles = val.substr(1);
+              }
+              else {
+                this.contactsList.params.bundle = val;
+              }
+            }
+            else {
+              delete this.contactsList.params.bundle;
+              delete this.contactsList.params.protectedBundles;
+            }
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
