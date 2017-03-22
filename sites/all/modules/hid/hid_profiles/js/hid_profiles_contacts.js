@@ -60,7 +60,7 @@ Drupal.behaviors.hidProfilesContacts = {
         if (settings.hid_profiles.v2) {
           var ops = this.get('operations');
           var names = [];
-          _.each(operations, function (operation) {
+          _.each(ops, function (operation) {
             names.push(operation.name);
           });
           return names.join(", ");
