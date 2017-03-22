@@ -16,6 +16,7 @@ $plugin = array(
       'disaster_type' => '',
       'language' => '',
     ),
+    'limit' => 5,
   ),
 );
 
@@ -26,8 +27,12 @@ function hr_reliefweb_key_documents_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
 
   $dropdowns = hr_reliefweb_get_list_of_filters();
+  $form['filters'] = array(
+    '#type' => 'container',
+    '#tree' => TRUE,
+  );
   foreach ($dropdowns as $name => $dropdown) {
-    $form[$name] = array(
+    $form['filters'][$name] = array(
       '#title' => hr_reliefweb_get_dropdowns($name),
       '#type' => 'select',
       '#options' => $dropdown,
@@ -37,6 +42,14 @@ function hr_reliefweb_key_documents_edit_form($form, &$form_state) {
     );
   }
 
+  $form['limit'] = array(
+    '#title' => t('Number of documents to display'),
+    '#type' => 'select',
+    '#options' => array_combine(range(1, 10), range(1, 10)),
+    '#required' => TRUE,
+    '#default_value' => $conf['limit'],
+  );
+
   return $form;
 }
 
@@ -44,10 +57,9 @@ function hr_reliefweb_key_documents_edit_form($form, &$form_state) {
  * The submit form stores the data in $conf.
  */
 function hr_reliefweb_key_documents_edit_form_submit($form, &$form_state) {
-  foreach (array_keys($form_state['plugin']['defaults']) as $key) {
-    if (isset($form_state['values'][$key])) {
-      $form_state['conf'][$key] = $form_state['values'][$key];
-    }
+  $form_state['conf']['limit'] = $form_state['values']['limit'];
+  foreach ($form_state['values']['filters'] as $key => $value) {
+    $form_state['conf']['filters'][$key] = $value;
   }
   $form_state['rebuild'] = TRUE;
 }
@@ -57,9 +69,17 @@ function hr_reliefweb_key_documents_edit_form_submit($form, &$form_state) {
  * See ctools_plugin_examples for more advanced info
  */
 function hr_reliefweb_key_documents_render($subtype, $conf, $panel_args, $context = NULL) {
-  $limit = 5;
+  // initial content is blank
   $block = new stdClass();
-  dpm($conf['filters']);
+  $block->title = 'Reliefweb documents';
+  $block->content = '';
+
+  // Override title.
+  if ($conf['override_title']) {
+    $block->title = $conf['override_title_text'];
+  }
+
+  $limit = $conf['limit'];
 
   // Build parameters.
   $filters = array();
@@ -67,7 +87,7 @@ function hr_reliefweb_key_documents_render($subtype, $conf, $panel_args, $contex
   foreach ($conf['filters'] as $filter => $value) {
     if ($value && isset($dropdowns[$filter])) {
       $filters[] = array(
-        'field' => $dropdowns[$filter]['field'],
+        'field' => $dropdowns[$filter]['filter'],
         'value' => $value,
         'operator' => 'AND',
       );
@@ -75,18 +95,15 @@ function hr_reliefweb_key_documents_render($subtype, $conf, $panel_args, $contex
   }
 
   $data = hr_reliefweb_fetch_documents('', $limit, 0, $filters);
-  dpm($data);
-  // initial content is blank
-  $block->title = '';
-  $block->content = '';
-  if (!empty($documents)) {
-    if ($conf['view_mode'] == 'link') {
-      $block->content = '<ul>'.$block->content.'</ul>';
+  if (!empty($data['data'])) {
+    $links = array();
+    foreach ($data['data'] as $key => $value) {
+      $links[] = array(
+        'title' => $value['title'],
+        'href' => $value['url'],
+      );
     }
-
-    if (!empty($block->content)) {
-      $block->content = '<div class="fieldable-panels-pane">'.$block->content.'</div>';
-    }
+    $block->content = theme('links', array('links' => $links));
   }
 
   return $block;

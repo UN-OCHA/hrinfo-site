@@ -328,27 +328,27 @@ function hr_reliefweb_get_dropdowns($key = NULL) {
   $dropdowns = array(
     'country' => array(
       'label' => t('Country'),
-      'filter' => '',
+      'filter' => 'country',
     ),
     'theme' => array(
       'label' => t('Theme'),
-      'filter' => '',
+      'filter' => 'theme',
     ),
     'source' => array(
       'label' => t('Organisation'),
-      'filter' => '',
+      'filter' => 'source',
     ),
     'format' => array(
       'label' => t('Document type'),
-      'filter' => '',
+      'filter' => 'format',
     ),
     'disaster_type' => array(
       'label' => t('Disaster type'),
-      'filter' => '',
+      'filter' => 'disaster_type',
     ),
     'language' => array(
       'label' => t('Language'),
-      'filter' => '',
+      'filter' => 'language',
     ),
   );
 
@@ -364,6 +364,12 @@ function hr_reliefweb_get_dropdowns($key = NULL) {
  * Get a list of filters.
  */
 function hr_reliefweb_get_list_of_filters() {
+  $cache_key = 'hr_reliefweb_get_list_of_filters';
+  $cache = cache_get($cache_key);
+  if ($cache) {
+    return $cache->data;
+  }
+
   $endpoint = 'https://api.reliefweb.int/v1/reports';
   $params = array(
     'appname' => 'hrinfo',
@@ -414,6 +420,7 @@ function hr_reliefweb_get_list_of_filters() {
         $dropdowns[$key][$term['value']] = $term['value'];
       }
     }
+    cache_set($cache_key, $dropdowns, 'cache', REQUEST_TIME + 60 * 60);
   }
 
   return $dropdowns;
