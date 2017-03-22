@@ -142,9 +142,9 @@ Drupal.behaviors.hidProfilesContacts = {
           }
           return url;
         },
-        parse: function(response) {
+        parse: function(response, options) {
           if (settings.hid_profiles.v2) {
-            console.log(response);
+            console.log(options);
             return response;
           }
           else {
@@ -243,7 +243,6 @@ Drupal.behaviors.hidProfilesContacts = {
           'keyup #search': 'search',
           'click #back': 'back',
           'autocompleteselect #organizations': 'filterByOrganization',
-          'click #key-contact': 'filterByKeyContact',
           'click #verified': 'filterByVerified',
           'change #countries': 'filterByCountry',
           'change #locations': 'filterByLocation',
@@ -420,21 +419,21 @@ Drupal.behaviors.hidProfilesContacts = {
 
         filterByDisaster: function(event) {
           var val = $('#disasters').val();
-          if (val != '') {
-            this.contactsList.params.disasters_remote_id = val;
+          if (settings.hid_profiles.v2) {
+            if (val !== '') {
+              this.contactsList.params['disasters.list'] = val;
+            }
+            else {
+              delete this.contactsList.params['disasters.list'];
+            }
           }
           else {
-            delete this.contactsList.params.disasters_remote_id;
-          }
-          this.router.navigateWithParams('table/1', this.contactsList.params);
-        },
-
-        filterByKeyContact: function(event) {
-          if ($('#key-contact').prop('checked') == true) {
-            this.contactsList.params.keyContact = true;
-          }
-          else {
-            delete this.contactsList.params.keyContact;
+            if (val != '') {
+              this.contactsList.params.disasters_remote_id = val;
+            }
+            else {
+              delete this.contactsList.params.disasters_remote_id;
+            }
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
