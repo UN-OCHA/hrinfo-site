@@ -152,23 +152,6 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
     'limit' => $limit,
     'preset' => 'latest',
 
-    'filter' => array(
-      'operator' => 'AND',
-      'conditions' => array(
-        array(
-          'field' => 'primary_country.iso3',
-          'value' => $country,
-          'operator' => 'OR',
-        ),
-        array(
-          'field' => 'format.name',
-          'value' => 'News and Press Release',
-          'operator' => 'OR',
-          'negate' => TRUE,
-        ),
-      ),
-    ),
-
     'fields[include]' => array(
       'disaster_type.name',
       'url',
@@ -184,6 +167,38 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
       'format.name',
     ),
   );
+
+  if ($country) {
+    $params['filter'] = array(
+      'operator' => 'AND',
+      'conditions' => array(
+        array(
+          'field' => 'primary_country.iso3',
+          'value' => $country,
+          'operator' => 'OR',
+        ),
+        array(
+          'field' => 'format.name',
+          'value' => 'News and Press Release',
+          'operator' => 'OR',
+          'negate' => TRUE,
+        ),
+      ),
+    );
+  }
+  else {
+    $params['filter'] = array(
+      'operator' => 'AND',
+      'conditions' => array(
+        array(
+          'field' => 'format.name',
+          'value' => 'News and Press Release',
+          'operator' => 'OR',
+          'negate' => TRUE,
+        ),
+      ),
+    );
+  }
 
   if (!empty($query)) {
     $params['query']['value'] = $query;
@@ -304,6 +319,45 @@ function _hr_reliefweb_fix_url($url) {
   $url = str_replace('http://', 'https://', $url);
 
   return $url;
+}
+
+/**
+ * Allowed dropdowns.
+ */
+function hr_reliefweb_get_dropdowns($key = NULL) {
+  $dropdowns = array(
+    'country' => array(
+      'label' => t('Country'),
+      'filter' => '',
+    ),
+    'theme' => array(
+      'label' => t('Theme'),
+      'filter' => '',
+    ),
+    'source' => array(
+      'label' => t('Organisation'),
+      'filter' => '',
+    ),
+    'format' => array(
+      'label' => t('Document type'),
+      'filter' => '',
+    ),
+    'disaster_type' => array(
+      'label' => t('Disaster type'),
+      'filter' => '',
+    ),
+    'language' => array(
+      'label' => t('Language'),
+      'filter' => '',
+    ),
+  );
+
+  if ($key) {
+    return $dropdowns[$key]['label'];
+  }
+  else {
+    return $dropdowns;
+  }
 }
 
 /**
