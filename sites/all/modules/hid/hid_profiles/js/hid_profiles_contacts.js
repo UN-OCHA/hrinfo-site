@@ -308,11 +308,21 @@ Drupal.behaviors.hidProfilesContacts = {
 
         filterByProtectedRoles: function(event) {
           var val = $('#protectedRoles').val();
-          if (val != '') {
-            this.contactsList.params.protectedRoles = val;
+          if (settings.hid_profiles.v2) {
+            if (val !== '') {
+              this.contactsList.params['functional_roles.list'] = val;
+            }
+            else {
+              delete this.contactsList.params['functional_roles.list'];
+            }
           }
           else {
-            delete this.contactsList.params.protectedRoles;
+            if (val !== '') {
+              this.contactsList.params.protectedRoles = val;
+            }
+            else {
+              delete this.contactsList.params.protectedRoles;
+            }
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },

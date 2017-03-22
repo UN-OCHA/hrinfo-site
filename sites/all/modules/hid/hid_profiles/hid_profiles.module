@@ -828,7 +828,7 @@ function hid_profiles_protected_roles_select() {
   $html = '';
   if (variable_get('hid_profiles_v2', FALSE)) {
     $token = hid_profiles_get_token();
-    $lists = hid_profiles_restclient_get('/api/v2/list', array(
+    $req = hid_profiles_restclient_get('api/v2/list', array(
       'query' => array(
         'type' => 'functional_role'
       ),
@@ -836,6 +836,7 @@ function hid_profiles_protected_roles_select() {
         'Authorization' => 'Bearer '.$token->key
       )
     ));
+    $lists = json_decode($req->data);
     $html = '<div id="block-hid-profiles-filters-roles" class="block"><select id="protectedRoles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Role">';
     $html .= '<option value=""></option>';
     foreach ($lists as $list) {
