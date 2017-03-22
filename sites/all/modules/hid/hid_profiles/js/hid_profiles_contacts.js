@@ -15,7 +15,12 @@ Drupal.behaviors.hidProfilesContacts = {
 
     Contact = Backbone.Model.extend({
       url: function() {
-        return window.location.protocol + '//' + window.location.host + '/hid/proxy?api_path=v0/contact/view&_id='+this.get('_id');
+        if (settings.hid_profiles.v2) {
+          return 'https://api2.dev.humanitarian.id/api/v2/user/' + this.get('_id');
+        }
+        else {
+          return window.location.protocol + '//' + window.location.host + '/hid/proxy?api_path=v0/contact/view&_id='+this.get('_id');
+        }
       },
       parse: function(response) {
         if (response.contacts != undefined) {
