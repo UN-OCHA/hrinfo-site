@@ -8,6 +8,9 @@
  * Implements hook_ctools_plugin_directory().
  */
 function hr_reliefweb_ctools_plugin_directory($module, $plugin) {
+  if ($module == "panels" && in_array($plugin, array('styles'))) {
+    return "plugins/$plugin";
+  }
   if ($module == 'ctools' && $plugin == 'content_types') {
     return 'plugins/' . $plugin;
   }
@@ -128,7 +131,6 @@ function hr_reliefweb_get_filters($key = NULL) {
     'language.name' => t('Language'),
     'date.original' => t('Original publication date'),
     'date.changed' => t('Date'),
-
   );
 
   if ($key) {
@@ -302,4 +304,63 @@ function _hr_reliefweb_fix_url($url) {
   $url = str_replace('http://', 'https://', $url);
 
   return $url;
+}
+
+/**
+ * Get a list of filters.
+ */
+function hr_reliefweb_get_list_of_filters() {
+  $endpoint = 'https://api.reliefweb.int/v1/reports';
+  $params = array(
+    'appname' => 'hrinfo',
+    'offset' => 0,
+    'limit' => 0,
+    'facets' => array(
+      array(
+        'field' => 'country',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'theme',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'source',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'format',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'disaster_type',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'language',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+    ),
+  );
+
+  $url = $endpoint . '?' . drupal_http_build_query($params);
+
+  $request = drupal_http_request($url);
+  if (isset($request->data)) {
+    $response = drupal_json_decode($request->data);
+    foreach ($response['embedded']['facets'] as $key => $facet) {
+      $dropdowns[$key] = array();
+      foreach ($facet['data'] as $term) {
+        $dropdowns[$key][$term['value']] = $term['value'];
+      }
+    }
+  }
+
+  return $dropdowns;
 }
