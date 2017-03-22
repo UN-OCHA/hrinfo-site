@@ -154,7 +154,7 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
       'operator' => 'AND',
       'conditions' => array(
         array(
-          'field' => 'country.iso3',
+          'field' => 'primary_country.iso3',
           'value' => $country,
           'operator' => 'OR',
         ),
