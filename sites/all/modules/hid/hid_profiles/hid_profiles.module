@@ -738,6 +738,13 @@ function hid_profiles_restclient_post($resource_path, $variables = array()) {
   return restclient_post($resource_path, $variables);
 }
 
+function hid_profiles_get_token() {
+  $cid = hid_auth_get_user_id();
+  $provider = oauthconnector_provider_load('hid_oauth');
+  $token = (!empty($cid) && !empty($provider->csid)) ? oauthconnector_get_connection_token($provider, $cid) : FALSE;
+  return $token;
+}
+
 /**
  * Implements hook_block_info().
  */
@@ -818,19 +825,39 @@ function hid_profiles_block_view($delta = '') {
 }
 
 function hid_profiles_protected_roles_select() {
-  $voc = taxonomy_vocabulary_machine_name_load('hr_functional_role');
-  $query = new EntityFieldQuery();
-  $entities = $query->entityCondition('entity_type', 'taxonomy_term')
-                    ->propertyCondition('vid', $voc->vid)
-                    ->execute();
-  $terms = taxonomy_term_load_multiple(array_keys($entities['taxonomy_term']));
-  $html = '<div id="block-hid-profiles-filters-roles" class="block"><select id="protectedRoles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Role">';
-  $html .= '<option value=""></option>';
-  foreach ($terms as $term) {
-    $label = entity_label('taxonomy_term', $term);
-    $html .= '<option value="'.$term->tid.'">'.$label.'</option>';
+  $html = '';
+  if (variable_get('hid_profiles_v2', FALSE)) {
+    $token = hid_profiles_get_token();
+    $lists = hid_profiles_restclient_get('/api/v2/list', array(
+      'query' => array(
+        'type' => 'functional_role'
+      ),
+      'headers' => array(
+        'Authorization' => 'Bearer '.$token->key
+      )
+    ));
+    $html = '<div id="block-hid-profiles-filters-roles" class="block"><select id="protectedRoles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Role">';
+    $html .= '<option value=""></option>';
+    foreach ($lists as $list) {
+      $html .= '<option value="'.$list->_id.'">'.$list->name.'</option>';
+    }
+    $html .= '</select></div>';
   }
-  $html .= '</select></div>';
+  else {
+    $voc = taxonomy_vocabulary_machine_name_load('hr_functional_role');
+    $query = new EntityFieldQuery();
+    $entities = $query->entityCondition('entity_type', 'taxonomy_term')
+                      ->propertyCondition('vid', $voc->vid)
+                      ->execute();
+    $terms = taxonomy_term_load_multiple(array_keys($entities['taxonomy_term']));
+    $html = '<div id="block-hid-profiles-filters-roles" class="block"><select id="protectedRoles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Role">';
+    $html .= '<option value=""></option>';
+    foreach ($terms as $term) {
+      $label = entity_label('taxonomy_term', $term);
+      $html .= '<option value="'.$term->tid.'">'.$label.'</option>';
+    }
+    $html .= '</select></div>';
+  }
   return $html;
 }
 
@@ -870,7 +897,12 @@ function hid_profiles_country_select() {
   $html .= '<option value=""></option>';
   foreach ($terms as $term) {
     $label = entity_label('taxonomy_term', $term);
-    $html .= '<option value="'.$label.'">'.$label.'</option>';
+    if (variable_get('hid_profiles_v2', FALSE)) {
+      $html .= '<option value="hrinfo_loc_'.$term->tid.'">'.$label.'</option>';
+    }
+    else {
+      $html .= '<option value="'.$label.'">'.$label.'</option>';
+    }
   }
   $html .= '</select></div>';
   return $html;

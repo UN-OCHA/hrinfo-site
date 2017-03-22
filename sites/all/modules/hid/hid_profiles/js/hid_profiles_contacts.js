@@ -347,11 +347,21 @@ Drupal.behaviors.hidProfilesContacts = {
 
         filterByCountry: function(event) {
           var val = $('#countries').val();
-          if (val != '') {
-            this.contactsList.params.address_country = val;
+          if (settings.hid_profiles.v2) {
+            if (val !== '') {
+              this.contactsList.params.country = val;
+            }
+            else {
+              delete this.contactsList.params.country;
+            }
           }
           else {
-            delete this.contactsList.params.address_country;
+            if (val !== '') {
+              this.contactsList.params.address_country = val;
+            }
+            else {
+              delete this.contactsList.params.address_country;
+            }
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },

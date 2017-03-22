@@ -284,9 +284,7 @@ function hid_profiles_local_contacts($node) {
     $settings['bundle'] = $node->type == 'hr_bundle' ? $node->title : '';
     $settings['v2'] = variable_get('hid_profiles_v2', FALSE);
     $settings['api_endpoint'] = variable_get('hid_profiles_api_endpoint', NULL);
-    $cid = hid_auth_get_user_id();
-    $provider = oauthconnector_provider_load('hid_oauth');
-    $token = (!empty($cid) && !empty($provider->csid)) ? oauthconnector_get_connection_token($provider, $cid) : FALSE;
+    $token = hid_profiles_get_token();
     if ($token) {
       $settings['token'] = $token->key;
     }
