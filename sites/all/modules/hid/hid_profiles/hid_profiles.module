@@ -942,42 +942,65 @@ function hid_profiles_location_select($operation) {
 }
 
 function hid_profiles_office_select($operation) {
-  $query = new EntityFieldQuery();
-  $entities = $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'hr_office')
-    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
-    ->propertyOrderBy('title')
-    ->propertyCondition('status', NODE_PUBLISHED)
-    ->execute();
-  $nodes = node_load_multiple(array_keys($entities['node']));
-  $html = '<div id="block-hid-profiles-filters-offices" class="block"><select id="offices" class="form-control form-select" tabindex="1" data-placeholder="Filter by Office">';
-  $html .= '<option value=""></option>';
-  foreach ($nodes as $node) {
-    $label = entity_label('node', $node);
-    $html .= '<option value="'.$label.'">'.$label.'</option>';
+  $html = '';
+  if (variable_get('hid_profiles_v2', FALSE)) {
+    $lists = hid_v2_get_lists(array('type' => 'office', 'metadata.operation.id' => $operation->nid));
+    $html = '<div id="block-hid-profiles-filters-offices" class="block"><select id="offices" class="form-control form-select" tabindex="1" data-placeholder="Filter by Office">';
+    $html .= '<option value=""></option>';
+    foreach ($lists as $list) {
+      $html .= '<option value="'.$list->_id.'">'.$list->name.'</option>';
+    }
+    $html .= '</select></div>';
   }
-  $html .= '</select></div>';
+  else {
+    $query = new EntityFieldQuery();
+    $entities = $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'hr_office')
+      ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
+      ->propertyOrderBy('title')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->execute();
+    $nodes = node_load_multiple(array_keys($entities['node']));
+    $html = '<div id="block-hid-profiles-filters-offices" class="block"><select id="offices" class="form-control form-select" tabindex="1" data-placeholder="Filter by Office">';
+    $html .= '<option value=""></option>';
+    foreach ($nodes as $node) {
+      $label = entity_label('node', $node);
+      $html .= '<option value="'.$label.'">'.$label.'</option>';
+    }
+    $html .= '</select></div>';
+  }
   return $html;
 }
 
 function hid_profiles_disaster_select($operation) {
   $output = '';
-  $query = new EntityFieldQuery();
-  $results = $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'hr_disaster')
-    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
-    ->propertyCondition('status', NODE_PUBLISHED)
-    ->propertyOrderBy('title')
-    ->execute();
-  if (!empty($results['node'])) {
-    $nodes = node_load_multiple(array_keys($results['node']));
+  if (variable_get('hid_profiles_v2', FALSE)) {
+    $lists = hid_v2_get_lists(array('type' => 'disaster', 'metadata.operation.id' => $operation->nid));
     $output .= '<div id="block-hid-profiles-filters-disasters" class="block"><select id="disasters" class="form-control form-select" tabindex="1" data-placeholder="Filter by Disaster">';
     $output .= '<option value=""></option>';
-    foreach ($nodes as $node) {
-      $id = 'hrinfo:' . $node->nid;
-      $output .= '<option value="' . $id . '">' . entity_label('node', $node) . '</option>';
+    foreach ($lists as $list) {
+      $output .= '<option value="'.$list->_id.'">'.$list->name.'</option>';
     }
     $output .= '</select></div>';
+  }
+  else {
+    $query = new EntityFieldQuery();
+    $results = $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'hr_disaster')
+      ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->propertyOrderBy('title')
+      ->execute();
+    if (!empty($results['node'])) {
+      $nodes = node_load_multiple(array_keys($results['node']));
+      $output .= '<div id="block-hid-profiles-filters-disasters" class="block"><select id="disasters" class="form-control form-select" tabindex="1" data-placeholder="Filter by Disaster">';
+      $output .= '<option value=""></option>';
+      foreach ($nodes as $node) {
+        $id = 'hrinfo:' . $node->nid;
+        $output .= '<option value="' . $id . '">' . entity_label('node', $node) . '</option>';
+      }
+      $output .= '</select></div>';
+    }
   }
 
   return $output;

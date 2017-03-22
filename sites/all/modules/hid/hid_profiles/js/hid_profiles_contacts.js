@@ -399,11 +399,21 @@ Drupal.behaviors.hidProfilesContacts = {
 
         filterByOffice: function(event) {
           var val = $('#offices').val();
-          if (val != '') {
-            this.contactsList.params.office_name = val;
+          if (settings.hid_profiles.v2) {
+            if (val !== '') {
+              this.contactsList.params['offices.list'] = val;
+            }
+            else {
+              delete this.contactsList.params['offices.list'];
+            }
           }
           else {
-            delete this.contactsList.params.office_name;
+            if (val != '') {
+              this.contactsList.params.office_name = val;
+            }
+            else {
+              delete this.contactsList.params.office_name;
+            }
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
