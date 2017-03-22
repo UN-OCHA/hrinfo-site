@@ -113,6 +113,33 @@ Drupal.behaviors.hidProfilesContacts = {
           }
         }
       },
+
+      getPhoneNumbers: function() {
+        if (settings.hid_profiles.v2) {
+          return this.get('phone_numbers');
+        }
+        else {
+          return this.get('phones');
+        }
+      },
+
+      getWebsites: function() {
+        if (settings.hid_profiles.v2) {
+          return this.get('websites');
+        }
+        else {
+          return this.get('uri');
+        }
+      },
+
+      getVoip: function() {
+        if (settings.hid_profiles.v2) {
+          return this.get('voips');
+        }
+        else {
+          return this.get('voip');
+        }
+      },
     });
 
     Lists = Backbone.Collection.extend({
@@ -144,7 +171,7 @@ Drupal.behaviors.hidProfilesContacts = {
         },
         parse: function(response, options) {
           if (settings.hid_profiles.v2) {
-            console.log(options);
+            this.count = options.xhr.getResponseHeader('X-Total-Count');
             return response;
           }
           else {

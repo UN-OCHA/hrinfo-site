@@ -6,16 +6,7 @@
           <div class="panel-panel-inner">
             <div class="panel-pane pane-node-title" >
               <div class="pane-content">
-                <h2><%= contact.get('nameGiven') %> <%= contact.get('nameFamily') %> <% if(contact.get('_profile').verified == true) { %><i class="fa fa-check-circle"></i><% } %></h2>
-              </div>
-            </div>
-            <div class="panel-separator"></div>
-            <div class="panel-pane pane-entity-field-extra pane-node-hr-core-share-button" >
-              <div class="pane-content">
-                <div class="form-item form-type-item form-group">
-                  <a href="http://www.addtoany.com/share_save" class="a2a_dd btn btn-secondary btn-sm"><i class="fa fa-share"></i> share</a>
-                </div>
-                <!-- <script type="text/javascript">a2a_config.linkname = "Alaa Abou Zeid";a2a_config.linkurl = "http://www.humanitarianresponse.info/operations/iraq/contact/alaa-abou-zeid";a2a.init("page");</script> -->
+                <h2><%= contact.getFullName() %> <% if(contact.getVerified() == true) { %><i class="fa fa-check-circle"></i><% } %></h2>
               </div>
             </div>
             <div class="panel-separator"></div>
@@ -36,7 +27,7 @@
                 <div class="field field-name-field-phones field-type-phone field-label-above">
                   <div class="field-label">Phones:&nbsp;</div>
                   <div class="field-items">
-                    <% _.each(contact.get('phone'), function(phone) { %>
+                    <% _.each(contact.getPhoneNumbers(), function(phone) { %>
                       <div class="field-item"><%= phone.type %>: <%= phone.number %></div>
                     <% }); %>
                   </div>
@@ -48,7 +39,7 @@
                 <div class="field field-name-field-uri field-type-link field-label-above">
                   <div class="field-label">URLs:&nbsp;</div>
                   <div class="field-items">
-                    <% _.each(contact.get('uri'), function(uri) { %>
+                    <% _.each(contact.getWebsites(), function(uri) { %>
                       <div class="field-item"><a href="<%= uri %>"><%= uri %></a></div>
                     <% }); %>
                   </div>
@@ -60,7 +51,7 @@
                 <div class="field field-name-field-voip field-type-text field-label-above">
                   <div class="field-label">Instant Messengers:&nbsp;</div>
                   <div class="field-items">
-                    <% _.each(contact.get('voip'), function(voip) { %>
+                    <% _.each(contact.getVoip(), function(voip) { %>
                       <div class="field-item"><%= voip.type %>: <%= voip.number %></a></div>
                     <% }); %>
                   </div>
@@ -74,7 +65,7 @@
           <div class="panel-panel-inner">
             <div class="panel-pane pane-entity-field pane-node-og-group-ref" >
               <div class="pane-content">
-                <div class="field field-name-og-group-ref field-type-entityreference field-label-above"><div class="field-label">Space(s):&nbsp;</div><div class="field-items"><div class="field-item even"><%= contact.get('location') %></div></div></div>
+                <div class="field field-name-og-group-ref field-type-entityreference field-label-above"><div class="field-label">Space(s):&nbsp;</div><div class="field-items"><div class="field-item even"><%= contact.getLocationName() %></div></div></div>
               </div>
             </div>
             <div class="panel-separator"></div>
@@ -92,7 +83,7 @@
             <div class="panel-separator"></div>
             <div class="panel-pane pane-entity-field pane-node-field-job-title-other" >
               <div class="pane-content">
-                <div class="field field-name-field-job-title-other field-type-text field-label-above"><div class="field-label">Job Title:&nbsp;</div><div class="field-items"><div class="field-item even"><%= contact.get('jobtitle') %></div></div></div>
+                <div class="field field-name-field-job-title-other field-type-text field-label-above"><div class="field-label">Job Title:&nbsp;</div><div class="field-items"><div class="field-item even"><%= contact.getJobTitle() %></div></div></div>
               </div>
             </div>
           </div>
