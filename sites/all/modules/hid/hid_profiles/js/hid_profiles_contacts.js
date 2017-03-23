@@ -191,7 +191,9 @@ Drupal.behaviors.hidProfilesContacts = {
           }
           if (index != -1) {
             var params = window.location.hash.substr(index + 1);
-            url += '&' + params;
+            if (params) {
+              url += '&' + params;
+            }
           }
           return url;
         },
@@ -458,10 +460,10 @@ Drupal.behaviors.hidProfilesContacts = {
           var val = $('#locations').val();
           if (settings.hid_profiles.v2) {
             if (val !== '') {
-              this.contactsList.params['region.name'] = val;
+              this.contactsList.params['location.region.name'] = val;
             }
             else {
-              delete this.contactsList.params['region.name'];
+              delete this.contactsList.params['location.region.name'];
             }
           }
           else {
