@@ -268,8 +268,12 @@ Drupal.behaviors.hidProfilesContacts = {
 
         loadResultsV2: function () {
           var that = this;
+          var remote_id = settings.hid_profiles.operation_id;
+          if (settings.hid_profiles.bundle) {
+            remote_id = settings.hid_profiles.bundle;
+          }
           this.lists.fetch({
-            data: { 'remote_id': settings.hid_profiles.operation_id},
+            data: { 'remote_id': remote_id },
             success: function (lists) {
               that.contactsList.listId = lists.models[0].get('_id');
               that.contactsList.fetch({
@@ -277,6 +281,7 @@ Drupal.behaviors.hidProfilesContacts = {
                   var template = _.template($('#contacts_list_table_row').html());
                   var pdf_url = that.contactsList.url();
                   pdf_url = pdf_url.replace('&limit=' + that.numItems + '&offset=' + that.contactsList.skip, '');
+                  pdf_url = pdf_url + '&token=' + settings.hid_profiles.token;
                   var csv_url = pdf_url.replace('user', 'user.csv');
                   pdf_url = pdf_url.replace('user', 'user.pdf');
                   $('#contacts-list-pdf').attr('href', pdf_url);
