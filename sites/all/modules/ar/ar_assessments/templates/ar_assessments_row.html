@@ -1,12 +1,63 @@
 <% _.each(assessments, function(assessment) { %>
     <tr>
-      <td><a href="#assessment/<%= assessment.get('id') %>"><%= assessment.get('label') %></a></td>
-      <td><% _.each(assessment.get('locations'), function (loc) { %><%= loc.label %>, <% }); %></td>
-      <td><% _.each(assessment.get('organizations'), function (org) { %><%= org.label %>, <% }); %></td>
-      <td><% _.each(assessment.get('participating_organizations'), function (org) { %><%= org.label %>, <% }); %></td>
-      <td><% _.each(assessment.get('bundles'), function (bundle) { %><%= bundle.label %>, <% }); %></td>
-      <td><%= assessment.get('status') %></td>
-      <td><% if (assessment.get('date')) { %>From <%= assessment.getFromDate() %> to <%= assessment.getToDate() %><% } %></td>
-      <td><strong>Report:</strong><% if(assessment.get('report')) { %><%= assessment.get('report').accessibility %><% } %><br /><strong>Questionnaire:</strong><% if(assessment.get('questionnaire')) { %><%= assessment.get('questionnaire').accessibility %><% } %><br /><strong>Data:</strong></td>
+      <td class="pb-table__td pb-table__td--primary" data-title="Title"><a href="#assessment/<%= assessment.get('id') %>"><%= assessment.get('label') %></a></td>
+
+      <td data-title="Sources">  
+        <% if ( assessment.get('organizations') ) { %>
+          <p>       
+            <strong>Organization:</strong>
+            <% _.each(assessment.get('organizations'), function (org, index, list) { %>
+              <%= org.label %><% if (index < list.length -1) { %>, <% } %>
+            <% }); %>
+          </p>
+        <% } %>
+             
+        <% if ( assessment.get('participating_organizations') ) { %>
+          <p>
+            <strong>Participating organizations:</strong>
+            <% _.each(assessment.get('participating_organizations'), function (org, index, list) { %>
+              <%= org.label %><% if (index < list.length -1) { %>, <% } %> 
+            <% }); %>
+          </p>
+        <% } %>
+        
+        <% if ( assessment.get('bundles') ) { %>
+          <p>
+            <strong>Cluster:</strong>
+            <% _.each(assessment.get('bundles'), function (bundle, index, list) { %>
+              <%= bundle.label %><% if (index < list.length -1) { %>, <% } %>
+            <% }); %>
+          </p>
+        <% } %>       
+      </td>
+
+      <td data-title="Dates">
+        <% if (assessment.get('date')) { %>From <%= assessment.getFromDate() %> to <%= assessment.getToDate() %><% } %>
+      </td>
+
+      <td data-title="Data">
+        <p>
+          <strong>Status:</strong>
+          <%= assessment.get('status') %>
+        </p>
+
+        <% if(assessment.get('report')) { %>
+          <p>
+            <strong>Report:</strong>
+            <%= assessment.get('report').accessibility %>
+          </p>
+        <% } %>
+        
+        <% if(assessment.get('questionnaire')) { %>
+          <p>
+            <strong>Questionnaire:</strong>
+            <%= assessment.get('questionnaire').accessibility %>
+          </p>
+        <% } %>
+
+        <p>
+          <strong>Data:</strong>
+        </p>
+      </td>
     </tr>
   <% }); %>

@@ -4,14 +4,9 @@
    * Initial template for the reliefweb documents.
    */
 ?>
-
-<div class="reliefweb--wrapper">
-  <?php if ($contents): ?>
-  <div class="reliefweb--intro">
-    <?php print render($contents); ?>
-  </div>
-<?php endif ?>
-  <div class="reliefweb--sidebar">
+<div class="reliefweb--wrapper container">
+ 
+  <div class="reliefweb--sidebar col-md-3">
     <div class="reliefweb--powered-by">
       <p><?php print t('Powered by'); ?></p>
       <img src="/<?php print drupal_get_path('module', 'hr_reliefweb') ?>/assets/reliefweb.svg">
@@ -29,7 +24,13 @@
       <?php print render($facets); ?>
     </div>
   </div>
-  <div class="reliefweb--content">
+  <div class="reliefweb--content col-md-9">
+    <h2 class="pb-header">Documents</h2>
+    <?php if ($contents): ?>
+    <div class="reliefweb--intro">
+      <?php print render($contents); ?>
+    </div>
+     <?php endif ?>
     <div class="reliefweb--data">
       <?php print render($data); ?>
     </div>

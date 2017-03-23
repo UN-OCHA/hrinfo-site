@@ -3107,7 +3107,7 @@ form .description { margin: 2px 0; color: #555555; }
 
 .media-widget > a { margin: 0 10px 0 0; display: inline-block; }
 
-html.js input.form-autocomplete { background: url('../images/throbber.gif?1485333955') no-repeat right 8px #fff !important; }
+html.js input.form-autocomplete { background: url('../images/throbber.gif?1490188061') no-repeat right 8px #fff !important; }
 html.js input.throbbing { background-position: right -122px !important; }
 html.js fieldset.collapsed { height: auto; border-left-width: 1px; border-right-width: 1px; }
 
@@ -4028,6 +4028,56 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
 .breadcrumbs-item a { color: #656565; padding: 0 5px 0 2px; }
 .breadcrumbs-item:first-child a { padding-left: 0; }
 
+.pb-header { color: #1977d4; font-size: 1.5em; text-transform: uppercase; margin: 12px 0; }
+
+.pb-btn { border: 1px solid #1565b5; background: none; color: #1565b5; display: inline-block; padding: 12px 8px; text-align: center; }
+.pb-btn:hover, .pb-btn:focus { background: #1565b5; color: white; text-decoration: none; }
+td .pb-btn { width: 100%; }
+td .pb-btn + .pb-btn { margin-top: 5px; }
+
+.pb-export-button-holder { position: absolute; right: 0; margin-top: -50px; }
+
+.reliefweb--powered-by { text-align: center; font-size: 1.2rem; }
+
+.reliefweb--summary { margin: 20px 0; font-size: 1.5rem; font-weight: bold; }
+
+.reliefweb--wrapper .reliefweb--clearall { margin: 20px 0; }
+
+.reliefweb--wrapper .reliefweb--clearall a { border: solid #333333 1px; padding: 5px; color: #333333; }
+
+.reliefweb--removefacets h2 { color: #333333; }
+
+.reliefweb--wrapper .reliefweb--removefacets a { color: #333333; }
+
+.reliefweb--facet .processed { display: none; }
+
+.reliefweb--facet select { width: 90%; }
+
+table.pb-table, .reliefweb--data table { border: none; }
+table.pb-table thead tr th, .reliefweb--data table thead tr th { background: none; color: #666; text-transform: uppercase; font-weight: normal; position: relative; vertical-align: middle; padding: 8px 12px; }
+table.pb-table thead tr th:before, .reliefweb--data table thead tr th:before { content: ""; display: block; position: absolute; top: 0; left: 0; width: 100%; width: calc(100% - 2px); height: 100%; background: #e6e6e6; z-index: -1; }
+table.pb-table thead tr th:last-child:before, .reliefweb--data table thead tr th:last-child:before { width: 100%; }
+table.pb-table th.pb-table__th--narrow, .reliefweb--data table th.pb-table__th--narrow { width: 15%; }
+table.pb-table tbody tr, .reliefweb--data table tbody tr { border-bottom: 1px solid #ccc; }
+table.pb-table tbody tr td, .reliefweb--data table tbody tr td { color: #3d3d3f; padding: 8px; }
+table.pb-table tr:nth-of-type(odd), table.pb-table tr:nth-of-type(even), .reliefweb--data table tr:nth-of-type(odd), .reliefweb--data table tr:nth-of-type(even) { background: none; }
+table.pb-table td.pb-table__td--primary, .reliefweb--data table td.pb-table__td--primary { font-size: 1.05em; }
+table.pb-table p, .reliefweb--data table p { margin-bottom: 8px; }
+table.pb-table td p:last-child, .reliefweb--data table td p:last-child { margin-bottom: 0; }
+table.pb-table a, .reliefweb--data table a { font-weight: normal; color: #1565b5; }
+
+.reliefweb--data table tbody tr td:first-child { text-align: center; }
+
+[class*="reliefweb--doc-type--"] div { background-color: #c13d4a; display: block; padding: 12px 8px; color: white; font-weight: bold; }
+
+.reliefweb--doc-type--download { padding: 12px 0; }
+
+@media (min-width: 768px) { table.pb-table tbody tr, .reliefweb--data table tbody tr { border: none; }
+  table.pb-table tbody tr td, .reliefweb--data table tbody tr td { padding: 12px; border-bottom: 1px solid #ccc; }
+  .reliefweb--data table thead th:first-child { width: 92px; }
+  .reliefweb--data table thead th:first-child + th { width: 25%; }
+  .reliefweb--data table tbody tr td:first-child { padding: 12px 2px 12px 0; }
+  .pb-table__th-icon { width: 32px; text-align: center; } }
 .cd-hri-header { font-family: Arial, Tahoma, sans-serif; }
 .cd-hri-header * { margin: 0; padding: 0; box-sizing: border-box; }
 .cd-hri-header button { -webkit-appearance: none; background-color: transparent; border: none; border-radius: none; box-shadow: none; cursor: pointer; }

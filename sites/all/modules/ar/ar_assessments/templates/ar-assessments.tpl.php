@@ -1,3 +1,5 @@
+<h2 class="pb-header">Assessment Registry</h2>
+
 <div id="assessments-view">
 </div>
 <div id="assessments-list">
@@ -9,16 +11,12 @@
   <div id="assessments-list-view">
   </div>
 
-  <table id="assessments-list-table" class="table table-striped">
+  <table id="assessments-list-table" class="table pb-table">
     <thead>
     <tr>
       <th>Title</th>
-      <th>Location(s)</th>
-      <th>Organization(s)</th>
-      <th>Participating Organization(s)</th>
-      <th>Cluster(s)/Sector(s)</th>
-      <th>Status</th>
-      <th>Assessment Date(s)</th>
+      <th>Sources</th>
+      <th class="pb-table__th--narrow">Dates</th>
       <th>Data</th>
     </tr>
     </thead>

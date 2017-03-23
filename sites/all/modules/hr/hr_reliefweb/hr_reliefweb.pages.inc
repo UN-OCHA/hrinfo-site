@@ -123,12 +123,9 @@ function hr_reliefweb_document_list($node) {
     $downloads = array();
     if (isset($value['files'])) {
       foreach ($value['files'] as $file) {
-        if (isset($file['preview']) && !empty($file['preview'])) {
-          $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
-        }
-        else {
-          $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
-        }
+        
+          $downloads[] = '<a target="reliefweb" class="pb-btn pb-btn--download" title="' . $file['description'] .'" href = ' . $file['url'] . '><span class="pb-download-btn__text">Download file</span><span class="sr-only"> ' . $file['description'] . '</span></a>';
+        
       }
     }
     $rows[] = array(
@@ -278,12 +275,6 @@ function hr_reliefweb_document_list($node) {
     '#attached' => array (
       'library' => array(
         array('chosen', 'drupal.chosen'),
-      ),
-      'css' => array (
-        array (
-          'type' => 'file',
-          'data' => drupal_get_path('module', 'hr_reliefweb') . '/css/hr_reliefweb_overview.css',
-        ),
       ),
       'js' => array (
         array (

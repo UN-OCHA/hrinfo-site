@@ -4,11 +4,11 @@
    * Initial template for the dataset list.
    */
 ?>
-
+<h2 class="pb-header">Datasets</h2>
 <div id="datasets-view">
 </div>
 <div id="datasets-list">
-  <table id="datasets-list-table" class="table table-striped">
+  <table id="datasets-list-table" class="table pb-table">
     <thead>
       <tr>
         <th><?php print t('Dataset');  ?></th>
