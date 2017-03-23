@@ -181,7 +181,13 @@ Drupal.behaviors.hidProfilesContacts = {
           var index = window.location.hash.indexOf('?');
           var url = '';
           if (settings.hid_profiles.v2) {
-            url = 'https://api2.dev.humanitarian.id/api/v2/user?limit=' + this.limit + '&offset=' + this.skip + '&operations.list=' + this.listId + '&sort=name';
+            url = 'https://api2.dev.humanitarian.id/api/v2/user?limit=' + this.limit + '&offset=' + this.skip + '&sort=name';
+            if (settings.hid_profiles.bundle) {
+              url = url + '&bundles.list=' + this.listId;
+            }
+            else {
+              url = url + '&operations.list=' + this.listId;
+            }
           }
           else {
             url = window.location.protocol + '//' + window.location.host + '/hid/proxy?api_path=v0/contact/view&locationId=hrinfo:' + settings.hid_profiles.operation_id + '&status=1&type=local&limit=' + this.limit + '&skip=' + this.skip;
@@ -419,6 +425,7 @@ Drupal.behaviors.hidProfilesContacts = {
             val = ui.item.value;
             if (val !== '') {
               this.contactsList.params['organizations.list'] = val;
+              $( "#organizations" ).val( ui.item.label );
             }
             else {
               delete this.contactsList.params['organizations.list'];
@@ -619,7 +626,7 @@ Drupal.behaviors.hidProfilesContacts = {
               response( orgs );
             }
           });
-        },
+        }
       });
     }
     else {
