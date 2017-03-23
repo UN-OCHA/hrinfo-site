@@ -282,6 +282,7 @@ function hid_profiles_local_contacts($node) {
     $settings['operation_id'] = $operation->nid;
     // Get the operation id from the cluster.
     $settings['bundle'] = $node->type == 'hr_bundle' ? $node->title : '';
+    $settings['bundle_id'] = $node->type == 'hr_bundle' ? $node->nid : '';
     $settings['v2'] = variable_get('hid_profiles_v2', FALSE);
     $settings['api_endpoint'] = variable_get('hid_profiles_api_endpoint', NULL);
     $token = hid_profiles_get_token();

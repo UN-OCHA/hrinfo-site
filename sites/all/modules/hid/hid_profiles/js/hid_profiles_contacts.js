@@ -270,7 +270,7 @@ Drupal.behaviors.hidProfilesContacts = {
           var that = this;
           var remote_id = settings.hid_profiles.operation_id;
           if (settings.hid_profiles.bundle) {
-            remote_id = settings.hid_profiles.bundle;
+            remote_id = settings.hid_profiles.bundle_id;
           }
           this.lists.fetch({
             data: { 'remote_id': remote_id },
@@ -456,11 +456,21 @@ Drupal.behaviors.hidProfilesContacts = {
 
         filterByLocation: function(event) {
           var val = $('#locations').val();
-          if (val != '') {
-            this.contactsList.params.address_administrative_area = val;
+          if (settings.hid_profiles.v2) {
+            if (val !== '') {
+              this.contactsList.params['region.name'] = val;
+            }
+            else {
+              delete this.contactsList.params['region.name'];
+            }
           }
           else {
-            delete this.contactsList.params.address_administrative_area;
+            if (val !== '') {
+              this.contactsList.params.address_administrative_area = val;
+            }
+            else {
+              delete this.contactsList.params.address_administrative_area;
+            }
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
