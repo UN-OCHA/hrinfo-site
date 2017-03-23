@@ -277,8 +277,8 @@ Drupal.behaviors.hidProfilesContacts = {
                   var template = _.template($('#contacts_list_table_row').html());
                   var pdf_url = that.contactsList.url();
                   pdf_url = pdf_url.replace('&limit=' + that.numItems + '&offset=' + that.contactsList.skip, '');
-                  var csv_url = pdf_url + '&export=csv';
-                  pdf_url = pdf_url + '&export=pdf';
+                  var csv_url = pdf_url.replace('user', 'user.csv');
+                  pdf_url = pdf_url.replace('user', 'user.pdf');
                   $('#contacts-list-pdf').attr('href', pdf_url);
                   $('#contacts-list-csv').attr('href', csv_url);
                   $('#contacts-list-table tbody').append(template({contacts: contacts.models}));
@@ -411,10 +411,10 @@ Drupal.behaviors.hidProfilesContacts = {
           if (settings.hid_profiles.v2) {
             val = ui.item.value;
             if (val !== '') {
-              this.contactsList.params['organization.list'] = val;
+              this.contactsList.params['organizations.list'] = val;
             }
             else {
-              delete this.contactsList.params['organization.list'];
+              delete this.contactsList.params['organizations.list'];
             }
           }
           else {
