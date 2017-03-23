@@ -408,11 +408,22 @@ Drupal.behaviors.hidProfilesContacts = {
 
         filterByOrganization: function(event, ui) {
           var val = ui.item.label;
-          if (val != '') {
-            this.contactsList.params.organization_name = val;
+          if (settings.hid_profiles.v2) {
+            val = ui.item.value;
+            if (val !== '') {
+              this.contactsList.params['organization.list'] = val;
+            }
+            else {
+              delete this.contactsList.params['organization.list'];
+            }
           }
           else {
-            delete this.contactsList.params.organization_name;
+            if (val != '') {
+              this.contactsList.params.organization_name = val;
+            }
+            else {
+              delete this.contactsList.params.organization_name;
+            }
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
@@ -572,24 +583,46 @@ Drupal.behaviors.hidProfilesContacts = {
       },
     });
 
-    var contact_router = new ContactRouter;
+    var contact_router = new ContactRouter();
 
-    // Autocomplete for organization
-    $('#organizations').autocomplete({
-      source: function (request, response) {
-        $.ajax({
-          url: "/hid/organizations/autocomplete/"+request.term,
-          dataType: "json",
-          success: function( data ) {
-            var orgs = new Array();
-            _.each(data, function(element, index) {
-              orgs.push({'label': element, 'value': element});
-            });
-            response( orgs );
-          }
-        });
-      },
-    });
+    if (settings.hid_profiles.v2) {
+      $('#organizations').autocomplete({
+        source: function (request, response) {
+          $.ajax({
+            url: "https://api2.dev.humanitarian.id/api/v2/list?type=organization&limit=10&name=" + request.term,
+            dataType: "json",
+            headers: {
+              'Authorization': 'Bearer ' + settings.hid_profiles.token
+            },
+            success: function( data ) {
+              var orgs = [];
+              _.each(data, function(element, index) {
+                orgs.push({'label': element.name, 'value': element._id});
+              });
+              response( orgs );
+            }
+          });
+        },
+      });
+    }
+    else {
+      // Autocomplete for organization
+      $('#organizations').autocomplete({
+        source: function (request, response) {
+          $.ajax({
+            url: "/hid/organizations/autocomplete/"+request.term,
+            dataType: "json",
+            success: function( data ) {
+              var orgs = [];
+              _.each(data, function(element, index) {
+                orgs.push({'label': element, 'value': element});
+              });
+              response( orgs );
+            }
+          });
+        },
+      });
+    }
 
     // Chosen configuration
     $('select').chosen({allow_single_deselect: true});
