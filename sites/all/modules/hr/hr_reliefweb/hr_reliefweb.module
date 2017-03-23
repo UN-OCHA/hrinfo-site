@@ -8,6 +8,9 @@
  * Implements hook_ctools_plugin_directory().
  */
 function hr_reliefweb_ctools_plugin_directory($module, $plugin) {
+  if ($module == "panels" && in_array($plugin, array('styles'))) {
+    return "plugins/$plugin";
+  }
   if ($module == 'ctools' && $plugin == 'content_types') {
     return 'plugins/' . $plugin;
   }
@@ -54,7 +57,34 @@ function hr_reliefweb_menu() {
     'file' => 'hr_reliefweb.pages.inc',
   );
 
+  $items['reliefweb/autocomplete'] = array(
+    'title' => 'Reliefweb autocomplete',
+    'page callback' => 'hr_reliefweb_autocomplete',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete($string) {
+  $matches = array();
+  if ($string) {
+    $query = '"' . $string . '"';
+    $data = hr_reliefweb_fetch_documents('', 20, 0, array(), $query);
+
+    if (!empty($data['data'])) {
+      foreach ($data['data'] as $key => $value) {
+        $matches[$value['title']] = $value['title'] . ' (' . $value['id'] . ')';
+      }
+    }
+  }
+
+  drupal_json_output($matches);
 }
 
 /**
@@ -128,7 +158,6 @@ function hr_reliefweb_get_filters($key = NULL) {
     'language.name' => t('Language'),
     'date.original' => t('Original publication date'),
     'date.changed' => t('Date'),
-
   );
 
   if ($key) {
@@ -150,24 +179,8 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
     'limit' => $limit,
     'preset' => 'latest',
 
-    'filter' => array(
-      'operator' => 'AND',
-      'conditions' => array(
-        array(
-          'field' => 'primary_country.iso3',
-          'value' => $country,
-          'operator' => 'OR',
-        ),
-        array(
-          'field' => 'format.name',
-          'value' => 'News and Press Release',
-          'operator' => 'OR',
-          'negate' => TRUE,
-        ),
-      ),
-    ),
-
     'fields[include]' => array(
+      'id',
       'disaster_type.name',
       'url',
       'title',
@@ -182,6 +195,38 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
       'format.name',
     ),
   );
+
+  if ($country) {
+    $params['filter'] = array(
+      'operator' => 'AND',
+      'conditions' => array(
+        array(
+          'field' => 'primary_country.iso3',
+          'value' => $country,
+          'operator' => 'OR',
+        ),
+        array(
+          'field' => 'format.name',
+          'value' => 'News and Press Release',
+          'operator' => 'OR',
+          'negate' => TRUE,
+        ),
+      ),
+    );
+  }
+  else {
+    $params['filter'] = array(
+      'operator' => 'AND',
+      'conditions' => array(
+        array(
+          'field' => 'format.name',
+          'value' => 'News and Press Release',
+          'operator' => 'OR',
+          'negate' => TRUE,
+        ),
+      ),
+    );
+  }
 
   if (!empty($query)) {
     $params['query']['value'] = $query;
@@ -239,6 +284,7 @@ function hr_reliefweb_content($path) {
       $url = $value['fields']['url'];
       $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
       $data_array[$title] = array(
+        'id' => $value['fields']['id'],
         'title' => $title,
         'url' => $url,
         'date_changed' => $value['fields']['date']['changed'],
@@ -302,4 +348,109 @@ function _hr_reliefweb_fix_url($url) {
   $url = str_replace('http://', 'https://', $url);
 
   return $url;
+}
+
+/**
+ * Allowed dropdowns.
+ */
+function hr_reliefweb_get_dropdowns($key = NULL) {
+  $dropdowns = array(
+    'country' => array(
+      'label' => t('Country'),
+      'filter' => 'country',
+    ),
+    'theme' => array(
+      'label' => t('Theme'),
+      'filter' => 'theme',
+    ),
+    'source' => array(
+      'label' => t('Organisation'),
+      'filter' => 'source',
+    ),
+    'format' => array(
+      'label' => t('Document type'),
+      'filter' => 'format',
+    ),
+    'disaster_type' => array(
+      'label' => t('Disaster type'),
+      'filter' => 'disaster_type',
+    ),
+    'language' => array(
+      'label' => t('Language'),
+      'filter' => 'language',
+    ),
+  );
+
+  if ($key) {
+    return $dropdowns[$key]['label'];
+  }
+  else {
+    return $dropdowns;
+  }
+}
+
+/**
+ * Get a list of filters.
+ */
+function hr_reliefweb_get_list_of_filters() {
+  $cache_key = 'hr_reliefweb_get_list_of_filters';
+  $cache = cache_get($cache_key);
+  if ($cache) {
+    return $cache->data;
+  }
+
+  $endpoint = 'https://api.reliefweb.int/v1/reports';
+  $params = array(
+    'appname' => 'hrinfo',
+    'offset' => 0,
+    'limit' => 0,
+    'facets' => array(
+      array(
+        'field' => 'country',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'theme',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'source',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'format',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'disaster_type',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'language',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+    ),
+  );
+
+  $url = $endpoint . '?' . drupal_http_build_query($params);
+
+  $request = drupal_http_request($url);
+  if (isset($request->data)) {
+    $response = drupal_json_decode($request->data);
+    foreach ($response['embedded']['facets'] as $key => $facet) {
+      $dropdowns[$key] = array();
+      foreach ($facet['data'] as $term) {
+        $dropdowns[$key][$term['value']] = $term['value'];
+      }
+    }
+    cache_set($cache_key, $dropdowns, 'cache', REQUEST_TIME + 60 * 60);
+  }
+
+  return $dropdowns;
 }
