@@ -422,10 +422,9 @@ Drupal.behaviors.hidProfilesContacts = {
         filterByOrganization: function(event, ui) {
           var val = ui.item.label;
           if (settings.hid_profiles.v2) {
-            val = ui.item.value;
+            val = ui.item._id;
             if (val !== '') {
               this.contactsList.params['organizations.list'] = val;
-              $( "#organizations" ).val( ui.item.label );
             }
             else {
               delete this.contactsList.params['organizations.list'];
@@ -621,7 +620,7 @@ Drupal.behaviors.hidProfilesContacts = {
             success: function( data ) {
               var orgs = [];
               _.each(data, function(element, index) {
-                orgs.push({'label': element.name, 'value': element._id});
+                orgs.push({'label': element.name, 'value': element.name, '_id': element._id});
               });
               response( orgs );
             }
