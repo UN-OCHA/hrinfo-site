@@ -269,7 +269,11 @@ function hid_profiles_local_contacts($node) {
   // Open access operations list their contacts in public, whereas closed, only
   // show to those logged in and verified.
   $hid_access = $operation_wrapper->field_hid_access->value();
-  if ($hid_access == 'open' ||  $hid->profile->verified) {
+  $version = 1;
+  if (variable_get('hid_profiles_v2', FALSE)) {
+    $version = 2;
+  }
+  if ((($hid_access == 'open' ||  $hid->profile->verified) && $version == 1) || ($version == 2 && !hid_auth_user_is_anonymous())) {
     $templates = array(
       'contacts_list_table_row',
       'contacts_view',
