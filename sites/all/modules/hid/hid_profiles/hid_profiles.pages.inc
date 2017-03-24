@@ -60,6 +60,12 @@ function hid_profiles_settings_form($form, &$form_state) {
     '#default_value' => variable_get('hid_profiles_v2', FALSE),
     '#required' => FALSE,
   );
+  $form['hid_profiles_v2_api_key'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('HID v2 API key'),
+    '#description' => t('API key for HID v2'),
+    '#default_value' => variable_get('hid_profiles_v2_api_key', NULL),
+  );
   return system_settings_form($form);
 }
 

@@ -230,19 +230,42 @@ function hid_profiles_og_features_registry() {
  *  for only local profiles (checked in).
  */
 function hid_profiles_autocomplete_callback($type, $string = '') {
-  $variables['query'] = array(
-    'status' => 1,
-    'text' => $string,
-  );
+  if (variable_get('hid_profiles_v2', FALSE)) {
+    $variables['query'] = array(
+      'sort' => 'name',
+      'limit' => 5,
+      'name' => $string,
+      'appMetadata.hid.login' => 'true'
+    );
+    $variables['headers'] = array(
+      'Authorization' => 'Bearer '.variable_get('hid_profiles_v2_api_key', NULL)
+    );
+    $response = hid_profiles_restclient_get('api/v2/user', $variables);
+    if ($response->code == '200') {
+      $contacts = json_decode($response->data);
+      $out = [];
+      foreach ($contacts as $contact) {
+        $out[$contact->id] = $contact->name;
+      }
+      drupal_json_output($out);
+    }
 
-  // Restrict only to local profiles.
-  if ($type == 'local') {
-    $variables['query']['type'] = 'local';
   }
+  else {
+    $variables['query'] = array(
+      'status' => 1,
+      'text' => $string,
+    );
 
-  $response = hid_profiles_restclient_post('v0/contact/view', $variables);
-  if ($response->code == "200") {
-    drupal_json_output(hid_profiles_autocomplete_helper(json_decode($response->data)));
+    // Restrict only to local profiles.
+    if ($type == 'local') {
+      $variables['query']['type'] = 'local';
+    }
+
+    $response = hid_profiles_restclient_post('v0/contact/view', $variables);
+    if ($response->code == "200") {
+      drupal_json_output(hid_profiles_autocomplete_helper(json_decode($response->data)));
+    }
   }
 
   drupal_exit();
