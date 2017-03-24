@@ -61,7 +61,7 @@ function hid_profiles_settings_form($form, &$form_state) {
     '#required' => FALSE,
   );
   $form['hid_profiles_v2_api_key'] = array(
-    '#type' => 'textfield',
+    '#type' => 'textarea',
     '#title' => t('HID v2 API key'),
     '#description' => t('API key for HID v2'),
     '#default_value' => variable_get('hid_profiles_v2_api_key', NULL),
