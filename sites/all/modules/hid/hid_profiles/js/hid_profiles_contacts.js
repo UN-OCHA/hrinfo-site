@@ -16,7 +16,7 @@ Drupal.behaviors.hidProfilesContacts = {
     Contact = Backbone.Model.extend({
       url: function() {
         if (settings.hid_profiles.v2) {
-          return 'https://api2.dev.humanitarian.id/api/v2/user/' + this.get('_id');
+          return settings.hid_profiles.api_endpoint + '/api/v2/user/' + this.get('_id');
         }
         else {
           return window.location.protocol + '//' + window.location.host + '/hid/proxy?api_path=v0/contact/view&_id='+this.get('_id');
@@ -169,7 +169,7 @@ Drupal.behaviors.hidProfilesContacts = {
     });
 
     Lists = Backbone.Collection.extend({
-      url: 'https://api2.dev.humanitarian.id/api/v2/list'
+      url: settings.hid_profiles.api_endpoint + '/api/v2/list'
     });
 
     ContactList = Backbone.Collection.extend({
@@ -181,7 +181,7 @@ Drupal.behaviors.hidProfilesContacts = {
           var index = window.location.hash.indexOf('?');
           var url = '';
           if (settings.hid_profiles.v2) {
-            url = 'https://api2.dev.humanitarian.id/api/v2/user?limit=' + this.limit + '&offset=' + this.skip + '&sort=name';
+            url = settings.hid_profiles.api_endpoint + '/api/v2/user?limit=' + this.limit + '&offset=' + this.skip + '&sort=name';
             if (settings.hid_profiles.bundle) {
               url = url + '&bundles.list=' + this.listId;
             }
@@ -612,7 +612,7 @@ Drupal.behaviors.hidProfilesContacts = {
       $('#organizations').autocomplete({
         source: function (request, response) {
           $.ajax({
-            url: "https://api2.dev.humanitarian.id/api/v2/list?type=organization&limit=10&name=" + request.term,
+            url: settings.hid_profiles.api_endpoint + "/api/v2/list?type=organization&limit=10&name=" + request.term,
             dataType: "json",
             headers: {
               'Authorization': 'Bearer ' + settings.hid_profiles.token

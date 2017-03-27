@@ -60,6 +60,13 @@ function hid_profiles_settings_form($form, &$form_state) {
     '#default_value' => variable_get('hid_profiles_v2', FALSE),
     '#required' => FALSE,
   );
+  $form['hid_profiles_v2_api_endpoint'] = array(
+    '#type' => 'textfield',
+    '#title' => t('API endpoint (v2)'),
+    '#description' => t('The base URL for endpoints of Humanitarian ID v2 API.'),
+    '#default_value' => variable_get('hid_profiles_v2_api_endpoint', NULL),
+    '#required' => TRUE,
+  );
   $form['hid_profiles_v2_api_key'] = array(
     '#type' => 'textarea',
     '#title' => t('HID v2 API key'),
@@ -294,7 +301,12 @@ function hid_profiles_local_contacts($node) {
     $settings['bundle'] = $node->type == 'hr_bundle' ? $node->title : '';
     $settings['bundle_id'] = $node->type == 'hr_bundle' ? $node->nid : '';
     $settings['v2'] = variable_get('hid_profiles_v2', FALSE);
-    $settings['api_endpoint'] = variable_get('hid_profiles_api_endpoint', NULL);
+    if ($settings['v2']) {
+      $settings['api_endpoint'] = variable_get('hid_profiles_v2_api_endpoint', NULL);
+    }
+    else {
+      $settings['api_endpoint'] = variable_get('hid_profiles_api_endpoint', NULL);
+    }
     $token = hid_profiles_get_token();
     if ($token) {
       $settings['token'] = $token->key;

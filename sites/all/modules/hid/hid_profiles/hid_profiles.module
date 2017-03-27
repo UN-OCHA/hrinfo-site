@@ -720,8 +720,23 @@ function _hid_profiles_save_contact($cid, $values) {
 /**
  * Helper function for making a GET request to the Humanitarian ID Profiles API.
  */
-function hid_profiles_restclient_get($resource_path, $variables = array()) {
-  $variables['endpoint'] = variable_get('hid_profiles_api_endpoint', NULL);
+function hid_profiles_restclient_get($resource_path, $variables = array(), $version = 0) {
+  if ($version == 0) {
+    if (variable_get('hid_profiles_v2', FALSE)) {
+      $variables['endpoint'] = variable_get('hid_profiles_v2_api_endpoint', NULL);
+    }
+    else {
+      $variables['endpoint'] = variable_get('hid_profiles_api_endpoint', NULL);
+    }
+  }
+  else {
+    if ($version == 1) {
+      $variables['endpoint'] = variable_get('hid_profiles_api_endpoint', NULL);
+    }
+    else {
+      $variables['endpoint'] = variable_get('hid_profiles_v2_api_endpoint', NULL);
+    }
+  }
 
   if (empty($variables['endpoint'])) {
     watchdog('hid_profiles', 'Attempted to make a GET request to the Humanitarian ID Profiles API, but the API endpoint, key, or secret is not set.');
