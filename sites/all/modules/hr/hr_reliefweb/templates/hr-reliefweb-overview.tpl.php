@@ -27,7 +27,7 @@
     </div>
   </div>
   <div class="reliefweb--content col-md-9">
-    <h2 class="pb-header">Documents</h2>
+    <h2 class="pb-header">Reports and Maps</h2>
     <?php if ($contents): ?>
     <div class="reliefweb--intro">
       <?php print render($contents); ?>

@@ -4104,11 +4104,19 @@ table.pb-table a, .reliefweb--data table a { font-weight: normal; color: #1565b5
 
 .reliefweb--doc-type--download { padding: 12px 0; }
 
+.reliefweb-tb-link { display: inline-block; width: 60px; height: 60px; background-repeat: no-repeat; background-size: cover; background-position: top center; border: 1px solid #e6e6e6; }
+.reliefweb-tb-link + .reliefweb-tb-link { margin-left: 4px; }
+
+.reliefweb--data .table-responsive { border: none; }
+
+@media (min-width: 450px) { .reliefweb-tb-link { width: 80px; height: 80px; } }
 @media (min-width: 768px) { table.pb-table tbody tr, .reliefweb--data table tbody tr { border: none; }
   table.pb-table tbody tr td, .reliefweb--data table tbody tr td { padding: 12px; border-bottom: 1px solid #ccc; }
-  .reliefweb--data table thead th:first-child { width: 92px; }
+  .reliefweb--data table thead th:first-child { width: 96px; }
   .reliefweb--data table thead th:first-child + th { width: 25%; }
   .reliefweb--data table tbody tr td:first-child { padding: 12px 2px 12px 0; }
+  .reliefweb-tb-link { display: block; margin: 0 auto; }
+  .reliefweb-tb-link + .reliefweb-tb-link { margin: 4px auto 0 auto; }
   .pb-table__th-icon { width: 32px; text-align: center; } }
 .cd-hri-header { font-family: Arial, Tahoma, sans-serif; }
 .cd-hri-header * { margin: 0; padding: 0; box-sizing: border-box; }

@@ -123,9 +123,12 @@ function hr_reliefweb_document_list($node) {
     $downloads = array();
     if (isset($value['files'])) {
       foreach ($value['files'] as $file) {
-        
-          $downloads[] = '<a target="reliefweb" class="pb-btn pb-btn--download" title="' . $file['description'] .'" href = ' . $file['url'] . '><span class="pb-download-btn__text">Download file</span><span class="sr-only"> ' . $file['description'] . '</span></a>';
-        
+        if (isset($file['preview']) && !empty($file['preview'])) {
+          $downloads[] = '<a target="reliefweb" class="reliefweb-tb-link" style="background-image: url(' . $file['preview'] . ')" title="' . $file['description'] .'" href = ' . $file['url'] . '><span class="sr-only">' . t('Download !file', array('!file' => $file['filename'])) . '</span></a>';
+        }
+        else {
+          $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
+        }
       }
     }
     $rows[] = array(

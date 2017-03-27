@@ -85,10 +85,37 @@ table.pb-table, .reliefweb--data table {
 	padding: 12px 0;
 }
 
+.reliefweb-tb-link {
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: top center;
+	border: 1px solid $pb-th-bg;
+
+	& + .reliefweb-tb-link {
+		margin-left: 4px;
+	}
+}
+
+.reliefweb--data .table-responsive {
+	border: none;
+}
+
+@media (min-width: 450px) {
+
+	.reliefweb-tb-link {
+		width: 80px;
+		height: 80px;
+	}
+
+}
 
 @media (min-width: 768px) {
 
 	table.pb-table, .reliefweb--data table {
+
 		tbody tr {
 			border: none;
 
@@ -103,7 +130,7 @@ table.pb-table, .reliefweb--data table {
 
 		thead {
 			th:first-child {
-				width: 92px;
+				width: 96px;
 
 				&+th {
 					width: 25%;
@@ -118,14 +145,15 @@ table.pb-table, .reliefweb--data table {
 		}
 	}
 
-	// #contacts-list-table {
-	// 	thead {
-	// 		th:first-child {
-	// 			width: 32px;
-	// 			text-align: center;
-	// 		}
-	// 	}
-	// }
+	.reliefweb-tb-link {
+		display: block;
+		margin: 0 auto;
+
+		& + .reliefweb-tb-link {
+			margin: 4px auto 0 auto;
+		}
+	}
+
 
 	.pb-table__th-icon {
 		width: 32px;
