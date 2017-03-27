@@ -877,7 +877,7 @@ function hid_profiles_block_view($delta = '') {
         $block['content'] .= hid_profiles_location_select($operation);
         $block['content'] .= hid_profiles_office_select($operation);
         $block['content'] .= hid_profiles_disaster_select($operation);
-        $block['content'] .= '<div class="block block-hid-verified"><span class="verified-icon" title="Verified"><i class="fa fa-check-circle fa-lg"></i></span> <label>Verified User <input type="checkbox" id="verified" name="verified" /></label></div>';
+        $block['content'] .= '<div class="block block-hid-verified"><span class="verified-icon" title="Verified"></span> <label>Verified User <input type="checkbox" id="verified" name="verified" /></label></div>';
       }
       break;
     case 'hid_profiles_sidebar':

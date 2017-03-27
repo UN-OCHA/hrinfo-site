@@ -4030,19 +4030,22 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
 
 .pb-header { color: #1977d4; font-size: 1.5em; text-transform: uppercase; margin: 12px 0; }
 
-.pb-btn { border: 1px solid #1565b5; background: none; color: #1565b5; display: inline-block; padding: 12px 8px; text-align: center; }
+.verified-icon { display: inline-block; width: 16px; height: 16px; background: url("../images/check-circle.svg") no-repeat; background-size: 100%; }
+
+.pb-btn { border: 1px solid #1565b5; background: none; color: #1565b5; display: inline-block; padding: 12px; text-align: center; }
+.pb-btn svg { width: 16px; height: 16px; vertical-align: sub; margin-right: 4px; fill: #1565b5; }
 .pb-btn:hover, .pb-btn:focus { background: #1565b5; color: white; text-decoration: none; }
-td .pb-btn { width: 100%; }
-td .pb-btn + .pb-btn { margin-top: 5px; }
+.pb-btn:hover svg, .pb-btn:focus svg { fill: white; }
 
 .pb-export-button-holder { position: absolute; right: 0; margin-top: -50px; }
+.pb-export-button-holder .pb-btn { width: 140px; }
 
 /* Powered by */
-.poweredby-logo { margin-top: 10px; padding-bottom: 15px; }
+.poweredby-logo { margin-top: 20px; }
 .poweredby-logo p { margin: 0; font-size: 14px; }
 .poweredby-logo a { padding: 0 !important; }
 .poweredby-logo img { display: block; margin: 16px auto; max-width: 100%; width: 180px; }
-.block .poweredby-logo { margin-top: 20px; padding-bottom: 0; }
+.poweredby-logo.reliefweb--powered-by { margin-top: 0; padding-bottom: 30px; }
 
 /* Filters */
 #sidebar-first .block-ar-assessments .block, #sidebar-first .block-ar-assessments .text-search, .reliefweb--sidebar .block, .reliefweb--sidebar .text-search, #sidebar-first .block-hid-profiles .block, #sidebar-first .block-hid-profiles .text-search, #sidebar-first .block-hdx-datasets .block, #sidebar-first .block-hdx-datasets .text-search { margin-top: 8px; padding: 0; border-bottom: 1px solid #ccc; }
@@ -4078,6 +4081,9 @@ td .pb-btn + .pb-btn { margin-top: 5px; }
 #sidebar-first .block-ar-assessments :-ms-input-placeholder, .reliefweb--sidebar :-ms-input-placeholder, #sidebar-first .block-hid-profiles :-ms-input-placeholder, #sidebar-first .block-hdx-datasets :-ms-input-placeholder { color: #3d3d3f; }
 #sidebar-first .block-ar-assessments .block-hid-verified, .reliefweb--sidebar .block-hid-verified, #sidebar-first .block-hid-profiles .block-hid-verified, #sidebar-first .block-hdx-datasets .block-hid-verified { padding: 10px 0 5px 0; }
 #sidebar-first .block-ar-assessments .block-hid-verified label, .reliefweb--sidebar .block-hid-verified label, #sidebar-first .block-hid-profiles .block-hid-verified label, #sidebar-first .block-hdx-datasets .block-hid-verified label { font-weight: normal; font-size: 14px; display: inline-block; }
+#sidebar-first .block-ar-assessments .block-hid-verified .verified-icon, .reliefweb--sidebar .block-hid-verified .verified-icon, #sidebar-first .block-hid-profiles .block-hid-verified .verified-icon, #sidebar-first .block-hdx-datasets .block-hid-verified .verified-icon { vertical-align: text-bottom; }
+
+.reliefweb--sidebar { padding: 10px 15px 15px 15px; }
 
 .reliefweb--removefacets h2 { font-size: 14px; color: #3d3d3f; }
 .reliefweb--removefacets li { margin-bottom: 8px; }

@@ -1,6 +1,6 @@
 <% _.each(contacts, function(contact) { %>
     <tr>
-      <td><% if (contact.getVerified() == true) { %><span title="Verified"><i class="fa fa-check-circle fa-lg"></i></span><% } %></td>
+      <td><% if (contact.getVerified() == true) { %><span class="verified-icon" title="Verified"><i class="sr-only">Verified</i></span><% } %></td>
       <td class="pb-table__td--primary" data-title="Name"><a href="#contact/<%= contact.get('_id') %>"><%= contact.getFullName() %></a></td>
       <td data-title="Clusters"><%= contact.getBundles() %></td>
       <td data-title="Job title"><%= contact.getJobTitle() %></td>
