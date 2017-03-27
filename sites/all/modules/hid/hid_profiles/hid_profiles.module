@@ -1095,7 +1095,7 @@ function hid_profiles_theme() {
         'url' => '',
       ),
       'template' => 'templates/hid-profiles-single-contact-v2'
-    )
+    ),
     'hid_profiles_local_contacts' => array(
       'variables' => array(),
       'template' => 'templates/hid-profiles-local-contacts',
