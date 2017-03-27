@@ -27,7 +27,7 @@ function hid_contact_reference_field_validate($entity_type, $entity, $field, $in
   // Check if the contact exists in HID.
   foreach ($items as $delta => $item) {
     if (is_array($item) && !empty($item['cid'])) {
-      if (!$contact = hid_profiles_get_contact_by_id($item['cid'])) {
+      if (!$contact = hid_profiles_get_contact($item['cid'])) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'invalid_contact_id',
           'message' => t(
@@ -72,12 +72,18 @@ function hid_contact_reference_field_widget_info() {
 function hid_contact_reference_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   $default_value = '';
   if (!empty($items[$delta])) {
-    if ($contact = hid_profiles_get_contact_by_id($items[$delta]['cid'])) {
-      $location = !empty($contact->location) ? $contact->location : t(
-        'Global profile'
-      );
-      $label = "$contact->nameGiven $contact->nameFamily ($location)";
-      $default_value = "$label [id: $contact->_id]";
+    if (variable_get('hid_profiles_v2', FALSE)) {
+      $contact = hid_profiles_get_contact($items[$delta]['cid']);
+      $default_value = $contact->name." [id: $contact->_id]";
+    }
+    else {
+      if ($contact = hid_profiles_get_contact_by_id($items[$delta]['cid'])) {
+        $location = !empty($contact->location) ? $contact->location : t(
+          'Global profile'
+        );
+        $label = "$contact->nameGiven $contact->nameFamily ($location)";
+        $default_value = "$label [id: $contact->_id]";
+      }
     }
   }
 
