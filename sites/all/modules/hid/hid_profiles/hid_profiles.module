@@ -612,6 +612,34 @@ function _hid_profiles_get_contacts($terms = NULL) {
   return $contacts;
 }
 
+function hid_profiles_get_contact($id) {
+  if (variable_get('hid_profiles_v2', FALSE)) {
+    return hid_profiles_v2_get_contact(array('_id' => $id));
+  }
+  else {
+    return hid_profiles_get_contact_by_id($id);
+  }
+}
+
+/**
+ * Get a contact from HID v2
+ */
+function hid_profiles_v2_get_contact($params) {
+  $req = hid_profiles_restclient_get('api/v2/user', array(
+    'query' => $params,
+    'headers' => array(
+      'Authorization' => 'Bearer '.variable_get('hid_profiles_v2_api_key', NULL)
+    )
+  ));
+  $contacts = json_decode($req->data);
+  if ($contacts[0]) {
+    return $contacts[0];
+  }
+  else {
+    return NULL;
+  }
+}
+
 /**
  * Get the contact from HID using the id.
  */
@@ -1061,6 +1089,13 @@ function hid_profiles_theme() {
       ),
       'template' => 'templates/hid-profiles-single-contact',
     ),
+    'hid_profiles_single_contact_v2' => array(
+      'variables' => array(
+        'contact' => array(),
+        'url' => '',
+      ),
+      'template' => 'templates/hid-profiles-single-contact-v2'
+    )
     'hid_profiles_local_contacts' => array(
       'variables' => array(),
       'template' => 'templates/hid-profiles-local-contacts',

@@ -25,17 +25,6 @@ function hid_profiles_drush_command() {
   return $items;
 }
 
-function hid_profiles_v2_get_contact($params) {
-  $req = hid_profiles_restclient_get('api/v2/user', array(
-    'query' => $params,
-    'headers' => array(
-      'Authorization' => 'Bearer '.variable_get('hid_profiles_v2_api_key', NULL)
-    )
-  ));
-  $contacts = json_decode($req->data);
-  return $contacts;
-}
-
 /**
  * Migrate v1 contacts to v2
  */
@@ -48,9 +37,9 @@ function drush_hid_profiles_migrate_v1() {
     $contact = hid_profiles_get_contact_by_id($v1_id, array(), 1);
     $userid = $contact->_profile ? $contact->_profile->userid : '';
     if ($userid) {
-      $contacts = hid_profiles_v2_get_contact(array('user_id' => $userid));
-      if ($contacts[0]) {
-        $v2_id = $contacts[0]->_id;
+      $contact = hid_profiles_v2_get_contact(array('user_id' => $userid));
+      if ($contact) {
+        $v2_id = $contact->_id;
         db_update('field_data_field_hid_contact_ref')
           ->fields(array(
             'field_hid_contact_ref_cid' => $v2_id
