@@ -67,13 +67,13 @@ function hr_reliefweb_featured_document_render($subtype, $conf, $panel_args, $co
     foreach ($data['data'] as $key => $value) {
       $downloads = array();
       if (isset($value['files'])) {
-        foreach ($value['files'] as $file) {
-          if (isset($file['preview']) && !empty($file['preview'])) {
-            $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
-          }
-          else {
-            $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
-          }
+        // Only show first file.
+        $file = reset($value['files']);
+        if (isset($file['preview']) && !empty($file['preview'])) {
+          $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
+        }
+        else {
+          $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
         }
       }
       $rows[] = array(
