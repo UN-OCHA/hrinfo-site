@@ -46,7 +46,7 @@ function drush_hid_profiles_migrate_v1() {
   while ($record = $results->fetchAssoc()) {
     $contact = hid_profiles_get_contact_by_id($record['field_hid_contact_ref_cid'], array(), 1);
     $userid = $contact->_profile ? $contact->_profile->userid : '';
-    if ($userid) {
+    if ($userid) {
       $contacts = hid_profiles_v2_get_contact(array('userid' => $userid));
       print_r($contacts);
     }
