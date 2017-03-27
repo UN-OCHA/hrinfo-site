@@ -214,7 +214,7 @@ function hr_reliefweb_document_list($node) {
         $facets[] = array(
           '#theme' => 'links',
           '#links' => $links,
-          '#prefix' => '<div class="reliefweb--facet"><details><summary>' . t('Filter by !name', array('!name' => hr_reliefweb_get_filters($name))) . '</summary>',
+          '#prefix' => '<div class="reliefweb--facet block"><details><summary>' . t('Filter by !name', array('!name' => hr_reliefweb_get_filters($name))) . '</summary>',
           '#suffix' => '</details></div>',
         );
       }
@@ -238,7 +238,7 @@ function hr_reliefweb_document_list($node) {
         '#type' => 'container',
         'total' => array(
           '#type' => 'markup',
-          '#markup' => format_plural($data['total'], 'One record found', '@count records found'),
+          '#markup' => format_plural($data['total'], 'Filter: <strong>1</strong> item displayed', 'Filter: <strong>@count</strong> items displayed'),
         ),
       ),
 
@@ -246,7 +246,7 @@ function hr_reliefweb_document_list($node) {
         '#type' => 'container',
         'total' => array(
           '#type' => 'markup',
-          '#markup' => l('Remove all filters', $page_url),
+          '#markup' => l('Reset all filters', $page_url),
         ),
         '#access' => count($active_filters) > 0 || !empty($query),
       ),

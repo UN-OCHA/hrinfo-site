@@ -7,14 +7,16 @@
 <div class="reliefweb--wrapper container">
  
   <div class="reliefweb--sidebar col-md-3">
-    <div class="reliefweb--powered-by">
+    <div class="reliefweb--powered-by poweredby-logo">
       <p><?php print t('Powered by'); ?></p>
-      <img src="/<?php print drupal_get_path('module', 'hr_reliefweb') ?>/assets/reliefweb.svg">
+      <a href="http://reliefweb.int/">
+        <img src="/<?php print drupal_get_path('module', 'hr_reliefweb') ?>/assets/reliefweb.svg" alt="ReliefWeb">
+      </a>
     </div>
-    <div class="reliefweb--summary">
+    <div class="reliefweb--summary current-search-filter">
       <?php print render($summary); ?>
     </div>
-    <div class="reliefweb--clearall">
+    <div class="reliefweb--clearall current-reset-filter">
       <?php print render($clearall); ?>
     </div>
     <div class="reliefweb--removefacets">

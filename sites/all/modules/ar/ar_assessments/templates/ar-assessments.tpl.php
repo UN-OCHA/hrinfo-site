@@ -1,4 +1,4 @@
-<h2 class="pb-header">Assessment Registry</h2>
+<h2 class="pb-header">Assessments</h2>
 
 <div id="assessments-view">
 </div>

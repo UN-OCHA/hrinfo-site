@@ -1,37 +1,246 @@
+/* Powered by */
 
-.reliefweb--powered-by {
-  text-align: center;
-  font-size: 1.2rem;
+.poweredby-logo {
+  margin-top: 10px;
+  padding-bottom: 15px;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  a {
+    padding: 0!important;
+  }
+
+  img {
+    display: block;
+    margin: 16px auto;
+    max-width: 100%;
+    width: 180px;
+  }
+
+  .block & {
+    margin-top: 20px;
+    padding-bottom: 0;
+  }
+
 }
 
-.reliefweb--summary {
-  margin: 20px 0;
-  font-size: 1.5rem;
-  font-weight: bold;
+/* Filters */
+
+#sidebar-first .block-ar-assessments, .reliefweb--sidebar,  #sidebar-first .block-hid-profiles, #sidebar-first .block-hdx-datasets {
+
+  .block, .text-search {
+    margin-top: 8px;
+    padding: 0;
+    border-bottom: 1px solid $pb-table-border;
+  }
+
+  .block-current-search {
+    border-bottom: none;
+  }
+
+  .current-search-filter {
+    background: none;
+    font-size: 14px;
+    height: auto;
+    border-bottom: 1px solid $pb-table-border;
+    padding-bottom: 4px;
+
+    strong {
+      color: $p-main;
+    }
+
+    &:before {
+      content: none;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.2;
+    }
+  }
+
+  .current-reset-filter, .reliefweb--removefacets {
+    color: $pb-td-text;
+    font-size: 14px;
+    position: relative;
+    margin: 12px 0;
+
+    a {
+      background: none;
+      width: 100%;
+      height: 16px;
+      position: absolute;
+      top: 10px;
+      padding: 0;
+      margin: 0;
+
+      &:before, &:after {
+        content: "";
+        width: 1px;
+        height: 16px;
+        background: $pb-td-text;
+        position: absolute;
+        top: 0;
+        left: 6px;
+      }
+
+      &:before {
+        transform: rotate(45deg);
+      }
+      &:after {
+        transform: rotate(-45deg);
+      }
+
+      &:hover, &:focus {
+        &:before, &:after {
+          background: $p-main;
+        }
+
+        & + span {
+          color: $p-main;
+        }
+      }
+    }
+
+    span {
+      padding-left: 24px;
+    }
+
+    &.reliefweb--clearall, &.reliefweb--removefacets {
+      a {
+        position: relative;
+        color: $pb-td-text;
+        font-weight: normal;
+        padding-left: 24px;
+        top: auto;
+        display: block;
+        height: auto;
+
+        &:before, &:after {
+          top: 2px;
+        }
+
+        &:hover, &:focus {
+          text-decoration: none;
+          color: $p-main;
+        }
+      }
+    }
+  }
+
+
+  .chosen-single, .form-control, .search {
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    height: auto;
+    padding: 8px 0;
+    transition: padding 0.3s ease;
+    color: $pb-td-text;
+    font-size: 14px;
+    font-weight: normal;
+  }
+
+  .chosen-container {
+    width: 100%!important;
+  }
+
+  .chosen-container-active {
+    background: white;
+
+    .chosen-single {
+      background: none;
+      box-shadow: none;
+      border: none;
+      padding-left: 8px;
+    }
+  }
+
+  .chosen-with-drop {
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+  }
+
+  .chosen-drop {
+    border: none;
+    border-radius: 0;
+  }
+
+  .chosen-container-single .chosen-single div {
+    width: 6px;
+    height: 6px;
+    border-right: 1px solid $pb-td-text;
+    border-bottom: 1px solid $pb-td-text;
+    transform: rotate(45deg);
+    right: 8px;
+    bottom: 18px;
+    top: auto;
+
+    b {
+      display: none;
+    }
+  }
+
+  .search-choice-close {
+    bottom: 14px;
+    top: auto;
+  }
+
+  .form-control, .search {
+    height: 40px;
+
+    &:focus {
+      background: white;
+      padding-left: 4px;
+      outline: none;
+    }
+  }
+
+  ::-webkit-input-placeholder { 
+    color: $pb-td-text;
+  }
+  ::-moz-placeholder {
+    color: $pb-td-text;
+  }
+  :-ms-input-placeholder { 
+    color: $pb-td-text;
+  }
+
+  .block-hid-verified {
+    padding: 10px 0 5px 0;
+
+    label {
+      font-weight: normal;
+      font-size: 14px;
+      display: inline-block;
+    }
+  }
 }
 
-.reliefweb--wrapper .reliefweb--clearall {
-  margin: 20px 0;
+.reliefweb--removefacets {
+  h2 {
+    font-size: 14px;
+    color: $pb-td-text;    
+  }
+
+  li {
+    margin-bottom: 8px;
+  }
+
 }
 
-.reliefweb--wrapper .reliefweb--clearall a {
-  border: solid #333333 1px;
-  padding: 5px;
-  color: #333333;
-}
+.reliefweb--facet {
 
-.reliefweb--removefacets h2 {
-  color: #333333;
-}
+  .invisible {
+    height: 0;
+    margin: 0;
+  }
 
-.reliefweb--wrapper .reliefweb--removefacets a {
-  color: #333333;
-}
+  .processed {
+    display: none;
+  }
 
-.reliefweb--facet .processed {
-  display: none;
-}
-
-.reliefweb--facet select {
-  width: 90%;
 }
