@@ -44,11 +44,24 @@ function drush_hid_profiles_migrate_v1() {
     ->fields('f')
     ->execute();
   while ($record = $results->fetchAssoc()) {
-    $contact = hid_profiles_get_contact_by_id($record['field_hid_contact_ref_cid'], array(), 1);
+    $v1_id = $record['field_hid_contact_ref_cid'];
+    $contact = hid_profiles_get_contact_by_id($v1_id, array(), 1);
     $userid = $contact->_profile ? $contact->_profile->userid : '';
     if ($userid) {
-      $contacts = hid_profiles_v2_get_contact(array('userid' => $userid));
-      print_r($contacts);
+      $contacts = hid_profiles_v2_get_contact(array('user_id' => $userid));
+      if ($contacts[0]) {
+        $v2_id = $contacts[0]->_id;
+        db_update('field_data_field_hid_contact_ref')
+          ->fields(array(
+            'field_hid_contact_ref_cid' => $v2_id
+          ))
+          ->condition('field_hid_contact_ref_cid', $v1_id)
+          ->execute();
+          echo "Updated ".$v2_id."\n";
+      }
+    }
+    else {
+      echo "Could not find ".$v1_id."\n";
     }
   }
 }

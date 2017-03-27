@@ -65,7 +65,7 @@ function hid_profiles_settings_form($form, &$form_state) {
     '#title' => t('API endpoint (v2)'),
     '#description' => t('The base URL for endpoints of Humanitarian ID v2 API.'),
     '#default_value' => variable_get('hid_profiles_v2_api_endpoint', NULL),
-    '#required' => TRUE,
+    '#required' => FALSE,
   );
   $form['hid_profiles_v2_api_key'] = array(
     '#type' => 'textarea',
