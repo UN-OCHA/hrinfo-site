@@ -74,11 +74,12 @@ table.pb-table, .reliefweb--data table {
 }
 
 [class*="reliefweb--doc-type--"] div {
-  background-color: #c13d4a;
+  background-color: $pb-type-bf;
   display: block;
   padding: 12px 8px;
-  color: white;
+  color: $pb-link-text;
   font-weight: bold;
+  line-height: 1.3;
 }
 
 .reliefweb--doc-type--download {

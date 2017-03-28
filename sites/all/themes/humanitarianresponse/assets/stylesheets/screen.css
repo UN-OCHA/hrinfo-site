@@ -4058,7 +4058,7 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
 .poweredby-logo { margin-top: 20px; }
 .poweredby-logo p { margin: 0; font-size: 14px; }
 .poweredby-logo a { padding: 0 !important; }
-.poweredby-logo img { display: block; margin: 16px auto; max-width: 100%; width: 180px; }
+.poweredby-logo img { display: block; margin: 16px auto; max-width: 100%; width: 140px; }
 .poweredby-logo.reliefweb--powered-by { margin-top: 0; padding-bottom: 30px; }
 
 /* Filters */
@@ -4120,7 +4120,7 @@ table.pb-table a, .reliefweb--data table a { font-weight: normal; color: #1565b5
 
 .reliefweb--data table tbody tr td:first-child { text-align: center; }
 
-[class*="reliefweb--doc-type--"] div { background-color: #c13d4a; display: block; padding: 12px 8px; color: white; font-weight: bold; }
+[class*="reliefweb--doc-type--"] div { background-color: #e5edf5; display: block; padding: 12px 8px; color: #1565b5; font-weight: bold; line-height: 1.3; }
 
 .reliefweb--doc-type--download { padding: 12px 0; }
 
