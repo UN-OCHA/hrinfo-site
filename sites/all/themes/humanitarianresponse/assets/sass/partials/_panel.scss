@@ -509,7 +509,7 @@
     border-bottom: 1px solid $pb-border;
     font-weight: normal;
     font-size: 14px;
-    padding: 0 80px 4px 5px;
+    padding: 0 80px 6px 5px;
     margin: 0;
     text-transform: uppercase;
     color: $pb-sub-heading-text;
@@ -592,12 +592,28 @@
     }
 
     .pane-title + .pane-content {
-      background: $pb-grey-bg;
-      padding: 10px 5px;
+      background: white;
+      padding: 15px;
+      border-bottom: none;
+    }
+
+    .table-responsive {
+      border: 0!important;
+      margin-bottom: 0!important;
     }
 
     table {
       border: none;
+      margin: 0;
+
+      tr:nth-of-type(odd), tr:nth-of-type(even) {
+        background: white;
+      }
+
+      td {
+        display: table-cell!important;
+        padding-left: 0!important;
+      }
     }
 
     .reliefweb--doc-type--download {
@@ -606,11 +622,12 @@
 
       img {
         max-width: 100%;
+        border: 1px solid $pb-grey-bg;
       }
     }
 
-    .reliefweb--doc-type--title {
-      padding: 0 0 0 20px;
+    td.reliefweb--doc-type--title {
+      padding: 0 0 0 15px!important;
     }
 
   }
