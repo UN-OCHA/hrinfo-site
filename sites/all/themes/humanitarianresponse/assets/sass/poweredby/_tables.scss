@@ -3,7 +3,7 @@ table.pb-table, .reliefweb--data table {
 
 	thead tr th {
 		background: none;	
-		color: $pb-th-text;
+		color: $pb-sub-heading-text;
 		text-transform: uppercase;
 		font-weight: normal;
 		position: relative;
@@ -19,7 +19,7 @@ table.pb-table, .reliefweb--data table {
 			width: 100%;
 			width: calc(100% - 2px);
 			height: 100%;
-			background: $pb-th-bg;
+			background: $pb-grey-bg;
 			z-index: -1;
 		}
 
@@ -35,10 +35,10 @@ table.pb-table, .reliefweb--data table {
 	}
 
 	tbody tr {
-		border-bottom: 1px solid $pb-table-border;
+		border-bottom: 1px solid $pb-border;
 
 		td {
-			color: $pb-td-text;
+			color: $pb-text;
 			padding: 8px;
 		}
 	}
@@ -92,7 +92,7 @@ table.pb-table, .reliefweb--data table {
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: top center;
-	border: 1px solid $pb-th-bg;
+	border: 1px solid $pb-grey-bg;
 
 	& + .reliefweb-tb-link {
 		margin-left: 4px;
@@ -121,7 +121,7 @@ table.pb-table, .reliefweb--data table {
 
 			td {
 				padding: 12px;
-				border-bottom: 1px solid $pb-table-border;
+				border-bottom: 1px solid $pb-border;
 			}
 		}
 	}

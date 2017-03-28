@@ -33,7 +33,7 @@
   .block, .text-search {
     margin-top: 8px;
     padding: 0;
-    border-bottom: 1px solid $pb-table-border;
+    border-bottom: 1px solid $pb-border;
   }
 
   .block-current-search {
@@ -44,7 +44,7 @@
     background: none;
     font-size: 14px;
     height: auto;
-    border-bottom: 1px solid $pb-table-border;
+    border-bottom: 1px solid $pb-border;
     padding-bottom: 4px;
 
     strong {
@@ -62,7 +62,7 @@
   }
 
   .current-reset-filter, .reliefweb--removefacets {
-    color: $pb-td-text;
+    color: $pb-text;
     font-size: 14px;
     position: relative;
     margin: 12px 0;
@@ -80,7 +80,7 @@
         content: "";
         width: 1px;
         height: 16px;
-        background: $pb-td-text;
+        background: $pb-text;
         position: absolute;
         top: 0;
         left: 6px;
@@ -111,7 +111,7 @@
     &.reliefweb--clearall, &.reliefweb--removefacets {
       a {
         position: relative;
-        color: $pb-td-text;
+        color: $pb-text;
         font-weight: normal;
         padding-left: 24px;
         top: auto;
@@ -139,7 +139,7 @@
     height: auto;
     padding: 8px 0;
     transition: padding 0.3s ease;
-    color: $pb-td-text;
+    color: $pb-text;
     font-size: 14px;
     font-weight: normal;
   }
@@ -171,8 +171,8 @@
   .chosen-container-single .chosen-single div {
     width: 6px;
     height: 6px;
-    border-right: 1px solid $pb-td-text;
-    border-bottom: 1px solid $pb-td-text;
+    border-right: 1px solid $pb-text;
+    border-bottom: 1px solid $pb-text;
     transform: rotate(45deg);
     right: 8px;
     bottom: 18px;
@@ -199,13 +199,13 @@
   }
 
   ::-webkit-input-placeholder { 
-    color: $pb-td-text;
+    color: $pb-text;
   }
   ::-moz-placeholder {
-    color: $pb-td-text;
+    color: $pb-text;
   }
   :-ms-input-placeholder { 
-    color: $pb-td-text;
+    color: $pb-text;
   }
 
   .block-hid-verified {
@@ -230,7 +230,7 @@
 .reliefweb--removefacets {
   h2 {
     font-size: 14px;
-    color: $pb-td-text;    
+    color: $pb-text;    
   }
 
   li {
