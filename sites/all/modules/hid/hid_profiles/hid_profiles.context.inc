@@ -48,7 +48,7 @@ function hid_profiles_context_default_contexts() {
           'module' => 'hid_profiles',
           'delta' => 'hid_profiles_powered_by',
           'region' => 'sidebar_first',
-          'weight' => '0',
+          'weight' => '-30',
         ),
       ),
     ),
