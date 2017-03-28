@@ -126,7 +126,7 @@ function ar_assessments_block_view($delta = '') {
       $block['content'] = '<button class="btn btn-primary btn-lg btn-block" id="back"><i class="fa fa-arrow-circle-left"></i> Back</button>';
       break;
     case 'ar_assessments_powered_by':
-      $block['content'] = '<p class="text-center">Powerered by:</p><a class="text-center" href="http://www.humanitarian.id"><img src="/sites/all/themes/humanitarianresponse/assets/images/ar_logo.svg" alt="Assessments Registry logo" width="250" /></a>';
+      $block['content'] = '<div class="poweredby-logo"><p class="">Powered by</p><a href="http://www.humanitarian.id"><img src="/sites/all/themes/humanitarianresponse/assets/images/ar_logo.svg" alt="Assessments Registry logo" width="250" /></a></div>';
       break;
   }
   return $block;

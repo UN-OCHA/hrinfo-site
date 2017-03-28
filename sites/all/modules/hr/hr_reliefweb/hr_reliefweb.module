@@ -150,14 +150,14 @@ function hr_reliefweb_block_view($delta = '') {
  */
 function hr_reliefweb_get_filters($key = NULL) {
   $filters = array(
-    'source.name' => t('Organisation'),
+    'source.name' => t('Organization'),
     'theme.name' => t('Theme'),
-    'format.name' => t('Document type'),
+    'format.name' => t('Format'),
     'disaster_type' => t('Disaster type'),
     'vulnerable_groups.name' => t('Vulnerable group'),
     'language.name' => t('Language'),
     'date.original' => t('Original publication date'),
-    'date.changed' => t('Date'),
+    'date.changed' => t('Posting Date'),
   );
 
   if ($key) {
