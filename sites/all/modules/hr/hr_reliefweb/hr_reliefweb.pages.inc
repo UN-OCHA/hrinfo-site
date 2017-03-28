@@ -140,7 +140,7 @@ function hr_reliefweb_document_list($node) {
         'class' => 'reliefweb--doc-type--title',
       ),
       array(
-        'data' => isset($value['date_changed']) ? format_date(strtotime($value['date_changed']), 'search_api_facetapi_DAY') : '',
+        'data' => isset($value['date_changed']) ? format_date(strtotime($value['date_changed']), 'custom', 'd F Y') : '',
         'class' => 'reliefweb--doc-type--date',
       ),
       array(
