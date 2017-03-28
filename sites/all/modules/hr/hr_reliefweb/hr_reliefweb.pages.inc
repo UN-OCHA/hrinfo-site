@@ -219,7 +219,10 @@ function hr_reliefweb_document_list($node) {
     }
   }
 
-  // Set active menu item.
+  // Render pager upfront, it needs the full current_path.
+  $pager_html = theme('pager');
+
+  // Set active menu item, it will override current_path.
   menu_set_active_item('node/' . $node->nid . '/reliefweb');
 
   // Return page array.
@@ -267,7 +270,7 @@ function hr_reliefweb_document_list($node) {
       ),
 
       '#pager' => array(
-        '#theme' => 'pager',
+        '#markup' => $pager_html,
       ),
     ),
     '#attached' => array (
