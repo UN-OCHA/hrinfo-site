@@ -114,7 +114,6 @@ function hr_reliefweb_document_list($node) {
     t('Title'),
     t('Date'),
     t('Sources'),
-    t('Location'),
     t('Download'),
   );
 
@@ -147,10 +146,6 @@ function hr_reliefweb_document_list($node) {
       array(
         'data' => isset($value['sources']) ? implode(', ', $value['sources']) : '',
         'class' => 'reliefweb--doc-type--source',
-      ),
-      array(
-        'data' => isset($value['primary_country']) ? $value['primary_country'] : '',
-        'class' => 'reliefweb--doc-type--country',
       ),
       array(
         'data' => !empty($downloads) ? implode(' ', $downloads) : '',
