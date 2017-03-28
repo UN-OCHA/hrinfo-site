@@ -157,7 +157,8 @@ function hr_reliefweb_get_filters($key = NULL) {
     'vulnerable_groups.name' => t('Vulnerable group'),
     'language.name' => t('Language'),
     'date.original' => t('Original publication date'),
-    'date.changed' => t('Posting Date'),
+    'date.changed' => t('Posting date'),
+    'disaster.name' => t('Disaster'),
   );
 
   if ($key) {
