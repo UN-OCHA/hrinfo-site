@@ -32,8 +32,8 @@ function hr_reliefweb_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hr_reliefweb_documents';
-  $feature->name = 'RW Documents';
-  $feature->description = t('Provide access to RW Documents.');
+  $feature->name = 'Reports and Maps';
+  $feature->description = t('Provide access to Reliefweb reports and maps.');
   $feature->components = array(
     'path' => array(
       'node/%node/reliefweb',
@@ -50,7 +50,7 @@ function hr_reliefweb_menu() {
   $items = array();
 
   $items['node/%node/reliefweb'] = array(
-    'title' => 'Reliefweb documents',
+    'title' => 'Reports and Maps',
     'page callback' => 'hr_reliefweb_document_list',
     'page arguments' => array(1),
     'access arguments' => array('access content'),
