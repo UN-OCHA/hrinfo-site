@@ -455,3 +455,168 @@ function hr_reliefweb_get_list_of_filters() {
 
   return $dropdowns;
 }
+
+/**
+ * Map HR Info cluster to ReliefWeb filters.
+ */
+function _hr_reliefweb_map_cluster_to_rw_filters($node) {
+  $filters = array();
+
+  $global_cluster = 0;
+  if (isset($node->field_sector['und'][0]['target_id'])) {
+    $global_cluster = $node->field_sector['und'][0]['target_id'];
+  }
+
+  switch($global_cluster) {
+    case 'Agriculture':
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Agriculture',
+        'operator' => 'OR',
+      );
+      break;
+
+    case 3: // Education
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Education Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Education',
+        'operator' => 'OR',
+      );
+      break;
+
+    case 4: // Emergency Shelter and NFI
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Shelter Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Shelter and Non-Food Items',
+        'operator' => 'OR',
+      );
+      break;
+
+    case 6: // Food Security
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Food Security Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Food and Nutrition',
+        'operator' => 'OR',
+      );
+      break;
+
+    case 7: // Health
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Health Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Health',
+        'operator' => 'OR',
+      );
+      break;
+
+    case 1: // Camp Coordination / Management
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Coordination',
+        'operator' => 'OR',
+      );
+      break;
+
+    case 8: // Logistics
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Logistics Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Logistics and Telecommunications',
+        'operator' => 'OR',
+      );
+      break;
+
+    case 9: // Nutrition
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Nutrition Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Food and Nutrition',
+        'operator' => 'OR',
+      );
+      break;
+
+    case 10: // Protection
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Protection Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Protection and Human Rights',
+        'operator' => 'OR',
+      );
+      break;
+
+    case 5404: // Gender Based Violence
+    case 5403: // Child Protection
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Protection Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Protection and Human Rights',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'vulnerable_groups.name',
+        'value' => 'Children; Women',
+        'operator' => 'OR',
+      );
+      break;
+
+    case 11: // Water Sanitation Hygiene
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'WASH Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Water Sanitation Hygiene',
+        'operator' => 'OR',
+      );
+      break;
+
+    case 5405: // Housing, Land and Property
+    case 5406: // Mine Action
+    case 70192: // Information Management
+    case 5: // Emergency Telecommunications
+    case 2: // Early Recovery
+      break;
+
+    default:
+      break;
+  }
+
+  return $filters;
+}

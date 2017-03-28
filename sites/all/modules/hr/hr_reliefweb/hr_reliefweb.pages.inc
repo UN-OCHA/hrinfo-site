@@ -94,11 +94,7 @@ function hr_reliefweb_document_list($node) {
 
   // Always filter clusters.
   if ($is_cluster) {
-    $filters[] = array(
-      'field' => 'theme.name',
-      'value' => 'Protection and Human Rights',
-      'operator' => 'OR',
-    );
+    $filters = array_merge($filters, _hr_reliefweb_map_cluster_to_rw_filters($node));
   }
 
   // Handle search parameter.
