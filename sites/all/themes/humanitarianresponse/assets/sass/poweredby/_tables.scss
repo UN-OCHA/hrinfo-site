@@ -1,0 +1,163 @@
+table.pb-table, .reliefweb--data table {
+	border: none;
+
+	thead tr th {
+		background: none;	
+		color: $pb-th-text;
+		text-transform: uppercase;
+		font-weight: normal;
+		position: relative;
+		vertical-align: middle;
+		padding: 8px 12px;
+
+		&:before {
+			content: "";
+			display: block;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			width: calc(100% - 2px);
+			height: 100%;
+			background: $pb-th-bg;
+			z-index: -1;
+		}
+
+		&:last-child {
+			&:before {
+				width: 100%;
+			}
+		}
+	}
+
+	th.pb-table__th--narrow {
+		width: 15%;
+	}
+
+	tbody tr {
+		border-bottom: 1px solid $pb-table-border;
+
+		td {
+			color: $pb-td-text;
+			padding: 8px;
+		}
+	}
+
+	tr:nth-of-type(odd), tr:nth-of-type(even) {
+		background: none;
+	}
+
+	td.pb-table__td--primary {
+		font-size: 14px;
+	}
+
+	p {
+		margin-bottom: 8px;
+	}
+
+	td p:last-child {
+		margin-bottom: 0;
+	}
+
+	a {
+		font-weight: normal;
+		color: $pb-link-text;
+	}
+}
+
+.reliefweb--data table {
+	tbody tr {
+		td:first-child {
+			text-align: center;
+		}
+	}
+}
+
+[class*="reliefweb--doc-type--"] div {
+  background-color: #c13d4a;
+  display: block;
+  padding: 12px 8px;
+  color: white;
+  font-weight: bold;
+}
+
+.reliefweb--doc-type--download {
+	padding: 12px 0;
+}
+
+.reliefweb-tb-link {
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: top center;
+	border: 1px solid $pb-th-bg;
+
+	& + .reliefweb-tb-link {
+		margin-left: 4px;
+	}
+}
+
+.reliefweb--data .table-responsive {
+	border: none;
+}
+
+@media (min-width: 450px) {
+
+	.reliefweb-tb-link {
+		width: 80px;
+		height: 80px;
+	}
+
+}
+
+@media (min-width: 768px) {
+
+	table.pb-table, .reliefweb--data table {
+
+		tbody tr {
+			border: none;
+
+			td {
+				padding: 12px;
+				border-bottom: 1px solid $pb-table-border;
+			}
+		}
+	}
+
+	.reliefweb--data table {
+
+		thead {
+			th:first-child {
+				width: 96px;
+
+				&+th {
+					width: 25%;
+				}
+			}
+		}
+
+		tbody tr {
+			td:first-child {
+				padding: 12px 2px 12px 0;
+			}
+		}
+	}
+
+	.reliefweb-tb-link {
+		display: block;
+		margin: 0 auto;
+
+		& + .reliefweb-tb-link {
+			margin: 4px auto 0 auto;
+		}
+	}
+
+
+	.pb-table__th-icon {
+		width: 32px;
+		text-align: center;
+	}
+
+}

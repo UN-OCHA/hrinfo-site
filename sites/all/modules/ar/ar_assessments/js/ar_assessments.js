@@ -405,7 +405,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
       },
 
       defaultRoute: function (actions) {
-        this.navigate('list/1', {trigger: true});
+        this.navigate('table/1', {trigger: true});
       },
 
       table: function(page) {

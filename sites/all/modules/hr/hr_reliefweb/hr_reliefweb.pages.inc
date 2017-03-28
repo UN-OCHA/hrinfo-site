@@ -124,7 +124,7 @@ function hr_reliefweb_document_list($node) {
     if (isset($value['files'])) {
       foreach ($value['files'] as $file) {
         if (isset($file['preview']) && !empty($file['preview'])) {
-          $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
+          $downloads[] = '<a target="reliefweb" class="reliefweb-tb-link" style="background-image: url(' . $file['preview'] . ')" title="' . $file['description'] .'" href = ' . $file['url'] . '><span class="sr-only">' . t('Download !file', array('!file' => $file['filename'])) . '</span></a>';
         }
         else {
           $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
@@ -217,7 +217,7 @@ function hr_reliefweb_document_list($node) {
         $facets[] = array(
           '#theme' => 'links',
           '#links' => $links,
-          '#prefix' => '<div class="reliefweb--facet"><details><summary>' . t('Filter by !name', array('!name' => hr_reliefweb_get_filters($name))) . '</summary>',
+          '#prefix' => '<div class="reliefweb--facet block"><details><summary>' . t('Filter by !name', array('!name' => hr_reliefweb_get_filters($name))) . '</summary>',
           '#suffix' => '</details></div>',
         );
       }
@@ -241,7 +241,7 @@ function hr_reliefweb_document_list($node) {
         '#type' => 'container',
         'total' => array(
           '#type' => 'markup',
-          '#markup' => format_plural($data['total'], 'One record found', '@count records found'),
+          '#markup' => format_plural($data['total'], 'Filter: <strong>1</strong> item displayed', 'Filter: <strong>@count</strong> items displayed'),
         ),
       ),
 
@@ -249,7 +249,7 @@ function hr_reliefweb_document_list($node) {
         '#type' => 'container',
         'total' => array(
           '#type' => 'markup',
-          '#markup' => l('Remove all filters', $page_url),
+          '#markup' => l('Reset all filters', $page_url),
         ),
         '#access' => count($active_filters) > 0 || !empty($query),
       ),
@@ -278,12 +278,6 @@ function hr_reliefweb_document_list($node) {
     '#attached' => array (
       'library' => array(
         array('chosen', 'drupal.chosen'),
-      ),
-      'css' => array (
-        array (
-          'type' => 'file',
-          'data' => drupal_get_path('module', 'hr_reliefweb') . '/css/hr_reliefweb_overview.css',
-        ),
       ),
       'js' => array (
         array (

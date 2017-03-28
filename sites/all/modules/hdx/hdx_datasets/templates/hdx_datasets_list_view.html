@@ -1,7 +1,7 @@
 <% _.each(fields, function(dataset) { %>
    <tr>
-     <td><%= dataset.get('title') %></td>
-     <td><%= dataset.get('last_modified') %></td>
-     <td><%= dataset.get('source') %></td>
+     <td class="pb-table__td--primary" data-title="Title"><%= dataset.get('title') %></td>
+     <td data-title="Last updated"><%= dataset.get('last_modified') %></td>
+     <td data-title="Source"><%= dataset.get('source') %></td>
    </tr>
  <% }); %>

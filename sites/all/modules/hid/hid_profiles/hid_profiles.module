@@ -877,14 +877,14 @@ function hid_profiles_block_view($delta = '') {
         $block['content'] .= hid_profiles_location_select($operation);
         $block['content'] .= hid_profiles_office_select($operation);
         $block['content'] .= hid_profiles_disaster_select($operation);
-        $block['content'] .= '<hr /><span title="Verified"><i class="fa fa-check-circle fa-lg"></i></span> Verified User <input type="checkbox" id="verified" name="verified" /><hr />';
+        $block['content'] .= '<div class="block block-hid-verified"><span class="verified-icon" title="Verified"></span> <label>Verified User <input type="checkbox" id="verified" name="verified" /></label></div>';
       }
       break;
     case 'hid_profiles_sidebar':
       $block['content'] = '<button class="btn btn-primary btn-lg btn-block" id="back"><i class="fa fa-arrow-circle-left"></i> Back</button>';
       break;
     case 'hid_profiles_powered_by':
-      $block['content'] = '<p class="text-center">Powerered by:</p><a class="text-center" href="http://www.humanitarian.id"><img src="/sites/all/themes/humanitarianresponse/assets/images/hid_logo.png" alt="HID logo" /></a>';
+      $block['content'] = '<div class="poweredby-logo"><p>Powered by:</p><a href="http://www.humanitarian.id"><img src="/sites/all/themes/humanitarianresponse/assets/images/hid_logo.png" alt="HID logo" /></a></div>';
       break;
   }
   return $block;

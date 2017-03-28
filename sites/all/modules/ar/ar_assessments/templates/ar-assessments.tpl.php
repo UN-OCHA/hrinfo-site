@@ -1,24 +1,18 @@
+<h2 class="pb-header">Assessments</h2>
+
 <div id="assessments-view">
 </div>
 <div id="assessments-list">
-  <ul class="nav nav-tabs primary">
-    <li class="active" id="li-list"><a href="#list/1" class="active">List</a></li>
-    <li id="li-table"><a href="#table/1">Table</a></li>
-  </ul>
 
   <div id="assessments-list-view">
   </div>
 
-  <table id="assessments-list-table" class="table table-striped">
+  <table id="assessments-list-table" class="table pb-table">
     <thead>
     <tr>
       <th>Title</th>
-      <th>Location(s)</th>
-      <th>Organization(s)</th>
-      <th>Participating Organization(s)</th>
-      <th>Cluster(s)/Sector(s)</th>
-      <th>Status</th>
-      <th>Assessment Date(s)</th>
+      <th>Sources</th>
+      <th class="pb-table__th--narrow">Dates</th>
       <th>Data</th>
     </tr>
     </thead>

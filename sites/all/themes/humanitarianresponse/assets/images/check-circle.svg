@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>check-circle</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="check-circle" fill-rule="nonzero" fill="#1565B5">
+            <path d="M12.6,22.1 C12.1,22.1 11.6,21.9 11.3,21.6 L7.3,17.6 C7.1,17.4 7.1,17 7.3,16.8 C7.5,16.6 7.9,16.6 8.1,16.8 L12.1,20.8 C12.3,21 12.8,21 13,20.8 L23.7,10 C23.9,9.8 24.3,9.8 24.5,10 C24.7,10.2 24.7,10.6 24.5,10.8 L13.9,21.6 C13.5,21.9 13.1,22.1 12.6,22.1 Z" id="Shape"></path>
+            <path d="M16,31.4 C7.5,31.4 0.5,24.5 0.5,16 C0.5,7.5 7.5,0.6 16,0.6 C24.5,0.6 31.4,7.5 31.4,16 C31.3,24.5 24.4,31.4 16,31.4 L16,31.4 Z M16,1.8 C8.1,1.8 1.8,8.2 1.8,16 C1.8,23.8 8.1,30.2 16,30.2 C23.9,30.2 30.2,23.8 30.2,16 C30.2,8.2 23.8,1.8 16,1.8 L16,1.8 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>
