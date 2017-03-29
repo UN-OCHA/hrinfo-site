@@ -884,7 +884,7 @@ function hid_profiles_block_view($delta = '') {
       $block['content'] = '<button class="btn btn-primary btn-lg btn-block" id="back"><i class="fa fa-arrow-circle-left"></i> Back</button>';
       break;
     case 'hid_profiles_powered_by':
-      $block['content'] = '<div class="poweredby-logo"><p>Powered by:</p><a href="http://www.humanitarian.id"><img src="/sites/all/themes/humanitarianresponse/assets/images/hid_logo.png" alt="HID logo" /></a></div>';
+      $block['content'] = '<div class="poweredby-logo"><p>Powered by</p><a href="http://www.humanitarian.id"><img src="/sites/all/themes/humanitarianresponse/assets/images/hid_logo.png" alt="HID logo" /></a></div>';
       break;
   }
   return $block;
