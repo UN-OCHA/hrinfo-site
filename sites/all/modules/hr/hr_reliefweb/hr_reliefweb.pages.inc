@@ -138,9 +138,13 @@ function hr_reliefweb_document_list($node) {
         }
       }
     }
+
+    $type_path = current_path() . "/format.name/" . $value['format'];
+    $type_text = (isset($value['format']) ? $value['format'] : '');
+
     $rows[] = array(
       array(
-        'data' => '<a href="reliefweb/format.name/' . $value['format'] .'" class="reliefweb--doc-type-link">' . (isset($value['format']) ? $value['format'] : '') . '</a>',
+        'data' => l($type_text, $type_path, array('attributes' => array('class' => 'reliefweb--doc-type-link'))),
         'class' => isset($value['format']) ? drupal_html_class('reliefweb--doc-type--' . $value['format']) : '',
       ),
       array(
