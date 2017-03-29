@@ -358,7 +358,7 @@ function hr_reliefweb_get_dropdowns($key = NULL) {
   $dropdowns = array(
     'country' => array(
       'label' => t('Country'),
-      'filter' => 'primary_country.iso3',
+      'filter' => 'primary_country',
     ),
     'theme' => array(
       'label' => t('Theme'),
