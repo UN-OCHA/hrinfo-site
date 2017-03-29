@@ -78,9 +78,9 @@ function ar_assessments_key_assessments_render($subtype, $conf, $panel_args, $co
   $limit = $conf['limit'];
 
   $data = ar_assessments_fetch_assessments($conf['filters'], $conf['limit']);
-  if (!empty($data)) {
+  if (!empty($data['data'])) {
     $links = array();
-    foreach ($data as $key => $value) {
+    foreach ($data['data'] as $key => $value) {
       $links[] = array(
         'title' => $value['label'],
         'href' => $value['url'],

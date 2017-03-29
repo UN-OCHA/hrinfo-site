@@ -241,7 +241,7 @@ function ar_assessments_get_list_of_filters() {
 function ar_assessments_fetch_assessments($filters, $limit = 5) {
   $url = 'https://assessmentregistry.hrinfo.568elmp03.blackmesh.com/api/v1.0/assessments';
   if (!empty($filters)) {
-    $url .= '?limit='.$limit.'&';
+    $url .= '?range='.$limit.'&';
     foreach ($filters as $name => $val) {
       if ($val) {
         $url .= 'filter['.$name.'][value]='.$val.'&';
