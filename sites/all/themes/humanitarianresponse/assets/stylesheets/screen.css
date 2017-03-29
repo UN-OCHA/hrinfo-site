@@ -4117,6 +4117,7 @@ table.pb-table td.pb-table__td--primary, .reliefweb--data table td.pb-table__td-
 table.pb-table p, .reliefweb--data table p { margin-bottom: 8px; }
 table.pb-table td p:last-child, .reliefweb--data table td p:last-child { margin-bottom: 0; }
 table.pb-table a, .reliefweb--data table a { font-weight: normal; color: #1565b5; }
+table.pb-table a.reliefweb--doc-type-link, .reliefweb--data table a.reliefweb--doc-type-link { font-weight: bold; }
 
 .reliefweb--data table tbody tr td:first-child { text-align: center; }
 
