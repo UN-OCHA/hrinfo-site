@@ -220,3 +220,20 @@ function ar_assessments_disaster_select($operation) {
 
   return $output;
 }
+
+function ar_assessments_get_list_of_filters() {
+  $dropdowns = array();
+  $operations = array();
+  $query = new EntityFieldQuery();
+  $entities = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'hr_operation')
+    ->propertyOrderBy('title')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->execute();
+  $nodes = node_load_multiple(array_keys($entities['node']));
+  foreach ($nodes as $node) {
+    $countries[$node->nid] = entity_label('node', $node);
+  }
+  $dropdowns['operations'] = $countries;
+  return $dropdowns;
+}

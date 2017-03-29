@@ -9,7 +9,7 @@ $plugin = array(
   'render callback' => 'ar_assessments_key_assessments_render',
   'defaults' => array(
     'filters' => array(
-      'country' => '',
+      'operation' => '',
       'source' => '',
     ),
     'limit' => 5,
@@ -22,14 +22,14 @@ $plugin = array(
 function ar_assessments_key_assessments_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
 
-  $dropdowns = hr_reliefweb_get_list_of_filters();
+  $dropdowns = ar_assessments_get_list_of_filters();
   $form['filters'] = array(
     '#type' => 'container',
     '#tree' => TRUE,
   );
   foreach ($dropdowns as $name => $dropdown) {
     $form['filters'][$name] = array(
-      '#title' => hr_reliefweb_get_dropdowns($name),
+      '#title' => $name,
       '#type' => 'select',
       '#options' => $dropdown,
       '#required' => FALSE,
