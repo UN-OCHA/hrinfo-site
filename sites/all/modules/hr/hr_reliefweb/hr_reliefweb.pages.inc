@@ -118,7 +118,7 @@ function hr_reliefweb_document_list($node) {
   $data = hr_reliefweb_fetch_documents($country_codes, $limit, $current_page * $limit, $filters, $query);
 
   $headers = array(
-    t('Type'),
+    t('Format'),
     t('Title'),
     t('Date'),
     t('Sources'),
@@ -140,7 +140,7 @@ function hr_reliefweb_document_list($node) {
     }
     $rows[] = array(
       array(
-        'data' => '<div>' . (isset($value['format']) ? $value['format'] : '') . '</div>',
+        'data' => '<a href="reliefweb/format.name/' . $value['format'] .'" class="reliefweb--doc-type-link">' . (isset($value['format']) ? $value['format'] : '') . '</a>',
         'class' => isset($value['format']) ? drupal_html_class('reliefweb--doc-type--' . $value['format']) : '',
       ),
       array(
