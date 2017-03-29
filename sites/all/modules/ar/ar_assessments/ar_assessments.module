@@ -234,7 +234,7 @@ function ar_assessments_get_list_of_filters() {
   foreach ($nodes as $node) {
     $countries[$node->nid] = entity_label('node', $node);
   }
-  $dropdowns['operations'] = $countries;
+  $dropdowns['operation'] = $countries;
   return $dropdowns;
 }
 
@@ -243,7 +243,9 @@ function ar_assessments_fetch_assessments($filters, $limit = 5) {
   if (!empty($filters)) {
     $url .= '?limit='.$limit.'&';
     foreach ($filters as $name => $val) {
-      $url .= 'filter['.$name.'][value]='.$val.'&';
+      if ($val) {
+        $url .= 'filter['.$name.'][value]='.$val.'&';
+      }
     }
   }
   $assessments = array();
