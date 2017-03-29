@@ -24,6 +24,7 @@ function hr_reliefweb_featured_document_edit_form($form, &$form_state) {
     '#title' => t('Document title'),
     '#autocomplete_path' => 'reliefweb/autocomplete',
     '#default_value' => $conf['doc_title'],
+    '#maxlength' => 512,
   );
 
   return $form;
