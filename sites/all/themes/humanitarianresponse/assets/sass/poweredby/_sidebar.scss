@@ -190,11 +190,38 @@
 
   .form-control, .search {
     height: 40px;
+    padding-left: 24px;
 
     &:focus {
       background: white;
-      padding-left: 4px;
       outline: none;
+    }
+  }
+
+  .text-search .input-group, #block-hid-profiles-filters-organization {
+    position: relative;
+
+    &:before {
+      content: "";
+      font-family: FontAwesome;
+      font-style: normal;
+      font-weight: normal;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      width: 16px;
+      height: 16px;
+      position: absolute;
+      bottom: 8px;
+      font-size: 12px;
+      left: 2px;
+      color: $pb-text;
+      z-index: 1;
+    }
+  }
+
+  #block-hid-profiles-filters-organization {
+    &:before {
+      bottom: 10px;
     }
   }
 
