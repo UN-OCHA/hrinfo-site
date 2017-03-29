@@ -67,7 +67,7 @@ function ar_assessments_key_assessments_edit_form_submit($form, &$form_state) {
 function ar_assessments_key_assessments_render($subtype, $conf, $panel_args, $context = NULL) {
   // initial content is blank
   $block = new stdClass();
-  $block->title = 'Reliefweb documents';
+  $block->title = 'Assessments';
   $block->content = '';
 
   // Override title.
@@ -77,25 +77,12 @@ function ar_assessments_key_assessments_render($subtype, $conf, $panel_args, $co
 
   $limit = $conf['limit'];
 
-  // Build parameters.
-  $filters = array();
-  $dropdowns = hr_reliefweb_get_dropdowns();
-  foreach ($conf['filters'] as $filter => $value) {
-    if ($value && isset($dropdowns[$filter])) {
-      $filters[] = array(
-        'field' => $dropdowns[$filter]['filter'],
-        'value' => $value,
-        'operator' => 'AND',
-      );
-    }
-  }
-
-  $data = hr_reliefweb_fetch_documents('', $limit, 0, $filters);
+  $data = ar_assessments_fetch_assessments($conf['filters'], $conf['limit']);
   if (!empty($data['data'])) {
     $links = array();
-    foreach ($data['data'] as $key => $value) {
+    foreach ($data as $key => $value) {
       $links[] = array(
-        'title' => $value['title'],
+        'title' => $value['label'],
         'href' => $value['url'],
       );
     }

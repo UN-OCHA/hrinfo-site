@@ -237,3 +237,19 @@ function ar_assessments_get_list_of_filters() {
   $dropdowns['operations'] = $countries;
   return $dropdowns;
 }
+
+function ar_assessments_fetch_assessments($filters, $limit = 5) {
+  $url = 'https://assessmentregistry.hrinfo.568elmp03.blackmesh.com/api/v1.0/assessments';
+  if (!empty($filters)) {
+    $url .= '?limit='.$limit.'&';
+    foreach ($filters as $name => $val) {
+      $url .= 'filter['.$name.'][value]='.$val.'&';
+    }
+  }
+  $assessments = array();
+  $request = drupal_http_request($url);
+  if (isset($request->data)) {
+    $assessments = drupal_json_decode($request->data);
+  }
+  return $assessments;
+}
