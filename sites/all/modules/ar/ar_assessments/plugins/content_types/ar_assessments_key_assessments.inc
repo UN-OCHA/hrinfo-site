@@ -52,7 +52,7 @@ function ar_assessments_key_assessments_edit_form($form, &$form_state) {
 /**
  * The submit form stores the data in $conf.
  */
-function hr_reliefweb_key_documents_edit_form_submit($form, &$form_state) {
+function ar_assessments_key_assessments_edit_form_submit($form, &$form_state) {
   $form_state['conf']['limit'] = $form_state['values']['limit'];
   foreach ($form_state['values']['filters'] as $key => $value) {
     $form_state['conf']['filters'][$key] = $value;
@@ -64,7 +64,7 @@ function hr_reliefweb_key_documents_edit_form_submit($form, &$form_state) {
  * Run-time rendering of the body of the block (content type)
  * See ctools_plugin_examples for more advanced info
  */
-function hr_reliefweb_key_documents_render($subtype, $conf, $panel_args, $context = NULL) {
+function ar_assessments_key_assessments_render($subtype, $conf, $panel_args, $context = NULL) {
   // initial content is blank
   $block = new stdClass();
   $block->title = 'Reliefweb documents';
