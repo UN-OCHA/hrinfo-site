@@ -59,9 +59,13 @@ table.pb-table, .reliefweb--data table {
 		margin-bottom: 0;
 	}
 
-	a {
+	a {	
 		font-weight: normal;
 		color: $pb-link-text;
+
+		&.reliefweb--doc-type-link { 
+			font-weight: bold;
+		}
 	}
 }
 
