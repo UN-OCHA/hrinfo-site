@@ -1,4 +1,10 @@
 (function($) {
+
+function formatDate (date) {
+  var months = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+  var monthIndex = date.getMonth();        
+  return date.getDate() + ' ' + months[monthIndex] + ' ' + date.getFullYear();
+}
 Drupal.behaviors.arAssessmentsAssessments = {
   attach: function (context, settings) {
     Assessment = Backbone.Model.extend({
@@ -17,21 +23,17 @@ Drupal.behaviors.arAssessmentsAssessments = {
         var d = this.get('date');
         if (d) {
           var from = new Date(d.from);
-          return from.toLocaleDateString();
+          return formatDate(from);
         }
-        else {
-          return '';
-        }
+        return '';
       },
       getToDate: function () {
         var d = this.get('date');
         if (d) {
           var to = new Date(d.to);
-          return to.toLocaleDateString();
+          return formatDate(to);
         }
-        else {
-          return '';
-        }
+        return '';  
       }
     });
 
