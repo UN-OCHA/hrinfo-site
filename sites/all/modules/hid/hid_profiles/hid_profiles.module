@@ -245,7 +245,7 @@ function hid_profiles_autocomplete_callback($type, $string = '') {
       $contacts = json_decode($response->data);
       $out = [];
       foreach ($contacts as $contact) {
-        $out[$contact->id] = $contact->name;
+        $out["$contact->name [id: $contact->id]"] = $contact->name;
       }
       drupal_json_output($out);
     }
