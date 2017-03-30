@@ -85,11 +85,11 @@ function hr_users_user_login(&$edit, $account) {
         $last_name_attribute = 'family_name';
       }
       if (empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) || $profile->field_first_name[LANGUAGE_NONE][0]['value'] != $data['name_given']) {
-        $profile->field_first_name[LANGUAGE_NONE][0]['value'] = $data['name_given'];
+        $profile->field_first_name[LANGUAGE_NONE][0]['value'] = $data[$first_name_attribute];
         $changed = TRUE;
       }
       if (empty($profile->field_last_name[LANGUAGE_NONE][0]['value']) || $profile->field_last_name[LANGUAGE_NONE][0]['value'] != $data['name_family']) {
-        $profile->field_last_name[LANGUAGE_NONE][0]['value'] = $data['name_family'];
+        $profile->field_last_name[LANGUAGE_NONE][0]['value'] = $data[$last_name_attribute];
         $changed = TRUE;
       }
 
