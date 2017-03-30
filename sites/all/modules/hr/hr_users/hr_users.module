@@ -78,6 +78,12 @@ function hr_users_user_login(&$edit, $account) {
     if (!empty($data) && $profile) {
       $changed = FALSE;
 
+      $first_name_attribute = 'name_given';
+      $last_name_attribute = 'name_family';
+      if (variable_get('hid_profiles_v2', FALSE)) {
+        $first_name_attribute = 'given_name';
+        $last_name_attribute = 'family_name';
+      }
       if (empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) || $profile->field_first_name[LANGUAGE_NONE][0]['value'] != $data['name_given']) {
         $profile->field_first_name[LANGUAGE_NONE][0]['value'] = $data['name_given'];
         $changed = TRUE;
@@ -122,7 +128,7 @@ function hr_users_check_profile($redirect = NULL) {
   global $user;
 
   // Commented this code out temporarily until we figure out what's wrong
-  /*$profile = profile2_load_by_user($user, 'main');
+  $profile = profile2_load_by_user($user, 'main');
   if (empty($profile) || empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) || empty($profile->field_last_name[LANGUAGE_NONE][0]['value']) || empty($profile->field_organizations[LANGUAGE_NONE][0]['target_id'])) {
     $_SESSION['hr_users_require_profile'] = 1;
 
@@ -138,7 +144,7 @@ function hr_users_check_profile($redirect = NULL) {
   }
   else {
     unset($_SESSION['hr_users_require_profile']);
-  }*/
+  }
 }
 
 /**
