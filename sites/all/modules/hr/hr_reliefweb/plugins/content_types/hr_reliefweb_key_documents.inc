@@ -83,7 +83,7 @@ function hr_reliefweb_key_documents_render($subtype, $conf, $panel_args, $contex
 
   // Build parameters and path.
   $filters = array();
-  $path = current_path();
+  $path = current_path() . '/reliefweb';
   $dropdowns = hr_reliefweb_get_dropdowns();
   foreach ($conf['filters'] as $filter => $value) {
     if ($value && isset($dropdowns[$filter])) {
@@ -93,7 +93,10 @@ function hr_reliefweb_key_documents_render($subtype, $conf, $panel_args, $contex
         'operator' => 'AND',
       );
 
-      $path .= '/' . $dropdowns[$filter]['filter'] . '/' . $value;
+      // Build path, skipcountry filter.
+      if ($filter !== 'country') {
+        $path .= '/' . $dropdowns[$filter]['filter'] . '/' . $value;
+      }
     }
   }
 
