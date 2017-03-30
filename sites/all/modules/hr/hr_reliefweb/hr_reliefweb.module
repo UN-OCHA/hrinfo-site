@@ -79,7 +79,7 @@ function hr_reliefweb_autocomplete($string) {
 
     if (!empty($data['data'])) {
       foreach ($data['data'] as $key => $value) {
-        $matches[$value['title']] = $value['title'] . ' (' . $value['id'] . ')';
+        $matches[$value['title'] . ' (' . $value['id'] . ')'] = $value['title'];
       }
     }
   }
