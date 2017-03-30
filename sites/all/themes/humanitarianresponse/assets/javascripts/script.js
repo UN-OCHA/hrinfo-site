@@ -2,7 +2,21 @@
 	* @file
 	* Custom scripts for theme.
 */
+
 (function ($) {
+
+	// Add class to powered by pages so they use new style panels.
+	function poweredBy () {
+		var poweredByPages = ['ethiopia'];
+		var poweredByPagesLength = poweredByPages.length;
+
+		for (var i=0; i < poweredByPagesLength; i++) {
+			if (window.location.pathname.indexOf('operations/' + poweredByPages[i]) !== -1) {
+				$('html').addClass('powered-by');				
+			}
+		}
+	}
+	poweredBy();
 
 	$(document).ready(function() {
 
