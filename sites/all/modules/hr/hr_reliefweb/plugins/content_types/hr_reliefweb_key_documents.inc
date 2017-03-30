@@ -81,8 +81,9 @@ function hr_reliefweb_key_documents_render($subtype, $conf, $panel_args, $contex
 
   $limit = $conf['limit'];
 
-  // Build parameters.
+  // Build parameters and path.
   $filters = array();
+  $path = current_path();
   $dropdowns = hr_reliefweb_get_dropdowns();
   foreach ($conf['filters'] as $filter => $value) {
     if ($value && isset($dropdowns[$filter])) {
@@ -91,6 +92,8 @@ function hr_reliefweb_key_documents_render($subtype, $conf, $panel_args, $contex
         'value' => $value,
         'operator' => 'AND',
       );
+
+      $path .= '/' . $dropdowns[$filter]['filter'] . '/' . $value;
     }
   }
 
@@ -103,7 +106,12 @@ function hr_reliefweb_key_documents_render($subtype, $conf, $panel_args, $contex
         'href' => $value['url'],
       );
     }
-    $block->content = theme('links', array('links' => $links));
+
+    $read_more = '<div class="read-more">';
+    $read_more .= '<a href="' . $path . '">' . t('Read more') . '</a>';
+    $read_more .= '</div>';
+
+    $block->content = $read_more . theme('links', array('links' => $links));
   }
 
   return $block;
