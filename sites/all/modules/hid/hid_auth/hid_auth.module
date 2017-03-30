@@ -47,7 +47,9 @@ function hid_auth_menu() {
  * variable that can be checked in hook_drupal_goto_alter().
  */
 function hid_auth_user_logout($account) {
-  $GLOBALS['hid_auth_user_logout'] = 1;
+  if (!variable_get('hid_profiles_v2', FALSE)) {
+    $GLOBALS['hid_auth_user_logout'] = 1;
+  }
 }
 
 /**
@@ -235,7 +237,7 @@ function hid_auth_api_post($resource_path, $data = array()) {
 }
 
 /**
- * Access callback function to replace user_is_anonymous(). If logins are 
+ * Access callback function to replace user_is_anonymous(). If logins are
  * disabled, deny the user automatically. Otherwise, continue on to the
  * original user_is_anonymous() callback.
  */
@@ -373,4 +375,3 @@ function hid_auth_oauthconnector_presets_alter(&$presets) {
     'name' => 'Humanitarian.ID (local)',
   );
 }
-
