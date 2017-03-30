@@ -265,6 +265,43 @@ function hid_profiles_load_template($file, $id) {
   drupal_add_html_head($template_elt, 'hid_profiles_'.$file);
 }
 
+function hid_profiles_local_contacts_no_access($reason) {
+  context_set('context', 'hid_contacts', FALSE);
+
+  $message = '<p>' . t('You can\'t access the contact list for this operation') . '</p>';
+
+  if ($reason == 'anonymous') {
+    $img_path = drupal_get_path('module', 'hid_profiles') . '/img';
+    $message = theme('hid_profiles_local_contacts_hid_login',
+      array(
+        'logo_image' => '/' . $img_path . '/message.png',
+        'login_button' => l('<img src="/' . $img_path . '/log-in-button.png" />', 'connect/oauthconnector_hid_oauth', array('query' => drupal_get_destination(), 'html' => TRUE)),
+        'register_button' => l('<img src="/' . $img_path . '/register-button.png" />', '//app.humanitarian.id/#register', array('html' => TRUE)),
+      )
+    );
+  }
+
+  if ($reason == 'unverified') {
+    $message = '<p>' .
+      t('This contact list has been set as private by our field-level administrators. Only "verified" Humanitarian ID users can access the contact list. For information about "verified" users, please see our <a href="@faq-link">FAQs</a> or contact us at <a href="@mail-hrinfo">info@humanitarian.id</a>.',
+        array(
+          '@faq-link' => 'http://humanitarian.id/faqs',
+          '@mail-hrinfo' => 'mailto:info@humanitarian.id',
+        ))
+      . '</p>';
+  }
+
+  return array(
+    '#theme' => 'hid_profiles_local_contacts_no_access',
+    '#message' => $message,
+    '#attached' => array(
+      'css' => array(
+        drupal_get_path('module', 'hid_profiles') . '/css/hid_profiles_contacts_no_access.css',
+      ),
+    ),
+  );
+}
+
 /**
  * Callback function to display the list of local contacts for a node.
  *
@@ -312,6 +349,10 @@ function hid_profiles_local_contacts($node) {
       $settings['token'] = $token->key;
     }
 
+    if (!$token && $settings['v2']) {
+      return hid_profiles_local_contacts_no_access('anonymous');
+    }
+
     return array(
       '#theme' => 'hid_profiles_local_contacts',
       '#attached' => array(
@@ -332,43 +373,18 @@ function hid_profiles_local_contacts($node) {
     );
   }
   else {
-    context_set('context', 'hid_contacts', FALSE);
-
-    // Display a default generic message for edge cases.
-    $message = '<p>' . t('You can\'t access the contact list for this operation') . '</p>';
 
     // Display the HID Login / Register screen for anonymous users.
     if (hid_auth_user_is_anonymous()) {
-      $img_path = drupal_get_path('module', 'hid_profiles') . '/img';
-      $message = theme('hid_profiles_local_contacts_hid_login',
-        array(
-          'logo_image' => '/' . $img_path . '/message.png',
-          'login_button' => l('<img src="/' . $img_path . '/log-in-button.png" />', 'connect/oauthconnector_hid_oauth', array('query' => drupal_get_destination(), 'html' => TRUE)),
-          'register_button' => l('<img src="/' . $img_path . '/register-button.png" />', '//app.humanitarian.id/#register', array('html' => TRUE)),
-        )
-      );
+      $reason = 'anonymous';
     }
 
     // Display a specific message to non verified users.
     if ($hid_access == 'closed' &&  !$hid->profile->verified) {
-      $message = '<p>' .
-        t('This contact list has been set as private by our field-level administrators. Only "verified" Humanitarian ID users can access the contact list. For information about "verified" users, please see our <a href="@faq-link">FAQs</a> or contact us at <a href="@mail-hrinfo">info@humanitarian.id</a>.',
-          array(
-            '@faq-link' => 'http://humanitarian.id/faqs',
-            '@mail-hrinfo' => 'mailto:info@humanitarian.id',
-          ))
-        . '</p>';
+      $reason = 'unverified';
     }
 
-    return array(
-      '#theme' => 'hid_profiles_local_contacts_no_access',
-      '#message' => $message,
-      '#attached' => array(
-        'css' => array(
-          drupal_get_path('module', 'hid_profiles') . '/css/hid_profiles_contacts_no_access.css',
-        ),
-      ),
-    );
+    return hid_profiles_local_contacts_no_access($reason);
   }
 }
 
