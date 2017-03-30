@@ -121,7 +121,8 @@ function hr_users_init() {
 function hr_users_check_profile($redirect = NULL) {
   global $user;
 
-  $profile = profile2_load_by_user($user, 'main');
+  // Commented this code out temporarily until we figure out what's wrong
+  /*$profile = profile2_load_by_user($user, 'main');
   if (empty($profile) || empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) || empty($profile->field_last_name[LANGUAGE_NONE][0]['value']) || empty($profile->field_organizations[LANGUAGE_NONE][0]['target_id'])) {
     $_SESSION['hr_users_require_profile'] = 1;
 
@@ -137,7 +138,7 @@ function hr_users_check_profile($redirect = NULL) {
   }
   else {
     unset($_SESSION['hr_users_require_profile']);
-  }
+  }*/
 }
 
 /**
