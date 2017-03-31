@@ -7,7 +7,7 @@
 <article class="hid-contact" itemscope itemtype="https://schema.org/Person">
   <span itemprop="name">
     <strong>
-      <?php empty($url) ? print l("$contact->name", $url) : print "$contact->name"; ?>
+      <?php empty($url) ? print "$contact->name" : print l("$contact->name", $url); ?>
     </strong>
   </span>
 
