@@ -38,26 +38,29 @@ function drush_hid_profiles_migrate_v1_panels() {
     ->execute();
   while ($record = $results->fetchAssoc()) {
     $conf = unserialize($record['configuration']);
-    print_r($conf);
-    /*$v1_id = $record['field_hid_contact_ref_cid'];
-    $contact = hid_profiles_get_contact_by_id($v1_id, array(), 1);
-    $userid = $contact->_profile ? $contact->_profile->userid : '';
-    if ($userid) {
-      $contact = hid_profiles_v2_get_contact(array('user_id' => $userid));
-      if ($contact) {
-        $v2_id = $contact->_id;
-        db_update('field_data_field_hid_contact_ref')
-          ->fields(array(
-            'field_hid_contact_ref_cid' => $v2_id
-          ))
-          ->condition('field_hid_contact_ref_cid', $v1_id)
-          ->execute();
-          echo "Updated ".$v2_id."\n";
+    $contacts = $conf['contacts'];
+    $v2_contacts = array();
+    foreach ($contacts as $v1_id) {
+      $contact = hid_profiles_get_contact_by_id($v1_id, array(), 1);
+      $userid = $contact->_profile ? $contact->_profile->userid : '';
+      if ($userid) {
+        $contact = hid_profiles_v2_get_contact(array('user_id' => $userid));
+        if ($contact) {
+          $v2_contacts[] = $contact->_id;
+          echo "Found ".$contact->_id;
+        }
+      }
+      else {
+        echo "Could not find ".$v1_id."\n";
       }
     }
-    else {
-      echo "Could not find ".$v1_id."\n";
-    }*/
+    $conf['contacts'] = $v2_contacts;
+    db_update('panels_pane')
+      ->fields(array(
+        'configuration' => serialize($conf)
+      ))
+      ->condition('pid', $record['pid'])
+      ->execute();
   }
 }
 
