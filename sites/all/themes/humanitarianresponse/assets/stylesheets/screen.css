@@ -4154,7 +4154,9 @@ table.pb-table a.reliefweb--doc-type-link, .reliefweb--data table a.reliefweb--d
   .reliefweb--data table tbody tr td:first-child { padding: 12px 2px 12px 0; }
   .reliefweb-tb-link { display: block; margin: 0 auto; }
   .reliefweb-tb-link + .reliefweb-tb-link { margin: 4px auto 0 auto; }
-  .pb-table__th-icon { width: 32px; text-align: center; } }
+  .pb-table__th-icon { width: 32px; text-align: center; padding: 8px 0 !important; }
+  .pb-table__th-icon .verified-icon { margin-left: -2px; vertical-align: sub; }
+  td.pb-table__th-icon .verified-icon { margin-top: 6px; } }
 .cd-hri-header { font-family: Arial, Tahoma, sans-serif; }
 .cd-hri-header * { margin: 0; padding: 0; box-sizing: border-box; }
 .cd-hri-header button { -webkit-appearance: none; background-color: transparent; border: none; border-radius: none; box-shadow: none; cursor: pointer; }
