@@ -157,8 +157,12 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
       $node = _hr_layout_get_latest($gid, $value['term'], $value['type'], $ocha_org_id);
       if ($node) {
         $ocha_products[$key] = _hr_layout_get_list_item($node, $value['term'], $value['type'], $key, $initial_state, $value['see_more'], t('See more @term', array('@term' => $value['term'].'s')));
-        $ocha_images .= $ocha_products[$key]['image'];
-        $ocha_links .= $ocha_products[$key]['link'];
+        if (isset($ocha_products[$key]['image'])) {
+          $ocha_images .= $ocha_products[$key]['image'];
+        }
+        if (isset($ocha_products[$key]['link'])) {
+          $ocha_links .= $ocha_products[$key]['link'];
+        }
         $i++;
       }
     }

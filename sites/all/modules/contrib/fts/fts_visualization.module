@@ -79,7 +79,7 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
     // Get funding.
     $funding = fts_get_funding($params);
     $data['financed'] = (int) $funding->funding;
-    $data['data'] = $funding->data;
+    $data['data'] = isset($funding->data) ? $funding->data : array();
 
     $data['total'] = (int) $funding->current_requirements;
     $data['not_financed'] = $data['total'] - $data['financed'];

@@ -569,6 +569,12 @@ class panels_renderer_standard {
         $style = panels_get_style($pane->style['style']);
 
         if (isset($style) && isset($style['render pane'])) {
+          if (!isset($pane->style['settings']) && isset($style['settings'])) {
+            $pane->style['settings'] = $style['settings'];
+          }
+          else {
+            $pane->style['settings'] = array();
+          }
           $output = theme($style['render pane'], array('content' => $content, 'pane' => $pane, 'display' => $this->display, 'style' => $style, 'settings' => $pane->style['settings']));
 
           // This could be null if no theme function existed.
