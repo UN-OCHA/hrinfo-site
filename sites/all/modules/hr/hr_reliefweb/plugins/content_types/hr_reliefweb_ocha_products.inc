@@ -137,7 +137,14 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
     $block->title = $conf['override_title_text'];
   }
 
-  foreach (array('sitrep', 'humbul', 'humsnap', 'humdash') as $key) {
+  $ocha_reports = array(
+    'sitrep' => t('Situation Report'),
+    'humbul' => t('Humanitarian Bulletin'),
+    'humsnap' => t('Humanitarian Snapshot'),
+    'humdash' => t('Humanitarian Dashboard'),
+  );
+
+  foreach ($ocha_reports as $key => $label) {
     if (isset($conf['show_' . $key]) && $conf['show_' . $key] == TRUE || !isset($conf['show_' . $key])) {
       $initial_state = 'hidden';
       if ($i == 0) {
@@ -145,7 +152,7 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
       }
       $data = hr_reliefweb_get_latest_document_by_key($key);
       if ($data) {
-        $ocha_products[$key] = _hr_reliefweb_get_list_item($data, 'test', $key, $initial_state, $value['see_more'], t('See more @term', array('@term' => $value['term'].'s')));
+        $ocha_products[$key] = _hr_reliefweb_get_list_item($data, $label, $key, $initial_state, $value['see_more'], t('See more @term', array('@term' => $value['term'].'s')));
         if (isset($ocha_products[$key]['image'])) {
           $ocha_images .= $ocha_products[$key]['image'];
         }
@@ -214,7 +221,7 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
 /**
  * Creates the full list-item by calling the helper functions
  */
-function _hr_reliefweb_get_list_item($value, $term, $prefix, $initial_state = 'hidden', $see_more_link = '', $see_more_title = '') {
+function _hr_reliefweb_get_list_item($value, $label, $prefix, $initial_state = 'hidden', $see_more_link = '', $see_more_title = '') {
   $out = array();
 
   $file = reset($value['files']);
@@ -240,7 +247,7 @@ function _hr_reliefweb_get_list_item($value, $term, $prefix, $initial_state = 'h
   if ($initial_state == 'show') {
     $active_link = 'active';
   }
-  $link = '<a class="list-group-item ' . $active_link . '" id="' . $prefix . '">' . t($term) . ' ' . format_date(strtotime($value['date_changed']), 'custom', 'd F Y') . '</a>';
+  $link = '<a class="list-group-item ' . $active_link . '" id="' . $prefix . '">' . $label . ' ' . format_date(strtotime($value['date_changed']), 'custom', 'd F Y') . '</a>';
   $out['image'] = $img_link;
   $out['link'] = $link;
 
