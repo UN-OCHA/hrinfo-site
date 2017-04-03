@@ -47,7 +47,7 @@ function drush_hid_profiles_migrate_v1_panels() {
         $contact = hid_profiles_v2_get_contact(array('user_id' => $userid));
         if ($contact) {
           $v2_contacts[] = $contact->_id;
-          echo "Found ".$contact->_id;
+          echo "Found ".$contact->_id."\n";
         }
       }
       else {
