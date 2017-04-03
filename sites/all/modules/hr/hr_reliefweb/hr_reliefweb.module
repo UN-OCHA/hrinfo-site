@@ -68,40 +68,46 @@ function hr_reliefweb_menu() {
   $items['reliefweb/hno/autocomplete'] = array(
     'title' => 'Reliefweb autocomplete hno',
     'page callback' => 'hr_reliefweb_autocomplete_hno',
-    'page arguments' => array(2),
+    'page arguments' => array(3),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
   $items['reliefweb/srp/autocomplete'] = array(
     'title' => 'Reliefweb autocomplete srp',
     'page callback' => 'hr_reliefweb_autocomplete_srp',
-    'page arguments' => array(2),
+    'page arguments' => array(3),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
   $items['reliefweb/monr/autocomplete'] = array(
     'title' => 'Reliefweb autocomplete monr',
     'page callback' => 'hr_reliefweb_autocomplete_monr',
-    'page arguments' => array(2),
+    'page arguments' => array(3),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
   $items['reliefweb/opr/autocomplete'] = array(
     'title' => 'Reliefweb autocomplete opr',
     'page callback' => 'hr_reliefweb_autocomplete_opr',
-    'page arguments' => array(2),
+    'page arguments' => array(3),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
   $items['reliefweb/orp/autocomplete'] = array(
     'title' => 'Reliefweb autocomplete orp',
     'page callback' => 'hr_reliefweb_autocomplete_orp',
-    'page arguments' => array(2),
+    'page arguments' => array(3),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
 
   return $items;
+}
+
+function hr_reliefweb_url_outbound_alter(&$path, &$options, $original_path) {
+  if (strpos($path, 'autocomplete') !== false && strpos($path, 'reliefweb') !== false) {
+    $options['script'] = '';
+  }
 }
 
 /**
@@ -111,7 +117,7 @@ function hr_reliefweb_autocomplete($string) {
   $matches = array();
   if ($string) {
     $query = '"' . $string . '"';
-    $data = hr_reliefweb_fetch_documents('', 20, 0, array(), $query);
+    $data = hr_reliefweb_fetch_documents('', 20, 0, array(), $query, TRUE);
 
     if (!empty($data['data'])) {
       foreach ($data['data'] as $key => $value) {
@@ -127,35 +133,90 @@ function hr_reliefweb_autocomplete($string) {
  * Autocomplete callback.
  */
 function hr_reliefweb_autocomplete_hno($string) {
-  return hr_reliefweb_autocomplete($string);
+  hr_reliefweb_autocomplete($string);
 }
 
 /**
  * Autocomplete callback.
  */
 function hr_reliefweb_autocomplete_srp($string) {
-  return hr_reliefweb_autocomplete($string);
+  hr_reliefweb_autocomplete($string);
 }
 
 /**
  * Autocomplete callback.
  */
 function hr_reliefweb_autocomplete_monr($string) {
-  return hr_reliefweb_autocomplete($string);
+  hr_reliefweb_autocomplete($string);
 }
 
 /**
  * Autocomplete callback.
  */
 function hr_reliefweb_autocomplete_opr($string) {
-  return hr_reliefweb_autocomplete($string);
+  hr_reliefweb_autocomplete($string);
 }
 
 /**
  * Autocomplete callback.
  */
 function hr_reliefweb_autocomplete_orp($string) {
-  return hr_reliefweb_autocomplete($string);
+  hr_reliefweb_autocomplete($string);
+}
+
+function hr_reliefweb_get_latest_document_by_key($key) {
+  $filters = array();
+
+  switch ($key) {
+    case 'sitrep':
+      $filters[] = array(
+        'field' => 'ocha_product.name',
+        'value' => 'Situation Report',
+        'operator' => 'AND',
+      );
+      break;
+
+    case 'humbul':
+      $filters[] = array(
+        'field' => 'ocha_product.name',
+        'value' => 'Humanitarian Bulletin',
+        'operator' => 'AND',
+      );
+      break;
+
+    case 'humsnap':
+      $filters[] = array(
+        'field' => 'ocha_product.name',
+        'value' => 'Humanitarian Snapshot',
+        'operator' => 'AND',
+      );
+      break;
+
+    case 'humdash':
+      $filters[] = array(
+        'field' => 'ocha_product.name',
+        'value' => 'Humanitarian Dashboard',
+        'operator' => 'AND',
+      );
+      break;
+
+    default:
+      $filters[] = array(
+        'field' => 'ocha_product.name',
+        'value' => 'Situation Report',
+        'operator' => 'AND',
+      );
+      break;
+
+  }
+
+
+  $data = hr_reliefweb_fetch_documents('', 1, 0, $filters, NULL, TRUE);
+  if (isset($data['data'])) {
+    $report = array_shift($data['data']);
+    return $report;
+  }
+  return FALSE;
 }
 
 /**
@@ -243,7 +304,7 @@ function hr_reliefweb_get_filters($key = NULL) {
 /**
  * Fetch documents from Reliefweb.
  */
-function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filters = array(), $query = NULL) {
+function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filters = array(), $query = NULL, $without_facets = FALSE) {
   $endpoint = 'https://api.reliefweb.int/v1/reports';
   $params = array(
     'appname' => 'hrinfo',
@@ -308,21 +369,23 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
     $params['filter']['conditions'] = array_merge($params['filter']['conditions'], $filters);
   }
 
-  $allowed_filters = hr_reliefweb_get_filters();
-  foreach ($allowed_filters as $key => $allowed_filter) {
-    // Date is a special case, needs an interval.
-    if (strpos($key, 'date') !== FALSE) {
-      $params['facets'][] = array(
-        'field' => $key,
-        'interval' => 'month',
-      );
-    }
-    else {
-      $params['facets'][] = array(
-        'field' => $key,
-        'limit' => 2000,
-        'sort' => 'value:asc',
-      );
+  if (!$without_facets) {
+    $allowed_filters = hr_reliefweb_get_filters();
+    foreach ($allowed_filters as $key => $allowed_filter) {
+      // Date is a special case, needs an interval.
+      if (strpos($key, 'date') !== FALSE) {
+        $params['facets'][] = array(
+          'field' => $key,
+          'interval' => 'month',
+        );
+      }
+      else {
+        $params['facets'][] = array(
+          'field' => $key,
+          'limit' => 2000,
+          'sort' => 'value:asc',
+        );
+      }
     }
   }
 
@@ -345,10 +408,12 @@ function hr_reliefweb_content($path) {
     $total_count = $response['totalCount'];
 
     // Re-order facets.
-    $facets = array();
-    $allowed_filters = hr_reliefweb_get_filters();
-    foreach ($allowed_filters as $key => $allowed_filter) {
-      $facets[$key] = $response['embedded']['facets'][$key];
+    if (isset($response['embedded'])) {
+      $facets = array();
+      $allowed_filters = hr_reliefweb_get_filters();
+      foreach ($allowed_filters as $key => $allowed_filter) {
+        $facets[$key] = $response['embedded']['facets'][$key];
+      }
     }
 
     $data = $response['data'];

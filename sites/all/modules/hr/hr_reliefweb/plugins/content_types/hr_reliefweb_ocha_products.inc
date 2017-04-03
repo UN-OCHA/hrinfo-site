@@ -137,6 +137,112 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
     $block->title = $conf['override_title_text'];
   }
 
-  $block->content = 'No output yet';
+  foreach (array('sitrep', 'humbul', 'humsnap', 'humdash') as $key) {
+    if (isset($conf['show_' . $key]) && $conf['show_' . $key] == TRUE || !isset($conf['show_' . $key])) {
+      $initial_state = 'hidden';
+      if ($i == 0) {
+        $initial_state = 'show';
+      }
+      $data = hr_reliefweb_get_latest_document_by_key($key);
+      if ($data) {
+        $ocha_products[$key] = _hr_reliefweb_get_list_item($data, 'test', $key, $initial_state, $value['see_more'], t('See more @term', array('@term' => $value['term'].'s')));
+        if (isset($ocha_products[$key]['image'])) {
+          $ocha_images .= $ocha_products[$key]['image'];
+        }
+        if (isset($ocha_products[$key]['link'])) {
+          $ocha_links .= $ocha_products[$key]['link'];
+        }
+        $i++;
+      }
+    }
+  }
+
+
+  $block->content = '<div class="clearfix hr-layout-operation-standard">
+  <ul class="nav nav-tabs" role="tablist">';
+  if (!empty($hpc)) {
+    $block->content .= '<li class="active"><a href="#hpc" role="tab" data-toggle="tab">' . t('Response Planning') . '</a></li>';
+    $block->content .= '<li>';
+  }
+  else {
+    $block->content .= '<li class="active">';
+  }
+  $block->content .= '<a href="#ocha" role="tab" data-toggle="tab">' . t('OCHA Products') . '</a></li>
+  </ul>
+
+  <div class="tab-content">';
+  if (!empty($hpc)) {
+    $block->content .= '<div class="tab-pane active" id="hpc">
+      <div class="row">
+        <div class="col-xs-4">' . $hpc_images . '</div>
+        <div class="col-xs-8 hr-layout-operation-standard-links">
+          <div class="list-group">' . $hpc_links . '</div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane" id="ocha">';
+  }
+  else {
+    $block->content .= '<div class="tab-pane active" id="ocha">';
+  }
+  $block->content .= '<div class="col-xs-4">' . $ocha_images . '</div>
+      <div class="col-xs-8 hr-layout-operation-standard-links">
+        <div class="list-group">' . $ocha_links . '</div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script type="text/javascript">
+    (function($) {
+      $(".hr-layout-operation-standard-links a").hover(
+        function () {
+          $(".hr-layout-operation-standard .tab-pane:visible a").removeClass("active");
+          $(".hr-layout-operation-standard .tab-pane:visible .hr-thumbnail").removeClass("show");
+          $(".hr-layout-operation-standard .tab-pane:visible .hr-thumbnail").addClass("hidden");
+          $( this ).addClass("active");
+          var selector = "#" + $( this ).attr("id") + "-thumbnail";
+          $(selector).removeClass("hidden");
+          $(selector).addClass("show");
+        },
+        function() { });
+    })(jQuery);
+  </script>';
   return $block;
+}
+
+/**
+ * Creates the full list-item by calling the helper functions
+ */
+function _hr_reliefweb_get_list_item($value, $term, $prefix, $initial_state = 'hidden', $see_more_link = '', $see_more_title = '') {
+  $out = array();
+
+  $file = reset($value['files']);
+  if (isset($file['preview']) && !empty($file['preview'])) {
+    $img_link = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
+  }
+  else {
+    $img_link = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
+  }
+
+  $more_link = '';
+  if (!empty($see_more_link)) {
+    $more_link = l($see_more_title, $see_more_link, array('attributes' => array('class' => 'hr-layout-see-more')));
+  }
+  $img_link = '<div id="' . $prefix . '-thumbnail" class="hr-thumbnail ' . $initial_state . '">' . $img_link . $more_link . '</div>';
+  $date_string = '';
+  if (!empty($node->field_publication_date)) {
+    $date = new DateObject($node->field_publication_date[LANGUAGE_NONE][0]['value'], $node->field_publication_date[LANGUAGE_NONE][0]['timezone_db']);
+    $date_string = ' - '.date_format_date($date, 'custom', 'd M Y');
+    $out['date'] = $node->field_publication_date[LANGUAGE_NONE][0]['value'];
+  }
+  $active_link = '';
+  if ($initial_state == 'show') {
+    $active_link = 'active';
+  }
+  $link = '<a class="list-group-item ' . $active_link . '" id="' . $prefix . '">' . t($term) . ' ' . format_date(strtotime($value['date_changed']), 'custom', 'd F Y') . '</a>';
+  $out['image'] = $img_link;
+  $out['link'] = $link;
+
+  return $out;
 }
