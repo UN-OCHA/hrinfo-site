@@ -65,35 +65,35 @@ function hr_reliefweb_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['reliefweb/autocomplete-hno'] = array(
+  $items['reliefweb/hno/autocomplete'] = array(
     'title' => 'Reliefweb autocomplete hno',
     'page callback' => 'hr_reliefweb_autocomplete_hno',
     'page arguments' => array(2),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-  $items['reliefweb/autocomplete-srp'] = array(
+  $items['reliefweb/srp/autocomplete'] = array(
     'title' => 'Reliefweb autocomplete srp',
     'page callback' => 'hr_reliefweb_autocomplete_srp',
     'page arguments' => array(2),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-  $items['reliefweb/autocomplete-monr'] = array(
+  $items['reliefweb/monr/autocomplete'] = array(
     'title' => 'Reliefweb autocomplete monr',
     'page callback' => 'hr_reliefweb_autocomplete_monr',
     'page arguments' => array(2),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-  $items['reliefweb/autocomplete-opr'] = array(
+  $items['reliefweb/opr/autocomplete'] = array(
     'title' => 'Reliefweb autocomplete opr',
     'page callback' => 'hr_reliefweb_autocomplete_opr',
     'page arguments' => array(2),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
-  $items['reliefweb/autocomplete-orp'] = array(
+  $items['reliefweb/orp/autocomplete'] = array(
     'title' => 'Reliefweb autocomplete orp',
     'page callback' => 'hr_reliefweb_autocomplete_orp',
     'page arguments' => array(2),

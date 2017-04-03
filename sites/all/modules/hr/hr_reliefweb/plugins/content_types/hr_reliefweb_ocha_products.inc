@@ -40,7 +40,7 @@ function hr_reliefweb_ocha_products_edit_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Humanitarian Needs Overview'),
     '#default_value' => $conf['hno_title'],
-    '#autocomplete_path' => 'reliefweb/autocomplete-hno',
+    '#autocomplete_path' => 'reliefweb/hno/autocomplete',
     '#maxlength' => 512,
   );
 
@@ -48,7 +48,7 @@ function hr_reliefweb_ocha_products_edit_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Strategic Response Plan'),
     '#default_value' => $conf['srp_title'],
-    '#autocomplete_path' => 'reliefweb/autocomplete-srp',
+    '#autocomplete_path' => 'reliefweb/srp/autocomplete',
     '#maxlength' => 512,
   );
 
@@ -56,7 +56,7 @@ function hr_reliefweb_ocha_products_edit_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Periodic Monitoring Report'),
     '#default_value' => $conf['monr_title'],
-    '#autocomplete_path' => 'reliefweb/autocomplete-monr',
+    '#autocomplete_path' => 'reliefweb/monr/autocomplete',
     '#maxlength' => 512,
   );
 
@@ -64,7 +64,7 @@ function hr_reliefweb_ocha_products_edit_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Operational Peer Review Summary'),
     '#default_value' => $conf['opr_title'],
-    '#autocomplete_path' => 'reliefweb/autocomplete-opr',
+    '#autocomplete_path' => 'reliefweb/opr/autocomplete',
     '#maxlength' => 512,
   );
 
@@ -72,7 +72,7 @@ function hr_reliefweb_ocha_products_edit_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Other Response plan'),
     '#default_value' => $conf['orp_title'],
-    '#autocomplete_path' => 'reliefweb/autocomplete-orp',
+    '#autocomplete_path' => 'reliefweb/orp/autocomplete',
     '#maxlength' => 512,
   );
 
