@@ -288,7 +288,7 @@ Drupal.behaviors.hidProfilesContacts = {
                 success: function (contacts) {
                   var template = _.template($('#contacts_list_table_row').html());
                   var pdf_url = that.contactsList.url();
-                  pdf_url = pdf_url.replace('&limit=' + that.numItems + '&offset=' + that.contactsList.skip, '');
+                  pdf_url = pdf_url.replace('&limit=' + that.contactsList.limit + '&offset=' + that.contactsList.skip, '');
                   pdf_url = pdf_url + '&token=' + settings.hid_profiles.token;
                   var csv_url = pdf_url.replace('user', 'user.csv');
                   pdf_url = pdf_url.replace('user', 'user.pdf');
