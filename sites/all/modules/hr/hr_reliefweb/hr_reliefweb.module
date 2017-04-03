@@ -65,6 +65,42 @@ function hr_reliefweb_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['reliefweb/autocomplete-hno'] = array(
+    'title' => 'Reliefweb autocomplete hno',
+    'page callback' => 'hr_reliefweb_autocomplete_hno',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['reliefweb/autocomplete-srp'] = array(
+    'title' => 'Reliefweb autocomplete srp',
+    'page callback' => 'hr_reliefweb_autocomplete_srp',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['reliefweb/autocomplete-monr'] = array(
+    'title' => 'Reliefweb autocomplete monr',
+    'page callback' => 'hr_reliefweb_autocomplete_monr',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['reliefweb/autocomplete-opr'] = array(
+    'title' => 'Reliefweb autocomplete opr',
+    'page callback' => 'hr_reliefweb_autocomplete_opr',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['reliefweb/autocomplete-orp'] = array(
+    'title' => 'Reliefweb autocomplete orp',
+    'page callback' => 'hr_reliefweb_autocomplete_orp',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -85,6 +121,41 @@ function hr_reliefweb_autocomplete($string) {
   }
 
   drupal_json_output($matches);
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete_hno($string) {
+  return hr_reliefweb_autocomplete($string);
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete_srp($string) {
+  return hr_reliefweb_autocomplete($string);
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete_monr($string) {
+  return hr_reliefweb_autocomplete($string);
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete_opr($string) {
+  return hr_reliefweb_autocomplete($string);
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete_orp($string) {
+  return hr_reliefweb_autocomplete($string);
 }
 
 /**
