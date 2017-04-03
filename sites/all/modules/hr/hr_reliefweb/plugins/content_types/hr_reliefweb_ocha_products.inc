@@ -137,8 +137,7 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
     $block->title = $conf['override_title_text'];
   }
 
-    $block->content = 'No output yet';
-  }
+  $block->content = 'No output yet';
 
   return $block;
 }
