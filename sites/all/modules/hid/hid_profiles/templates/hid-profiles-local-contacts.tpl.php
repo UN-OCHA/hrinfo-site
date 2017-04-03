@@ -20,7 +20,7 @@
   <table id="contacts-list-table" class="table pb-table">
     <thead>
     <tr>
-      <th class="pb-table__th-icon"><span class="sr-only">Verified</span></th>
+      <th class="pb-table__th-icon"><span class="verified-icon" title="Verified"><i class="sr-only">Verified</i></span></th>
       <th>Name</th>
       <th>Clusters</th>
       <th>Job Title</th>

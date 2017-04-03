@@ -169,6 +169,18 @@ table.pb-table, .reliefweb--data table {
 	.pb-table__th-icon {
 		width: 32px;
 		text-align: center;
+		padding: 8px 0!important;
+
+		.verified-icon {
+			margin-left: -2px;
+			vertical-align: sub;
+		}
+	}
+
+	td.pb-table__th-icon {
+		.verified-icon {
+			margin-top: 6px;
+		}
 	}
 
 }

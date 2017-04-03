@@ -117,6 +117,11 @@ class panels_renderer_ipe extends panels_renderer_editor {
     drupal_add_library('system', 'ui.droppable');
     drupal_add_library('system', 'ui.sortable');
 
+    // Store original path to fake it when rendering pane content.
+    if (strpos($_GET['q'], 'panels/ajax') !== 0) {
+      $_SESSION['panels_ipe_fake_path'] = $_GET;
+    }
+
     parent::add_meta();
   }
 
@@ -191,6 +196,12 @@ class panels_renderer_ipe extends panels_renderer_editor {
       return parent::render_pane_content($pane);
     }
 
+    // Fake the path to provide better context.
+    if (!empty($_SESSION['panels_ipe_fake_path'])) {
+      $original_path = $_GET;
+      $_GET = $_SESSION['panels_ipe_fake_path'];
+    }
+
     if (!empty($pane->shown) && panels_pane_access($pane, $this->display)) {
       $content = parent::render_pane_content($pane);
     }
@@ -209,6 +220,11 @@ class panels_renderer_ipe extends panels_renderer_editor {
       $content->type = 'panels_ipe';
       $content->subtype = 'panels_ipe';
       $pane->IPE_empty = TRUE;
+    }
+
+    // Restore the path.
+    if (isset($original_path)) {
+      $_GET = $original_path;
     }
 
     return $content;
