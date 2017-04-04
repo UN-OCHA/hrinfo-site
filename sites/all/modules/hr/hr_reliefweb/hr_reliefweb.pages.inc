@@ -170,10 +170,12 @@ function hr_reliefweb_document_list($node) {
   if (!empty($active_filters)) {
     $links = array();
     foreach ($active_filters as $active_filter) {
-      $links[] = array(
-        'title' => hr_reliefweb_get_filters($active_filter['name']) . ': ' . $active_filter['value'],
-        'href' => str_replace($active_filter['path'], '', drupal_get_path_alias()),
-      );
+      if (hr_reliefweb_get_filters($active_filter['name'])) {
+        $links[] = array(
+          'title' => hr_reliefweb_get_filters($active_filter['name']) . ': ' . $active_filter['value'],
+          'href' => str_replace($active_filter['path'], '', drupal_get_path_alias()),
+        );
+      }
     }
     $remove_facets = array(
       '#theme' => 'links',

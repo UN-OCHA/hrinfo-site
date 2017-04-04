@@ -137,14 +137,10 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
     $block->title = $conf['override_title_text'];
   }
 
-  $ocha_reports = array(
-    'sitrep' => t('Situation Report'),
-    'humbul' => t('Humanitarian Bulletin'),
-    'humsnap' => t('Humanitarian Snapshot'),
-    'humdash' => t('Humanitarian Dashboard'),
-  );
+  $path = current_path() . '/reliefweb';
 
-  foreach ($ocha_reports as $key => $label) {
+  $ocha_reports = hr_reliefweb_get_ocha_reports();
+  foreach ($ocha_reports as $key => $ocha_report) {
     if (isset($conf['show_' . $key]) && $conf['show_' . $key] == TRUE || !isset($conf['show_' . $key])) {
       $initial_state = 'hidden';
       if ($i == 0) {
@@ -152,7 +148,8 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
       }
       $data = hr_reliefweb_get_latest_document_by_key($key);
       if ($data) {
-        $ocha_products[$key] = _hr_reliefweb_get_list_item($data, $label, $key, $initial_state, $value['see_more'], t('See more @term', array('@term' => $value['term'].'s')));
+        $see_more_path = $path . '/' . $ocha_report['field'] . '/' . $ocha_report['value'];
+        $ocha_products[$key] = _hr_reliefweb_get_list_item($data, $ocha_report['label'], $key, $initial_state, $see_more_path, t('See more @term', array('@term' => $ocha_report['label'] . 's')));
         if (isset($ocha_products[$key]['image'])) {
           $ocha_images .= $ocha_products[$key]['image'];
         }

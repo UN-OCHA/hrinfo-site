@@ -164,52 +164,50 @@ function hr_reliefweb_autocomplete_orp($string) {
   hr_reliefweb_autocomplete($string);
 }
 
+function hr_reliefweb_get_ocha_reports() {
+  return array(
+    'sitrep' => array(
+      'label' => t('Situation Report'),
+      'field' => 'ocha_product.name',
+      'value' => 'Situation Report',
+    ),
+    'humbul' => array(
+      'label' => t('Humanitarian Bulletin'),
+      'field' => 'ocha_product.name',
+      'value' => 'Humanitarian Bulletin',
+    ),
+    'humsnap' => array(
+      'label' => t('Humanitarian Snapshot'),
+      'field' => 'ocha_product.name',
+      'value' => 'Humanitarian Snapshot',
+    ),
+    'humdash' => array(
+      'label' => t('Humanitarian Dashboard'),
+      'field' => 'ocha_product.name',
+      'value' => 'Humanitarian Dashboard',
+    ),
+  );
+
+}
+
 function hr_reliefweb_get_latest_document_by_key($key) {
   $filters = array();
+  $ocha_reports = hr_reliefweb_get_ocha_reports();
 
-  switch ($key) {
-    case 'sitrep':
-      $filters[] = array(
-        'field' => 'ocha_product.name',
-        'value' => 'Situation Report',
-        'operator' => 'AND',
-      );
-      break;
-
-    case 'humbul':
-      $filters[] = array(
-        'field' => 'ocha_product.name',
-        'value' => 'Humanitarian Bulletin',
-        'operator' => 'AND',
-      );
-      break;
-
-    case 'humsnap':
-      $filters[] = array(
-        'field' => 'ocha_product.name',
-        'value' => 'Humanitarian Snapshot',
-        'operator' => 'AND',
-      );
-      break;
-
-    case 'humdash':
-      $filters[] = array(
-        'field' => 'ocha_product.name',
-        'value' => 'Humanitarian Dashboard',
-        'operator' => 'AND',
-      );
-      break;
-
-    default:
-      $filters[] = array(
-        'field' => 'ocha_product.name',
-        'value' => 'Situation Report',
-        'operator' => 'AND',
-      );
-      break;
-
+  if (array_key_exists($key, $ocha_reports)) {
+    $filters[] = array(
+      'field' => $ocha_reports[$key]['field'],
+      'value' => $ocha_reports[$key]['value'],
+      'operator' => 'AND',
+    );
   }
-
+  else {
+    $filters[] = array(
+      'field' => 'ocha_product.name',
+      'value' => 'Situation Report',
+      'operator' => 'AND',
+    );
+  }
 
   $data = hr_reliefweb_fetch_documents('', 1, 0, $filters, NULL, TRUE);
   if (isset($data['data'])) {
@@ -294,7 +292,12 @@ function hr_reliefweb_get_filters($key = NULL) {
   );
 
   if ($key) {
-    return $filters[$key];
+    if (array_key_exists($key, $filters)) {
+      return $filters[$key];
+    }
+    else {
+      return FALSE;
+    }
   }
   else {
     return $filters;
