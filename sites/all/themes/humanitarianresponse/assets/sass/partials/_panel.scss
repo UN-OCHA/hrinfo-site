@@ -659,5 +659,120 @@
       }
 
     }
+
+    .pane-hr-reliefweb-ocha-products {
+      .pane-title {
+        display: none;
+      }
+
+      .pane-title + .pane-content {
+        padding: 0;
+      }
+
+      .pane-content {
+        height: auto;
+        overflow: auto;
+
+        ul {
+          padding: 0;
+        }
+
+        .tab-content {
+          height: auto;
+        }
+
+        .tab-pane {
+          height: auto;
+
+          .col-xs-4 {
+            display: none;
+          }
+
+          .col-xs-8 {
+            width: 100%;
+          }
+        }
+
+        @media (min-width: 768px) {
+          
+          .tab-content {
+            min-height: 235px;
+          }
+
+          .tab-pane {
+            padding: 0 15px;
+
+            .col-xs-4 {
+              display: block;
+              width: 33.33333%
+            }
+
+            .col-xs-8 {
+              width: 66.66666667%
+            }
+
+            >.col-xs-4 {
+              
+              padding-left: 0;
+            }
+          }
+
+        }
+
+        @media (min-width: 1200px) {
+          .tab-pane {
+            >.col-xs-4 {
+              max-width: 175px;
+            }
+            .col-xs-8 {
+              width: 590px;
+            }
+
+            .row .col-xs-4 {
+              max-width: 190px;
+            }
+          }
+        }
+
+        .hr-thumbnail {
+          padding: 15px 0;
+
+          a[target="reliefweb"] {
+            display: block;
+            position: relative;
+            width: 160px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 5px; 
+            border: 1px solid $pb-border;
+
+            img {
+              max-width: 100%;
+              max-height: none;
+            }
+          }
+        }
+
+        .list-group {
+          margin: 15px 0;
+        }
+
+        a.list-group-item {
+          border-bottom: 1px solid $pb-border;
+
+          &.active {
+            background: $pb-grey-bg;
+            color: $pb-link-text;
+          }
+
+          &:last-child {
+            border-radius: 0;
+          }
+        }
+      }
+    }
+
   }
+
+
 }
