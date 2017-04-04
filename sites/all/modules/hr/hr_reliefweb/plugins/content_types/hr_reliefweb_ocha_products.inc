@@ -138,8 +138,42 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
   }
 
   $path = current_path() . '/reliefweb';
-
   $ocha_reports = hr_reliefweb_get_ocha_reports();
+
+  // Response planning.
+  $nodes = array();
+  foreach (array('hno_id', 'srp_id', 'monr_id', 'opr_id', 'orp_id') as $hpc_key) {
+    if (!empty($conf[$hpc_key])) {
+      $data = hr_reliefweb_get_document_by_id($conf[$hpc_key]);
+      $nodes[$hpc_key] = $data;
+    }
+  }
+
+  uasort($nodes, '_hr_reliefweb_sort_hpc');
+
+  $i = 0;
+  foreach ($nodes as $key => $node) {
+    $initial_state = 'hidden';
+    if ($i == 0) {
+      $initial_state = 'show';
+      $i++;
+    }
+    $see_more_path = $path;
+    $hpc[$key] = _hr_reliefweb_get_list_item($node, $node['title'], $key, $initial_state, $see_more_path, t('See more HPC documents'));
+  }
+
+  $hpc_images = '';
+  $hpc_links = '';
+  foreach ($hpc as $hpc_doc) {
+    if (isset($hpc_doc['image'])) {
+      $hpc_images .= $hpc_doc['image'];
+    }
+    if (isset($hpc_doc['link'])) {
+      $hpc_links .= $hpc_doc['link'];
+    }
+  }
+
+  // OCHA Reports.
   $ocha_images = '';
   $ocha_links = '';
   $i = 0;
@@ -163,7 +197,6 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
       }
     }
   }
-
 
   $block->content = '<div class="clearfix hr-layout-operation-standard">
   <ul class="nav nav-tabs" role="tablist">';
@@ -247,9 +280,21 @@ function _hr_reliefweb_get_list_item($value, $label, $prefix, $initial_state = '
   if ($initial_state == 'show') {
     $active_link = 'active';
   }
-  $link = '<a target="reliefweb" href="' . $value['url'] . '" class="list-group-item ' . $active_link . '" id="' . $prefix . '">' . $label . ' ' . format_date(strtotime($value['date_changed']), 'custom', 'd F Y') . '</a>';
+  $link = '<a target="reliefweb" href="' . $value['url'] . '" class="list-group-item ' . $active_link . '" id="' . $prefix . '">' . $label . ' - ' . format_date(strtotime($value['date_changed']), 'custom', 'd F Y') . '</a>';
   $out['image'] = $img_link;
   $out['link'] = $link;
 
   return $out;
+}
+
+/**
+ * Helper function to sort docs by date
+ */
+function _hr_reliefweb_sort_hpc($a, $b) {
+  $atime = strtotime($a['date_changed']);
+  $btime = strtotime($b['date_changed']);
+  if ($atime == $btime) {
+    return 0;
+  }
+  return ($atime < $btime) ? 1 : -1;
 }

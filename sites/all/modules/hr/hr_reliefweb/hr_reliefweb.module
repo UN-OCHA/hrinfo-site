@@ -190,6 +190,23 @@ function hr_reliefweb_get_ocha_reports() {
 
 }
 
+function hr_reliefweb_get_document_by_id($id) {
+  $filters = array();
+
+  $filters[] = array(
+    'field' => 'id',
+    'value' => $id,
+    'operator' => 'AND',
+  );
+
+  $data = hr_reliefweb_fetch_documents('', 1, 0, $filters, NULL, TRUE);
+  if (isset($data['data'])) {
+    $report = array_shift($data['data']);
+    return $report;
+  }
+  return FALSE;
+}
+
 function hr_reliefweb_get_latest_document_by_key($key) {
   $filters = array();
   $ocha_reports = hr_reliefweb_get_ocha_reports();
