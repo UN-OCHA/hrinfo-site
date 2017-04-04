@@ -140,6 +140,9 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
   $path = current_path() . '/reliefweb';
 
   $ocha_reports = hr_reliefweb_get_ocha_reports();
+  $ocha_images = '';
+  $ocha_links = '';
+  $i = 0;
   foreach ($ocha_reports as $key => $ocha_report) {
     if (isset($conf['show_' . $key]) && $conf['show_' . $key] == TRUE || !isset($conf['show_' . $key])) {
       $initial_state = 'hidden';
@@ -244,7 +247,7 @@ function _hr_reliefweb_get_list_item($value, $label, $prefix, $initial_state = '
   if ($initial_state == 'show') {
     $active_link = 'active';
   }
-  $link = '<a class="list-group-item ' . $active_link . '" id="' . $prefix . '">' . $label . ' ' . format_date(strtotime($value['date_changed']), 'custom', 'd F Y') . '</a>';
+  $link = '<a target="reliefweb" href="' . $value['url'] . '" class="list-group-item ' . $active_link . '" id="' . $prefix . '">' . $label . ' ' . format_date(strtotime($value['date_changed']), 'custom', 'd F Y') . '</a>';
   $out['image'] = $img_link;
   $out['link'] = $link;
 
