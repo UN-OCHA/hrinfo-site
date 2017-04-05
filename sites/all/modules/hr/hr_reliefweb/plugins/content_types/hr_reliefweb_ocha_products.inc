@@ -259,10 +259,13 @@ function _hr_reliefweb_get_list_item($value, $label, $prefix, $initial_state = '
 
   $file = reset($value['files']);
   if (isset($file['preview']) && !empty($file['preview'])) {
-    $img_link = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
+    $img_link = '<a class="hr-thumbnail-image" target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '<span class="hr-thumbnail-text">' .t('Download') . '</span></a>';
+  }
+  elseif (!empty($file['url'])) {
+    $img_link = '<a class="hr-thumbnail-no-image" target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
   }
   else {
-    $img_link = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
+    $img_link = '<div class="hr-thumbnail-no-download">No download available</div>';
   }
 
   $more_link = '';

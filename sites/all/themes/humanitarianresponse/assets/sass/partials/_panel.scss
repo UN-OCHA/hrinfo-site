@@ -737,7 +737,7 @@
         .hr-thumbnail {
           padding: 15px 0;
 
-          a[target="reliefweb"] {
+          .hr-thumbnail-image, .hr-thumbnail-no-image, .hr-thumbnail-no-download {
             display: block;
             position: relative;
             width: 160px;
@@ -749,6 +749,44 @@
             img {
               max-width: 100%;
               max-height: none;
+            }
+          }
+
+          .hr-thumbnail-no-image {
+            background: url('../images/download-icon.svg') 8px center no-repeat;
+            background-size: 16px;
+            text-align: left;
+            padding: 10px 10px 10px 34px;
+          }
+
+          .hr-thumbnail-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            opacity: 0;
+
+            &:before {
+              content: '';
+              background: url('../images/download-icon.svg') center no-repeat;
+              background-size: 16px;
+              width: 16px;
+              height: 16px;
+              margin: -4px 5px 0 0;
+            }
+          }
+
+          &:hover, &:focus {
+            .hr-thumbnail-text {
+              opacity: 1;
             }
           }
         }
