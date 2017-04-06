@@ -497,6 +497,65 @@ function hr_reliefweb_content($path) {
 }
 
 /**
+ * Fetch disasters from Reliefweb.
+ */
+function hr_reliefweb_fetch_disasters($country, $limit = 999, $offset = 0, $filters = array()) {
+  $endpoint = 'https://api.reliefweb.int/v1/disasters';
+  $params = array(
+    'appname' => 'hrinfo',
+    'offset' => $offset,
+    'limit' => $limit,
+    'preset' => 'latest',
+
+    'fields[include]' => array(
+      'id',
+      'name',
+    ),
+  );
+
+  if ($country) {
+    $params['filter'] = array(
+      'operator' => 'AND',
+      'conditions' => array(
+        array(
+          'field' => 'primary_country.iso3',
+          'value' => $country,
+          'operator' => 'OR',
+        ),
+      ),
+    );
+  }
+
+  if (!empty($query)) {
+    $params['query']['value'] = $query;
+  }
+
+  if (!empty($filters)) {
+    $params['filter']['conditions'] = array_merge($params['filter']['conditions'], $filters);
+  }
+
+  $url = $endpoint . '?' . drupal_http_build_query($params);
+
+  $data_array = array();
+  $total_count = 0;
+  $facets = array();
+
+  $request = drupal_http_request($url);
+  if (isset($request->data)) {
+    $response = drupal_json_decode($request->data);
+    $total_count = $response['totalCount'];
+
+    $data = $response['data'];
+    foreach ($data as $value) {
+      $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
+      $data_array[$value['fields']['id']] = $title;
+    }
+  }
+
+  return $data_array;
+}
+
+/**
  * Fix URL for reliefweb.
  */
 function _hr_reliefweb_fix_url($url) {

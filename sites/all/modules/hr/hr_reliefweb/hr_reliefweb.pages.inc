@@ -186,6 +186,7 @@ function hr_reliefweb_document_list($node) {
 
   $facets = array();
   $facets_weight = 0;
+  $country_disasters = hr_reliefweb_fetch_disasters($country_codes);
   foreach ($data['facets'] as $name => $facet) {
     $links = array();
     if (isset($facet['data']) && count($facet['data']) > 1) {
@@ -196,6 +197,13 @@ function hr_reliefweb_document_list($node) {
         }
         else {
           $filter_path = '/' . $name . '/' . $term['value'];
+        }
+
+        // Special case filters.
+        if ($name == 'disaster.name') {
+          if (!in_array($term['value'], $country_disasters)) {
+            continue;
+          }
         }
 
         if (!array_key_exists($filter_path, $active_filters)) {
