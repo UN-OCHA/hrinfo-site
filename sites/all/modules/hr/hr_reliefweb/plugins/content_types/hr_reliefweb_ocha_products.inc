@@ -117,6 +117,13 @@ function hr_reliefweb_ocha_products_edit_form_submit($form, &$form_state) {
       $form_state['conf'][$base . '_title'] = $form_state['values'][$base . '_title'];
       $form_state['conf'][$base . '_id'] = $matches[1];
     }
+    else {
+      $form_state['conf'][$base . '_title'] = '';
+      $form_state['conf'][$base . '_id'] = FALSE;
+    }
+  }
+  foreach (array('sitrep', 'humbul', 'humsnap', 'humdash') as $suffix) {
+    $form_state['conf']['show_' . $suffix] = $form_state['values']['show_' . $suffix];
   }
 
   $form_state['rebuild'] = TRUE;
