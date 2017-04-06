@@ -159,7 +159,7 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
       $i++;
     }
     $see_more_path = $path;
-    $hpc[$key] = _hr_reliefweb_get_list_item($node, $node['title'], $key, $initial_state, $see_more_path, t('See more HPC documents'));
+    $hpc[$key] = _hr_reliefweb_get_list_item($node, $node['title'], $key, $initial_state);
   }
 
   $hpc_images = '';
@@ -259,13 +259,10 @@ function _hr_reliefweb_get_list_item($value, $label, $prefix, $initial_state = '
 
   $file = reset($value['files']);
   if (isset($file['preview']) && !empty($file['preview'])) {
-    $img_link = '<a class="hr-thumbnail-image" target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '<span class="hr-thumbnail-text">' .t('Download') . '</span></a>';
-  }
-  elseif (!empty($file['url'])) {
-    $img_link = '<a class="hr-thumbnail-no-image" target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
+    $img_link = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
   }
   else {
-    $img_link = '<div class="hr-thumbnail-no-download">No download available</div>';
+    $img_link = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
   }
 
   $more_link = '';
