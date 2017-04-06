@@ -207,7 +207,7 @@ function hr_reliefweb_get_document_by_id($id) {
   return FALSE;
 }
 
-function hr_reliefweb_get_latest_document_by_key($key) {
+function hr_reliefweb_get_latest_document_by_key($key, $country) {
   $filters = array();
   $ocha_reports = hr_reliefweb_get_ocha_reports();
 
@@ -226,7 +226,7 @@ function hr_reliefweb_get_latest_document_by_key($key) {
     );
   }
 
-  $data = hr_reliefweb_fetch_documents('', 1, 0, $filters, NULL, TRUE);
+  $data = hr_reliefweb_fetch_documents($country, 1, 0, $filters, NULL, TRUE);
   if (isset($data['data'])) {
     $report = array_shift($data['data']);
     return $report;
@@ -834,4 +834,17 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
   }
 
   return $filters;
+}
+
+/**
+ * Helper function to get the iso2 code from an operation.
+ */
+function hr_reliefweb_get_country_from_operation($wrapper) {
+  if (isset($wrapper->field_country) && isset($wrapper->field_country->field_pcode)) {
+    $iso2 = $wrapper->field_country->field_pcode->value();
+    $country_codes = hdx_datasets_get_country_codes();
+    return drupal_strtolower($country_codes[$iso2]);
+  }
+
+  return '';
 }

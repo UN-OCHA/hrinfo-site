@@ -147,6 +147,14 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
   $path = current_path() . '/reliefweb';
   $ocha_reports = hr_reliefweb_get_ocha_reports();
 
+  // Fetch current node to get country.
+  $country_code = FALSE;
+  $node = menu_get_object();
+  if ($node && isset($node->type) && $node->type == 'hr_operation') {
+    $operation_wrapper = entity_metadata_wrapper('node', $node);
+    $country_code = hr_reliefweb_get_country_from_operation($operation_wrapper);
+  }
+
   // Response planning.
   $nodes = array();
   foreach (array('hno_id', 'srp_id', 'monr_id', 'opr_id', 'orp_id') as $hpc_key) {
@@ -190,10 +198,10 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
       if ($i == 0) {
         $initial_state = 'show';
       }
-      $data = hr_reliefweb_get_latest_document_by_key($key);
+      $data = hr_reliefweb_get_latest_document_by_key($key, $country_code);
       if ($data) {
         $see_more_path = $path . '/' . $ocha_report['field'] . '/' . $ocha_report['value'];
-        $ocha_products[$key] = _hr_reliefweb_get_list_item($data, $ocha_report['label'], $key, $initial_state, $see_more_path, t('See more @term', array('@term' => $ocha_report['label'] . 's')));
+        $ocha_products[$key] = _hr_reliefweb_get_list_item($data, $data['title'], $key, $initial_state, $see_more_path, t('See more @term', array('@term' => $ocha_report['label'] . 's')));
         if (isset($ocha_products[$key]['image'])) {
           $ocha_images .= $ocha_products[$key]['image'];
         }

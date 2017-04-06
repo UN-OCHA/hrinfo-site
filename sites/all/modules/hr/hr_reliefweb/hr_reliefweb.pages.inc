@@ -308,16 +308,3 @@ function hr_reliefweb_document_list($node) {
     ),
   );
 }
-
-/**
- * Helper function to get the iso2 code from an operation.
- */
-function hr_reliefweb_get_country_from_operation($wrapper) {
-  if (isset($wrapper->field_country) && isset($wrapper->field_country->field_pcode)) {
-    $iso2 = $wrapper->field_country->field_pcode->value();
-    $country_codes = hdx_datasets_get_country_codes();
-    return drupal_strtolower($country_codes[$iso2]);
-  }
-
-  return '';
-}
