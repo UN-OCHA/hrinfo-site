@@ -19,6 +19,73 @@ function hr_layout_ctools_plugin_directory($module, $plugin) {
 }
 
 /**
+ * Implements hook_menu()
+ */
+function hr_layout_menu() {
+  $items = array();
+
+  $items['node/%node/add-content'] = array(
+    'title' => 'Add content',
+    'page callback' => 'hr_layout_add_content',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+/**
+ * Callback that renders the document list.
+ */
+function hr_layout_add_content($node) {
+  $content = array();
+
+  $title = '<h1>' . t('Share your info') . '</h1>';
+  $intro = '<p>' . t('Humanitarian Response relies on information contributed by numerous organizations. We welcome content from a variety of sources, including NGOs, UN agencies and governments. By sharing information on Humanitarian Response, your organization helps to support efficient, effective, and coordinated humanitarian response through the sharing of operational information.') . '</p>';
+
+  $content[] = array(
+    'title' => t('Have a report, press release, or map to share? Send it to submit@reliefweb.int'),
+    'href' => 'mailto:submit@reliefweb.int',
+    'localized_options' => array(
+      'HTML' => TRUE,
+    ),
+    'description' => '',
+  );
+
+  $content[] = array(
+    'title' => t('Have a event to share? Add it here'),
+    'href' => 'node/add/hr-event',
+    'localized_options' => array(
+      'HTML' => TRUE,
+      'query' => array(
+        'og_group_ref' => $node->nid,
+      ),
+    ),
+    'description' => '',
+  );
+
+  $content[] = array(
+    'title' => t('Have an assessment to share? Add it to assessments.hpc.tools.'),
+    'href' => 'https://assessments.hpc.tools',
+    'localized_options' => array(
+      'HTML' => TRUE,
+    ),
+    'description' => '',
+  );
+
+  $content[] = array(
+    'title' => t('Have questions or comments? Send an email to info@humanitarianresponse.info.'),
+    'href' => 'mailto:info@humanitarianresponse.info',
+    'localized_options' => array(
+      'HTML' => TRUE,
+    ),
+    'description' => '',
+  );
+
+  return $title . $intro . theme('node_add_list', array('content' => $content));
+}
+
+/**
  * Implements hook_block_info().
  */
 function hr_layout_block_info() {
@@ -507,35 +574,41 @@ function hr_layout_create_links() {
       }
     }
 
-    $extra_fields = array();
-    if (!empty($bundle_id)) {
-      $extra_fields = array('field_bundles' => $bundle_id);
+    if (in_array($group->nid, variable_get('hr_layout_show_new_button', array('65')))) {
+      $link = url('node/' . $group->nid . '/add-content');
+      $button = '<div class="btn-group"><a style="color: #fff;" class="btn btn-default dropdown-toggle" href="' . $link . '"><i class="fa fa-plus-square"></i></a></div>';
     }
-    $content = og_node_create_links('node', $group->nid, OG_AUDIENCE_FIELD, FALSE, $types, $extra_fields);
-    if (!empty($content['og_node_create_links']['#items'])) {
-      foreach ($content['og_node_create_links']['#items'] as $key => $item) {
-        // Unfortunately we have to parse the link path to determine
-        // which node type this is for
-        $matches = array();
-        if (preg_match("/(?<=(node\/add\/)).*(?=\?)/", $item['data'], $matches)) {
-          if (isset($matches[0])) {
-            // Reformat the node type
-            $type = str_replace('-', '_', $matches[0]);
-            // See if this node type is disabled for this group
-            if (!og_features_component_is_disabled('node', $type, $group)) {
-              if ($type != 'hr_contact' || ($type == 'hr_contact' && (og_is_member('node', $group->nid) || in_array('editor', $user->roles)))) {
-                $button .= '<li>'.$item['data'].'</li>';
+    else {
+      $extra_fields = array();
+      if (!empty($bundle_id)) {
+        $extra_fields = array('field_bundles' => $bundle_id);
+      }
+      $content = og_node_create_links('node', $group->nid, OG_AUDIENCE_FIELD, FALSE, $types, $extra_fields);
+      if (!empty($content['og_node_create_links']['#items'])) {
+        foreach ($content['og_node_create_links']['#items'] as $key => $item) {
+          // Unfortunately we have to parse the link path to determine
+          // which node type this is for
+          $matches = array();
+          if (preg_match("/(?<=(node\/add\/)).*(?=\?)/", $item['data'], $matches)) {
+            if (isset($matches[0])) {
+              // Reformat the node type
+              $type = str_replace('-', '_', $matches[0]);
+              // See if this node type is disabled for this group
+              if (!og_features_component_is_disabled('node', $type, $group)) {
+                if ($type != 'hr_contact' || ($type == 'hr_contact' && (og_is_member('node', $group->nid) || in_array('editor', $user->roles)))) {
+                  $button .= '<li>'.$item['data'].'</li>';
+                }
               }
             }
           }
         }
-      }
-      if (!empty($button)) {
-        $button = '<div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          <i class="fa fa-plus-square"></i>
-        </button>
-        <ul class="dropdown-menu" role="menu">'.$button.'</ul></div>';
+        if (!empty($button)) {
+          $button = '<div class="btn-group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-plus-square"></i>
+          </button>
+          <ul class="dropdown-menu" role="menu">'.$button.'</ul></div>';
+        }
       }
     }
   }
