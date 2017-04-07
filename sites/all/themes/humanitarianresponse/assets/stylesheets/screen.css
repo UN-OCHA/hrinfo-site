@@ -3230,8 +3230,17 @@ div.region-top div.block { display: inline-block; }
   #secondary-navigation a { margin-bottom: 0; } }
 
 .cd-hri-header { margin-bottom: 35px; }
+.cd-hri-header + .alert-container .alert { margin-top: -15px; margin-bottom: 15px; }
 .og-context .cd-hri-header, .front .cd-hri-header { margin-bottom: 0; }
+.og-context .cd-hri-header + .alert-container .alert, .front .cd-hri-header + .alert-container .alert { margin-top: 15px; }
 
+.alert-container { position: relative; }
+.alert-container a.alert { display: block; font-weight: bold; }
+.alert-container a.alert:hover, .alert-container a.alert:focus { color: #333333; }
+.alert-container .close { position: absolute; width: 40px; height: 40px; top: 6px; right: 20px; opacity: 0.6; }
+
+@media (min-width: 768px) { .alert-container .close { top: -10px; }
+  .og-context .alert-container .close, .front .alert-container .close { margin-top: -20px; top: 50%; } }
 .block-menu h2, .block-menu-block h2, .block-og-menu h2, .block-locale h2 { display: none; }
 
 .navbar { min-height: 0; }

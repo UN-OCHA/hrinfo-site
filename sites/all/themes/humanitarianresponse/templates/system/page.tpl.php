@@ -59,6 +59,15 @@
     </div>
   </header>
 
+  <div id="surveyAlert" style="display: none;" class="container alert-container">
+    <div class="col-sm-12">
+      <a href="https://www.surveymonkey.com/r/P37HT9N" class="alert alert-info alert-dismissable">
+        <?php print t('HumanitarianResponse.info wants to hear from you! Please participate in our user survey.') ?>
+      </a>
+      <button type="button" class="close" id="closeSurveyAlert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+  </div>
+
   <?php if ($hr_tabs): ?>
     <div class="container">
       <div class="col-sm-12">

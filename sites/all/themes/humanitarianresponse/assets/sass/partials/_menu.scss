@@ -69,8 +69,54 @@
 .cd-hri-header {
   margin-bottom: 35px;
 
+  &+ .alert-container {
+    .alert {
+      margin-top: -15px;
+      margin-bottom: 15px;
+    }
+  }
+
   .og-context &, .front & {
     margin-bottom: 0;
+
+    &+ .alert-container {
+      .alert {
+        margin-top: 15px;
+      }
+    }
+  }
+
+}
+
+.alert-container {
+  position: relative;
+
+  a.alert {
+    display: block;
+    font-weight: bold;
+
+    &:hover, &:focus {
+      color: $text-color;
+    }
+  }
+  .close {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 6px;
+    right: 20px;
+    opacity: 0.6;
+  }
+}
+
+@media (min-width: 768px) {
+  .alert-container .close {
+    top: -10px;
+
+    .og-context &, .front & {
+      margin-top: -20px;
+      top: 50%;
+    }
   }
 }
 
