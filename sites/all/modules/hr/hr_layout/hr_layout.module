@@ -574,8 +574,8 @@ function hr_layout_create_links() {
       }
     }
 
-    if (in_array($group->nid, variable_get('hr_layout_show_new_button', array('65')))) {
-      $link = url('node/' . $group->nid . '/add-content');
+    if (in_array($gid, variable_get('hr_layout_show_new_button', array('65')))) {
+      $link = url('node/' . $gid . '/add-content');
       $button = '<div class="btn-group"><a style="color: #fff;" class="btn btn-default dropdown-toggle" href="' . $link . '"><i class="fa fa-plus-square"></i></a></div>';
     }
     else {
