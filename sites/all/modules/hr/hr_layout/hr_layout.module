@@ -53,6 +53,13 @@ function hr_layout_add_content($node) {
       ),
     )),
   ));
+  $content[] = t('<strong>Have an assessment to share?</strong> <a href="@url">Submit it via this form.</a>', array(
+    '@url' => url('node/add/hr-assessment', array(
+      'query' => array(
+        'og_group_ref' => $node->nid,
+      ),
+    )),
+  ));
   $content[] = '<br>' . t('<strong>Have questions or comments?</strong> <a href="@url">Send an email to info@humanitarianresponse.info.</a>', array(
     '@url' => url('mailto:info@humanitarianresponse.info'),
   ));
