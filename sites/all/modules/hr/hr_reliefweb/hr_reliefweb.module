@@ -135,7 +135,13 @@ function hr_reliefweb_autocomplete($string) {
 function hr_reliefweb_autocomplete_hno($string) {
   $matches = array();
   if ($string) {
-    $query = '"' . $string . '"';
+    $query = array(
+      'value' => $string,
+      'operator' => 'AND',
+      'fields' => array(
+        'title',
+      ),
+    );
     $data = hr_reliefweb_fetch_documents('', 20, 0, array(), $query, TRUE, FALSE);
 
     if (!empty($data['data'])) {
@@ -145,6 +151,7 @@ function hr_reliefweb_autocomplete_hno($string) {
     }
   }
 
+  ksort($matches);
   drupal_json_output($matches);
 }
 
@@ -384,7 +391,12 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
   }
 
   if (!empty($query)) {
-    $params['query']['value'] = $query;
+    if (is_array($query)) {
+      $params['query'] = $query;
+    }
+    else {
+      $params['query']['value'] = $query;
+    }
   }
 
   if (!empty($filters)) {
