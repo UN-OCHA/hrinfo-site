@@ -43,7 +43,7 @@ function hr_layout_add_content($node) {
   $title = '<h1>' . t('Share your info') . '</h1>';
   $intro = '<p>' . t('Humanitarian Response relies on information contributed by numerous organizations. We welcome content from a variety of sources, including NGOs, UN agencies and governments. By sharing information on Humanitarian Response, your organization helps to support efficient, effective, and coordinated humanitarian response through the sharing of operational information.') . '</p>';
 
-  $content[] = t('<strong>Have a report, press release, or map to share?</strong> <a href="@url">Send it to submit@reliefweb.int.</a>', array(
+  $content[] = t('<strong>Have a report, press release or map/infographic to share?</strong> <a href="@url">Send it to submit@reliefweb.int.</a>', array(
     '@url' => 'mailto:submit@reliefweb.int',
   ));
   $content[] = t('<strong>Have an event to share?</strong> <a href="@url">Submit it via this form.</a>', array(
