@@ -298,7 +298,7 @@ function _hr_reliefweb_get_list_item($value, $label, $prefix, $initial_state = '
   if ($initial_state == 'show') {
     $active_link = 'active';
   }
-  $link = '<a target="reliefweb" href="' . $value['url'] . '" class="list-group-item ' . $active_link . '" id="' . $prefix . '">' . $label . ' - ' . format_date(strtotime($value['date_changed']), 'custom', 'd F Y') . '</a>';
+  $link = '<a target="reliefweb" href="' . $value['url'] . '" class="list-group-item ' . $active_link . '" id="' . $prefix . '">' . $label . '</a>';
   $out['image'] = $img_link;
   $out['link'] = $link;
 
