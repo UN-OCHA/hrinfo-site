@@ -391,6 +391,11 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
     $params['filter']['conditions'] = array_merge($params['filter']['conditions'], $filters);
   }
 
+  // Remove filters if no condition is present.
+  if (empty($params['filter']['conditions'])) {
+    unset($params['filter']);
+  }
+
   if (!$without_facets) {
     $allowed_filters = hr_reliefweb_get_filters();
     foreach ($allowed_filters as $key => $allowed_filter) {
