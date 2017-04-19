@@ -83,7 +83,7 @@
         var option = options[j];
         var newOption = document.createElement('option');
         newOption.value = option.href;
-        newOption.text = option.innerText;
+        newOption.text = option.innerHTML;
         newSelect.appendChild(newOption);
       }
 
