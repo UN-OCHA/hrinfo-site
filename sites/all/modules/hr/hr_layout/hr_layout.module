@@ -381,6 +381,9 @@ function hr_layout_block_view($delta = '') {
               case 'hr_reliefweb_documents':
                 $path = 'reliefweb';
                 break;
+              case 'hr_reliefweb_meeting_documents':
+                $path = 'meeting-documents';
+                break;
               case 'ar_assessments':
                 $path = 'ar_assessments';
                 break;
