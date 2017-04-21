@@ -30,6 +30,7 @@ function hr_reliefweb_ctools_plugin_api($module, $api) {
  */
 function hr_reliefweb_og_features_registry() {
   $registry = array();
+
   $feature = new stdClass();
   $feature->id = 'hr_reliefweb_documents';
   $feature->name = 'Reports and Maps';
@@ -40,6 +41,18 @@ function hr_reliefweb_og_features_registry() {
     ),
   );
   $registry[$feature->id] = $feature;
+
+  $feature = new stdClass();
+  $feature->id = 'hr_reliefweb_meeting_documents';
+  $feature->name = 'Meeting Documents';
+  $feature->description = t('Provide access to old meeting documents.');
+  $feature->components = array(
+    'path' => array(
+      'node/%node/meeting-documents',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+
   return $registry;
 }
 
