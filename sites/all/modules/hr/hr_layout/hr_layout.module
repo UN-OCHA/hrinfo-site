@@ -342,6 +342,7 @@ function hr_layout_block_view($delta = '') {
           'hr_documents',
           'hr_infographics',
           'hr_reliefweb_documents',
+          'hr_reliefweb_meeting_documents',
           'hdx_datasets',
           'hr_offices',
           'hr_assessments',
