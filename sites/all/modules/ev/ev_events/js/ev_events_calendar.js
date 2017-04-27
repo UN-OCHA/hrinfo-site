@@ -15,12 +15,7 @@
         return;
       }
 
-      var eventFilters = {
-        'field_event_organization': '',
-        'field_event_cluster': '',
-        'field_event_category': '',
-        'field_event_coordination_hub': '',
-      };
+      var eventFilters = Drupal.settings.fullcalendar_api.calendarSettings.events.data;
 
       var $settings = settings.fullcalendar_api.calendarSettings;
       $.extend($settings, {
