@@ -47,8 +47,9 @@ function ev_events_calendar($node) {
   // Set active menu item, it will override current_path.
   menu_set_active_item('node/' . $node->nid . '/humanitarian-events');
 
+  $api_base_url = variable_get('ev_events_api_url', 'https://events.staging.humanitarianresponse.info');
   $settings = array(
-    'base_url' => 'http://localhost:8080',
+    'base_url' => $api_base_url,
     'header' => array(
       'left' => 'prev,next today',
       'center' => 'title',
@@ -68,7 +69,7 @@ function ev_events_calendar($node) {
       'past' => array(),
     ),
     'events' => array(
-      'url' => 'http://localhost:8080/api/v0/fetch-events',
+      'url' => $api_base_url . '/api/v0/fetch-events',
       'type' => 'GET',
       'data' => array(
         'field_event_coordination_hub' => '',
