@@ -1,0 +1,101 @@
+#fullcalendar {
+
+	table {
+		display: table;
+	}
+
+	thead {
+		display: table-header-group;
+
+		tr {
+			position: relative;
+			top: auto;
+			left: auto;
+		}
+	}
+
+	tbody {
+		display: table-row-group;
+	}
+
+	tr {
+		display: table-row;
+	}
+
+	th, td {
+		display: table-cell;
+	}
+
+	td {
+		padding-left: 0!important;
+
+		&.fc-limited {
+			display: none;
+		}
+	}
+}
+
+.fc-view-container {
+	background: white;
+}
+
+a.fc-event, .fc-event {
+	border-radius: 0!important;
+	box-shadow: none;
+	font-weight: normal;
+
+}
+
+a.fc-event {
+	&:hover, &:focus {
+		color: $p-comp;
+		text-decoration: underline;
+	}
+}
+
+.fc-day-grid-event,
+.fc-time-grid-event {
+	margin: 1px 2px 0;
+  padding: 2px 0 0 0;
+}
+
+.fc-day-grid-event .fc-content,
+.fc-time-grid-event .fc-content {
+	background: white;
+	padding: 4px;
+  height: 100%;
+}
+
+.fc-toolbar {
+	.fc-left, .fc-right {
+		float: none;
+		overflow: auto;
+		margin-bottom: 8px;
+	}
+
+}
+
+@media (min-width: 768px) {
+
+	.fc-toolbar {
+		.fc-left {
+			float: left;
+		}
+
+		.fc-right {
+			float: right;
+		}
+	}
+
+}
+
+
+@media (min-width: 1024px) {
+
+	#fullcalendar {
+		td.fc-limited {
+			display: table-cell;
+		}
+	}
+
+}

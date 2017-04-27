@@ -4090,6 +4090,64 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
 .breadcrumbs-item a { color: #656565; padding: 0 5px 0 2px; }
 .breadcrumbs-item:first-child a { padding-left: 0; }
 
+.calendar-filters { padding-top: 8px; }
+.calendar-filters .block-views { display: block; float: left; width: 50%; margin-bottom: 16px; padding-right: 8px; }
+.calendar-filters .block-views h2 { margin-bottom: 4px; }
+.calendar-filters .block-views.processed .content .item-list { display: none; }
+.calendar-filters .chosen-container { width: 100% !important; max-width: 300px; background: white; }
+.calendar-filters .chosen-container .chosen-drop { box-shadow: none; border-radius: 0; border-color: #ddd; }
+.calendar-filters .chosen-container .chosen-results li.active-result.highlighted { background: #55b1c8; }
+.calendar-filters .chosen-container-single.chosen-container-active .chosen-single { border-color: #55b1c8; }
+.calendar-filters .chosen-container-active.chosen-with-drop { border-color: #ddd; }
+.calendar-filters .chosen-container-active.chosen-with-drop .chosen-single { border-color: #ddd; background: none; }
+.calendar-filters .chosen-container-active.chosen-with-drop .chosen-single div b { transform: rotate(180deg); }
+.calendar-filters .chosen-container-single .chosen-single { background: none; box-shadow: none; border: 1px solid #ddd; border-radius: 0; height: auto; padding: 4px 8px; }
+.calendar-filters .chosen-container-single .chosen-single div { width: 24px; }
+.calendar-filters .chosen-container-single .chosen-single div b { background: url(../images/arrow-down.svg) center no-repeat !important; background-size: 10px 10px !important; }
+
+.calendar-filters .block-views label, .calendar-settings label { margin-bottom: 4px; }
+
+.calendar-settings { background: #eee; padding: 8px; margin: 16px 0; }
+.calendar-settings h3, .calendar-settings p { margin-bottom: 8px; }
+
+.calendar-export { order: 1; position: relative; }
+.calendar-export .dropdown button { width: 100%; border: none; background: none; }
+
+@media (min-width: 550px) { .calendar-filters { padding-top: 16px; }
+  .calendar-filters .block-views { width: 25%; }
+  .calendar-filters .block-views:last-child { padding: 0; }
+  .calendar-export { order: 0; position: absolute; right: 0; top: -16px; }
+  .calendar-export.open { position: absolute; }
+  .calendar-export .btn-primary { border: none; }
+  .calendar-export .dropdown-menu { left: auto; right: 0; }
+  .calendar-export .dropdown-menu button { width: 100%; background: none; border: none; } }
+@media (min-width: 768px) { .calendar-filters { margin-bottom: 8px; } }
+@media print { .calendar-export, .calendar-filters { display: none !important; }
+  .calendar-settings h2, .calendar-settings label, .calendar-settings .chosen-container, .calendar-settings select { display: none !important; } }
+#fullcalendar table { display: table; }
+#fullcalendar thead { display: table-header-group; }
+#fullcalendar thead tr { position: relative; top: auto; left: auto; }
+#fullcalendar tbody { display: table-row-group; }
+#fullcalendar tr { display: table-row; }
+#fullcalendar th, #fullcalendar td { display: table-cell; }
+#fullcalendar td { padding-left: 0 !important; }
+#fullcalendar td.fc-limited { display: none; }
+
+.fc-view-container { background: white; }
+
+a.fc-event, .fc-event { border-radius: 0 !important; box-shadow: none; font-weight: normal; }
+
+a.fc-event:hover, a.fc-event:focus { color: #0fa4de; text-decoration: underline; }
+
+.fc-day-grid-event, .fc-time-grid-event { margin: 1px 2px 0; padding: 2px 0 0 0; }
+
+.fc-day-grid-event .fc-content, .fc-time-grid-event .fc-content { background: white; padding: 4px; height: 100%; }
+
+.fc-toolbar .fc-left, .fc-toolbar .fc-right { float: none; overflow: auto; margin-bottom: 8px; }
+
+@media (min-width: 768px) { .fc-toolbar .fc-left { float: left; }
+  .fc-toolbar .fc-right { float: right; } }
+@media (min-width: 1024px) { #fullcalendar td.fc-limited { display: table-cell; } }
 .pb-header { color: #1977d4; font-size: 1.5em; text-transform: uppercase; margin: 12px 0; }
 
 .verified-icon { display: inline-block; width: 16px; height: 16px; background: url("../images/check-circle.svg") no-repeat; background-size: 100%; }
