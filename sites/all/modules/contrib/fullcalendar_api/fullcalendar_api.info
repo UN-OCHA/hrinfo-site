@@ -1,0 +1,17 @@
+name = FullCalendar API
+description = API interface for jQuery FullCalendar plugin, http://fullcalendar.io/.
+core = 7.x
+package = Calendar
+dependencies[] = date
+dependencies[] = date_api
+dependencies[] = entity
+dependencies[] = jquery_update
+dependencies[] = libraries
+dependencies[] = moment
+
+; Information added by Drupal.org packaging script on 2015-06-17
+version = "7.x-1.0-alpha2"
+core = "7.x"
+project = "fullcalendar_api"
+datestamp = "1434542593"
+

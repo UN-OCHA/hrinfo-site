@@ -40,7 +40,7 @@ test('diff', function (assert) {
     assert.equal(moment(1000).diff(500), 500, '1 second - 0.5 seconds = 500');
     assert.equal(moment(0).diff(1000), -1000, '0 - 1 second = -1000');
     assert.equal(moment(new Date(1000)).diff(1000), 0, '1 second - 1 second = 0');
-    var oneHourDate = new Date(),
+    var oneHourDate = new Date(2015, 5, 21),
     nowDate = new Date(+oneHourDate);
     oneHourDate.setHours(oneHourDate.getHours() + 1);
     assert.equal(moment(oneHourDate).diff(nowDate), 60 * 60 * 1000, '1 hour from now = 3600000');
@@ -231,4 +231,17 @@ test('year diffs', function (assert) {
     equal(assert, moment([2012, 0, 1]).diff([2013, 0, 1, 12], 'years', true), -1 - (0.5 / 31) / 12, 'Jan 1 2012 to Jan 1 2013 noon should be 1+(0.5 / 31) / 12 years');
     equal(assert, moment([2012, 0, 1]).diff([2013, 6, 1, 12], 'years', true), -1.5 - (0.5 / 31) / 12, 'Jan 1 2012 to Jul 1 2013 noon should be 1.5+(0.5 / 31) / 12 years');
     equal(assert, moment([2012, 1, 29]).diff([2013, 1, 28], 'years', true), -1, 'Feb 29 2012 to Feb 28 2013 should be 1-(1 / 28.5) / 12 years');
+});
+
+test('negative zero', function (assert) {
+    function isNegative (n) {
+        return (1 / n) < 0;
+    }
+    assert.ok(!isNegative(moment([2012, 0, 1]).diff(moment([2012, 0, 1]), 'months')), 'month diff on same date is zero, not -0');
+    assert.ok(!isNegative(moment([2012, 0, 1]).diff(moment([2012, 0, 1]), 'years')), 'year diff on same date is zero, not -0');
+    assert.ok(!isNegative(moment([2012, 0, 1]).diff(moment([2012, 0, 1]), 'quarters')), 'quarter diff on same date is zero, not -0');
+    assert.ok(!isNegative(moment([2012, 0, 1]).diff(moment([2012, 0, 1, 1]), 'days')), 'days diff on same date is zero, not -0');
+    assert.ok(!isNegative(moment([2012, 0, 1]).diff(moment([2012, 0, 1, 0, 1]), 'hours')), 'hour diff on same hour is zero, not -0');
+    assert.ok(!isNegative(moment([2012, 0, 1]).diff(moment([2012, 0, 1, 0, 0, 1]), 'minutes')), 'minute diff on same minute is zero, not -0');
+    assert.ok(!isNegative(moment([2012, 0, 1]).diff(moment([2012, 0, 1, 0, 0, 0, 1]), 'seconds')), 'second diff on same second is zero, not -0');
 });
