@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Functions and hook implementations for FullCalendar API Examples module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function fullcalendar_api_example_menu() {
+  $items['fullcalendar/calendar'] = array(
+    'title' => 'FullCalendar',
+    'description' => 'FullCalendar basic implementation.',
+    'page callback' => 'fullcalendar_api_example_calendar_page',
+    'access callback' => TRUE,
+    'file' => 'fullcalendar_api_example.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+  $items['fullcalendar/entity'] = array(
+    'title' => 'FullCalendar Entities',
+    'description' => 'FullCalendar entity implementation.',
+    'page callback' => 'fullcalendar_api_example_entity_page',
+    'access callback' => TRUE,
+    'file' => 'fullcalendar_api_example.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+  $items['fullcalendar/callbacks'] = array(
+    'title' => 'FullCalendar Callbacks',
+    'description' => 'Example of using callbacks when a FullCalendar event fires.',
+    'page callback' => 'fullcalendar_api_example_callbacks_page',
+    'access callback' => TRUE,
+    'file' => 'fullcalendar_api_example.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}

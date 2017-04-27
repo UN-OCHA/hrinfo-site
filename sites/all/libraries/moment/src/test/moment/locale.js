@@ -1,6 +1,7 @@
 import { module, test } from '../qunit';
 import moment from '../../moment';
 import each from '../helpers/each';
+import indexOf from '../../lib/utils/index-of';
 
 module('locale', {
     setup : function () {
@@ -135,14 +136,16 @@ test('library localeData', function (assert) {
 
     assert.equal(moment.localeData().months(jan), 'January', 'no arguments returns global');
     assert.equal(moment.localeData('zh-cn').months(jan), '一月', 'a string returns the locale based on key');
-    assert.equal(moment.localeData(moment().locale('es')).months(jan), 'Enero', 'if you pass in a moment it uses the moment\'s locale');
+    assert.equal(moment.localeData(moment().locale('es')).months(jan), 'enero', 'if you pass in a moment it uses the moment\'s locale');
 });
 
 test('library deprecations', function (assert) {
+    test.expectedDeprecations('moment.lang');
     moment.lang('dude', {months: ['Movember']});
     assert.equal(moment.locale(), 'dude', 'setting the lang sets the locale');
     assert.equal(moment.lang(), moment.locale());
     assert.equal(moment.langData(), moment.localeData(), 'langData is localeData');
+    moment.defineLocale('dude', null);
 });
 
 test('defineLocale', function (assert) {
@@ -150,12 +153,21 @@ test('defineLocale', function (assert) {
     moment.defineLocale('dude', {months: ['Movember']});
     assert.equal(moment().locale(), 'dude', 'defineLocale also sets it');
     assert.equal(moment().locale('dude').locale(), 'dude', 'defineLocale defines a locale');
+    moment.defineLocale('dude', null);
+});
+
+test('locales', function (assert) {
+    moment.defineLocale('dude', {months: ['Movember']});
+    assert.equal(true, !!~indexOf.call(moment.locales(), 'dude'), 'locales returns an array of defined locales');
+    assert.equal(true, !!~indexOf.call(moment.locales(), 'en'), 'locales should always include english');
+    moment.defineLocale('dude', null);
 });
 
 test('library convenience', function (assert) {
     moment.locale('something', {week: {dow: 3}});
     moment.locale('something');
     assert.equal(moment.locale(), 'something', 'locale can be used to create the locale too');
+    moment.defineLocale('something', null);
 });
 
 test('firstDayOfWeek firstDayOfYear locale getters', function (assert) {
@@ -163,13 +175,14 @@ test('firstDayOfWeek firstDayOfYear locale getters', function (assert) {
     moment.locale('something');
     assert.equal(moment.localeData().firstDayOfWeek(), 3, 'firstDayOfWeek');
     assert.equal(moment.localeData().firstDayOfYear(), 4, 'firstDayOfYear');
+    moment.defineLocale('something', null);
 });
 
 test('instance locale method', function (assert) {
     moment.locale('en');
 
     assert.equal(moment([2012, 5, 6]).format('MMMM'), 'June', 'Normally default to global');
-    assert.equal(moment([2012, 5, 6]).locale('es').format('MMMM'), 'Junio', 'Use the instance specific locale');
+    assert.equal(moment([2012, 5, 6]).locale('es').format('MMMM'), 'junio', 'Use the instance specific locale');
     assert.equal(moment([2012, 5, 6]).format('MMMM'), 'June', 'Using an instance specific locale does not affect other moments');
 });
 
@@ -193,9 +206,9 @@ test('instance getter locale substrings', function (assert) {
 test('instance locale persists with manipulation', function (assert) {
     moment.locale('en');
 
-    assert.equal(moment([2012, 5, 6]).locale('es').add({days: 1}).format('MMMM'), 'Junio', 'With addition');
-    assert.equal(moment([2012, 5, 6]).locale('es').day(0).format('MMMM'), 'Junio', 'With day getter');
-    assert.equal(moment([2012, 5, 6]).locale('es').endOf('day').format('MMMM'), 'Junio', 'With endOf');
+    assert.equal(moment([2012, 5, 6]).locale('es').add({days: 1}).format('MMMM'), 'junio', 'With addition');
+    assert.equal(moment([2012, 5, 6]).locale('es').day(0).format('MMMM'), 'junio', 'With day getter');
+    assert.equal(moment([2012, 5, 6]).locale('es').endOf('day').format('MMMM'), 'junio', 'With endOf');
 });
 
 test('instance locale persists with cloning', function (assert) {
@@ -205,8 +218,8 @@ test('instance locale persists with cloning', function (assert) {
         b = a.clone(),
         c = moment(a);
 
-    assert.equal(b.format('MMMM'), 'Junio', 'using moment.fn.clone()');
-    assert.equal(b.format('MMMM'), 'Junio', 'using moment()');
+    assert.equal(b.format('MMMM'), 'junio', 'using moment.fn.clone()');
+    assert.equal(b.format('MMMM'), 'junio', 'using moment()');
 });
 
 test('duration locale method', function (assert) {
@@ -233,6 +246,7 @@ test('changing the global locale doesn\'t affect existing duration instances', f
 });
 
 test('duration deprecations', function (assert) {
+    test.expectedDeprecations('moment().lang()');
     assert.equal(moment.duration().lang(), moment.duration().localeData(), 'duration.lang is the same as duration.localeData');
 });
 
@@ -324,6 +338,7 @@ test('instance locale used with from', function (assert) {
 test('instance localeData', function (assert) {
     moment.defineLocale('dude', {week: {dow: 3}});
     assert.equal(moment().locale('dude').localeData()._week.dow, 3);
+    moment.defineLocale('dude', null);
 });
 
 test('month name callback function', function (assert) {
@@ -351,6 +366,8 @@ test('month name callback function', function (assert) {
 });
 
 test('changing parts of a locale config', function (assert) {
+    test.expectedDeprecations('defineLocaleOverride');
+
     moment.locale('partial-lang', {
         months : 'a b c d e f g h i j k l'.split(' ')
     });
@@ -362,6 +379,8 @@ test('changing parts of a locale config', function (assert) {
     });
 
     assert.equal(moment([2011, 0, 1]).format('MMMM MMM'), 'a A', 'should be able to set locale values after creating the localeuage');
+
+    moment.defineLocale('partial-lang', null);
 });
 
 test('start/endOf week feature for first-day-is-monday locales', function (assert) {
@@ -374,6 +393,7 @@ test('start/endOf week feature for first-day-is-monday locales', function (asser
     moment.locale('monday-lang');
     assert.equal(moment([2013, 0, 1]).startOf('week').day(), 1, 'for locale monday-lang first day of the week should be monday');
     assert.equal(moment([2013, 0, 1]).endOf('week').day(), 0, 'for locale monday-lang last day of the week should be sunday');
+    moment.defineLocale('monday-lang', null);
 });
 
 test('meridiem parsing', function (assert) {
@@ -387,6 +407,7 @@ test('meridiem parsing', function (assert) {
     moment.locale('meridiem-parsing');
     assert.equal(moment('2012-01-01 3b', 'YYYY-MM-DD ha').hour(), 15, 'Custom parsing of meridiem should work');
     assert.equal(moment('2012-01-01 3d', 'YYYY-MM-DD ha').hour(), 3, 'Custom parsing of meridiem should work');
+    moment.defineLocale('meridiem-parsing', null);
 });
 
 test('invalid date formatting', function (assert) {
@@ -396,12 +417,14 @@ test('invalid date formatting', function (assert) {
 
     assert.equal(moment.invalid().format(), 'KHAAAAAAAAAAAN!');
     assert.equal(moment.invalid().format('YYYY-MM-DD'), 'KHAAAAAAAAAAAN!');
+    moment.defineLocale('has-invalid', null);
 });
 
 test('return locale name', function (assert) {
     var registered = moment.locale('return-this', {});
 
     assert.equal(registered, 'return-this', 'returns the locale configured');
+    moment.locale('return-this', null);
 });
 
 test('changing the global locale doesn\'t affect existing instances', function (assert) {
@@ -411,6 +434,7 @@ test('changing the global locale doesn\'t affect existing instances', function (
 });
 
 test('setting a language on instance returns the original moment for chaining', function (assert) {
+    test.expectedDeprecations('moment().lang()');
     var mom = moment();
 
     assert.equal(mom.lang('fr'), mom, 'setting the language (lang) returns the original moment for chaining');
@@ -418,6 +442,7 @@ test('setting a language on instance returns the original moment for chaining', 
 });
 
 test('lang(key) changes the language of the instance', function (assert) {
+    test.expectedDeprecations('moment().lang()');
     var m = moment().month(0);
     m.lang('fr');
     assert.equal(m.locale(), 'fr', 'm.lang(key) changes instance locale');
@@ -441,7 +466,40 @@ test('moment().locale with missing key doesn\'t change locale', function (assert
 });
 
 test('moment().lang with missing key doesn\'t change locale', function (assert) {
+    test.expectedDeprecations('moment().lang()');
     assert.equal(moment().lang('boo').localeData(), moment.localeData(),
             'preserve global locale in case of bad locale id');
 });
 
+
+// TODO: Enable this after fixing pl months parse hack hack
+// test('monthsParseExact', function (assert) {
+//     var locale = 'test-months-parse-exact';
+
+//     moment.defineLocale(locale, {
+//         monthsParseExact: true,
+//         months: 'A_AA_AAA_B_B B_BB  B_C_C-C_C,C2C_D_D+D_D`D*D'.split('_'),
+//         monthsShort: 'E_EE_EEE_F_FF_FFF_G_GG_GGG_H_HH_HHH'.split('_')
+//     });
+
+//     assert.equal(moment('A', 'MMMM', true).month(), 0, 'parse long month 0 with MMMM');
+//     assert.equal(moment('AA', 'MMMM', true).month(), 1, 'parse long month 1 with MMMM');
+//     assert.equal(moment('AAA', 'MMMM', true).month(), 2, 'parse long month 2 with MMMM');
+//     assert.equal(moment('B B', 'MMMM', true).month(), 4, 'parse long month 4 with MMMM');
+//     assert.equal(moment('BB  B', 'MMMM', true).month(), 5, 'parse long month 5 with MMMM');
+//     assert.equal(moment('C-C', 'MMMM', true).month(), 7, 'parse long month 7 with MMMM');
+//     assert.equal(moment('C,C2C', 'MMMM', true).month(), 8, 'parse long month 8 with MMMM');
+//     assert.equal(moment('D+D', 'MMMM', true).month(), 10, 'parse long month 10 with MMMM');
+//     assert.equal(moment('D`D*D', 'MMMM', true).month(), 11, 'parse long month 11 with MMMM');
+
+//     assert.equal(moment('E', 'MMM', true).month(), 0, 'parse long month 0 with MMM');
+//     assert.equal(moment('EE', 'MMM', true).month(), 1, 'parse long month 1 with MMM');
+//     assert.equal(moment('EEE', 'MMM', true).month(), 2, 'parse long month 2 with MMM');
+
+//     assert.equal(moment('A', 'MMM').month(), 0, 'non-strict parse long month 0 with MMM');
+//     assert.equal(moment('AA', 'MMM').month(), 1, 'non-strict parse long month 1 with MMM');
+//     assert.equal(moment('AAA', 'MMM').month(), 2, 'non-strict parse long month 2 with MMM');
+//     assert.equal(moment('E', 'MMMM').month(), 0, 'non-strict parse short month 0 with MMMM');
+//     assert.equal(moment('EE', 'MMMM').month(), 1, 'non-strict parse short month 1 with MMMM');
+//     assert.equal(moment('EEE', 'MMMM').month(), 2, 'non-strict parse short month 2 with MMMM');
+// });

@@ -1,0 +1,153 @@
+<?php
+
+/**
+ * @file
+ * Functions and hooks for FullCalendar API module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function fullcalendar_api_menu() {
+  $items['fullcalendar-api/ajax/update/%/%'] = array(
+    'title' => 'Update entity',
+    'description' => 'Save the updated entity date.',
+    'page callback' => 'fullcalendar_api_update',
+    'page arguments' => array(3, 4),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Saves the updated FullCalendar event's datetime.
+ */
+function fullcalendar_api_update($action, $id) {
+  if (empty($_REQUEST['id'])) {
+    return;
+  }
+
+  // Retrieve and sanitize POST data.
+  $id = check_plain($_REQUEST['id']);
+  $title = check_plain($_REQUEST['title']);
+  $entity_type = check_plain($_REQUEST['entityType']);
+  $bundle = check_plain($_REQUEST['bundle']);
+  $all_day = $_REQUEST['allDay'] ? TRUE : FALSE;
+  $date_field = check_plain($_REQUEST['dateField']);
+  $start_time = intval($_REQUEST['startTime']);
+  $end_time = $_REQUEST['endTime'] ? intval($_REQUEST['endTime']) : NULL;
+
+  $entity = entity_load_single($entity_type, $id);
+
+  // Directly assign the date value instead of using entity metadata wrappers 
+  // to support custom field type.
+  // @todo this could be a lot more flexible
+  $date_value = $entity->{$date_field}[LANGUAGE_NONE][0];
+
+  if ($date_value['date_type'] == 'datestamp') {
+    $date_value['value'] = $start_time;
+    if (empty($end_time)) {
+      $date_value['value2'] = $date_value['value'];
+    }
+    else {
+      $date_value['value2'] = $end_time;
+    }
+  }
+  elseif ($date_value['date_type'] == 'ep_datetime') {
+    $format_string = DATE_FORMAT_DATETIME;
+    $date_value['type'] = 'exact';
+    $date_value['value'] = date($format_string, $start_time);
+    if (empty($end_time)) {
+      $date_value['value2'] = $date_value['value'];
+    }
+    else {
+      $date_value['value2'] = date($format_string, $end_time);
+    }
+  }
+  else {
+    // Get date format and use php date() function.
+    // @todo timezone?
+    $format_string = date_type_format($date_value['date_type']);
+    $date_value['value'] = date($format_string, $start_time);
+    if (empty($end_time)) {
+      $date_value['value2'] = $date_value['value'];
+    }
+    else {
+      $date_value['value2'] = date($format_string, $end_time);
+    }
+  }
+  $entity->{$date_field}[LANGUAGE_NONE][0] = $date_value;;
+  
+  if (entity_save($entity_type, $entity)) {
+    drupal_json_output('success');
+  }
+  else {
+    drupal_json_output('failure');
+  }
+}
+
+/**
+ * Implements hook_libraries_info().
+ */
+function fullcalendar_api_libraries_info() {
+  $libraries['fullcalendar'] = array(
+    'name' => 'Full Calendar',
+    'vendor url' => 'http://fullcalendar.io/',
+    'download url' => 'http://fullcalendar.io/download/',
+    'version arguments' => array(
+      'file' => 'fullcalendar.min.js',
+      'pattern' => '/FullCalendar v(\d+\.+\d+)/',
+      'lines' => 2,
+    ),
+    'files' => array(
+      'js' => array(
+        'fullcalendar.js' => array(
+          'scope' => 'footer',
+        ),
+      ),
+      'css' => array(
+        'fullcalendar.min.css',
+      ),
+    ),
+    'dependencies' => array(
+      'moment',
+    ),
+  );
+  return $libraries;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function fullcalendar_api_theme($existing, $type, $theme, $path) {
+  return array(
+    'fullcalendar_calendar' => array(
+      'file' => 'theme.inc',
+      'variables' => array(
+        'calendar_settings' => array(NULL),
+      ),
+    ),
+    'fullcalendar_calendar_entity' => array(
+      'file' => 'theme.inc',
+      'variables' => array(
+        'entities' => array(NULL),
+        'date_field_map' => array(NULL),
+        'calendar_id' => NULL,
+        'calendar_settings' => array(NULL),
+      ),
+    ),
+  );
+}
+
+/**
+ * Helper function to load all scripts necessary to embed FullCalendar.
+ */
+function fullcalendar_api_load_calendar($calendar_id, $settings) {
+  libraries_load('fullcalendar');
+  drupal_add_js(drupal_get_path('module', 'fullcalendar_api') . '/fullcalendar_calendar.js', array('scope' => 'footer'));
+  drupal_add_js(array('fullcalendar_api' => array(
+    'calendarId' => $calendar_id,
+    'calendarSettings' => $settings,
+  )), 'setting');
+}

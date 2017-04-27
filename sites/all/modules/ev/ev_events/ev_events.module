@@ -1,0 +1,63 @@
+<?php
+/**
+ * @file
+ * Code for the external events feature.
+ */
+
+/**
+ * Implements hook_og_features_registry()
+ */
+function ev_events_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'ev_events';
+  $feature->name = 'Humanitarian Events';
+  $feature->description = t('Provide Humanitarian Events to your space.');
+  $feature->components = array(
+    'path' => array(
+      'node/%node/humanitarian-events',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
+ * Implements hook_menu()
+ */
+function ev_events_menu() {
+  $items = array();
+
+  $items['node/%node/humanitarian-events'] = array(
+    'title' => 'Humanitarian Events',
+    'page callback' => 'ev_events_calendar',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'file' => 'ev_events.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ev_events_theme($existing, $type, $theme, $path) {
+  $theme = array();
+
+  $theme['ev_events_calendar'] = array(
+    'template' => 'ev-events-calendar',
+    'path' => drupal_get_path('module', 'ev_events') . '/templates',
+    'variables' => array(
+      'contents' => array(),
+      'summary' => NULL,
+      'clearall' => NULL,
+      'removefacets' => NULL,
+      'facets' => NULL,
+      'data' => NULL,
+      'pager' => NULL,
+    ),
+   );
+
+  return $theme;
+}

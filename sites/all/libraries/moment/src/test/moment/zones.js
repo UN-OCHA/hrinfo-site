@@ -1,7 +1,11 @@
 import { module, test } from '../qunit';
 import moment from '../../moment';
 
-module('zones');
+module('zones', {
+    'setup': function () {
+        test.expectedDeprecations('moment().zone');
+    }
+});
 
 test('set zone', function (assert) {
     var zone = moment();
@@ -49,6 +53,9 @@ test('set zone with string', function (assert) {
 
     zone.zone('2013-03-07T07:00:00+0100');
     assert.equal(zone.zone(), -60, 'set the zone with a string that uses the +0000 syntax');
+
+    zone.zone('2013-03-07T07:00:00+02');
+    assert.equal(zone.zone(), -120, 'set the zone with a string that uses the +00 syntax');
 
     zone.zone('03-07-2013T07:00:00-08:00');
     assert.equal(zone.zone(), 480, 'set the zone with a string with a non-ISO 8601 date');
@@ -357,6 +364,7 @@ test('isDST', function (assert) {
 });
 
 test('zone names', function (assert) {
+    test.expectedDeprecations();
     assert.equal(moment().zoneAbbr(),   '', 'Local zone abbr should be empty');
     assert.equal(moment().format('z'),  '', 'Local zone formatted abbr should be empty');
     assert.equal(moment().zoneName(),   '', 'Local zone name should be empty');
@@ -419,6 +427,7 @@ test('parse zone static', function (assert) {
 });
 
 test('parse zone with more arguments', function (assert) {
+    test.expectedDeprecations();
     var m;
     m = moment.parseZone('2013 01 01 05 -13:00', 'YYYY MM DD HH ZZ');
     assert.equal(m.format(), '2013-01-01T05:00:00-13:00', 'accept input and format');
@@ -448,4 +457,45 @@ test('timezone format', function (assert) {
     assert.equal(moment().zone(+60).format('ZZ'), '-0100', '+60 -> -0100');
     assert.equal(moment().zone(+90).format('ZZ'), '-0130', '+90 -> -0130');
     assert.equal(moment().zone(+120).format('ZZ'), '-0200', '+120 -> -0200');
+});
+
+test('parse zone without a timezone', function (assert) {
+    test.expectedDeprecations();
+    var m1 = moment.parseZone('2016-02-01T00:00:00');
+    var m2 = moment.parseZone('2016-02-01T00:00:00Z');
+    var m3 = moment.parseZone('2016-02-01T00:00:00+00:00'); //Someone might argue this is not necessary, you could even argue that is wrong being here.
+    var m4 = moment.parseZone('2016-02-01T00:00:00+0000'); //Someone might argue this is not necessary, you could even argue that is wrong being here.
+    assert.equal(
+        m1.format('M D YYYY HH:mm:ss ZZ'),
+        '2 1 2016 00:00:00 +0000',
+        'Not providing a timezone should keep the time and change the zone to 0'
+    );
+    assert.equal(
+        m2.format('M D YYYY HH:mm:ss ZZ'),
+        '2 1 2016 00:00:00 +0000',
+        'Not providing a timezone should keep the time and change the zone to 0'
+    );
+    assert.equal(
+        m3.format('M D YYYY HH:mm:ss ZZ'),
+        '2 1 2016 00:00:00 +0000',
+        'Not providing a timezone should keep the time and change the zone to 0'
+    );
+    assert.equal(
+        m4.format('M D YYYY HH:mm:ss ZZ'),
+        '2 1 2016 00:00:00 +0000',
+        'Not providing a timezone should keep the time and change the zone to 0'
+    );
+});
+
+test('parse zone with a minutes unit abs less than 16 should retain minutes', function (assert) {
+    //ensure when minutes are explicitly parsed, they are retained
+    //instead of converted to hours, even if less than 16
+    var n = moment.parseZone('2013-01-01T00:00:00-00:15');
+    assert.equal(n.utcOffset(), -15);
+    assert.equal(n.zone(), 15);
+    assert.equal(n.hour(), 0);
+    var o = moment.parseZone('2013-01-01T00:00:00+00:15');
+    assert.equal(o.utcOffset(), 15);
+    assert.equal(o.zone(), -15);
+    assert.equal(o.hour(), 0);
 });

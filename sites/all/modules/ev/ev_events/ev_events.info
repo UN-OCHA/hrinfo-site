@@ -1,0 +1,4 @@
+name = Humanitarian Events
+description = Humanitarian Events integration for Humanitarianresponse
+core = 7.x
+package = Humanitarianresponse
