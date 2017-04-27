@@ -1,107 +1,221 @@
-(function ($, Drupal) {
-  'use strict';
+/**
+ * @file
+ * Calendar.
+ */
 
-  $(document).ready(function () {
-    if (!document.querySelector('.reliefweb--facets')) {
-      return;
-    }
-
-    var qs = (function(a) {
-      if (a == "") return {};
-      var b = {};
-      for (var i = 0; i < a.length; ++i) {
-        var p=a[i].split('=', 2);
-        if (p.length == 1) {
-          b[p[0]] = "";
-        }
-        else {
-          b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
-        }
+(function($) {
+  Drupal.behaviors.eventsEvent = {
+    attach: function(context, settings) {
+      if (!settings.fullcalendar_api.calendarSettings) {
+        return;
       }
-      return b;
-    })(window.location.search.substr(1).split('&'));
+      var $calendarId = Drupal.settings.fullcalendar_api.calendarId;
+      var $calendar = $('#' + $calendarId);
+      if (!$calendar.length) {
+        return;
+      }
 
-    // Bind to search.
-    if (document.getElementById('block-hr-reliefweb-hr-reliefweb-search')) {
-      // Redirect to search, overwrite previous search.
-      var handleSearch = function () {
-        var q = document.querySelector('#block-hr-reliefweb-hr-reliefweb-search input').value;
-        window.location = window.location.pathname + '?s=' + q;
+      var eventFilters = {
+        'field_event_organization': undefined,
+        'field_event_cluster': undefined,
+        'field_event_category': undefined,
+        'field_event_coordination_hub': undefined,
       };
 
-      var search = document.querySelector('#block-hr-reliefweb-hr-reliefweb-search input');
-      if (search) {
-        search.addEventListener('keyup', function (e) {
-          if (event.keyCode == 13) {
-            handleSearch();
+      var $settings = settings.fullcalendar_api.calendarSettings;
+      $.extend($settings, {
+        'eventRender': function(event, element, view) {
+          for (f in eventFilters) {
+            if (eventFilters.hasOwnProperty(f) && event.hasOwnProperty(f) && typeof eventFilters[f] != 'undefined' && eventFilters[f] != event[f]) {
+              return false;
+            }
           }
-        });
+          return true;
+        },
+        viewRender: function(view) {
+          if (view.name === 'upcoming') {
+            if ($calendar.fullCalendar('getDate').unix() < moment().unix()) {
+              $calendar.fullCalendar('gotoDate', moment());
+            }
+          }
+          else if (view.name === 'past') {
+            if ($calendar.fullCalendar('getDate').toISOString() >= moment().format('Y-MM-DD')) {
+              $calendar.fullCalendar('gotoDate', moment().add(-1, 'days'));
+              window.setTimeout(function () {
+                $calendar.fullCalendar('prev');
+              }, 250);
+            }
+          }
+        }
+      });
+
+      $.extend($settings['views'], {
+        'upcoming': {
+          'type': 'list',
+          'buttonText': 'Upcoming',
+          'duration': {
+            'days': 90
+          },
+          'visibleRange': function(currentDate) {
+            return {
+              start: currentDate.clone(),
+              end: currentDate.clone().add(90, 'days')
+            };
+          },
+          'validRange': function(currentDate) {
+            return {
+              start: currentDate.clone()
+            };
+          }
+        },
+        'past': {
+          'type': 'listrev',
+          'buttonText': 'Past events',
+          'duration': {
+            'days': 90
+          },
+          'visibleRange': function(currentDate) {
+            return {
+              start: currentDate.clone().add(-90, 'days'),
+              end: currentDate.clone().add(1, 'days')
+            };
+          },
+          'validRange': function(currentDate) {
+            return {
+              end: currentDate.clone().add(-1, 'days')
+            };
+          }
+        }
+      });
+
+      $calendar.fullCalendar($settings);
+
+      var handleICal = function (e) {
+        var url = $settings.base_url + '/ical?';
+        url += $.param(eventFilters);
+        window.location = url;
+      };
+
+      // Redirect to selected option.
+      var handleSelect = function (e) {
+        if (e.target.value) {
+          data = e.target.value;
+          parts = data.split(':');
+
+          eventFilters[parts[0]] = parts[1];
+
+          // Don't change the source.
+          // $calendar.fullCalendar('getEventSources')[0].data[parts[0]] = parts[1];
+
+          // Trigger rerender.
+          $calendar.fullCalendar('rerenderEvents');
+        }
+      };
+
+      var buildIcalButton = function () {
+        var button = document.createElement('button');
+        button.innerHTML = Drupal.t('ICAL');
+        button.addEventListener('click', handleICal);
+        return button;
       }
 
-      var searchButton = document.querySelector('#block-hr-reliefweb-hr-reliefweb-search button');
-      if (searchButton) {
-        searchButton.addEventListener('click', function (e) {
-          handleSearch();
+      var buildPdfButton = function () {
+        var button = document.createElement('button');
+        button.innerHTML = Drupal.t('PDF');
+        button.addEventListener('click', function () {
+          // pdf magic here
         });
+        return button;
       }
 
-      // Fill in current search parameter.
-      if (qs['s']) {
-        document.querySelector('#block-hr-reliefweb-hr-reliefweb-search input').value = qs['s'];
+      var buildExportOptions = function () {
+        var container = document.createElement('div');
+        container.className = 'calendar-export';
+
+        var exportButton = document.createElement('button');
+        exportButton.className = 'btn-primary calendar-export__button';
+        exportButton.innerHTML = Drupal.t('Export');
+        exportButton.id = 'export-dropdown';
+        exportButton.setAttribute('data-toggle', 'dropdown');
+        exportButton.setAttribute('aria-haspopup', 'true');
+        exportButton.setAttribute('aria-expanded', 'false');
+
+        container.appendChild(exportButton);
+
+        var exportOptionsList = document.createElement('ul');
+        exportOptionsList.className = 'dropdown-menu';
+        exportOptionsList.setAttribute('aria-labelledby', 'export-dropdown');
+
+        var icalButton = buildIcalButton();
+        var pdfButton = buildPdfButton();
+
+        var exportListItem = document.createElement('li');
+        exportListItem.appendChild(icalButton);
+        exportListItem.appendChild(pdfButton);
+        exportOptionsList.appendChild(exportListItem);
+        container.appendChild(exportOptionsList);
+        return container;
       }
+
+      $.getJSON($settings.base_url + '/api/v0/facets', function(facets) {
+        var filtersWrapper = document.createElement('div');
+        filtersWrapper.className = 'calendar-filters clearfix';
+
+        var filterCount = 0;
+        for (var f in facets) {
+          var facet = facets[f];
+          filterCount++;
+
+          console.log(facet);
+          var filter = document.createElement('div');
+
+          if (facet.values.length === 0) {
+            continue;
+          }
+
+          // Construct label.
+          var newLabel = document.createElement('label');
+          newLabel.innerText = facet.label;
+          newLabel.setAttribute('for', 'filter-' + filterCount);
+
+          // Construct select.
+          var newSelect = document.createElement('select');
+          newSelect.className += ' chosen-enable';
+          newSelect.id = 'filter-' + filterCount;
+
+          // Add empty option.
+          var newOption = document.createElement('option');
+          newOption.value = f;
+          newOption.text = Drupal.t('- Any -');
+          newSelect.appendChild(newOption);
+
+          // Add options.
+          for (var o in facet.values) {
+            var option = facet.values[o];
+            var newOption = document.createElement('option');
+            newOption.value = f + ':' + o;
+            newOption.text = option;
+            newSelect.appendChild(newOption);
+          }
+
+          // Hide filters.
+          filter.className += ' processed block-views';
+          filter.appendChild(newLabel);
+          filter.appendChild(newSelect);
+          filtersWrapper.appendChild(filter);
+
+          if (Drupal.behaviors && Drupal.behaviors.chosen) {
+            Drupal.behaviors.chosen.attach(newSelect, Drupal.settings);
+            jQuery(newSelect).chosen().change(function(e) {
+              handleSelect(e);
+            });
+          }
+        }
+        document.querySelector('#block-system-main').insertBefore(filtersWrapper, document.querySelector('#block-system-main').firstChild);
+
+        var exportDiv = buildExportOptions();
+        document.querySelector('#block-system-main').insertBefore(exportDiv, document.querySelector('#block-system-main').firstChild);
+      });
     }
-
-    // Redirect to selected option.
-    var handleSelect = function (e) {
-      if (e.target.value) {
-        window.location = e.target.value;
-      }
-    };
-
-    var details = document.querySelectorAll('.reliefweb--facets details');
-    for (var i = 0; i < details.length; i++) {
-      var detail = details[i];
-
-      // Construct label.
-      var newLabel = document.createElement('label');
-      newLabel.innerText = detail.querySelector('summary').innerText;
-      newLabel.classList.add('invisible');
-
-      // Construct select.
-      var newSelect = document.createElement('select');
-      newSelect.classList.add('chosen-enable');
-      var options = detail.querySelectorAll('li a');
-
-      // Add empty option.
-      var newOption = document.createElement('option');
-      newOption.value = '';
-      newOption.text = newLabel.innerText;
-      newSelect.appendChild(newOption);
-
-      // Add options.
-      for (var j = 0; j < options.length; j++) {
-        var option = options[j];
-        var newOption = document.createElement('option');
-        newOption.value = option.href;
-        newOption.text = option.innerHTML;
-        newSelect.appendChild(newOption);
-      }
-
-      // Hide details.
-      detail.classList.add('processed');
-      detail.parentNode.appendChild(newLabel);
-      detail.parentNode.appendChild(newSelect);
-
-      if (Drupal.behaviors && Drupal.behaviors.chosen) {
-        Drupal.behaviors.chosen.attach(newSelect, Drupal.settings);
-        jQuery(newSelect).chosen().change(function(e) {
-          handleSelect(e);
-        });
-      }
-    }
-
-    // Listen for change events.
-    var details = document.querySelector('.reliefweb--facets').addEventListener("change", handleSelect);
-
-  });
-})(jQuery, Drupal);
+  }
+})(jQuery);

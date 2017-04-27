@@ -61,3 +61,13 @@ function ev_events_theme($existing, $type, $theme, $path) {
 
   return $theme;
 }
+
+/**
+ * Implements hook_js_alter().
+ */
+function ev_events_js_alter(&$javascript) {
+  // Remove fullcalendar javascript.
+  if (isset($javascript['sites/all/modules/contrib/fullcalendar_api/fullcalendar_calendar.js'])) {
+    unset($javascript['sites/all/modules/contrib/fullcalendar_api/fullcalendar_calendar.js']);
+  }
+}

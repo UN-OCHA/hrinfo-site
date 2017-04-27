@@ -48,6 +48,7 @@ function ev_events_calendar($node) {
   menu_set_active_item('node/' . $node->nid . '/humanitarian-events');
 
   $settings = array(
+    'base_url' => 'http://localhost:8080',
     'header' => array(
       'left' => 'prev,next today',
       'center' => 'title',
@@ -69,10 +70,17 @@ function ev_events_calendar($node) {
     'events' => array(
       'url' => 'http://localhost:8080/api/v0/fetch-events',
       'type' => 'GET',
+      'data' => array(
+        'field_event_coordination_hub' => '',
+        'field_event_cluster' => '',
+        'field_event_category' => '',
+        'field_event_organization' => '',
+      )
     ),
   );
 
   drupal_add_library('chosen', 'drupal.chosen');
+  drupal_add_js(drupal_get_path('module', 'ev_events') . '/js/ev_events_calendar.js');
 
   return theme('fullcalendar_calendar', array(
     'calendar_id' => 'fullcalendar',
