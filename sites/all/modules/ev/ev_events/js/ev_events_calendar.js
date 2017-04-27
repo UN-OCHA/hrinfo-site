@@ -16,17 +16,17 @@
       }
 
       var eventFilters = {
-        'field_event_organization': undefined,
-        'field_event_cluster': undefined,
-        'field_event_category': undefined,
-        'field_event_coordination_hub': undefined,
+        'field_event_organization': '',
+        'field_event_cluster': '',
+        'field_event_category': '',
+        'field_event_coordination_hub': '',
       };
 
       var $settings = settings.fullcalendar_api.calendarSettings;
       $.extend($settings, {
         'eventRender': function(event, element, view) {
           for (f in eventFilters) {
-            if (eventFilters.hasOwnProperty(f) && event.hasOwnProperty(f) && typeof eventFilters[f] != 'undefined' && eventFilters[f] != event[f]) {
+            if (eventFilters.hasOwnProperty(f) && event.hasOwnProperty(f) && typeof eventFilters[f] != 'undefined' && eventFilters[f] != '' && eventFilters[f] != event[f]) {
               return false;
             }
           }
