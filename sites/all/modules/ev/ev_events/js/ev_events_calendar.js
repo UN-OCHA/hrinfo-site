@@ -21,7 +21,7 @@
       $.extend($settings, {
         'eventRender': function(event, element, view) {
           for (f in eventFilters) {
-            if (eventFilters.hasOwnProperty(f) && event.hasOwnProperty(f) && typeof eventFilters[f] != 'undefined' && eventFilters[f] != '' && eventFilters[f] != event[f]) {
+            if (eventFilters.hasOwnProperty(f) && event.hasOwnProperty(f) && typeof eventFilters[f] != 'undefined' && eventFilters[f] != '' && event[f].indexOf(eventFilters[f]) === -1) {
               return false;
             }
           }
