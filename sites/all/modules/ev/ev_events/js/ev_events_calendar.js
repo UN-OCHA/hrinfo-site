@@ -158,6 +158,11 @@
 
         var filterCount = 0;
         for (var f in facets) {
+          // Skip facets if they are not used.
+          if (!field_event_location[f]) {
+            continue;
+          }
+
           var facet = facets[f];
           filterCount++;
 

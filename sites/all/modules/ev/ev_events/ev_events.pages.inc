@@ -75,7 +75,7 @@ function ev_events_calendar($node) {
         'field_event_coordination_hub' => '',
         'field_event_cluster' => '',
         'field_event_category' => '',
-        'field_event_organization' => '',
+        'field_event_location' => '',
       )
     ),
   );
