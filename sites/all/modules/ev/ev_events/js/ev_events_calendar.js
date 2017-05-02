@@ -159,14 +159,13 @@
         var filterCount = 0;
         for (var f in facets) {
           // Skip facets if they are not used.
-          if (!field_event_location[f]) {
+          if (typeof eventFilters[f] == 'undefined') {
             continue;
           }
 
           var facet = facets[f];
           filterCount++;
 
-          console.log(facet);
           var filter = document.createElement('div');
 
           if (facet.values.length === 0) {
