@@ -98,9 +98,10 @@
           parts = data.split(':');
 
           eventFilters[parts[0]] = parts[1];
-
-          // Don't change the source.
-          // $calendar.fullCalendar('getEventSources')[0].data[parts[0]] = parts[1];
+          eventFilters[parts[0]] = parts[1];
+          if (typeof parts[1] != 'undefined') {
+            eventFilters[parts[0]] = '';
+          }
 
           // Trigger rerender.
           $calendar.fullCalendar('rerenderEvents');
