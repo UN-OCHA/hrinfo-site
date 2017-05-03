@@ -25,6 +25,7 @@
               return false;
             }
           }
+          event.url = $settings.base_url + event.url;
           return true;
         },
         viewRender: function(view) {
@@ -152,7 +153,16 @@
         return container;
       }
 
-      $.getJSON($settings.base_url + '/api/v0/facets', function(facets) {
+      // Build URL parameters for facets.
+      var facetURL = '/api/v0/facets?';
+      var forcedFilters = Drupal.settings.fullcalendar_api.calendarSettings.events.data;
+      for (f in forcedFilters) {
+        if (forcedFilters.hasOwnProperty(f) && typeof forcedFilters[f] != 'undefined' && forcedFilters[f] != '') {
+          facetURL += f + '=' + forcedFilters[f] + '&';
+        }
+      }
+
+      $.getJSON($settings.base_url + facetURL, function(facets) {
         var filtersWrapper = document.createElement('div');
         filtersWrapper.className = 'calendar-filters clearfix';
 
