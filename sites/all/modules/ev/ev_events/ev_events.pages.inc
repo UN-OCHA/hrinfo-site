@@ -80,6 +80,11 @@ function ev_events_calendar($node) {
     ),
   );
 
+  if (isset($node->field_country['und'][0]['target_id'])) {
+    $term = taxonomy_term_load($node->field_country['und'][0]['target_id']);
+    $settings['events']['data']['vloc'] = $term->name;
+  }
+
   drupal_add_library('chosen', 'drupal.chosen');
   drupal_add_js(drupal_get_path('module', 'ev_events') . '/js/ev_events_calendar.js');
 
