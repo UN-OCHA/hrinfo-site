@@ -25,7 +25,6 @@
               return false;
             }
           }
-          event.url = $settings.base_url + event.url;
           return true;
         },
         viewRender: function(view) {
