@@ -72,10 +72,10 @@ function ev_events_calendar($node) {
       'url' => $api_base_url . '/api/v0/fetch-events',
       'type' => 'GET',
       'data' => array(
-        'field_event_coordination_hub' => '',
-        'field_event_cluster' => '',
-        'field_event_category' => '',
-        'field_event_location' => '',
+        'hub' => '',
+        'clu' => '',
+        'cat' => '',
+        'loc' => '',
       )
     ),
   );
