@@ -590,7 +590,7 @@ function _oauthconnector_button($form, &$form_state, $login = TRUE) {
   //TODO: Move some of the contens of this function to oauth_common_get_request_token()?
 
   $provider = $form_state['clicked_button']['connector']['#value']['oauthconnector provider'];
-  $callback_url = url('oauth/authorized', array('absolute' => TRUE));
+  $callback_url = url('oauth/authorized', array('absolute' => TRUE, 'language' => ''));
 
   $consumer = DrupalOAuthConsumer::loadById($provider->csid, FALSE);
   $sig_method = DrupalOAuthClient::signatureMethod(substr(strtolower($provider->consumer_advanced['signature method']), 5));
@@ -614,7 +614,7 @@ function _oauthconnector_button($form, &$form_state, $login = TRUE) {
     ));
   }
   else {
-    $callback_url = url('oauth/authorized2/' . $consumer->csid, array('absolute' => TRUE));
+    $callback_url = url('oauth/authorized2/' . $consumer->csid, array('absolute' => TRUE, 'language' => ''));
     $request_token = new DrupalOAuthToken(md5(mt_rand()), md5(mt_rand()), $consumer, array(
       'type'    => OAUTH_COMMON_TOKEN_TYPE_REQUEST,
       //'version' => $client->version,
