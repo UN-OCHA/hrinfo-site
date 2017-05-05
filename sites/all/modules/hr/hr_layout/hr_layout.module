@@ -585,9 +585,6 @@ function hr_layout_create_links() {
                   $button .= '<li>'.$item['data'].'</li>';
                 }
               }
-              else if (in_array($type, array('hr_document', 'hr_infographic'))) {
-                $button .= '<li>'.$item['data'].'</li>';
-              }
             }
           }
         }
