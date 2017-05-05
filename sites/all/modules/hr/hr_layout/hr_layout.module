@@ -400,6 +400,19 @@ function hr_layout_block_view($delta = '') {
               case 'acc_incidents':
                 $path = 'access/incidents';
                 break;
+
+              case 'hr_events':
+                // Hide menu item when hr_reliefweb_meeting_documents is active.
+                if (!og_features_feature_is_disabled('hr_reliefweb_meeting_documents', $og_group)) {
+                  continue 2;
+                }
+
+              case 'hr_documents':
+              case 'hr_infographics':
+                // Hide menu item when hr_reliefweb_documents is active.
+                if (!og_features_feature_is_disabled('hr_reliefweb_documents', $og_group)) {
+                  continue 2;
+                }
             }
             // If not disabled add to menu items
             $paths[$key] = array(
