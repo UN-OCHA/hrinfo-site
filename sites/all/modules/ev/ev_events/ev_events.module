@@ -5,6 +5,15 @@
  */
 
 /**
+ * Implements hook_ctools_plugin_directory()
+ */
+function ev_events_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
  * Implements hook_og_features_registry()
  */
 function ev_events_og_features_registry() {
