@@ -12,11 +12,19 @@
 
 		for (var i=0; i < poweredByPagesLength; i++) {
 			if (window.location.pathname.indexOf('operations/' + poweredByPages[i]) !== -1) {
-				$('html').addClass('powered-by');				
+				$('html').addClass('powered-by');
 			}
 		}
 	}
 	poweredBy();
+
+	// Add class to Colombia pages so they use the Sala Humanitaria logo.
+	function salaHumanitariaLogo () {
+		if (window.location.pathname.indexOf('operations/colombia') !== -1 || window.location.pathname.indexOf('j2h/contactos') !== -1) {
+			$('html').addClass('sala-humanitaria');
+		}
+	}
+	salaHumanitariaLogo();
 
 	$(document).ready(function() {
 
@@ -87,7 +95,7 @@
 				$('#surveyAlert').hide();
 				var date = new Date();
 				date.setDate(date.getDate() + 4);
-		    document.cookie = "hrinfoSurveyAlert=true; expires=" + date; 
+		    document.cookie = "hrinfoSurveyAlert=true; expires=" + date;
 			});
 
 		  if (document.cookie.replace(/(?:(?:^|.*;\s*)hrinfoSurveyAlert\s*\=\s*([^;]*).*$)|^.*$/, "$1") !== "true") {
