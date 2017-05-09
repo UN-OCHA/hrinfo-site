@@ -4135,15 +4135,25 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
 
 .fc-view-container { background: white; }
 
-a.fc-event, .fc-event { border-radius: 0 !important; box-shadow: none; font-weight: normal; }
+a.fc-event, .fc-event { border-radius: 0 !important; box-shadow: none; font-weight: normal; color: #1565b5; }
 
 a.fc-event:hover, a.fc-event:focus { color: #0fa4de; text-decoration: underline; }
 
 .fc-day-grid-event, .fc-time-grid-event { margin: 1px 2px 0; padding: 2px 0 0 0; }
 
-.fc-day-grid-event .fc-content, .fc-time-grid-event .fc-content { background: white; padding: 4px; height: 100%; }
+.fc-day-grid-event .fc-content, .fc-time-grid-event .fc-content { background: #eeeeee; border: 1px solid #eeeeee; border-top: none; padding: 4px; height: 100%; }
 
 .fc-toolbar .fc-left, .fc-toolbar .fc-right { float: none; overflow: auto; margin-bottom: 8px; }
+
+.hr-highlighted .fc-header-toolbar { text-align: left; margin-bottom: 8px; }
+.hr-highlighted .fc-header-toolbar h2 { font-size: 13px; color: #333333; }
+.hr-highlighted .fc-view-container { background: none; }
+.hr-highlighted .fc-scroller { height: auto !important; max-height: 274px; }
+.hr-highlighted .fc-list-view { border: none; }
+.hr-highlighted .fc-list-heading td { background: none; }
+.hr-highlighted .fc-list-table + .fc-list-table { margin-top: 8px; }
+.hr-highlighted .fc-list-table td { border: none; padding: 0 8px 8px 0; }
+.hr-highlighted .fc-list-item-marker { padding-right: 4px; }
 
 @media (min-width: 768px) { .fc-toolbar .fc-left { float: left; }
   .fc-toolbar .fc-right { float: right; } }
