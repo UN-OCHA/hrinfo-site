@@ -27,7 +27,7 @@
   margin-right: $cd-base-unit;
 
   // Columbia has a different logo, use OG context to identify these pages
-  .og-context-node-77 & {
+  .og-context-node-77 &, .sala-humanitaria & {
     background-image: url('../images/salahumanitaria-logo-mobile.svg');
   }
 
@@ -45,7 +45,7 @@
     background-image: url('../images/hr-info-logo-mobile.png');
   }
 
-  .og-context-node-77 & {
+  .og-context-node-77 &, .sala-humanitaria & {
     .no-svg & {
       background-image: url('../images/salahumanitaria-logo-mobile.png');
     }
@@ -233,7 +233,7 @@
     background: url('../images/hr-info-logo.svg') left center no-repeat;
     background-size: auto 100%;
 
-    .og-context-node-77 & {
+    .og-context-node-77 &, .sala-humanitaria & {
       background-image: url('../images/salahumanitaria-logo.svg');
       background-size: 100% auto;
     }
@@ -241,7 +241,7 @@
     .no-svg & {
       background-image: url('../images/hr-info-logo.png');
     }
-    .og-context-node-77 & {
+    .og-context-node-77 &, .sala-humanitaria & {
       .no-svg & {
         background-image: url('../images/salahumanitaria-logo.png');
         background-size: 100% auto;
