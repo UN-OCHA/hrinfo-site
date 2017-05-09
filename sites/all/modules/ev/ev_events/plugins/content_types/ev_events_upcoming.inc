@@ -63,6 +63,7 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
   $api_base_url = variable_get('ev_events_api_url', 'https://events.staging.humanitarianresponse.info');
   $settings = array(
     'base_url' => $api_base_url,
+    'hide_export' => TRUE,
     'header' => array(
       'left' => '',
       'center' => 'title',

@@ -222,8 +222,10 @@
         }
         document.querySelector('#block-system-main').insertBefore(filtersWrapper, document.querySelector('#block-system-main').firstChild);
 
-        var exportDiv = buildExportOptions();
-        document.querySelector('#block-system-main').insertBefore(exportDiv, document.querySelector('#block-system-main').firstChild);
+        if (typeof Drupal.settings.fullcalendar_api.calendarSettings.hide_export == 'undefined' || !Drupal.settings.fullcalendar_api.calendarSettings.hide_export) {
+          var exportDiv = buildExportOptions();
+          document.querySelector('#block-system-main').insertBefore(exportDiv, document.querySelector('#block-system-main').firstChild);
+        }
       });
     }
   }
