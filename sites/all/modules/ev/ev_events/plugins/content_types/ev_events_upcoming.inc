@@ -50,59 +50,73 @@ function ev_events_upcoming_edit_form_submit($form, &$form_state) {
 
 /**
  * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
  */
-
-function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL){
+function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL) {
   $block = new stdClass();
   $block->title = t('Upcoming events');
+  $output = t('No events to display');
+  $now = new DateTime();
 
   $api_base_url = variable_get('ev_events_api_url', 'https://events.staging.humanitarianresponse.info');
-  $country = $conf['country'];
+  $country = 'Ethiopia';
 
-  $api_base_url = variable_get('ev_events_api_url', 'https://events.staging.humanitarianresponse.info');
-  $settings = array(
-    'base_url' => $api_base_url,
-    'hide_export' => TRUE,
-    'header' => array(
-      'left' => '',
-      'center' => 'title',
-      'right' => '',
-    ),
-    'editable' => FALSE,
-    'eventLimit' => TRUE,
-    'firstDay' => 1,
-    'weekends' => TRUE,
-    'timeFormat' => 'H:mm',
-    'timezone' => drupal_get_user_timezone(),
-    'defaultView' => 'upcoming',
-    'views' => array(
-      'upcoming' => array(),
-    ),
-    'events' => array(
-      'url' => $api_base_url . '/api/v0/fetch-events',
-      'type' => 'GET',
-      'data' => array(
-        'vloc' => $country,
-      )
-    ),
+  $api_url = $api_base_url . '/api/v0/fetch-events';
+  $params = array(
+    'vloc' => $country,
+    'start' => $now->format('Y-m-d'),
   );
 
-  drupal_add_library('chosen', 'drupal.chosen');
-  drupal_add_js(drupal_get_path('module', 'ev_events') . '/js/ev_events_calendar.js');
+  $url = $api_url . '?' . drupal_http_build_query($params);
+  $request = drupal_http_request($url);
+  if (isset($request->data)) {
+    $events = drupal_json_decode($request->data);
+    $items = array();
+    foreach ($events as $event) {
+      $items[] = array(
+        'data' => ev_events_upcoming_render_event($event),
+        'class' => array_keys($account->roles),
+      );
+    }
+    $output = theme('item_list', array(
+      'items' => $items,
+      'title' => '',
+      'type' => 'ul',
+      'attributes' => array('class' => 'ev-upcoming-events'),
+    ));
+  }
 
-  $block->content = theme('fullcalendar_calendar', array(
-    'calendar_id' => 'fullcalendar',
-    'calendar_settings' => $settings,
-  ));
+  $block->content = $output;
 
   return $block;
 }
 
 /**
+ * Render one event.
+ */
+function ev_events_upcoming_render_event($event) {
+  $timezone = drupal_get_user_timezone();
+
+  $output = '';
+  $date_start = new DateTime($event['start']);
+  $date_end = new DateTime($event['end']);
+  $all_day = $event['allDay'];
+
+  if ($all_day) {
+    $date = $date_start->format('d F Y') . ' (' . t('All day') . ')';
+  }
+  else {
+    $date = $date_start->format('d F Y H:i') . ' - ' . $date_end->format('H:i');
+  }
+
+  $output .= '<span class="ev-event-date">' . $date . '</span> ';
+  $output .= '<span class="ev-event-title">' . l($event['title'], $event['url']) . '</span>';
+
+  return $output;
+}
+
+/**
 *  Function to return ReliefWeb Api paths.
 */
-
 function ev_events_upcoming_api_path() {
   $source_url = 'http://api.reliefweb.int/v1';
   $api_endpoints = array();
