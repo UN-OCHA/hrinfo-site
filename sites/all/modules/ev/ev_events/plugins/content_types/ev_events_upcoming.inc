@@ -74,7 +74,7 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
     foreach ($events as $event) {
       $items[] = array(
         'data' => ev_events_upcoming_render_event($event),
-        'class' => array_keys($account->roles),
+        'class' => array('ev-event'),
       );
     }
     $output = theme('item_list', array(
