@@ -6,10 +6,59 @@
  */
 
 /**
+ * Implements hook_schema().
+ */
+function media_wysiwyg_schema() {
+  $schema['media_restrict_wysiwyg'] = array(
+    'description' => 'Stores media displays restricted in wysiwyg.',
+    'fields' => array(
+      'type' => array(
+        'description' => 'The machine name of the file type.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'display' => array(
+        'description' => 'The restricted display.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+  );
+  $schema['media_view_mode_wysiwyg'] = array(
+    'description' => 'Maps WYSIWYG view modes to file types.',
+    'fields' => array(
+      'type' => array(
+        'description' => 'The machine name of the file type.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'view_mode' => array(
+        'description' => 'WYSIWYG view mode mapped to this file type.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+
+    ),
+  );
+  return $schema;
+}
+
+/**
  * Implements hook_install().
  */
 function media_wysiwyg_install() {
   media_wysiwyg_update_7204();
+
+  // Start off with the alignment feature enabled.
+  variable_set('media_wysiwyg_alignment', TRUE);
 }
 
 /**
@@ -25,6 +74,8 @@ function media_wysiwyg_uninstall() {
   variable_del('media_wysiwyg_wysiwyg_allowed_attributes');
   variable_del('media_wysiwyg_wysiwyg_browser_plugins');
   variable_del('media_wysiwyg_wysiwyg_override_field_types');
+  variable_del('media_wysiwyg_use_link_text_for_filename');
+  variable_del('media_wysiwyg_alignment');
 }
 
 /**
@@ -74,6 +125,7 @@ function media_wysiwyg_update_7203() {
 
   return $output;
 }
+
 /**
  * Whitelists certain fields for WYSIWYG overriding.
  */
@@ -105,4 +157,88 @@ function media_wysiwyg_update_7204() {
       '@default_string' => $default_string,
     ));
   }
+}
+
+/**
+ * Install {media_restrict_wysiwyg} and {media_view_mode_wysiwyg}.
+ *
+ * Remove variables media_wysiwyg_view_mode_%.
+ *
+ * Uninstall media_wysiwyg_view_mode module.
+ */
+function media_wysiwyg_update_7205() {
+  $schema = media_wysiwyg_schema();
+
+  // Create the new configuration tables.
+  if (!db_table_exists('media_restrict_wysiwyg')) {
+    db_create_table('media_restrict_wysiwyg', $schema['media_restrict_wysiwyg']);
+    db_create_table('media_view_mode_wysiwyg', $schema['media_view_mode_wysiwyg']);
+  }
+
+  // Migrate the configuration from the old variables into the new DB tables.
+  $types = file_type_load_all(TRUE);
+  foreach ($types as $type) {
+    $enabled = variable_get("media_wysiwyg_view_mode_" . $type->type . "_file_wysiwyg_restricted_view_modes_status", FALSE);
+    if ($enabled) {
+      $wysiwyg_restricted_view_modes = variable_get("media_wysiwyg_view_mode_" . $type->type . "_file_wysiwyg_restricted_view_modes", array());
+      foreach ($wysiwyg_restricted_view_modes as $wysiwyg_restricted_view_mode) {
+        db_insert('media_restrict_wysiwyg')
+          ->fields(array(
+            'type' => $type->type,
+            'display' => $wysiwyg_restricted_view_mode,
+          ))
+          ->execute();
+      }
+    }
+
+    $enabled = variable_get("media_wysiwyg_view_mode_" . $type->type . "_wysiwyg_view_mode_status", FALSE);
+    if ($enabled) {
+      $file_wysiwyg_view_mode = variable_get("media_wysiwyg_view_mode_" . $type->type . "_file_wysiwyg_view_mode", 'wysiwyg');
+      db_insert('media_view_mode_wysiwyg')
+        ->fields(array(
+          'type' => $type->type,
+          'view_mode' => $file_wysiwyg_view_mode,
+        ))
+        ->execute();
+    }
+  }
+
+  // Remove old configuration variables.
+  db_delete('variable')->condition('name', "media_wysiwyg_view_mode_%", "LIKE")->execute();
+
+  // Disable and uninstall View Mode module.Since the view mode module is
+  // deleted, this copies from  module_disable() and drupal_uninstall_modules().
+  // Disable first.
+  $module = 'media_wysiwyg_view_mode';
+  db_update('system')
+    ->fields(array('status' => 0))
+    ->condition('type', 'module')
+    ->condition('name', $module)
+    ->execute();
+  system_list_reset();
+  module_list(TRUE);
+  module_implements('', FALSE, TRUE);
+  entity_info_cache_clear();
+  // Invoke hook_modules_disabled before disabling modules,
+  // so we can still call module hooks to get information.
+  module_invoke_all('modules_disabled', array($module));
+  // Update the registry to remove the newly-disabled module.
+  registry_update();
+  _system_update_bootstrap_status();
+  // Update the theme registry to remove the newly-disabled module.
+  drupal_theme_rebuild();
+
+  // Now uninstall.
+  drupal_uninstall_schema($module);
+  drupal_set_installed_schema_version($module, SCHEMA_UNINSTALLED);
+
+  module_invoke_all('modules_uninstalled', array($module));
+}
+
+/**
+ * Notify upgraders that there's optional media alignment functionality that needs to be enabled.
+ */
+function media_wysiwyg_update_7206() {
+  $message = t('If you would like to be able to align your embedded media (left, right, or center), go to /admin/config/media/browser and check "Provide alignment option when embedding media", and save the settings.');
+  drupal_set_message($message, 'warning', TRUE);
 }
