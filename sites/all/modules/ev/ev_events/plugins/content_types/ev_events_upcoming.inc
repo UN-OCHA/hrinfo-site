@@ -55,7 +55,9 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
   $block = new stdClass();
   $block->title = t('Upcoming events');
   $output = t('No events to display');
+
   $now = new DateTime();
+  $path = current_path() . '/humanitarian-events';
 
   $api_base_url = variable_get('ev_events_api_url', 'https://events.staging.humanitarianresponse.info');
   $country = 'Ethiopia';
@@ -70,6 +72,7 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
   $request = drupal_http_request($url);
   if (isset($request->data)) {
     $events = drupal_json_decode($request->data);
+    $events = ev_events_order_by_date($events);
     $items = array();
     foreach ($events as $event) {
       $items[] = array(
@@ -85,9 +88,30 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
     ));
   }
 
-  $block->content = $output;
+  $read_more = '<div class="more-link read-more">';
+  $read_more .= l(t('View more'), $path);
+  $read_more .= '</div>';
+
+  $block->content = $read_more . $output;
 
   return $block;
+}
+
+/**
+ * Order events by date.
+ */
+function ev_events_order_by_date($events) {
+  usort($events, function ($a, $b) {
+    if ($a['start'] == $b['start']) {
+      if ($a['end'] == $b['end']) {
+        return 0;
+      }
+      return ($a['end'] < $b['end']) ? -1 : 1;
+    }
+    return ($a['start'] < $b['start']) ? -1 : 1;
+  });
+
+  return $events;
 }
 
 /**
