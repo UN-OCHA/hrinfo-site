@@ -339,6 +339,7 @@ function hr_layout_block_view($delta = '') {
         $order = array(
           'hid_contacts',
           'hr_events',
+          'ev_events',
           'hr_reliefweb_meeting_documents',
           'hr_documents',
           'hr_infographics',
@@ -378,6 +379,9 @@ function hr_layout_block_view($delta = '') {
                 else {
                   $path = 'j2h/contactos';
                 }
+                break;
+              case 'ev_events':
+                $path = 'humanitarian-events';
                 break;
               case 'hr_reliefweb_documents':
                 $path = 'reliefweb';
