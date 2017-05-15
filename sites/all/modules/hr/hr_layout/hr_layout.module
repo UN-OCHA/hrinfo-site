@@ -401,16 +401,18 @@ function hr_layout_block_view($delta = '') {
 
               case 'hr_events':
                 // Hide menu item when hr_reliefweb_meeting_documents is active.
-                if (!og_features_feature_is_disabled('hr_reliefweb_meeting_documents', $og_group)) {
+                if (array_key_exists('ev_events', $registry) && !og_features_feature_is_disabled('ev_events', $og_group)) {
                   continue 2;
                 }
+                break;
 
               case 'hr_documents':
               case 'hr_infographics':
                 // Hide menu item when hr_reliefweb_documents is active.
-                if (!og_features_feature_is_disabled('hr_reliefweb_documents', $og_group)) {
+                if (array_key_exists('hr_reliefweb_documents', $registry) && !og_features_feature_is_disabled('hr_reliefweb_documents', $og_group)) {
                   continue 2;
                 }
+                break;
             }
             // If not disabled add to menu items
             $paths[$key] = array(
@@ -438,6 +440,7 @@ function hr_layout_block_view($delta = '') {
             $items[] = $paths[$feature];
           }
         }
+
         foreach ($items as $item) {
           $block['content'] .= '<li>'.l(t($item['name']), $item['path']).'</li>';
         }
