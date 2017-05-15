@@ -61,6 +61,9 @@ function ev_events_calendar($node) {
     'weekends' => TRUE,
     'timeFormat' => 'H:mm',
     'timezone' => drupal_get_user_timezone(),
+    'buttonText' => array(
+      'today' => 'Today',
+    ),
     'views' => array(
       'month' => array(
         'buttonText' => 'Month',
