@@ -133,7 +133,10 @@ function ev_events_upcoming_render_event($event) {
   }
 
   $output .= '<span class="ev-event-date">' . $date . '</span> ';
-  $output .= '<span class="ev-event-title">' . l($event['title'], $event['url']) . '</span>';
+  $output .= '<span class="ev-event-title">' . l($event['title'], $event['url'], array(
+    'attributes' => array(
+      'target' => '_blank',
+    ))) . '</span>';
 
   return $output;
 }
