@@ -73,6 +73,7 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
   if (isset($request->data)) {
     $events = drupal_json_decode($request->data);
     $events = ev_events_order_by_date($events);
+
     $items = array();
     foreach ($events as $event) {
       $items[] = array(
@@ -80,6 +81,7 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
         'class' => array('ev-event'),
       );
     }
+
     $output = theme('item_list', array(
       'items' => $items,
       'title' => '',
@@ -125,11 +127,29 @@ function ev_events_upcoming_render_event($event) {
   $date_end = new DateTime($event['end']);
   $all_day = $event['allDay'];
 
+  $date_start_date = $date_start->format('d F Y');
+  $date_end_date = $date_end->format('d F Y');
+
+  $multiday = FALSE;
+  if ($date_start_date != $date_end_date) {
+    $multiday = TRUE;
+  }
+
   if ($all_day) {
-    $date = $date_start->format('d F Y') . ' (' . t('All day') . ')';
+    if ($multiday) {
+      $date = $date_start->format('d F Y') . ' - ' . $date_end->format('d F Y') . ' (' . t('All day') . ')';
+    }
+    else {
+      $date = $date_start->format('d F Y') . ' (' . t('All day') . ')';
+    }
   }
   else {
-    $date = $date_start->format('d F Y H:i') . ' - ' . $date_end->format('H:i');
+    if ($multiday) {
+      $date = $date_start->format('d F Y H:i') . ' - ' . $date_end->format('d F Y H:i');
+    }
+    else {
+      $date = $date_start->format('d F Y H:i') . ' - ' . $date_end->format('H:i');
+    }
   }
 
   $output .= '<span class="ev-event-title">' . l($event['title'], $event['url'], array(
