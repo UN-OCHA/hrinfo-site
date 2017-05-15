@@ -62,11 +62,24 @@ function ev_events_calendar($node) {
     'timeFormat' => 'H:mm',
     'timezone' => drupal_get_user_timezone(),
     'views' => array(
+      'month' => array(
+        'buttonText' => 'Month',
+      ),
+      'agendaWeek' => array(
+        'buttonText' => 'Week',
+      ),
+      'agendaDay' => array(
+        'buttonText' => 'Day',
+      ),
       'listYear' => array(
         'buttonText' => 'Year',
       ),
-      'upcoming' => array(),
-      'past' => array(),
+      'upcoming' => array(
+        'buttonText' => 'Upcoming',
+      ),
+      'past' => array(
+        'buttonText' => 'Past Events',
+      ),
     ),
     'events' => array(
       'url' => $api_base_url . '/api/v0/fetch-events',
