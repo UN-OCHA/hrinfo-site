@@ -46,13 +46,7 @@ function hr_layout_add_content($node) {
   $content[] = t('<strong>Have a report, press release or map/infographic to share?</strong> <a href="@url">Send it to submit@reliefweb.int.</a>', array(
     '@url' => 'mailto:submit@reliefweb.int',
   ));
-  $content[] = t('<strong>Have an event to share?</strong> <a href="@url">Submit it via this form.</a>', array(
-    '@url' => url('node/add/hr-event', array(
-      'query' => array(
-        'og_group_ref' => $node->nid,
-      ),
-    )),
-  ));
+  $content[] = t('<strong>Have an event to share?</strong> <a href="https://events.rwlabs.org">Submit it via this form.</a>');
   $content[] = t('<strong>Have an assessment to share?</strong> <a href="@url">Submit it via this form.</a>', array(
     '@url' => url('node/add/hr-assessment', array(
       'query' => array(
