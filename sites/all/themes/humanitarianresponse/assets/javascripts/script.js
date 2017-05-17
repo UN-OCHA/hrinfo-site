@@ -89,22 +89,6 @@
 			document.location.href = $(this).val();
 		});
 
-
-		function surveyAlert() {
-			$('#closeSurveyAlert').on('click', function () {
-				$('#surveyAlert').hide();
-				var date = new Date();
-				date.setDate(date.getDate() + 4);
-		    document.cookie = "hrinfoSurveyAlert=true; expires=" + date;
-			});
-
-		  if (document.cookie.replace(/(?:(?:^|.*;\s*)hrinfoSurveyAlert\s*\=\s*([^;]*).*$)|^.*$/, "$1") !== "true") {
-		    $('#surveyAlert').show();
-		  }
-		}
-		surveyAlert();
-
-
 	});
 
 	$(window).resize(function() {
