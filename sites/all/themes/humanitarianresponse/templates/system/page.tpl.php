@@ -164,7 +164,7 @@
       <div class="col-md-3">
         <div class="column"><a href="<?php print variable_get('humdata_base_url', 'https://data.humdata.org'); ?>" target="_blank"><div class="footer-logo footer-logos-hdx"></div></a></div>
         <div class="column"><a href="http://vosocc.unocha.org" target="_blank"><div class="footer-logo footer-logos-vosocc"></div></a></div>
-        <div class="column"><a href="http://www.worldhumanitariansummit.org" target="_blank"><div class="footer-logo footer-logos-whs"></div></a></div>
+        <div class="column"><a href="http://agendaforhumanity.org/" target="_blank"><div class="footer-logo footer-logos-pact"></div></a></div>
       </div>
     </div>
     <div id = "footer-third" class="col-md-3">
