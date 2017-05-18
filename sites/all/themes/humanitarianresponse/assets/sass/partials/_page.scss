@@ -1,12 +1,8 @@
 //
 // Styles for individual pages
 // --------------------------------------------------
-@import "compass/layout/sticky-footer";
-@import "compass/utilities/sprites";
-@import "footer-logos/*.png";
 
-@include sticky-footer(210px);
-@include all-footer-logos-sprites;
+
 
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
 input,
@@ -19,9 +15,6 @@ body {
   height: 100%;
   #header {
     margin-top: 0;
-  }
-  #footer {
-    margin: 0;
   }
 }
 
@@ -220,71 +213,6 @@ body table, body .table {
       font-size: 10px;
     }
   }
-}
-
-#footer {
-  margin: 20px 0 0;
-  background-color: #F8F8F8;
-
-  @media screen and (max-width: $screen-md) {
-    height: auto;
-  }
-
-  .container {
-
-    padding-bottom: 20px;
-    padding-top: 1em;
-
-    #footer-second {
-      img {
-        margin: 10px;
-        max-width: 100%;
-        max-height: 45px;
-      }
-      @media screen and (max-width: $screen-md) {
-        .col-md-3 {
-          float: left;
-          .column {
-            width: 105px;
-            float: left;
-          }
-        }
-      }
-    }
-
-    #footer-third {
-      @media screen and (max-width: $screen-md) {
-        clear: both;
-        &:after {
-          clear: both;
-          content: '';
-        }
-      }
-    }
-
-    .footer-logo {
-      margin: 10px;
-      height: 40px;
-      opacity: 1;
-      @include transition(all 0.2s ease-in-out);
-      &:hover {
-        opacity: 0.7;
-      }
-    }
-  }
-}
-
-.footer-logos-hdx { 
-  background-image: url('../images/footer-logos/hdx.png');
-  background-repeat: no-repeat;
-  background-position: 0 0;
-}
-
-.footer-logos-hid { 
-  background-image: url('../images/footer-logos/hid.png');
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-size: contain;
 }
 
 .page-header {
