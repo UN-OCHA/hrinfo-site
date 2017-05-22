@@ -47,7 +47,7 @@ function hr_layout_add_content($node) {
     '@url' => 'mailto:submit@reliefweb.int',
   ));
   $content[] = t('<strong>Have an event to share?</strong> <a href="https://events.rwlabs.org">Submit it via this form.</a>');
-  $content[] = t('<strong>Have a dataset to share?</strong> <a href="https://data.humdata.org/contribute">Snd to HDX.</a>');
+  $content[] = t('<strong>Have a dataset to share?</strong> <a href="https://data.humdata.org/contribute">Send to HDX.</a>');
   $content[] = t('<strong>Have an assessment to share?</strong> <a href="@url">Submit it via this form.</a>', array(
     '@url' => url('node/add/hr-assessment', array(
       'query' => array(
