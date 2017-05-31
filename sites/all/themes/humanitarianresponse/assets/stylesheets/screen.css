@@ -3457,50 +3457,10 @@ div.region-top div.block { display: inline-block; }
 
 .node-full.node-hr-document .container-fluid .row .radix-layouts-sidebar, .node-full.node-hr-infographic .container-fluid .row .radix-layouts-sidebar, .node-full.node-hr-news .container-fluid .row .radix-layouts-sidebar, .node-full.node-hr-event .container-fluid .row .radix-layouts-sidebar, .node-full.node-hr-dataset .container-fluid .row .radix-layouts-sidebar, .node-full.node-hr-indicator .container-fluid .row .radix-layouts-sidebar, .node-full.node-hr-contact .container-fluid .row .radix-layouts-sidebar, .node-full.node-hr-assessment .container-fluid .row .radix-layouts-sidebar, .node-full.node-hr-office .container-fluid .row .radix-layouts-sidebar, .page-node.node-type-hr-disaster:not(.hr-group-context) .node-full.node-hr-disaster .container-fluid .row .radix-layouts-sidebar, .node-full.node-hr-funding .container-fluid .row .radix-layouts-sidebar, .node-full.node-hr-discussion .container-fluid .row .radix-layouts-sidebar, .node-full.node-acc-incident .container-fluid .row .radix-layouts-sidebar, .node-full.node-hr-toolbox-item .container-fluid .row .radix-layouts-sidebar, .user-full .container-fluid .row .radix-layouts-sidebar { margin-bottom: auto; padding: 0; padding-bottom: auto; }
 
-.footer-logos-sprite, .footer-logos-cap, .footer-logos-cerf, .footer-logos-fts, .footer-logos-gdacs, .footer-logos-hdx, .footer-logos-hews, .footer-logos-hid, .footer-logos-iasc, .footer-logos-insarag, .footer-logos-irin, .footer-logos-pw, .footer-logos-redhum, .footer-logos-reliefweb, .footer-logos-vosocc, .footer-logos-whs { background-image: url('../images/footer-logos-s6fd438a181.png'); background-repeat: no-repeat; }
-
-html, body { height: 100%; }
-
-#root { clear: both; min-height: 100%; height: auto !important; height: 100%; margin-bottom: -210px; }
-#root #root_footer { height: 210px; }
-
-#footer { clear: both; position: relative; height: 210px; }
-
-.footer-logos-cap { background-position: 0 0; }
-
-.footer-logos-cerf { background-position: 0 -40px; }
-
-.footer-logos-fts { background-position: 0 -80px; }
-
-.footer-logos-gdacs { background-position: 0 -120px; }
-
-.footer-logos-hdx { background-position: 0 -160px; }
-
-.footer-logos-hews { background-position: 0 -191px; }
-
-.footer-logos-hid { background-position: 0 -231px; }
-
-.footer-logos-iasc { background-position: 0 -271px; }
-
-.footer-logos-insarag { background-position: 0 -311px; }
-
-.footer-logos-irin { background-position: 0 -350px; }
-
-.footer-logos-pw { background-position: 0 -390px; }
-
-.footer-logos-redhum { background-position: 0 -430px; }
-
-.footer-logos-reliefweb { background-position: 0 -470px; }
-
-.footer-logos-vosocc { background-position: 0 -510px; }
-
-.footer-logos-whs { background-position: 0 -550px; }
-
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, input, select { font-family: Arial, Tahoma, sans-serif; }
 
 html, body { height: 100%; }
 html #header, body #header { margin-top: 0; }
-html #footer, body #footer { margin: 0; }
 
 body { background: #F4F4F4; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 13px; }
 
@@ -3553,21 +3513,6 @@ body table tbody tr td, body .table tbody tr td { border: 0; border-color: #FFFF
 .thumbnail p { margin: 0; }
 .thumbnail .caption { text-align: center; background-color: #494949; text-transform: uppercase; font-weight: bold; color: white; padding-left: 0; padding-right: 0; }
 @media screen and (max-width: 1200px) { .thumbnail .caption { font-size: 10px; } }
-
-#footer { margin: 20px 0 0; background-color: #F8F8F8; }
-@media screen and (max-width: 992px) { #footer { height: auto; } }
-#footer .container { padding-bottom: 20px; padding-top: 1em; }
-#footer .container #footer-second img { margin: 10px; max-width: 100%; max-height: 45px; }
-@media screen and (max-width: 992px) { #footer .container #footer-second .col-md-3 { float: left; }
-  #footer .container #footer-second .col-md-3 .column { width: 105px; float: left; } }
-@media screen and (max-width: 992px) { #footer .container #footer-third { clear: both; }
-  #footer .container #footer-third:after { clear: both; content: ''; } }
-#footer .container .footer-logo { margin: 10px; height: 40px; opacity: 1; -webkit-transition: all 0.2s ease-in-out; -o-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; }
-#footer .container .footer-logo:hover { opacity: 0.7; }
-
-.footer-logos-hdx { background-image: url("../images/footer-logos/hdx.png"); background-repeat: no-repeat; background-position: 0 0; }
-
-.footer-logos-hid { background-image: url("../images/footer-logos/hid.png"); background-repeat: no-repeat; background-position: 0 0; background-size: contain; }
 
 .page-header { border: none; }
 .page-header h1.title { margin-top: 15px; }
@@ -3652,6 +3597,58 @@ body .region-branding input.form-text:focus { border-color: #bc2e3c; }
   td:before { /* Now like a table header */ position: absolute; /* Top/left values mimic padding */ top: 6px; left: 6px; width: 35%; padding-right: 10px; text-align: left; font-weight: bold; }
   /* Label the data */
   td:before { content: attr(data-title); } }
+.footer-logos-sprite, .footer-logos-cap, .footer-logos-cerf, .footer-logos-fts, .footer-logos-gdacs, .footer-logos-hdx, .footer-logos-hews, .footer-logos-hid, .footer-logos-iasc, .footer-logos-insarag, .footer-logos-irin, .footer-logos-pact, .footer-logos-pw, .footer-logos-redhum, .footer-logos-reliefweb, .footer-logos-vosocc { background-image: url('../images/footer-logos-s98a5d46e2b.png'); background-repeat: no-repeat; }
+
+html, body { height: 100%; }
+
+#root { clear: both; min-height: 100%; height: auto !important; height: 100%; margin-bottom: -210px; }
+#root #root_footer { height: 210px; }
+
+#footer { clear: both; position: relative; height: 210px; }
+
+.footer-logos-cap { background-position: 0 0; }
+
+.footer-logos-cerf { background-position: 0 -40px; }
+
+.footer-logos-fts { background-position: 0 -80px; }
+
+.footer-logos-gdacs { background-position: 0 -120px; }
+
+.footer-logos-hdx { background-position: 0 -160px; }
+
+.footer-logos-hews { background-position: 0 -200px; }
+
+.footer-logos-hid { background-position: 0 -240px; }
+
+.footer-logos-iasc { background-position: 0 -280px; }
+
+.footer-logos-insarag { background-position: 0 -320px; }
+
+.footer-logos-irin { background-position: 0 -359px; }
+
+.footer-logos-pact { background-position: 0 -399px; }
+
+.footer-logos-pw { background-position: 0 -439px; }
+
+.footer-logos-redhum { background-position: 0 -479px; }
+
+.footer-logos-reliefweb { background-position: 0 -519px; }
+
+.footer-logos-vosocc { background-position: 0 -559px; }
+
+body #footer { margin: 0; }
+
+#footer { background-color: #F8F8F8; }
+@media screen and (max-width: 992px) { #footer { height: auto; } }
+#footer .container { padding-bottom: 20px; padding-top: 1em; }
+#footer .container #footer-second img { margin: 10px; max-width: 100%; max-height: 45px; }
+@media screen and (max-width: 992px) { #footer .container #footer-second .col-md-3 { float: left; }
+  #footer .container #footer-second .col-md-3 .column { width: 105px; float: left; } }
+@media screen and (max-width: 992px) { #footer .container #footer-third { clear: both; }
+  #footer .container #footer-third:after { clear: both; content: ''; } }
+#footer .container .footer-logo { margin: 10px; height: 40px; opacity: 1; -webkit-transition: all 0.2s ease-in-out; -o-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; }
+#footer .container .footer-logo:hover { opacity: 0.7; }
+
 .grey-sprite, #hr-bundles-layer-switcher input[value="Camp Coordination / Management"] + label, #hr-bundles-layer-switcher input[value="Early Recovery"] + label, #hr-bundles-layer-switcher input[value="Education"] + label, #hr-bundles-layer-switcher input[value="Emergency Shelter and NFI"] + label, #hr-bundles-layer-switcher input[value="Food Security"] + label, #hr-bundles-layer-switcher input[value="Health"] + label, #hr-bundles-layer-switcher input[value="Logistics"] + label, #hr-bundles-layer-switcher input[value="Nutrition"] + label, #hr-bundles-layer-switcher input[value="Protection"] + label, #hr-bundles-layer-switcher input[value="Water Sanitation Hygiene"] + label, #hr-bundles-layer-switcher input[value="Emergency Telecommunications"] + label { background-image: url('../images/icons/38/Clusters/grey-s00beb148a7.png'); background-repeat: no-repeat; }
 
 .Clusters-sprite, #hr-bundles-layer-switcher input[value="Camp Coordination / Management"]:checked + label, #hr-bundles-layer-switcher input[value="Camp Coordination / Management"] + label:hover, #hr-bundles-layer-switcher input[value="Early Recovery"]:checked + label, #hr-bundles-layer-switcher input[value="Early Recovery"] + label:hover, #hr-bundles-layer-switcher input[value="Education"]:checked + label, #hr-bundles-layer-switcher input[value="Education"] + label:hover, #hr-bundles-layer-switcher input[value="Emergency Shelter and NFI"]:checked + label, #hr-bundles-layer-switcher input[value="Emergency Shelter and NFI"] + label:hover, #hr-bundles-layer-switcher input[value="Food Security"]:checked + label, #hr-bundles-layer-switcher input[value="Food Security"] + label:hover, #hr-bundles-layer-switcher input[value="Health"]:checked + label, #hr-bundles-layer-switcher input[value="Health"] + label:hover, #hr-bundles-layer-switcher input[value="Logistics"]:checked + label, #hr-bundles-layer-switcher input[value="Logistics"] + label:hover, #hr-bundles-layer-switcher input[value="Nutrition"]:checked + label, #hr-bundles-layer-switcher input[value="Nutrition"] + label:hover, #hr-bundles-layer-switcher input[value="Protection"]:checked + label, #hr-bundles-layer-switcher input[value="Protection"] + label:hover, #hr-bundles-layer-switcher input[value="Water Sanitation Hygiene"]:checked + label, #hr-bundles-layer-switcher input[value="Water Sanitation Hygiene"] + label:hover, #hr-bundles-layer-switcher input[value="Emergency Telecommunications"]:checked + label, #hr-bundles-layer-switcher input[value="Emergency Telecommunications"] + label:hover { background-image: url('../images/icons/38/Clusters-sdabcfc3cf0.png'); background-repeat: no-repeat; }

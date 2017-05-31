@@ -13,8 +13,8 @@ function entity_translation_admin_form($form, $form_state) {
 
   $form['locale_field_language_fallback'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Enable language fallback'),
-    '#description' => t('When language fallback is enabled, if a translation is not available for the requested language an existing one will be displayed.'),
+    '#title' => t('Allow language fallback'),
+    '#description' => t('When language fallback is allowed, an alternative translation will be displayed if the requested language is not available. Other modules, such as <a href="https://www.drupal.org/project/language_hierarchy" target="_blank">Language Hierarchy</a>, are needed to manage which languages are used as fallbacks. Otherwise, existing translations will be chosen based on their <a href="!url">language weight</a>.', array('!url' => url('admin/config/regional/language'))),
     '#default_value' => variable_get('locale_field_language_fallback', TRUE),
   );
 
@@ -211,8 +211,9 @@ function entity_translation_settings_init($entity_type, $settings = array()) {
  */
 function entity_translation_overview($entity_type, $entity, $callback = NULL) {
   // Entity translation and node translation share the same system path.
-  if ($callback && entity_translation_node($entity_type, $entity)) {
-    return entity_translation_overview_callback($callback, $entity);
+  if ($callback && !entity_translation_enabled($entity_type, $entity)) {
+    $args = array_slice(func_get_args(), 3);
+    return entity_translation_overview_callback($callback, $args);
   }
 
   $handler = entity_translation_get_handler($entity_type, $entity);
@@ -356,13 +357,13 @@ function entity_translation_overview($entity_type, $entity, $callback = NULL) {
 /**
  * Calls the appropriate translation overview callback.
  */
-function entity_translation_overview_callback($callback, $entity) {
+function entity_translation_overview_callback($callback, $args) {
   if (module_exists($callback['module'])) {
     if (isset($callback['file'])) {
       $path = isset($callback['file path']) ? $callback['file path'] : drupal_get_path('module', $callback['module']);
       require_once DRUPAL_ROOT . '/' . $path . '/' . $callback['file'];
     }
-    return $callback['page callback']($entity);
+    return call_user_func_array($callback['page callback'], $args);
   }
 }
 
@@ -409,7 +410,8 @@ function theme_entity_translation_overview_outdated($variables){
  */
 function entity_translation_delete_confirm($form, $form_state, $entity_type, $entity, $langcode) {
   $handler = entity_translation_get_handler($entity_type, $entity);
-  $handler->setFormLanguage($langcode);
+  $handler->setActiveLanguage($langcode);
+  $handler->initPathScheme();
   $languages = language_list();
 
   $form = array(
@@ -576,6 +578,7 @@ function entity_translation_translatable_batch($translatable, $field_name, $copy
     $query = new EntityFieldQuery();
     $count = $query
       ->fieldCondition($field_name)
+      ->age(FIELD_LOAD_REVISION)
       ->count()
       ->execute();
 
@@ -595,11 +598,16 @@ function entity_translation_translatable_batch($translatable, $field_name, $copy
   $result = $query
     ->fieldCondition($field_name)
     ->entityOrderBy('entity_id')
+    ->age(FIELD_LOAD_REVISION)
     ->range($offset, $limit)
     ->execute();
 
-  foreach ($result as $entity_type => $entities) {
-    foreach (entity_load($entity_type, array_keys($entities)) as $entity) {
+  foreach ($result as $entity_type => $revisions) {
+    foreach ($revisions as $revision) {
+      // $revision is a partial entity object that will be used as an array of
+      // conditions.
+      $conditions = (array) $revision;
+      $entity = reset(entity_load($entity_type, FALSE, $conditions));
       $context['sandbox']['progress']++;
       $handler = entity_translation_get_handler($entity_type, $entity);
       $langcode = $handler->getLanguage();

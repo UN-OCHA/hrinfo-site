@@ -14,6 +14,9 @@ class EntityTranslationTestCase extends DrupalWebTestCase {
   protected $admin_user;
   protected $translator_user;
 
+  /**
+   * {@inheritdoc}
+   */
   function setUp() {
     $args = func_get_args();
     call_user_func_array(array('parent', 'setUp'), $args);
@@ -64,6 +67,7 @@ class EntityTranslationTestCase extends DrupalWebTestCase {
       $this->admin_user = $this->drupalCreateUser(array_merge(array(
         'bypass node access',
         'administer nodes',
+        'administer fields',
         'administer languages',
         'administer content types',
         'administer blocks',
@@ -189,7 +193,7 @@ class EntityTranslationTestCase extends DrupalWebTestCase {
 
     // Check if the setting works.
     $this->drupalGet('node/add/page');
-    $this->assertFieldById('edit-body-und-add-more', t('Add another item'), t('Add another item button found.'));
+    $this->assertFieldById('edit-body-en-add-more', t('Add another item'), t('Add another item button found.'));
   }
 
   /**
@@ -204,9 +208,8 @@ class EntityTranslationTestCase extends DrupalWebTestCase {
    */
   function createPage($title, $body, $langcode) {
     $edit = array();
-    $language_none = LANGUAGE_NONE;
     $edit["title"] = $title;
-    $edit["body[$language_none][0][value]"] = $body;
+    $edit["body[$langcode][0][value]"] = $body;
     $edit['language'] = $langcode;
     $this->drupalPost('node/add/page', $edit, t('Save'));
     $this->assertRaw(t('Basic page %title has been created.', array('%title' => $title)), t('Basic page created.'));
@@ -523,4 +526,64 @@ class EntityTranslationHookTestCase extends EntityTranslationTestCase {
     variable_del($name);
     return $info;
   }
+}
+
+/**
+ * Tests that entity translation handler hierarchy works properly.
+ */
+class EntityTranslationHierarchyTestCase extends EntityTranslationTestCase {
+
+  /**
+   * Return the test information.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Entity translation hierarchy',
+      'description' => 'Tests that entity translation handler hierarchy works properly.',
+      'group' => 'Entity translation',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  function setUp() {
+    parent::setUp('locale', 'entity_translation');
+  }
+
+  /**
+   * Tests the handler hierarchy.
+   */
+  public function testHierarchy() {
+    $entity_type = 'node';
+    $node = $this->drupalCreateNode();
+    $factory = EntityTranslationHandlerFactory::getInstance();
+    $handler = $factory->getHandler($entity_type, $node);
+
+    $children = array();
+    foreach (range(0, 4) as $index) {
+      $children[$index] = $this->drupalCreateNode();
+      $handler->addChild($entity_type, $children[$index]);
+    }
+
+    $langcode = 'it';
+    $handler->setActiveLanguage($langcode);
+    foreach ($children as $child) {
+      $child_handler = $factory->getHandler($entity_type, $child);
+      $this->assertEqual($child_handler->getActiveLanguage(), $langcode);
+    }
+
+    $rm_index = mt_rand(0, count($children) - 1);
+    $handler->removeChild($entity_type, $children[$rm_index]);
+
+    $langcode = 'fr';
+    $handler->setActiveLanguage($langcode);
+    foreach ($children as $index => $child) {
+      $child_handler = $factory->getHandler($entity_type, $child);
+      $this->assertEqual($child_handler->getActiveLanguage() == $langcode, $index != $rm_index);
+    }
+
+    // @todo Test the other properties.
+  }
+
 }
