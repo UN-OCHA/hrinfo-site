@@ -2,11 +2,11 @@
 
 $plugin = array(
   'single' => TRUE,
-  'title' => t('Upcoming events'),
-  'description' => t('Display upcoming events from Humanitarian Events.'),
+  'title' => t('Meeting minutes'),
+  'description' => t('Display meeting minutes from Humanitarian Events.'),
   'category' => t('Humanitarianresponse'),
-  'edit form' => 'ev_events_upcoming_edit_form',
-  'render callback' => 'ev_events_upcoming_render',
+  'edit form' => 'ev_events_meeting_minutes_edit_form',
+  'render callback' => 'ev_events_meeting_minutes_render',
   'all contexts' => TRUE,
   'defaults' => array(
     'country' => '',
@@ -17,7 +17,7 @@ $plugin = array(
  * 'Edit form' callback for the content type.
  */
 
-function ev_events_upcoming_edit_form($form, &$form_state){
+function ev_events_meeting_minutes_edit_form($form, &$form_state){
   $countries_list = country_get_list();
   $countries = array();
   foreach ($countries_list as $key => $value) {
@@ -40,7 +40,7 @@ function ev_events_upcoming_edit_form($form, &$form_state){
  * Edit form submit handler.
  */
 
-function ev_events_upcoming_edit_form_submit($form, &$form_state) {
+function ev_events_meeting_minutes_edit_form_submit($form, &$form_state) {
   foreach (element_children($form) as $key) {
     if (!empty($form_state['values'][$key])) {
       $form_state['conf'][$key] = $form_state['values'][$key];
@@ -51,12 +51,15 @@ function ev_events_upcoming_edit_form_submit($form, &$form_state) {
 /**
  * Run-time rendering of the body of the block (content type)
  */
-function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL) {
+function ev_events_meeting_minutes_render($subtype, $conf, $panel_args, $context = NULL) {
   $block = new stdClass();
   $block->title = t('Upcoming events');
   $output = t('No events to display');
 
-  $now = new DateTime();
+  $start = new DateTime();
+  $start->sub(new DateInterval('P3M'));
+  $end = new DateTime();
+
   $path = current_path() . '/humanitarian-events';
 
   $api_base_url = variable_get('ev_events_api_url', 'https://events.staging.humanitarianresponse.info');
@@ -64,21 +67,23 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
 
   $api_url = $api_base_url . '/api/v0/fetch-events';
   $params = array(
+    'doct' => 2,
     'vloc' => $country,
-    'start' => $now->format('Y-m-d'),
+    'start' => $start->format('Y-m-d'),
+    'end' => $end->format('Y-m-d'),
   );
 
   $url = $api_url . '?' . drupal_http_build_query($params);
   $request = drupal_http_request($url);
   if (isset($request->data)) {
     $events = drupal_json_decode($request->data);
-    $events = ev_events_order_by_date($events);
+    $events = array_reverse(ev_events_order_by_date($events));
 
     $items = array();
     foreach ($events as $event) {
       $items[] = array(
-        'data' => ev_events_upcoming_render_event($event),
-        'class' => array('ev-event'),
+        'data' => ev_events_meeting_minutes_render_event($event),
+        'class' => array('ev-meeting-minutes'),
       );
     }
 
@@ -86,7 +91,7 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
       'items' => $items,
       'title' => '',
       'type' => 'ul',
-      'attributes' => array('class' => 'ev-upcoming-events'),
+      'attributes' => array('class' => 'ev-meeting-minutes'),
     ));
   }
 
@@ -102,7 +107,7 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
 /**
  * Render one event.
  */
-function ev_events_upcoming_render_event($event) {
+function ev_events_meeting_minutes_render_event($event) {
   $timezone = drupal_get_user_timezone();
 
   $output = '';
@@ -119,27 +124,29 @@ function ev_events_upcoming_render_event($event) {
   }
 
   if ($all_day) {
-    if ($multiday) {
-      $date = $date_start->format('d F Y') . ' - ' . $date_end->format('d F Y') . ' (' . t('All day') . ')';
-    }
-    else {
-      $date = $date_start->format('d F Y') . ' (' . t('All day') . ')';
-    }
+    $date = $date_start->format('d F Y') . ' (' . t('All day') . ')';
   }
   else {
-    if ($multiday) {
-      $date = $date_start->format('d F Y H:i') . ' - ' . $date_end->format('d F Y H:i');
-    }
-    else {
-      $date = $date_start->format('d F Y H:i') . ' - ' . $date_end->format('H:i');
+    $date = $date_start->format('d F Y H:i') . ' - ' . $date_end->format('H:i');
+  }
+
+  // Add files.
+  $docs = array();
+  foreach ($event['files'] as $file) {
+    if ($file['type'] == 2) {
+      $docs[] = l('Meeting minutes from ' . $event['title'] . ' on ' . $date, $file['uri'], array(
+        'attributes' => array(
+          'target' => '_blank',
+        ),
+      ));
     }
   }
 
-  $output .= '<span class="ev-event-title">' . l($event['title'], $event['url'], array(
-    'attributes' => array(
-      'target' => '_blank',
-    ))) . '</span><br>';
-  $output .= '<span class="ev-event-date">' . $date . '</span> ';
+  if (count($docs) > 0) {
+    $output .= '<span class="ev-event-meeting-minutes">';
+    $output .= implode(', ', $docs);
+    $output .= '</span> ';
+  }
 
   return $output;
 }
@@ -147,7 +154,7 @@ function ev_events_upcoming_render_event($event) {
 /**
 *  Function to return ReliefWeb Api paths.
 */
-function ev_events_upcoming_api_path() {
+function ev_events_meeting_minutes_api_path() {
   $source_url = 'http://api.reliefweb.int/v1';
   $api_endpoints = array();
   $request = drupal_http_request($source_url);
@@ -170,7 +177,7 @@ function ev_events_upcoming_api_path() {
 *  Function to return content given an api path.
 */
 
-function ev_events_upcoming_content($path) {
+function ev_events_meeting_minutes_content($path) {
   $request = drupal_http_request($path);
   if (isset($request->data)) {
     $response = drupal_json_decode($request->data);

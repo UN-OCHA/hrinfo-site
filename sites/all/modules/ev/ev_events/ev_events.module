@@ -107,3 +107,20 @@ function ev_events_fetch_clusters() {
 
   return $items;
 }
+
+/**
+ * Order events by date.
+ */
+function ev_events_order_by_date($events) {
+  usort($events, function ($a, $b) {
+    if ($a['start'] == $b['start']) {
+      if ($a['end'] == $b['end']) {
+        return 0;
+      }
+      return ($a['end'] < $b['end']) ? -1 : 1;
+    }
+    return ($a['start'] < $b['start']) ? -1 : 1;
+  });
+
+  return $events;
+}
