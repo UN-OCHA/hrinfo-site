@@ -129,12 +129,11 @@ function ev_events_meeting_minutes_render_event($event) {
   $docs = array();
   foreach ($event['files'] as $file) {
     if ($file['type'] == 2) {
-      $docs[] = l('Meeting minutes from ' . $event['title'] . '<br />' . $date, $file['uri'], array(
-        'html' => TRUE,
+      $docs[] = l('Meeting minutes from ' . $event['title'], $file['uri'], array(
         'attributes' => array(
           'target' => '_blank',
         ),
-      ));
+      )) . '<br />' . $date;
     }
   }
 
