@@ -123,18 +123,14 @@ function ev_events_meeting_minutes_render_event($event) {
     $multiday = TRUE;
   }
 
-  if ($all_day) {
-    $date = $date_start->format('d F Y') . ' (' . t('All day') . ')';
-  }
-  else {
-    $date = $date_start->format('d F Y H:i') . ' - ' . $date_end->format('H:i');
-  }
+  $date = $date_start->format('d F Y');
 
   // Add files.
   $docs = array();
   foreach ($event['files'] as $file) {
     if ($file['type'] == 2) {
-      $docs[] = l('Meeting minutes from ' . $event['title'] . ' on ' . $date, $file['uri'], array(
+      $docs[] = l('Meeting minutes from ' . $event['title'] . '<br />' . $date, $file['uri'], array(
+        'html' => TRUE,
         'attributes' => array(
           'target' => '_blank',
         ),
