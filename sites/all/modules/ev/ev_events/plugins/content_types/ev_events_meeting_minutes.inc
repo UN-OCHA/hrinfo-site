@@ -60,8 +60,6 @@ function ev_events_meeting_minutes_render($subtype, $conf, $panel_args, $context
   $start->sub(new DateInterval('P3M'));
   $end = new DateTime();
 
-  $path = current_path() . '/humanitarian-events';
-
   $api_base_url = variable_get('ev_events_api_url', 'https://events.staging.humanitarianresponse.info');
   $country = 'Ethiopia';
 
@@ -96,7 +94,7 @@ function ev_events_meeting_minutes_render($subtype, $conf, $panel_args, $context
   }
 
   $read_more = '<div class="more-link read-more">';
-  $read_more .= l(t('View more'), $path);
+  $read_more .= l(t('View more'), $api_base_url . '/?view=past');
   $read_more .= '</div>';
 
   $block->content = $read_more . $output;
