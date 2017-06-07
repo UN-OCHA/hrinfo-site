@@ -58,6 +58,7 @@ function ev_events_calendar($node) {
     'editable' => FALSE,
     'eventLimit' => TRUE,
     'firstDay' => 1,
+    'defaultView' => 'month',
     'weekends' => TRUE,
     'timeFormat' => 'H:mm',
     'timezone' => drupal_get_user_timezone(),
@@ -95,6 +96,21 @@ function ev_events_calendar($node) {
       )
     ),
   );
+
+  $settings['availableFilters'] = array(
+    'hub' => '',
+    'clu' => '',
+    'cat' => '',
+    'loc' => '',
+  );
+
+  if (isset($_GET['view'])) {
+    $settings['defaultView'] = $_GET['view'];
+  };
+
+  if (isset($_GET['date'])) {
+    $settings['defaultDate'] = $_GET['date'];
+  };
 
   if (isset($node->field_country['und'][0]['target_id'])) {
     $term = taxonomy_term_load($node->field_country['und'][0]['target_id']);

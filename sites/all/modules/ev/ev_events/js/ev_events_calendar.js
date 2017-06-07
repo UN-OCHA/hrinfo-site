@@ -15,9 +15,33 @@
         return;
       }
 
-      var eventFilters = Drupal.settings.fullcalendar_api.calendarSettings.events.data;
+      var eventFilters = Drupal.settings.fullcalendar_api.calendarSettings.availableFilters;
+      var state = {
+        'view': 'month',
+        'date': '',
+      };
+
+      var updateState = function () {
+        $.extend(state, eventFilters);
+        var path = '?';
+        for (f in state) {
+          if (state.hasOwnProperty(f) && typeof state[f] != 'undefined' && state[f] != '') {
+            path += f + '=' + state[f] + '&';
+          }
+        }
+        history.replaceState(state, '', path);
+      };
+
+      var updateEventFilters = function (filters) {
+        eventFilters = filters;
+        updateState();
+      };
 
       var $settings = settings.fullcalendar_api.calendarSettings;
+
+      // Needed to fix navigation problem on past events.
+      var alreadyTrigger = false;
+
       $.extend($settings, {
         'eventRender': function(event, element, view) {
           for (f in eventFilters) {
@@ -25,19 +49,58 @@
               return false;
             }
           }
+
+          // Add location.
+          if (event.location) {
+            if (view.name === 'listYear' || view.name === 'upcoming' || view.name === 'past') {
+              if (event.locationDetails) {
+                element.find('.fc-list-item-title').html(element.find('.fc-list-item-title').html() + '<div class="fc-location-details">' + event.locationDetails + '</div>');
+              }
+              element.find('.fc-list-item-title').html(element.find('.fc-list-item-title').html() + '<div class="fc-location">' + event.location + '</div>');
+            }
+            else {
+              if (event.locationDetails) {
+                element.find('.fc-content').append('<span class="fc-location-details">' + event.locationDetails + '</span>');
+              }
+              element.find('.fc-content').append('<span class="fc-location">' + event.location + '</span>');
+            }
+          }
+
+          // Add more details to past events.
+          if (view.name === 'past') {
+            if (event.description) {
+              element.find('.fc-list-item-title').html(element.find('.fc-list-item-title').html() + '<span class="fc-description">' + event.description + '</span>');
+            }
+            if (event.files && event.files.length > 0) {
+              var ul = $('<ul class="ev-files"></ul');
+              for (var i = 0; i < event.files.length; i++) {
+                ul.append('<li class="ev-doc-' + event.files[i].type_human.toLowerCase().replace(/[^0-9a-z]/gi,'-') + '"><a href="' + event.files[i].uri + '" target="_blank">' + event.files[i].name + '</a></li>');
+              }
+              element.find('.fc-list-item-title').append(ul);
+            }
+          }
+
           return true;
         },
+        height: 'auto',
         viewRender: function(view) {
+          // Store view.name, view.start and view.end
+          state.view = view.name;
+          state.date = $calendar.fullCalendar('getDate').toISOString();
+          updateState();
+
           if (view.name === 'upcoming') {
-            if ($calendar.fullCalendar('getDate').unix() < moment().unix()) {
+            if ($calendar.fullCalendar('getDate').unix() < moment().add(-1, 'days').unix()) {
               $calendar.fullCalendar('gotoDate', moment());
             }
           }
           else if (view.name === 'past') {
-            if ($calendar.fullCalendar('getDate').toISOString() >= moment().format('Y-MM-DD')) {
-              $calendar.fullCalendar('gotoDate', moment().add(-1, 'days'));
+            if (!alreadyTrigger && $calendar.fullCalendar('getDate').toISOString() >= moment().format('Y-MM-DD')) {
+              $calendar.fullCalendar('gotoDate', moment().add(0, 'days'));
+              alreadyTrigger = true;
               window.setTimeout(function () {
                 $calendar.fullCalendar('prev');
+                alreadyTrigger = false;
               }, 250);
             }
           }
@@ -69,15 +132,15 @@
           'duration': {
             'days': 90
           },
+          'validRange': function(currentDate) {
+            return {
+              end: currentDate.clone()
+            };
+          },
           'visibleRange': function(currentDate) {
             return {
               start: currentDate.clone().add(-90, 'days'),
-              end: currentDate.clone().add(1, 'days')
-            };
-          },
-          'validRange': function(currentDate) {
-            return {
-              end: currentDate.clone().add(-1, 'days')
+              end: currentDate.clone()
             };
           }
         }
@@ -102,6 +165,7 @@
           if (typeof parts[1] == 'undefined') {
             eventFilters[parts[0]] = '';
           }
+          updateEventFilters(eventFilters);
 
           // Trigger rerender.
           $calendar.fullCalendar('rerenderEvents');
