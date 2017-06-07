@@ -10,6 +10,7 @@ $plugin = array(
   'all contexts' => TRUE,
   'defaults' => array(
     'country' => '',
+    'cluster' => '',
   ),
 );
 
@@ -31,6 +32,15 @@ function ev_events_upcoming_edit_form($form, &$form_state){
     '#title' => 'Country',
     '#description' => t('Choose the country you want to get content for.'),
     '#default_value' => $conf['country'],
+  );
+
+  $form['cluster'] = array(
+    '#type' => 'select',
+    '#options' => ev_events_fetch_clusters(),
+    '#title' => 'Cluster',
+    '#empty_option' => '- Select a cluster -',
+    '#description' => t('Choose the cluster you want to get content for.'),
+    '#default_value' => $conf['cluster'],
   );
 
   return $form;
@@ -60,11 +70,11 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
   $path = current_path() . '/humanitarian-events';
 
   $api_base_url = variable_get('ev_events_api_url', 'https://events.staging.humanitarianresponse.info');
-  $country = 'Ethiopia';
 
   $api_url = $api_base_url . '/api/v0/fetch-events';
   $params = array(
-    'vloc' => $country,
+    'vloc' => $conf['country'],
+    'clu' => $conf['cluster'],
     'start' => $now->format('Y-m-d'),
   );
 
