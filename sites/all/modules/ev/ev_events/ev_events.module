@@ -85,6 +85,13 @@ function ev_events_js_alter(&$javascript) {
  * Fetch clusters.
  */
 function ev_events_fetch_clusters() {
+  $cache_key = 'ev_events:clusters';
+
+  $cache = cache_get($cache_key);
+  if ($cache && !empty($cache->data)) {
+    return $cache->data;
+  }
+
   $items = array();
 
   $now = new DateTime();
@@ -105,6 +112,7 @@ function ev_events_fetch_clusters() {
     }
   }
 
+  cache_set($cache_key, $items, REQUEST_TIME + 24 * 60 * 60);
   return $items;
 }
 
