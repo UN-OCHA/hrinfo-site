@@ -118,6 +118,8 @@ function ev_events_calendar($node) {
   }
 
   drupal_add_library('chosen', 'drupal.chosen');
+  drupal_add_js('sites/all/libraries/jspdf/dist/jspdf.min.js');
+  drupal_add_js('sites/all/libraries/jspdf/jspdf.plugin.autotable.js');
   drupal_add_js(drupal_get_path('module', 'ev_events') . '/js/ev_events_calendar.js');
 
   return theme('fullcalendar_calendar', array(
