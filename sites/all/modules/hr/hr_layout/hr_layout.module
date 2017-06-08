@@ -46,7 +46,7 @@ function hr_layout_add_content($node) {
   $content[] = t('<strong>Have a report, press release or map/infographic to share?</strong> <a href="@url">Send it to submit@reliefweb.int.</a>', array(
     '@url' => 'mailto:submit@reliefweb.int',
   ));
-  $content[] = t('<strong>Have an event to share?</strong> <a href="https://events.rwlabs.org">Submit it via this form.</a>');
+  $content[] = t('<strong>Have an event and related documents to share?</strong> <a href="https://events.rwlabs.org">Add them to Humanitarian Events.</a>');
 
   $content[] = t('<strong>Have a dataset to share?</strong> <a href="https://data.humdata.org/contribute">Send to HDX.</a>');
 
