@@ -17,33 +17,6 @@ function ev_events_calendar($node) {
   $operation = $is_cluster ? $op = node_load(_hr_bundles_get_operation($node->nid)) : $node;
   $operation_wrapper = entity_metadata_wrapper('node', $operation);
 
-  $country_codes = array();
-  // Get the country code directly from the operation.
-  if ($country_code = hr_reliefweb_get_country_from_operation($operation_wrapper)) {
-    $country_codes[] = $country_code;
-  }
-
-  // Otherwise, it could be a region spread in multiple countries.
-  if (empty($country_codes)) {
-    $query = new EntityFieldQuery();
-    $results = $query->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', 'hr_operation')
-      ->propertyCondition('status', NODE_PUBLISHED)
-      ->fieldCondition(
-        'field_operation_region',
-        'target_id',
-        $operation_wrapper->getIdentifier()
-      )
-      ->execute();
-    if (!empty($results['node'])) {
-      $regions = node_load_multiple(array_keys($results['node']));
-      foreach ($regions as $region) {
-        $region_wrapper = entity_metadata_wrapper('node', $region);
-        $country_codes[] = hr_reliefweb_get_country_from_operation($region_wrapper);
-      }
-    }
-  }
-
   // Set active menu item, it will override current_path.
   menu_set_active_item('node/' . $node->nid . '/humanitarian-events');
 
@@ -112,9 +85,18 @@ function ev_events_calendar($node) {
     $settings['defaultDate'] = $_GET['date'];
   };
 
-  if (isset($node->field_country['und'][0]['target_id'])) {
-    $term = taxonomy_term_load($node->field_country['und'][0]['target_id']);
-    $settings['events']['data']['vloc'] = $term->name;
+  if (variable_get_value('ev_events_calendar_country')) {
+    $settings['events']['data']['loc'] = variable_get_value('ev_events_calendar_country');
+  }
+  else {
+    if (isset($node->field_country['und'][0]['target_id'])) {
+      $term = taxonomy_term_load($node->field_country['und'][0]['target_id']);
+      $settings['events']['data']['vloc'] = $term->name;
+    }
+  }
+
+  if (variable_get_value('ev_events_calendar_cluster')) {
+    $settings['events']['data']['clu'] = variable_get_value('ev_events_calendar_cluster');
   }
 
   drupal_add_library('chosen', 'drupal.chosen');

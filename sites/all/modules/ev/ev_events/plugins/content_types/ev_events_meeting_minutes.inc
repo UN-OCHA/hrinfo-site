@@ -19,16 +19,11 @@ $plugin = array(
  */
 
 function ev_events_meeting_minutes_edit_form($form, &$form_state){
-  $countries_list = country_get_list();
-  $countries = array();
-  foreach ($countries_list as $key => $value) {
-    $countries[$value] = $value;
-  }
   $conf = $form_state['conf'];
 
   $form['country'] = array(
     '#type' => 'select',
-    '#options' => $countries,
+    '#options' => ev_events_fetch_countries(),
     '#title' => 'Country',
     '#description' => t('Choose the country you want to get content for.'),
     '#default_value' => $conf['country'],
@@ -76,7 +71,7 @@ function ev_events_meeting_minutes_render($subtype, $conf, $panel_args, $context
   $api_url = $api_base_url . '/api/v0/fetch-events';
   $params = array(
     'doct' => 2,
-    'vloc' => $conf['country'],
+    'loc' => $conf['country'],
     'clu' => $conf['cluster'],
     'start' => $start->format('Y-m-d'),
     'end' => $end->format('Y-m-d'),
