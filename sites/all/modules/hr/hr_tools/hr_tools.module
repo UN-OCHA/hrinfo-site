@@ -41,6 +41,26 @@ function hr_tools_menu() {
     'weight' => 999,
   );
 
+  $items['admin/config/hrinfo/hr-import'] = array(
+    'title' => 'HR import',
+    'description' => 'HR import from csv files.',
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 50,
+    'file path' => drupal_get_path('module', 'system'),
+    'file' => 'system.admin.inc',
+  );
+
+  $items['admin/config/hrinfo/hr-import/locations'] = array(
+    'title' => 'Import locations',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hr_tools_import_locations'),
+    'access arguments' => array('access administration pages'),
+    'description' => 'Import locations from csv',
+    'file' => 'hr_tools.import.inc',
+  );
+
   return $items;
 }
 
