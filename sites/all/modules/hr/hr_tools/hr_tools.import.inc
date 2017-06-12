@@ -114,18 +114,6 @@ function hr_tools_import_locations_line($data, &$context) {
     watchdog('hr_tools_importer', 'Admin0_Pcode not set');
     return;
   }
-  if (!isset($data['admin1_pcode']) || empty($data['admin3_pcode'])) {
-    watchdog('hr_tools_importer', 'Admin1_Pcode not set');
-    return;
-  }
-  if (!isset($data['admin2_pcode']) || empty($data['admin3_pcode'])) {
-    watchdog('hr_tools_importer', 'Admin2_Pcode not set');
-    return;
-  }
-  if (!isset($data['admin3_pcode']) || empty($data['admin3_pcode'])) {
-    watchdog('hr_tools_importer', 'Admin3_Pcode not set');
-    return;
-  }
 
   $voc = taxonomy_vocabulary_machine_name_load('hr_location');
   $terms = array();
@@ -136,23 +124,27 @@ function hr_tools_import_locations_line($data, &$context) {
     'admin' => 0,
   );
 
-  $terms[] = array(
-    'name' => $data['admin1_name'],
-    'pcode' => $data['admin1_pcode'],
-    'admin' => 1,
-  );
-
-  $terms[] = array(
-    'name' => $data['admin2_name'],
-    'pcode' => $data['admin2_pcode'],
-    'admin' => 2,
-  );
-
-  $terms[] = array(
-    'name' => $data['admin3_name'],
-    'pcode' => $data['admin3_pcode'],
-    'admin' => 3,
-  );
+  if (isset($data['admin1_pcode']) && isset($data['admin1_pcode'])) {
+    $terms[] = array(
+      'name' => $data['admin1_name'],
+      'pcode' => $data['admin1_pcode'],
+      'admin' => 1,
+    );
+    if (isset($data['admin2_pcode']) && isset($data['admin2_pcode'])) {
+      $terms[] = array(
+        'name' => $data['admin2_name'],
+        'pcode' => $data['admin2_pcode'],
+        'admin' => 2,
+      );
+      if (isset($data['admin3_pcode']) && isset($data['admin3_pcode'])) {
+        $terms[] = array(
+          'name' => $data['admin3_name'],
+          'pcode' => $data['admin3_pcode'],
+          'admin' => 3,
+        );
+      }
+    }
+  }
 
   $term = hr_tools_create_terms_location($terms, $voc);
 
