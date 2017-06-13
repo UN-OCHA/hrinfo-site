@@ -269,11 +269,43 @@ function hr_tools_export_locations_submit($form, $form_state) {
     $data[$location->tid] = array_reverse($hierarchy);
   }
 
-  // Admin0_Name;Admin0_Pcode;Admin1_Name;Admin1_Pcode;Admin2_Name;Admin2_Pcode;Admin3_Name;Admin3_Pcode
-  foreach ($data as $row) {
-
+  $headers = array(
+    'Admin0_Name',
+    'Admin0_Pcode',
+    'Admin1_Name',
+    'Admin1_Pcode',
+    'Admin2_Name',
+    'Admin2_Pcode',
+    'Admin3_Name',
+    'Admin3_Pcode',
+  );
+  $output[] = $headers;
+  foreach ($data as $info) {
+    $row = array();
+    foreach ($info as $admin) {
+      $row[] = $admin['name'];
+      $row[] = $admin['pcode'];
+    }
+    $output[] = $row;
   }
-  dpm($data);
+
+  // Stream output to user.
+  $file_name = 'export_locations.csv';
+
+  header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+  header('Content-Description: File Transfer');
+  header("Content-type: text/csv");
+  header("Content-Disposition: attachment; filename={$file_name}");
+  header("Expires: 0");
+  header("Pragma: public");
+
+  $fh = @fopen('php://output', 'w');
+  foreach ($output as $row) {
+    fputcsv($fh, $row, ';');
+  }
+  fclose($fh);
+
+  drupal_exit();
 }
 
 /**
