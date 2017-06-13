@@ -6,7 +6,7 @@
  */
 
  /**
-  * Articles form.
+  * Import locations form.
   */
  function hr_tools_import_locations($form, &$form_state) {
    if (!variable_get('file_private_path')) {
@@ -165,6 +165,115 @@ function hr_tools_import_locations_finished($success, $results, $operations) {
       drupal_set_message($message);
     }
   }
+}
+
+/**
+ * Export locations form.
+ */
+function hr_tools_export_locations($form, &$form_state) {
+  if (!variable_get('file_private_path')) {
+    $form['private_path'] = array(
+      '#type' => 'markup',
+      '#markup' => t('You must specify a private file system path in the !settings so we can save the created files there.', array('!settings' => l(t('file system settings'), 'admin/config/media/file-system'))),
+    );
+  }
+  else {
+    $options = array();
+    $locations = taxonomy_get_tree(3, 0, 1);
+    foreach ($locations as $location) {
+      $options[$location->tid] = $location->name;
+    }
+
+    $form['location'] = array(
+      '#type' => 'select',
+      '#title' => t('Select Admin 0 level to export'),
+      '#options' => $options,
+      '#required' => TRUE,
+    );
+
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Export locations'),
+    );
+  }
+
+  $form['#submit'] = array('hr_tools_export_locations_submit');
+  return $form;
+}
+
+/**
+ * Form submit callback.
+ */
+function hr_tools_export_locations_submit($form, $form_state) {
+  $admin0 = $form_state['values']['location'];
+  $locs = taxonomy_get_tree(3, $admin0);
+
+  // Gatter all tids, add admin0 as well.
+  $tids = array();
+  $tids[$admin0] = $admin0;
+  foreach ($locs as $location) {
+    $tids[$location->tid] = $location->tid;
+  }
+
+  // Load full terms.
+  $terms = taxonomy_term_load_multiple(array_keys($tids));
+
+  // Key locations by tid, add admin0.
+  $locations = array();
+  $locations[$admin0] = new stdClass();
+  $locations[$admin0]->parents[0] = 0;
+  $locations[$admin0]->tid = $admin0;
+  foreach ($locs as $location) {
+    $locations[$location->tid] = $location;
+  }
+
+  // Clear locs.
+  $locs = array();
+
+  $data = array();
+  foreach ($locations as $location) {
+    $hierarchy = array();
+
+    // Add location.
+    $hierarchy[] = array(
+      'name' => $terms[$location->tid]->name,
+      'pcode' => $terms[$location->tid]->field_pcode['und'][0]['value'],
+      'admin' => $terms[$location->tid]->field_loc_admin_level['und'][0]['value'],
+    );
+
+    // Get parent.
+    $parent_tid = isset($location->parents[0]) ? $location->parents[0] : 0;
+    $count = 0;
+    while ($parent_tid != 0 && $count < 3) {
+      $count++;
+      $hierarchy[] = array(
+        'name' => $terms[$parent_tid]->name,
+        'pcode' => $terms[$parent_tid]->field_pcode['und'][0]['value'],
+        'admin' => $terms[$parent_tid]->field_loc_admin_level['und'][0]['value'],
+      );
+
+      // Remove parents from results.
+      if (isset($data[$parent_tid])) {
+        unset($data[$parent_tid]);
+      }
+
+      // Find new parent.
+      if (isset($locations[$parent_tid]->parents[0])) {
+        $parent_tid = $locations[$parent_tid]->parents[0];
+      }
+      else {
+        $parent_tid = 0;
+      }
+    }
+
+    $data[$location->tid] = array_reverse($hierarchy);
+  }
+
+  // Admin0_Name;Admin0_Pcode;Admin1_Name;Admin1_Pcode;Admin2_Name;Admin2_Pcode;Admin3_Name;Admin3_Pcode
+  foreach ($data as $row) {
+
+  }
+  dpm($data);
 }
 
 /**

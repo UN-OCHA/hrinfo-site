@@ -41,9 +41,9 @@ function hr_tools_menu() {
     'weight' => 999,
   );
 
-  $items['admin/config/hrinfo/hr-import'] = array(
-    'title' => 'HR import',
-    'description' => 'HR import from csv files.',
+  $items['admin/config/hrinfo/hr-import-export'] = array(
+    'title' => 'HR import & export',
+    'description' => 'HR import/export from/to csv files.',
     'page callback' => 'system_admin_menu_block_page',
     'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
@@ -52,12 +52,21 @@ function hr_tools_menu() {
     'file' => 'system.admin.inc',
   );
 
-  $items['admin/config/hrinfo/hr-import/locations'] = array(
+  $items['admin/config/hrinfo/hr-import-export/import-locations'] = array(
     'title' => 'Import locations',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('hr_tools_import_locations'),
     'access arguments' => array('access administration pages'),
     'description' => 'Import locations from csv',
+    'file' => 'hr_tools.import.inc',
+  );
+
+  $items['admin/config/hrinfo/hr-import-export/export-locations'] = array(
+    'title' => 'Export locations',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hr_tools_export_locations'),
+    'access arguments' => array('access administration pages'),
+    'description' => 'Export locations from csv',
     'file' => 'hr_tools.import.inc',
   );
 
