@@ -9,7 +9,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
   attach: function (context, settings) {
     Assessment = Backbone.Model.extend({
       url: function() {
-        return 'https://assessmentregistry.hrinfo.568elmp03.blackmesh.com/en/api/v1.0/assessments/' + this.get('id');
+        return 'https://assessments.hpc.tools/api/v1.1/assessments/' + this.get('id');
       },
       parse: function(response) {
         if (response.data !== undefined) {
@@ -43,7 +43,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
         url: function() {
           var index = window.location.hash.indexOf('?');
-          var url = 'https://assessmentregistry.hrinfo.568elmp03.blackmesh.com/en/api/v1.0/assessments/?sort=-date';
+          var url = 'https://assessments.hpc.tools/api/v1.1/assessments/?sort=-date';
           if (settings.ar_assessments.bundle !== '') {
             this.params['filter[bundles][value]'] = settings.ar_assessments.bundle;
           }
