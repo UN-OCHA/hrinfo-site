@@ -32,6 +32,10 @@
 		&.fc-limited {
 			display: none;
 		}
+
+		&.fc-list-item-marker {
+			padding-right: 4px;
+		}
 	}
 }
 
@@ -66,6 +70,7 @@ a.fc-event {
 	border-top: none;
 	padding: 4px;
   height: 100%;
+  white-space: normal;
 }
 
 .fc-toolbar {
@@ -75,6 +80,17 @@ a.fc-event {
 		margin-bottom: 8px;
 	}
 
+}
+
+.fc-day-grid-event .fc-location,
+.fc-day-grid-event .fc-location-details,
+.fc-time-grid-event .fc-location,
+.fc-time-grid-event .fc-location-details {
+	display: block;
+  background: #fff;
+  padding: 4px;
+  margin: 4px -4px -4px -4px;
+  height: 100%;
 }
 
 .hr-highlighted {
