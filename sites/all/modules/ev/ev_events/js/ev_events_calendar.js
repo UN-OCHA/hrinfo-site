@@ -218,16 +218,37 @@
             locationString += $(event).find('.fc-location').text();
           }
 
-          displayEvents.push([
-            startDate,
-            timeString,
-            $(event).find(titleSelector).text(),
-            locationString,
-          ]);
+          displayEvents.push(
+            {
+              'date': startDate,
+              'time': timeString,
+              'name': $(event).find(titleSelector).text(),
+              'location': locationString
+            }
+          );
         }
 
+        var columns = [
+          {
+            title: 'Date',
+            dataKey: 'date'
+          },
+          {
+            title: 'Time',
+            dataKey: 'time'
+          },
+          {
+            title: 'Name of meeting',
+            dataKey: 'name'
+          },
+          {
+            title: 'Location',
+            dataKey: 'location'
+          }
+        ];
+
         return {
-          cols: ['Date', 'Time', 'Name of meeting', 'Location'],
+          cols: columns,
           rows: displayEvents
         };
       };
@@ -310,6 +331,11 @@
           // Events.
           doc.autoTable(table.cols, table.rows, {
             startY: tableY,
+            styles: {overflow: 'linebreak', columnWidth: 'wrap'},
+            columnStyles: {
+              name: {columnWidth: 'auto'},
+              location: {columnWidth: 'auto'}
+            },
             addPageContent: function (data) {
               getPdfFooter(data, doc);
             }
