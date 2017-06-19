@@ -45,6 +45,7 @@
       $.extend($settings, {
         eventLimit: false,
         'eventRender': function(event, element, view) {
+          element.attr('data-start', event.start._i);
           for (f in eventFilters) {
             if (eventFilters.hasOwnProperty(f) && event.hasOwnProperty(f) && typeof eventFilters[f] != 'undefined' && eventFilters[f] != '' && event[f].indexOf(eventFilters[f]) === -1) {
               return false;
