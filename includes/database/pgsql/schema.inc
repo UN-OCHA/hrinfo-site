@@ -417,8 +417,6 @@ class DatabaseSchema_pgsql extends DatabaseSchema {
   public function indexExists($table, $name) {
     // Details http://www.postgresql.org/docs/8.3/interactive/view-pg-indexes.html
     $index_name = '{' . $table . '}_' . $name . '_idx';
-    // https://www.drupal.org/node/2765043#comment-11397571
-    $index_name = $table . '_' . $name . '_idx';
     return (bool) $this->connection->query("SELECT 1 FROM pg_indexes WHERE indexname = '$index_name'")->fetchField();
   }
 
@@ -432,8 +430,6 @@ class DatabaseSchema_pgsql extends DatabaseSchema {
    */
   protected function constraintExists($table, $name) {
     $constraint_name = '{' . $table . '}_' . $name;
-    // https://www.drupal.org/node/2765043#comment-11397545
-    $constraint_name = $table . '_' . $name;
     return (bool) $this->connection->query("SELECT 1 FROM pg_constraint WHERE conname = '$constraint_name'")->fetchField();
   }
 
@@ -493,8 +489,7 @@ class DatabaseSchema_pgsql extends DatabaseSchema {
       return FALSE;
     }
 
-    $index_name = '{' . $table . '}_' . $name . '_idx';
-    $this->connection->query('DROP INDEX ' . $index_name);
+    $this->connection->query('DROP INDEX ' . $this->prefixNonTable($table, $name, 'idx'));
     return TRUE;
   }
 
