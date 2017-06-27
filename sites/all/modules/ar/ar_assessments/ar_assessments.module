@@ -221,20 +221,28 @@ function ar_assessments_disaster_select($operation) {
   return $output;
 }
 
-function ar_assessments_get_list_of_filters() {
-  $dropdowns = array();
-  $operations = array();
+function ar_assessments_get_entities_dropdown($type) {
+  $output = array();
   $query = new EntityFieldQuery();
   $entities = $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'hr_operation')
+    ->entityCondition('bundle', $type)
     ->propertyOrderBy('title')
     ->propertyCondition('status', NODE_PUBLISHED)
     ->execute();
   $nodes = node_load_multiple(array_keys($entities['node']));
   foreach ($nodes as $node) {
-    $countries[$node->nid] = entity_label('node', $node);
+    $output[$node->nid] = entity_label('node', $node);
   }
-  $dropdowns['operation'] = $countries;
+  return $output;
+}
+
+function ar_assessments_get_list_of_filters() {
+  $dropdowns = array();
+  $operations = ar_assessments_get_entities_dropdown('hr_operation');
+  $bundles = ar_assessments_get_entities_dropdown('hr_bundle');
+
+  $dropdowns['operation'] = $operations;
+  $dropdowns['bundles'] = $bundles;
   return $dropdowns;
 }
 
