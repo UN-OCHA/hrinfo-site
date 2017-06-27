@@ -2,7 +2,7 @@
 
 function formatDate (date) {
   var months = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
-  var monthIndex = date.getMonth();        
+  var monthIndex = date.getMonth();
   return date.getDate() + ' ' + months[monthIndex] + ' ' + date.getFullYear();
 }
 Drupal.behaviors.arAssessmentsAssessments = {
@@ -33,7 +33,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           var to = new Date(d.to);
           return formatDate(to);
         }
-        return '';  
+        return '';
       }
     });
 
@@ -50,7 +50,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
           else {
             this.params['filter[operation][value]'] = settings.ar_assessments.operation_id;
           }
-          url += '&fields=id,label,status,bundles,organizations,participating_organizations,locations,report,questionnaire,date,disasters,population_types&page=' + this.page;
+          url += '&fields=id,label,status,bundles,organizations,participating_organizations,locations,report,questionnaire,date.from,date.to,date.timezone,disasters,population_types.id,population_types.label&page=' + this.page;
           if (index != -1) {
             var params = window.location.hash.substr(index + 1);
             url += '&' + params;
