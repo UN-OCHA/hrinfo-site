@@ -233,10 +233,11 @@ function ar_assessments_get_entities_dropdown($type) {
   foreach ($nodes as $node) {
     $output[$node->nid] = entity_label('node', $node);
     if ($type == 'hr_bundle') {
-      $operation = node_load($node->og_group_access[LANGUAGE_NONE][0]['target_id']);
+      $operation = node_load($node->og_group_ref[LANGUAGE_NONE][0]['target_id']);
       $output[$node->nid] = entity_label('node', $operation) . ': ' . $output[$node->nid];
     }
   }
+  asort($output);
   return $output;
 }
 
@@ -251,7 +252,7 @@ function ar_assessments_get_list_of_filters() {
 }
 
 function ar_assessments_fetch_assessments($filters, $limit = 5) {
-  $url = 'https://assessmentregistry.hrinfo.568elmp03.blackmesh.com/api/v1.0/assessments';
+  $url = 'https://assessments.hpc.tools/api/v1.1/assessments';
   if (!empty($filters)) {
     $url .= '?range='.$limit.'&';
     foreach ($filters as $name => $val) {
