@@ -1606,6 +1606,7 @@ function _menu_tree_data(&$links, $parents, $depth) {
  * Implements template_preprocess_HOOK() for theme_menu_tree().
  */
 function template_preprocess_menu_tree(&$variables) {
+  $variables['#tree'] = $variables['tree'];
   $variables['tree'] = $variables['tree']['#children'];
 }
 
@@ -2682,7 +2683,7 @@ function menu_link_load($mlid) {
 }
 
 /**
- * Clears the cached cached data for a single named menu.
+ * Clears the cached data for a single named menu.
  */
 function menu_cache_clear($menu_name = 'navigation') {
   $cache_cleared = &drupal_static(__FUNCTION__, array());
@@ -2753,21 +2754,6 @@ function _menu_check_rebuild() {
  *   in parallel and the current thread just waited for completion.
  */
 function menu_rebuild() {
-  // Log to NR.
-  if (function_exists('newrelic_record_custom_event')) {
-    $callers = array();
-    $traces = debug_backtrace();
-    $counter = 0;
-    foreach ($traces as $trace) {
-      $callers['l' . $counter] = $trace['function'] . '::' . $trace['line'] . '::' . $trace['file'];
-      $counter++;
-    }
-    newrelic_record_custom_event('menu_rebuild', $callers);
-
-    $info = new Exception('menu_rebuild');
-    newrelic_notice_error('menu_rebuild', $info);
-  }
-
   if (!lock_acquire('menu_rebuild')) {
     // Wait for another request that is already doing this work.
     // We choose to block here since otherwise the router item may not

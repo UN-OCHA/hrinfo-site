@@ -4129,6 +4129,7 @@ a.fc-event .fc-event-inner .fc-event-title, .fc-event-draggable .fc-event-inner 
 #fullcalendar th, #fullcalendar td { display: table-cell; }
 #fullcalendar td { padding-left: 0 !important; }
 #fullcalendar td.fc-limited { display: none; }
+#fullcalendar td.fc-list-item-marker { padding-right: 4px; }
 
 .fc-view-container { background: white; }
 
@@ -4138,9 +4139,11 @@ a.fc-event:hover, a.fc-event:focus { color: #0fa4de; text-decoration: underline;
 
 .fc-day-grid-event, .fc-time-grid-event { margin: 1px 2px 0; padding: 2px 0 0 0; }
 
-.fc-day-grid-event .fc-content, .fc-time-grid-event .fc-content { background: #eeeeee; border: 1px solid #eeeeee; border-top: none; padding: 4px; height: 100%; }
+.fc-day-grid-event .fc-content, .fc-time-grid-event .fc-content { background: #eeeeee; border: 1px solid #eeeeee; border-top: none; padding: 4px; height: 100%; white-space: normal; }
 
 .fc-toolbar .fc-left, .fc-toolbar .fc-right { float: none; overflow: auto; margin-bottom: 8px; }
+
+.fc-day-grid-event .fc-location, .fc-day-grid-event .fc-location-details, .fc-time-grid-event .fc-location, .fc-time-grid-event .fc-location-details { display: block; background: #fff; padding: 4px; margin: 4px -4px -4px -4px; height: 100%; }
 
 .hr-highlighted .fc-header-toolbar { text-align: left; margin-bottom: 8px; }
 .hr-highlighted .fc-header-toolbar h2 { font-size: 13px; color: #333333; }

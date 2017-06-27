@@ -432,7 +432,7 @@ class DatabaseSchema_pgsql extends DatabaseSchema {
    */
   protected function constraintExists($table, $name) {
     $constraint_name = '{' . $table . '}_' . $name;
-    // https://www.drupal.org/node/2765043#comment-11397545
+    // https://www.drupal.org/node/2765043#comment-11397571
     $constraint_name = $table . '_' . $name;
     return (bool) $this->connection->query("SELECT 1 FROM pg_constraint WHERE conname = '$constraint_name'")->fetchField();
   }
