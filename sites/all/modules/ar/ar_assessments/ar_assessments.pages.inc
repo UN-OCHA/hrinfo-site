@@ -38,7 +38,7 @@ function ar_assessments_page($node) {
   $settings = array();
   $settings['operation_id'] = $operation->nid;
   // Get the operation id from the cluster.
-  $settings['bundle'] = $node->type == 'hr_bundle' ? $node->title : '';
+  $settings['bundle'] = $node->type == 'hr_bundle' ? $node->nid : '';
 
   return array(
     '#theme' => 'ar_assessments_assessments',
