@@ -232,6 +232,10 @@ function ar_assessments_get_entities_dropdown($type) {
   $nodes = node_load_multiple(array_keys($entities['node']));
   foreach ($nodes as $node) {
     $output[$node->nid] = entity_label('node', $node);
+    if ($type == 'hr_bundle') {
+      $operation = node_load($node->og_group_access[LANGUAGE_NONE][0]['target_id']);
+      $output[$node->nid] = entity_label('node', $operation) . ': ' . $output[$node->nid];
+    }
   }
   return $output;
 }
