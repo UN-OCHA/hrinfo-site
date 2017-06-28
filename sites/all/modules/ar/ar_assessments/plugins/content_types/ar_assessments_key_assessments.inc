@@ -86,7 +86,11 @@ function ar_assessments_key_assessments_render($subtype, $conf, $panel_args, $co
         'href' => $value['url'],
       );
     }
-    $block->content = theme('links', array('links' => $links));
+    $read_more = '<div class="more-link read-more">';
+    $read_more .= l(t('View more'), 'node/1');
+    $read_more .= '</div>';
+
+    $block->content = $read_more . theme('links', array('links' => $links));
   }
 
   return $block;
