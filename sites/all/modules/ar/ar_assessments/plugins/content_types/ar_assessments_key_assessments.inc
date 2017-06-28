@@ -86,8 +86,15 @@ function ar_assessments_key_assessments_render($subtype, $conf, $panel_args, $co
         'href' => $value['url'],
       );
     }
+    $nid = 0;
+    if ($conf['filters']['operation']) {
+      $nid = $conf['filters']['operation'];
+    }
+    elseif ($conf['filters']['bundles']) {
+      $nid = $conf['filters']['bundles'];
+    }
     $read_more = '<div class="more-link read-more">';
-    $read_more .= l(t('View more'), 'node/1');
+    $read_more .= l(t('View more'), 'node/' . $nid . '/ar_assessments');
     $read_more .= '</div>';
 
     $block->content = $read_more . theme('links', array('links' => $links));
