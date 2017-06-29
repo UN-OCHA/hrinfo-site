@@ -111,6 +111,18 @@ function ar_assessments_block_view($delta = '') {
     <div class="content">
       <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter"><p>Filter: <span class="facetapi-active">216 items</span> displayed</p></div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/'.drupal_get_path_alias(current_path()).'"><i class="reset"></i></a> <span>Reset all filters</span></div></div>  </div>
   </div>';
+        $block['content'] .= '<div><div class="views-exposed-form">
+    <div class="views-exposed-widgets clearfix">
+                  <div id="edit-search-wrapper" class="views-exposed-widget form-group">
+          <div class="input-group">
+            <input class="form-control form-text" id="search" name="text" value="" size="30" maxlength="128" type="text" placeholder="Search Assessments">
+            <span class="input-group-btn">
+              <button id="search-button" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+            </span>
+          </div>
+        </div>
+        </div>
+  </div>  </div>';
         if ($node->type == 'hr_operation') {
           $block['content'] .= ar_assessments_bundles_select($operation);
         }
