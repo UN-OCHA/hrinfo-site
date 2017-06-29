@@ -262,7 +262,7 @@ function ar_assessments_fetch_assessments($filters, $limit = 5) {
     }
   }
   // Sort by date.
-  $url .= '&sort=-created';
+  $url .= '&sort=-date';
   $assessments = array();
   $request = drupal_http_request($url);
   if (isset($request->data)) {
