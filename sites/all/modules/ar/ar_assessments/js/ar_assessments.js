@@ -284,7 +284,9 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
         search: function(event) {
           if (event.type == 'keyup' && event.keyCode == 13 || event.type == 'click') {
-            this.router.navigate('table/1?text='+$('#search').val(), {trigger: true});
+            this.assessmentsList.params['filter[label][value]'] = $('#search').val();
+            this.assessmentsList.params['filter[label][operator]'] = 'CONTAINS';
+            this.router.navigateWithParams('table/1', this.assessmentsList.params);
           }
         },
 
@@ -365,7 +367,9 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
         search: function(event) {
           if (event.type == 'keyup' && event.keyCode == 13 || event.type == 'click') {
-            this.router.navigate('list/1?text='+$('#search').val(), {trigger: true});
+            this.assessmentsList.params['filter[label][value]'] = $('#search').val();
+            this.assessmentsList.params['filter[label][operator]'] = 'CONTAINS';
+            this.router.navigateWithParams('list/1', this.assessmentsList.params);
           }
         },
 
