@@ -458,9 +458,6 @@
             var newOption = document.createElement('option');
             newOption.value = f + ':' + option.key;
             newOption.text = option.label;
-            if (defaultFilters[f] && defaultFilters[f] == o.key) {
-              newOption.selected = 'selected';
-            }
             newSelect.appendChild(newOption);
           }
 
