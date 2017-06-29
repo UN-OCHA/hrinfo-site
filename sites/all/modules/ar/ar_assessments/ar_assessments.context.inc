@@ -32,12 +32,6 @@ function ar_assessments_context_default_contexts() {
           'region' => 'sidebar_first',
           'weight' => '-30',
         ),
-        /*'ar_assessments-ar_assessments_search' => array(
-          'module' => 'ar_assessments',
-          'delta' => 'ar_assessments_search',
-          'region' => 'sidebar_first',
-          'weight' => '-10',
-        ),*/
         'ar_assessments-ar_assessments_sidebar' => array(
           'module' => 'ar_assessments',
           'delta' => 'ar_assessments_sidebar',
