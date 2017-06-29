@@ -1,3 +1,5 @@
+<h2 class="pb-header">Assessments</h2>
+
 <div id="assessments-view">
 </div>
 <div id="assessments-list">
