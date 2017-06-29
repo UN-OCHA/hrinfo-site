@@ -413,13 +413,14 @@
           }
 
           var facet = facets[f];
-          filterCount++;
-
-          var filter = document.createElement('div');
-
           if (facet.values.length === 0) {
             continue;
           }
+
+          filterCount++;
+
+          var filter = document.createElement('div');
+          filter.className = 'calendar-filters--' + f;
 
           // Construct label.
           var newLabel = document.createElement('label');
@@ -437,12 +438,26 @@
           newOption.text = Drupal.t('- Any -');
           newSelect.appendChild(newOption);
 
+          // Flip key and value.
+          var flipped = [];
+          for (var key in facet.values) {
+            flipped.push({
+              'key': key,
+              'label': facet.values[key]
+            });
+          }
+
+          // Sort by label.
+          flipped.sort(function(a, b) {
+            return a.label.localeCompare(b.label)
+          });
+
           // Add options.
-          for (var o in facet.values) {
-            var option = facet.values[o];
+          for (var o = 0; o < flipped.length; o++) {
+            var option = flipped[o];
             var newOption = document.createElement('option');
-            newOption.value = f + ':' + o;
-            newOption.text = option;
+            newOption.value = f + ':' + option.key;
+            newOption.text = option.label;
             newSelect.appendChild(newOption);
           }
 
