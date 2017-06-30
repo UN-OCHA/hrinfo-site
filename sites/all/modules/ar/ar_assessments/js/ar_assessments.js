@@ -283,7 +283,8 @@ Drupal.behaviors.arAssessmentsAssessments = {
           if (keys.length > 0) {
              if (keys.length === 1) {
               var key = keys[0];
-              if ((settings.ar_assessments.bundle !== '' && key === 'filter[bundles][value]') || (settings.ar_assessments.operation_id && key === 'filter[operation][valu
+              if ((settings.ar_assessments.bundle !== '' && key === 'filter[bundles][value]') ||
+                (settings.ar_assessments.operation_id && key === 'filter[operation][value]')) {
                 $('.current-search-item-reset').hide();
               }
               else {
