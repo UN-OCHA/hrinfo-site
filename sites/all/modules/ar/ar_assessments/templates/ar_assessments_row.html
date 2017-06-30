@@ -1,6 +1,6 @@
 <% _.each(assessments, function(assessment) { %>
     <tr>
-      <td class="pb-table__td pb-table__td--primary" data-title="Title"><a href="#assessment/<%= assessment.get('id') %>"><%= assessment.get('label') %></a></td>
+      <td class="pb-table__td pb-table__td--primary" data-title="Title"><a href="<%= assessment.get('url') %>" target="_blank"><%= assessment.get('label') %></a></td>
 
       <td data-title="Sources">  
         <% if ( assessment.get('organizations') ) { %>
