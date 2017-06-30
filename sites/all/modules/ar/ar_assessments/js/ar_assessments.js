@@ -279,6 +279,12 @@ Drupal.behaviors.arAssessmentsAssessments = {
         },
 
         navigate: function() {
+          if (this.assessmentsList.params.length > 1) {
+            $('.current-search-item-reset').show();
+          }
+          else {
+            $('.current-search-item-reset').hide();
+          }
           this.router.navigateWithParams('table/1', this.assessmentsList.params);
         },
 
@@ -451,7 +457,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
     var orgAutocompleteCallback = function (request, response) {
       $.ajax({
-        url: "/hid/organizations/autocomplete/"+request.term,
+        url: "/hid/organizations/autocomplete/" + request.term,
         dataType: "json",
         success: function( data ) {
           var orgs = [];
