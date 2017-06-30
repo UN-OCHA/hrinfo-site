@@ -279,7 +279,8 @@ Drupal.behaviors.arAssessmentsAssessments = {
         },
 
         navigate: function() {
-          if (this.assessmentsList.params.length > 1) {
+          var keys = Object.keys(this.assessmentsList.params);
+          if (keys.length > 0) {
             $('.current-search-item-reset').show();
           }
           else {
@@ -418,6 +419,7 @@ Drupal.behaviors.arAssessmentsAssessments = {
 
       defaultRoute: function (actions) {
         this.navigate('table/1', {trigger: true});
+        $('.current-search-item-reset').hide();
       },
 
       table: function(page) {
