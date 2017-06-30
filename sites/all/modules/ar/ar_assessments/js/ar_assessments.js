@@ -281,7 +281,18 @@ Drupal.behaviors.arAssessmentsAssessments = {
         navigate: function() {
           var keys = Object.keys(this.assessmentsList.params);
           if (keys.length > 0) {
-            $('.current-search-item-reset').show();
+             if (keys.length === 1) {
+              var key = keys[0];
+              if ((settings.ar_assessments.bundle !== '' && key === 'filter[bundles][value]') || (settings.ar_assessments.operation_id && key === 'filter[operation][valu
+                $('.current-search-item-reset').hide();
+              }
+              else {
+                $('.current-search-item-reset').show();
+              }
+            }
+            else {
+              $('.current-search-item-reset').show();
+            }
           }
           else {
             $('.current-search-item-reset').hide();
