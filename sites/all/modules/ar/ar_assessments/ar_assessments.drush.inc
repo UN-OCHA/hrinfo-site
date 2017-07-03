@@ -48,7 +48,7 @@ function drush_ar_assessments_redirects() {
       $assessments = drupal_json_decode($request->data);
       if (!empty($assessments['data'])) {
         $asst = reset($assessments['data']);
-        echo 'node/' . $nid . ':' . $asst['url'];
+        echo 'node/' . $nid . ':' . $asst['url'] . "\n";
         $csv[] = array('node/' . $nid, $asst['url']);
       }
     }
