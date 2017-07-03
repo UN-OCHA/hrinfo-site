@@ -50,6 +50,7 @@ function drush_ar_assessments_redirect() {
         $asst = reset($assessments['data']);
         echo 'node/' . $nid . ':' . $asst['url'];
         $csv[] = array('node/' . $nid, $asst['url']);
+      }
     }
   }
 
