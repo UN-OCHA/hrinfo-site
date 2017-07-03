@@ -169,6 +169,5 @@ function j2h_block_view($delta = '') {
       $block['content'] = j2h('4w');
       return $block;
   }
-  break;
 }
 
