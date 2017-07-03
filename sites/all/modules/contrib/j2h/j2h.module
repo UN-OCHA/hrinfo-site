@@ -126,7 +126,7 @@ function j2h($mod_api='') {
       
       // Only cache real data.
       if ($json_data) {
-        cache_set($cache_id, $variables, REQUEST_TIME + 24 * 60 * 60);
+        cache_set($cache_id, $variables, 'cache', REQUEST_TIME + 24 * 60 * 60);
       }
     }
 
