@@ -32,7 +32,7 @@ function ar_assessments_drush_command() {
 /**
  * Creates a CSV file with URL redirects.
  */
-function drush_ar_assessments_redirect() {
+function drush_ar_assessments_redirects() {
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node');
   $query->entityCondition('bundle', 'hr_assessment', '=');
