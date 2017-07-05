@@ -47,7 +47,7 @@ function ev_events_upcoming_edit_form($form, &$form_state){
 
 function ev_events_upcoming_edit_form_submit($form, &$form_state) {
   foreach (element_children($form) as $key) {
-    if (!empty($form_state['values'][$key])) {
+    if (isset($form_state['values'][$key])) {
       $form_state['conf'][$key] = $form_state['values'][$key];
     }
   }
@@ -80,7 +80,7 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
     $events = ev_events_order_by_date($events);
 
     // Limit to 5 events.
-    $events = array_splice($events, 5);
+    array_splice($events, 5);
 
     $items = array();
     foreach ($events as $event) {

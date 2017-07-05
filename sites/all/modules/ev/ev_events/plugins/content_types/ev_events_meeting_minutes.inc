@@ -47,7 +47,7 @@ function ev_events_meeting_minutes_edit_form($form, &$form_state){
 
 function ev_events_meeting_minutes_edit_form_submit($form, &$form_state) {
   foreach (element_children($form) as $key) {
-    if (!empty($form_state['values'][$key])) {
+    if (isset($form_state['values'][$key])) {
       $form_state['conf'][$key] = $form_state['values'][$key];
     }
   }
