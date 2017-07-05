@@ -941,3 +941,181 @@ function _hr_core_fix_entity_reference_ajax_calls(&$form, &$form_state) {
     }
   }
 }
+
+/**
+ * Implements hook_ctools_content_subtype_alter().
+ */
+function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
+  // Bail out soon.
+  if (!isset($plugin['name']) || in_array($plugin['name'], array(
+    'block',
+    'entity_form_field',
+    'token',
+    'entity_field_extra',
+    'entity_field',
+    'entity_view',
+    'flag_link',
+    'views',
+  ))) {
+    return;
+  }
+
+  // Bail out soon.
+  if (isset($plugin['category']) && in_array($plugin['category'], array(
+    'Comment',
+    'User',
+    'Node',
+    'Form',
+  ))) {
+    return;
+  }
+
+  $categories = array(
+    'hr_layout_rss_feeds' => array(
+      'category' => 'Custom content',
+      'title' => 'RSS Feed',
+    ),
+
+    'hr_contacts_key_contacts' => array(
+      'category' => 'Outdated',
+    ),
+    'hr_contacts' => array(
+      'category' => 'Outdated',
+    ),
+    'contacts' => array(
+      'category' => 'Outdated',
+    ),
+
+    'hid_profiles_checkins' => array(
+      'category' => 'HID',
+      'title' => 'Checkin',
+    ),
+    'hid_profiles_list' => array(
+      'category' => 'HID',
+      'title' => 'List',
+    ),
+
+    // Documents.
+    'documents' => array(
+      'category' => 'Content by HR.info',
+      'title' => 'Dynamic documents',
+    ),
+    'hr_documents' => array(
+      'category' => 'Content by HR.info',
+      'title' => 'Documents',
+    ),
+    'hr_documents_key_documents' => array(
+      'category' => 'Content by HR.info',
+      'title' => 'Key documents',
+    ),
+    'hr_layout_standard' => array(
+      'category' => 'Content by HR.info',
+      'title' => 'OCHA products',
+    ),
+
+    // Old events.
+    'events' => array(
+      'category' => 'Old events',
+      'title' => 'HR.Info events',
+    ),
+
+    // Events.
+    'ev_events_upcoming' => array(
+      'category' => 'Events by Humanitarian Events',
+      'title' => 'Humanitarian Events upcoming events',
+    ),
+    'ev_events_meeting_minutes' => array(
+      'category' => 'Events by Humanitarian Events',
+      'title' => 'Humanitarian Events meeting minutes',
+    ),
+
+    'infographics' => array(
+      'category' => 'Content by HR.info',
+      'title' => 'Dynamic infographics',
+    ),
+    'hr_infographics' => array(
+      'category' => 'Content by HR.info',
+      'title' => 'Infographics',
+    ),
+    'hr_infographics_key_infographics' => array(
+      'category' => 'Content by HR.info',
+      'title' => 'Key infographics',
+    ),
+
+    // Reliefweb.
+    'hr_layout_reliefweb' => array(
+      'category' => 'Content by Reliefweb',
+      'title' => 'Reliefweb API',
+    ),
+    'hr_reliefweb_ocha_products' => array(
+      'category' => 'Content by Reliefweb',
+      'title' => 'OCHA products',
+    ),
+    'hr_reliefweb_key_documents' => array(
+      'category' => 'Content by Reliefweb',
+      'title' => 'Reliefweb documents',
+    ),
+    'hr_reliefweb_featured_document' => array(
+      'category' => 'Content by Reliefweb',
+      'title' => 'Featured document',
+    ),
+
+    'fts_visualization' => array(
+      'category' => ' Funding by FTS',
+    ),
+
+    // Outdated.
+    'bean_pane' => array(
+      'category' => 'Outdated',
+    ),
+    'twitter' => array(
+      'category' => 'Outdated',
+    ),
+    'hr_assessments' => array(
+      'category' => 'Outdated',
+    ),
+    'assessments' => array(
+      'category' => 'Outdated',
+    ),
+  );
+
+  if (isset($plugin['name']) && $plugin['name'] == 'views_panes') {
+    if (is_array($subtype['category'])) {
+      $key = strtolower($subtype['category'][0]);
+      if (array_key_exists($key, $categories)) {
+        $plugin['category'] = $categories[$key]['category'];
+        $subtype['category'] = $categories[$key]['category'];
+        if (isset($categories[$key]['title'])) {
+          $subtype['title'] = $categories[$key]['title'];
+          $plugin['title'] = $categories[$key]['title'];
+        }
+        return;
+      }
+    }
+  }
+
+  if (isset($subtype['category']) && isset($subtype['name'])) {
+    if (!is_array($subtype['category'])) {
+      if (array_key_exists($subtype['name'], $categories)) {
+        $plugin['category'] = $categories[$subtype['name']]['category'];
+        $subtype['category'] = $categories[$subtype['name']]['category'];
+        if (isset($categories[$subtype['name']]['title'])) {
+          $subtype['title'] = $categories[$subtype['name']]['title'];
+          $plugin['title'] = $categories[$subtype['name']]['title'];
+        }
+        return;
+      }
+    }
+  }
+  if (isset($plugin['category']) && isset($plugin['name'])) {
+    if (array_key_exists($plugin['name'], $categories)) {
+      $plugin['category'] = $categories[$plugin['name']]['category'];
+      $subtype['category'] = $categories[$plugin['name']]['category'];
+      if (isset($categories[$plugin['name']]['title'])) {
+        $subtype['title'] = $categories[$plugin['name']]['title'];
+        $plugin['title'] = $categories[$plugin['name']]['title'];
+      }
+      return;
+    }
+  }
+}
