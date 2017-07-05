@@ -80,6 +80,13 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
     $events = drupal_json_decode($request->data);
     $events = ev_events_order_by_date($events);
 
+    // Since recurring events can have a date in the past, remove them.
+    foreach ($events as $key => $event) {
+      if ($event['start'] < $now->format('Y-m-d')) {
+        unset($events[$key]);
+      }
+    }
+
     // Limit to 5 events.
     array_splice($events, 5);
 
@@ -151,53 +158,4 @@ function ev_events_upcoming_render_event($event) {
   $output .= '<span class="ev-event-date">' . $date . '</span> ';
 
   return $output;
-}
-
-/**
-*  Function to return ReliefWeb Api paths.
-*/
-function ev_events_upcoming_api_path() {
-  $source_url = 'http://api.reliefweb.int/v1';
-  $api_endpoints = array();
-  $request = drupal_http_request($source_url);
-  if (isset($request->data)) {
-    $data = drupal_json_decode($request->data);
-    $api = $data['data'];
-    foreach ($api as $value) {
-      foreach ($value as $subvalue) {
-        $api_endpoints[$value['href']] = $value['title'];
-      }
-    }
-    return $api_endpoints;
-  }
-  else{
-    drupal_set_message("Could not return ReliefWeb API Paths. Please consult the site administrator");
-  }
-}
-
-/**
-*  Function to return content given an api path.
-*/
-
-function ev_events_upcoming_content($path) {
-  $request = drupal_http_request($path);
-  if (isset($request->data)) {
-    $response = drupal_json_decode($request->data);
-    $data = $response['data'];
-    $data_array = array();
-    foreach ($data as $value) {
-      $url = $value['fields']['url'];
-      $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
-      $data_array[$title] = array(
-        'title' => $title,
-        'url' => $url,
-        'closing_date' => isset($value['fields']['date']['closing']) ? $value['fields']['date']['closing'] : NULL,
-        'source' => isset($value['fields']['source'][0]['name']) ? $value['fields']['source'][0]['name'] : '',
-      );
-    }
-    return $data_array;
-  }
-  else{
-    drupal_set_message('Could not fetch content for the given API path, please consult your site administrator');
-  }
 }
