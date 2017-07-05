@@ -79,6 +79,9 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
     $events = drupal_json_decode($request->data);
     $events = ev_events_order_by_date($events);
 
+    // Limit to 5 events.
+    $events = array_splice($events, 5);
+
     $items = array();
     foreach ($events as $event) {
       $items[] = array(
