@@ -62,6 +62,7 @@ function ev_events_upcoming_render($subtype, $conf, $panel_args, $context = NULL
   $output = t('No events to display');
 
   $now = new DateTime();
+  $now->add(new DateInterval('P1D'));
   $path = current_path() . '/humanitarian-events';
 
   $api_base_url = variable_get('ev_events_api_url', 'https://events.staging.humanitarianresponse.info');
