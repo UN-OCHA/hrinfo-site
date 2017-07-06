@@ -41,29 +41,6 @@ function humanitarianresponse_field__field_documents($variables) {
  * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4506
  */
 function humanitarianresponse_preprocess_panels_add_content_modal(&$vars) {
-  $additional_features = array();
-  foreach ($vars['categories']['humanitarianresponse']['content'] as $key => $pane) {
-    $pane['category'] = 'Additional features';
-    $additional_features[$key] = $pane;
-  }
-  foreach($vars['categories']['bean-pane']['content'] as $key => $pane) {
-    $pane['category'] = 'Additional features';
-    if ($pane['name'] == 'fts_visualization') {
-      $pane['title'] = 'FTS Chart';
-      $additional_features['FTS Chart'] = $pane;
-    }
-    else {
-      $additional_features[$key] = $pane;
-    }
-  }
-  foreach ($vars['categories']['twitter']['content'] as $key => $pane) {
-    $pane['category'] = 'Additional features';
-    $additional_features[$key] = $pane;
-  }
-  $vars['categories']['additional_features'] = array(
-    'title' => 'Additional features',
-    'content' => $additional_features
-  );
   $pane = $vars['categories']['fielded-panes']['content']['Panels pane'];
   $pane['title'] = 'Free text';
   $vars['categories']['custom-content'] = array(
@@ -78,6 +55,10 @@ function humanitarianresponse_preprocess_panels_add_content_modal(&$vars) {
   unset($vars['categories']['twitter']);
   ksort($vars['categories']);
   unset($vars['categories_array']);
+  
+  // Remove adding assesment.
+  unset($vars['root_content_array']);
+
   // Process the list of categories.
   foreach ($vars['categories'] as $key => $category_info) {
     // 'root' category is actually displayed under the categories, so
