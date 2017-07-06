@@ -964,6 +964,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   if (isset($plugin['category']) && in_array($plugin['category'], array(
     'Comment',
     'User',
+    'Node',
     'Form',
   ))) {
     return;
@@ -986,12 +987,12 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     ),
 
     'hid_profiles_checkins' => array(
-      'category' => 'Contacts by HID',
+      'category' => 'HID',
       'title' => 'Checkin',
     ),
     'hid_profiles_list' => array(
-      'category' => 'Contacts by HID',
-      'title' => 'List',
+      'category' => 'HID',
+      'title' => 'Contacts',
     ),
 
     // Documents.
@@ -1005,32 +1006,32 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     ),
     'hr_documents_key_documents' => array(
       'category' => 'Content by HR.info',
-      'title' => 'Key documents',
+      'title' => 'Static documents',
     ),
     'hr_layout_standard' => array(
       'category' => 'Content by HR.info',
-      'title' => 'OCHA products',
+      'title' => 'Response Planning/OCHA products',
     ),
 
     // Old events.
     'events' => array(
-      'category' => 'Outdated',
+      'category' => 'Old events',
       'title' => 'HR.Info events',
     ),
 
     // Events.
     'ev_events_upcoming' => array(
       'category' => 'Events by Humanitarian Events',
-      'title' => 'Humanitarian Events upcoming events',
+      'title' => 'Dynamic events',
     ),
     'ev_events_meeting_minutes' => array(
       'category' => 'Events by Humanitarian Events',
-      'title' => 'Humanitarian Events meeting minutes',
+      'title' => 'Meeting minutes',
     ),
 
     'infographics' => array(
       'category' => 'Content by HR.info',
-      'title' => 'Dynamic infographics',
+      'title' => 'Dynamic maps/infographics',
     ),
     'hr_infographics' => array(
       'category' => 'Content by HR.info',
@@ -1038,34 +1039,30 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     ),
     'hr_infographics_key_infographics' => array(
       'category' => 'Content by HR.info',
-      'title' => 'Key infographics',
+      'title' => 'Static maps/infographics',
     ),
 
     // Reliefweb.
     'hr_layout_reliefweb' => array(
-      'category' => 'Content by RW',
-      'title' => 'Reliefweb API',
+      'category' => 'Content by Reliefweb',
+      'title' => 'ReliefWeb API',
     ),
     'hr_reliefweb_ocha_products' => array(
-      'category' => 'Content by RW',
-      'title' => 'OCHA products',
+      'category' => 'Content by Reliefweb',
+      'title' => 'Response Planning/OCHA products',
     ),
     'hr_reliefweb_key_documents' => array(
-      'category' => 'Content by RW',
-      'title' => 'Reliefweb documents',
+      'category' => 'Content by Reliefweb',
+      'title' => 'Dynamic Reports and Maps',
     ),
     'hr_reliefweb_featured_document' => array(
-      'category' => 'Content by RW',
-      'title' => 'Featured document',
+      'category' => 'Content by Reliefweb',
+      'title' => 'Static Reports and Maps',
     ),
 
     'fts_visualization' => array(
       'category' => ' Funding by FTS',
-    ),
-
-    // Custom content.
-    'node_body' => array(
-      'category' => 'Custom content',
+      'title' => 'FTS Chart',
     ),
 
     // Outdated.
@@ -1079,15 +1076,6 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'category' => 'Outdated',
     ),
     'assessments' => array(
-      'category' => 'Outdated',
-    ),
-    'additional features' => array(
-      'category' => 'Outdated',
-    ),
-    'hr_news' => array(
-      'category' => 'Outdated',
-    ),
-    'blog posts' => array(
       'category' => 'Outdated',
     ),
   );
