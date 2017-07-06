@@ -1017,7 +1017,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
 
     // Old events.
     'events' => array(
-      'category' => 'Outdated',
+      'category' => 'Content by HR.info',
       'title' => 'HR.Info events',
     ),
 
@@ -1065,8 +1065,16 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
 
     // FTS.
     'fts_visualization' => array(
-      'category' => 'Custom content',
+      'category' => 'Funding by FTS',
       'title' => 'FTS Chart',
+    ),
+
+    // Assessments.
+    'hr_assessments' => array(
+      'category' => 'Content by HR.info',
+    ),
+    'assessments' => array(
+      'category' => 'Content by HR.info',
     ),
 
     // Outdated.
@@ -1074,12 +1082,6 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'category' => 'Outdated',
     ),
     'twitter' => array(
-      'category' => 'Outdated',
-    ),
-    'hr_assessments' => array(
-      'category' => 'Outdated',
-    ),
-    'assessments' => array(
       'category' => 'Outdated',
     ),
     'additional features' => array(
