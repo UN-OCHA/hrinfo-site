@@ -964,7 +964,6 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   if (isset($plugin['category']) && in_array($plugin['category'], array(
     'Comment',
     'User',
-    'Node',
     'Form',
   ))) {
     return;
@@ -987,11 +986,11 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     ),
 
     'hid_profiles_checkins' => array(
-      'category' => 'HID',
+      'category' => 'Contacts by HID',
       'title' => 'Checkin',
     ),
     'hid_profiles_list' => array(
-      'category' => 'HID',
+      'category' => 'Contacts by HID',
       'title' => 'Contacts',
     ),
 
@@ -1044,24 +1043,24 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
 
     // Reliefweb.
     'hr_layout_reliefweb' => array(
-      'category' => 'Content by Reliefweb',
+      'category' => 'Content by RW',
       'title' => 'ReliefWeb API',
     ),
     'hr_reliefweb_ocha_products' => array(
-      'category' => 'Content by Reliefweb',
+      'category' => 'Content by RW',
       'title' => 'Response Planning/OCHA products',
     ),
     'hr_reliefweb_key_documents' => array(
-      'category' => 'Content by Reliefweb',
+      'category' => 'Content by RW',
       'title' => 'Dynamic Reports and Maps',
     ),
     'hr_reliefweb_featured_document' => array(
-      'category' => 'Content by Reliefweb',
+      'category' => 'Content by RW',
       'title' => 'Static Reports and Maps',
     ),
 
     'fts_visualization' => array(
-      'category' => ' Funding by FTS',
+      'category' => 'Custom content',
       'title' => 'FTS Chart',
     ),
 
@@ -1076,6 +1075,15 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'category' => 'Outdated',
     ),
     'assessments' => array(
+      'category' => 'Outdated',
+    ),
+    'additional features' => array(
+      'category' => 'Outdated',
+    ),
+    'hr_news' => array(
+      'category' => 'Outdated',
+    ),
+    'blog posts' => array(
       'category' => 'Outdated',
     ),
   );
