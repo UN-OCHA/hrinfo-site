@@ -1134,4 +1134,27 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       return;
     }
   }
+
+  // Something old found.
+  $tag = '';
+  if (isset($plugin['category'])) {
+    if (is_array($plugin['category'])) {
+      $tag .= '[' . $plugin['category'][0] . ']';
+    }
+    else {
+      $tag .= '[' . $plugin['category'] . ']';
+    }
+  }
+  if (isset($subtype['category'])) {
+    if (is_array($subtype['category'])) {
+      $tag .= '{' . $subtype['category'][0] . '}';
+    }
+    else {
+      $tag .= '{' . $subtype['category'] . '}';
+    }
+  }
+
+  if (isset($subtype['title'])) {
+    $subtype['title'] = $tag . ' - ' . $subtype['title'];
+  }
 }
