@@ -1084,6 +1084,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     // Outdated.
     'bean_pane' => array(
       'category' => 'Outdated',
+      'title' => 'Bean',
     ),
     'twitter' => array(
       'category' => 'Outdated',
@@ -1093,9 +1094,11 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     ),
     'hr_news' => array(
       'category' => 'Outdated',
+      'title' => 'News',
     ),
     'blog posts' => array(
       'category' => 'Outdated',
+      'title' => 'Blog post',
     ),
   );
 
