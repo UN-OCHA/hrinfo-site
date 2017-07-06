@@ -974,6 +974,9 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'category' => 'Custom content',
       'title' => 'RSS Feed',
     ),
+    'node_body' => array(
+      'category' => 'Custom content',
+    ),
 
     'hr_contacts_key_contacts' => array(
       'category' => 'Outdated',
@@ -1014,7 +1017,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
 
     // Old events.
     'events' => array(
-      'category' => 'Old events',
+      'category' => 'Outdated',
       'title' => 'HR.Info events',
     ),
 
@@ -1028,6 +1031,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'title' => 'Meeting minutes',
     ),
 
+    // Infographics.
     'infographics' => array(
       'category' => 'Content by HR.info',
       'title' => 'Dynamic maps/infographics',
@@ -1059,6 +1063,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'title' => 'Static Reports and Maps',
     ),
 
+    // FTS.
     'fts_visualization' => array(
       'category' => 'Custom content',
       'title' => 'FTS Chart',
