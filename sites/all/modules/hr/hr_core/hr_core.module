@@ -1107,21 +1107,24 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   );
 
   $tag = '';
-  if (isset($plugin['category'])) {
-    if (is_array($plugin['category'])) {
-      $tag .= '[' . $plugin['category'][0] . ']';
+  if (variable_get('hr_core_debug_panel_categories', FALSE)) {
+    if (isset($plugin['category'])) {
+      if (is_array($plugin['category'])) {
+        $tag .= '[' . $plugin['category'][0] . ']';
+      }
+      else {
+        $tag .= '[' . $plugin['category'] . ']';
+      }
     }
-    else {
-      $tag .= '[' . $plugin['category'] . ']';
+    if (isset($subtype['category'])) {
+      if (is_array($subtype['category'])) {
+        $tag .= '{' . $subtype['category'][0] . '}';
+      }
+      else {
+        $tag .= '{' . $subtype['category'] . '}';
+      }
     }
-  }
-  if (isset($subtype['category'])) {
-    if (is_array($subtype['category'])) {
-      $tag .= '{' . $subtype['category'][0] . '}';
-    }
-    else {
-      $tag .= '{' . $subtype['category'] . '}';
-    }
+    $tag .= ' - ';
   }
 
   // Check views panes.
@@ -1136,8 +1139,8 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
           $plugin['title'] = $categories[$key]['title'];
         }
         else {
-          $subtype['title'] = $tag . ' - ' . $subtype['title'];
-          $plugin['title'] = $tag . ' - ' . $plugin['title'];
+          $subtype['title'] = $tag . $subtype['title'];
+          $plugin['title'] = $tag . $plugin['title'];
         }
         return;
       }
@@ -1155,8 +1158,8 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
           $plugin['title'] = $categories[$subtype['name']]['title'];
         }
         else {
-          $subtype['title'] = $tag . ' - ' . $subtype['title'];
-          $plugin['title'] = $tag . ' - ' . $plugin['title'];
+          $subtype['title'] = $tag . $subtype['title'];
+          $plugin['title'] = $tag . $plugin['title'];
         }
         return;
       }
@@ -1173,14 +1176,16 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
         $plugin['title'] = $categories[$plugin['name']]['title'];
       }
       else {
-        $subtype['title'] = $tag . ' - ' . $subtype['title'];
-        $plugin['title'] = $tag . ' - ' . $plugin['title'];
+        $subtype['title'] = $tag . $subtype['title'];
+        $plugin['title'] = $tag . $plugin['title'];
       }
       return;
     }
   }
 
   // Something old found.
-  $subtype['title'] = $tag . ' - ' . $subtype['title'];
-  $plugin['title'] = $tag . ' - ' . $plugin['title'];
+  if (variable_get('hr_core_debug_panel_categories', FALSE)) {
+    $subtype['title'] = $tag . $subtype['title'];
+    $plugin['title'] = $tag . $plugin['title'];
+  }
 }
