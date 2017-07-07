@@ -978,6 +978,10 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'category' => 'Custom content',
       'title' => 'Node body',
     ),
+    'fieldable_panels_pane' => array(
+      'category' => 'Custom content',
+      'title' => 'Free text',
+    ),
 
     'hr_contacts_key_contacts' => array(
       'category' => 'Outdated',
@@ -1120,6 +1124,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     }
   }
 
+  // Check views panes.
   if (isset($plugin['name']) && $plugin['name'] == 'views_panes') {
     if (is_array($subtype['category'])) {
       $key = strtolower($subtype['category'][0]);
@@ -1139,6 +1144,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     }
   }
 
+  // Check subtype.
   if (isset($subtype['category']) && isset($subtype['name'])) {
     if (!is_array($subtype['category'])) {
       if (array_key_exists($subtype['name'], $categories)) {
@@ -1156,6 +1162,8 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       }
     }
   }
+
+  // Check plugin.
   if (isset($plugin['category']) && isset($plugin['name'])) {
     if (array_key_exists($plugin['name'], $categories)) {
       $plugin['category'] = $categories[$plugin['name']]['category'];

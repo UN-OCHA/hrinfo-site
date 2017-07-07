@@ -41,19 +41,7 @@ function humanitarianresponse_field__field_documents($variables) {
  * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4506
  */
 function humanitarianresponse_preprocess_panels_add_content_modal(&$vars) {
-  $pane = $vars['categories']['fielded-panes']['content']['Panels pane'];
-  $pane['title'] = 'Free text';
-  $vars['categories']['custom-content'] = array(
-    'title' => 'Custom content',
-    'content' => array(
-      'Free text' => $pane
-    )
-  );
-  unset($vars['categories']['fielded-panes']);
-  unset($vars['categories']['bean-pane']);
-  unset($vars['categories']['humanitarianresponse']);
-  unset($vars['categories']['twitter']);
-  ksort($vars['categories']);
+  // Remove redundant array.
   unset($vars['categories_array']);
   
   // Remove adding assesment.
