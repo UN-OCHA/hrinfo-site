@@ -1102,47 +1102,6 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     ),
   );
 
-  if (isset($plugin['name']) && $plugin['name'] == 'views_panes') {
-    if (is_array($subtype['category'])) {
-      $key = strtolower($subtype['category'][0]);
-      if (array_key_exists($key, $categories)) {
-        $plugin['category'] = $categories[$key]['category'];
-        $subtype['category'] = $categories[$key]['category'];
-        if (isset($categories[$key]['title'])) {
-          $subtype['title'] = $categories[$key]['title'];
-          $plugin['title'] = $categories[$key]['title'];
-        }
-        return;
-      }
-    }
-  }
-
-  if (isset($subtype['category']) && isset($subtype['name'])) {
-    if (!is_array($subtype['category'])) {
-      if (array_key_exists($subtype['name'], $categories)) {
-        $plugin['category'] = $categories[$subtype['name']]['category'];
-        $subtype['category'] = $categories[$subtype['name']]['category'];
-        if (isset($categories[$subtype['name']]['title'])) {
-          $subtype['title'] = $categories[$subtype['name']]['title'];
-          $plugin['title'] = $categories[$subtype['name']]['title'];
-        }
-        return;
-      }
-    }
-  }
-  if (isset($plugin['category']) && isset($plugin['name'])) {
-    if (array_key_exists($plugin['name'], $categories)) {
-      $plugin['category'] = $categories[$plugin['name']]['category'];
-      $subtype['category'] = $categories[$plugin['name']]['category'];
-      if (isset($categories[$plugin['name']]['title'])) {
-        $subtype['title'] = $categories[$plugin['name']]['title'];
-        $plugin['title'] = $categories[$plugin['name']]['title'];
-      }
-      return;
-    }
-  }
-
-  // Something old found.
   $tag = '';
   if (isset($plugin['category'])) {
     if (is_array($plugin['category'])) {
@@ -1161,7 +1120,59 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     }
   }
 
-  if (isset($subtype['title'])) {
-    $subtype['title'] = $tag . ' - ' . $subtype['title'];
+  if (isset($plugin['name']) && $plugin['name'] == 'views_panes') {
+    if (is_array($subtype['category'])) {
+      $key = strtolower($subtype['category'][0]);
+      if (array_key_exists($key, $categories)) {
+        $plugin['category'] = $categories[$key]['category'];
+        $subtype['category'] = $categories[$key]['category'];
+        if (isset($categories[$key]['title'])) {
+          $subtype['title'] = $categories[$key]['title'];
+          $plugin['title'] = $categories[$key]['title'];
+        }
+        else {
+          $subtype['title'] = $tag . ' - ' . $subtype['title'];
+          $plugin['title'] = $tag . ' - ' . $plugin['title'];
+        }
+        return;
+      }
+    }
   }
+
+  if (isset($subtype['category']) && isset($subtype['name'])) {
+    if (!is_array($subtype['category'])) {
+      if (array_key_exists($subtype['name'], $categories)) {
+        $plugin['category'] = $categories[$subtype['name']]['category'];
+        $subtype['category'] = $categories[$subtype['name']]['category'];
+        if (isset($categories[$subtype['name']]['title'])) {
+          $subtype['title'] = $categories[$subtype['name']]['title'];
+          $plugin['title'] = $categories[$subtype['name']]['title'];
+        }
+        else {
+          $subtype['title'] = $tag . ' - ' . $subtype['title'];
+          $plugin['title'] = $tag . ' - ' . $plugin['title'];
+        }
+        return;
+      }
+    }
+  }
+  if (isset($plugin['category']) && isset($plugin['name'])) {
+    if (array_key_exists($plugin['name'], $categories)) {
+      $plugin['category'] = $categories[$plugin['name']]['category'];
+      $subtype['category'] = $categories[$plugin['name']]['category'];
+      if (isset($categories[$plugin['name']]['title'])) {
+        $subtype['title'] = $categories[$plugin['name']]['title'];
+        $plugin['title'] = $categories[$plugin['name']]['title'];
+      }
+      else {
+        $subtype['title'] = $tag . ' - ' . $subtype['title'];
+        $plugin['title'] = $tag . ' - ' . $plugin['title'];
+      }
+      return;
+    }
+  }
+
+  // Something old found.
+  $subtype['title'] = $tag . ' - ' . $subtype['title'];
+  $plugin['title'] = $tag . ' - ' . $plugin['title'];
 }
