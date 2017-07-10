@@ -309,6 +309,193 @@ function hr_tools_export_locations_submit($form, $form_state) {
 }
 
 /**
+ * Import locations form.
+ */
+function hr_tools_import_nodes_tag($form, &$form_state) {
+  if (!variable_get('file_private_path')) {
+    $form['private_path'] = array(
+      '#type' => 'markup',
+      '#markup' => t('You must specify a private file system path in the !settings so we can save the created files there.', array('!settings' => l(t('file system settings'), 'admin/config/media/file-system'))),
+    );
+  }
+  else {
+    $form['csv'] = array(
+      '#type' => 'file',
+      '#title' => t('Upload csv file'),
+      '#size' => 48,
+    );
+
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Import nodes with new pcode'),
+    );
+  }
+  $form['#validate'] = array('hr_tools_import_nodes_tag_validate');
+  $form['#submit'] = array('hr_tools_import_nodes_tag_submit');
+  return $form;
+}
+
+/**
+ * Form validate callback.
+ */
+function hr_tools_import_nodes_tag_validate($form, &$form_state) {
+  $validators['file_validate_extensions'] = array('csv');
+  // Upload to the temp directory, we only need to read it. Afterwards it can be
+  // deleted.
+  $file = file_save_upload('csv', $validators, FALSE, FILE_EXISTS_REPLACE);
+  if (!$file) {
+    form_error($form['csv'], t('Something went wrong while uploading the file.'));
+    return;
+  }
+  $form_state['values']['csv'] = $file;
+}
+
+/**
+ * Form submit callback.
+ */
+function hr_tools_import_nodes_tag_submit($form, $form_state) {
+  $file = $form_state['values']['csv'];
+  hr_tools_import_nodes_tag_populate_queue($file->uri);
+}
+
+/**
+ * Populate queue.
+ */
+function hr_tools_import_nodes_tag_populate_queue($csv_file) {
+  $batch = array(
+    'operations' => array(),
+    'title' => t('Importing'),
+    'init_message' => t('Initializing.'),
+    'progress_message' => t('Processed @current out of @total.'),
+    'file' => drupal_get_path('module', 'hr_tools') . '/hr_tools.import.inc',
+    'finished' => 'hr_tools_import_nodes_tag_finished',
+  );
+
+  // Check file for UTF-8 and BOM.
+  check_csv_file_utf8_bom($csv_file);
+
+  $encoding_list[] = "UTF-8";
+  $encoding_list[] = "ASCII";
+  $encoding_list[] = "ISO-8859-1";
+
+  $handle = fopen($csv_file, 'r');
+  // Assume 1 header line.
+  $header = fgetcsv($handle, 0, ';', '"');
+  $header_lowercase = array_map('drupal_strtolower', $header);
+
+  while ($row = fgetcsv($handle, 0, ';', '"')) {
+    $data = array();
+    for ($i = 0; $i < count($row); $i++) {
+      $content = $row[$i];
+      if (mb_detect_encoding($content, $encoding_list, TRUE) == 'ISO-8859-1') {
+        $row[$i] = utf8_encode($content);
+      }
+      elseif (!mb_check_encoding($content, 'UTF-8') || !($content === mb_convert_encoding(mb_convert_encoding($content, 'UTF-32', 'UTF-8'), 'UTF-8', 'UTF-32'))) {
+        $content = mb_convert_encoding($content, 'UTF-8');
+        if (mb_check_encoding($content, 'UTF-8')) {
+          $row[$i] = $content;
+        }
+      }
+      $data[$header_lowercase[$i]] = $row[$i];
+    }
+
+    $batch['operations'][] = array(
+      'hr_tools_import_nodes_tag_line',
+      array($data),
+    );
+  }
+  fclose($handle);
+  batch_set($batch);
+  batch_process(current_path());
+}
+
+/**
+ * Import node data.
+ */
+function hr_tools_import_nodes_tag_line($data, &$context) {
+  if (!isset($data['nid']) || empty($data['nid'])) {
+    watchdog('hr_tools_importer', 'Nid not set');
+    return;
+  }
+
+  // Assume it fails.
+  $context['results']['failures'][$data['nid']] = TRUE;
+
+  if (!isset($data['new_pcode']) || empty($data['new_pcode'])) {
+    $context['results']['failures'][$data['nid']] = 'Missing pcode';
+    return;
+  }
+
+  // Load term by pcode.
+  $location = FALSE;
+  $efq = new EntityFieldQuery();
+  $results = $efq->entityCondition('entity_type', 'taxonomy_term')
+    ->entityCondition('bundle', 'hr_location')
+    ->fieldCondition('field_pcode', 'value', $data['new_pcode'])
+    ->execute();
+  if (isset($results['taxonomy_term'])) {
+    $tids = array_keys($results['taxonomy_term']);
+    $tid = reset($tids);
+    $location = taxonomy_term_load($tid);
+  }
+
+  if (!$location) {
+    $context['results']['failures'][$data['nid']] = 'Missing location term for ' . $data['new_pcode'];
+    return;
+  }
+
+  // Load node by nid, reset cache.
+  $node = node_load($data['nid'], NULL, TRUE);
+  if (!$node) {
+    $context['results']['failures'][$data['nid']] = 'Missing node for ' . $data['nid'];
+    return;
+  }
+
+  // Make sure node has field_locations.
+  if (!isset($node->field_locations)) {
+    $context['results']['failures'][$data['nid']] = 'Missing locations field for ' . $data['nid'];
+    return;
+  }
+
+  // Check if new pcode is different location.
+  $locations = array();
+  foreach($node->field_locations['und'] as $loc_id) {
+    $locations[] = $loc_id['target_id'];
+  }
+
+  // Skip if it already exists.
+  if (in_array($location->tid, $locations)) {
+    unset($context['results']['failures'][$data['nid']]);
+    $context['results']['succes'][$data['nid']] = 'Node already has new pcode - ' . $data['nid'];
+    return;
+  }
+
+  $node->field_locations['und'][] = array(
+    'target_id' => $location->tid,
+  );
+  node_save($node);
+
+  unset($context['results']['failures'][$data['nid']]);
+  $context['results']['succes'][$data['nid']] = 'Imported row ' . $data['nid'];
+}
+
+function hr_tools_import_nodes_tag_finished($success, $results, $operations) {
+  if ($success) {
+    if (!isset($results['succes'])) {
+      $results['succes'] = array();
+    }
+    $message = t('@count locations successfully imported', array('@count' => count($results['succes'])));
+    drupal_set_message($message);
+
+    if (!empty($results['failures'])) {
+      $message = t('Failed to import @count locations', array('@count' => count($results['failures'])));
+      drupal_set_message($message, 'error');
+      drupal_set_message(implode('<br>', $results['failures']), 'error');
+    }
+  }
+}
+
+/**
  * Recursively create terms.
  */
 function hr_tools_create_terms_location($terms, $voc) {

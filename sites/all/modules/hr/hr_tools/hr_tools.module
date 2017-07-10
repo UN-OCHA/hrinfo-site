@@ -70,6 +70,15 @@ function hr_tools_menu() {
     'file' => 'hr_tools.import.inc',
   );
 
+  $items['admin/config/hrinfo/hr-import-export/import-nodes'] = array(
+    'title' => 'Import nodes and tag',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hr_tools_import_nodes_tag'),
+    'access arguments' => array('access administration pages'),
+    'description' => 'Import nodes with new pcode and retag',
+    'file' => 'hr_tools.import.inc',
+  );
+
   return $items;
 }
 
