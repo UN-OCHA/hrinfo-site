@@ -5,31 +5,31 @@
  * Admin.
  */
 
- /**
-  * Import locations form.
-  */
- function hr_tools_import_locations($form, &$form_state) {
-   if (!variable_get('file_private_path')) {
-     $form['private_path'] = array(
-       '#type' => 'markup',
-       '#markup' => t('You must specify a private file system path in the !settings so we can save the created files there.', array('!settings' => l(t('file system settings'), 'admin/config/media/file-system'))),
-     );
-   }
-   else {
-     $form['csv'] = array(
-       '#type' => 'file',
-       '#title' => t('Upload csv file'),
-       '#size' => 48,
-     );
+/**
+ * Import locations form.
+ */
+function hr_tools_import_locations($form, &$form_state) {
+  if (!variable_get('file_private_path')) {
+    $form['private_path'] = array(
+      '#type' => 'markup',
+      '#markup' => t('You must specify a private file system path in the !settings so we can save the created files there.', array('!settings' => l(t('file system settings'), 'admin/config/media/file-system'))),
+    );
+  }
+  else {
+    $form['csv'] = array(
+      '#type' => 'file',
+      '#title' => t('Upload csv file'),
+      '#size' => 48,
+    );
 
-     $form['submit'] = array(
-       '#type' => 'submit',
-       '#value' => t('Import locations'),
-     );
-   }
-   $form['#validate'] = array('hr_tools_import_locations_validate');
-   $form['#submit'] = array('hr_tools_import_locations_submit');
-   return $form;
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Import locations'),
+    );
+  }
+  $form['#validate'] = array('hr_tools_import_locations_validate');
+  $form['#submit'] = array('hr_tools_import_locations_submit');
+  return $form;
 }
 
 /**
@@ -107,7 +107,7 @@ function hr_tools_import_locations_populate_queue($csv_file) {
 }
 
 /**
- * Import product type data.
+ * Import location data.
  */
 function hr_tools_import_locations_line($data, &$context) {
   if (!isset($data['admin0_pcode']) || empty($data['admin0_pcode'])) {
