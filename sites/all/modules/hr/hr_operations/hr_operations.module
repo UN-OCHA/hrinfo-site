@@ -49,11 +49,6 @@ function hr_operations_block_view($delta = '') {
 </div>
 <div>
   <div class="col-sm-12">
-    <p><strong><a href="/fr/operations/haiti">Haiti</a></strong></p>
-  </div>
-</div>
-<div>
-  <div class="col-sm-12">
     <p><strong><a href="/operations/iraq">Iraq</a></strong></p>
   </div>
 </div>
@@ -64,16 +59,19 @@ function hr_operations_block_view($delta = '') {
 </div>
 <div>
   <div class="col-sm-12">
+    <p><strong><a href="/en/operations/somalia">Somalia</a></strong></p>
+  </div>
+</div>
+<div>
+  <div class="col-sm-12">
     <p><strong><a href="/operations/ukraine">Ukraine</a></strong></p>
   </div>
 </div>
-
 <div>
   <div class="col-sm-12">
     <p><strong><a href="/operations/whole-of-syria">Whole of Syria</a></strong></p>
   </div>
 </div>
-
 <div>
   <div class="col-sm-12">
     <p><strong><a href="/operations/yemen">Yemen</a></strong></p>
