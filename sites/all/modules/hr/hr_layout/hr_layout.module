@@ -750,3 +750,19 @@ function _hr_layout_menu_item_in_tree($path, $menu_tree) {
 
   return FALSE;
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function hr_layout_form_og_features_feature_form_alter(&$form, &$form_state, $form_id) {
+  $form['#submit'][] = 'hr_layout_form_og_features_feature_form_alter_submit';
+}
+
+/**
+ * Submit handler to clear cache for group node.
+ */
+function hr_layout_form_og_features_feature_form_alter_submit(&$form, &$form_state) {
+  if (isset($form['#ogf_entity_id'])) {
+    node_load($form['#ogf_entity_id'], NULL, TRUE);
+  }
+}
