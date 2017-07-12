@@ -48,6 +48,13 @@ function hr_core_form_alter(&$form, &$form_state, $form_id) {
       $form['group_access']['#access'] = FALSE;
     }
   }
+  if (isset($form['group_content_access'])) {
+    $user_roles = user_roles();
+    $user_roles = array_flip($user_roles);
+    if (!user_has_role($user_roles['administrator'])) {
+      $form['group_content_access']['#access'] = FALSE;
+    }
+  }
 
   foreach ($form as $id => &$item) {
     if (is_array($item) && isset($item['#type']) && $item['#type'] == 'container') {
