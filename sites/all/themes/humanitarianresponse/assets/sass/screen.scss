@@ -132,3 +132,11 @@ table.stylish-table tr:nth-child(2n) {
 
 .front .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents { margin-bottom: 30px; }
 .front .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system { margin-bottom: 30px; }
+
+div#modalContent {
+  max-height: calc(100% - 100px);
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
+}
