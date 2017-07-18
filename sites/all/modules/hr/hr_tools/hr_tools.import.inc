@@ -319,10 +319,30 @@ function hr_tools_import_nodes_tag($form, &$form_state) {
     );
   }
   else {
+    $form['csv_separator'] = array(
+      '#type' => 'radios',
+      '#title' => t('CSV separator'),
+      '#required' => TRUE,
+      '#options' => array(
+        ',' => ', (comma)',
+        ';' => '; (semicolon)',
+      ),
+    );
+
     $form['csv'] = array(
       '#type' => 'file',
       '#title' => t('Upload csv file'),
       '#size' => 48,
+    );
+
+    $form['strategy'] = array(
+      '#type' => 'radios',
+      '#title' => t('Import strategy'),
+      '#required' => TRUE,
+      '#options' => array(
+        'overwrite' => 'Overwrite all location terms',
+        'append' => 'Append location defined in csv',
+      ),
     );
 
     $form['submit'] = array(
@@ -355,13 +375,13 @@ function hr_tools_import_nodes_tag_validate($form, &$form_state) {
  */
 function hr_tools_import_nodes_tag_submit($form, $form_state) {
   $file = $form_state['values']['csv'];
-  hr_tools_import_nodes_tag_populate_queue($file->uri);
+  hr_tools_import_nodes_tag_populate_queue($file->uri, $form_state['values']['strategy'], $form_state['values']['csv_separator']);
 }
 
 /**
  * Populate queue.
  */
-function hr_tools_import_nodes_tag_populate_queue($csv_file) {
+function hr_tools_import_nodes_tag_populate_queue($csv_file, $strategy, $csv_separator) {
   $batch = array(
     'operations' => array(),
     'title' => t('Importing'),
@@ -380,10 +400,10 @@ function hr_tools_import_nodes_tag_populate_queue($csv_file) {
 
   $handle = fopen($csv_file, 'r');
   // Assume 1 header line.
-  $header = fgetcsv($handle, 0, ';', '"');
+  $header = fgetcsv($handle, 0, $csv_separator, '"');
   $header_lowercase = array_map('drupal_strtolower', $header);
 
-  while ($row = fgetcsv($handle, 0, ';', '"')) {
+  while ($row = fgetcsv($handle, 0, $csv_separator, '"')) {
     $data = array();
     for ($i = 0; $i < count($row); $i++) {
       $content = $row[$i];
@@ -401,7 +421,7 @@ function hr_tools_import_nodes_tag_populate_queue($csv_file) {
 
     $batch['operations'][] = array(
       'hr_tools_import_nodes_tag_line',
-      array($data),
+      array($data, $strategy),
     );
   }
   fclose($handle);
@@ -412,7 +432,7 @@ function hr_tools_import_nodes_tag_populate_queue($csv_file) {
 /**
  * Import node data.
  */
-function hr_tools_import_nodes_tag_line($data, &$context) {
+function hr_tools_import_nodes_tag_line($data, $strategy, &$context) {
   if (!isset($data['nid']) || empty($data['nid'])) {
     watchdog('hr_tools_importer', 'Nid not set');
     return;
@@ -426,21 +446,24 @@ function hr_tools_import_nodes_tag_line($data, &$context) {
     return;
   }
 
-  // Load term by pcode.
-  $location = FALSE;
+  // Load term by pcodes.
+  $pcodes = array();
+  foreach (explode(',', $data['new_pcode']) as $pcode) {
+    $pcodes[] = trim($pcode);
+  }
+
+  $tids = FALSE;
   $efq = new EntityFieldQuery();
   $results = $efq->entityCondition('entity_type', 'taxonomy_term')
     ->entityCondition('bundle', 'hr_location')
-    ->fieldCondition('field_pcode', 'value', $data['new_pcode'])
+    ->fieldCondition('field_pcode', 'value', $pcodes, 'IN')
     ->execute();
   if (isset($results['taxonomy_term'])) {
     $tids = array_keys($results['taxonomy_term']);
-    $tid = reset($tids);
-    $location = taxonomy_term_load($tid);
   }
 
-  if (!$location) {
-    $context['results']['failures'][$data['nid']] = 'Missing location term for ' . $data['new_pcode'];
+  if (!$tids) {
+    $context['results']['failures'][$data['nid']] = 'No location terms found for ' . $data['new_pcode'];
     return;
   }
 
@@ -451,28 +474,55 @@ function hr_tools_import_nodes_tag_line($data, &$context) {
     return;
   }
 
-  // Make sure node has field_locations.
-  if (!isset($node->field_locations)) {
-    $context['results']['failures'][$data['nid']] = 'Missing locations field for ' . $data['nid'];
+  // Make sure node has field_locations or field_location.
+  $cardinality = -1;
+  $location_field_name = '';
+  if (isset($node->field_locations)) {
+    $cardinality = 0;
+    $location_field_name = 'field_locations';
+  }
+  elseif (isset($node->field_location)) {
+    $cardinality = 1;
+    $location_field_name = 'field_location';
+  }
+  else {
+    $context['results']['failures'][$data['nid']] = 'Missing location(s) field for ' . $data['nid'];
     return;
   }
 
   // Check if new pcode is different location.
-  $locations = array();
-  foreach($node->field_locations['und'] as $loc_id) {
-    $locations[] = $loc_id['target_id'];
+  $original_locations = array();
+  foreach($node->{$location_field_name}['und'] as $loc_id) {
+    $original_locations[] = $loc_id['target_id'];
   }
 
   // Skip if it already exists.
-  if (in_array($location->tid, $locations)) {
+  if (empty(array_diff($tids, $original_locations))) {
     unset($context['results']['failures'][$data['nid']]);
-    $context['results']['succes'][$data['nid']] = 'Node already has new pcode - ' . $data['nid'];
+    $context['results']['succes'][$data['nid']] = 'Node already has the same pcodes - ' . $data['nid'];
     return;
   }
 
-  $node->field_locations['und'][] = array(
-    'target_id' => $location->tid,
-  );
+  // Check update strategy.
+  switch ($strategy) {
+    case 'overwrite':
+      $node->{$location_field_name}['und'] = array();
+      foreach ($tids as $tid) {
+        $node->{$location_field_name}['und'][] = array(
+          'target_id' => $tid,
+        );
+      }
+      break;
+
+    case 'append':
+      foreach (array_diff($tids, $original_locations) as $tid) {
+        $node->{$location_field_name}['und'][] = array(
+          'target_id' => $tid,
+        );
+      }
+      break;
+
+  }
   node_save($node);
 
   unset($context['results']['failures'][$data['nid']]);
