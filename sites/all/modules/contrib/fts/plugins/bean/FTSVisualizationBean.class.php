@@ -58,6 +58,7 @@ class FTSVisualizationBean extends BeanPlugin {
     $form['settings']['cluster'] = array(
       '#type' => 'select',
       '#title' => t('Cluster'),
+      '#description' => t('Not all clusters might have data available.'),
       '#required' => FALSE,
       '#default_value' => isset($bean->settings['cluster']) ? $bean->settings['cluster'] : '',
       '#prefix' => '<div id="cluster">',
@@ -79,11 +80,11 @@ class FTSVisualizationBean extends BeanPlugin {
       '#default_value' => isset($bean->settings['groupby']) ? $bean->settings['groupby'] : '',
       '#required' => FALSE,
       '#multiple' => FALSE,
-      /*'#states' => array(
+      '#states' => array(
         'visible' => array(
           ':input[name="settings[cluster]"]' => array('value' => ""),
         ),
-      )*/
+      ),
     );
 
 

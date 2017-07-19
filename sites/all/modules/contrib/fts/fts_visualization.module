@@ -61,19 +61,30 @@ function _fts_visualization_get_global_cluster_options() {
  * Helper function
  */
 function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster = NULL) {
+  $data = array();
+
   if (is_numeric($plan_id)) {
     // Get plan.
     $appeal = fts_get_appeal($plan_id);
+
+    $plan_only = TRUE;
+    $filtered = FALSE;
+
     $params = array(
       'planId' => $plan_id,
     );
 
     if ($group_by) {
-      $params['groupby'] = $group_by;
+      $params['groupby'] = drupal_strtolower($group_by);
+      $plan_only = FALSE;
     }
 
     if ($cluster) {
-      $params['filterBy'][] = 'destinationGlobalClusterId:' . $cluster;
+      // $params['filterBy'][] = 'destinationGlobalClusterId:' . $cluster;
+      $params['groupby'] = 'cluster';
+      $params['report'] = 3;
+      $plan_only = FALSE;
+      $filtered = TRUE;
     }
 
     // Get funding.
@@ -82,6 +93,40 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
     $data['data'] = isset($funding->data) ? $funding->data : array();
 
     $data['total'] = (int) $funding->current_requirements;
+    if ($plan_only) {
+      $data['total'] = (int) $appeal->revisedRequirements;
+    }
+
+    if ($filtered) {
+      // Try to find the correct cluster data.
+      $clusters = fts_get_global_clusters();
+      $cluster_name = '';
+      foreach ($clusters as $cluster_info) {
+        if ($cluster_info->id == $cluster) {
+          $cluster_name = $cluster_info->name;
+          break;
+        }
+      }
+
+      if ($cluster_name) {
+        // Total.
+        foreach ($funding->raw_data->requirements->objects as $object) {
+          if ($object->name == $cluster_name) {
+            $data['total'] = $object->revisedRequirements;
+            break;
+          }
+        }
+
+        // Financed.
+        foreach ($funding->raw_data->report3->fundingTotals->objects[0]->singleFundingObjects as $object) {
+          if ($object->name == $cluster_name) {
+            $data['financed'] = $object->totalFunding;
+            break;
+          }
+        }
+      }
+    }
+
     $data['not_financed'] = $data['total'] - $data['financed'];
     if ((int) $data['total'] > 0) {
       $data['financed_percentage'] = round($data['financed'] / $data['total'] * 100);
@@ -92,6 +137,7 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
     $data['not_financed_percentage'] = 100 - $data['financed_percentage'];
     $data['label'] = $appeal->locations[0]->name;
   }
+
   return $data;
 }
 

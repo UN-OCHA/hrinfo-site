@@ -68,7 +68,6 @@ function fts_get_appeal($id) {
   else {
     $appeal = $cache->data;
   }
-
   return $appeal;
 }
 
@@ -80,6 +79,7 @@ function fts_get_funding($params) {
 
   $query = drupal_http_build_query($params);
   $cache = cache_get('fts_funding::' . md5($query), 'cache');
+
   if (!$cache) {
     $response = drupal_http_request(_fts_get_api_endpoint() . 'fts/flow?' . $query);
     $data = json_decode($response->data);
@@ -122,13 +122,14 @@ function fts_get_funding($params) {
         $funding->current_requirements = $requirements->totalRevisedReqs;
       }
 
+      $funding->raw_data = $data->data;
+
       cache_set('fts_funding' . md5($query), $funding, 'cache', REQUEST_TIME + 24 * 60 * 60);
     }
     else{
       $funding = $cache->data;
     }
   }
-
   return $funding;
 }
 
