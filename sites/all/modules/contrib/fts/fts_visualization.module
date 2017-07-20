@@ -75,14 +75,33 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
     );
 
     if ($group_by) {
-      $params['groupby'] = drupal_strtolower($group_by);
+      //$params['groupby'] = drupal_strtolower($group_by);
       $plan_only = FALSE;
+      unset($params['planId']);
+      $params['countryISO3'] = $appeal->locations[0]->iso3;
+      $params['year'] = $appeal->years[0]->year;
+      $params['groupby'] = 'globalCluster';
     }
 
     if ($cluster) {
-      // $params['filterBy'][] = 'destinationGlobalClusterId:' . $cluster;
-      $params['groupby'] = 'cluster';
-      $params['report'] = 3;
+      // We need to get revisedRequirements from another API call first.
+      $data_total_revisedRequirements = 0;
+      $params['groupby'] = 'globalCluster';
+      $funding = fts_get_funding($params);
+      foreach ($funding->raw_data->requirements->objects as $object) {
+        if ($object->id == $cluster) {
+          $data_total_revisedRequirements = (int) $object->revisedRequirements;
+          break;
+        }
+      }
+
+      // Overwrite params for the second API call.
+      $params = array(
+        'report' => 3,
+        'countryISO3' => $appeal->locations[0]->iso3,
+        'year' => $appeal->years[0]->year,
+        'groupby' => 'globalCluster',
+      );
       $plan_only = FALSE;
       $filtered = TRUE;
     }
@@ -98,31 +117,14 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
     }
 
     if ($filtered) {
-      // Try to find the correct cluster data.
-      $clusters = fts_get_global_clusters();
-      $cluster_name = '';
-      foreach ($clusters as $cluster_info) {
-        if ($cluster_info->id == $cluster) {
-          $cluster_name = $cluster_info->name;
+      // Total.
+      $data['total'] = $data_total_revisedRequirements;
+
+      // Financed.
+      foreach ($funding->raw_data->report3->fundingTotals->objects[0]->singleFundingObjects as $object) {
+        if ($object->id == $cluster) {
+          $data['financed'] = (int) $object->totalFunding;
           break;
-        }
-      }
-
-      if ($cluster_name) {
-        // Total.
-        foreach ($funding->raw_data->requirements->objects as $object) {
-          if ($object->name == $cluster_name) {
-            $data['total'] = (int) $object->revisedRequirements;
-            break;
-          }
-        }
-
-        // Financed.
-        foreach ($funding->raw_data->report3->fundingTotals->objects[0]->singleFundingObjects as $object) {
-          if ($object->name == $cluster_name) {
-            $data['financed'] = (int) $object->totalFunding;
-            break;
-          }
         }
       }
     }

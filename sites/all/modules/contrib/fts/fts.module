@@ -83,6 +83,7 @@ function fts_get_funding($params) {
   if (!$cache) {
     $response = drupal_http_request(_fts_get_api_endpoint() . 'fts/flow?' . $query);
     $data = json_decode($response->data);
+
     if (isset($data->data)) {
       $funding = new stdClass();
       if (isset($data->data->report1)) {
