@@ -16,6 +16,16 @@ function hr_tools_import_locations($form, &$form_state) {
     );
   }
   else {
+    $form['csv_separator'] = array(
+      '#type' => 'radios',
+      '#title' => t('CSV separator'),
+      '#required' => TRUE,
+      '#options' => array(
+        ',' => ', (comma)',
+        ';' => '; (semicolon)',
+      ),
+    );
+
     $form['csv'] = array(
       '#type' => 'file',
       '#title' => t('Upload csv file'),
@@ -52,13 +62,13 @@ function hr_tools_import_locations_validate($form, &$form_state) {
  */
 function hr_tools_import_locations_submit($form, $form_state) {
   $file = $form_state['values']['csv'];
-  hr_tools_import_locations_populate_queue($file->uri);
+  hr_tools_import_locations_populate_queue($file->uri, $form_state['values']['csv_separator']);
 }
 
 /**
  * Populate queue.
  */
-function hr_tools_import_locations_populate_queue($csv_file) {
+function hr_tools_import_locations_populate_queue($csv_file, $csv_separator) {
   $batch = array(
     'operations' => array(),
     'title' => t('Importing'),
@@ -77,10 +87,10 @@ function hr_tools_import_locations_populate_queue($csv_file) {
 
   $handle = fopen($csv_file, 'r');
   // Assume 1 header line.
-  $header = fgetcsv($handle, 0, ';', '"');
+  $header = fgetcsv($handle, 0, $csv_separator, '"');
   $header_lowercase = array_map('drupal_strtolower', $header);
 
-  while ($row = fgetcsv($handle, 0, ';', '"')) {
+  while ($row = fgetcsv($handle, 0, $csv_separator, '"')) {
     $data = array();
     for ($i = 0; $i < count($row); $i++) {
       $content = $row[$i];
