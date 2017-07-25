@@ -235,7 +235,7 @@ function hid_profiles_autocomplete_callback($type, $string = '') {
       'sort' => 'name',
       'limit' => 5,
       'name' => $string,
-      'appMetadata.hid.login' => 'true'
+      'authOnly' => 'false'
     );
     $variables['headers'] = array(
       'Authorization' => 'Bearer '.variable_get('hid_profiles_v2_api_key', NULL)
