@@ -97,35 +97,6 @@ function hr_users_default_page_manager_pages() {
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass();
-    $pane->pid = 'new-470fc1ad-ac6f-4965-bb03-7a7586cf9e3c';
-    $pane->panel = 'contentmain';
-    $pane->type = 'hid_profiles_checkins';
-    $pane->subtype = 'hid_profiles_checkins';
-    $pane->shown = TRUE;
-    $pane->access = array();
-    $pane->configuration = array(
-      'gid' => '',
-      'hno' => '',
-      'srp' => '',
-      'monr' => '',
-      'opr' => '',
-      'orp' => '',
-      'override_title' => 0,
-      'override_title_text' => '',
-    );
-    $pane->cache = array();
-    $pane->style = array(
-      'settings' => NULL,
-      'style' => 'hr_highlighted',
-    );
-    $pane->css = array();
-    $pane->extras = array();
-    $pane->position = 0;
-    $pane->locks = array();
-    $pane->uuid = '470fc1ad-ac6f-4965-bb03-7a7586cf9e3c';
-    $display->content['new-470fc1ad-ac6f-4965-bb03-7a7586cf9e3c'] = $pane;
-    $display->panels['contentmain'][0] = 'new-470fc1ad-ac6f-4965-bb03-7a7586cf9e3c';
-    $pane = new stdClass();
     $pane->pid = 'new-6a11c7c6-b8d4-4f6d-9ace-a107c2d436f7';
     $pane->panel = 'contentmain';
     $pane->type = 'views_panes';
