@@ -1,0 +1,72 @@
+<?php
+/**
+ * @file
+ */
+
+define('PCE_EXPORT_ROOT', '/tmp/pce');
+
+/**
+ * Callback function to export content.
+ *
+ * Runs the code for the my-private-content view to obtain the list
+ * of nodes that should be exported.
+ */
+function private_content_export_export_content() {
+  // Hack root.
+  global $user;
+  $user = user_load(1);
+
+  $list = views_get_view_result('my_private_content', 'attachment_1');
+
+  drush_print(dt("Going to export @count items", array('@count' => count($list))));
+
+  foreach ($list as $item) {
+    // Where do we save this?
+    $group = $item->field_og_group_ref['0']['rendered']['#markup'];
+    if (!file_exists(PCE_EXPORT_ROOT . '/' . $group)) {
+      mkdir(PCE_EXPORT_ROOT . '/' . $group . '/files', 0755, TRUE);
+    }
+    $output = PCE_EXPORT_ROOT . '/' . $group . '/' . $node->nid . '.html';
+
+    drush_print(dt("Processing @nid", array('@nid' => $item->nid)));
+
+    // Render.
+    // Only save after we've rewritten the file links.
+    $node = node_load($item->nid);
+    $node_view = node_view($node);
+    $rendered_node = drupal_render($node_view);
+
+    if (!empty($node->field_files_collection[LANGUAGE_NONE])) {
+      // Copy attachments.
+      foreach ($node->field_files_collection[LANGUAGE_NONE] as $collection) {
+        $data = field_collection_item_load($collection['value']);
+
+        $file = file_load($data->field_file[LANGUAGE_NONE][0]['fid']);
+        if (file_copy($file, PCE_EXPORT_ROOT . '/' . $group . '/files/' . $file->filename, FILE_EXISTS_REPLACE)) {
+          drush_print(dt(" ✓ Wrote @file", array('@file' => $file->filename)));
+        }
+        else {
+          drush_print(dt(" ❌ Failed to write @file", array('@file' => $file->filename)));
+        }
+
+        // Fix the file path.
+        $search = dirname(file_create_url($file->uri));
+        $rendered_node = strtr($rendered_node, array($search => 'files'));
+      }
+    }
+
+    // Save.
+    file_put_contents($output, $rendered_node);
+    drush_print(dt("Processed '@title'", array('@nid' => $node->nid, '@title' => $node->title))); 
+  }
+}
+
+/**
+ * Implements hook_views_api()
+ */
+function private_content_export_views_api() {
+  return array(
+    'api'  => 3,
+    'path' => drupal_get_path('module', 'private_content_export') . '/views',
+  );
+}

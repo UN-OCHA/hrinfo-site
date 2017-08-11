@@ -1,0 +1,4 @@
+name = Private Content Export
+description = Export private nodes and their file attachments in a useable format.
+core = 7.x
+version = 7.x-1.0
