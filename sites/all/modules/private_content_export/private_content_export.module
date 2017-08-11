@@ -42,7 +42,7 @@ function private_content_export_export_content() {
         $data = field_collection_item_load($collection['value']);
 
         $file = file_load($data->field_file[LANGUAGE_NONE][0]['fid']);
-        if (file_copy($file, PCE_EXPORT_ROOT . '/' . $group . '/files/' . $file->filename, FILE_EXISTS_REPLACE)) {
+        if (file_unmanaged_copy($file->uri, PCE_EXPORT_ROOT . '/' . $group . '/files/' . $file->filename, FILE_EXISTS_REPLACE)) {
           drush_print(dt(" ✓ Wrote @file", array('@file' => $file->filename)));
         }
         else {
