@@ -29,3 +29,14 @@ function hr_admin_menu() {
 
   return $items;
 }
+
+/**
+ * Implements hook_init().
+ */
+function hr_admin_init() {
+  // If the current user has administrative privileges, bump the
+  // memory limit, so that they can delete complex content.
+  if (user_access('access administration pages')) {
+    ini_set('memory_limit', '1024M');
+  }
+}
