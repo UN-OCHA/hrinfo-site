@@ -10,7 +10,7 @@
         delete data; // Reset data
         $.ajax({
           url: data.next.href,
-          async:false
+          async: false
         })
         .done(function(dataPager) {
           data = dataPager;
@@ -21,8 +21,9 @@
       $(countriesMap).each(function(i) {
         // Set country code
         if(countriesMap[i].country != null) {
-          countriesMap[i].mapCode = countriesMap[i].country.pcode;
+          countriesMap[i].mapCode = countriesMap[i].country.iso3;
         }
+
         //Format date
         if (countriesMap[i].launch_date != null) {
           var launchDate = new Date(countriesMap[i].launch_date*1000);
@@ -56,7 +57,7 @@
         },
         plotOptions: {
           map: {
-            joinBy: ['iso-a2', 'mapCode'],
+            joinBy: ['iso-a3', 'mapCode'],
             mapData: Highcharts.maps['custom/world'],
             tooltip: {
               headerFormat: '',
