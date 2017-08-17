@@ -113,6 +113,7 @@ function elysia_cron_permission() {
     'administer elysia_cron' => array(
       'title' => t('Administer elysia cron'),
       'description' => t('Perform changes to cron jobs timings, disable cron or single jobs and access cron execution statistics'),
+      'restrict access' => TRUE,  
     ),
     'execute elysia_cron' => array(
       'title' => t('Execute elysia cron jobs'),
@@ -142,9 +143,11 @@ function elysia_cron_exit() {
 function elysia_cron_cron() {
   global $_elysia_cron_exit_phase, $_elysia_cron_drush;
 
-  // If invoked "core-cron" via drush i'll redirect to elysia-cron handler.
+  // If cron has been executed via "drush core-cron" or any other custom drush
+  // command then we run internal cron handler which is designed to handle
+  // cron executions from drush.
   if (function_exists('elysia_cron_drush_detect') && elysia_cron_drush_detect()) {
-    elysia_cron_drush_invoke(TRUE);
+    elysia_cron_drush_invoke();
   }
 
   // First cron run is executed in standard drupal way.
@@ -1039,8 +1042,8 @@ function elysia_cron_module_jobs() {
 
             $jobs[$job] = $jobs[$job] + array(
               'module' => $module,
-              'callback' => is_callable($job) ? $job : $function,
-              'arguments' => is_callable($job) ? array() : array('execute', $job),
+              'callback' => $job,
+              'arguments' => array(),
             );
           }
         }
@@ -1445,8 +1448,11 @@ function elysia_cron_internal_execute_job($job) {
 
   try {
     if (!empty($_elysia_cron_settings[$job]['file'])) {
-      include_once((!empty($_elysia_cron_settings[$job]['file path']) ? $_elysia_cron_settings[$job]['file path'] : drupal_get_path('module', $_elysia_cron_settings[$job]['module'])) . DIRECTORY_SEPARATOR . $_elysia_cron_settings[$job]['file']);
+      $file_path = !empty($_elysia_cron_settings[$job]['file path']) ? $_elysia_cron_settings[$job]['file path'] : drupal_get_path('module', $_elysia_cron_settings[$job]['module']);
+      $file_path .= DIRECTORY_SEPARATOR . $_elysia_cron_settings[$job]['file'];
+      include_once $file_path;
     }
+
     if (!empty($_elysia_cron_settings[$job]['expression'])) {
       eval($_elysia_cron_settings[$job]['expression']);
     }
@@ -1454,7 +1460,15 @@ function elysia_cron_internal_execute_job($job) {
       call_user_func_array($_elysia_cron_settings[$job]['callback'], $_elysia_cron_settings[$job]['arguments']);
     }
     else {
-      elysia_cron_error('Execution of ' . $job . ' failed, can\'t find function!', array(), TRUE);
+      $function = $_elysia_cron_settings[$job]['module'] . '_cronapi';
+      $arguments = array('execute', $job);
+
+      if (is_callable($function)) {
+        call_user_func_array($function, $arguments);
+      }
+      else {
+        elysia_cron_error('Execution of ' . $job . ' failed, can\'t find function!', array(), TRUE);
+      }
     }
   }
   catch (Exception $e) {

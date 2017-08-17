@@ -1,5 +1,0 @@
-Including a modification from:
-https://github.com/RESTful-Drupal/restful/pull/661
-
-
-Change is still ongoing but we need to fix it for us.

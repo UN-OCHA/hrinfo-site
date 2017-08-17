@@ -26,12 +26,13 @@ function elysia_cron_drush_die() {
 /**
  * Wrapper for drush_invoke().
  */
-function elysia_cron_drush_invoke($replace_core_cron = FALSE) {
+function elysia_cron_drush_invoke() {
   $args = drush_get_arguments();
   array_shift($args);
 
-  // If invoked like 'core-cron' I do the same as that: execute 'run'.
-  if ($replace_core_cron && empty($args)) {
+  // If drush command has no arguments or the first argument is not in the
+  // list of allowed operations then we assume the cron execution.
+  if (empty($args) || !in_array($args[0], array('list', 'run', 'enable', 'disable'))) {
     $args = array('run');
   }
 
