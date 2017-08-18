@@ -21,14 +21,28 @@ function private_content_export_export_content() {
   drush_print(dt("Going to export @count items", array('@count' => count($list))));
 
   foreach ($list as $item) {
-    // Where do we save this?
-    $group = $item->field_og_group_ref['0']['rendered']['#markup'];
-    if (!file_exists(PCE_EXPORT_ROOT . '/' . $group)) {
-      mkdir(PCE_EXPORT_ROOT . '/' . $group . '/files', 0755, TRUE);
-    }
-    $output = PCE_EXPORT_ROOT . '/' . $group . '/' . $node->nid . '.html';
+    $group = $item->field_og_group_ref['0']['rendered']['#label'];
+    $uid = $item->node_uid;
+    $email = $item->users_node_mail;
 
-    drush_print(dt("Processing @nid", array('@nid' => $item->nid)));
+    // Where do we save this?
+    $base_path = PCE_EXPORT_ROOT . '/' . $group;
+    if (!empty($email)) {
+      $base_path .= '/' . $email;
+    }
+    else {
+      $base_path .= '/' . $uid;
+    }
+
+    if (!file_exists($base_path)) {
+      mkdir($base_path . '/files', 0755, TRUE);
+    }
+    $output = $base_path . '/' . $node->nid . '.html';
+
+    drush_print(dt("Processing @nid to @path", array(
+      '@nid' => $item->nid,
+      '@path' => $base_path,
+    )));
 
     // Render.
     // Only save after we've rewritten the file links.
@@ -42,7 +56,7 @@ function private_content_export_export_content() {
         $data = field_collection_item_load($collection['value']);
 
         $file = file_load($data->field_file[LANGUAGE_NONE][0]['fid']);
-        if (file_unmanaged_copy($file->uri, PCE_EXPORT_ROOT . '/' . $group . '/files/' . $file->filename, FILE_EXISTS_REPLACE)) {
+        if (file_unmanaged_copy($file->uri, $base_path . '/files/' . $file->filename, FILE_EXISTS_REPLACE)) {
           drush_print(dt(" ✓ Wrote @file", array('@file' => $file->filename)));
         }
         else {
@@ -57,7 +71,7 @@ function private_content_export_export_content() {
 
     // Save.
     file_put_contents($output, $rendered_node);
-    drush_print(dt("Processed '@title'", array('@nid' => $node->nid, '@title' => $node->title))); 
+    drush_print(dt("Processed '@title'", array('@nid' => $node->nid, '@title' => $node->title)));
   }
 }
 

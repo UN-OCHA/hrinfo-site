@@ -165,17 +165,27 @@ function private_content_export_views_default_views() {
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  /* Field: Content: Webspace(s) */
+  $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
+  $handler->display->display_options['fields']['og_group_ref']['table'] = 'og_membership';
+  $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
+  $handler->display->display_options['fields']['og_group_ref']['settings'] = array(
+    'bypass_access' => 0,
+    'link' => 0,
+  );
+  $handler->display->display_options['fields']['og_group_ref']['delta_offset'] = '0';
+  /* Field: Content: Author uid */
+  $handler->display->display_options['fields']['uid']['id'] = 'uid';
+  $handler->display->display_options['fields']['uid']['table'] = 'node';
+  $handler->display->display_options['fields']['uid']['field'] = 'uid';
+  /* Field: User: E-mail */
+  $handler->display->display_options['fields']['mail']['id'] = 'mail';
+  $handler->display->display_options['fields']['mail']['table'] = 'users';
+  $handler->display->display_options['fields']['mail']['field'] = 'mail';
+  $handler->display->display_options['fields']['mail']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['mail']['link_to_user'] = '0';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Field: Content: Webspace(s) */                                                                                                                                                   
-  $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';                                                                                                
-  $handler->display->display_options['fields']['og_group_ref']['table'] = 'og_membership';                                                                                            
-  $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';                                                                                             
-  $handler->display->display_options['fields']['og_group_ref']['settings'] = array(                                                                                                   
-    'bypass_access' => 0,                                                                                                                                                             
-    'link' => 0,                                                                                                                                                                      
-  );                                                                                                                                                                                  
-  $handler->display->display_options['fields']['og_group_ref']['delta_offset'] = '0';  
   /* Filter criterion: Content: Content visibility (group_content_access) */
   $handler->display->display_options['filters']['group_content_access_value']['id'] = 'group_content_access_value';
   $handler->display->display_options['filters']['group_content_access_value']['table'] = 'field_data_group_content_access';
