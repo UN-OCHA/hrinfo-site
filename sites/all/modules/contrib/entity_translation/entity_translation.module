@@ -1832,9 +1832,9 @@ function entity_translation_settings($entity_type, $bundle) {
  * the presence of Entity translation should be safe, thus developers can rely
  * on the EntityTranslationHandlerInterface::getLanguage() method.
  *
- * @param $entity_type
+ * @param string $entity_type
  *    The the type of the entity.
- * @param $entity
+ * @param object $entity
  *    The entity whose language has to be returned.
  *
  * @return string
@@ -1842,11 +1842,16 @@ function entity_translation_settings($entity_type, $bundle) {
  */
 function entity_translation_language($entity_type, $entity) {
   $handler = entity_translation_get_handler($entity_type, $entity);
-  if (empty($handler)) {
+  if (!$handler) {
     return LANGUAGE_NONE;
   }
-  $langcode = $handler->getActiveLanguage();
-  return !empty($langcode) ? $langcode : $handler->getLanguage();
+  if (entity_translation_enabled($entity_type, $entity)) {
+    $langcode = $handler->getActiveLanguage();
+    return $langcode ? $langcode : $handler->getLanguage();
+  }
+  else {
+    return $handler->getLanguage();
+  }
 }
 
 /**
@@ -1871,6 +1876,7 @@ function entity_translation_get_handler($entity_type = NULL, $entity = NULL) {
     $entity_info = entity_get_info($entity_type);
     return new EntityTranslationDefaultHandler($entity_type, $entity_info, $entity);
   }
+  return NULL;
 }
 
 /**
@@ -2027,7 +2033,7 @@ function entity_translation_entity_uuid_presave(&$entity, $entity_type) {
 }
 
 /**
- * Implement hook_pathauto_alias_alter().
+ * Implements hook_pathauto_alias_alter().
  *
  * When bulk-updating aliases for nodes automatically create a path for every
  * translation.
@@ -2037,17 +2043,20 @@ function entity_translation_pathauto_alias_alter(&$alias, array &$context) {
   $entity_type = $context['module'];
 
   // Ensure that we are dealing with a bundle having entity translation enabled.
-  if ($context['op'] == 'bulkupdate' && !empty($info[$entity_type]['token type']) && !empty($context['data'][$info[$entity_type]['token type']])) {
+  if (in_array($context['op'], array('bulkupdate', 'update')) && !empty($info[$entity_type]['token type']) && !empty($context['data'][$info[$entity_type]['token type']])) {
     $entity = $context['data'][$info[$entity_type]['token type']];
     if (entity_translation_enabled($entity_type, $entity)) {
       $translations = entity_translation_get_handler($entity_type, $entity)->getTranslations();
-      // Only create extra aliases if we are working on the original language to
-      // avoid infinite recursion.
-      if ($context['language'] == $translations->original) {
+      // To avoid infinite recursion, remember the starting language.
+      static $pathauto_start_language;
+      if (!$pathauto_start_language) {
+        $pathauto_start_language = $context['language'];
+      }
+      if ($context['language'] == $pathauto_start_language) {
         foreach ($translations->data as $language => $translation) {
-          // We already have an alias for the original language, so let's not
+          // We already have an alias for the starting language, so let's not
           // create another one.
-          if ($language == $translations->original) {
+          if ($language == $pathauto_start_language) {
             continue;
           }
           pathauto_create_alias($entity_type, $context['op'], $context['source'], $context['data'], $context['type'], $language);
@@ -2084,4 +2093,12 @@ function entity_translation_entity_save($entity_type, $entity) {
     field_attach_presave($entity_type, $entity);
     field_attach_update($entity_type, $entity);
   }
+}
+
+/**
+ * Implements hook_field_attach_prepare_translation_alter().
+ */
+function entity_translation_field_attach_prepare_translation_alter(&$entity, $context) {
+  $handler = entity_translation_get_handler('node', $entity);
+  $handler->setActiveLanguage($context['langcode']);
 }

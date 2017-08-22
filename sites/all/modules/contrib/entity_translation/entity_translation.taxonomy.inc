@@ -40,6 +40,9 @@ function entity_translation_taxonomy_term_menu_alter(&$items, $backup) {
   $items['taxonomy/term/%taxonomy_term/translate']['access callback'] = 'entity_translation_taxonomy_term_tab_access';
   $items['taxonomy/term/%taxonomy_term/translate']['file'] = 'entity_translation.admin.inc';
   $items['taxonomy/term/%taxonomy_term/translate']['module'] = 'entity_translation';
+
+  // Delete translation callback.
+  $items['taxonomy/term/%taxonomy_term/translate/delete/%entity_translation_language']['access arguments'] = $access_arguments;
 }
 
 /**

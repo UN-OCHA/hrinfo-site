@@ -410,19 +410,19 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
    */
   protected $children = array();
 
-  private $entityForm;
-  private $translating;
-  private $outdated;
-  private $activeLanguage;
-  private $sourceLanguage;
+  protected $entityForm;
+  protected $translating;
+  protected $outdated;
+  protected $activeLanguage;
+  protected $sourceLanguage;
 
-  private $pathScheme;
-  private $pathWildcard;
-  private $basePath;
-  private $editPath;
-  private $translatePath;
-  private $viewPath;
-  private $routerMap;
+  protected $pathScheme;
+  protected $pathWildcard;
+  protected $basePath;
+  protected $editPath;
+  protected $translatePath;
+  protected $viewPath;
+  protected $routerMap;
 
   /**
    * Initializes an instance of the translation handler.
@@ -704,7 +704,7 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
       foreach (field_info_instances($this->entityType, $this->bundle) as $instance) {
         $field_name = $instance['field_name'];
         $field = field_info_field($field_name);
-        if ($field['translatable'] && isset($values[$field_name])) {
+        if ($field['translatable'] && isset($values[$field_name][$langcode])) {
           $this->entity->{$field_name}[$langcode] = $values[$field_name][$langcode];
         }
       }
@@ -1732,7 +1732,7 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
    *
    * @throws Exception
    */
-  private function initPathVariables() {
+  protected function initPathVariables() {
     if (empty($this->pathScheme) || !isset($this->entityInfo['translation']['entity_translation']['path schemes'][$this->pathScheme])) {
       throw new Exception("Cannot initialize entity translation path variables (invalid path scheme).");
     }

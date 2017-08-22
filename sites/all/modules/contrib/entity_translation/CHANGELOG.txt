@@ -4,6 +4,39 @@ Entity Translation 7.x-1.x, xxxx-xx-xx
 
 
 
+Entity Translation 7.x-1.0-beta7, 2017-08-21
+--------------------------------------------
+#2903195 by stefanos.petrakis, BAHbKA, plach: Enabling translation for not
+  empty taxonomy vocabulary.
+#2425825 by jamesrward: Update from before beta4 fails.
+#2900094 by joseph.olstad: code sniffer drupal.org recommended code syntax
+  fixes.
+#2883805 by mikran: entity_translation_update_7008 is broken when taxonomy
+  module is not enabled.
+#2877074 by plach, stefanos.petrakis, joseph.olstad: Refactor the
+  entity_translation_language() callback to make it bundle-specific.
+#2743685 by stefanos.petrakis, bwaindwain: Pathauto update for all translations
+  for a single node.
+#2899658 by joseph.olstad, stefanos.petrakis: entity_translation_upgrade_do
+  needs to automatically create the entity_translation row for the source
+  language in entity_translation.
+#1800158 by meichr: Entity Translation Upgrade, drush extension.
+#2885858 by StephaneQ: Can't delete taxonomy term translation since beta6
+  update.
+#2572203 by mattew: Wrong query generated when several Translations
+  relationships are used.
+#2824255 by ccarrascal, plach: Notice: Undefined index for language in
+  setTranslation().
+#2750179 by wadmiraal: Allowed default translation handler to be completely
+  overridden.
+#2307937 by meichr, joseph.olstad: Batch API needs $context['results'] handled
+  as an array, not a value.
+#1175170 by hgoto, Pisco, alberto56: Optionally enable disabled languages for
+  entity translation.
+#2870524 by stefanos.petrakis, joseph.olstad: Field copy fails with content
+  translation for fields with entity translation enabled.
+
+
 Entity Translation 7.x-1.0-beta6, 2017-03-03
 --------------------------------------------
 #2849464 by plach, czigor, stefanos.petrakis: Added an API to set the active
