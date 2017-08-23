@@ -1,0 +1,4 @@
+name = Events migration API
+description = Provides API to migrate events to Humanitarian Events
+core = 7.x
+package = Humanitarianresponse

@@ -1,0 +1,81 @@
+<?php
+/**
+ * @file
+ * Code for Events migration API.
+ */
+
+/**
+ * Implements hook_menu()
+ */
+function ev_migrate_menu() {
+  $items = array();
+
+  $items['ev-migrate/events/%/%/%'] = array(
+    'title' => 'Events',
+    'page callback' => 'ev_migrate_fetch_events',
+    'page arguments' => array(2, 3, 4),
+    'access arguments' => array('access content'),
+  );
+
+  return $items;
+}
+
+function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
+  $page_size = 20;
+
+  $shared_secret = variable_get('ev_migrate_shared_secret', 'ThisIsMySecret');
+  if (md5($shared_secret . '_' . $page . '_' . $timestamp) != $hash) {
+    drupal_access_denied();
+    return;
+  }
+
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node');
+    ->entityCondition('bundle', 'hr_event', '=')
+    ->propertyOrderBy('nid')
+    ->range($page * $page_size, $page_size);
+  $result = $query->execute();
+
+  if (!isset($result['node'])) {
+    drupal_not_found();
+    return;
+  }
+
+  $nids = array_keys($result['node']);
+  $events = node_load_multiple($nids);
+
+  $data = array();
+  foreach ($events as $event) {
+    $row = array();
+    $e = entity_metadata_wrapper('node', $event);
+
+    $author = array(
+      'name' => isset($e->author->value()->realname) ? $e->author->value()->realname : $e->author->name->value(),
+      'email' => $e->author->mail->value(),
+      'timezone' => $e->author->value()->timezone,
+      'language' => $e->author->language->value(),
+    );
+
+    $row = array(
+      'nid' => $e->nid->value(),
+      'title' => $e->title_field->value(),
+      'created' => $e->created->value(),
+      'changed' => $e->changed->value(),
+      'category' => $e->field_event_category->getIdentifier() ? $e->field_event_category->name->value() : '',
+    );
+
+    $row['author'] = $author;
+    $data[] = $row
+  }
+
+  ev_migrate_json_output($events);
+};
+
+/**
+ * Output as JSON.
+ */
+function ev_migrate_json_output($data) {
+  drupal_add_http_header('Access-Control-Allow-Origin', '*');
+  drupal_add_http_header('Access-Control-Allow-Methods', 'GET');
+  drupal_json_output($data);
+}
