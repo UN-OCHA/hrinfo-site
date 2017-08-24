@@ -30,7 +30,7 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
   }
 
   $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'node');
+  $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'hr_event', '=')
     ->propertyOrderBy('nid')
     ->range($page * $page_size, $page_size);
@@ -47,28 +47,83 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
   $data = array();
   foreach ($events as $event) {
     $row = array();
-    $e = entity_metadata_wrapper('node', $event);
+    try {
+      $e = entity_metadata_wrapper('node', $event);
 
-    $author = array(
-      'name' => isset($e->author->value()->realname) ? $e->author->value()->realname : $e->author->name->value(),
-      'email' => $e->author->mail->value(),
-      'timezone' => $e->author->value()->timezone,
-      'language' => $e->author->language->value(),
-    );
+      $author = array(
+        'name' => isset($e->author->value()->realname) ? $e->author->value()->realname : $e->author->name->value(),
+        'email' => $e->author->mail->value(),
+        'timezone' => $e->author->value()->timezone,
+        'init' => $e->author->value()->init,
+        'language' => $e->author->language->value(),
+      );
 
-    $row = array(
-      'nid' => $e->nid->value(),
-      'title' => $e->title_field->value(),
-      'created' => $e->created->value(),
-      'changed' => $e->changed->value(),
-      'category' => $e->field_event_category->getIdentifier() ? $e->field_event_category->name->value() : '',
-    );
+      $row = array(
+        'nid' => $e->getIdentifier(),
+        'title' => $e->title_field->value(),
+        'created' => $e->created->value(),
+        'changed' => $e->changed->value(),
+        'category' => $e->field_event_category->getIdentifier() ? $e->field_event_category->name->value() : '',
+        'date' => $e->field_event_date[0]->value(),
+        'address' => $e->field_address->value(),
+        'location' => $e->field_location->getIdentifier() ? $e->field_location->name->value() : '',
+        'description' => $e->body->raw(),
+        'url' => url('node/' . $e->getIdentifier(), array('absolute' => TRUE)),
+      );
 
-    $row['author'] = $author;
-    $data[] = $row
+      foreach ($e->field_themes as $theme) {
+        $row['themes'][] = $theme->name->value();
+      }
+
+      foreach ($e->field_disasters as $disaster) {
+        $row['disasters'][] = $disaster->title->value();
+      }
+
+      foreach ($e->field_organizations as $organization) {
+        $row['organizations'][] = $organization->name->value();
+      }
+
+      foreach ($e->field_coordination_hubs as $coordination_hub) {
+        $row['coordination_hubs'][] = $coordination_hub->title->value();
+      }
+
+      foreach ($e->field_bundles as $bundle) {
+        $row['bundles'][] = $bundle->title->value();
+      }
+
+      foreach ($e->field_sectors as $sector) {
+        $row['sectors'][] = $sector->title->value();
+      }
+
+      foreach ($e->field_event_agenda as $event_agenda) {
+        foreach ($event_agenda->field_files_collection as $file) {
+          $row['event_agenda'][] = array(
+            'name' => $file->field_file->value()['filename'],
+            'url' => file_create_url($file->field_file->value()['uri']),
+          );
+        }
+      }
+
+      foreach ($e->field_event_meeting_minutes as $event_meeting_minute) {
+        foreach ($event_meeting_minute->field_files_collection as $file) {
+          $row['event_meeting_minutes'][] = array(
+            'name' => $file->field_file->value()['filename'],
+            'url' => file_create_url($file->field_file->value()['uri']),
+          );
+        }
+      }
+
+      $row['author'] = $author;
+      $data[] = $row;
+    } catch (Exception $e) {
+      watchdog('ev_migrate', 'Skipping node @title (@nid)', array(
+        '@title' => $e->title_field->value(),
+        '@nid' => $e->getIdentifier(),
+      ));
+    }
   }
 
-  ev_migrate_json_output($events);
+  ev_migrate_json_output($data);
 };
 
 /**
