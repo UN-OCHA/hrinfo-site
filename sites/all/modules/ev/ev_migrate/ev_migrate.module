@@ -96,26 +96,31 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
       }
 
       foreach ($e->field_event_agenda as $event_agenda) {
-        foreach ($event_agenda->field_files_collection as $file) {
-          $row['event_agenda'][] = array(
-            'name' => $file->field_file->value()['filename'],
-            'url' => file_create_url($file->field_file->value()['uri']),
-          );
+        if (isset($event_agenda->field_files_collection)) {
+          foreach ($event_agenda->field_files_collection as $file) {
+            $row['event_agenda'][] = array(
+              'name' => $file->field_file->value()['filename'],
+              'url' => file_create_url($file->field_file->value()['uri']),
+            );
+          }
         }
       }
 
       foreach ($e->field_event_meeting_minutes as $event_meeting_minute) {
-        foreach ($event_meeting_minute->field_files_collection as $file) {
-          $row['event_meeting_minutes'][] = array(
-            'name' => $file->field_file->value()['filename'],
-            'url' => file_create_url($file->field_file->value()['uri']),
-          );
+        if (isset($event_meeting_minute->field_files_collection)) {
+          foreach ($event_meeting_minute->field_files_collection as $file) {
+            $row['event_meeting_minutes'][] = array(
+              'name' => $file->field_file->value()['filename'],
+              'url' => file_create_url($file->field_file->value()['uri']),
+            );
+          }
         }
       }
 
       $row['author'] = $author;
       $data[] = $row;
     } catch (Exception $e) {
+      dpm($e->getMessage());
       watchdog('ev_migrate', 'Skipping node @title (@nid): @message', array(
         '@title' => $event->title,
         '@nid' => $event->nid,
