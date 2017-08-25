@@ -120,7 +120,6 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
       $row['author'] = $author;
       $data[] = $row;
     } catch (Exception $e) {
-      dpm($e->getMessage());
       watchdog('ev_migrate', 'Skipping node @title (@nid): @message', array(
         '@title' => $event->title,
         '@nid' => $event->nid,
