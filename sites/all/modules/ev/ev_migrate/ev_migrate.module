@@ -64,7 +64,7 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
         'created' => $e->created->value(),
         'changed' => $e->changed->value(),
         'category' => $e->field_event_category->getIdentifier() ? $e->field_event_category->name->value() : '',
-        'date' => $e->field_event_date[0]->value(),
+        'date' => $e->field_event_date->value(),
         'address' => $e->field_address->value(),
         'location' => $e->field_location->getIdentifier() ? $e->field_location->name->value() : '',
         'description' => $e->body->raw(),
@@ -119,7 +119,8 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
 
       $row['author'] = $author;
       $data[] = $row;
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       watchdog('ev_migrate', 'Skipping node @title (@nid): @message', array(
         '@title' => $event->title,
         '@nid' => $event->nid,
