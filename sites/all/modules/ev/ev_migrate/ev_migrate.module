@@ -76,7 +76,9 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
       }
 
       foreach ($e->field_disasters as $disaster) {
-        $row['disasters'][] = $disaster->title->value();
+        if ($disaster->value() && isset($disaster->title)) {
+          $row['disasters'][] = $disaster->title->value();
+        }
       }
 
       foreach ($e->field_organizations as $organization) {
@@ -84,15 +86,21 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
       }
 
       foreach ($e->field_coordination_hubs as $coordination_hub) {
-        $row['coordination_hubs'][] = $coordination_hub->title->value();
+        if ($coordination_hub->value() && isset($coordination_hub->title)) {
+          $row['coordination_hubs'][] = $coordination_hub->title->value();
+        }
       }
 
       foreach ($e->field_bundles as $bundle) {
-        $row['bundles'][] = $bundle->title->value();
+        if ($bundle->value() && isset($bundle->title)) {
+          $row['bundles'][] = $bundle->title->value();
+        }
       }
 
       foreach ($e->field_sectors as $sector) {
-        $row['sectors'][] = $sector->title->value();
+        if ($sector->value() && isset($sector->title)) {
+          $row['sectors'][] = $sector->title->value();
+        }
       }
 
       foreach ($e->field_event_agenda as $event_agenda) {
