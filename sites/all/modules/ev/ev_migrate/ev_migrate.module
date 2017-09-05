@@ -77,8 +77,10 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
         foreach ($e->og_group_ref as $group) {
           // Check country field.
           if ($group->field_country->getIdentifier()) {
-            $row['location'] = $group->field_country->name;
-            break;
+            if (isset($group->field_country->name)) {
+              $row['location'] = $group->field_country->name->value();
+              break;
+            }
           }
 
           // Check parent group if set.
@@ -86,8 +88,10 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
             foreach ($group->og_group_ref as $parent_group) {
               // Check country field.
               if ($parent_group->field_country->getIdentifier()) {
-                $row['location'] = $parent_group->field_country->name;
-                break 2;
+                if (isset($parent_group->field_country->name)) {
+                  $row['location'] = $parent_group->field_country->name->value();
+                  break 2;
+                }
               }
             }
           }
