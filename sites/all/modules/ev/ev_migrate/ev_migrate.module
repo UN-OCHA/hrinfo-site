@@ -80,12 +80,14 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
             $row['location'] = $group->field_country->name-value();
             break;
           }
+
           // Check parent group if set.
           if ($group->og_group_ref->getIdentifier()) {
             foreach ($group->og_group_ref as $parent_group) {
               // Check country field.
               if ($parent_group->field_country->getIdentifier()) {
                 $row['location'] = $parent_group->field_country->name-value();
+                break 2;
               }
             }
           }
