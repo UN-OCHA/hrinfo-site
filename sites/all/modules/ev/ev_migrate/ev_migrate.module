@@ -71,6 +71,24 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
         'url' => url('node/' . $e->getIdentifier(), array('absolute' => TRUE)),
       );
 
+      // Make sure we have a location.
+      if (empty($row['location'])) {
+        if ($e->og_group_ref->getIdentifier()) {
+          // Check country field.
+          if ($e->og_group_ref->field_country->getIdentifier()) {
+            $row['location'] = $e->og_group_ref->field_country->name-value();
+          }
+
+          // Check parent group if set.
+          if ($e->og_group_ref->og_group_ref->getIdentifier()) {
+            // Check country field.
+            if ($e->og_group_ref->og_group_ref->field_country->getIdentifier()) {
+              $row['location'] = $e->og_group_ref->og_group_ref->field_country->name-value();
+            }
+          }
+        }
+      }
+
       foreach ($e->field_themes as $theme) {
         $row['themes'][] = $theme->name->value();
       }
