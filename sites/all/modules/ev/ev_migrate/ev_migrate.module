@@ -84,7 +84,7 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
           }
 
           // Check parent group if set.
-          if ($group->og_group_ref->getIdentifier()) {
+          if (isset($group->og_group_ref) && $group->og_group_ref->getIdentifier()) {
             foreach ($group->og_group_ref as $parent_group) {
               // Check country field.
               if ($parent_group->field_country->getIdentifier()) {
