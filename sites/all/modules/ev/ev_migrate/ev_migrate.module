@@ -73,17 +73,20 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
 
       // Make sure we have a location.
       if (empty($row['location'])) {
-        if ($e->og_group_ref->getIdentifier()) {
+        // Loop through all groups.
+        foreach ($e->og_group_ref as $group) {
           // Check country field.
-          if ($e->og_group_ref->field_country->getIdentifier()) {
-            $row['location'] = $e->og_group_ref->field_country->name-value();
+          if ($group->field_country->getIdentifier()) {
+            $row['location'] = $group->field_country->name-value();
+            break;
           }
-
           // Check parent group if set.
-          if ($e->og_group_ref->og_group_ref->getIdentifier()) {
-            // Check country field.
-            if ($e->og_group_ref->og_group_ref->field_country->getIdentifier()) {
-              $row['location'] = $e->og_group_ref->og_group_ref->field_country->name-value();
+          if ($group->og_group_ref->getIdentifier()) {
+            foreach ($group->og_group_ref as $parent_group) {
+              // Check country field.
+              if ($parent_group->field_country->getIdentifier()) {
+                $row['location'] = $parent_group->field_country->name-value();
+              }
             }
           }
         }
