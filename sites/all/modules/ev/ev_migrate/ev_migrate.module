@@ -76,7 +76,7 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
         // Loop through all groups.
         foreach ($e->og_group_ref as $group) {
           // Check country field.
-          if ($group->field_country->getIdentifier()) {
+          if (isset($group->field_country) && $group->field_country->getIdentifier()) {
             if (isset($group->field_country->name)) {
               $row['location'] = $group->field_country->name->value();
               break;
