@@ -70,7 +70,7 @@ function ev_events_meeting_minutes_render($subtype, $conf, $panel_args, $context
 
   $api_url = $api_base_url . '/api/v0/fetch-events';
   $params = array(
-    'doct' => 2,
+    'doct' => variable_get('ev_events_doc_type_meeting_minutes', 2),
     'loc' => $conf['country'],
     'clu' => $conf['cluster'],
     'start' => $start->format('Y-m-d'),
