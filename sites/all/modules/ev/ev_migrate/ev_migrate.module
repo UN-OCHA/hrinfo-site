@@ -34,7 +34,7 @@ function ev_migrate_fetch_event($nid, $timestamp = 0, $hash = '') {
     return;
   }
 
-  $events = node_load($nid);
+  $event = node_load($nid);
   $data = ev_migrate_build_data($event);
   ev_migrate_json_output($data);
 }
