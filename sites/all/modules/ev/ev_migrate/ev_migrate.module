@@ -19,7 +19,7 @@ function ev_migrate_menu() {
 
   $items['ev-migrate/event/%/%/%'] = array(
     'title' => 'Events',
-    'page callback' => 'ev_migrate_fetch_events',
+    'page callback' => 'ev_migrate_fetch_event',
     'page arguments' => array(2, 3, 4),
     'access arguments' => array('access content'),
   );
