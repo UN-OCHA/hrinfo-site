@@ -69,6 +69,7 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
         'location' => $e->field_location->getIdentifier() ? $e->field_location->name->value() : '',
         'description' => $e->body->raw(),
         'url' => url('node/' . $e->getIdentifier(), array('absolute' => TRUE)),
+        'country' => '',
       );
 
       // Make sure we have a location.
@@ -90,6 +91,33 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
               if ($parent_group->field_country->getIdentifier()) {
                 if (isset($parent_group->field_country->name)) {
                   $row['location'] = $parent_group->field_country->name->value();
+                  break 2;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // Store country to fix cluster migration.
+      if (empty($row['country'])) {
+        // Loop through all groups.
+        foreach ($e->og_group_ref as $group) {
+          // Check country field.
+          if (isset($group->field_country) && $group->field_country->getIdentifier()) {
+            if (isset($group->field_country->name)) {
+              $row['country'] = $group->field_country->name->value();
+              break;
+            }
+          }
+
+          // Check parent group if set.
+          if (isset($group->og_group_ref) && $group->og_group_ref->getIdentifier()) {
+            foreach ($group->og_group_ref as $parent_group) {
+              // Check country field.
+              if ($parent_group->field_country->getIdentifier()) {
+                if (isset($parent_group->field_country->name)) {
+                  $row['country'] = $parent_group->field_country->name->value();
                   break 2;
                 }
               }
