@@ -1038,11 +1038,11 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
 
     // Events.
     'ev_events_upcoming' => array(
-      'category' => 'Events by Humanitarian Events',
+      'category' => 'Events by<br>Humanitarian Events',
       'title' => 'Dynamic events',
     ),
     'ev_events_meeting_minutes' => array(
-      'category' => 'Events by Humanitarian Events',
+      'category' => 'Events by<br>Humanitarian Events',
       'title' => 'Meeting minutes',
     ),
 
@@ -1090,6 +1090,17 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     ),
     'assessments' => array(
       'category' => 'Content by HR.info',
+    ),
+
+    // New assessments.
+    'ar_assessments_assessments' => array(
+      'category' => 'Assessments by<br>Assessment Registry',
+    ),
+    'ar_assessments_key_assessments' => array(
+      'category' => 'Assessments by<br>Assessment Registry',
+    ),
+    'ar_assessments_featured_assessments' => array(
+      'category' => 'Assessments by<br>Assessment Registry',
     ),
 
     // Outdated.
