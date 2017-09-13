@@ -140,7 +140,7 @@ function ar_assessments_bundles_select($operation) {
 }
 
 function ar_assessments_organization_autocomplete() {
-  $html = '<div id="block-hid-profiles-filters-organization" class="block"><input type="text" id="organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Organization" /></div>';
+  $html = '<div id="block-hid-profiles-filters-organization" class="block"><input type="text" id="organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Leading Organization" /></div>';
   return $html;
 }
 
