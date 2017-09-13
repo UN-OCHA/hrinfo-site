@@ -2,8 +2,8 @@
 
 $plugin = array(
   'single' => TRUE,
-  'title' => t('Featured assessments (remote)'),
-  'description' => t('Chose which assessments you want to display.'),
+  'title' => t('Static Assessments'),
+  'description' => t('Choose which assessments you want to display.'),
   'category' => t('Assessments'),
   'edit form' => 'ar_assessments_featured_assessments_edit_form',
   'render callback' => 'ar_assessments_featured_assessments_render',

@@ -2,7 +2,7 @@
 
 $plugin = array(
   'single' => TRUE,
-  'title' => t('Assessments (remote)'),
+  'title' => t('Dynamic Assessments'),
   'description' => t('Choose the Assessments you want to display.'),
   'category' => t('Assessments'),
   'edit form' => 'ar_assessments_key_assessments_edit_form',
