@@ -54,7 +54,7 @@ function hr_admin_init() {
 
       $can_edit = FALSE;
       foreach ($rids as $rid) {
-        if ($rid == 'manager' || $rid == 'contributor') {
+        if ($rid == 'manager' || $rid == 'contributor' || $rid == 'editor') {
           $can_edit = TRUE;
           break;
         }
