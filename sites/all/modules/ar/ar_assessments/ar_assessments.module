@@ -174,9 +174,8 @@ function ar_assessments_status_select() {
   return $html;
 }
 
-function ar_assessments_population_types_select($operation) {
+function ar_assessments_population_types_select() {
   $loc_vocabulary = taxonomy_vocabulary_machine_name_load('hr_population_type');
-  $parent = $operation->field_country[LANGUAGE_NONE][0]['target_id'];
   $tree = taxonomy_get_tree($loc_vocabulary->vid, 0, 1);
   $html = '<div id="block-hid-profiles-filters-population-types" class="block"><select id="population-types" class="form-control form-select" tabindex="1" data-placeholder="Filter by Population Type">';
   $html .= '<option value=""></option>';
