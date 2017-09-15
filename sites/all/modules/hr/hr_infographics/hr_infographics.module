@@ -44,7 +44,7 @@ function hr_infographics_form_hr_infographic_node_form_alter(&$form, &$form_stat
   }
 
   // Show multiple empty ones for locations.
-  if (!isset($form['#node']->nid)) {
+  if (!isset($form['clone_from_original_nid']) && !isset($form['#node']->nid)) {
     $items_count = 4;
     $field_name = 'field_locations';
     _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
