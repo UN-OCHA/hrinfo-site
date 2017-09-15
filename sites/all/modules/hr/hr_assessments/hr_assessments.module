@@ -132,7 +132,7 @@ function hr_assessments_form_hr_assessment_node_form_alter(&$form, &$form_state)
   }
 
   // Show multiple empty ones for locations.
-  if (!isset($form['clone_from_original_nid']) && !isset($form['#node']->nid)) {
+  if (!isset($form['#node']->nid)) {
     $items_count = 4;
     $field_name = 'field_locations';
     _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
