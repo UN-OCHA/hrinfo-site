@@ -73,7 +73,7 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
     if (!isset($form['#after_build'])) {
       $form['#after_build'] = array();
     }
-    $form['#after_build'][] = '_hr_document_clone_disable_language';
+    // $form['#after_build'][] = '_hr_document_clone_disable_language';
   }
 }
 
