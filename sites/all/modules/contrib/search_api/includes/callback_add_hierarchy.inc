@@ -139,9 +139,7 @@ class SearchApiAlterAddHierarchy extends SearchApiAbstractAlterCallback {
         $ret[$key] = $child->info();
         $type = search_api_extract_inner_type($ret[$key]['type']);
         $ret[$key]['type'] = "list<$type>";
-        if (empty($ret[$key]['getter callback'])) {
-          $ret[$key]['getter callback'] = 'entity_property_verbatim_get';
-        }
+        $ret[$key]['getter callback'] = 'entity_property_verbatim_get';
         // The return value of info() has some additional internal values set,
         // which we have to unset for the use here.
         unset($ret[$key]['name'], $ret[$key]['parent'], $ret[$key]['langcode'], $ret[$key]['clear'],
