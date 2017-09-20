@@ -121,15 +121,15 @@ function private_content_export_export_dataset_content() {
     if (!empty($node->field_ds_files[LANGUAGE_NONE])) {
       // Copy attachments.
       foreach ($node->field_ds_files[LANGUAGE_NONE] as $file) {
-        if (file_unmanaged_copy($file->uri, $base_path . '/files/' . $file->filename, FILE_EXISTS_REPLACE)) {
-          drush_print(dt(" ✓ Wrote @file", array('@file' => $file->filename)));
+        if (file_unmanaged_copy($file['uri'], $base_path . '/files/' . $file['filename'], FILE_EXISTS_REPLACE)) {
+          drush_print(dt(" ✓ Wrote @file", array('@file' => $file['filename'])));
         }
         else {
-          drush_print(dt(" ❌ Failed to write @file", array('@file' => $file->filename)));
+          drush_print(dt(" ❌ Failed to write @file", array('@file' => $file['filename'])));
         }
 
         // Fix the file path.
-        $search = dirname(file_create_url($file->uri));
+        $search = dirname(file_create_url($file['uri']));
         $rendered_node = strtr($rendered_node, array($search => 'files'));
       }
     }
