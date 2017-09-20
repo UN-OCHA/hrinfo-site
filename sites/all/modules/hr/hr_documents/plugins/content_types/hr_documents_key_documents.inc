@@ -41,6 +41,7 @@ function hr_documents_key_documents_edit_form($form, &$form_state) {
 
   for ($delta = 0; $delta < $documents_count; $delta++) {
     $form['documents_wrapper']['documents'][$delta] = array(
+      '#type' => 'entityreference',
       '#title' => t('Document'),
       '#era_entity_type' => 'node',
       '#era_bundles' => array('hr_document'),
