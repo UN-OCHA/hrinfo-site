@@ -35,5 +35,11 @@ function private_content_export_drush_command() {
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
   );
 
+  $items['private-dataset-delete'] = array(
+    'description' => 'Delete dataset',
+    'callback' => 'private_content_export_delete_dataset_content',
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
+  );
+
   return $items;
 }

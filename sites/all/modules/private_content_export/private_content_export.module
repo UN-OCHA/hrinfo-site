@@ -141,6 +141,23 @@ function private_content_export_export_dataset_content() {
 }
 
 /**
+ * Callback function to export dataset content.
+ */
+function private_content_export_delete_dataset_content() {
+  // Hack root.
+  global $user;
+  $user = user_load(1);
+
+  $list = views_get_view_result('my_dataset_content', 'attachment_1');
+
+  drush_print(dt("Going to delete @count items", array('@count' => count($list))));
+
+  foreach ($list as $item) {
+    node_delete($item->nid);
+  }
+}
+
+/**
  * Implements hook_views_api()
  */
 function private_content_export_views_api() {
