@@ -41,5 +41,11 @@ function private_content_export_drush_command() {
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
   );
 
+  $items['private-content-export'] = array(
+    'description' => 'Delete private content',
+    'callback' => 'private_content_export_delete_content',
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
+  );
+
   return $items;
 }
