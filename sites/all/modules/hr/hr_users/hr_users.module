@@ -165,3 +165,49 @@ function hr_users_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
   $form['account']['mail']['#title'] = t('Login e-mail');
   $form['account']['mail']['#description'] = t('The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail. To change your login address, please contact our support team: <a href="@mailto">info@humanitarianresponse.info</a>.', array('@mailto' => 'mailto:info@humanitarianresponse.info'));
 }
+
+/**
+ * Implements hook_action_info().
+ */
+function hr_users_action_info() {
+  return array(
+    'hr_users_remove_og_roles' => array(
+      'type' => 'user',
+      'label' => t('Remove OG roles from user'),
+      'behavior' => array('changes_property'),
+      'configurable' => FALSE,
+      'vbo_configurable' => FALSE,
+      'triggers' => array('any'),
+    ),
+  );
+}
+
+function hr_users_remove_og_roles(&$account, $context) {
+  $mids = array();
+  $groups = og_get_groups_by_user($account);
+  if ($groups) {
+    foreach ($groups as $group_type => $gids) {
+      foreach ($gids as $gid) {
+        // Load membership.
+        $membership = og_get_membership($group_type, $gid, 'user', $account->uid);
+        if ($membership) {
+          $mids[$membership->id] = $membership->id;
+        }
+      }
+    }
+  }
+
+  // Remove stale records in the {og_users_roles} table.
+  db_delete('og_users_roles')
+    ->condition('uid', $account->uid)
+    ->execute();
+
+  // Remove all roles from user.
+  $account->roles = array(
+    '2' => 'authenticated user',
+  );
+
+  if (!empty($mids)) {
+    og_membership_delete_multiple($mids);
+  }
+}
