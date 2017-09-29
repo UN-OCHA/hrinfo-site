@@ -183,3 +183,25 @@ function private_content_export_views_api() {
     'path' => drupal_get_path('module', 'private_content_export') . '/views',
   );
 }
+
+/**
+ * Callback function to delete old contacts.
+ */
+function private_content_export_delete_old_contacts() {
+  $query = new EntityFieldQuery();
+  $results = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'hr_contact')
+    ->range(0, 100)
+    ->execute();
+
+  if (isset($results['node'])) {
+    $nids = array_keys($results['node']);
+    drush_print(dt("Going to delete @count contacts", array('@count' => count($nids))));
+    foreach ($nids as $nid) {
+      node_delete($nid);
+    }
+  }
+  else {
+    drush_print(dt("No contacts found"));
+  }
+}

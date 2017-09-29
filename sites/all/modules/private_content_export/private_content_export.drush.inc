@@ -47,5 +47,11 @@ function private_content_export_drush_command() {
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
   );
 
+  $items['old-contacts-delete'] = array(
+    'description' => 'Delete old contacts',
+    'callback' => 'private_content_export_delete_old_contacts',
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
+  );
+
   return $items;
 }
