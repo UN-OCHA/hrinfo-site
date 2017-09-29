@@ -632,7 +632,7 @@ function hr_core_panels_new_pane_alter(&$pane) {
  * See http://atrium.humanitarianresponse.info/humanitarian_response/node/3992
  */
 function hr_core_node_delete($node) {
-  if (isset($node->{OG_AUDIENCE_FIELD})) {
+  if (isset($node->{OG_AUDIENCE_FIELD}) && isset($node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'])) {
     $nid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
     $_GET['destination'] = 'node/' . $nid;
   }
