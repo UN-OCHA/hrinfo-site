@@ -400,8 +400,6 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
           foreach ($disasters as $nid => $disaster) {
             $options[$nid] = $disaster->title;
           }
-          asort($options);
-
           $form['field_disasters']['und']['#options'] = $options;
         }
       }
