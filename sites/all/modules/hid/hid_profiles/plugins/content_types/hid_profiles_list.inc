@@ -16,7 +16,7 @@ $plugin = array(
 /**
  * 'Edit form' callback for the content type.
  */
-function hid_profiles_list_edit_form($form, &$form_state, $context) {
+function hid_profiles_list_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
 
   if (isset($form_state['contacts_count'])) {
