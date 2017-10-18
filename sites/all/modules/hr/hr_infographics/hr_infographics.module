@@ -160,6 +160,7 @@ function hr_infographics_field_widget_form_alter(&$element, &$form_state, $conte
           $option = implode(' > ', $option_label);
         }
       }
+      asort($element['#options']);
     }
   }
 }
