@@ -211,6 +211,7 @@ function hr_documents_field_widget_form_alter(&$element, &$form_state, $context)
         $option = implode(' > ', $option_label);
       }
     }
+    asort($element['#options']);
   }
 }
 

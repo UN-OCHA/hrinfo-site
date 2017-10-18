@@ -171,6 +171,7 @@ function hr_assessments_field_widget_form_alter(&$element, &$form_state, $contex
           $option = implode(' > ', $option_label);
         }
       }
+      asort($element['#options']);
     }
   }
 }
