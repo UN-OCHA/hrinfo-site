@@ -379,3 +379,15 @@ function hr_core_update_7021() {
     }
   }
 }
+
+/**
+ * Switch to RefHRCoreSelectionHandler.
+ */
+function hr_core_update_7022() {
+  foreach (field_info_fields() as $field_info) {
+    if (isset($field_info['settings']['handler']) && $field_info['settings']['handler'] === 'base') {
+      $field_info['settings']['handler'] = 'ref_hr_core';
+      field_update_field($field_info);
+    }
+  }
+}
