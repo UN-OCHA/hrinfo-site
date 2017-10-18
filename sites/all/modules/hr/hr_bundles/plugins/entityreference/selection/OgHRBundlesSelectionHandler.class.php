@@ -52,15 +52,6 @@ class OgHRBundlesSelectionHandler extends OgSelectionHandler {
     $gid = $field[LANGUAGE_NONE][0]['target_id'];
     $group = entity_load_single('node', $gid);
 
-    // Log to NR.
-    if (extension_loaded('newrelic')) { // Ensure PHP agent is available
-      newrelic_record_custom_event('og_ref' , array(
-        'class' => 'OgHRBundlesSelectionHandler',
-        'label' => entity_label($target_type, $entity),
-        'parent' => entity_label('node', $group),
-      ));
-    }
-
     return entity_label($target_type, $entity) . ' (' . entity_label('node', $group) . ')';
   }
 

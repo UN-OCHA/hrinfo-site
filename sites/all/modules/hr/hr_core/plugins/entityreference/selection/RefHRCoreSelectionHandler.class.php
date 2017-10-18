@@ -20,14 +20,6 @@ class RefHRCoreSelectionHandler extends EntityReference_SelectionHandler_Generic
    */
   public function getLabel($entity) {
     $target_type = $this->field['settings']['target_type'];
-
-    if (extension_loaded('newrelic')) { // Ensure PHP agent is available
-      newrelic_record_custom_event('og_ref' , array(
-        'class' => 'RefHRCoreSelectionHandler',
-        'label' => entity_label($target_type, $entity),
-      ));
-    }
-
     return entity_label($target_type, $entity);
   }
 
