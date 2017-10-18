@@ -9,6 +9,15 @@ define('HR_CORE_OG_AUDIENCE_FIELD', 'hr_core_gid');
 include_once 'hr_core.features.inc';
 
 /**
+ * Implements hook_ctools_plugin_directory().
+ */
+function hr_core_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'entityreference') {
+    return "plugins/entityreference/$plugin";
+  }
+}
+
+/**
  * Implements hook_entity_info_alter().
  */
 function hr_core_entity_info_alter(&$entity_info) {
