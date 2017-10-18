@@ -18,7 +18,6 @@ function hr_bundles_ctools_plugin_directory($module, $plugin) {
   }
 }
 
-
 /**
  * Get operation from bundle GID
  */
