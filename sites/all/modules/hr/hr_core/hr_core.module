@@ -411,6 +411,9 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
           }
           $form['field_disasters']['und']['#options'] = $options;
         }
+        else {
+          $form['field_disasters']['#access'] = FALSE;
+        }
       }
 
       if (isset($form['field_coordination_hubs'])) {
@@ -431,6 +434,9 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
           asort($options);
 
           $form['field_coordination_hubs']['und']['#options'] = $options;
+        }
+        else {
+          $form['field_coordination_hubs']['#access'] = FALSE;
         }
       }
     }
