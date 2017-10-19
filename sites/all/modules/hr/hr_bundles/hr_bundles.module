@@ -160,7 +160,7 @@ function hr_bundles_form_node_form_alter(&$form, &$form_state) {
       if (isset($_GET[OG_AUDIENCE_FIELD])) {
         $op_gid = $_GET[OG_AUDIENCE_FIELD];
       }
-      elseif (isset($node->{OG_AUDIENCE_FIELD})) {
+      elseif (isset($node->{OG_AUDIENCE_FIELD}) && isset($node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'])) {
         $op_gid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
       }
     }
