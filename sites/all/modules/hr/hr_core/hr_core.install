@@ -391,3 +391,10 @@ function hr_core_update_7022() {
     }
   }
 }
+
+/**
+ * Disable Mollom.
+ */
+function hr_core_update_7023() {
+  module_disable(array('mollom'));
+}
