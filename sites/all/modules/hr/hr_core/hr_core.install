@@ -398,3 +398,10 @@ function hr_core_update_7022() {
 function hr_core_update_7023() {
   module_disable(array('mollom'));
 }
+
+/**
+ * Disable contacts.
+ */
+function hr_core_update_7024() {
+  module_disable(array('hr_contacts'));
+}
