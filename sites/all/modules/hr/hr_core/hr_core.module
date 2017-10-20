@@ -1221,3 +1221,21 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     $plugin['title'] = $tag . $plugin['title'];
   }
 }
+
+/**
+ * Implements hook_boot().
+ */
+function hr_core_boot() {
+  if (!extension_loaded('newrelic')) {
+    return;
+  }
+
+  if (user_is_anonymous()) {
+    newrelic_add_custom_parameter('hr_role', 'anonymous');
+    newrelic_add_custom_parameter('hr_uid', 0);
+  }
+  else {
+    newrelic_add_custom_parameter('hr_role', 'authenticated');
+    newrelic_add_custom_parameter('hr_uid', $GLOBALS['user']->uid);
+  }
+}
