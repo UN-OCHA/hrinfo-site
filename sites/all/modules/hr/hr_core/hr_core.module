@@ -1230,12 +1230,12 @@ function hr_core_boot() {
     return;
   }
 
-  if (user_is_anonymous()) {
-    newrelic_add_custom_parameter('hr_role', 'anonymous');
-    newrelic_add_custom_parameter('hr_uid', 0);
-  }
-  else {
+  if ($GLOBALS['user']->uid) {
     newrelic_add_custom_parameter('hr_role', 'authenticated');
     newrelic_add_custom_parameter('hr_uid', $GLOBALS['user']->uid);
+  }
+  else {
+    newrelic_add_custom_parameter('hr_role', 'anonymous');
+    newrelic_add_custom_parameter('hr_uid', 0);
   }
 }
