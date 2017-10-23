@@ -443,5 +443,7 @@ function hr_core_update_7025() {
  */
 function hr_core_update_7026() {
   $view = views_get_view('hr_bundles');
-  views_revert_view($view);
+  if ($view->type == t('Overridden')) {
+    views_revert_view($view);
+  }
 }
