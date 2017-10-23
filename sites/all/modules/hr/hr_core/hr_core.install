@@ -405,3 +405,35 @@ function hr_core_update_7023() {
 function hr_core_update_7024() {
   module_disable(array('hr_contacts'));
 }
+
+/**
+ * Disable webforms.
+ */
+function hr_core_update_7025() {
+  // Delete webforms.
+  $results = db_select('node', 'n')
+    ->fields('n', array('nid'))
+    ->condition('type', 'webform')
+    ->execute();
+  foreach ($results as $result) {
+    $nids[] = $result->nid;
+  }
+  if (!empty($nids)) {
+    node_delete_multiple($nids);
+    drupal_set_message(t('%count nodes has been deleted.', array(
+      '%count' => count($nids),
+    )));
+  }
+
+  // Disable modules.
+  module_disable(array('hr_webforms', 'webform'));
+
+  // Delete content type.
+  if (node_type_load('webform')) {
+    node_type_delete('webform');
+    drupal_set_message(t('Webform content type has been deleted.'));
+  }
+
+  node_types_rebuild();
+  menu_rebuild();
+}
