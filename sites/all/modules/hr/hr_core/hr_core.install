@@ -437,3 +437,11 @@ function hr_core_update_7025() {
   node_types_rebuild();
   menu_rebuild();
 }
+
+/**
+ * Revert hr_bundles view.
+ */
+function hr_core_update_7026() {
+  $view = views_get_view('hr_bundles');
+  views_revert_view($view);
+}
