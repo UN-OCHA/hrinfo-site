@@ -509,6 +509,7 @@ Co-leads: [field_partners]';
   $handler->display->display_options['fields']['og_group_ref']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['og_group_ref']['settings'] = array(
     'link' => 0,
+    'bypass-access' => 1,
   );
   $handler->display->display_options['fields']['og_group_ref']['delta_offset'] = '0';
   /* Field: Content: Title */
