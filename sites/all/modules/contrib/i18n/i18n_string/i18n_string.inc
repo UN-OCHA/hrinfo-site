@@ -102,7 +102,11 @@ class i18n_string_object {
     $this->location = $this->textgroup . ':' . $this->context;
     $this->type = array_shift($parts);
     $this->objectid = $parts ? array_shift($parts) : '';
-    $this->objectkey = (int)$this->objectid;
+    $this->objectkey = 0;
+    if (is_numeric($string->objectid)) {
+      $this->objectkey = (int)$this->objectid;
+    }
+
     // Remaining elements glued again with ':'
     $this->property = $parts ? implode(':', $parts) : '';
 
@@ -703,9 +707,19 @@ class i18n_string_textgroup_default {
       // Create source string so we get an lid
       $this->save_source($string);
     }
+
+    // Convert objectid to objectkey if it's numeric.
     if (!isset($string->objectkey)) {
-      $string->objectkey = (int)$string->objectid;
+      if (is_numeric($string->objectid)) {
+        $string->objectkey = (int)$string->objectid;
+      }
     }
+
+    // Make sure objectkey is numeric.
+    if (!is_numeric($string->objectkey)) {
+      $string->objectkey = 0;
+    }
+
     if (!isset($string->format)) {
       $string->format = '';
     }
