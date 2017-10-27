@@ -141,6 +141,19 @@
         }
       }
 
+      .reset-all-filters {
+        height: 33px;
+        line-height: 36px;
+        color: $p-main;
+
+        a {
+          color: $p-main;
+          width: 19px;
+          background: url(../images/cross.png) no-repeat left bottom rgba(0, 0, 0, 0);
+          padding-left: 25px;
+        }
+      }
+
       .current-search-item-active {
         margin-top: 10px;
         margin-bottom: -8px;

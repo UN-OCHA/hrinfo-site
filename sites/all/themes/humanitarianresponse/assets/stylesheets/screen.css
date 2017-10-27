@@ -3844,6 +3844,14 @@ body #footer { margin: 0; }
 #sidebar-first .text-search input[type="text"] { width: 100%; height: 36px; }
 #sidebar-first .block-current-search .current-reset-filter { height: 33px; line-height: 36px; color: #bc2e3c; }
 #sidebar-first .block-current-search .current-reset-filter a { height: 28px; width: 19px; background: url(../images/cross.png) no-repeat center bottom transparent; float: left; margin-right: 5px; }
+#sidebar-first .block-current-search .reset-all-filters { height: 33px; line-height: 36px; color: #bc2e3c; }
+#sidebar-first .block-current-search .reset-all-filters a {
+  color: $p-main;
+  width: 19px;
+  background: url(../images/cross.png) no-repeat left bottom rgba(0, 0, 0, 0);
+  padding-left: 25px;
+ }
+
 #sidebar-first .block-current-search .current-search-item-active { margin-top: 10px; margin-bottom: -8px; }
 #sidebar-first .block-current-search .current-search-item-active .current-selected-item { color: #BC2E3C; list-style: none outside none; }
 #sidebar-first .block-current-search .current-search-item-active .current-selected-item li { margin-left: 0; line-height: 22px; color: black; font-size: 0.8em; }
