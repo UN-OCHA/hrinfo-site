@@ -45,6 +45,10 @@ class FacetapiBonusCurrentSearchResetFiltersLink extends CurrentSearchItemText {
     // current URL processor doesn't provide a basePath.
     $path = method_exists($processor, 'getBasePath') ? $processor->getBasePath() : $this->getFacetPath(reset($items), $adapter);
 
+    if ($this->settings['reset_type']) {
+      $path = $adapter->getSearchPath();
+    }
+
     $variables = array(
       'text' => l(token_replace($translated_text, $data), $path, array('query' => $query)),
       'wrapper' => $this->settings['wrapper'],
@@ -54,5 +58,31 @@ class FacetapiBonusCurrentSearchResetFiltersLink extends CurrentSearchItemText {
       'options' => array('html' => TRUE),
     );
     return array('#markup' => theme('current_search_text', $variables));
+  }
+
+  /**
+   * Adds settings
+   * @param $form
+   * @param $form_state
+   */
+  public function settingsForm(&$form, &$form_state) {
+    $form['reset_type'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Complete reset'),
+      '#description' => t('This option will cause all querystring ($_GET) variables to be reset.  While heavy-handed, this is sometimes useful if you also want exposed filters on a view to be reset.'),
+      '#default_value' => $this->settings['reset_type'],
+    );
+
+    parent::settingsForm($form, $form_state);
+  }
+
+  /**
+   * Implements CurrentSearchItem::getDefaultSettings().
+   */
+  public function getDefaultSettings() {
+    $defaults = array(
+      'reset_type' => 0,
+    );
+    return $defaults + parent::getDefaultSettings();
   }
 }
