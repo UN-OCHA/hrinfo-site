@@ -447,3 +447,10 @@ function hr_core_update_7026() {
     views_revert_view($view);
   }
 }
+
+/**
+ * Enable the facetapi_bonus module.
+ */
+function hr_core_update_7027() {
+  module_enable(array('facetapi_bonus'));
+}
