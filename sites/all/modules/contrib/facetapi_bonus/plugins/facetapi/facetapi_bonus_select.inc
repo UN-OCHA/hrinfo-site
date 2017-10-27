@@ -1,12 +1,14 @@
 <?php
 
 class FacetapiBonusSelect extends FacetapiWidget {
-   /**
+  /**
    * Renders the form.
    */
   public function execute() {
     $element = &$this->build[$this->facet['field alias']];
-    $name = array_pop(explode(':', $this->build['#settings']->name));
+    $parts = explode(':', $this->build['#settings']->name);
+    $name = array_pop($parts);
+
     $element = drupal_get_form('facetapi_bonus_select_' .  $name, $element);
   }
 }
