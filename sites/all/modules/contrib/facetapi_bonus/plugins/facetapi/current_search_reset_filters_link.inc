@@ -50,7 +50,7 @@ class FacetapiBonusCurrentSearchResetFiltersLink extends CurrentSearchItemText {
     }
 
     $variables = array(
-      'text' => l(token_replace($translated_text, $data), $path, array('query' => $query)),
+      'text' => l(token_replace($translated_text, $data), $path, array('query' => $query, 'html' => TRUE)),
       'wrapper' => $this->settings['wrapper'],
       'element' => $this->settings['element'],
       'css' => $this->settings['css'],
