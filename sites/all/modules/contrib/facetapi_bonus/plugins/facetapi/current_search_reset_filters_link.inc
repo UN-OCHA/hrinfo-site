@@ -28,12 +28,6 @@ class FacetapiBonusCurrentSearchResetFiltersLink extends CurrentSearchItemText {
     // Makes sure facet builds are initialized.
     $adapter->processFacets();
 
-    // If no facets were selected stop here.
-    $items = $adapter->getAllActiveItems();
-    if (empty($items)) {
-      return;
-    }
-
     // Get the right URL processor.
     $processor = $adapter->getUrlProcessor();
 
