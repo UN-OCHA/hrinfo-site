@@ -31,8 +31,16 @@ class FacetapiBonusCurrentSearchResetFiltersLink extends CurrentSearchItemText {
     // Get the right URL processor.
     $processor = $adapter->getUrlProcessor();
 
-    // Build the query parameters and remove the current facet key.
+    // Build the query parameters.
     $query = $processor->normalizeParams($processor->fetchParams());
+
+    // If no facets were selected stop here.
+    $items = $adapter->getAllActiveItems();
+    if (empty($items) && empty(array_filter($query))) {
+      return;
+    }
+
+    // Remove the current facet key.
     unset($query[$processor->getFilterKey()]);
 
     // Get the path from either a basePath or the first search item if the
