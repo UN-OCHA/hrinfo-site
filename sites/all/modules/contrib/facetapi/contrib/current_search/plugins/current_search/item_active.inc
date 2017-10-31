@@ -41,10 +41,18 @@ class CurrentSearchItemActive extends CurrentSearchItem {
     elseif ($this->settings['keys'] && $keys_link && $keys) {
       $active_items = $adapter->getAllActiveItems();
       if (count($active_items) > 0) {
-        $item = $active_items[0];
-        $item['adapter'] = $adapter;
-        $path = $adapter->getUrlProcessor()->getFacetPath($item, $this->getItemValues($item, $adapter), 0);
-        $params = $adapter->getUrlProcessor()->getQueryString($item, $this->getItemValues($item, $adapter), 0);
+        if (isset($active_items[0])) {
+          $item = $active_items[0];
+          $item['adapter'] = $adapter;
+          $path = $adapter->getUrlProcessor()->getFacetPath($item, $this->getItemValues($item, $adapter), 0);
+          $params = $adapter->getUrlProcessor()->getQueryString($item, $this->getItemValues($item, $adapter), 0);
+        }
+        else {
+          $path = $adapter->getSearchPath();
+          $item = array();
+          $item['adapter'] = $adapter;
+          $params = $adapter->getUrlProcessor()->getQueryString(array(), array(), 0);
+        }
       }
       else {
         $path = $adapter->getSearchPath();

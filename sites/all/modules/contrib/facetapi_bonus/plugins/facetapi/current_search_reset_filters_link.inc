@@ -44,9 +44,14 @@ class FacetapiBonusCurrentSearchResetFiltersLink extends CurrentSearchItemText {
     // Get the path from either a basePath or the first search item if the
     // current URL processor doesn't provide a basePath.
     $path = method_exists($processor, 'getBasePath') ? $processor->getBasePath() : $this->getFacetPath(reset($items), $adapter);
-
     if ($this->settings['reset_type']) {
-      $path = $adapter->getSearchPath();
+      $path = $processor->getBasePath();
+      $reset_query_params = explode(',', $this->settings['reset_query_params']);
+      foreach ($reset_query_params as $reset_query_param) {
+        if (isset($query[trim($reset_query_param)])) {
+          unset($query[trim($reset_query_param)]);
+        }
+      }
     }
 
     $variables = array(
@@ -71,6 +76,13 @@ class FacetapiBonusCurrentSearchResetFiltersLink extends CurrentSearchItemText {
       '#title' => t('Complete reset'),
       '#description' => t('This option will cause all querystring ($_GET) variables to be reset.  While heavy-handed, this is sometimes useful if you also want exposed filters on a view to be reset.'),
       '#default_value' => $this->settings['reset_type'],
+    );
+
+    $form['reset_query_params'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Reset query parameters'),
+      '#description' => t('Comma separated list of query parameters to reset.'),
+      '#default_value' => $this->settings['reset_query_params'],
     );
 
     parent::settingsForm($form, $form_state);
