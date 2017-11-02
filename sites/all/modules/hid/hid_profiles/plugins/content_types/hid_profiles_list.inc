@@ -9,7 +9,7 @@ $plugin = array(
   'render callback' => 'hid_profiles_list_render',
   'required context' => new ctools_context_required(t('Panelized entity'), 'entity'),
   'defaults' => array(
-    'contacts' => '',
+    'contacts' => array(),
   ),
 );
 
@@ -24,6 +24,7 @@ function hid_profiles_list_edit_form($form, &$form_state) {
   }
   else {
     $contacts_count = count($conf['contacts']);
+    $contacts_count++;
   }
 
   // Add a wrapper for the contacts and more button.
