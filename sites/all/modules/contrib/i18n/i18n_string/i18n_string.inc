@@ -102,10 +102,7 @@ class i18n_string_object {
     $this->location = $this->textgroup . ':' . $this->context;
     $this->type = array_shift($parts);
     $this->objectid = $parts ? array_shift($parts) : '';
-    $this->objectkey = 0;
-    if (is_numeric($string->objectid)) {
-      $this->objectkey = (int)$this->objectid;
-    }
+    $this->objectkey = (int)$this->objectid;
 
     // Remaining elements glued again with ':'
     $this->property = $parts ? implode(':', $parts) : '';
