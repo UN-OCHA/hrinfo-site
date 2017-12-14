@@ -40,10 +40,6 @@ function piwik_variable_group_info() {
 
 /**
  * Validate Piwik site ID variable.
- *
- * @param array $variable
- *
- * @return string
  */
 function piwik_validate_piwik_site_id($variable) {
   if (!preg_match('/^\d{1,}$/', $variable['value'])) {

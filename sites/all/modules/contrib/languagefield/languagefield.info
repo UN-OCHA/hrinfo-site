@@ -8,9 +8,9 @@ dependencies[] = options
 files[] = languagefield.migrate.inc
 files[] = handlers/languagefield_handler_filter_locale_language.inc 
 
-; Information added by Drupal.org packaging script on 2017-10-04
-version = "7.x-1.7"
+; Information added by Drupal.org packaging script on 2016-10-23
+version = "7.x-1.5"
 core = "7.x"
 project = "languagefield"
-datestamp = "1507136736"
+datestamp = "1477261950"
 

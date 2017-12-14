@@ -10,13 +10,9 @@
   margin: 20px;
 }
 
-#media-wysiwyg-format-form .media-preview-group {
+#media-wysiwyg-format-form .media-item {
   float: left;
   margin-right: 10px;
-}
-
-#media-wysiwyg-format-form .media-preview-group .edit-file-link {
-  text-align: center;
 }
 
 #media-wysiwyg-format-form .form-item-format label {

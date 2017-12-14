@@ -93,7 +93,7 @@ Drupal.media.browser.views.select = function(view) {
   Drupal.media.browser.selectMedia([]);
 
   // Reset all 'selected'-status.
-  $('.view-content .media-item', view).removeClass('selected').parent().attr('aria-checked', 'false');
+  $('.view-content .media-item', view).removeClass('selected');
 }
 
 /**
@@ -140,15 +140,16 @@ Drupal.media.browser.views.setup = function(view) {
   });
 
 
-  function onSelectMediaItem() {
+  // Catch the click on a media item
+  $('.view-content .media-item', view).bind('click', function () {
     var fid = $(this).closest('.media-item[data-fid]').data('fid'),
       selectedFiles = new Array();
 
     // Remove all currently selected files
-    $('.view-content .media-item', view).removeClass('selected').parent().attr('aria-checked', 'false');
+    $('.view-content .media-item', view).removeClass('selected');
 
     // Mark it as selected
-    $(this).addClass('selected').parent().attr('aria-checked', 'true');
+    $(this).addClass('selected');
 
     // Multiselect!
     if (Drupal.settings.media.browser.params.multiselect) {
@@ -159,7 +160,7 @@ Drupal.media.browser.views.setup = function(view) {
         // If the current file exists in the list of already selected
         // files, we deselect instead of selecting
         if (currentFid == fid) {
-          $(this).removeClass('selected').parent().attr('aria-checked', 'false');
+          $(this).removeClass('selected');
           // If we change the fid, the later matching won't
           // add it back again because it can't find it.
           fid = NaN;
@@ -172,7 +173,7 @@ Drupal.media.browser.views.setup = function(view) {
           selectedFiles.push(Drupal.media.browser.selectedMedia[index]);
 
           // Mark it as selected
-          $('.view-content *[data-fid=' + currentFid + '].media-item', view).addClass('selected').parent().attr('aria-checked', 'true');
+          $('.view-content *[data-fid=' + currentFid + '].media-item', view).addClass('selected');
         }
       }
     }
@@ -193,15 +194,6 @@ Drupal.media.browser.views.setup = function(view) {
       }
     }
     Drupal.media.browser.selectMedia(selectedFiles);
-  }
-
-  // Catch the click or space bar press on a media item.
-  $('.view-content .media-item', view).bind('click', onSelectMediaItem);
-  $('.view-content .media-item', view).parent().bind('keydown', function (evt) {
-    if (evt.which == 32 || evt.which == 13) {
-      onSelectMediaItem.call($('.media-item', this).get(0), evt);
-      return false;
-    }
   });
 
   // Add the processed class, so we dont accidentally process the same element twice..

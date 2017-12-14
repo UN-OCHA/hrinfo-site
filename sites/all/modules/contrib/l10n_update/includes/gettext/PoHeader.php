@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Definition of Drupal\Component\Gettext\PoHeader.
+ * Definition of Drupal\Component\Gettext\PoHeader
  */
 
 /**
@@ -88,7 +88,7 @@ class PoHeader {
    *   Plural form component from the header, for example:
    *   'nplurals=2; plural=(n > 1);'.
    */
-  public function getPluralForms() {
+  function getPluralForms() {
     return $this->_pluralForms;
   }
 
@@ -98,7 +98,7 @@ class PoHeader {
    * @param string $languageName
    *   Human readable language name.
    */
-  public function setLanguageName($languageName) {
+  function setLanguageName($languageName) {
     $this->_languageName = $languageName;
   }
 
@@ -108,7 +108,7 @@ class PoHeader {
    * @return string
    *   The human readable language name.
    */
-  public function getLanguageName() {
+  function getLanguageName() {
     return $this->_languageName;
   }
 
@@ -118,7 +118,7 @@ class PoHeader {
    * @param string $projectName
    *   Human readable project name.
    */
-  public function setProjectName($projectName) {
+  function setProjectName($projectName) {
     $this->_projectName = $projectName;
   }
 
@@ -128,7 +128,7 @@ class PoHeader {
    * @return string
    *   The human readable project name.
    */
-  public function getProjectName() {
+  function getProjectName() {
     return $this->_projectName;
   }
 
@@ -186,14 +186,11 @@ class PoHeader {
    * @param string $pluralforms
    *   The Plural-Forms entry value.
    *
-   * @return array|boolean
+   * @return
    *   An array containing the number of plural forms and the converted version
    *   of the formula that can be evaluated with PHP later.
-   *
-   * @throws \Exception
-   *   Throws exception in case plural formula could not be parsed.
    */
-  public function parsePluralForms($pluralforms) {
+  function parsePluralForms($pluralforms) {
     // First, delete all whitespace.
     $pluralforms = strtr($pluralforms, array(" " => "", "\t" => ""));
 
@@ -256,7 +253,7 @@ class PoHeader {
    * @param string $string
    *   A string containing the arithmetic formula.
    *
-   * @return string|FALSE
+   * @return
    *   A version of the formula to evaluate with PHP later.
    */
   private function parseArithmetic($string) {
@@ -391,7 +388,6 @@ class PoHeader {
               $tokens[] = $formula[$i];
             }
             break;
-
           case 5:
             if ($next == '&') {
               $tokens[] = '&&';
@@ -401,7 +397,6 @@ class PoHeader {
               $tokens[] = $formula[$i];
             }
             break;
-
           case 6:
             if ($next == '|') {
               $tokens[] = '||';

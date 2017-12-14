@@ -5,11 +5,9 @@ core = 7.x
 
 configure = admin/structure/menu/settings
 
-dependencies[] = menu
-
-; Information added by Drupal.org packaging script on 2017-01-30
-version = "7.x-1.6"
+; Information added by Drupal.org packaging script on 2014-10-02
+version = "7.x-1.4"
 core = "7.x"
 project = "menu_target"
-datestamp = "1485761596"
+datestamp = "1412270937"
 

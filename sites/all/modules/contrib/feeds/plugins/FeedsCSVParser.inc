@@ -56,34 +56,24 @@ class FeedsCSVParser extends FeedsParser {
   /**
    * Get first line and use it for column names, convert them to lower case.
    * Be aware that the $parser and iterator objects can be modified in this
-   * function since they are passed in by reference.
+   * function since they are passed in by reference
    *
    * @param ParserCSV $parser
    * @param ParserCSVIterator $iterator
-   *
-   * @return array|false
-   *   An array of lower-cased column names to use as keys for the parsed items
-   *   or FALSE if the document was empty.
+   * @return
+   *   An array of lower-cased column names to use as keys for the parsed items.
    */
   protected function parseHeader(ParserCSV $parser, ParserCSVIterator $iterator) {
-    try {
-      $parser->setLineLimit(1);
-      $rows = $parser->parse($iterator);
-      if (!count($rows)) {
-        return FALSE;
-      }
-      $header = array_shift($rows);
-      foreach ($header as $i => $title) {
-        $header[$i] = trim(drupal_strtolower($title));
-      }
-      return $header;
+    $parser->setLineLimit(1);
+    $rows = $parser->parse($iterator);
+    if (!count($rows)) {
+      return FALSE;
     }
-    catch (Exception $e) {
-      // Make sure that the file on the iterator gets properly closed when
-      // exceptions occur during parsing.
-      $iterator->releaseHandler();
-      throw $e;
+    $header = array_shift($rows);
+    foreach ($header as $i => $title) {
+      $header[$i] = trim(drupal_strtolower($title));
     }
+    return $header;
   }
 
   /**
@@ -91,27 +81,14 @@ class FeedsCSVParser extends FeedsParser {
    *
    * @param ParserCSV $parser
    * @param ParserCSVIterator $iterator
-   * @param int $start
-   *   The byte number from where to start parsing the file.
-   * @param int $limit
-   *   The number of lines to parse, 0 for all lines.
-   *
-   * @return array
-   *   An array of rows of the CSV keyed by the column names previously set.
+   * @return
+   *   An array of rows of the CSV keyed by the column names previously set
    */
   protected function parseItems(ParserCSV $parser, ParserCSVIterator $iterator, $start = 0, $limit = 0) {
-    try {
-      $parser->setLineLimit($limit);
-      $parser->setStartByte($start);
-      $rows = $parser->parse($iterator);
-      return $rows;
-    }
-    catch (Exception $e) {
-      // Make sure that the file on the iterator gets properly closed when
-      // exceptions occur during parsing.
-      $iterator->releaseHandler();
-      throw $e;
-    }
+    $parser->setLineLimit($limit);
+    $parser->setStartByte($start);
+    $rows = $parser->parse($iterator);
+    return $rows;
   }
 
   /**
@@ -161,10 +138,10 @@ class FeedsCSVParser extends FeedsParser {
       if (strpos($mapping['source'], ',') !== FALSE) {
         $sources[] = '"' . $mapping['source'] . '"';
       }
-      elseif (strlen(trim($mapping['source']))) {
+      else {
         $sources[] = $mapping['source'];
       }
-      if (!empty($mapping['unique']) && strlen(trim($mapping['source']))) {
+      if (!empty($mapping['unique'])) {
         $uniques[] = $mapping['source'];
       }
     }
@@ -172,18 +149,7 @@ class FeedsCSVParser extends FeedsParser {
 
     $output = t('Import !csv_files with one or more of these columns: @columns.', array('!csv_files' => l(t('CSV files'), 'http://en.wikipedia.org/wiki/Comma-separated_values'), '@columns' => implode(', ', $sources)));
     $items = array();
-    if ($uniques) {
-      $items[] = format_plural(count($uniques),
-        'Column <strong>@columns</strong> is mandatory and considered unique: only one item per @columns value will be created.',
-        'Columns <strong>@columns</strong> are mandatory and values in these columns are considered unique: only one entry per value in one of these column will be created.',
-        array(
-          '@columns' => implode(', ', $uniques),
-        )
-      );
-    }
-    else {
-      $items[] = t('No columns are unique. The import will only create new items, no items will be updated.');
-    }
+    $items[] = format_plural(count($uniques), 'Column <strong>@columns</strong> is mandatory and considered unique: only one item per @columns value will be created.', 'Columns <strong>@columns</strong> are mandatory and values in these columns are considered unique: only one entry per value in one of these column will be created.', array('@columns' => implode(', ', $uniques)));
     $items[] = l(t('Download a template'), 'import/' . $this->id . '/template');
     $form['help'] = array(
       '#prefix' => '<div class="help">',
@@ -226,7 +192,7 @@ class FeedsCSVParser extends FeedsParser {
       'delimiter' => ',',
       'encoding' => 'UTF-8',
       'no_headers' => 0,
-    ) + parent::configDefaults();
+    );
   }
 
   /**
@@ -309,10 +275,7 @@ class FeedsCSVParser extends FeedsParser {
         $col = '"' . str_replace('"', '""', $col) . '"';
       }
 
-      // Prevent columns without headers from being added to the template.
-      if (strlen(trim($col))) {
-        $columns[] = $col;
-      }
+      $columns[] = $col;
     }
 
     $template_file_details = $this->getTemplateFileDetails($this->config);

@@ -7,6 +7,7 @@
  * Functions used for clearing caches and killing files.
  */
 
+// Cache and file flushing.
 /**
  * Uses the database to scan CSS/JS files for changes.
  *
@@ -90,27 +91,16 @@ function advagg_scan_for_changes() {
  * @return array
  *   Array of files that have changed and caches flushed.
  */
-function advagg_push_new_changes(array $files = array()) {
-  $results = array();
-  // Scan the file system for changes to CSS/JS files.
-  if (empty($files)) {
-    $files = advagg_scan_for_changes();
-    if (variable_get('advagg_debug', ADVAGG_DEBUG) >= 2) {
-      watchdog('advagg-debug', 'Changes detected in <pre>@files</pre>.', array('@files' => print_r($files, TRUE)), WATCHDOG_DEBUG);
-    }
-  }
-
+function advagg_push_new_changes() {
   // Clear some static caches.
   drupal_static_reset('advagg_get_info_on_file');
   drupal_static_reset('advagg_drupal_hash_base64');
   drupal_static_reset('advagg_current_hooks_hash_array');
   drupal_static_reset('advagg_get_current_hooks_hash');
 
-  if (variable_get('advagg_debug', ADVAGG_DEBUG) >= 2) {
-    // Exception used to get a compact stack trace.
-    $e = new Exception();
-    watchdog('advagg-debug', 'New changes called by: <pre>@changes</pre>', array('@changes' => print_r($e->getTraceAsString(), TRUE)), WATCHDOG_DEBUG);
-  }
+  // Scan the file system for changes to CSS/JS files.
+  $files = advagg_scan_for_changes();
+  $results = array();
 
   // If something changed, flush the correct caches so that change goes out.
   if (!empty($files)) {
@@ -120,15 +110,12 @@ function advagg_push_new_changes(array $files = array()) {
       // Lookup the aggregates/cache ids that use this file.
       $cache_ids = advagg_get_aggregates_using_file($meta_data['filename_hash'], TRUE);
       $cache_hits = array();
-      $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+      $ext = pathinfo($filename, PATHINFO_EXTENSION);
       $types[$ext] = TRUE;
 
       if (!empty($cache_ids)) {
         $cache_hits = cache_get_multiple($cache_ids, 'cache_advagg_info');
         foreach ($cache_hits as $cid => $data) {
-          if (variable_get('advagg_debug', ADVAGG_DEBUG) >= 2) {
-            watchdog('advagg-debug', 'Clearing cache @cid.', array('@cid' => $cid), WATCHDOG_DEBUG);
-          }
           cache_clear_all($cid, 'cache_advagg_info', FALSE);
         }
       }
@@ -159,9 +146,6 @@ function advagg_push_new_changes(array $files = array()) {
 
     // Clear out the full aggregates cache.
     foreach ($types as $ext => $bool) {
-      if (variable_get('advagg_debug', ADVAGG_DEBUG) >= 2) {
-        watchdog('advagg-debug', 'Clearing cache advagg:@ext: in cache_advagg_aggregates.', array('@ext' => print_r($ext, TRUE)), WATCHDOG_DEBUG);
-      }
       cache_clear_all('advagg:' . $ext . ':', 'cache_advagg_aggregates', TRUE);
     }
   }
@@ -263,93 +247,47 @@ function advagg_delete_files_if_stale(array $files) {
     }
     else {
       // Can not get data on file, remove it.
-      $kill_list[] = advagg_delete_file_by_uri($uri);
+      file_unmanaged_delete($uri);
+      if (file_exists($uri . '.gz')) {
+        file_unmanaged_delete($uri . '.gz');
+      }
+      if (file_exists($uri . '.br')) {
+        file_unmanaged_delete($uri . '.br');
+      }
+      $kill_list[] = $uri;
       continue;
     }
 
     // Get atime of file.
     $atime = advagg_get_atime($aggregate_filenames_hash, $aggregate_contents_hash, $uri);
     if (empty($atime)) {
-      $kill_list[] = advagg_delete_file_by_uri($uri);
+      file_unmanaged_delete($uri);
+      if (file_exists($uri . '.gz')) {
+        file_unmanaged_delete($uri . '.gz');
+      }
+      if (file_exists($uri . '.br')) {
+        file_unmanaged_delete($uri . '.br');
+      }
+      $kill_list[] = $uri;
       continue;
     }
 
     // Default stale file threshold is 30 days.
     if (REQUEST_TIME - $atime > variable_get('drupal_stale_file_threshold', 2592000)) {
-      $kill_list[] = advagg_delete_file_by_uri($uri);
-      continue;
-    }
-
-  }
-  // Let other modules know about the removed files.
-  // Call hook_advagg_removed_aggregates().
-  module_invoke_all('advagg_removed_aggregates', $kill_list);
-  return $kill_list;
-}
-
-/**
- * Scan CSS/JS advagg dir and remove that file if it is empty.
- *
- * @return array
- *   Array of files that got removed.
- */
-function advagg_delete_empty_aggregates() {
-  list($css_files, $js_files) = advagg_get_all_files();
-  $css_files = advagg_delete_files_if_empty($css_files);
-  $js_files = advagg_delete_files_if_empty($js_files);
-  return array($css_files, $js_files);
-}
-
-/**
- * Given an array of files remove that file if it is empty.
- *
- * @param array $files
- *   Array of files returned by file_scan_directory.
- *
- * @return array
- *   Array of files that got removed.
- */
-function advagg_delete_files_if_empty(array $files) {
-  // Array used to record what files were deleted.
-  $kill_list = array();
-
-  foreach ($files as $uri => $file) {
-    // Ignore temp files.  There's a separate process for cleaning those up.
-    if (strpos($uri, '/advagg_file_') !== FALSE) {
-      continue;
-    }
-    $size = filesize($uri);
-    if ($size === 0) {
-      $kill_list[] = advagg_delete_file_by_uri($uri);
-      continue;
+      file_unmanaged_delete($uri);
+      if (file_exists($uri . '.gz')) {
+        file_unmanaged_delete($uri . '.gz');
+      }
+      if (file_exists($uri . '.br')) {
+        file_unmanaged_delete($uri . '.br');
+      }
+      $kill_list[] = $uri;
     }
   }
   // Let other modules know about the removed files.
   // Call hook_advagg_removed_aggregates().
   module_invoke_all('advagg_removed_aggregates', $kill_list);
   return $kill_list;
-}
-
-/**
- * Delete a file, and any compressed versions.
- *
- * @param string $uri
- *   URI of the file to delete.
- *
- * @return string
- *   The given URI.
- */
-function advagg_delete_file_by_uri($uri) {
-  if (file_exists($uri)) {
-    file_unmanaged_delete($uri);
-  }
-  if (file_exists($uri . '.gz')) {
-    file_unmanaged_delete($uri . '.gz');
-  }
-  if (file_exists($uri . '.br')) {
-    file_unmanaged_delete($uri . '.br');
-  }
-  return $uri;
 }
 
 /**
@@ -453,7 +391,7 @@ function advagg_remove_missing_files_from_db() {
   $types = array();
   foreach ($missing_files as $filename => $data) {
     // Setup this run.
-    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    $ext = pathinfo($filename, PATHINFO_EXTENSION);
     $advagg_files_del = 0;
     $advagg_aggregates_del = 0;
     $advagg_aggregates_versions_del = 0;
@@ -602,7 +540,15 @@ function advagg_delete_files_if_orphaned(array $files) {
 
   if (!empty($kill_list)) {
     foreach ($kill_list as $uri) {
-      advagg_delete_file_by_uri($uri);
+      if (file_exists($uri)) {
+        file_unmanaged_delete($uri);
+        if (file_exists($uri . '.gz')) {
+          file_unmanaged_delete($uri . '.gz');
+        }
+        if (file_exists($uri . '.br')) {
+          file_unmanaged_delete($uri . '.br');
+        }
+      }
     }
   }
 
@@ -913,7 +859,7 @@ function advagg_detect_subfile_changes($filename, array $subfiles, $keyname, $sa
     // Get the current info on the file.
     if (file_exists($subfile)) {
       $current_file_info = array(
-        'hash' => drupal_hash_base64((string) @advagg_file_get_contents($subfile)),
+        'hash' => drupal_hash_base64((string) @file_get_contents($subfile)),
         'size' => filesize($subfile),
         'mtime' => filemtime($subfile),
       );

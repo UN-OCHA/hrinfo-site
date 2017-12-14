@@ -71,11 +71,6 @@ class SearchApiSavedSearch extends Entity {
   /**
    * @var integer
    */
-  public $last_queued;
-
-  /**
-   * @var integer
-   */
   public $last_execute;
 
   /**
@@ -150,7 +145,7 @@ class SearchApiSavedSearch extends Entity {
   }
 
   /**
-   * @return SearchApiSavedSearchesSettings
+   * @return SearchApiIndex
    *   The settings this saved search uses.
    *
    * @throws SearchApiException
@@ -191,19 +186,14 @@ class SearchApiSavedSearch extends Entity {
    *   If the saved search's index is disabled.
    */
   public function query() {
-    $index = $this->index();
-    $query = $index->query($this->query['options']);
-    if ($this->query['keys']) {
+    $query = $this->index()->query($this->query['options']);
+    if ($this->query['keys']){
       $query->keys($this->query['keys']);
     }
-    if ($this->query['fields']) {
-      $fields = (array) $this->query['fields'];
-      $fields = array_intersect($fields, $index->getFulltextFields());
-      if ($fields) {
-        $query->fields($fields);
-      }
+    if ($this->query['fields']){
+      $query->fields($this->query['fields']);
     }
-    if ($this->query['filters']) {
+    if ($this->query['filters']){
       $filters = &$query->getFilter()->getFilters();
       $filters = $this->query['filters'];
     }

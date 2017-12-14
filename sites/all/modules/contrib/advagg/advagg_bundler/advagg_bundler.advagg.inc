@@ -6,11 +6,6 @@
  */
 
 /**
- * @addtogroup advagg_hooks
- * @{
- */
-
-/**
  * Implements hook_advagg_build_aggregate_plans_alter().
  */
 function advagg_bundler_advagg_build_aggregate_plans_alter(&$files, &$modified, $type) {
@@ -95,10 +90,6 @@ function advagg_bundler_advagg_build_aggregate_plans_alter(&$files, &$modified, 
   // Replace $files array with new aggregate filenames.
   $files = advagg_generate_filenames($final_groupings, $type);
 }
-
-/**
- * @} End of "addtogroup advagg_hooks".
- */
 
 /**
  * Merge bundles together if too many where created.

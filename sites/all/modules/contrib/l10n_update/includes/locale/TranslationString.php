@@ -14,7 +14,6 @@
  * in the specified language.
  */
 class TranslationString extends StringBase {
-
   /**
    * The language code.
    *
@@ -32,7 +31,7 @@ class TranslationString extends StringBase {
   /**
    * Integer indicating whether this string is customized.
    *
-   * @var integer
+   * @var int
    */
   public $customized;
 
@@ -79,7 +78,7 @@ class TranslationString extends StringBase {
 
   /**
    * Implements StringInterface::isTranslation().
-   */
+  */
   public function isTranslation() {
     return !empty($this->lid) && !empty($this->language) && isset($this->translation);
   }

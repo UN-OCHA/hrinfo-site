@@ -1001,7 +1001,6 @@ class MediaElementSettingsTestCase extends MediaFileFieldTestCase {
               'max_filesize' => '',
               'uri_scheme' => 'public',
               'multiselect' => $multiselect,
-              'field' => $field_name,
             ),
           ),
         ),

@@ -167,9 +167,6 @@ class Redis_Cache
         return $this->maxTtl;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct($bin)
     {
         $this->bin = $bin;
@@ -291,7 +288,7 @@ class Redis_Cache
         if (!$this->flushCache) {
             $this->flushCache = $this->backend->getLastFlushTime();
         }
-
+ 
          // At the very first hit, we might not have the timestamps set, thus
          // we need to create them to avoid our entry being considered as
          // invalid

@@ -3,8 +3,6 @@
  * Used to load CSS via JS so css doesn't block the browser.
  */
 
-/* eslint-disable no-unused-vars */
-
 /**
  * Given a css file, load it using JavaScript.
  *

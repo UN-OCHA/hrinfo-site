@@ -9,7 +9,6 @@
  * Comparison result of source files timestamps.
  *
  * Timestamp of source 1 is less than the timestamp of source 2.
- *
  * @see _l10n_update_source_compare()
  */
 define('L10N_UPDATE_SOURCE_COMPARE_LT', -1);
@@ -18,7 +17,6 @@ define('L10N_UPDATE_SOURCE_COMPARE_LT', -1);
  * Comparison result of source files timestamps.
  *
  * Timestamp of source 1 is equal to the timestamp of source 2.
- *
  * @see _l10n_update_source_compare()
  */
 define('L10N_UPDATE_SOURCE_COMPARE_EQ', 0);
@@ -27,7 +25,6 @@ define('L10N_UPDATE_SOURCE_COMPARE_EQ', 0);
  * Comparison result of source files timestamps.
  *
  * Timestamp of source 1 is greater than the timestamp of source 2.
- *
  * @see _l10n_update_source_compare()
  */
 define('L10N_UPDATE_SOURCE_COMPARE_GT', 1);
@@ -44,7 +41,7 @@ define('L10N_UPDATE_SOURCE_COMPARE_GT', 1);
  * disabled this function will return the last known module state. The status
  * will only be updated once Update module is enabled.
  *
- * @param array $project_names
+ *  @params array $project_names
  *    Array of names of the projects to get.
  *
  * @return array
@@ -58,7 +55,7 @@ function l10n_update_get_projects($project_names = array()) {
   if (empty($projects)) {
     // Get project data from the database.
     $result = db_query('SELECT name, project_type, core, version, l10n_path as server_pattern, status FROM {l10n_update_project}');
-    // https://www.drupal.org/node/1777106 is a follow-up issue to make the check for
+    // http://drupal.org/node/1777106 is a follow-up issue to make the check for
     // possible out-of-date project information more robust.
     if ($result->rowCount() == 0) {
       module_load_include('compare.inc', 'l10n_update');
@@ -100,7 +97,7 @@ function l10n_update_clear_cache_projects() {
  *
  * @see l10n_update_source_build()
  */
-function l10n_update_load_sources(array $projects = NULL, array $langcodes = NULL) {
+function l10n_update_load_sources($projects = NULL, $langcodes = NULL) {
   $sources = array();
   $projects = $projects ? $projects : array_keys(l10n_update_get_projects());
   $langcodes = $langcodes ? $langcodes : array_keys(l10n_update_translatable_language_list());
@@ -109,7 +106,7 @@ function l10n_update_load_sources(array $projects = NULL, array $langcodes = NUL
   $status = l10n_update_get_status();
 
   // Use only the selected projects and languages for update.
-  foreach ($projects as $project) {
+  foreach($projects as $project) {
     foreach ($langcodes as $langcode) {
       $sources[$project][$langcode] = isset($status[$project][$langcode]) ? $status[$project][$langcode] : NULL;
     }
@@ -160,7 +157,7 @@ function l10n_update_build_sources($projects = array(), $langcodes = array()) {
  * @param object $source
  *   Translation source object.
  *
- * @return object|bool
+ * @return stdClass
  *   Source file object of the po file, updated with:
  *   - "uri": File name and path.
  *   - "timestamp": Last updated time of the po file.
@@ -172,7 +169,7 @@ function l10n_update_source_check_file($source) {
   if (isset($source->files[L10N_UPDATE_LOCAL])) {
     $source_file = $source->files[L10N_UPDATE_LOCAL];
     $directory = $source_file->directory;
-    $filename = '/^' . preg_quote($source_file->filename) . '$/';
+    $filename = '/' . preg_quote($source_file->filename) . '$/';
 
     if ($files = file_scan_directory($directory, $filename, array('key' => 'name', 'recurse' => FALSE))) {
       $file = current($files);
@@ -364,15 +361,12 @@ function l10n_update_cron_fill_queue() {
  * @param string $uri
  *   The URI or URI pattern of the file.
  *
- * @return bool
+ * @return boolean
  *   TRUE if the $uri is a remote file.
  */
 function _l10n_update_file_is_remote($uri) {
   $scheme = file_uri_scheme($uri);
   if ($scheme) {
-    if ($scheme == 'http' || $scheme == 'https') {
-      return TRUE;
-    }
     return !drupal_realpath($scheme . '://');
   }
   return FALSE;
@@ -389,7 +383,7 @@ function _l10n_update_file_is_remote($uri) {
  * @param object $source2
  *   Source object of available update.
  *
- * @return int
+ * @return integer
  *   - "L10N_UPDATE_SOURCE_COMPARE_LT": $source1 < $source2 OR $source1
  *     is missing.
  *   - "L10N_UPDATE_SOURCE_COMPARE_EQ":  $source1 == $source2 OR both
@@ -437,14 +431,12 @@ function _l10n_update_default_update_options() {
         'not_customized' => TRUE,
       );
       break;
-
     case L10N_UPDATE_OVERWRITE_NON_CUSTOMIZED:
       $options['overwrite_options'] = array(
         'customized' => FALSE,
         'not_customized' => TRUE,
       );
       break;
-
     case LOCALE_IMPORT_KEEP:
       $options['overwrite_options'] = array(
         'customized' => FALSE,
@@ -459,40 +451,34 @@ function _l10n_update_default_update_options() {
 /**
  * Import one string into the database.
  *
- * @param array $report
+ * @param $report
  *   Report array summarizing the number of changes done in the form:
  *   array(inserts, updates, deletes).
- * @param string $langcode
+ * @param $langcode
  *   Language code to import string into.
- * @param string $context
+ * @param $context
  *   The context of this string.
- * @param string $source
+ * @param $source
  *   Source string.
- * @param string $translation
+ * @param $translation
  *   Translation to language specified in $langcode.
- * @param string $textgroup
+ * @param $textgroup
  *   Name of textgroup to store translation in.
- * @param string $location
+ * @param $location
  *   Location value to save with source string.
- * @param int $mode
+ * @param $mode
  *   Import mode to use, LOCALE_IMPORT_KEEP or LOCALE_IMPORT_OVERWRITE.
- * @param int $status
- *   Status of translation if created: L10N_UPDATE_STRING_DEFAULT or
- *   L10N_UPDATE_STRING_CUSTOM.
- * @param int $plid
+ * @param $status
+ *   Status of translation if created: L10N_UPDATE_STRING_DEFAULT or L10N_UPDATE_STRING_CUSTOM
+ * @param $plid
  *   Optional plural ID to use.
- * @param int $plural
+ * @param $plural
  *   Optional plural value to use.
- *
- * @return string
+ * @return
  *   The string ID of the existing string modified or the new string added.
  */
-function _l10n_update_locale_import_one_string_db(array &$report, $langcode, $context, $source, $translation, $textgroup, $location, $mode, $status = L10N_UPDATE_NOT_CUSTOMIZED, $plid = 0, $plural = 0) {
-  $lid = db_query("SELECT lid FROM {locales_source} WHERE source = :source AND context = :context AND textgroup = :textgroup", array(
-    ':source' => $source,
-    ':context' => $context,
-    ':textgroup' => $textgroup,
-  ))->fetchField();
+function _l10n_update_locale_import_one_string_db(&$report, $langcode, $context, $source, $translation, $textgroup, $location, $mode, $status = L10N_UPDATE_NOT_CUSTOMIZED, $plid = 0, $plural = 0) {
+  $lid = db_query("SELECT lid FROM {locales_source} WHERE source = :source AND context = :context AND textgroup = :textgroup", array(':source' => $source, ':context' => $context, ':textgroup' => $textgroup))->fetchField();
 
   if (!empty($translation)) {
     // Skip this string unless it passes a check for dangerous code.

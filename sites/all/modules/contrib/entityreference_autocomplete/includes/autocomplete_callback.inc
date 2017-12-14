@@ -1,27 +1,18 @@
 <?php
-
 /**
  * @file
- * Autocomplete callback for "entityreference" Form API Elements.
+ * autocomplete_callback.inc.
+ *
+ * Autocomplete callback for 'entityreference' Form API Elements.
  */
 
 /**
- * Page callback for the "entityreference" elements autocomplete path.
- *
- * @param string $entity_type
- *   The type of entity.
- * @param string $bundles
- *   List of bundles.
- * @param string $encoded_query_settings
- *   Query settings string.
- * @param string $string
- *   Search query.
+ * Page callback for the entityreference elements autocomplete path.
  */
 function entityreference_autocomplete_autocomplete_callback($entity_type, $bundles, $encoded_query_settings, $string = '') {
   // If search string contains a slash "/", menu system will think it's a new
   // argument. In such case, reassemble the whole search string.
   $args = func_get_args();
-
   if (count($args) > 4) {
     array_shift($args);
     array_shift($args);
@@ -36,7 +27,7 @@ function entityreference_autocomplete_autocomplete_callback($entity_type, $bundl
 
   // Decode the query settings passed and then parse the result string to get
   // the actual settings array.
-  parse_str(decode_entities(urldecode($encoded_query_settings)), $query_settings);
+  parse_str(urldecode($encoded_query_settings), $query_settings);
 
   // The user enters a comma-separated list of entity labels. Autocomplete only
   // the last label.
@@ -69,14 +60,14 @@ function entityreference_autocomplete_autocomplete_callback($entity_type, $bundl
 
     // Set property conditions, if any.
     if (!empty($query_settings['property_conditions']) && is_array($query_settings['property_conditions'])) {
-      foreach ($query_settings['property_conditions'] as $property_condition) {
+      foreach($query_settings['property_conditions'] as $property_condition) {
         $query->propertyCondition($property_condition[0], $property_condition[1], $property_condition[2]);
       }
     }
 
     // Add the field conditions declared.
     if (!empty($query_settings['field_conditions']) && is_array($query_settings['field_conditions'])) {
-      foreach ($query_settings['field_conditions'] as $field_condition) {
+      foreach($query_settings['field_conditions'] as $field_condition) {
         $column = isset($field_condition[1]) ? $field_condition[1] : NULL;
         $value = isset($field_condition[2]) ? $field_condition[2] : NULL;
         $operator = isset($field_condition[3]) ? $field_condition[3] : NULL;
@@ -100,7 +91,8 @@ function entityreference_autocomplete_autocomplete_callback($entity_type, $bundl
       $result = $query->execute();
     }
     catch (Exception $e) {
-      watchdog_exception('entityreference_autocomplete', $e);
+      $args = array('@error' => $e->getMessage());
+      watchdog(WATCHDOG_ERROR, t('Entityreference Autocomplete error: @error', $args));
     }
 
     if (!empty($result[$entity_type])) {

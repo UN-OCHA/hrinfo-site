@@ -9,7 +9,6 @@
  * Form constructor for the translation import screen.
  *
  * @see l10n_update_import_form_submit()
- *
  * @ingroup forms
  */
 function l10n_update_import_form($form, &$form_state) {
@@ -37,7 +36,7 @@ function l10n_update_import_form($form, &$form_state) {
     $default = key($existing_languages);
     $language_options = array(
       t('Existing languages') => $existing_languages,
-      t('Languages not yet added') => language_admin_predefined_list(),
+      t('Languages not yet added') => language_admin_predefined_list()
     );
   }
 
@@ -89,11 +88,11 @@ function l10n_update_import_form($form, &$form_state) {
   );
 
   $form['actions'] = array(
-    '#type' => 'actions',
+    '#type' => 'actions'
   );
   $form['actions']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Import'),
+    '#value' => t('Import')
   );
   return $form;
 }
@@ -109,7 +108,7 @@ function l10n_update_import_form_submit($form, &$form_state) {
     $language = language_load($form_state['values']['langcode']);
     if (empty($language)) {
       $language = new Language(array(
-        'id' => $form_state['values']['langcode'],
+        'id' => $form_state['values']['langcode']
       ));
       $language = language_save($language);
       drupal_set_message(t('The language %language has been created.', array('%language' => t($language->name))));
@@ -126,16 +125,17 @@ function l10n_update_import_form_submit($form, &$form_state) {
   else {
     form_set_error('file', $form_state, t('File to import not found.'));
     $form_state['rebuild'] = TRUE;
+    return;
   }
 
   $form_state['redirect_route']['route_name'] = 'locale.translate_page';
+  return;
 }
 
 /**
  * Form constructor for the Gettext translation files export form.
  *
  * @see l10n_update_export_form_submit()
- *
  * @ingroup forms
  */
 function l10n_update_export_form($form, &$form_state) {
@@ -148,7 +148,6 @@ function l10n_update_export_form($form, &$form_state) {
     }
   }
   $language_default = language_default();
-  $groups = module_invoke_all('locale', 'groups');
 
   if (empty($language_options)) {
     $form['langcode'] = array(
@@ -169,12 +168,6 @@ function l10n_update_export_form($form, &$form_state) {
       '#default_value' => $language_default->id,
       '#empty_option' => t('Source text only, no translations'),
       '#empty_value' => $language->language,
-    );
-    $form['textgroup'] = array(
-      '#type' => 'select',
-      '#title' => t('Text group'),
-      '#options' => $groups,
-      '#default_value' => 'default',
     );
     $form['content_options'] = array(
       '#type' => 'details',
@@ -205,11 +198,11 @@ function l10n_update_export_form($form, &$form_state) {
   }
 
   $form['actions'] = array(
-    '#type' => 'actions',
+    '#type' => 'actions'
   );
   $form['actions']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Export'),
+    '#value' => t('Export')
   );
   return $form;
 }
@@ -229,16 +222,14 @@ function l10n_update_export_form_submit($form, &$form_state) {
     $language = NULL;
   }
   $content_options = isset($form_state['values']['content_options']) ? $form_state['values']['content_options'] : array();
-  $textgroup = isset($form_state['values']['textgroup']) ? $form_state['values']['textgroup'] : NULL;
   $reader = new PoDatabaseReader();
   $languageName = '';
   if ($language != NULL) {
     $reader->setLangcode($language->id);
     $reader->setOptions($content_options);
-    $reader->setTextgroup($textgroup);
     $languages = language_list();
     $languageName = isset($languages[$language->id]) ? $languages[$language->id]->name : '';
-    $filename = $language->id . '.po';
+    $filename = $language->id .'.po';
   }
   else {
     // Template required.
@@ -252,7 +243,7 @@ function l10n_update_export_form_submit($form, &$form_state) {
     $header->setProjectName(variable_get('site_name'));
     $header->setLanguageName($languageName);
 
-    $writer = new PoStreamWriter();
+    $writer = new PoStreamWriter;
     $writer->setUri($uri);
     $writer->setHeader($header);
 
@@ -277,19 +268,20 @@ function l10n_update_export_form_submit($form, &$form_state) {
  *     PoDatabaseWriter. Optional, defaults to an empty array.
  *   - 'customized': Flag indicating whether the strings imported from $file
  *     are customized translations or come from a community source. Use
- *     L10N_UPDATE_CUSTOMIZED or L10N_UPDATE_NOT_CUSTOMIZED. Optional, defaults
- *     to L10N_UPDATE_NOT_CUSTOMIZED.
+ *     L10N_UPDATE_CUSTOMIZED or L10N_UPDATE_NOT_CUSTOMIZED. Optional, defaults to
+ *     L10N_UPDATE_NOT_CUSTOMIZED.
  *   - 'finish_feedback': Whether or not to give feedback to the user when the
  *     batch is finished. Optional, defaults to TRUE.
- * @param bool $force
+ *
+ * @param $force
  *   (optional) Import all available files, even if they were imported before.
  *
  * @todo
  *   Integrate with update status to identify projects needed and integrate
  *   l10n_update functionality to feed in translation files alike.
- *   See https://www.drupal.org/node/1191488.
+ *   See http://drupal.org/node/1191488.
  */
-function l10n_update_batch_import_files(array $options, $force = FALSE) {
+function l10n_update_batch_import_files($options, $force = FALSE) {
   $options += array(
     'overwrite_options' => array(),
     'customized' => L10N_UPDATE_NOT_CUSTOMIZED,
@@ -332,7 +324,7 @@ function l10n_update_batch_import_files(array $options, $force = FALSE) {
  *   Defaults to all projects.
  * @param array $langcodes
  *   Language codes from which to  get the translation files and history.
- *   Defaults to all languages.
+ *   Defaults to all languagues
  *
  * @return array
  *   An array of interface translation files keyed by their URI.
@@ -366,8 +358,9 @@ function l10n_update_get_interface_translation_files($projects = array(), $langc
 /**
  * Build a locale batch from an array of files.
  *
- * @param array $files
+ * @param $files
  *   Array of file objects to import.
+ *
  * @param array $options
  *   An array with options that can have the following elements:
  *   - 'langcode': The language code. Optional, defaults to NULL, which means
@@ -376,15 +369,15 @@ function l10n_update_get_interface_translation_files($projects = array(), $langc
  *     PoDatabaseWriter. Optional, defaults to an empty array.
  *   - 'customized': Flag indicating whether the strings imported from $file
  *     are customized translations or come from a community source. Use
- *     L10N_UPDATE_CUSTOMIZED or L10N_UPDATE_NOT_CUSTOMIZED. Optional, defaults
- *     to L10N_UPDATE_NOT_CUSTOMIZED.
+ *     L10N_UPDATE_CUSTOMIZED or L10N_UPDATE_NOT_CUSTOMIZED. Optional, defaults to
+ *     L10N_UPDATE_NOT_CUSTOMIZED.
  *   - 'finish_feedback': Whether or not to give feedback to the user when the
  *     batch is finished. Optional, defaults to TRUE.
  *
- * @return array|bool
+ * @return
  *   A batch structure or FALSE if $files was empty.
  */
-function l10n_update_batch_build(array $files, array $options) {
+function l10n_update_batch_build($files, $options) {
   $options += array(
     'overwrite_options' => array(),
     'customized' => L10N_UPDATE_NOT_CUSTOMIZED,
@@ -397,7 +390,7 @@ function l10n_update_batch_build(array $files, array $options) {
       $operations[] = array('l10n_update_batch_import', array($file, $options));
     }
     // Save the translation status of all files.
-    $operations[] = array('l10n_update_batch_import_save', array());
+    $operations[] =  array('l10n_update_batch_import_save', array());
 
     // Add a final step to refresh JavaScript and configuration strings.
     $operations[] = array('l10n_update_batch_refresh', array());
@@ -423,6 +416,7 @@ function l10n_update_batch_build(array $files, array $options) {
  * @param object $file
  *   A file object of the gettext file to be imported. The file object must
  *   contain a language parameter. This is used as the language of the import.
+ *
  * @param array $options
  *   An array with options that can have the following elements:
  *   - 'langcode': The language code.
@@ -430,14 +424,15 @@ function l10n_update_batch_build(array $files, array $options) {
  *     PoDatabaseWriter. Optional, defaults to an empty array.
  *   - 'customized': Flag indicating whether the strings imported from $file
  *     are customized translations or come from a community source. Use
- *     L10N_UPDATE_CUSTOMIZED or L10N_UPDATE_NOT_CUSTOMIZED. Optional, defaults
- *     to L10N_UPDATE_NOT_CUSTOMIZED.
+ *     L10N_UPDATE_CUSTOMIZED or L10N_UPDATE_NOT_CUSTOMIZED. Optional, defaults to
+ *     L10N_UPDATE_NOT_CUSTOMIZED.
  *   - 'message': Alternative message to display during import. Note, this must
  *     be sanitized text.
- * @param array $context
+ *
+ * @param $context
  *   Contains a list of files imported.
  */
-function l10n_update_batch_import($file, array $options, &$context) {
+function l10n_update_batch_import($file, $options, &$context) {
   // Merge the default values in the $options array.
   $options += array(
     'overwrite_options' => array(),
@@ -466,7 +461,7 @@ function l10n_update_batch_import($file, array $options, &$context) {
         // Maximize the progress bar at 95% before completion, the batch API
         // could trigger the end of the operation before file reading is done,
         // because of floating point inaccuracies. See
-        // https://www.drupal.org/node/1089472
+        // http://drupal.org/node/1089472
         $context['finished'] = min(0.95, $report['seek'] / filesize($file->uri));
         if (isset($options['message'])) {
           $context['message'] = t('!message (@percent%).', array('!message' => $options['message'], '@percent' => (int) ($context['finished'] * 100)));
@@ -515,7 +510,7 @@ function l10n_update_batch_import($file, array $options, &$context) {
 /**
  * Batch callback: Save data of imported files.
  *
- * @param array $context
+ * @param $context
  *   Contains a list of imported files.
  */
 function l10n_update_batch_import_save($context) {
@@ -541,7 +536,7 @@ function l10n_update_batch_import_save($context) {
  * @param array $context
  *   Contains a list of strings updated and information about the progress.
  */
-function l10n_update_batch_refresh(&$context) {
+function l10n_update_batch_refresh(array &$context) {
   if (!isset($context['sandbox']['refresh'])) {
     $strings = $langcodes = array();
     if (isset($context['results']['stats'])) {
@@ -614,17 +609,9 @@ function l10n_update_batch_finished($success, $results) {
       drupal_set_message(format_plural(count($results['files']),
         'One translation file imported. %number translations were added, %update translations were updated and %delete translations were removed.',
         '@count translation files imported. %number translations were added, %update translations were updated and %delete translations were removed.',
-        array(
-          '%number' => $additions,
-          '%update' => $updates,
-          '%delete' => $deletes,
-        )
+        array('%number' => $additions, '%update' => $updates, '%delete' => $deletes)
       ));
-      watchdog('l10n_update', 'Translations imported: %number added, %update updated, %delete removed.', array(
-        '%number' => $additions,
-        '%update' => $updates,
-        '%delete' => $deletes,
-      ));
+      watchdog('l10n_update', 'Translations imported: %number added, %update updated, %delete removed.', array('%number' => $additions, '%update' => $updates, '%delete' => $deletes));
 
       if ($skips) {
         if (module_exists('dblog')) {
@@ -634,10 +621,7 @@ function l10n_update_batch_finished($success, $results) {
           $message = format_plural($skips, 'One translation string was skipped because of disallowed or malformed HTML. See the log for details.', '@count translation strings were skipped because of disallowed or malformed HTML. See the log for details.');
         }
         drupal_set_message($message, 'warning');
-        watchdog('l10n_update', '@count disallowed HTML string(s) in files: @files.', array(
-          '@count' => $skips,
-          '@files' => implode(',', $skipped_files),
-        ), WATCHDOG_WARNING);
+        watchdog('l10n_update', '@count disallowed HTML string(s) in files: @files.', array('@count' => $skips, '@files' => implode(',', $skipped_files)), WATCHDOG_WARNING);
       }
     }
   }
@@ -646,10 +630,10 @@ function l10n_update_batch_finished($success, $results) {
 /**
  * Creates a file object and populates the timestamp property.
  *
- * @param string $filepath
- *   The file path of a file to import.
+ * @param $filepath
+ *   The filepath of a file to import.
  *
- * @return object
+ * @return
  *   An object representing the file.
  */
 function l10n_update_file_create($filepath) {
@@ -687,7 +671,7 @@ function l10n_update_file_attach_properties($file, $options = array()) {
   }
 
   // Extract project, version and language code from the file name. Supported:
-  // {project}-{version}.{langcode}.po, {prefix}.{langcode}.po or {langcode}.po.
+  // {project}-{version}.{langcode}.po, {prefix}.{langcode}.po or {langcode}.po
   preg_match('!
     (                       # project OR project and version OR emtpy (group 1)
       ([a-z_]+)             # project name (group 2)
@@ -719,9 +703,9 @@ function l10n_update_file_attach_properties($file, $options = array()) {
  *   Defaults to all projects.
  * @param array $langcodes
  *   Language codes from which to delete the translation files and history.
- *   Defaults to all languages.
+ *   Defaults to all languagues
  *
- * @return bool
+ * @return boolean
  *   TRUE if files are removed successfully. FALSE if one or more files could
  *   not be deleted.
  */
