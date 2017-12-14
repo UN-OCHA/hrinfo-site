@@ -1,32 +1,57 @@
 <?php
+
 /**
  * @file
- * JavaScript callback handler module.
+ * Administrative callbacks for the JS module.
  */
 
 /**
- * Form callback for the js configuration form.
+ * Form callback for the JS configuration form.
  */
 function js_configure_form($form, &$form_state) {
-  $htaccess = '# Rewrite JavaScript callback URLs of the form js.php?q=x.' . PHP_EOL;
-  $htaccess .= 'RewriteCond %{REQUEST_URI} ^' . str_replace("/", "\/", base_path()) . '([a-z]{2}\/)?js\/.*' . PHP_EOL;
-  $htaccess .= 'RewriteRule ^(.*)$ js.php?q=$1 [L,QSA]' . PHP_EOL;
-  $htaccess .= 'RewriteCond %{QUERY_STRING} (^|&)q=((\/)?[a-z]{2})?(\/)?js\/.*' . PHP_EOL;
-  $htaccess .= 'RewriteRule .* js.php [L]';
+  $default_value = '';
 
-  $form['js_server_software'] = array(
-    '#type'          => 'select',
-    '#options'       => array('apache' => 'Apache', 'other' => t('Other')),
-    '#title'         => t('Server software'),
-    '#description'   => t('The server software for the http server, used to detect if the requirements for the module are met. Set this to other if running on anything other than Apache.'),
-    '#default_value' => variable_get('js_server_software', 'apache'),
+  $form['rewrite'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Server rewrite rules'),
+    '#description' => t('Provides a template for common HTTP server rewrite rules. If the type of server this site is using is not listed here, you will need to ensure that any request starting with <code>/@endpoint</code> is forwarded to <code>js.php</code>', array(
+      '@endpoint' => variable_get('js_endpoint', 'js'),
+    )),
   );
 
-  $form['htaccess'] = array(
-    '#type'        => 'textarea',
-    '#title'       => t('Add the following lines in front of the existing RewriteRules in your .htaccess.'),
-    '#value'       => $htaccess,
+  $options = array();
+  $servers = js_server_info();
+  foreach ($servers as $name => $info) {
+    $options[$name] = $info['label'];
+
+    // Detect the default value from the server.
+    if (!$default_value && preg_match($info['regexp'], $_SERVER['SERVER_SOFTWARE'])) {
+      $default_value = $name;
+    }
+
+    $form['rewrite'][$name] = array(
+      '#type' => 'textarea',
+      '#title' => $info['label'],
+      '#description' => $info['description'],
+      '#value' => $info['rewrite'],
+      '#rows' => count(explode(PHP_EOL, $info['rewrite'])),
+      '#resizable' => FALSE,
+      '#states' => array(
+        'visible' => array(
+          ':input[name=server]' => array('value' => $name),
+        ),
+      ),
+    );
+  }
+
+  $form['rewrite']['server'] = array(
+    '#type' => 'select',
+    '#title' => t('Choose server:'),
+    '#empty_option' => t('Unknown'),
+    '#options' => $options,
+    '#default_value' => $default_value,
+    '#weight' => -1,
   );
 
-  return system_settings_form($form);
+  return $form;
 }

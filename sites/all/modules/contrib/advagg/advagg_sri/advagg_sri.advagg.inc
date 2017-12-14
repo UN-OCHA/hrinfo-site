@@ -5,23 +5,26 @@
  * Advanced aggregation sri module.
  */
 
-// AdvAgg hooks.
+/**
+ * @addtogroup advagg_hooks
+ * @{
+ */
+
 /**
  * Implements hook_advagg_save_aggregate_alter().
  *
  * Save the hash of the file.
- *
- * @param array $files_to_save
- *   Array($uri => $contents).
- * @param array $aggregate_settings
- *   Array of settings.
- * @param array $other_parameters
- *   Array of containing $files and $type.
  */
 function advagg_sri_advagg_save_aggregate_alter(array &$files_to_save, array $aggregate_settings, array $other_parameters) {
+  // * @param array $files_to_save
+  // *   Array($uri => $contents).
+  // * @param array $aggregate_settings
+  // *   Array of settings.
+  // * @param array $other_parameters
+  // *   Array of containing $files and $type.
   foreach ($files_to_save as $uri => $contents) {
     // Skip gzip/brotli files.
-    $ext = pathinfo($uri, PATHINFO_EXTENSION);
+    $ext = strtolower(pathinfo($uri, PATHINFO_EXTENSION));
     if ($ext === 'gz' || $ext === 'br') {
       continue;
     }
@@ -36,11 +39,10 @@ function advagg_sri_advagg_save_aggregate_alter(array &$files_to_save, array $ag
 
 /**
  * Implements hook_advagg_build_aggregate_plans_post_alter().
- *
- * @param array $plans
- *   Array of aggregate files.
  */
 function advagg_sri_advagg_build_aggregate_plans_post_alter(array &$plans) {
+  // * @param array $plans
+  // *   Array of aggregate files.
   $advagg_sri = variable_get('advagg_sri', ADVAGG_SRI);
   if (empty($advagg_sri)) {
     return;
@@ -98,7 +100,7 @@ function advagg_sri_advagg_missing_root_file($aggregate_filename, $filename, $ca
     advagg_sri_del_filename_hashes($aggregate_filename);
   }
   // Remove entries from the Cache.
-  $ext = pathinfo($aggregate_filename, PATHINFO_EXTENSION);
+  $ext = strtolower(pathinfo($aggregate_filename, PATHINFO_EXTENSION));
   $cid = "advagg:$ext:";
   cache_clear_all($cid, 'cache_advagg_aggregates', TRUE);
 }
@@ -114,7 +116,7 @@ function advagg_sri_advagg_removed_aggregates($kill_list) {
       $uri = $temp;
     }
     // Skip gzip/brotli files.
-    $ext = pathinfo($uri, PATHINFO_EXTENSION);
+    $ext = strtolower(pathinfo($uri, PATHINFO_EXTENSION));
     if ($ext === 'gz' || $ext === 'br') {
       continue;
     }
@@ -123,7 +125,10 @@ function advagg_sri_advagg_removed_aggregates($kill_list) {
   }
 }
 
-// Helper functions.
+/**
+ * @} End of "addtogroup advagg_hooks".
+ */
+
 /**
  * Store settings associated with hash.
  *
@@ -135,7 +140,7 @@ function advagg_sri_advagg_removed_aggregates($kill_list) {
  * @return MergeQuery
  *   value from db_merge
  */
-function advagg_sri_set_filename_hashes($filename, $hashes) {
+function advagg_sri_set_filename_hashes($filename, array $hashes) {
   return db_merge('advagg_sri')
     ->key(array('filename' => $filename))
     ->fields(array(
@@ -169,7 +174,7 @@ function advagg_sri_del_filename_hashes($filename) {
  * @return array
  *   The hashes for the given filenames.
  */
-function advagg_sri_get_filenames_hashes($filenames) {
+function advagg_sri_get_filenames_hashes(array $filenames) {
   $hashes = array();
   // Do not use the DB if in development mode.
   if (variable_get('advagg_cache_level', ADVAGG_CACHE_LEVEL) < 0) {
@@ -188,6 +193,7 @@ function advagg_sri_get_filenames_hashes($filenames) {
   foreach ($not_in_db as $file) {
     $filepath = array_search($file, $filenames);
     if (is_readable($filepath)) {
+      // Do not use advagg_file_get_contents here.
       $contents = (string) @file_get_contents($filepath);
       if (!empty($contents)) {
         $hashes[$file] = advagg_sri_compute_hashes($contents);
