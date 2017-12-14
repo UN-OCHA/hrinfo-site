@@ -58,6 +58,12 @@ function redis_settings_form($form, &$form_state) {
     '#default_value' => variable_get('redis_client_interface', NULL),
     '#description' => t("Redis low level backend."),
   );
+  $form['connection']['redis_scan_delete'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use SCAN command instead of KEYS for cache wildcard key deletions'),
+    '#default_value' => variable_get('redis_scan_delete', FALSE),
+    '#description' => t('Requires Redis 3.2 or later. Uses non-atomic, non-blocking and concurrency friendler SCAN command instead of KEYS to perform cache wildcard key deletions.'),
+  );
 
   $form = system_settings_form($form);
 

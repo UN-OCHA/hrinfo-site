@@ -6,11 +6,6 @@
  */
 
 /**
- * @addtogroup advagg_hooks
- * @{
- */
-
-/**
  * Implements hook_advagg_get_css_file_contents_pre_alter().
  */
 function advagg_css_compress_advagg_get_css_file_contents_pre_alter(&$file, &$optimize, &$aggregate_settings) {
@@ -66,45 +61,15 @@ function advagg_css_compress_advagg_get_css_aggregate_contents_alter(&$data, $fi
 }
 
 /**
- * @} End of "addtogroup advagg_hooks".
- */
-
-/**
  * Use the CSSmin library from YUI to compress the CSS.
  */
 function advagg_css_compress_yui_cssmin(&$data) {
-  // Try libraries for YUI.
-  if (is_callable('libraries_load')) {
-    libraries_load('YUI-CSS-compressor-PHP-port');
-    if (class_exists('tubalmartin\CssMin\Minifier')) {
-      // The "use" alias requires php 5.3.
-      // @codingStandardsIgnoreLine
-      $cssmin = new tubalmartin\CssMin\Minifier();
-    }
-    elseif (class_exists('CSSmin')) {
-      $cssmin = new CSSmin();
-    }
-  }
-  if (!isset($cssmin)) {
-    // Load CSSMin.inc if the CSSmin class variable is not set.
-    if (!class_exists('CSSmin')) {
-      include drupal_get_path('module', 'advagg_css_compress') . '/yui/CSSMin.inc';
-    }
-    $cssmin = new CSSmin();
-  }
-  if (!isset($cssmin)) {
-    return;
+  // Only include CSSMin.inc if the CSSmin class doesn't exist.
+  if (!class_exists('CSSmin')) {
+    include drupal_get_path('module', 'advagg_css_compress') . '/yui/CSSMin.inc';
   }
 
-  // Set line break to 4k of text.
-  if (method_exists($cssmin, 'setLineBreakPosition')) {
-    $cssmin->setLineBreakPosition(4096);
-  }
+  $cssmin = new CSSmin(TRUE);
   // Compress the CSS splitting lines after 4k of text.
-  if (method_exists($cssmin, 'run')) {
-    $compressed = $cssmin->run($data, 4096);
-  }
-  if (!empty($compressed)) {
-    $data = $compressed;
-  }
+  $data = $cssmin->run($data, 4096);
 }

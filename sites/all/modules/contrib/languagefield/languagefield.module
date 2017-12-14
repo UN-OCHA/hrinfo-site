@@ -39,19 +39,9 @@ function languagefield_field_info() {
 //                             ),
       'default_widget' => 'options_select',
       'default_formatter' => 'language_default',
-      'property_type' => 'text',
+      'property_type' => 'token',
     ),
   );
-}
-
-/**
- * Prevents a fatal error in the upgrade from 7.x-1.4 to 7.x-1.5.
- *
- * @see https://www.drupal.org/node/1312374
- * @see https://www.drupal.org/node/2821791
- */
-function languagefield_property_info_callback(&$info, $entity_type, $field, $instance, $field_type) {
-  return array();
 }
 
 /**
@@ -555,7 +545,7 @@ function _languagefield_options($subsets = NULL, $langcode = LANGUAGE_NONE) {
             $predefined[$langcode][$subset][$id]['value'] = $id;
             $predefined[$langcode][$subset][$id]['langcode'] = $id;
             $predefined[$langcode][$subset][$id]['name'] = t($language[0]);
-            $predefined[$langcode][$subset][$id]['native'] = isset($language[1]) ? $language[1] : $language[0];
+            $predefined[$langcode][$subset][$id]['native'] = isset($language[1]) ? $language[1] : '';
           }
           break;
       }

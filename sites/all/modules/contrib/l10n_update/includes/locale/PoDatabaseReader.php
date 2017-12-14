@@ -41,13 +41,6 @@ class PoDatabaseReader implements PoReaderInterface {
   private $_result;
 
   /**
-   * D7: Text group.
-   *
-   * @var string
-   */
-  protected $_textgroup;
-
-  /**
    * Database storage to retrieve the strings from.
    *
    * @var StringDatabaseStorage
@@ -57,7 +50,7 @@ class PoDatabaseReader implements PoReaderInterface {
   /**
    * Constructor, initializes with default options.
    */
-  public function __construct() {
+  function __construct() {
     $this->setOptions(array());
     $this->storage = new StringDatabaseStorage();
   }
@@ -79,14 +72,14 @@ class PoDatabaseReader implements PoReaderInterface {
   /**
    * Get the options used by the reader.
    */
-  public function getOptions() {
+  function getOptions() {
     return $this->_options;
   }
 
   /**
    * Set the options for the current reader.
    */
-  public function setOptions(array $options) {
+  function setOptions(array $options) {
     $options += array(
       'customized' => FALSE,
       'not_customized' => FALSE,
@@ -96,16 +89,9 @@ class PoDatabaseReader implements PoReaderInterface {
   }
 
   /**
-   * @param \string $textgroup
-   */
-  public function setTextgroup($textgroup) {
-    $this->_textgroup = $textgroup;
-  }
-
-  /**
    * Implements PoMetadataInterface::getHeader().
    */
-  public function getHeader() {
+  function getHeader() {
     return new PoHeader($this->getLangcode());
   }
 
@@ -115,7 +101,7 @@ class PoDatabaseReader implements PoReaderInterface {
    * @throws Exception
    *   Always, because you cannot set the PO header of a reader.
    */
-  public function setHeader(PoHeader $header) {
+  function setHeader(PoHeader $header) {
     throw new \Exception('You cannot set the PO header in a reader.');
   }
 
@@ -125,11 +111,7 @@ class PoDatabaseReader implements PoReaderInterface {
   private function loadStrings() {
     $langcode = $this->_langcode;
     $options = $this->_options;
-    $textgroup = $this->_textgroup;
     $conditions = array();
-    if ($textgroup) {
-      $conditions['textgroup'] = $textgroup;
-    }
 
     if (array_sum($options) == 0) {
       // If user asked to not include anything in the translation files,
@@ -184,9 +166,9 @@ class PoDatabaseReader implements PoReaderInterface {
   /**
    * Implements PoReaderInterface::readItem().
    */
-  public function readItem() {
+  function readItem() {
     if ($string = $this->readString()) {
-      $values = (array) $string;
+      $values = (array)$string;
       $poItem = new PoItem();
       $poItem->setFromArray($values);
       return $poItem;

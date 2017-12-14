@@ -13,7 +13,7 @@ class PoItem {
   /**
    * The language code this translation is in.
    *
-   * @var string
+   * @car string
    */
   private $_langcode;
 
@@ -27,8 +27,7 @@ class PoItem {
   /**
    * The source string or array of strings if it has plurals.
    *
-   * @var string|array
-   *
+   * @var string or array
    * @see $_plural
    */
   private $_source;
@@ -48,17 +47,9 @@ class PoItem {
   private $_comment;
 
   /**
-   * The text group of this translation.
-   *
-   * @var string
-   */
-  private $_textgroup;
-
-  /**
    * The translation string or array of strings if it has plurals.
    *
-   * @var string|array
-   *
+   * @var string or array
    * @see $_plural
    */
   private $_translation;
@@ -66,10 +57,9 @@ class PoItem {
   /**
    * Get the language code of the currently used language.
    *
-   * @return string
-   *   The translation language code.
+   * @return string with langcode
    */
-  public function getLangcode() {
+  function getLangcode() {
     return $this->_langcode;
   }
 
@@ -77,131 +67,109 @@ class PoItem {
    * Set the language code of the current language.
    *
    * @param string $langcode
-   *   The translation language code.
    */
-  public function setLangcode($langcode) {
+  function setLangcode($langcode) {
     $this->_langcode = $langcode;
-  }
-
-  /**
-   * Get the translation group of this translation.
-   *
-   * @return string
-   *   The translation text group.
-   */
-  public function getTextgroup() {
-    return empty($this->_textgroup) ? 'default' : $this->_textgroup;
-  }
-
-  /**
-   * Set the translation group of this translation.
-   *
-   * @param string $textgroup
-   *   The translation text group.
-   */
-  public function setTextgroup($textgroup) {
-    $this->_textgroup = $textgroup;
   }
 
   /**
    * Get the context this translation belongs to.
    *
-   * @return string
-   *   The translation context.
+   * @return string $context
    */
-  public function getContext() {
+  function getContext() {
     return $this->_context;
   }
 
   /**
    * Set the context this translation belongs to.
+   *
+   * @param string $context
    */
-  public function setContext($context) {
+  function setContext($context) {
     $this->_context = $context;
   }
 
   /**
-   * Get the source string(s) if the translation has plurals.
+   * Get the source string or the array of strings if the translation has
+   * plurals.
    *
-   * @return string|array
-   *   Translation source string(s).
+   * @return string or array $translation
    */
-  public function getSource() {
+  function getSource() {
     return $this->_source;
   }
 
   /**
-   * Set the source string(s) if the translation has plurals.
+   * Set the source string or the array of strings if the translation has
+   * plurals.
    *
-   * @param string|array
-   *   Translation source string(s).
+   * @param string or array $source
    */
-  public function setSource($source) {
+  function setSource($source) {
     $this->_source = $source;
   }
 
   /**
-   * Get the translation string(s) if the translation has plurals.
+   * Get the translation string or the array of strings if the translation has
+   * plurals.
    *
-   * @return string|array
-   *   Translation string(s).
+   * @return string or array $translation
    */
-  public function getTranslation() {
+  function getTranslation() {
     return $this->_translation;
   }
 
   /**
-   * Set the translation string(s) if the translation has plurals.
+   * Set the translation string or the array of strings if the translation has
+   * plurals.
+   *
+   * @param string or array $translation
    */
-  public function setTranslation($translation) {
+  function setTranslation($translation) {
     $this->_translation = $translation;
   }
 
   /**
    * Set if the translation has plural values.
    *
-   * @param bool $plural
-   *   The translation plural flag.
+   * @param boolean $plural
    */
-  public function setPlural($plural) {
+  function setPlural($plural) {
     $this->_plural = $plural;
   }
 
   /**
    * Get if the translation has plural values.
    *
-   * @return integer $plural
-   *   The translation plural flag.
+   * @return boolean $plural
    */
-  public function isPlural() {
+  function isPlural() {
     return $this->_plural;
   }
 
   /**
    * Get the comment of this translation.
    *
-   * @return string
-   *   The translation comment.
+   * @return String $comment
    */
-  public function getComment() {
+  function getComment() {
     return $this->_comment;
   }
 
   /**
    * Set the comment of this translation.
    *
-   * @param string $comment
-   *   The translation comment.
+   * @param String $comment
    */
-  public function setComment($comment) {
+  function setComment($comment) {
     $this->_comment = $comment;
   }
 
   /**
    * Create the PoItem from a structured array.
    *
-   * @param array $values
-   *   Keyed array with translation data.
+   * @param array values
    */
   public function setFromArray(array $values = array()) {
     if (isset($values['context'])) {
@@ -213,19 +181,19 @@ class PoItem {
     if (isset($values['translation'])) {
       $this->setTranslation($values['translation']);
     }
-    if (isset($values['comment'])) {
+    if (isset($values['comment'])){
       $this->setComment($values['comment']);
     }
-    if (isset($this->_source) && count($this->_source) > 1) {
+    if (isset($this->_source) &&
+        strpos($this->_source, L10N_UPDATE_PLURAL_DELIMITER) !== FALSE) {
+      $this->setSource(explode(L10N_UPDATE_PLURAL_DELIMITER, $this->_source));
+      $this->setTranslation(explode(L10N_UPDATE_PLURAL_DELIMITER, $this->_translation));
       $this->setPlural(count($this->_translation) > 1);
     }
   }
 
   /**
    * Output the PoItem as a string.
-   *
-   * @return string
-   *   PO item string value.
    */
   public function __toString() {
     return $this->formatItem();
@@ -233,9 +201,6 @@ class PoItem {
 
   /**
    * Format the POItem as a string.
-   *
-   * @return string
-   *   Formatted PO item.
    */
   private function formatItem() {
     $output = '';
@@ -261,9 +226,6 @@ class PoItem {
 
   /**
    * Formats a plural translation.
-   *
-   * @return string
-   *   Gettext formatted plural translation.
    */
   private function formatPlural() {
     $output = '';
@@ -286,9 +248,6 @@ class PoItem {
 
   /**
    * Formats a singular translation.
-   *
-   * @return string
-   *   Gettext formatted singular translation.
    */
   private function formatSingular() {
     $output = '';
@@ -299,12 +258,6 @@ class PoItem {
 
   /**
    * Formats a string for output on multiple lines.
-   *
-   * @param string $string
-   *   A string.
-   *
-   * @return string
-   *   Gettext formatted multi-line string.
    */
   private function formatString($string) {
     // Escape characters for processing.

@@ -223,7 +223,7 @@ class Minifier
                 // new lines
                 case "\n":
                     // if the next line is something that can't stand alone preserve the newline
-                    if (strpos('(-+[@', $this->b) !== false) {
+                    if (strpos('(-+{[@', $this->b) !== false) {
                         echo $this->a;
                         $this->saveString();
                         break;
@@ -354,13 +354,10 @@ class Minifier
         $this->c = $this->getChar();
 
         if ($this->c === '/') {
-            $this->processOneLineComments($startIndex);
+            return $this->processOneLineComments($startIndex);
 
-            return $this->getReal();
         } elseif ($this->c === '*') {
-            $this->processMultiLineComments($startIndex);
-
-            return $this->getReal();
+            return $this->processMultiLineComments($startIndex);
         }
 
         return $char;
@@ -370,8 +367,8 @@ class Minifier
      * Removed one line comments, with the exception of some very specific types of
      * conditional comments.
      *
-     * @param  int   $startIndex The index point where "getReal" function started
-     * @return void
+     * @param  int    $startIndex The index point where "getReal" function started
+     * @return string
      */
     protected function processOneLineComments($startIndex)
     {
@@ -380,12 +377,17 @@ class Minifier
         // kill rest of line
         $this->getNext("\n");
 
-        unset($this->c);
-
         if ($thirdCommentString == '@') {
             $endPoint = $this->index - $startIndex;
-            $this->c = "\n" . substr($this->input, $startIndex, $endPoint);
+            unset($this->c);
+            $char = "\n" . substr($this->input, $startIndex, $endPoint);
+        } else {
+            // first one is contents of $this->c
+            $this->getChar();
+            $char = $this->getChar();
         }
+
+        return $char;
     }
 
     /**
@@ -393,7 +395,7 @@ class Minifier
      * Conditional comments and "license" style blocks are preserved.
      *
      * @param  int               $startIndex The index point where "getReal" function started
-     * @return void       False if there's no character
+     * @return bool|string       False if there's no character
      * @throws \RuntimeException Unclosed comments will throw an error
      */
     protected function processMultiLineComments($startIndex)
@@ -427,9 +429,7 @@ class Minifier
                 $endPoint = ($this->index - 1) - $startIndex;
                 echo substr($this->input, $startIndex, $endPoint);
 
-                $this->c = $char;
-
-                return;
+                return $char;
             }
 
         } else {
@@ -440,7 +440,10 @@ class Minifier
             throw new \RuntimeException('Unclosed multiline comment at position: ' . ($this->index - 2));
 
         // if we're here c is part of the comment and therefore tossed
-        $this->c = $char;
+        if(isset($this->c))
+            unset($this->c);
+
+        return $char;
     }
 
     /**

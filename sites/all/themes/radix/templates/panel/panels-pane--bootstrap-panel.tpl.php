@@ -20,7 +20,7 @@
 <?php if ($pane_prefix): ?>
   <?php print $pane_prefix; ?>
 <?php endif; ?>
-<div class="<?php print $classes; ?>" <?php print $id; ?> <?php print $attributes; ?>>
+<div class="<?php print $classes; ?>" <?php print $id; ?>>
   <?php if ($admin_links): ?>
     <?php print $admin_links; ?>
   <?php endif; ?>
@@ -28,9 +28,7 @@
   <?php print render($title_prefix); ?>
   <?php if ($title): ?>
     <div class="panel-heading">
-      <<?php print $title_heading; ?><?php print $title_attributes; ?>>
-        <?php print $title; ?>
-      </<?php print $title_heading; ?>>
+      <h3<?php print $title_attributes; ?>><?php print $title; ?></h3>
     </div>
   <?php endif; ?>
   <?php print render($title_suffix); ?>

@@ -111,7 +111,7 @@ Drupal.media.popups.mediaBrowser.getDefaults = function () {
   return {
     global: {
       types: [], // Types to allow, defaults to all.
-      enabledPlugins: [] // If provided, a list of plugins which should be enabled.
+      activePlugins: [] // If provided, a list of plugins which should be enabled.
     },
     widget: { // Settings for the actual iFrame which is launched.
       src: Drupal.settings.media.browserUrl, // Src of the media browser (if you want to totally override it)
@@ -128,8 +128,7 @@ Drupal.media.popups.mediaBrowser.mediaBrowserOnLoad = function (e) {
   var options = e.data;
 
   // Ensure that the iFrame is defined.
-  if (typeof this.contentWindow.Drupal.media === 'undefined' || typeof
-  this.contentWindow.Drupal.media.browser === 'undefined') {
+  if (this.contentWindow.Drupal.media == undefined) {
     return;
   }
 
@@ -214,7 +213,6 @@ Drupal.media.popups.mediaStyleSelector = function (mediaFile, onSelect, options)
   dialogOptions.buttons[ok] = function () {
     // Find the current file selection.
     var formattedMedia = this.contentWindow.Drupal.media.formatForm.getFormattedMedia();
-    formattedMedia.options = $.extend({}, mediaFile.attributes, formattedMedia.options);
 
     // Alert the user if a selection has yet to be made.
     if (!formattedMedia) {
@@ -374,7 +372,7 @@ Drupal.media.popups.getPopupIframe = function (src, id, options) {
   var defaults = {width: '100%', scrolling: 'auto'};
   var options = $.extend({}, defaults, options);
 
-  return $('<iframe class="media-modal-frame" tabindex="0"/>')
+  return $('<iframe class="media-modal-frame"/>')
   .attr('src', src)
   .attr('width', options.width)
   .attr('id', id)

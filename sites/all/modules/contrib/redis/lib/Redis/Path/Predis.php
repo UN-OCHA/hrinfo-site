@@ -41,6 +41,23 @@ class Redis_Path_Predis extends Redis_Path_AbstractHashLookup
         // Empty value here means that we already got it
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function saveAlias($source, $alias, $language = null)
+    {
+        if (null === $language) {
+            $language = LANGUAGE_NONE;
+        }
+
+        if (!empty($source)) {
+            $this->saveInHash($this->getKey(array(self::KEY_ALIAS, $language)), $source, $alias);
+        }
+        if (!empty($alias)) {
+            $this->saveInHash($this->getKey(array(self::KEY_SOURCE, $language)), $alias, $source);
+        }
+    }
+
     protected function deleteInHash($key, $hkey, $hvalue)
     {
         $client = $this->getClient();
@@ -60,6 +77,29 @@ class Redis_Path_Predis extends Redis_Path_AbstractHashLookup
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteAlias($source, $alias, $language = null)
+    {
+        if (null === $language) {
+            $language = LANGUAGE_NONE;
+        }
+
+        $this->deleteInHash($this->getKey(array(self::KEY_ALIAS, $language)), $source, $alias);
+        $this->deleteInHash($this->getKey(array(self::KEY_SOURCE, $language)), $alias, $source);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteLanguage($language)
+    {
+        $client = $this->getClient();
+        $client->del($this->getKey(array(self::KEY_ALIAS, $language)));
+        $client->del($this->getKey(array(self::KEY_SOURCE, $language)));
+    }
+
     protected function lookupInHash($keyPrefix, $hkey, $language = null)
     {
         $client = $this->getClient();
@@ -77,7 +117,7 @@ class Redis_Path_Predis extends Redis_Path_AbstractHashLookup
         if ($doNoneLookup && (!$ret || self::VALUE_NULL === $ret)) {
             $previous = $ret;
             $ret = $client->hget($this->getKey(array($keyPrefix, LANGUAGE_NONE)), $hkey);
-            if (!$ret || self::VALUE_NULL === $ret) {
+            if (!$ret && $previous) {
                 // Restore null placeholder else we loose conversion to false
                 // and drupal_lookup_path() would attempt saving it once again
                 $ret = $previous;
@@ -99,10 +139,16 @@ class Redis_Path_Predis extends Redis_Path_AbstractHashLookup
     /**
      * {@inheritdoc}
      */
-    public function deleteLanguage($language)
+    public function lookupAlias($source, $language = null)
     {
-        $client = $this->getClient();
-        $client->del($this->getKey(array(self::KEY_ALIAS, $language)));
-        $client->del($this->getKey(array(self::KEY_SOURCE, $language)));
+        return $this->lookupInHash(self::KEY_ALIAS, $source, $language);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function lookupSource($alias, $language = null)
+    {
+        return $this->lookupInHash(self::KEY_SOURCE, $alias, $language);
     }
 }

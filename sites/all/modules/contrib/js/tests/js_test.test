@@ -1,0 +1,134 @@
+<?php
+
+/**
+ * @file
+ * Testing for the bam template module
+ */
+
+class JsTestWebTestCase extends DrupalWebTestCase {
+  protected $privileged_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'JS Test',
+      'description' => 'JavaScript Callback Handler',
+      'group' => 'JS',
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array(
+      'js',
+      'js_test',
+      'locale',
+    ));
+  }
+
+  /**
+   * Test basic JS callbacks.
+   */
+  public function testBase() {
+    // Via index.php?q=js.php
+    $out = $this->drupalGet('index.php', array('query' => array('q' => 'js/js_test/test_basic')));
+    $out = drupal_json_decode($out);
+    $this->assertEqual($out['filename'], 'js.php', 'Call was routed through js.php.');
+    $this->assertEqual($out['response'], 'ok', 'The response to the basic test was ok.');
+
+    // Via clean url (rewrite).
+    $out = $this->drupalGet('js/js_test/test_basic');
+    $out = drupal_json_decode($out);
+    $this->assertEqual($out['filename'], 'js.php', 'Call was routed through js.php.');
+    $this->assertEqual($out['response'], 'ok', 'The response to the basic test was ok.');
+
+    // Test Page arguments.
+    $out = $this->drupalGet('js/js_test/test_arguments/value1/value2/value3');
+    $out = drupal_json_decode($out);
+    $this->assertEqual($out['response']['argument_1'], 'value1', 'Page argument 1 should be value1.');
+    $this->assertEqual($out['response']['argument_2'], 'value3', 'Page argument 2 should be value3.');
+
+    // Test seperate file.
+    $out = $this->drupalGet('js/js_test/test_file');
+    $out = drupal_json_decode($out);
+    $this->assertEqual($out['response'], 'ok', 'The response to the file test was ok.');
+
+    // Test skip_hook_init.
+    $out = $this->drupalGet('js/js_test/test_init');
+    $out = drupal_json_decode($out);
+    $this->assertEqual($out['hook_init'], FALSE, 'The hook init should have been skipped.');
+  }
+
+  /**
+   * Test authentication.
+   */
+  public function testAuthentication() {
+    $this->privileged_user = $this->drupalCreateUser(array(
+      'js test permission'
+    ));
+    $this->drupalLogin($this->privileged_user);
+
+    // Via clean url (rewrite).
+    $out = $this->drupalGet('js/js_test/test_basic_access');
+    $out = drupal_json_decode($out);
+
+    $this->assertEqual($out['response'], 'ok', 'Should have permission to view this page.');
+
+    // Via clean url (rewrite).
+    $this->drupalGet('js/js_test/test_basic_access_failure');
+    $headers = $this->drupalGetHeaders();
+    $this->assertResponse('403', 'Should NOT have permission to view this page.');
+    
+  }
+
+  /**
+   * Test Internationalization.
+   */
+  public function testInternationalization() {
+    // Add Dutch locale (just any other language).
+    locale_add_language('nl', 'Dutch', 'Nederlands');
+
+    // Add url language negotiation directly in the settings.
+    variable_set('language_negotiation_language', array(
+      'locale-url' => array(
+        'callbacks' => array(
+          'language' => 'locale_language_from_url',
+          'switcher' => 'locale_language_switcher_url',
+          'url_rewrite' => 'locale_language_url_rewrite_url',
+        ),
+        'file' => 'includes/locale.inc',
+      ),
+      'language-default' => array(
+        'callbacks' => array(
+          'language' => 'language_from_default',
+        ),
+      ),
+    ));
+    $this->verbose(print_r(variable_get('language_negotiation_language'), true));
+    // Via clean url (rewrite).
+    $out = $this->drupalGet('nl/js/js_test/test_basic');
+    $out = drupal_json_decode($out);
+
+    $this->assertEqual($out['filename'], 'js.php', 'Call was routed through js.php.');
+    $this->assertEqual($out['response'], 'ok', 'The response to the basic test was ok.');
+    $this->assertEqual($out['language']['language'], 'nl', 'The active language should be dutch.');
+
+    // Test Page arguments.
+    $out = $this->drupalGet('nl/js/js_test/test_arguments/value1/value2/value3');
+    $out = drupal_json_decode($out);
+    $this->assertEqual($out['response']['argument_1'], 'value1', 'Page argument 1 should be value1.');
+    $this->assertEqual($out['response']['argument_2'], 'value3', 'Page argument 2 should be value3.');
+    
+  }
+
+  /**
+   * Test bootstrapping.
+   */
+  public function testBootstrap() {
+    variable_set('js_test_variable', 1);
+
+    $out = $this->drupalGet('nl/js/js_test/test_variable');
+    $out = drupal_json_decode($out);
+    
+    $this->assertEqual($out['filename'], 'js.php', 'Call was routed through js.php.');
+    $this->assertEqual($out['response'], 1, 'The variable should contain 1 if Drupal booted to the DRUPAL_BOOTSTRAP_VARIABLES phase.');
+  }
+}

@@ -6,11 +6,6 @@
  */
 
 /**
- * @addtogroup hooks
- * @{
- */
-
-/**
  * Implements hook_install().
  */
 function advagg_sri_install() {
@@ -69,7 +64,3 @@ function advagg_sri_schema() {
 
   return $schema;
 }
-
-/**
- * @} End of "addtogroup hooks".
- */

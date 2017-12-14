@@ -6,11 +6,6 @@
  */
 
 /**
- * @addtogroup default_variables
- * @{
- */
-
-/**
  * Default value to see if jquery-ui should be grabbed from the Google CDN.
  */
 define('ADVAGG_CSS_CDN_JQUERY_UI', TRUE);
@@ -19,15 +14,6 @@ define('ADVAGG_CSS_CDN_JQUERY_UI', TRUE);
  * Default jquery ui version.
  */
 define('ADVAGG_CSS_CDN_JQUERY_UI_VERSION', '1.8.7');
-
-/**
- * @} End of "addtogroup default_variables".
- */
-
-/**
- * @addtogroup hooks
- * @{
- */
 
 /**
  * Implements hook_css_alter().
@@ -62,13 +48,26 @@ function advagg_css_cdn_css_alter(&$css) {
 }
 
 /**
- * @} End of "addtogroup hooks".
+ * Return an array of jquery ui files.
  */
-
-/**
- * @addtogroup advagg_hooks
- * @{
- */
+function advagg_css_cdn_get_ui_mapping() {
+  // Replace jQuery UI's CSS, beginning by defining the mapping.
+  $ui_mapping = array(
+    'misc/ui/jquery.ui.accordion.css' => 'ui.accordion',
+    'misc/ui/jquery.ui.autocomplete.css' => 'ui.autocomplete',
+    'misc/ui/jquery.ui.button.css' => 'ui.button',
+    'misc/ui/jquery.ui.core.css' => 'ui.core',
+    'misc/ui/jquery.ui.datepicker.css' => 'ui.datepicker',
+    'misc/ui/jquery.ui.dialog.css' => 'ui.dialog',
+    'misc/ui/jquery.ui.progressbar.css' => 'ui.progressbar',
+    'misc/ui/jquery.ui.resizable.css' => 'ui.resizable',
+    'misc/ui/jquery.ui.selectable.css' => 'ui.selectable',
+    'misc/ui/jquery.ui.slider.css' => 'ui.slider',
+    'misc/ui/jquery.ui.tabs.css' => 'ui.tabs',
+    'misc/ui/jquery.ui.theme.css' => 'ui.theme',
+  );
+  return $ui_mapping;
+}
 
 /**
  * Implements hook_advagg_css_groups_alter().
@@ -166,30 +165,4 @@ function advagg_css_cdn_advagg_css_groups_alter(&$css_groups, $preprocess_css) {
     }
   }
   ksort($css_groups);
-}
-
-/**
- * @} End of "addtogroup advagg_hooks".
- */
-
-/**
- * Return an array of jquery ui files.
- */
-function advagg_css_cdn_get_ui_mapping() {
-  // Replace jQuery UI's CSS, beginning by defining the mapping.
-  $ui_mapping = array(
-    'misc/ui/jquery.ui.accordion.css' => 'ui.accordion',
-    'misc/ui/jquery.ui.autocomplete.css' => 'ui.autocomplete',
-    'misc/ui/jquery.ui.button.css' => 'ui.button',
-    'misc/ui/jquery.ui.core.css' => 'ui.core',
-    'misc/ui/jquery.ui.datepicker.css' => 'ui.datepicker',
-    'misc/ui/jquery.ui.dialog.css' => 'ui.dialog',
-    'misc/ui/jquery.ui.progressbar.css' => 'ui.progressbar',
-    'misc/ui/jquery.ui.resizable.css' => 'ui.resizable',
-    'misc/ui/jquery.ui.selectable.css' => 'ui.selectable',
-    'misc/ui/jquery.ui.slider.css' => 'ui.slider',
-    'misc/ui/jquery.ui.tabs.css' => 'ui.tabs',
-    'misc/ui/jquery.ui.theme.css' => 'ui.theme',
-  );
-  return $ui_mapping;
 }

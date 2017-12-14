@@ -168,9 +168,6 @@ function media_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 function media_admin_paths() {
   $paths['media/*/edit/*'] = TRUE;
   $paths['media/*/format-form'] = TRUE;
-  if (module_exists('admin_language')) {
-    $paths['media/ajax/*'] = TRUE; // For admin_language module compatibility.
-  }
 
   // If the media browser theme is set to the admin theme, ensure it gets set
   // as an admin path as well.
@@ -610,7 +607,7 @@ function media_parse_to_uri($url) {
  * @see media_parse_to_uri()
  * @see media_add_from_url_submit()
  */
-function media_parse_to_file($url, $params = array()) {
+function media_parse_to_file($url) {
   try {
     $uri = media_parse_to_uri($url);
   }
@@ -649,15 +646,9 @@ function media_parse_to_file($url, $params = array()) {
       return;
     }
     $source_file = file_uri_to_object($source_uri);
-    if(isset($params['to_directory'])){
-      $scheme = variable_get('file_default_scheme', 'public') . '://' . $params['to_directory'] . '/';
-    }
-    else{
-      $scheme = variable_get('file_default_scheme', 'public') . '://';
-    }
+    $scheme = variable_get('file_default_scheme', 'public') . '://';
     $uri = file_stream_wrapper_uri_normalize($scheme . $source_file->filename);
     // Now to its new home.
-    file_prepare_directory($scheme, FILE_CREATE_DIRECTORY || FILE_MODIFY_PERMISSIONS);
     $file = file_move($source_file, $uri, FILE_EXISTS_RENAME);
   }
 
@@ -1146,12 +1137,7 @@ function media_get_thumbnail_preview($file, $link = FALSE, $view_mode = 'preview
  */
 function media_file_validate_types($file, $types) {
   $errors = array();
-
-  if (!function_exists('file_entity_get_filetype_candidates')) {
-    module_load_include('inc', 'file_entity', 'file_entity.pages');
-  }
-  $file_candidates = array_keys(file_entity_get_filetype_candidates($file));
-  if (!array_intersect($file_candidates, $types)) {
+  if (!in_array(file_get_type($file), $types)) {
     $errors[] = t('Only the following types of files are allowed to be uploaded: %types-allowed', array('%types-allowed' => implode(', ', $types)));
   }
 
@@ -1229,22 +1215,20 @@ function media_set_browser_params() {
 
     // Filter out everything except a whitelist of known safe options.
     $safe_options = array(
-      'enabledPlugins',
+      'activePlugins',
       'fid',
       'id',
       'multiselect',
-      'field',
       'options',
       'plugins',
       'render',
       'types',
-      'render_multi_edit_form',
     );
     $params = array_intersect_key($params, array_flip($safe_options));
 
-    // If the cache is present, use its values instead of the GET parameters.
+    // Retrieve the security sensitive options from the cache.
     if (!empty($params['options']) && is_string($params['options']) && $options = cache_get('media_options:' . $params['options'], 'cache_form')) {
-      $params = $options->data;
+      $params = array_merge($options->data, $params);
     }
 
     // Transform text 'true' and 'false' to actual booleans.

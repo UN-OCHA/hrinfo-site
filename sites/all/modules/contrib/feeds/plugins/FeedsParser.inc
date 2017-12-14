@@ -171,20 +171,6 @@ abstract class FeedsParser extends FeedsPlugin {
     $item = $result->currentItem();
     return isset($item[$element_key]) ? $item[$element_key] : '';
   }
-
-  /**
-   * Returns if the parsed result can have a title.
-   *
-   * Parser classes should override this method in case they support a source
-   * title.
-   *
-   * @return bool
-   *   TRUE if the parsed result can have a title.
-   *   FALSE otherwise.
-   */
-  public function providesSourceTitle() {
-    return FALSE;
-  }
 }
 
 /**
@@ -299,9 +285,9 @@ class FeedsEnclosure extends FeedsElement {
    *
    * @param string
    */
-  protected $mime_type;
+   protected $mime_type;
 
-  /**
+   /**
    * The default list of allowed extensions.
    *
    * @param string
@@ -430,49 +416,44 @@ class FeedsEnclosure extends FeedsElement {
    *
    * @return string
    *   The content of the referenced resource.
-   *
-   * @throws FeedsHTTPRequestException
-   *   In case the result code of the HTTP request is not in the 2xx series.
    */
   public function getContent() {
     feeds_include_library('http_request.inc', 'http_request');
-    $result = feeds_http_request($this->getUrlEncodedValue());
-    http_request_check_result($this->getUrlEncodedValue(), $result);
+    $result = http_request_get($this->getUrlEncodedValue());
+    if ($result->code != 200) {
+      throw new Exception(t('Download of @url failed with code !code.', array('@url' => $this->getUrlEncodedValue(), '!code' => $result->code)));
+    }
     return $result->data;
   }
 
   /**
    * Get a Drupal file object of the enclosed resource, download if necessary.
    *
-   * @param string $destination
+   * @param $destination
    *   The path or uri specifying the target directory in which the file is
    *   expected. Don't use trailing slashes unless it's a streamwrapper scheme.
-   * @param int $replace
-   *   Replace behavior when the destination file already exists.
-   *   @see file_save_data()
    *
-   * @return stdClass|FALSE
-   *   A Drupal temporary file object of the enclosed resource or FALSE if the
-   *   value is empty.
+   * @return
+   *   A Drupal temporary file object of the enclosed resource.
    *
    * @throws Exception
    *   If file object could not be created.
    */
-  public function getFile($destination, $replace = FILE_EXISTS_RENAME) {
-    $file = FALSE;
+  public function getFile($destination) {
+    $file = NULL;
     if ($this->getValue()) {
       // Prepare destination directory.
       file_prepare_directory($destination, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY);
       // Copy or save file depending on whether it is remote or local.
       if (drupal_realpath($this->getSanitizedUri())) {
-        $file = new stdClass();
-        $file->uid = 0;
-        $file->uri = $this->getSanitizedUri();
+        $file           = new stdClass();
+        $file->uid      = 0;
+        $file->uri      = $this->getSanitizedUri();
         $file->filemime = $this->getMIMEType();
         $file->filename = $this->getSafeFilename();
 
         if (drupal_dirname($file->uri) !== $destination) {
-          $file = file_copy($file, $destination, $replace);
+          $file = file_copy($file, $destination);
         }
         else {
           // If file is not to be copied, check whether file already exists,
@@ -481,9 +462,6 @@ class FeedsEnclosure extends FeedsElement {
           $existing_files = file_load_multiple(array(), array('uri' => $file->uri));
           if (count($existing_files)) {
             $existing = reset($existing_files);
-            if ($replace == FEEDS_FILE_EXISTS_SKIP) {
-              return $existing;
-            }
             $file->fid = $existing->fid;
             $file->filename = $existing->filename;
           }
@@ -502,7 +480,7 @@ class FeedsEnclosure extends FeedsElement {
             $filename = transliteration_clean_filename($filename);
           }
 
-          $file = file_save_data($this->getContent(), $destination . $filename, $replace);
+          $file = file_save_data($this->getContent(), $destination . $filename);
         }
         catch (Exception $e) {
           watchdog_exception('Feeds', $e, nl2br(check_plain($e)));
@@ -521,8 +499,6 @@ class FeedsEnclosure extends FeedsElement {
 
 /**
  * Defines a date element of a parsed result (including ranges, repeat).
- *
- * @deprecated This is no longer in use and will not be maintained.
  */
 class FeedsDateTimeElement extends FeedsElement {
 
@@ -683,8 +659,6 @@ class FeedsDateTimeElement extends FeedsElement {
  * class.
  *
  * @see FeedsDateTimeElement
- *
- * @deprecated Use DateObject instead.
  */
 class FeedsDateTime extends DateTime {
   public $granularity = array();
@@ -693,11 +667,24 @@ class FeedsDateTime extends DateTime {
   private $_serialized_timezone;
 
   /**
-   * The original time value passed into the constructor.
+   * Helper function to prepare the object during serialization.
    *
-   * @var mixed
+   * We are extending a core class and core classes cannot be serialized.
+   *
+   * Ref: http://bugs.php.net/41334, http://bugs.php.net/39821
    */
-  protected $originalValue;
+  public function __sleep() {
+    $this->_serialized_time = $this->format('c');
+    $this->_serialized_timezone = $this->getTimezone()->getName();
+    return array('_serialized_time', '_serialized_timezone');
+  }
+
+  /**
+   * Upon unserializing, we must re-build ourselves using local variables.
+   */
+  public function __wakeup() {
+    $this->__construct($this->_serialized_time, new DateTimeZone($this->_serialized_timezone));
+  }
 
   /**
    * Overridden constructor.
@@ -709,8 +696,6 @@ class FeedsDateTime extends DateTime {
    *   PHP DateTimeZone object, NULL allowed
    */
   public function __construct($time = '', $tz = NULL) {
-    $this->originalValue = $time;
-
     if (is_numeric($time)) {
       // Assume UNIX timestamp if it doesn't look like a simple year.
       if (strlen($time) > 4) {
@@ -746,43 +731,6 @@ class FeedsDateTime extends DateTime {
 
     // Finally set granularity.
     $this->setGranularityFromTime($time, $tz);
-  }
-
-  /**
-   * Helper function to prepare the object during serialization.
-   *
-   * We are extending a core class and core classes cannot be serialized.
-   *
-   * Ref: http://bugs.php.net/41334, http://bugs.php.net/39821
-   */
-  public function __sleep() {
-    $this->_serialized_time = $this->format('c');
-    $this->_serialized_timezone = $this->getTimezone()->getName();
-    return array('_serialized_time', '_serialized_timezone');
-  }
-
-  /**
-   * Upon unserializing, we must re-build ourselves using local variables.
-   */
-  public function __wakeup() {
-    $this->__construct($this->_serialized_time, new DateTimeZone($this->_serialized_timezone));
-  }
-
-  /**
-   * Returns the string representation.
-   *
-   * Will try to use the literal input, if that is a string. Fallsback to
-   * ISO-8601.
-   *
-   * @return string
-   *   The string version of this DateTime object.
-   */
-  public function __toString() {
-    if (is_scalar($this->originalValue)) {
-      return (string) $this->originalValue;
-    }
-
-    return $this->format('Y-m-d\TH:i:sO');
   }
 
   /**
@@ -899,7 +847,6 @@ class FeedsDateTime extends DateTime {
   protected function toArray() {
     return array('year' => $this->format('Y'), 'month' => $this->format('m'), 'day' => $this->format('d'), 'hour' => $this->format('H'), 'minute' => $this->format('i'), 'second' => $this->format('s'), 'zone' => $this->format('e'));
   }
-
 }
 
 /**
@@ -917,16 +864,12 @@ function feeds_to_unixtime($date, $default_value) {
   if (is_numeric($date)) {
     return $date;
   }
-
-  if ($date instanceof FeedsDateTimeElement) {
+  elseif (is_string($date) && !empty($date)) {
+    $date = new FeedsDateTimeElement($date);
     return $date->getValue();
   }
-
-  if (is_string($date) || is_object($date) && method_exists($date, '__toString')) {
-    if ($date_object = date_create(trim($date))) {
-      return $date_object->format('U');
-    }
+  elseif ($date instanceof FeedsDateTimeElement) {
+    return $date->getValue();
   }
-
   return $default_value;
 }
