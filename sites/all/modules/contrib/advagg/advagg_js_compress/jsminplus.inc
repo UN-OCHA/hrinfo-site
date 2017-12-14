@@ -1435,7 +1435,7 @@ class JSParser {
           }
 
           if ($tt == OP_DOT) {
-            $this->t->mustMatch(TOKEN_IDENTIFIER);
+            $this->t->mustMatch(TOKEN_IDENTIFIER, true);
             array_push($operands, new JSNode($this->t, OP_DOT, array_pop($operands), new JSNode($this->t)));
           }
           else {
@@ -1973,12 +1973,12 @@ class JSTokenizer {
     return $this->peek() == TOKEN_END;
   }
 
-  public function match($tt) {
-    return $this->get() == $tt || $this->unget();
+  public function match($tt, $op_dot = false) {
+    return $this->get(1000, $op_dot) == $tt || $this->unget();
   }
 
-  public function mustMatch($tt) {
-    if (!$this->match($tt)) {
+  public function mustMatch($tt, $op_dot = false) {
+    if (!$this->match($tt, $op_dot)) {
       throw $this->newSyntaxError('Unexpected token; token ' . $tt . ' expected');
     }
 
@@ -2017,7 +2017,7 @@ class JSTokenizer {
     }
   }
 
-  public function get($chunksize = 1000) {
+  public function get($chunksize = 1000, $op_dot = false) {
     while ($this->lookahead) {
       $this->lookahead--;
       $this->tokenIndex = ($this->tokenIndex + 1) & 3;
@@ -2264,7 +2264,14 @@ class JSTokenizer {
               throw $this->newSyntaxError('Illegal token');
             }
           }
-          $tt = in_array($match[0], $this->keywords) ? $match[0] : TOKEN_IDENTIFIER;
+
+          // Identifiers after an OP_DOT can include otherwise reserve keywords.
+          if ($op_dot) {
+            $tt = TOKEN_IDENTIFIER;
+          }
+          else {
+            $tt = in_array($match[0], $this->keywords) ? $match[0] : TOKEN_IDENTIFIER;
+          }
       }
     }
 
