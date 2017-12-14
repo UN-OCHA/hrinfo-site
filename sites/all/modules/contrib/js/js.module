@@ -5,10 +5,23 @@
  */
 
 /**
+ * Constants copied from menu.inc in order to drop dependency on that file.
+ */
+define('JS_MENU_NOT_FOUND', 2);
+define('JS_MENU_ACCESS_DENIED', 3);
+define('JS_MENU_SITE_OFFLINE', 4);
+define('JS_MENU_SITE_ONLINE', 5);
+
+/**
+ * Internal menu status code - Request method is not allowed.
+ */
+define('JS_MENU_METHOD_NOT_ALLOWED', 6);
+
+
+/**
  * Implements hook_menu().
  */
 function js_menu() {
-  $items = array();
   $items['admin/config/system/js'] = array(
     'title' => 'JS Callback handler',
     'description' => 'Configure JavaScript callback handler.',
@@ -30,4 +43,598 @@ function js_permission() {
       'title' => t('Administer JavaScript callback handler settings'),
     ),
   );
+}
+
+/**
+ * Implements hook_library().
+ */
+function js_library() {
+  $libraries['js'] = array(
+    'title' => 'JS AJAX Handler',
+    'version' => '2.0.0',
+    'js' => array(
+      drupal_get_path('module', 'js') . '/js.js' => array(
+        'weight' => -100,
+      ),
+      0 => array(
+        'type' => 'setting',
+        'data' => array(
+          'jsEndpoint' => variable_get('js_endpoint', 'js'),
+        ),
+      ),
+    ),
+    'dependencies' => array(
+      array('system', 'jquery'),
+    ),
+  );
+  return $libraries;
+}
+
+/**
+ * Implements hook_preprocess_html().
+ *
+ * Provide necessary JS functionality so modules can generate easier requests.
+ */
+function js_preprocess_html() {
+  // Add any unique tokens created to the current page request. This is to help
+  // ensure valid JS requests. Note, this only adds tokens that were generated
+  // on this page request. It does not provide tokens for all callbacks.
+  drupal_add_js(array(
+    'js' => array(
+      'tokens' => js_get_token(),
+    ),
+  ), 'setting');
+}
+
+/**
+ * Implements hook_custom_theme().
+ *
+ * Used to set the theme to be used for JS requests.
+ */
+function js_custom_theme() {
+  global $_js;
+  if (!empty($_js['theme'])) {
+    return $_js['theme'];
+  }
+}
+
+/**
+ * Implements hook_js_info().
+ *
+ * @see js_js_callback_form()
+ */
+function js_js_info() {
+  $callbacks['form'] = array(
+    // Because this callback invokes js_get_page() and fully bootstraps Drupal,
+    // there is no need to have these enabled. Also, FAPI handles it's own
+    // validation.
+    'token' => FALSE,
+    'xss' => FALSE,
+  );
+  return $callbacks;
+}
+
+/**
+ * Implements hook_js_server_info().
+ *
+ * {@inheritdoc}
+ */
+function js_js_server_info() {
+  $base_path = str_replace('/', '\\/', base_path());
+  $endpoint = variable_get('js_endpoint', 'js');
+
+  $header = array(
+    '###',
+    '### Support for https://www.drupal.org/project/js module.',
+    '###',
+  );
+
+  // Apache.
+  $servers['apache'] = array(
+    'label' => 'Apache',
+    'description' => t('Add the above lines before any existing rewrite rules inside this site\'s Apache <code>.htaccess</code> file.'),
+    'rewrite' => $header,
+  );
+  $servers['apache']['rewrite'][] = "RewriteCond %{REQUEST_URI} ^$base_path([a-z]{2}\\/)?$endpoint\\/.*";
+  $servers['apache']['rewrite'][] = "RewriteRule ^(.*)$ js.php?q=$1 [L,QSA]";
+  $servers['apache']['rewrite'][] = "RewriteCond %{QUERY_STRING} (^|&)q=((\\/)?[a-z]{2})?(\\/)?$endpoint\\/.*";
+  $servers['apache']['rewrite'][] = "RewriteRule .* js.php [L]";
+
+  // Nginx.
+  $servers['nginx'] = array(
+    'label' => 'Nginx',
+    'description' => t('Add the above lines before any existing rewrite rules inside this site\'s Nginx <code>server { }</code> block.'),
+    'rewrite' => $header,
+  );
+  $servers['nginx']['rewrite'][] = "location ^~ /$endpoint/ {";
+  $servers['nginx']['rewrite'][] = "  location ~* ^/$endpoint/ {";
+  $servers['nginx']['rewrite'][] = "    if (\$is_bot) {";
+  $servers['nginx']['rewrite'][] = "      return 403;";
+  $servers['nginx']['rewrite'][] = "    }";
+  $servers['nginx']['rewrite'][] = "    rewrite ^/(.*)$ /js.php?q=$1 last;";
+  $servers['nginx']['rewrite'][] = "  }";
+  $servers['nginx']['rewrite'][] = "}";
+
+  return $servers;
+}
+
+/**
+ * Provides server information provided by modules.
+ *
+ * @param string $server
+ *   The name of a server to retrieve.
+ * @param bool $reset
+ *   For internal use only: Whether to force the stored list of hook
+ *   implementations to be regenerated (such as after enabling a new module,
+ *   before processing hook_enable).
+ *
+ * @return array|false
+ *   If $server is provided the info array for the specified server is returned
+ *   or FALSE if it's not defined. If no parameters are provided, all modules
+ *   that provided server information is returned.
+ */
+function js_server_info($server = NULL, $reset = FALSE) {
+  // Use the advanced drupal_static() pattern, since this has the potential to
+  // be called quite often on a single page request.
+  static $drupal_static_fast;
+  if (!isset($drupal_static_fast)) {
+    $drupal_static_fast['servers'] = &drupal_static(__FUNCTION__);
+  }
+  $servers = &$drupal_static_fast['servers'];
+
+  // Populate servers. Using cache if possible or rebuild if necessary.
+  if ($reset || !isset($servers)) {
+    $servers = array();
+    $cid = 'js:servers';
+    if (!$reset && ($cache = cache_get($cid)) && $cache->data) {
+      $servers = $cache->data;
+    }
+    else {
+      $hook = 'js_server_info';
+      foreach (module_implements($hook, FALSE, $reset) as $module) {
+        $results = module_invoke($module, $hook);
+        // Iterate over each module and retrieve the server info.
+        foreach ($results as $name => $info) {
+          $servers[$name] = (array) $info;
+          // Provide defaults if the module didn't provide them.
+          $servers[$name] += array(
+            'description' => '',
+            'label' => $name,
+            'regexp' => "/$name/i",
+            'rewrite' => '',
+          );
+
+          // Ensure "name" and "module" are always provided by discovery.
+          $servers[$name]['name'] = $name;
+          $servers[$name]['module'] = $module;
+
+          // Convert "rewrite" to strings if it's an array.
+          if (is_array($servers[$name]['rewrite'])) {
+            $servers[$name]['rewrite'] = implode("\n", $servers[$name]['rewrite']);
+          }
+        }
+      }
+      // Invokes hook_js_server_info_alter(). Allow modules to alter the
+      // server info before it's cached in the database.
+      drupal_alter($hook, $servers);
+      cache_set($cid, $servers);
+    }
+  }
+
+  // Return a specific callback for a module.
+  if (isset($server)) {
+    return !empty($servers[$server]) ? $servers[$server] : FALSE;
+  }
+
+  // Return all server info implemented by any module.
+  return $servers;
+}
+
+/**
+ * Implements MODULE_js_callback_CALLBACK().
+ *
+ * Callback for processing form POST data. Because form data is sent via POST,
+ * we mimic a GET request here.
+ *
+ * @see js_js_info()
+ */
+function js_js_callback_form() {
+  module_load_include('inc', 'js', 'includes/get');
+  return js_get_page();
+}
+
+/**
+ * Implements hook_drupal_goto_alter().
+ */
+function js_drupal_goto_alter(&$path, &$options, &$http_response_code) {
+  global $_js;
+  if ($_js && in_array($http_response_code, array(301, 302, 303, 307))) {
+    module_load_include('inc', 'js', 'includes/json');
+    $json = js_http_response($http_response_code);
+    // Enforce an absolute URL so the request handler can determine if it
+    // should handle a redirect internally or just redirect the browser page.
+    $options['absolute'] = TRUE;
+    $json['response']['url'] = url($path, $options);
+    if (!empty($options['force'])) {
+      $json['response']['force'] = TRUE;
+    }
+    js_deliver_json($json);
+  }
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function js_element_info_alter(&$type) {
+  foreach ($type as $name => $element) {
+    if (!isset($type[$name]['#pre_render'])) {
+      $type[$name]['#pre_render'] = array();
+    }
+    array_unshift($type[$name]['#pre_render'], 'js_pre_render_element');
+  }
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function js_pre_render_element($element) {
+  if (isset($element['#js_callback']) && is_array($element['#js_callback'])) {
+    $callback = reset($element['#js_callback']);
+    $module = key($element['#js_callback']);
+    if (!empty($module) && !empty($callback)) {
+      $element['#attributes']['data-js-module'] = $module;
+      $element['#attributes']['data-js-callback'] = $callback;
+      $element['#attributes']['data-js-token'] = js_get_token($module, $callback);
+    }
+  }
+  return $element;
+}
+
+/**
+ * Loads the requested module and executes the requested callback.
+ *
+ * @return mixed
+ *   The callback function's return value or one of the JS_* constants.
+ */
+function js_execute_request() {
+  // Provide a global JS variable that will be used through out the request.
+  global $_js;
+  global $conf;
+
+  // Memcache requires an additional bootstrap phase to access variables.
+  if (!empty($conf['cache_default_class']) && $conf['cache_default_class'] === 'MemCacheDrupal') {
+    js_bootstrap(DRUPAL_BOOTSTRAP_VARIABLES);
+  }
+
+  // Immediately clone the request method so it cannot be altered any further.
+  static $method;
+  if (!isset($method)) {
+    $method = $_SERVER['REQUEST_METHOD'];
+  }
+
+  // Extract any parameters matching the unique "js_" prefixed names from the
+  // referenced global request data and then unset it so it is not processed
+  // again.
+  $_js['module'] = FALSE;
+  $_js['callback'] = FALSE;
+  $_js['token'] = FALSE;
+  $_js['theme'] = FALSE;
+  $global_method = '_' . strtoupper($method);
+  foreach ($_js as $key => $value) {
+    if (isset($GLOBALS[$global_method]["js_$key"])) {
+      $_js[$key] = check_plain($GLOBALS[$global_method]["js_$key"]);
+      unset($GLOBALS[$global_method]["js_$key"]);
+    }
+  }
+
+  // Prevent Devel from hi-jacking the output.
+  $GLOBALS['devel_shutdown'] = FALSE;
+
+  // Retrieve arguments for the current request.
+  $_js['args'] = explode('/', $_GET['q']);
+
+  // Determine the JS "endpoint".
+  $endpoint = variable_get('js_endpoint', 'js');
+
+  // Determine if there is a language prefix in the path.
+  $_js['lang'] = FALSE;
+  if (!empty($_js['args'][0]) && !empty($_js['args'][1]) && $_js['args'][1] === $endpoint) {
+    $_js['lang'] = check_plain(array_shift($_js['args']));
+  }
+
+  // Remove the endpoint argument.
+  if (!empty($_js['args'][0]) && $_js['args'][0] === $endpoint) {
+    array_shift($_js['args']);
+  }
+
+  // Load common functions used for all requests.
+  module_load_include('inc', 'js', 'includes/common');
+
+  // Set the default request result to JS_MENU_NOT_FOUND. The responsibility
+  // of changing the results falls to the request handler.
+  $request_result = JS_MENU_NOT_FOUND;
+
+  // If a request does not provide a module or callback, we cannot retrieve a
+  // valid callback info to validate against. Treat this request as a normal
+  // GET request in the browser, but only return the contents of the page. This
+  // is useful for certain tasks like populating modal content.
+  if (!$_js['module'] || !$_js['callback']) {
+    module_load_include('inc', 'js', 'includes/get');
+    $request_result = js_get_page();
+  }
+  else {
+    // Only continue if a valid callback is found. Otherwise it will will return
+    // the JS_MENU_NOT_FOUND integer.
+    $info = js_get_callback($_js['module'], $_js['callback']);
+    if (!$info) {
+      drupal_set_message(t('The requested callback "%callback" defined by the "%module" module could not be loaded. Please check your configuration and try again.', array(
+        '%callback' => $_js['callback'],
+        '%module' => $_js['module'],
+      )), 'error', FALSE);
+    }
+    // The very first thing that should be done is checking the callback's
+    // allowed methods.
+    elseif (!in_array($method, $info['methods'])) {
+      $request_result = JS_MENU_METHOD_NOT_ALLOWED;
+    }
+    else {
+      // Set the delivery callback found in the info.
+      js_delivery_callback($info['delivery callback']);
+
+      // Enforce token validation if the token variable in the callback info is
+      // not explicitly set to a boolean equaling FALSE.
+      $token_valid = FALSE;
+      $validate_token = $info['token'] !== FALSE;
+
+      // If a token should be validated, Drupal requires a minimum
+      // DRUPAL_BOOTSTRAP_SESSION level. The current SESSION user must also not
+      // be anonymous as the token would be the same for anonymous users. This
+      // is a security requirement.
+      if ($validate_token) {
+        js_bootstrap(DRUPAL_BOOTSTRAP_SESSION);
+        drupal_load('module', 'user');
+        $token_valid = !user_is_anonymous() && drupal_valid_token($_js['token'], 'js-' . $_js['module'] . '-' . $_js['callback']);
+      }
+
+      // Set the proper request result and display a message if a token should
+      // be validated and it didn't.
+      if ($validate_token && !$token_valid) {
+        $request_result = JS_MENU_ACCESS_DENIED;
+        drupal_set_message(t('Cannot complete request. The token provided was either missing or invalid. Please refresh this page or try logging out and back in again.'), 'error', FALSE);
+      }
+      // Only continue if the token shouldn't be validated or was validated and
+      // it passed.
+      else {
+        module_load_include('inc', 'js', 'includes/callback');
+        $request_result = js_callback_execute($info);
+      }
+    }
+  }
+
+  // Get the delivery callback to be used.
+  $delivery_callback = js_delivery_callback();
+
+  // Because a callback can specify a different delivery method, we don't need
+  // to load this include until it is absolutely necessary.
+  if ($delivery_callback === 'js_deliver_json') {
+    module_load_include('inc', 'js', 'includes/json');
+  }
+
+  // Deliver the results. The delivery callback is responsible for setting the
+  // appropriate headers, handling the result returned from the callback and
+  // exiting the script properly.
+  call_user_func_array($delivery_callback, array($request_result));
+}
+
+/**
+ * Ensures Drupal is bootstrapped to the specified phase.
+ *
+ * @param int $phase
+ *   A constant telling which phase to bootstrap to.
+ * @param boolean $new_phase
+ *   A boolean, set to FALSE if calling drupal_bootstrap from inside a
+ *   function called from drupal_bootstrap (recursion).
+ *
+ * @return int
+ *   The most recently completed phase.
+ *
+ * @see drupal_bootstrap()
+ */
+function js_bootstrap($phase = NULL, $new_phase = TRUE) {
+  // If we have a bootstrap level greater or equal to language initialization,
+  // we need to update path, because otherwise path initialization will fail.
+  if ($phase >= DRUPAL_BOOTSTRAP_LANGUAGE) {
+    js_update_path();
+  }
+  return drupal_bootstrap($phase, $new_phase);
+}
+
+/**
+ * Updates the request path after that the JS prefixes has been stripped.
+ */
+function js_update_path() {
+  global $_js;
+  static $processed;
+  if (!$processed) {
+    $processed = TRUE;
+    $path = implode('/', $_js['args']);
+    $_GET['q'] = $path;
+    if (isset($_SERVER['REQUEST_URI'])) {
+      $_SERVER['REQUEST_URI'] = '/' . $path;
+    }
+    else {
+      if (isset($_SERVER['argv'])) {
+        $_SERVER['argv'][0] = $path;
+      }
+      elseif (isset($_SERVER['QUERY_STRING'])) {
+        $_SERVER['QUERY_STRING'] = 'q=' . $path;
+      }
+    }
+  }
+}
+
+/**
+ * Generate a unique token for JS callbacks.
+ *
+ * @param string $module
+ *   The module name the callback belongs to.
+ * @param string $callback
+ *   The callback name.
+ *
+ * @return string|array
+ *   If $module and $callback are provided the unique token belonging to it
+ *   is returned, otherwise all current tokens set are returned.
+ */
+function js_get_token($module = NULL, $callback = NULL) {
+  // Use the advanced drupal_static() pattern, since this has the potential to
+  // be called quite often on a single page request.
+  static $drupal_static_fast;
+  if (!isset($drupal_static_fast)) {
+    $drupal_static_fast['tokens'] = &drupal_static(__FUNCTION__, array());
+  }
+  $tokens = &$drupal_static_fast['tokens'];
+
+  // Return a specific token for a module callback.
+  if (!empty($module) && !empty($callback)) {
+    // Only authenticated users should be allowed to generate tokens.
+    if (!user_is_anonymous()) {
+      return $tokens["$module-$callback"] = drupal_get_token("js-$module-$callback");
+    }
+    else {
+      return FALSE;
+    }
+  }
+
+  // Otherwise return all tokens.
+  return $tokens;
+}
+
+/**
+ * Provides callback information provided by modules.
+ *
+ * @param string $module
+ *   The module name the callback belongs to.
+ * @param string $callback
+ *   The callback name.
+ * @param bool $reset
+ *   For internal use only: Whether to force the stored list of hook
+ *   implementations to be regenerated (such as after enabling a new module,
+ *   before processing hook_enable).
+ *
+ * @return array|bool
+ *   If $module or $callback are provided the info array for the specified
+ *   callback is returned, FALSE if the specified callback is not defined.
+ *   If $module is provided, all the callbacks for the specified module is
+ *   returned, FALSE if specified module is not defined.
+ *   If no parameters are provided, all modules that provide callback
+ *   information is returned, FALSE if no callbacks are defined.
+ */
+function js_get_callback($module = NULL, $callback = NULL, $reset = FALSE) {
+  global $_js;
+  // Use the advanced drupal_static() pattern, since this has the potential to
+  // be called quite often on a single page request.
+  static $drupal_static_fast;
+  if (!isset($drupal_static_fast)) {
+    $drupal_static_fast['callbacks'] = &drupal_static(__FUNCTION__);
+  }
+  $callbacks = &$drupal_static_fast['callbacks'];
+
+  // Populate callbacks. Using cache if possible or rebuild if necessary.
+  if ($reset || !isset($callbacks)) {
+    $cid = 'js:callbacks';
+    if (!$reset && ($cache = cache_get($cid)) && $cache->data) {
+      $callbacks = $cache->data;
+    }
+    else {
+      // If we get to this point, this is the first time this is being run
+      // after a cache clear. This single request may take longer, but Drupal
+      // must be fully bootstrapped to detect all hook implementations.
+      if ($_js) {
+        js_bootstrap(DRUPAL_BOOTSTRAP_FULL);
+      }
+      $hook = 'js_info';
+      foreach (module_implements($hook, FALSE, $reset) as $_module) {
+        $results = module_invoke($_module, $hook);
+        // Iterate over each module and retrieve the callback info.
+        foreach ($results as $_callback => $info) {
+          $callbacks[$_module][$_callback] = (array) $info;
+          // Provide default if module didn't provide them.
+          $callbacks[$_module][$_callback] += array(
+            'access arguments' => array(),
+            'access callback'  => FALSE,
+            'bootstrap' => DRUPAL_BOOTSTRAP_DATABASE,
+            // Provide a standard function name to use if none is provided.
+            'callback function' => $_module . '_js_callback_' . $_callback,
+            'callback arguments' => array(),
+            'delivery callback' => 'js_deliver_json',
+            'dependencies' => array(),
+            'includes' => array(),
+            'lang' => FALSE,
+            'methods' => array('POST'),
+            'module' => $_module,
+            'process request' => TRUE,
+            'skip init' => FALSE,
+            'token' => TRUE,
+            'xhprof' => FALSE,
+            'xss' => TRUE,
+          );
+        }
+      }
+      // Invokes hook_js_info_alter(). Allow modules to alter the callback
+      // info before it's cached in the database.
+      drupal_alter('js_info', $callbacks);
+      cache_set($cid, $callbacks);
+    }
+  }
+
+  // Return a specific callback for a module.
+  if (isset($module) && isset($callback)) {
+    return !empty($callbacks[$module][$callback]) ? $callbacks[$module][$callback] : FALSE;
+  }
+  // Return all callbacks for a module.
+  elseif (isset($module)) {
+    return !empty($callbacks[$module]) ? $callbacks[$module] : FALSE;
+  }
+  // Return all callbacks implemented by any module.
+  return !empty($callbacks) ? $callbacks : FALSE;
+}
+
+/**
+ * Wrapper function for array_replace_recursive().
+ */
+function js_array_replace_recursive($array, $array1) {
+  // PHP 5.3+ has this function built in.
+  if (function_exists('array_replace_recursive')) {
+    return call_user_func_array('array_replace_recursive', func_get_args());
+  }
+  /**
+   * Internal recursion function.
+   */
+  function recurse($array, $array1) {
+    foreach ($array1 as $key => $value) {
+      // Create new key in $array, if it is empty or not an array.
+      if (!isset($array[$key]) || (isset($array[$key]) && !is_array($array[$key]))) {
+        $array[$key] = array();
+      }
+
+      // Overwrite the value in the base array.
+      if (is_array($value)) {
+        $value = recurse($array[$key], $value);
+      }
+      $array[$key] = $value;
+    }
+    return $array;
+  }
+  // Handle the arguments, merge one by one.
+  $args = func_get_args();
+  $array = $args[0];
+  if (!is_array($array)) {
+    return $array;
+  }
+  for ($i = 1; $i < count($args); $i++) {
+    if (is_array($args[$i])) {
+      $array = recurse($array, $args[$i]);
+    }
+  }
+  return $array;
 }
