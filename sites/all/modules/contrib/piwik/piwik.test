@@ -6,6 +6,13 @@
  */
 class PiwikBasicTest extends DrupalWebTestCase {
 
+  /**
+   * User without permissions to edit snippets.
+   *
+   * @var \StdClass
+   */
+  protected $noSnippetUser;
+
   public static function getInfo() {
     return array(
       'name' => t('Piwik basic tests'),
@@ -23,6 +30,8 @@ class PiwikBasicTest extends DrupalWebTestCase {
     );
 
     // User to set up piwik.
+    $this->noSnippetUser = $this->drupalCreateUser($permissions);
+    $permissions[] = 'add JS snippets for piwik';
     $this->admin_user = $this->drupalCreateUser($permissions);
     $this->drupalLogin($this->admin_user);
   }
@@ -36,6 +45,22 @@ class PiwikBasicTest extends DrupalWebTestCase {
     $edit['piwik_site_id'] = $this->randomName(2);
     $this->drupalPost('admin/config/system/piwik', $edit, 'Save configuration');
     $this->assertRaw(t('A valid Piwik site ID is an integer only.'), '[testPiwikConfiguration]: Invalid Piwik site ID number validated.');
+
+    // User should have access to code snippets.
+    $this->assertFieldByName('piwik_codesnippet_before');
+    $this->assertFieldByName('piwik_codesnippet_after');
+    $this->assertNoFieldByXPath("//textarea[@name='piwik_codesnippet_before' and @disabled='disabled']", NULL, '"Code snippet (before)" is enabled.');
+    $this->assertNoFieldByXPath("//textarea[@name='piwik_codesnippet_after' and @disabled='disabled']", NULL, '"Code snippet (after)" is enabled.');
+
+    // Login as user without JS permissions.
+    $this->drupalLogin($this->noSnippetUser);
+    $this->drupalGet('admin/config/system/piwik');
+
+    // User should *not* have access to snippets, but create fields.
+    $this->assertFieldByName('piwik_codesnippet_before');
+    $this->assertFieldByName('piwik_codesnippet_after');
+    $this->assertFieldByXPath("//textarea[@name='piwik_codesnippet_before' and @disabled='disabled']", NULL, '"Code snippet (before)" is disabled.');
+    $this->assertFieldByXPath("//textarea[@name='piwik_codesnippet_after' and @disabled='disabled']", NULL, '"Code snippet (after)" is disabled.');
   }
 
   function testPiwikPageVisibility() {
@@ -84,11 +109,11 @@ class PiwikBasicTest extends DrupalWebTestCase {
 
     // Test whether 403 forbidden tracking code is shown if user has no access.
     $this->drupalGet('admin');
-    $this->assertRaw('"403/URL = "', '[testPiwikPageVisibility]: 403 Forbidden tracking code shown if user has no access.');
+    $this->assertRaw('403/URL = "', '[testPiwikPageVisibility]: 403 Forbidden tracking code shown if user has no access.');
 
     // Test whether 404 not found tracking code is shown on non-existent pages.
     $this->drupalGet($this->randomName(64));
-    $this->assertRaw('"404/URL = "', '[testPiwikPageVisibility]: 404 Not Found tracking code shown on non-existent page.');
+    $this->assertRaw('404/URL = "', '[testPiwikPageVisibility]: 404 Not Found tracking code shown on non-existent page.');
   }
 
   function testPiwikTrackingCode() {
@@ -283,6 +308,53 @@ class PiwikCustomVariablesTest extends DrupalWebTestCase {
     $this->assertNoRaw("_paq.push(['setCustomVariable', 4,", '[testPiwikCustomVariables]: Empty name and value is not shown.');
     $this->assertNoRaw("_paq.push(['setCustomVariable', 5,", '[testPiwikCustomVariables]: Empty name and value is not shown.');
   }
+}
+
+/**
+ * Test custom url functionality of Google Analytics module.
+ */
+class PiwikCustomUrls extends DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Piwik custom url tests',
+      'description' => 'Test custom url functionality of Piwik module.',
+      'group' => 'Piwik',
+    );
+  }
+
+  function setUp() {
+    parent::setUp('piwik');
+
+    $permissions = array(
+      'access administration pages',
+      'administer piwik',
+    );
+
+    // User to set up piwik.
+    $this->admin_user = $this->drupalCreateUser($permissions);
+  }
+
+  /**
+   * Tests if user password page urls are overridden.
+   */
+  public function testPiwikUserPasswordPage() {
+    $base_path = base_path();
+    $ua_code = '1';
+    variable_set('piwik_site_id', $ua_code);
+    variable_get('piwik_url_http', 'http://example.com/piwik/');
+    variable_get('piwik_url_https', 'https://example.com/piwik/');
+
+    $this->drupalGet('user/password', array('query' => array('name' => 'foo')));
+    $this->assertRaw('_paq.push(["setCustomUrl", ' . drupal_json_encode(url('user/password')) . ']);');
+
+    $this->drupalGet('user/password', array('query' => array('name' => 'foo@example.com')));
+    $this->assertRaw('_paq.push(["setCustomUrl", ' . drupal_json_encode(url('user/password')) . ']);');
+
+    $this->drupalGet('user/password');
+    $this->assertNoRaw('_paq.push(["setCustomUrl", "', '[testPiwikCustomUrls]: Custom url not set.');
+  }
+
 }
 
 class PiwikStatusMessagesTest extends DrupalWebTestCase {
