@@ -60,6 +60,11 @@ function piwik_permission() {
       'description' => t('Enter PHP code in the field for tracking visibility settings.'),
       'restrict access' => TRUE,
     ),
+    'add JS snippets for piwik' => array(
+      'title' => t('Add JavaScript snippets'),
+      'description' => 'Enter JavaScript code snippets for advanced Piwik functionality.',
+      'restrict access' => TRUE,
+    ),
   );
 }
 
@@ -112,6 +117,10 @@ function piwik_page_alter(&$page) {
     $link_settings = array();
     $link_settings['trackMailto'] = variable_get('piwik_trackmailto', 1);
 
+    if (module_exists('colorbox') && ($track_colorbox = variable_get('piwik_trackcolorbox', 1))) {
+      $link_settings['trackColorbox'] = $track_colorbox;
+    }
+
     drupal_add_js(array('piwik' => $link_settings), 'setting');
     drupal_add_js(drupal_get_path('module', 'piwik') . '/piwik.js');
 
@@ -132,7 +141,7 @@ function piwik_page_alter(&$page) {
 
       if (!empty($titles)) {
         // Encode title, at least to keep "/" intact.
-        $titles = array_map('urlencode', $titles);
+        $titles = array_map('rawurlencode', $titles);
 
         $set_document_title = drupal_json_encode(implode('/', $titles));
       }
@@ -177,6 +186,18 @@ function piwik_page_alter(&$page) {
     }
     elseif ($status == '404 Not Found') {
       $set_document_title = '"404/URL = " + encodeURIComponent(document.location.pathname+document.location.search) + "/From = " + encodeURIComponent(document.referrer)';
+    }
+
+    // #2693595: User has entered an invalid login and clicked on forgot
+    // password link. This link contains the username or email address and may
+    // get send to Google if we do not override it. Override only if 'name'
+    // query param exists. Last custom url condition, this need to win.
+    //
+    // URLs to protect are:
+    // - user/password?name=username
+    // - user/password?name=foo@example.com
+    if (arg(0) == 'user' && arg(1) == 'password' && array_key_exists('name', drupal_get_query_parameters())) {
+      $set_custom_url = drupal_json_encode(url('user/password'));
     }
 
     // Add custom variables.
@@ -231,7 +252,7 @@ function piwik_page_alter(&$page) {
       // The USER_ID value should be a unique, persistent, and non-personally
       // identifiable string identifier that represents a user or signed-in
       // account across devices.
-      $script .= '_paq.push(["setUserId", ' . drupal_json_encode(drupal_hmac_base64($user->uid, drupal_get_private_key() . drupal_get_hash_salt())) . ']);';
+      $script .= '_paq.push(["setUserId", ' . drupal_json_encode(piwik_user_id_hash($user->uid)) . ']);';
     }
 
     // Set custom data.
@@ -349,6 +370,23 @@ function piwik_page_alter(&$page) {
 }
 
 /**
+ * Generate user id hash to implement USER_ID.
+ *
+ * The USER_ID value should be a unique, persistent, and non-personally
+ * identifiable string identifier that represents a user or signed-in
+ * account across devices.
+ *
+ * @param int $uid
+ *   User id.
+ *
+ * @return string
+ *   User id hash.
+ */
+function piwik_user_id_hash($uid) {
+  return drupal_hmac_base64($uid, drupal_get_private_key() . drupal_get_hash_salt());
+}
+
+/**
  * Implements hook_field_extra_fields().
  */
 function piwik_field_extra_fields() {
@@ -460,6 +498,10 @@ function _piwik_cache($location, $sync_cached_file = FALSE) {
         if ($data_hash_local != $data_hash_remote && file_prepare_directory($path)) {
           // Save updated tracking code file to disk.
           file_unmanaged_save_data($result->data, $file_destination, FILE_EXISTS_REPLACE);
+          // Based on Drupal Core drupal_build_css_cache().
+          if (variable_get('css_gzip_compression', TRUE) && variable_get('clean_url', 0) && extension_loaded('zlib')) {
+            file_unmanaged_save_data(gzencode($result->data, 9, FORCE_GZIP), $file_destination . '.gz', FILE_EXISTS_REPLACE);
+          }
           watchdog('piwik', 'Locally cached tracking code file has been updated.', array(), WATCHDOG_INFO);
 
           // Change query-strings on css/js files to enforce reload for all users.
@@ -472,6 +514,9 @@ function _piwik_cache($location, $sync_cached_file = FALSE) {
           // There is no need to flush JS here as core refreshes JS caches
           // automatically, if new files are added.
           file_unmanaged_save_data($result->data, $file_destination, FILE_EXISTS_REPLACE);
+          if (variable_get('css_gzip_compression', TRUE) && variable_get('clean_url', 0) && extension_loaded('zlib')) {
+            file_unmanaged_save_data(gzencode($result->data, 9, FORCE_GZIP), $file_destination . '.gz', FILE_EXISTS_REPLACE);
+          }
           watchdog('piwik', 'Locally cached tracking code file has been saved.', array(), WATCHDOG_INFO);
 
           // Return the local JS file path.

@@ -103,7 +103,6 @@ class i18n_string_object {
     $this->type = array_shift($parts);
     $this->objectid = $parts ? array_shift($parts) : '';
     $this->objectkey = (int)$this->objectid;
-
     // Remaining elements glued again with ':'
     $this->property = $parts ? implode(':', $parts) : '';
 
