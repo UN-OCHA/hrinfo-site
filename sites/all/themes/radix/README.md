@@ -1,49 +1,36 @@
 # Radix
+Radix is a base theme for Drupal and BackdropCMS. It has Bootstrap, Sass, Gulp, Bower, BrowserSync and Font Awesome built-in.
 
-Radix is a base theme for [Panopoly](http://drupal.org/project/panopoly). It has Sass and Compass support, and makes it easy to build responsive themes with Panels.
+![alt tag](https://www.drupal.org/files/drupal-radix.png)
 
-* Project Page:   http://drupal.org/project/radix
-* Documentation:  https://drupal.org/node/1840310
-* Demo:           http://dev-radix.gotpantheon.com
-* Issue Queue:    http://drupal.org/project/issues/radix
+## Status
 
-## Maintainer(s): 
+[![Documentation Status](https://readthedocs.org/projects/radix/badge/?version=latest)](http://docs.radixtheme.org/en/latest/?badge=latest)
 
-* Arshad Chummun
-* Capi Etheriel
+## Distributions using Radix
+##### [Open Atrium](http://openatrium.com/)
+Open Atrium is an intranet in a box that has group spaces to allow different teams to have their own conversations and collaboration.
 
-## Subtheming Guide
+##### [Open Academy](http://drupal.org/project/openacademy)
+Open Academy is a Drupal distribution that brings the best in web publishing for higher education on a customizable Drupal platform.
 
-1. Install the required gems:
+##### [Open Berkeley](http://open.berkeley.edu)
+Open Berkeley is a turnkey web platform solution for UC Berkeley campus websites.
 
-        sudo gem install compass_radix -v 2
+##### [Open Restaurant](http://drupal.org/project/openrestaurant)
+The Open Restaurant distribution has everything you need to kickstart your restaurant website. It comes with a menu management system, a reservation system, a customizable blog and events management.
 
-  This should install all required gems for Radix.
+##Features
+1. Components and plugins from Bootstrap.
+2. Sass, Gulp, BrowserSync and Font Awesome built-in.
+3. Drush intergration: drush radix "My Subtheme".
+4. Works with Bootswatch themes: drush radix "My Subtheme" --bootswatch=cerulean".
 
-2. Download the latest Radix and place it in your themes folder.
+## Links
+* Project Page:   http://www.radixtheme.org
+* Documentation:  http://docs.radixtheme.org
+* Demo:           http://dev-radix.chapterthree.com
+* Support:        https://www.drupal.org/project/issues/radix
 
-3. Using drush run the following command to create a subtheme.
-
-        drush radix "SUBTHEME_NAME"
-
-  You can also specify some options when creating your subtheme.
-
-        drush radix "SUBTHEME_NAME" --description="This is the description of subtheme."
-
-  Available options:
-
-        --bootswatch                              The Bootswatch theme to use. See https://github.com/arshad/radix-bootswatch.
-        --description                             The description of your subtheme.
-        --destination                             The destination of your subtheme. Defaults to "all" (sites/all/themes).
-        --kit                                     The name of the starter kit to use. Defaults to "default".
-        --machine_name                            The machine-readable name of your subtheme. Auto-generated if ommited.
-
-4. To start making changes to your theme, using a command line cd to your subtheme directory and run:
-        
-        compass watch
-
-  You can now start adding your Sass to your subtheme.
-
-
-For more information on subtheming, visit the Radix Handbook at https://drupal.org/node/1840310.
-
+## License
+http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
