@@ -8,12 +8,13 @@
 /**
  * Form builder; Configure advagg settings.
  *
- * @ingroup forms
+ * @ingroup advagg_forms
  *
  * @see system_settings_form()
  */
 function advagg_js_compress_admin_settings_form($form, $form_state) {
   drupal_set_title(t('AdvAgg: JS Compression'));
+  advagg_display_message_if_requirements_not_met();
   $config_path = advagg_admin_config_root_path();
 
   $form = array();
@@ -22,9 +23,27 @@ function advagg_js_compress_admin_settings_form($form, $form_state) {
       '#markup' => '<p>' . t('The settings below will not have any effect because AdvAgg is currently in <a href="@devel">development mode</a>. Once the cache settings have been set to normal or aggressive, JS minification will take place.', array('@devel' => url($config_path . '/advagg', array('fragment' => 'edit-advagg-cache-level')))) . '</p>',
     );
   }
+  list($list, $redo_list) = advagg_js_compress_all_js_files_list();
+
+  if (!empty($redo_list)) {
+    $form['advagg_js_compressor_batch'] = array(
+      '#markup' => '<p>' . t('There are %count js files that need to be minified. <a href="@batch">Click this batch compress link to process these files.</a>', array(
+        '@batch' => url($config_path . '/advagg/js-compress/batch'),
+        '%count' => count($redo_list),
+      )) . '</p>',
+    );
+    $form['advagg_js_compressor_redo_list'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('List of files that need to be recompressed'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+    $form['advagg_js_compressor_redo_list']['list'] = array(
+      '#markup' => '<p><pre><tt>' . (print_r($redo_list, TRUE)) . '</tt></pre></p>',
+    );
+  }
 
   list($options, $description) = advagg_js_compress_configuration();
-
   $form['advagg_js_compressor'] = array(
     '#type' => 'radios',
     '#title' => t('File Compression: Select a Compressor'),
@@ -95,8 +114,8 @@ function advagg_js_compress_admin_settings_form($form, $form_state) {
     ->orderBy('af.filename', 'ASC')
     ->execute();
   $file_settings = variable_get('advagg_js_compressor_file_settings', array());
-  foreach ($results as $row) {
-    $dir = dirname($row->filename);
+  foreach ($list as $row) {
+    $dir = dirname($row['data']);
     if (!isset($form['per_file_settings'][$dir])) {
       $form['per_file_settings'][$dir] = array(
         '#type' => 'fieldset',
@@ -105,12 +124,25 @@ function advagg_js_compress_admin_settings_form($form, $form_state) {
         '#collapsed' => TRUE,
       );
     }
-    $form_api_filename = str_replace(array('/', '.'), array('__', '--'), $row->filename);
+    $options_copy = $options;
+    if (!empty($row['advagg_js_compress'])) {
+      foreach ($row['advagg_js_compress'] as $key => $values) {
+        if (!isset($options_copy[$key])) {
+          continue;
+        }
+        if ($values['code'] != 1) {
+          unset($options_copy[$key]);
+          continue;
+        }
+        $options_copy[$key] .= " Ratio: {$values['ratio']}";
+      }
+    }
+    $form_api_filename = str_replace(array('/', '.'), array('__', '--'), $row['data']);
     $form['per_file_settings'][$dir]['advagg_js_compressor_file_settings_' . $form_api_filename] = array(
       '#type' => 'radios',
-      '#title' => t('%filename: Select a Compressor', array('%filename' => $row->filename)),
+      '#title' => t('%filename: Select a Compressor', array('%filename' => $row['data'])),
       '#default_value' => isset($file_settings[$form_api_filename]) ? $file_settings[$form_api_filename] : ADVAGG_JS_COMPRESSOR_FILE_SETTINGS,
-      '#options' => $options,
+      '#options' => $options_copy,
     );
     if ($form['per_file_settings'][$dir]['advagg_js_compressor_file_settings_' . $form_api_filename]['#default_value'] != ADVAGG_JS_COMPRESSOR_FILE_SETTINGS) {
       $form['per_file_settings'][$dir]['#collapsed'] = FALSE;
@@ -129,11 +161,12 @@ function advagg_js_compress_admin_settings_form($form, $form_state) {
   return system_settings_form($form);
 }
 
-// Submit callback.
 /**
- * Clear out the advagg cache bin when the save configuration button is pressed.
+ * Submit callback, clear out the advagg cache bin.
  *
  * Also remove default settings inside of the per_file_settings fieldgroup.
+ *
+ * @ingroup advagg_forms_callback
  */
 function advagg_js_compress_admin_settings_form_submit($form, &$form_state) {
   advagg_cache_clear_admin_submit();
