@@ -10,9 +10,9 @@ files[] = views/handler_field_saved_search_interval.inc
 files[] = views/handler_field_saved_search_link.inc
 files[] = views/handler_field_saved_search_name.inc
 
-; Information added by Drupal.org packaging script on 2014-05-24
-version = "7.x-1.3"
+; Information added by Drupal.org packaging script on 2017-07-18
+version = "7.x-1.6"
 core = "7.x"
 project = "search_api_saved_searches"
-datestamp = "1400922530"
+datestamp = "1500368644"
 

@@ -112,6 +112,11 @@ function search_api_saved_searches_schema() {
         'type' => 'int',
         'not null' => TRUE,
       ),
+      'last_queued' => array(
+        'description' => 'The Unix timestamp when the saved search was last queued.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
       'last_execute' => array(
         'description' => 'The Unix timestamp when the saved search was last executed.',
         'type' => 'int',
@@ -141,8 +146,8 @@ function search_api_saved_searches_schema() {
       ),
     ),
     'indexes' => array(
-      'uid' => array('uid'),
-      'mail' => array('mail'),
+      'user' => array('mail', 'uid'),
+      'notify' => array('enabled', 'notify_interval', 'last_queued', 'last_execute'),
     ),
     'primary key' => array('id'),
   );
@@ -155,6 +160,7 @@ function search_api_saved_searches_schema() {
  */
 function search_api_saved_searches_uninstall() {
   variable_del('search_api_saved_searches_search_ids');
+  variable_del('search_api_saved_search_queue_item_time');
 }
 
 /**
@@ -171,4 +177,69 @@ function search_api_saved_searches_update_7101() {
       ->fields(array('settings_id' => $delta))
       ->execute();
   }
+}
+
+/**
+ * Add {search_api_saved_search}.last_queued for more accurate queue tracking.
+ */
+function search_api_saved_searches_update_7102() {
+  $spec = array(
+    'description' => 'The Unix timestamp when the saved search was last queued.',
+    'type' => 'int',
+    'not null' => TRUE,
+  );
+  db_change_field('search_api_saved_search', 'last_execute', 'last_queued', $spec);
+  $spec['description'] = 'The Unix timestamp when the saved search was last executed.';
+  $spec['not null'] = FALSE;
+  db_add_field('search_api_saved_search', 'last_execute', $spec);
+  db_update('search_api_saved_search')
+    ->expression('last_execute', 'last_queued')
+    ->execute();
+  $spec['not null'] = TRUE;
+  db_change_field('search_api_saved_search', 'last_execute', 'last_execute', $spec);
+}
+
+/**
+ * Optimize indexes on {search_api_saved_search} to improve performance.
+ */
+function search_api_saved_searches_update_7103() {
+  db_drop_index('search_api_saved_search', 'uid');
+  db_drop_index('search_api_saved_search', 'mail');
+  db_add_index('search_api_saved_search', 'user', array('mail', 'uid'));
+  db_add_index('search_api_saved_search', 'notify', array('enabled', 'notify_interval', 'last_queued', 'last_execute'));
+}
+
+/**
+ * Fix incorrect {search_api_saved_search}.last_queued values.
+ *
+ * This might lead to duplicate mails for saved searches in some rare cases, but
+ * is necessary to prevent saved searches from never being executed at all
+ * anymore in others.
+ *
+ * @see https://www.drupal.org/node/2354863
+ */
+function search_api_saved_searches_update_7104() {
+  db_update('search_api_saved_search')
+    ->expression('last_queued', 'last_execute')
+    ->where('last_queued > last_execute')
+    ->execute();
+}
+
+/**
+ * Disable saved searches whose users were disabled.
+ */
+function search_api_saved_searches_update_7105() {
+  // Get the UIDs of all inactive users.
+  $query = db_select('users', 'u');
+  $query->fields('u', array('uid'))
+    ->condition('u.status', 0)
+    ->condition('u.uid', 0, '<>');
+
+  // Then, disable all their searches.
+  db_update('search_api_saved_search')
+    ->condition('uid', $query, 'IN')
+    ->fields(array(
+      'enabled' => 0,
+    ))
+    ->execute();
 }
