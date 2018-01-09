@@ -32,9 +32,20 @@ class languagefield_handler_filter_locale_language extends views_handler_filter_
     // $this->value_options = $output_languages;
 
     $this->value_options = languagefield_options_list($field_info, NULL, NULL, NULL);
-//    $this->value_options[''] = t('No language');
+    $this->value_options['language_content'] = t('Content language');
 
     return $this->value_options;
+  }
+
+  /**
+   * Replace/inject the value of the current content language.
+   */
+  function op_simple() {
+    if (isset($this->value['language_content'])) {
+      global $language_content;
+      $this->value['language_content'] = $language_content->language;
+    }
+    parent::op_simple();
   }
 
 }

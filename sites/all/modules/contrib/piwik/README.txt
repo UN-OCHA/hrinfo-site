@@ -48,8 +48,8 @@ Name: User ids
 Value: [current-user:piwik-role-ids]
 Scope: Visitor
 
-More details about custom variables can be found in the Piwik API documentation at
-http://piwik.org/docs/javascript-tracking/#toc-custom-variables.
+More details about custom variables can be found in the Piwik API documentation
+at http://piwik.org/docs/javascript-tracking/#toc-custom-variables.
 
 
 Advanced Settings
