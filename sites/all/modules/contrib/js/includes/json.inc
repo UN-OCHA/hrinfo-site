@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * json.inc
@@ -19,10 +20,12 @@
  *       });
  *
  *   - Array: An array of data to return.
+ * @param array $info
+ *   The callback definition array, may not be set.
  *
  * @see js_ajax.js
  */
-function js_deliver_json($callback_result) {
+function js_deliver_json($callback_result, array $info = NULL) {
   $json = array();
 
   $redirect_codes = array(301, 302, 303, 307);
@@ -87,7 +90,7 @@ function js_deliver_json($callback_result) {
   $output = drupal_json_encode($json);
 
   // Encode the stringed $output if the browser supports gzip compression.
-  if (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE) {
+  if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE) {
     $output = gzencode($output, 9);
     drupal_add_http_header('Content-Encoding', 'gzip');
     drupal_add_http_header('Vary', 'Accept-Encoding');

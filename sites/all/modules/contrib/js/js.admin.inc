@@ -19,7 +19,7 @@ function js_configure_form($form, &$form_state) {
     )),
   );
 
-  $options = [];
+  $options = array();
   $servers = js_server_info();
   foreach ($servers as $name => $info) {
     $options[$name] = $info['label'];
