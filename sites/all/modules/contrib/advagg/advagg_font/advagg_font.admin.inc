@@ -8,37 +8,32 @@
 /**
  * Form builder; Configure advagg settings.
  *
- * @ingroup forms
+ * @ingroup advagg_forms
  *
  * @see system_settings_form()
  */
 function advagg_font_admin_settings_form() {
   drupal_set_title(t('AdvAgg: Async Font Loader'));
+  advagg_display_message_if_requirements_not_met();
   $form = array();
 
-  $package = drupal_http_request('https://cdn.rawgit.com/bramstein/fontfaceobserver/master/package.json', array('timeout' => 7));
-  if (!empty($package->data)) {
-    $package = json_decode($package->data);
+  $versions = advagg_get_remote_libraries_versions();
+  $library = advagg_library('fontfaceobserver', 'advagg_font');
+  if (empty($versions['fontfaceobserver']['remote'])) {
+    $versions['fontfaceobserver']['remote'] = 'NULL';
   }
-  else {
-    unset($package);
-    $package = new stdClass();
-    $package->version = 0;
-  }
-
   $options = array(
     0 => t('Disabled'),
-    6 => t('Externally load the latest from github (version: @version)', array('@version' => $package->version)),
+    6 => t('Externally load the latest from github (version: @version)', array('@version' => $versions['fontfaceobserver']['remote'])),
   );
   $description = t('This will use the fallback font until the font has been downloaded. See <a href="@link">fontfaceobserver</a> for more info.', array(
-    '@link' => 'https://github.com/bramstein/fontfaceobserver',
+    '@link' => $library['vendor url'],
   ));
   if (function_exists('libraries_info')) {
-    $lib_info = libraries_detect('fontfaceobserver');
-    if ($lib_info['installed']) {
+    if ($library['installed']) {
       $options += array(
-        2 => t('Inline javascript (version: @version)', array('@version' => $lib_info['version'])),
-        4 => t('Local file included in aggregate (version: @version)', array('@version' => $lib_info['version'])),
+        2 => t('Inline javascript (version: @version)', array('@version' => $library['version'])),
+        4 => t('Local file included in aggregate (version: @version)', array('@version' => $library['version'])),
       );
     }
     elseif (!is_readable('sites/all/libraries/fontfaceobserver/fontfaceobserver.js')) {
@@ -115,12 +110,14 @@ function advagg_font_admin_settings_form() {
       continue;
     }
     // Get the file contents.
-    $file_contents = (string) @file_get_contents($row['filename']);
+    $file_contents = (string) @advagg_file_get_contents($row['filename']);
     // Get font names.
     $replacements = advagg_font_get_replacements_array($file_contents);
     if (!empty($replacements)) {
       $fonts = array();
       foreach ($replacements as $key => $replacement) {
+        // Do not display !important after the fallback font name.
+        $replacement[5] = str_replace(' !important', '', $replacement[5]);
         $fonts[$key . ' ' . $replacement[3]] = $replacement[5];
       }
 
@@ -161,9 +158,10 @@ function advagg_font_admin_settings_form() {
   return system_settings_form($form);
 }
 
-// Submit callback.
 /**
- * Clear out the advagg cache bin when the save configuration button is pressed.
+ * Submit callback, clear out the advagg cache bin.
+ *
+ * @ingroup advagg_forms_callback
  */
 function advagg_font_admin_settings_form_submit($form, &$form_state) {
   // Clear caches.

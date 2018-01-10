@@ -1,7 +1,7 @@
 <?php
+
 /**
  * @file
- * common.inc
  * Common functions used in any JS request.
  */
 

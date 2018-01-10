@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Variable module integration.
@@ -23,15 +24,36 @@ function securelogin_variable_info($options) {
   );
 
   // Build a list of forms that may be secured.
-  $forms['user_login'] = array('group' => 'required', 'title' => t('User login form', array(), $options));
-  $forms['user_login_block'] = array('group' => 'required', 'title' => t('User login block form', array(), $options));
-  $forms['user_pass_reset'] = array('group' => 'required', 'title' => t('User password reset form', array(), $options));
-  $forms['user_profile_form'] = array('group' => 'required', 'title' => t('User edit form', array(), $options));
+  $forms['user_login'] = array(
+    'group' => 'required',
+    'title' => t('User login form', array(), $options),
+  );
+  $forms['user_login_block'] = array(
+    'group' => 'required',
+    'title' => t('User login block form', array(), $options),
+  );
+  $forms['user_pass_reset'] = array(
+    'group' => 'required',
+    'title' => t('User password reset form', array(), $options),
+  );
+  $forms['user_profile_form'] = array(
+    'group' => 'required',
+    'title' => t('User edit form', array(), $options),
+  );
   // Registration form is also a login form if e-mail verification is disabled.
   $register = variable_get('user_email_verification', TRUE) ? 'optional' : 'required';
-  $forms['user_register_form'] = array('group' => $register, 'title' => t('User registration form', array(), $options));
-  $forms['user_pass'] = array('group' => 'optional', 'title' => t('User password request form', array(), $options));
-  $forms['node_form'] = array('group' => 'optional', 'title' => t('Node form', array(), $options));
+  $forms['user_register_form'] = array(
+    'group' => $register,
+    'title' => t('User registration form', array(), $options),
+  );
+  $forms['user_pass'] = array(
+    'group' => 'optional',
+    'title' => t('User password request form', array(), $options),
+  );
+  $forms['node_form'] = array(
+    'group' => 'optional',
+    'title' => t('Node form', array(), $options),
+  );
   module_load_include('inc', 'securelogin', 'securelogin.admin');
   drupal_alter('securelogin', $forms);
   foreach ($forms as $id => $item) {
