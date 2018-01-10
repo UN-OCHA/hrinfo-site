@@ -45,16 +45,30 @@ function search_api_saved_searches_user_listing($account) {
       $interval = format_interval($search->notify_interval, 1);
     }
 
+    $enable_options['attributes']['class'][] = 'saved-search-enable';
     $edit_options['attributes']['class'][] = 'saved-search-edit';
     $delete_options['attributes']['class'][] = 'saved-search-delete';
 
+    if ($search->enabled) {
+      $enable_action = '/disable';
+      $enable_label = t('disable');
+    }
+    else {
+      $enable_action = '/enable';
+      $enable_label = t('enable');
+      $enable_options['query']['token'] = drupal_get_token($search->id);
+    }
+
     $path = $base_path . $search->id;
+    $enable_link = l($enable_label, $path . $enable_action, $enable_options);
+    $edit_link = l(t('edit'), $path . '/edit', $edit_options);
+    $delete_link = l(t('delete'), $path . '/delete', $delete_options);
     $rows[] = array(
       $name,
       $created,
       $last_execute,
       $interval,
-      l(t('edit'), $path . '/edit', $edit_options) . ' | ' . l(t('delete'), $path . '/delete', $delete_options),
+      $enable_link . ' | ' . $edit_link . ' | ' . $delete_link,
     );
   }
 
@@ -170,6 +184,12 @@ function search_api_saved_searches_search_edit_form(array $form, array &$form_st
     $form_state['destination'] = array($search->options['page']['path'], $search->options['page']);
   }
 
+  $form['enabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enabled'),
+    '#description' => t('Disable to stop receiving notifications from this saved search.'),
+    '#default_value' => $search->enabled,
+  );
   $form['name'] = array(
     '#type' => 'textfield',
     '#title' => t('Name'),
@@ -178,6 +198,18 @@ function search_api_saved_searches_search_edit_form(array $form, array &$form_st
     '#required' => TRUE,
     '#default_value' => $search->name,
   );
+  if (!empty($settings->options['allow_keys_change'])) {
+    $keywords = $search->query['keys'];
+    if (is_array($keywords)) {
+      $keywords = search_api_saved_searches_unparse_keys($keywords);
+    }
+    $form['keys'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Keywords'),
+      '#description' => t('The keywords to use for this search.'),
+      '#default_value' => $keywords,
+    );
+  }
   if ($settings->options['user_select_interval'] && count($settings->options['interval_options']) > 1) {
     $form['notify_interval'] = array(
       '#type' => 'select',
@@ -205,17 +237,54 @@ function search_api_saved_searches_search_edit_form(array $form, array &$form_st
 }
 
 /**
+ * Reverses the search keywords parsing to get string keywords.
+ *
+ * @param array $keys
+ *   An array with search keys, as defined by
+ *   SearchApiQueryInterface::getKeys().
+ *
+ * @return string
+ *   A guess regarding the original keys used to come up with the given keys
+ *   array.
+ */
+function search_api_saved_searches_unparse_keys(array $keys) {
+  $simple_keys = array();
+
+  foreach (element_children($keys) as $i) {
+    $key = $keys[$i];
+    if (is_scalar($key)) {
+      if (strpos($key, ' ')) {
+        $key = '"' . $key . '"';
+      }
+      $simple_keys[] = $key;
+    }
+  }
+
+  return implode(' ', $simple_keys);
+}
+
+/**
  * Submission handler for search_api_saved_searches_search_edit_form().
  *
  * @see search_api_saved_searches_search_edit_form()
  */
 function search_api_saved_searches_search_edit_form_submit(array $form, array &$form_state) {
   $values = $form_state['values'];
+  /** @var SearchApiSavedSearch $search */
   $search = $form_state['search'];
   $search->name = $values['name'];
+  $search->enabled = $values['enabled'];
   if (isset($values['notify_interval'])) {
     $search->notify_interval = $values['notify_interval'];
   }
+
+  if (!empty($form['keys']) && $values['keys'] != $form['keys']['#default_value']) {
+    $search->query['keys'] = ($values['keys'] === '') ? NULL : $values['keys'];
+    // Unsetting the results array will automatically re-calculate the current
+    // results when saving.
+    $search->results = NULL;
+  }
+
   if ($search->save()) {
     drupal_set_message(t('Successfully saved your changes.'));
     if (!empty($form_state['destination'])) {
@@ -225,6 +294,56 @@ function search_api_saved_searches_search_edit_form_submit(array $form, array &$
   else {
     drupal_set_message(t('An error occurred while trying to save the changes.'), 'error');
   }
+}
+
+/**
+ * Page callback: Enables a saved search.
+ *
+ * @param SearchApiSavedSearch $search
+ *   The search to enable.
+ */
+function search_api_saved_searches_search_enable(SearchApiSavedSearch $search = NULL) {
+  if (!isset($_GET['token']) || !drupal_valid_token($_GET['token'], $search->id)) {
+    return MENU_ACCESS_DENIED;
+  }
+
+  $search->enabled = TRUE;
+  if ($search->save()) {
+    drupal_set_message(t('The saved search was successfully enabled.'));
+  }
+  else {
+    drupal_set_message(t('The saved search could not be enabled.'), 'error');
+  }
+
+  drupal_goto(_search_api_saved_searches_admin_redirect_url($search));
+  return NULL;
+}
+
+/**
+ * Page callback: Constructs a form for disabling a saved search.
+ *
+ * @param SearchApiSavedSearch $search
+ *   The search to disable.
+ *
+ * @see search_api_saved_searches_search_disable_form_submit()
+ *
+ * @ingroup forms
+ */
+function search_api_saved_searches_search_disable_form(array $form, array &$form_state, SearchApiSavedSearch $search) {
+  $form_state['search'] = $search;
+  $url = _search_api_saved_searches_admin_redirect_url($search);
+  return confirm_form($form, t('Do you really want to disable this saved search?'), $url, t('You will not receive any updates for this saved search until it is re-enabled.'));
+}
+
+/**
+ * Form submission handler for search_api_saved_searches_search_disable_form().
+ */
+function search_api_saved_searches_search_disable_form_submit(array $form, array &$form_state) {
+  $search = $form_state['search'];
+  $search->enabled = FALSE;
+  $search->save();
+  drupal_set_message(t('The saved search was successfully disabled.'));
+  $form_state['redirect'] = _search_api_saved_searches_admin_redirect_url($search);
 }
 
 /**
@@ -238,15 +357,7 @@ function search_api_saved_searches_search_edit_form_submit(array $form, array &$
  */
 function search_api_saved_searches_search_delete_form(array $form, array &$form_state, SearchApiSavedSearch $search) {
   $form_state['search'] = $search;
-  if ($search->uid && search_api_saved_search_edit_access(user_load($search->uid))) {
-    $url = 'user/' . $search->uid . '/saved-searches';
-  }
-  elseif (!empty($search->options['page'])) {
-    $url = $search->options['page'];
-  }
-  else {
-    $url = '<front>';
-  }
+  $url = _search_api_saved_searches_admin_redirect_url($search);
   return confirm_form($form, t('Do you really want to delete this saved search?'), $url);
 }
 
@@ -258,15 +369,29 @@ function search_api_saved_searches_search_delete_form(array $form, array &$form_
 function search_api_saved_searches_search_delete_form_submit(array $form, array &$form_state) {
   $search = $form_state['search'];
   $search->delete();
+  drupal_set_message(t('The saved search was successfully deleted.'));
+  $form_state['redirect'] = _search_api_saved_searches_admin_redirect_url($search);
+}
+
+/**
+ * Returns the correct redirect URL after changing a saved search.
+ *
+ * This will be the user's "Saved searches" overview tab, if it is accessible;
+ * otherwise, if the search has a page associated with it, that page; and if
+ * none of the two are the case, the front page.
+ *
+ * @param SearchApiSavedSearch $search
+ *   The saved search that was edited, deleted or otherwise changed.
+ *
+ * @return string
+ *   The URL to redirect to.
+ */
+function _search_api_saved_searches_admin_redirect_url(SearchApiSavedSearch $search) {
   if ($search->uid && search_api_saved_search_edit_access(user_load($search->uid))) {
-    $url = 'user/' . $search->uid . '/saved-searches';
+    return 'user/' . $search->uid . '/saved-searches';
   }
   elseif (!empty($search->options['page'])) {
-    $url = $search->options['page'];
+    return $search->options['page'];
   }
-  else {
-    $url = '<front>';
-  }
-  drupal_set_message(t('The saved search was successfully deleted.'));
-  $form_state['redirect'] = $url;
+  return '<front>';
 }

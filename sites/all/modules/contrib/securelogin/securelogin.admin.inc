@@ -1,12 +1,17 @@
 <?php
 
 /**
+ * @file
+ * Admin page callbacks for Secure Login module.
+ */
+
+/**
  * Admin settings form.
  */
 function securelogin_admin() {
   global $base_secure_url;
   if (variable_get('https', FALSE)) {
-    drupal_set_message(t('Secure Login module expects the Drupal <code>$conf[\'https\']</code> setting to be at its default value: <code>FALSE</code>. Because it is currently enabled, secure logins cannot be fully implemented because Drupal sets insecure session cookies during login to the secure site.'), 'warning');
+    drupal_set_message(t("Secure Login module expects the Drupal <code>\$conf['https']</code> setting to be at its default value: <code>FALSE</code>. Because it is currently enabled, secure logins cannot be fully implemented because Drupal sets insecure session cookies during login to the secure site."), 'warning');
   }
   $form['securelogin_base_url'] = array(
     '#type'          => 'textfield',
@@ -68,7 +73,7 @@ function securelogin_admin() {
  */
 function securelogin_admin_submit($form, &$form_state) {
   // Any cached pages containing forms should be regenerated.
-  cache_clear_all();
+  drupal_register_shutdown_function('cache_clear_all');
 }
 
 /**
