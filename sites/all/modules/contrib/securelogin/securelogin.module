@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Enables user login and other forms to be submitted securely via HTTPS.
+ */
+
+/**
  * Implements hook_cron_queue_info().
  */
 function securelogin_cron_queue_info() {
@@ -87,23 +92,27 @@ function securelogin_secure_form(&$form) {
  */
 function securelogin_secure_redirect() {
   global $is_https;
-  // POST requests are not redirected, to prevent unintentional redirects which
-  // result in lost POST data. Likewise do not redirect from HTTPS requests, the
-  // command-line environment or cron runs.
-  if ($is_https || $_SERVER['REQUEST_METHOD'] == 'POST' || drupal_is_cli() || drupal_static('securelogin_is_cron')) {
+  // Do not redirect from HTTPS requests, the command-line environment or cron.
+  if ($is_https || drupal_is_cli() || drupal_static('securelogin_is_cron')) {
     return;
   }
   $path = drupal_is_front_page() ? '' : $_GET['q'];
-  $http_response_code = 301;
+  // POST requests need a 308 redirect to avoid losing POST data.
+  $http_response_code = ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'HEAD') ? 301 : 308;
   // Do not permit redirecting to an external URL.
-  $options = array('query' => drupal_get_query_parameters(), 'https' => TRUE, 'external' => FALSE);
+  $options = array(
+    'query' => drupal_get_query_parameters(),
+    'https' => TRUE,
+    'external' => FALSE,
+  );
   // We don't use drupal_goto() here because we want to be able to use the
   // page cache, but let's pretend that we are.
   drupal_alter('drupal_goto', $path, $options, $http_response_code);
   // The 'Location' HTTP header must be absolute.
   $options['absolute'] = TRUE;
   $url = url($path, $options);
-  $status = "$http_response_code Moved Permanently";
+  $responses = array(301 => 'Moved Permanently', 308 => 'Permanent Redirect');
+  $status = "$http_response_code {$responses[$http_response_code]}";
   drupal_add_http_header('Status', $status);
   drupal_add_http_header('Location', $url);
   // Drupal page cache requires a non-empty page body for some reason.

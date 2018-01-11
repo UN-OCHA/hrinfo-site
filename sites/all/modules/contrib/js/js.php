@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * An optimized page execution used to serve JavaScript AJAX requests using a
