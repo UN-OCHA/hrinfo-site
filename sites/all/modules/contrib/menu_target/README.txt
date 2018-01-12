@@ -4,7 +4,7 @@ Menu Target
 INTRODUCTION:
 --------------------------------------------------------------------------------
 
-Allows privileged users to choose wether or not to open menu items in a new
+Allows privileged users to choose whether or not to open menu items in a new
 window. When enabled, users who have access to add or edit menu items, are
 provided the possibility to choose if the menu items should be opened in a new
 window or in the same window.
@@ -25,7 +25,11 @@ Install as usual, see http://drupal.org/node/70151 for further information.
 
 CONFIGURATION:
 --------------------------------------------------------------------------------
-There are no configuration options for this module.
+
+You can configure the type of redirecting (attribute-based or javascript)
+at admin/structure/menu/settings.
+This module defaults to rendering the links with the deprecated target
+attribute.
 
 
 TECHNICAL DESCRIPTION:
