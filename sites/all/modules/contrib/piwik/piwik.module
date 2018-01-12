@@ -188,6 +188,18 @@ function piwik_page_alter(&$page) {
       $set_document_title = '"404/URL = " + encodeURIComponent(document.location.pathname+document.location.search) + "/From = " + encodeURIComponent(document.referrer)';
     }
 
+    // #2693595: User has entered an invalid login and clicked on forgot
+    // password link. This link contains the username or email address and may
+    // get send to Google if we do not override it. Override only if 'name'
+    // query param exists. Last custom url condition, this need to win.
+    //
+    // URLs to protect are:
+    // - user/password?name=username
+    // - user/password?name=foo@example.com
+    if (arg(0) == 'user' && arg(1) == 'password' && array_key_exists('name', drupal_get_query_parameters())) {
+      $set_custom_url = drupal_json_encode(url('user/password'));
+    }
+
     // Add custom variables.
     $piwik_custom_vars = variable_get('piwik_custom_var', array());
     $custom_variable = '';
@@ -486,6 +498,10 @@ function _piwik_cache($location, $sync_cached_file = FALSE) {
         if ($data_hash_local != $data_hash_remote && file_prepare_directory($path)) {
           // Save updated tracking code file to disk.
           file_unmanaged_save_data($result->data, $file_destination, FILE_EXISTS_REPLACE);
+          // Based on Drupal Core drupal_build_css_cache().
+          if (variable_get('css_gzip_compression', TRUE) && variable_get('clean_url', 0) && extension_loaded('zlib')) {
+            file_unmanaged_save_data(gzencode($result->data, 9, FORCE_GZIP), $file_destination . '.gz', FILE_EXISTS_REPLACE);
+          }
           watchdog('piwik', 'Locally cached tracking code file has been updated.', array(), WATCHDOG_INFO);
 
           // Change query-strings on css/js files to enforce reload for all users.
@@ -498,6 +514,9 @@ function _piwik_cache($location, $sync_cached_file = FALSE) {
           // There is no need to flush JS here as core refreshes JS caches
           // automatically, if new files are added.
           file_unmanaged_save_data($result->data, $file_destination, FILE_EXISTS_REPLACE);
+          if (variable_get('css_gzip_compression', TRUE) && variable_get('clean_url', 0) && extension_loaded('zlib')) {
+            file_unmanaged_save_data(gzencode($result->data, 9, FORCE_GZIP), $file_destination . '.gz', FILE_EXISTS_REPLACE);
+          }
           watchdog('piwik', 'Locally cached tracking code file has been saved.', array(), WATCHDOG_INFO);
 
           // Return the local JS file path.
