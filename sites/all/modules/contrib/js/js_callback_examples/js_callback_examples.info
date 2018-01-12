@@ -4,9 +4,9 @@ package = Performance
 core = 7.x
 dependencies[] = js
 
-; Information added by Drupal.org packaging script on 2016-11-30
-version = "7.x-2.1"
+; Information added by Drupal.org packaging script on 2017-04-19
+version = "7.x-2.4"
 core = "7.x"
 project = "js"
-datestamp = "1480538596"
+datestamp = "1492622645"
 

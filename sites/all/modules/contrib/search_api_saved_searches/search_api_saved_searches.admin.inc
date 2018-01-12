@@ -56,6 +56,7 @@ function search_api_saved_searches_index_edit(array $form, array &$form_state, S
     'choose_name' => FALSE,
     'registered_user_delete_key' => FALSE,
     'show_empty_list' => FALSE,
+    'allow_keys_change' => FALSE,
     'user_select_interval' => TRUE,
     'interval_options' => array(
       60 * 60 * 24     => t('Daily'),
@@ -82,6 +83,7 @@ If you didn't create this saved search, just ignore this mail and it will be del
 --  [site:name] team"),
   );
   $settings->options['mail']['notify'] += array(
+    'send' => TRUE,
     'title' => t('New results for your saved search at [site:name]'),
     'body' => t('[user:name],
 
@@ -227,6 +229,13 @@ You can configure your saved searches at the following address:
     '#default_value' => $options['show_empty_list'],
     '#parents' => array('options', 'show_empty_list'),
   );
+  $form['options']['misc']['allow_keys_change'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Allow changing of keywords'),
+    '#description' => t("Whether to let users also change the saved search's keywords when editing it."),
+    '#default_value' => $options['allow_keys_change'],
+    '#parents' => array('options', 'allow_keys_change'),
+  );
 
   // @todo Access options? Maximum number of saved searches per user, maximum
   //   number of results to create saved search, minimum number of filters?
@@ -280,7 +289,7 @@ You can configure your saved searches at the following address:
   $form['options']['interval']['set_interval_custom'] = array(
     '#type' => 'textfield',
     '#description' => t('Enter the custom notification interval, in seconds. Use a negative value to disable notifications.'),
-    '#default_value' => isset($interval_options[$options['set_interval']]) ? $options['set_interval'] : 0,
+    '#default_value' => $options['set_interval'],
     '#parents' => array('options', 'set_interval_custom'),
     '#states' => array(
       'visible' => array(
@@ -333,17 +342,30 @@ You can configure your saved searches at the following address:
     '#required' => TRUE,
   );
 
+  $form['options']['mail']['notify_send'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Send mail notifications for new results'),
+    '#description' => t('Depending on the notification interval, send regular mail updates with new results for saved searches. Disable this option if you want to use some other mechanism to notify the user of new results (or if you do not want any notifications at all).'),
+    '#default_value' => $options['mail']['notify']['send'],
+    '#parents' => array('options', 'mail', 'notify', 'send'),
+  );
   $form['options']['mail']['notify'] = array(
     '#type' => 'fieldset',
     '#title' => t('Notification mails'),
     '#collapsible' => TRUE,
     '#collapsed' => $settings->enabled,
+    '#states' => array(
+      'visible' => array(
+        ':input[name="options[mail][notify][send]"]' => array('checked' => TRUE),
+      ),
+    ),
   );
   $form['options']['mail']['notify']['title'] = array(
     '#type' => 'textfield',
     '#title' => t('Subject'),
     '#description' => t("Enter the mail's subject.") . ' ' . t('Available variables are: @vars.',
-        array('@vars' => '[site:name], [user:name], [user:mail]')),
+        array('@vars' => '[site:name], [user:name], [user:mail], [search-api-saved-search:name], [search-api-saved-search:created]')) . '<br />' .
+        t('The search-specific variables are taken from the first saved search of the mail. (Alerts from multiple searches are sent at the same time.)'),
     '#default_value' => $options['mail']['notify']['title'],
     '#required' => TRUE,
   );
@@ -352,8 +374,12 @@ You can configure your saved searches at the following address:
     '#title' => t('Body'),
     '#description' => t("Enter the mail's body.") . ' ' . t('Available variables are: @vars.',
         array('@vars' => '[site:name], [site:url], [user:name], [user:mail], [site:url-brief], ' .
-            '[search-api-saved-searches:results], [user:search-api-saved-searches-url]')) . ' ' .
+            '[search-api-saved-searches:results], [user:search-api-saved-searches-url], ' .
+            '[search-api-saved-search:name], [search-api-saved-search:created], ' .
+            '[search-api-saved-search:results-capped], [search-api-saved-search:view-url], ' .
+            '[search-api-saved-search:edit-url], [search-api-saved-search:delete-url]')) . ' ' .
         t('The replacement for @var can be configured below.', array('@var' => '[search-api-saved-searches:results]')) . '<br />' .
+        t('The search-specific variables are taken from the first saved search of the mail. (Alerts from multiple searches are sent at the same time.)') . '<br />' .
         t('Please note: For anonymous users, the [user:*] variables will be empty.'),
     '#default_value' => $options['mail']['notify']['body'],
     '#rows' => 12,
@@ -433,7 +459,7 @@ You can configure your saved searches at the following address:
   if (!empty($index->options['fields'])) {
     $fields = array();
     foreach ($index->getFields() as $field => $info) {
-      $fields[$field] = $info['name'];
+      $fields[$field] = check_plain($info['name']);
     }
   }
   if (!empty($fields)) {
