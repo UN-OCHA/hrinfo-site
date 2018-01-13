@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * callback.inc
@@ -28,20 +29,20 @@ function js_callback_execute(array $info) {
   js_callback_process_request($info);
 
   // By default, return JS_MENU_NOT_FOUND. This will be overridden below.
-  $callback_result = JS_MENU_NOT_FOUND;
+  $result = JS_MENU_NOT_FOUND;
 
   // Check callback access.
   if (!empty($info['access callback']) && !call_user_func_array($info['access callback'], $info['access arguments'])) {
-    $callback_result = JS_MENU_ACCESS_DENIED;
+    $result = JS_MENU_ACCESS_DENIED;
   }
   // Ensure callback function exists and can be invoked.
   elseif (!empty($info['callback function']) || function_exists($info['callback function'])) {
     if ($xhprof) {
-      xhprof_enable(0, array('ignored_functions' =>  array('call_user_func', 'call_user_func_array')));
+      xhprof_enable(0, array('ignored_functions' => array('call_user_func', 'call_user_func_array')));
     }
 
     // Execute the callback.
-    $callback_result = call_user_func_array($info['callback function'], $info['callback arguments']);
+    $result = call_user_func_array($info['callback function'], $info['callback arguments']);
 
     if ($xhprof) {
       drupal_set_message('XHProf results:<ul><li>' . implode('</li><li>', array_keys(xhprof_disable())) . '</li></ul>');
@@ -50,11 +51,11 @@ function js_callback_execute(array $info) {
     // Enforce sensitization of the result if the "xss" variable is not
     // explicitly set to a boolean of FALSE.
     if ($info['xss'] !== FALSE) {
-      $callback_result = js_callback_filter_xss($callback_result);
+      $result = js_callback_filter_xss($result);
     }
   }
 
-  return $callback_result;
+  return $result;
 }
 
 /**
@@ -64,6 +65,7 @@ function js_callback_execute(array $info) {
  *   The callback info array, passed by reference.
  *
  * @throws Exception
+ *
  * @see _drupal_bootstrap_full()
  */
 function js_callback_bootstrap(array &$info) {
@@ -179,6 +181,12 @@ function js_callback_bootstrap(array &$info) {
         module_invoke($module, 'init');
       }
     }
+
+    // At this point in the execution flow it is safe to allow our cache handler
+    // to perform a full bootstrap in case of cache misses.
+    if ($info['cache']) {
+      JsProxyCache::setFullBootstrapAllowed(TRUE);
+    }
   }
 }
 
@@ -232,7 +240,7 @@ function js_callback_bootstrap(array &$info) {
  * @param array $info
  *   The callback info array, passed by reference.
  */
-function js_callback_process_request(&$info) {
+function js_callback_process_request(array &$info) {
   if ($info['process request'] === FALSE) {
     return;
   }
@@ -253,6 +261,9 @@ function js_callback_process_request(&$info) {
     }
   }
 
+  // Load argument callbacks.
+  $load_arguments = $info['load arguments'];
+
   // Retrieve the default parameters of the callback function.
   foreach (array('access', 'callback') as $type) {
     $data = $request_data;
@@ -263,23 +274,64 @@ function js_callback_process_request(&$info) {
     if (function_exists($function)) {
       $f = new ReflectionFunction($function);
       foreach ($f->getParameters() as $param) {
-        $default = NULL;
-        if ($param->isDefaultValueAvailable()) {
-          $default = $param->getDefaultValue();
+
+        // Don't add parameters that have no default value and are not in $_REQUEST
+        if (!$param->isDefaultValueAvailable() && !isset($data[$param->name])) {
+          continue;
         }
+
+        // Determine if there's a default value.
+        $default = $param->isDefaultValueAvailable() ? $param->getDefaultValue() : NULL;
+
+        // Determine if callback parameter has been type hinted with a class.
+        if ($class = $param->getClass()) {
+          $default = array('class' => $class->getName(), 'default' => $default);
+        }
+
+        // Set the default value.
         $parameters[$param->name] = $default;
+
+        // Give callback definitions a chance to completely disable autoloading.
+        if ($load_arguments !== FALSE && is_array($load_arguments)) {
+          // Automatically determine load function, if it wasn't explicitly set.
+          if (!isset($load_arguments[$param->name])) {
+            $load_callback = $param->name . '_load';
+            if (function_exists($load_callback)) {
+              $load_arguments[$param->name] = $load_callback;
+            }
+          }
+          // Otherwise, remove it if it's empty or not callable.
+          elseif (!$load_arguments[$param->name] || !is_callable($load_arguments[$param->name])) {
+            unset($load_arguments[$param->name]);
+          }
+        }
       }
     }
     foreach ($parameters as $name => $default_value) {
       // Check to see if the parameter exists.
       if (isset($data[$name])) {
+        $value = $data[$name];
+
+        // Load the parameter using a load argument callback, if one exists.
+        if (is_array($load_arguments) && isset($load_arguments[$name])) {
+          $value = call_user_func_array($load_arguments[$name], array($value));
+        }
+
+        // Ensure class type hinting is passing the proper value.
+        if (is_array($default_value) && isset($default_value['class'])) {
+          if (!is_object($value) || (get_class($value) !== $default_value['class'] && !is_subclass_of($value, $default_value['class']))) {
+            $value = $default_value['default'];
+          }
+        }
         // Convert the type of variable in the $_REQUEST array to match the
         // same variable type as the parameter's default value.
-        if (!is_null($default_value)) {
-          settype($data[$name], gettype($default_value));
+        elseif (!is_null($default_value)) {
+          settype($value, gettype($default_value));
         }
+
         // Move the value of the $_REQUEST data into the parameter array.
-        $parameters[$name] = $data[$name];
+        $parameters[$name] = $value;
+
         // Remove the request data since it has been moved.
         unset($data[$name]);
       }
