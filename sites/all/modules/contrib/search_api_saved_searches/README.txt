@@ -17,7 +17,7 @@ Installation
 ------------
 
 * Install the module as usual.
-  See http://drupal.org/documentation/install/modules-themes/modules-7 
+  See http://drupal.org/documentation/install/modules-themes/modules-7
   for further information.
 * Set the module's permissions (Administer saved searches, Use saved searches).
 * You can now configure saved searches for each index by going to its
@@ -25,3 +25,10 @@ Installation
 * For being able to actually save searches, you have to enable the
   "[Index Name]: Save search" block. This block will only appear on pages which
   contain a Search API search and allow users to save the executed search.
+
+Hidden variables
+----------------
+
+* search_api_saved_search_queue_item_time (default: 10)
+  By default, queue item time is set to 10 seconds. This setting lets you modify
+  the queue item time by providing your own value in seconds.
