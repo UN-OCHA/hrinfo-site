@@ -149,14 +149,22 @@ function search_api_saved_searches_tokens($type, array $tokens, array $data = ar
 
   switch ($type) {
     case 'user':
-      if (!empty($data['user']->uid)) {
-        if (isset($tokens['search-api-saved-searches-url'])) {
-          $replacements[$tokens['search-api-saved-searches-url']] = url('user/' . $data['user']->uid . '/saved-searches', $url_options);
+      if (isset($tokens['search-api-saved-searches-url'])) {
+        $url_tokens = token_find_with_prefix($tokens, 'search-api-saved-searches-url');
+        if (!empty($data['user']->uid)) {
+          $path = 'user/' . $data['user']->uid . '/saved-searches';
+          $replacements[$tokens['search-api-saved-searches-url']] = url($path, $url_options);
+          if ($url_tokens) {
+            $replacements += token_generate('url', $url_tokens, array(
+              'path' => $path,
+            ), $options);
+          }
         }
-        if ($url_tokens = token_find_with_prefix($tokens, 'search-api-saved-searches-url')) {
-          $replacements += token_generate('url', $url_tokens, array(
-            'path' => 'user/' . $data['user']->uid . '/saved-searches',
-          ), $options);
+        else {
+          $replacements[$tokens['search-api-saved-searches-url']] = '';
+          foreach ($url_tokens as $token) {
+            $replacements[$token] = '';
+          }
         }
       }
       break;
