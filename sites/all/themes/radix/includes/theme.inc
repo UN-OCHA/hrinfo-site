@@ -41,6 +41,39 @@ function radix_theme(&$existing, $type, $theme, $path) {
       ),
       'template' => 'templates/other/radix-modal',
     ),
+    'radix_tabs' => array(
+      'variables' => array(
+        'tabs' => NULL,
+        'type' => NULL,
+      ),
+      'template' => 'templates/other/radix-tabs',
+    ),
+    'radix_grid' => array(
+      'variables' => array(
+        'items' => NULL,
+      ),
+      'template' => 'templates/other/radix-grid',
+    ),
+    'radix_alert' => array(
+      'variables' => array(
+        'text' => NULL,
+        'type' => 'status',
+      ),
+    ),
+    'radix_icon' => array(
+      'variables' => array(
+        'icon' => NULL,
+        'text' => NULL,
+        'link' => NULL,
+      ),
+      'function' => 'theme_radix_icon',
+    ),
+    'radix_input_group_addon' => array(
+      'variables' => array(
+        'content' => NULL,
+      ),
+      'function' => 'theme_radix_input_group_addon',
+    )
   );
 }
 
@@ -82,7 +115,8 @@ function theme_radix_dropdown($variables) {
       continue;
     }
 
-    if (isset($link['href']) && ($link['href'] == $_GET['q'] || ($link['href'] == '<front>' && drupal_is_front_page())) && (empty($link['language']) || $link['language']->language == $language_url->language)) {
+    if (isset($link['href']) && ($link['href'] == $_GET['q']
+        || ($link['href'] == '<front>' && drupal_is_front_page()))) {
       $class[] = 'active';
     }
 
@@ -99,7 +133,7 @@ function theme_radix_dropdown($variables) {
     }
     elseif (!empty($link['title'])) {
       // Some links are actually not links,
-      // but we wrap these in <span> for adding title and class attributes.
+      // But we wrap these in <span> for adding title and class attributes.
       if (empty($link['html'])) {
         $link['title'] = check_plain($link['title']);
       }
@@ -151,7 +185,7 @@ function theme_radix_button_group($variables) {
       $class[] = 'last';
     }
 
-    // Add Boostrap attributes.
+    // Add Bootstrap attributes.
     $button['attributes'] = drupal_array_merge_deep($button['attributes'], array('class' => $class));
 
     $output .= l($button['title'], $button['href'], $button);
@@ -283,3 +317,82 @@ function radix_preprocess_radix_modal(&$variables) {
   }
 }
 
+/**
+ * Implements template_proprocess_radix_tabs().
+ */
+function radix_preprocess_radix_tabs(&$variables) {
+  $tabs = &$variables['tabs'];
+
+  // Create an id for each tab.
+  foreach ($tabs as &$tab) {
+    // Create an attributes_array for each tab.
+    $attributes_array = !empty($tab['attributes_array']) ? $tab['attributes_array'] : array();
+
+    // Get options.
+    $options = !empty($tab['options']) ? $tab['options'] : array();
+    $options = array_merge($options, array('html' => TRUE, 'attributes' => $attributes_array));
+
+    // Create the tab element.
+    $tab['tab'] = array(
+      '#theme' => 'link',
+      '#text' => $tab['title'],
+      '#path' => isset($tab['href']) ? $tab['href'] : current_path(),
+      '#options' => $options,
+    );
+
+    // If content is not empty, this tab can toggle a tab.
+    if (!empty($tab['content'])) {
+      $tab['id'] = drupal_html_class($tab['title']);
+      $tab['tab']['#options']['fragment'] = $tab['id'];
+      $tab['tab']['#options']['attributes']['data-toggle'] = "tab";
+    }
+  }
+
+  // Default to nav-tabs if type is not provided.
+  if (empty($variables['type'])) {
+    $variables['type'] = 'tabs';
+  }
+}
+
+/**
+ * Implements template_preprocess_radix_alert().
+ */
+function template_preprocess_radix_alert(&$variables) {
+  $type = $variables['type'];
+
+  // Add classes.
+  $variables['classes_array'][] = 'alert';
+  $variables['classes_array'][] = 'alert-' . $type;
+}
+
+/**
+ * Implements theme_radix_icon().
+ */
+function theme_radix_icon($variables) {
+  $icon = $variables['icon'];
+  $text = $variables['text'];
+  $link = $variables['link'];
+
+  $html  = '<i class="fa fa-' . check_plain($icon) . '">';
+  if ($text) {
+    $html .= '<span class="element-invisible">' . check_plain($text) . '</span>';
+  }
+  $html .= '</i>';
+
+  if ($link) {
+    $link_options = array('html' => TRUE);
+    if ($text) {
+      $link_options['attributes']['title'] = $text;
+    }
+    return l($html, $link, $link_options);
+  }
+
+  return $html;
+}
+
+/**
+ * Implements theme_input_group_addon().
+ */
+function theme_radix_input_group_addon($variables) {
+  return '<span class="input-group-addon">' . $variables['content'] . '</span>';
+}
