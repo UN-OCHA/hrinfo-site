@@ -6,8 +6,14 @@
  */
 
 /**
- * @addtogroup hooks
+ * @defgroup advagg_hooks Advanced Aggregates Hooks
+ *
  * @{
+ * Hooks for modules to implement to extend or modify Advanced Aggregates.
+ *
+ * For more examples of use see most of the Advanced Agregrates sub modules.
+ *
+ * @see https://api.drupal.org/api/drupal/includes%21module.inc/group/hooks/7.x
  */
 
 /**
@@ -86,7 +92,7 @@ function hook_advagg_changed_files(array $files, array $types) {
   $return = array();
   foreach ($files as $filename => $meta_data) {
     // Only care about js files.
-    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
     if ($ext !== 'js') {
       continue;
     }
@@ -343,7 +349,6 @@ function hook_advagg_css_groups_alter(array &$css_groups, $preprocess_css) {
     }
     else {
       $diff = array_merge(array_diff_assoc($group['browsers'], $target['browsers']), array_diff_assoc($target['browsers'], $group['browsers']));
-      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
       if ($group['type'] != $target['type']
         || $group['group'] != $target['group']
         || $group['every_page'] != $target['every_page']
@@ -354,7 +359,6 @@ function hook_advagg_css_groups_alter(array &$css_groups, $preprocess_css) {
       ) {
         if (!empty($last_group)) {
           $diff = array_merge(array_diff_assoc($last_group['browsers'], $target['browsers']), array_diff_assoc($target['browsers'], $last_group['browsers']));
-          // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
           if ($last_group['type'] != $target['type']
             || $last_group['group'] != $target['group']
             || $last_group['every_page'] != $target['every_page']
@@ -692,5 +696,5 @@ function hook_advagg_bundler_analysis_alter(array &$analysis) {
 }
 
 /**
- * @} End of "addtogroup hooks".
+ * @} End of "defgroup advagg_hooks".
  */
