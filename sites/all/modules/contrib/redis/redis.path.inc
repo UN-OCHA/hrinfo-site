@@ -85,6 +85,10 @@ function drupal_lookup_path($action, $path = '', $path_language = NULL) {
     return $cache[$path_language][$action][$path];
   }
 
+  if (!empty($path)) {
+    $path = strtolower(trim($path));
+  }
+
   $ret = null;
   $hashLookup = redis_path_backend_get();
 
@@ -117,17 +121,17 @@ function drupal_lookup_path($action, $path = '', $path_language = NULL) {
         // the right language (keeps track of LANGUAGE_NONE or specific language
         // so that default fallback behavior is the same that core).
         if ($path_language == LANGUAGE_NONE) {
-          list ($ret, $path_language) = db_query("SELECT alias, language FROM {url_alias} WHERE source = :source AND language = :language ORDER BY pid DESC LIMIT 1", array(
+          list ($ret, $path_language) = db_query_range("SELECT alias, language FROM {url_alias} WHERE source = :source AND language = :language ORDER BY pid DESC", 0, 1, array(
             ':source' => $path,
             ':language' => $path_language,
           ))->fetch(PDO::FETCH_NUM);
         } else if ($path_language > LANGUAGE_NONE) {
-          list ($ret, $path_language) = db_query("SELECT alias, language FROM {url_alias} WHERE source = :source AND language IN (:language) ORDER BY language DESC, pid DESC LIMIT 1", array(
+          list ($ret, $path_language) = db_query_range("SELECT alias, language FROM {url_alias} WHERE source = :source AND language IN (:language) ORDER BY language DESC, pid DESC", 0, 1, array(
             ':source' => $path,
             ':language' => array($path_language, LANGUAGE_NONE),
           ))->fetch(PDO::FETCH_NUM);
         } else {
-          list ($ret, $path_language) = db_query("SELECT alias, language FROM {url_alias} WHERE source = :source AND language IN (:language) ORDER BY language ASC, pid DESC LIMIT 1", array(
+          list ($ret, $path_language) = db_query_range("SELECT alias, language FROM {url_alias} WHERE source = :source AND language IN (:language) ORDER BY language ASC, pid DESC", 0, 1, array(
             ':source' => $path,
             ':language' => array($path_language, LANGUAGE_NONE),
           ))->fetch(PDO::FETCH_NUM);
@@ -159,17 +163,17 @@ function drupal_lookup_path($action, $path = '', $path_language = NULL) {
         // the right language (keeps track of LANGUAGE_NONE or specific language
         // so that default fallback behavior is the same that core).
         if ($path_language == LANGUAGE_NONE) {
-          list ($ret, $path_language) = db_query("SELECT source, language FROM {url_alias} WHERE alias = :alias AND language = :language ORDER BY pid DESC LIMIT 1", array(
+          list ($ret, $path_language) = db_query_range("SELECT source, language FROM {url_alias} WHERE alias = :alias AND language = :language ORDER BY pid DESC", 0, 1, array(
             ':alias' => $path,
             ':language' => LANGUAGE_NONE,
           ))->fetch(PDO::FETCH_NUM);
         } else if ($path_language > LANGUAGE_NONE) {
-          list ($ret, $path_language) = db_query("SELECT source, language FROM {url_alias} WHERE alias = :alias AND language IN (:language) ORDER BY language DESC, pid DESC LIMIT 1", array(
+          list ($ret, $path_language) = db_query_range("SELECT source, language FROM {url_alias} WHERE alias = :alias AND language IN (:language) ORDER BY language DESC, pid DESC", 0, 1, array(
             ':alias' => $path,
             ':language' => array($path_language, LANGUAGE_NONE),
           ))->fetch(PDO::FETCH_NUM);
         } else {
-          list ($ret, $path_language) = db_query("SELECT source, language FROM {url_alias} WHERE alias = :alias AND language IN (:language) ORDER BY language ASC, pid DESC LIMIT 1", array(
+          list ($ret, $path_language) = db_query_range("SELECT source, language FROM {url_alias} WHERE alias = :alias AND language IN (:language) ORDER BY language ASC, pid DESC", 0, 1, array(
             ':alias' => $path,
             ':language' => array($path_language, LANGUAGE_NONE),
           ))->fetch(PDO::FETCH_NUM);
@@ -177,6 +181,8 @@ function drupal_lookup_path($action, $path = '', $path_language = NULL) {
         // Getting here with a value means we need to cache it
         if (empty($ret)) {
           $ret = false;
+        } else {
+          $ret = strtolower(trim($ret));
         }
         $hashLookup->saveAlias($ret, $path, $path_language);
       }
@@ -561,8 +567,8 @@ function drupal_valid_path($path, $dynamic_allowed = FALSE) {
   elseif ($dynamic_allowed && preg_match('/\/\%/', $path)) {
     // Path is dynamic (ie 'user/%'), so check directly against menu_router table.
     if ($item = db_query("SELECT * FROM {menu_router} where path = :path", array(':path' => $path))->fetchAssoc()) {
-      $item['link_path']  = $form_item['link_path'];
-      $item['link_title'] = $form_item['link_title'];
+      $item['link_path']  = $item['path'];
+      $item['link_title'] = $item['title'];
       $item['external']   = FALSE;
       $item['options'] = '';
       _menu_link_translate($item);
