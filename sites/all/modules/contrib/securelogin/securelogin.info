@@ -1,15 +1,12 @@
 name = Secure Login
 description = "Enables user login and other forms to be submitted securely via HTTPS and enforces secure authenticated sessions."
 core = 7.x
-files[] = securelogin.admin.inc
-files[] = securelogin.install
-files[] = securelogin.module
 files[] = securelogin.test
 configure = admin/config/people/securelogin
 
-; Information added by Drupal.org packaging script on 2015-10-28
-version = "7.x-1.6"
+; Information added by Drupal.org packaging script on 2018-01-02
+version = "7.x-1.7"
 core = "7.x"
 project = "securelogin"
-datestamp = "1446062040"
+datestamp = "1514932989"
 
