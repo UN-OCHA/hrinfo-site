@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Install, update and uninstall functions for Secure Login module.
+ */
+
+/**
  * Implements hook_install().
  */
 function securelogin_install() {
