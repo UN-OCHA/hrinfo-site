@@ -6,8 +6,11 @@
  */
 
 /**
- * Implements hook_update_N().
- *
+ * @addtogroup hooks
+ * @{
+ */
+
+/**
  * Remove the advagg_bundler_info variable if set.
  */
 function advagg_bundler_update_7201() {
@@ -20,3 +23,7 @@ function advagg_bundler_update_7201() {
     return t('Nothing needed to happen.');
   }
 }
+
+/**
+ * @} End of "addtogroup hooks".
+ */
