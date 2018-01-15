@@ -81,12 +81,13 @@ function entityreference_prepopulate_field_attach_form($entity_type, $entity, &$
   foreach (element_children($form_state['field']) as $field_name) {
     foreach ($form_state['field'][$field_name] as $lang => $value) {
       $instance = $value['instance'];
-      if (empty($instance['settings']['behaviors']['prepopulate']['status']) || (isset($value['items_count']) && $value['items_count'] > 0)) {
+      if (empty($instance['settings']['behaviors']['prepopulate']['status'])) {
         continue;
       }
       $settings = $instance['settings']['behaviors']['prepopulate'];
 
       $field = $value['field'];
+
       // Store prepopulated values in the form state to make them persistent,
       // in case the form is rebuilt by AJAX requests.
       $field_name = $field['field_name'];
@@ -297,10 +298,13 @@ function entityreference_prepopulate_get_values($field, $instance, $validate = T
   }
 
   $handler = entityreference_get_selection_handler($field, $instance);
-  if (!$ids = $handler->validateReferencableEntities($ids)) {
+  if (!$valid_ids = $handler->validateReferencableEntities($ids)) {
     $cache[$identifier] = FALSE;
     return;
   }
+
+  // Only include valid ids.
+  $ids = array_intersect($ids, $valid_ids);
 
   // Check access to the provided entities.
   $target_type = $field['settings']['target_type'];
