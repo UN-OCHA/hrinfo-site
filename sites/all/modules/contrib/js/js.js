@@ -75,7 +75,7 @@
     // Force prefix the URL to use the internal JS module callback path. If
     // requests do not want it to be processed by the JS module, then the
     // normal $.ajax() method should be used instead.
-    this.options.url = base + prefix + 'js/' + (this.options.url ? prefix + this.options.url : '');
+    this.options.url = base + prefix + 'js/' + (this.options.url ? this.options.url : '');
 
     // Normalize data keys to Drupal variable standards.
     JS.snakeCaseObject(this.options.data);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * JavaScript callback handler module.
@@ -16,7 +17,6 @@ define('JS_MENU_SITE_ONLINE', 5);
  * Internal menu status code - Request method is not allowed.
  */
 define('JS_MENU_METHOD_NOT_ALLOWED', 6);
-
 
 /**
  * Implements hook_menu().
@@ -88,11 +88,28 @@ function js_preprocess_html() {
 
 /**
  * Implements hook_custom_theme().
- *
- * Used to set the theme to be used for JS requests.
  */
 function js_custom_theme() {
   global $_js;
+
+  // During a full bootstrap, hook_custom_theme() is invoked just before
+  // hook_init(). Here we can make sure that hook_init() implementations
+  // provided by callback dependencies are not invoked twice, in case a full
+  // bootstrap is performed after invoking them in js_callback_bootstrap().
+  if (!empty($_js['module']) && !empty($_js['callback'])) {
+    $info = js_get_callback($_js['module'], $_js['callback']);
+    if (!$info['skip init'] && $info['dependencies']) {
+      $implementations = &drupal_static('module_implements');
+      // After a global cache clear, hook implementation info is not available
+      // yet, so we explicitly rebuild it.
+      if (!isset($implementations['init'])) {
+        module_implements('init');
+      }
+      $implementations['init'] = array_diff_key($implementations['init'], array_flip($info['dependencies']));
+    }
+  }
+
+  // Set the theme to be used for JS requests.
   if (!empty($_js['theme'])) {
     return $_js['theme'];
   }
@@ -120,8 +137,9 @@ function js_js_info() {
  * {@inheritdoc}
  */
 function js_js_server_info() {
-  $base_path = str_replace('/', '\\/', base_path());
-  $endpoint = variable_get('js_endpoint', 'js');
+  $base_path = preg_quote(base_path());
+  $endpoint = preg_quote(variable_get('js_endpoint', 'js'));
+  $regexp = '(?:[a-z]{2}(?:-[A-Za-z]{2,4})?/)?(?:' . $endpoint . '|' . $endpoint . '/.*)';
 
   $header = array(
     '###',
@@ -135,10 +153,10 @@ function js_js_server_info() {
     'description' => t('Add the above lines before any existing rewrite rules inside this site\'s Apache <code>.htaccess</code> file.'),
     'rewrite' => $header,
   );
-  $servers['apache']['rewrite'][] = "RewriteCond %{REQUEST_URI} ^$base_path([a-z]{2}\\/)?$endpoint\\/.*";
-  $servers['apache']['rewrite'][] = "RewriteRule ^(.*)$ js.php?q=$1 [L,QSA]";
-  $servers['apache']['rewrite'][] = "RewriteCond %{QUERY_STRING} (^|&)q=((\\/)?[a-z]{2})?(\\/)?$endpoint\\/.*";
-  $servers['apache']['rewrite'][] = "RewriteRule .* js.php [L]";
+  $servers['apache']['rewrite'][] = 'RewriteCond %{REQUEST_URI} ^' . str_replace('/', '\\/', $base_path) . str_replace('/', '\\/', $regexp) . '$';
+  $servers['apache']['rewrite'][] = 'RewriteRule ^(.*)$ js.php?q=$1 [L,QSA]';
+  $servers['apache']['rewrite'][] = 'RewriteCond %{QUERY_STRING} (^|&)q=' . str_replace('/', '\\/', $regexp);
+  $servers['apache']['rewrite'][] = 'RewriteRule .* js.php [L]';
 
   // Nginx.
   $servers['nginx'] = array(
@@ -146,14 +164,27 @@ function js_js_server_info() {
     'description' => t('Add the above lines before any existing rewrite rules inside this site\'s Nginx <code>server { }</code> block.'),
     'rewrite' => $header,
   );
-  $servers['nginx']['rewrite'][] = "location ^~ /$endpoint/ {";
-  $servers['nginx']['rewrite'][] = "  location ~* ^/$endpoint/ {";
-  $servers['nginx']['rewrite'][] = "    if (\$is_bot) {";
-  $servers['nginx']['rewrite'][] = "      return 403;";
-  $servers['nginx']['rewrite'][] = "    }";
-  $servers['nginx']['rewrite'][] = "    rewrite ^/(.*)$ /js.php?q=$1 last;";
-  $servers['nginx']['rewrite'][] = "  }";
-  $servers['nginx']['rewrite'][] = "}";
+  $servers['nginx']['rewrite'][] = '### PHP-FPM (using https://github.com/perusio/drupal-with-nginx)';
+  $servers['nginx']['rewrite'][] = '###';
+  $servers['nginx']['rewrite'][] = '### 1. Copy `apps/drupal/fastcgi_drupal.conf` to `apps/drupal/fastcgi_js.conf`.';
+  $servers['nginx']['rewrite'][] = '### 2. Inside `fastcgi_js.conf`, rename all cases of `index.php` to `js.php`.';
+  $servers['nginx']['rewrite'][] = '###';
+  $servers['nginx']['rewrite'][] = 'location ~* "^' . $base_path . $regexp . '$" {';
+  $servers['nginx']['rewrite'][] = '  rewrite ^/(.*)$ /js.php?q=$1 last;';
+  $servers['nginx']['rewrite'][] = '}';
+  $servers['nginx']['rewrite'][] = 'location ^~ /js.php {';
+  $servers['nginx']['rewrite'][] = '  tcp_nopush off;';
+  $servers['nginx']['rewrite'][] = '  keepalive_requests 0;';
+  $servers['nginx']['rewrite'][] = '  access_log off;';
+  $servers['nginx']['rewrite'][] = '  try_files $uri =404; ### check for existence of php file first';
+  $servers['nginx']['rewrite'][] = '  include apps/drupal/fastcgi_js.conf;';
+  $servers['nginx']['rewrite'][] = '  fastcgi_pass phpcgi;';
+  $servers['nginx']['rewrite'][] = '}';
+  $servers['nginx']['rewrite'][] = '';
+  $servers['nginx']['rewrite'][] = '### Non-clean URLs (query based, only uncomment if needed).';
+  $servers['nginx']['rewrite'][] = '# if ($query_string ~ "(?:^|&)q=(' . $regexp . ')") {';
+  $servers['nginx']['rewrite'][] = '#  rewrite ^' . $base_path . '(.*)$ /js.php?q=$1 last;';
+  $servers['nginx']['rewrite'][] = '#}';
 
   return $servers;
 }
@@ -271,40 +302,211 @@ function js_element_info_alter(&$type) {
       $type[$name]['#pre_render'] = array();
     }
     array_unshift($type[$name]['#pre_render'], 'js_pre_render_element');
+
+    // Allow autocomplete elements to be ran via JS Callback.
+    if (isset($type[$name]['#process']) && in_array('form_process_autocomplete', $type[$name]['#process'])) {
+      $type[$name]['#process'][] = 'js_process_autocomplete';
+    }
   }
 }
 
 /**
- * Implements hook_preprocess().
+ * Autocomplete #process callback.
+ */
+function js_process_autocomplete($element) {
+  if ($element['#autocomplete_path'] && !empty($element['#autocomplete_input']['#url_value']) && isset($element['#js_callback']) && is_array($element['#js_callback'])) {
+    $module = key($element['#js_callback']);
+    $callback = reset($element['#js_callback']);
+    $info = js_get_callback($module, $callback);
+
+    $options = array(
+      'absolute' => TRUE,
+      'script' => 'js.php',
+      'query' => array(
+        'js_module' => $module,
+        'js_callback' => $callback,
+        // Define the path here so it's appended after our query parameters.
+        // This is necessary because of how core autocomplete.js appends the
+        // test being searched to the end of the URL.
+        'q' => $element['#autocomplete_path'],
+      ),
+    );
+
+    // Generate a token if necessary.
+    if ($info['token']) {
+      $options['query']['js_token'] = js_get_token($module, $callback);
+    }
+
+    // Force autocomplete to use non-clean URLs since this protects against the
+    // browser interpreting the path plus search string as an actual file.
+    $current_clean_url = isset($GLOBALS['conf']['clean_url']) ? $GLOBALS['conf']['clean_url'] : NULL;
+    $GLOBALS['conf']['clean_url'] = 0;
+    // Force the script path to 'js.php', in case the server is not
+    // configured to find it automatically. Normally it is the responsibility
+    // of the site to do this themselves using hook_url_outbound_alter() (see
+    // url()) but since this code is forcing non-clean URLs on sites that don't
+    // normally use them, it is done here instead.
+    $element['#autocomplete_input']['#url_value'] = url('<front>', $options);
+    $GLOBALS['conf']['clean_url'] = $current_clean_url;
+  }
+  return $element;
+}
+
+/**
+ * Generic #pre_render callback.
  */
 function js_pre_render_element($element) {
   if (isset($element['#js_callback']) && is_array($element['#js_callback'])) {
     $callback = reset($element['#js_callback']);
     $module = key($element['#js_callback']);
+    $info = js_get_callback($module, $callback);
     if (!empty($module) && !empty($callback)) {
       $element['#attributes']['data-js-module'] = $module;
       $element['#attributes']['data-js-callback'] = $callback;
-      $element['#attributes']['data-js-token'] = js_get_token($module, $callback);
+      if ($info['token']) {
+        $element['#attributes']['data-js-token'] = js_get_token($module, $callback);
+      }
     }
   }
   return $element;
 }
 
 /**
- * Loads the requested module and executes the requested callback.
+ * Provides custom PHP error handling.
  *
- * @return mixed
- *   The callback function's return value or one of the JS_* constants.
+ * @param int $error_level
+ *   The level of the error raised.
+ * @param string $message
+ *   The error message.
+ */
+function _js_error_handler($error_level, $message) {
+  if ($error_level & error_reporting()) {
+    require_once DRUPAL_ROOT . '/includes/errors.inc';
+
+    $types = drupal_error_levels();
+    list($severity_msg, $severity_level) = $types[$error_level];
+    $backtrace = debug_backtrace();
+    $caller = _drupal_get_last_caller($backtrace);
+
+    _js_log_php_error(array(
+      '%type' => isset($types[$error_level]) ? $severity_msg : 'Unknown error',
+      // The standard PHP error handler considers that the error messages
+      // are HTML. Mimic this behavior here.
+      '!message' => filter_xss_admin($message),
+      '%function' => $caller['function'],
+      '%file' => $caller['file'],
+      '%line' => $caller['line'],
+      'severity_level' => $severity_level,
+       // Drupal treats recoverable errors as fatals.
+    ), $error_level == E_RECOVERABLE_ERROR);
+  }
+}
+
+/**
+ * Provides custom PHP exception handling.
+ *
+ * Uncaught exceptions are those not enclosed in a try/catch block. They are
+ * always fatal: the execution of the script will stop as soon as the exception
+ * handler exits.
+ *
+ * @param \Exception $exception
+ *   The exception object that was thrown.
+ */
+function _js_exception_handler(\Exception $exception) {
+  require_once DRUPAL_ROOT . '/includes/errors.inc';
+  try {
+    _js_log_php_error(_drupal_decode_exception($exception), TRUE);
+  }
+  catch (Exception $exception2) {
+    // Another uncaught exception was thrown while handling the first one.
+    // If we are displaying errors, then do so with no possibility of a further
+    // uncaught exception being thrown.
+    $message = '<h1>Additional uncaught exception thrown while handling exception.</h1>';
+    $message .= '<h2>Original</h2><p>' . _drupal_render_exception_safe($exception) . '</p>';
+    $message .= '<h2>Additional</h2><p>' . _drupal_render_exception_safe($exception2) . '</p>';
+    $backtrace = debug_backtrace();
+    $caller = _drupal_get_last_caller($backtrace);
+    _js_log_php_error(array(
+      '%type' => 'Unknown error',
+      // The standard PHP error handler considers that the error messages
+      // are HTML. Mimic this behavior here.
+      '!message' => filter_xss_admin($message),
+      '%function' => $caller['function'],
+      '%file' => $caller['file'],
+      '%line' => $caller['line'],
+      'severity_level' => WATCHDOG_ERROR,
+    ), TRUE);
+  }
+}
+
+/**
+ * Provides custom PHP fatal error handling.
+ */
+function _js_fatal_error_handler() {
+  if ($error = error_get_last()) {
+    require_once DRUPAL_ROOT . '/includes/errors.inc';
+    _js_log_php_error(array(
+      '%type' => 'Fatal Error',
+      // The standard PHP error handler considers that the error messages
+      // are HTML. Mimic this behavior here.
+      '!message' => filter_xss_admin($error['message']),
+      '%file' => $error['file'],
+      '%line' => $error['line'],
+      'severity_level' => WATCHDOG_ERROR,
+    ), TRUE);
+  }
+}
+
+/**
+ * Logs a PHP error or exception and displays the error in fatal cases.
+ *
+ * @param array $error
+ *   An array with the following keys: %type, !message, %function, %file, %line
+ *   and severity_level. All the parameters are plain-text, with the exception
+ *   of !message, which needs to be a safe HTML string.
+ * @param bool $fatal
+ *   TRUE if the error is fatal.
+ */
+function _js_log_php_error(array $error, $fatal = FALSE) {
+  // Log the error immediately.
+  watchdog('php', '%type: !message in %function (line %line of %file).', $error, $error['severity_level']);
+
+  // Display the error to the user, if it should.
+  if (error_displayable($error)) {
+    if (!isset($error['%function'])) {
+      drupal_set_message(t('%type: !message (line %line of %file).', $error), 'error');
+    }
+    else {
+      drupal_set_message(t('%type: !message in %function (line %line of %file).', $error), 'error');
+    }
+  }
+
+  // If fatal, deliver an internal server error response.
+  if ($fatal) {
+    js_deliver(js_http_response(500));
+  }
+}
+
+/**
+ * Loads the requested module and executes the requested callback.
  */
 function js_execute_request() {
   // Provide a global JS variable that will be used through out the request.
   global $_js;
   global $conf;
 
-  // Memcache requires an additional bootstrap phase to access variables.
-  if (!empty($conf['cache_default_class']) && $conf['cache_default_class'] === 'MemCacheDrupal') {
-    js_bootstrap(DRUPAL_BOOTSTRAP_VARIABLES);
+  // Immediately start capturing any output.
+  ob_start();
+
+  // Override error and exception handlers to capture output.
+  if (empty($conf['js_silence_php_errors'])) {
+    set_error_handler('_js_error_handler');
+    set_exception_handler('_js_exception_handler');
+    register_shutdown_function('_js_fatal_error_handler');
   }
+
+  // Initialize the cache system and our custom handler.
+  _js_cache_initialize();
 
   // Immediately clone the request method so it cannot be altered any further.
   static $method;
@@ -349,6 +551,8 @@ function js_execute_request() {
 
   // Load common functions used for all requests.
   module_load_include('inc', 'js', 'includes/common');
+
+  $info = NULL;
 
   // Set the default request result to JS_MENU_NOT_FOUND. The responsibility
   // of changing the results falls to the request handler.
@@ -411,6 +615,69 @@ function js_execute_request() {
     }
   }
 
+  // Deliver the result.
+  js_deliver($request_result, $info);
+}
+
+/**
+ * Initializes the cache system and our custom handler.
+ */
+function _js_cache_initialize() {
+  global $conf;
+
+  // Skip autoloading, we do not need its overhead. Additionally it may trigger
+  // cache initialization.
+  module_load_include('php', 'js', 'src/JsProxyCache');
+
+  // Collect all the explicitly configured cache bins.
+  $default_key = JsProxyCache::DEFAULT_BIN_KEY;
+  $cache_bin_keys = array_values(array_filter(array_keys($conf), function ($key) {
+    return strpos($key, 'cache_class_') === 0;
+  }));
+  $cache_bin_keys[] = $default_key;
+
+  // Save the current configuration and override it to make sure an instance of
+  // our custom wrapper is instantiated for each configured bin.
+  $cache_conf = array();
+  $default_class = isset($conf[$default_key]) ? $conf[$default_key] : 'DrupalDatabaseCache';
+  foreach ($cache_bin_keys as $bin_key) {
+    $cache_conf[$bin_key] = isset($conf[$bin_key]) ? $conf[$bin_key] : $default_class;
+    $conf[$bin_key] = 'JsProxyCache';
+  }
+
+  // Finally ensure our custom wrappers know which actual cache backend they are
+  // supposed to use.
+  JsProxyCache::setConf($cache_conf);
+
+  // Memcache requires an additional bootstrap phase to access variables.
+  if (!empty($cache_conf[$default_key]) && $cache_conf[$default_key] === 'MemCacheDrupal') {
+    js_bootstrap(DRUPAL_BOOTSTRAP_VARIABLES);
+  }
+}
+
+/**
+ * Sends content to the browser via the delivery callback.
+ *
+ * @param mixed $result
+ *   The content to pass to the delivery callback.
+ * @param array $info
+ *   The callback definition array, may not be set.
+ */
+function js_deliver($result, array $info = NULL) {
+  // Capture buffered content.
+  $captured = ob_get_clean();
+
+  // If the callback definition array was not provided or the callback has
+  // explicitly disabled "capture", then allow loaded modules add the captured
+  // output to the result via hook_js_captured_content_alter().
+  if (!isset($info) || !empty($info['capture'])) {
+    drupal_alter('js_captured_content', $result, $captured);
+  }
+  // Otherwise, just print the captured output before hand.
+  else {
+    print $captured;
+  }
+
   // Get the delivery callback to be used.
   $delivery_callback = js_delivery_callback();
 
@@ -420,10 +687,16 @@ function js_execute_request() {
     module_load_include('inc', 'js', 'includes/json');
   }
 
+  // Since most callbacks act at a bootstrap level lower than full, that is
+  // without loading all modules, we need to make sure hook implementation cache
+  // is never written while processing a JS request.
+  $implementations = &drupal_static('module_implements');
+  unset($implementations['#write_cache']);
+
   // Deliver the results. The delivery callback is responsible for setting the
   // appropriate headers, handling the result returned from the callback and
   // exiting the script properly.
-  call_user_func_array($delivery_callback, array($request_result));
+  call_user_func_array($delivery_callback, array($result, $info));
 }
 
 /**
@@ -431,7 +704,7 @@ function js_execute_request() {
  *
  * @param int $phase
  *   A constant telling which phase to bootstrap to.
- * @param boolean $new_phase
+ * @param bool $new_phase
  *   A boolean, set to FALSE if calling drupal_bootstrap from inside a
  *   function called from drupal_bootstrap (recursion).
  *
@@ -458,6 +731,11 @@ function js_update_path() {
   if (!$processed) {
     $processed = TRUE;
     $path = implode('/', $_js['args']);
+    // Add language path prefix if there's one. If not added the language
+    // detection based on path prefix wont work.
+    if (!empty($_js['lang'])) {
+      $path = $_js['lang'] . '/' . $path;
+    }
     $_GET['q'] = $path;
     if (isset($_SERVER['REQUEST_URI'])) {
       $_SERVER['REQUEST_URI'] = '/' . $path;
@@ -563,13 +841,16 @@ function js_get_callback($module = NULL, $callback = NULL, $reset = FALSE) {
             'access arguments' => array(),
             'access callback'  => FALSE,
             'bootstrap' => DRUPAL_BOOTSTRAP_DATABASE,
+            'cache' => TRUE,
             // Provide a standard function name to use if none is provided.
             'callback function' => $_module . '_js_callback_' . $_callback,
             'callback arguments' => array(),
+            'capture' => TRUE,
             'delivery callback' => 'js_deliver_json',
             'dependencies' => array(),
             'includes' => array(),
             'lang' => FALSE,
+            'load arguments' => array(),
             'methods' => array('POST'),
             'module' => $_module,
             'process request' => TRUE,
@@ -607,6 +888,7 @@ function js_array_replace_recursive($array, $array1) {
   if (function_exists('array_replace_recursive')) {
     return call_user_func_array('array_replace_recursive', func_get_args());
   }
+
   /**
    * Internal recursion function.
    */
@@ -625,6 +907,7 @@ function js_array_replace_recursive($array, $array1) {
     }
     return $array;
   }
+
   // Handle the arguments, merge one by one.
   $args = func_get_args();
   $array = $args[0];
