@@ -9,6 +9,10 @@
  * Tests basic Secure Login functionality.
  */
 class SecureLoginTestCase extends DrupalWebTestCase {
+
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Secure Login tests',
@@ -17,7 +21,10 @@ class SecureLoginTestCase extends DrupalWebTestCase {
     );
   }
 
-  function setUp() {
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
     parent::setUp('securelogin');
   }
 
@@ -49,10 +56,10 @@ class SecureLoginTestCase extends DrupalWebTestCase {
   /**
    * Builds a URL for submitting a mock HTTPS request to HTTP test environments.
    *
-   * @param $url
+   * @param string $url
    *   A Drupal path such as 'user'.
    *
-   * @return
+   * @return string
    *   An absolute URL.
    */
   protected function httpsUrl($url) {
@@ -63,10 +70,10 @@ class SecureLoginTestCase extends DrupalWebTestCase {
   /**
    * Builds a URL for submitting a mock HTTP request to HTTPS test environments.
    *
-   * @param $url
+   * @param string $url
    *   A Drupal path such as 'user'.
    *
-   * @return
+   * @return string
    *   An absolute URL.
    */
   protected function httpUrl($url) {
