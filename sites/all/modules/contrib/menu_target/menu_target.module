@@ -33,6 +33,24 @@ function menu_target_preprocess_page(&$variables) {
   if (variable_get('menu_target_enabled', 1) && variable_get('menu_target_type', 'html') == 'javascript') {
     drupal_add_js(drupal_get_path('module', 'menu_target') . '/menu_target.js');
   }
+
+  foreach (array('main_menu','secondary_menu') as $name) {
+    if (isset($variables[$name])) {
+      foreach ($variables[$name] as $mlid_name => &$link) {
+        $mlid = str_replace('menu-', '', $mlid_name);
+        if (_menu_target_retarget_link($mlid)) {
+          $targeting = variable_get('menu_target_type', 'html');
+          // What kind of attributes depend on the settings
+          if ($targeting == 'html') {
+            $link['attributes']['target'] = "_blank";
+          }
+          else {
+            $link['attributes']['class'][] = "target-blank";
+          }
+        }
+      }
+    }
+  }
 }
 
 /**
