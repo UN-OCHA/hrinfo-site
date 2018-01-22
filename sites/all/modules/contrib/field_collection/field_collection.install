@@ -334,6 +334,7 @@ function field_collection_update_7006() {
  * Add index on {$field_collection_field}_value column for all tables.
  */
 function field_collection_update_7007() {
+  field_collection_update_7006();
   foreach (field_read_fields(array('type' => 'field_collection')) as $field_name => $field) {
     if (!isset($field['indexes']['value'])) {
       // Add index on the value column and update the field.
