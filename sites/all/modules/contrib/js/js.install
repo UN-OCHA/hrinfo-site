@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Ensures JavaScript callback handler has been setup properly.
@@ -26,7 +27,7 @@ function js_requirements($phase) {
       elseif (variable_get('js_server_software', 'apache') == 'apache' && strpos(file_get_contents('.htaccess'), 'js.php') === FALSE) {
         $requirements['js'] = array(
           'title' => $title,
-          'description' => t('Please add the <a href="!url">RewriteRules</a> to the .htaccess file.', array('!url' => url('admin/config/system/js'))),
+          'description' => $t('Please add the <a href="!url">RewriteRules</a> to the .htaccess file.', array('!url' => url('admin/config/system/js'))),
           'severity' => REQUIREMENT_ERROR,
           'value' => $t('Add Apache RewriteRule to .htaccess'),
         );
@@ -35,7 +36,7 @@ function js_requirements($phase) {
       else {
         $requirements['js'] = array(
           'title' => $title,
-          'description' => t('The JavaScript callback handler has been installed correctly.',
+          'description' => $t('The JavaScript callback handler has been installed correctly.',
             array('%core' => 'js.php')
           ),
           'severity' => REQUIREMENT_OK,
@@ -46,7 +47,6 @@ function js_requirements($phase) {
   return $requirements;
 }
 
-
 /**
  * Implements hook_install().
  */
@@ -55,19 +55,19 @@ function js_install() {
   $js_dir = realpath(dirname(__FILE__));
   $destination = DRUPAL_ROOT . DIRECTORY_SEPARATOR . 'js.php';
   $source = $js_dir . DIRECTORY_SEPARATOR . 'js.php';
+  $t = get_t();
 
   if (!file_exists($destination) && file_exists($source)) {
     if (!copy($source, $destination)) {
-      drupal_set_message(t('Can not copied js.php to installation root folder.'), 'error');
+      drupal_set_message($t('Can not copied js.php to installation root folder.'), 'error');
     }
     else {
-      drupal_set_message(t('Copied js.php to installation root folder successfully.'));
+      drupal_set_message($t('Copied js.php to installation root folder successfully.'));
     }
   }
 
-  // Notify the user that they should add the rewrite rules to their .htaccess 
-  // file.
-  drupal_set_message(t('To complete the installation: please add the <a href="!url">RewriteRules</a> to the .htaccess file.', array('!url' => url('admin/config/system/js'))));
+  // Notify the user that they should add the rewrite rules to their .htaccess file.
+  drupal_set_message($t('To complete the installation: please add the <a href="!url">RewriteRules</a> to the .htaccess file.', array('!url' => url('admin/config/system/js'))));
 }
 
 /**
@@ -85,7 +85,7 @@ function js_uninstall() {
     }
   }
 
-  // If the .htaccess contains references to js.php, notify the user they should 
+  // If the .htaccess contains references to js.php, notify the user they should
   // clean it up.
   if (variable_get('js_server_software', 'apache') == 'apache' && strpos(file_get_contents(DRUPAL_ROOT . DIRECTORY_SEPARATOR . '.htaccess'), 'js.php') !== FALSE) {
     drupal_set_message(t('The js.php file is still referenced in the .htaccess file. Please make sure to remove the .htaccess handling for js.php for a full uninstall.'));

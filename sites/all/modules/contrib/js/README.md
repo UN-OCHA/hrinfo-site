@@ -8,7 +8,8 @@
 3. Technical
 4. Installation
 5. Module Integration/API
-6. Credit
+6. Settings
+7. Credit
 
 
 ---
@@ -77,6 +78,24 @@ up small Ajax requests.
 
 Please read the `js.api.php` file and look at the `js_callback_examples`
 sub-module for more information.
+
+
+### Settings
+
+There are a few variables that can be set in an appropriate `settings.php` file:
+
+- `js_endpoint`: Configures the expected URL endpoint:  
+  ```php
+  $conf['js_endpoint'] = 'js';
+  ```
+- `js_silence_php_errors`: Prevents custom JS module PHP error and exception
+  handlers from being invoked. By default, this variable is not set and the
+  JS module will automatically handle any PHP error or exception and display
+  them (respecting the site's PHP error display configuration) as an error
+  type status message via `drupal_set_message()`. To disable this, use:  
+  ```php
+  $conf['js_silence_php_errors'] = TRUE;
+  ```
 
 
 ### Credit
