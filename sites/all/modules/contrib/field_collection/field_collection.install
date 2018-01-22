@@ -334,8 +334,17 @@ function field_collection_update_7006() {
  * Add index on {$field_collection_field}_value column for all tables.
  */
 function field_collection_update_7007() {
-  field_collection_update_7006();
   foreach (field_read_fields(array('type' => 'field_collection')) as $field_name => $field) {
+    $table_prefixes = array('field_data', 'field_revision');
+    foreach ($table_prefixes as $table_prefix) {
+      $table = "{$table_prefix}_{$field_name}";
+      $value_column = "{$field_name}_value";
+      if (db_index_exists($table, $value_column)) {
+        // Drop index from the value column.
+        db_drop_index($table, $value_column);
+      }
+    }
+
     if (!isset($field['indexes']['value'])) {
       // Add index on the value column and update the field.
       $field['indexes']['value'] = array('value');
