@@ -66,6 +66,7 @@ function hr_bundles_field_default_field_bases() {
     'module' => 'list',
     'settings' => array(
       'allowed_values' => array(
+        'no_list' => 'Do not create a list',
         'open' => 'Open',
         'closed' => 'Closed',
       ),
