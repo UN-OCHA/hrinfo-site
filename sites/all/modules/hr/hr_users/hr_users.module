@@ -97,6 +97,12 @@ function hr_users_user_login(&$edit, $account) {
         $profile->save();
         user_save($account);
       }
+
+      // Update email if needed
+      if ($account->mail != $data['email']) {
+        $account->mail = $data['email'];
+        user_save($account);
+      }
     }
   }
 
