@@ -144,13 +144,13 @@ function oauthconnector_list_provider($js = NULL) {
         'storage' => $provider->type,
         'operations' => theme('links', array('links' => $operations, 'attributes' => array('class' => array('links', 'inline')))),
       ),
-      'class' => (!empty($provider->disabled) ? array('oauthconnector-provider-disabled') : ''),
+      'class' => (!empty($provider->disabled) ? array('oauthconnector-provider-disabled') : array()),
     );
 
     if (empty($rows[$provider->name]['data']['callback_url'])) {
       $rows[$provider->name]['data']['callback_url'] = array(
         'data' => t('Missing consumer key') . (empty($provider->disabled) ? ' (' . l(t('Add'), 'admin/structure/oauthconnector/' . $provider->name . '/edit') . ')' : ''),
-        'class' => 'oauthconnector-provider-warning',
+        'class' => array('oauthconnector-provider-warning'),
       );
     }
   }
