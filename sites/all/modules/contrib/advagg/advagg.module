@@ -29,7 +29,12 @@ define('ADVAGG_GZIP', TRUE);
 /**
  * Default value to see we use core's default grouping of CSS/JS files.
  */
-define('ADVAGG_CORE_GROUPS', TRUE);
+if (module_exists('advagg_bundler') && variable_get('advagg_bundler_active', TRUE)) {
+  define('ADVAGG_CORE_GROUPS', FALSE);
+}
+else {
+  define('ADVAGG_CORE_GROUPS', TRUE);
+}
 
 /**
  * Default value to see if we cache the full CSS/JS structure.
@@ -44,7 +49,7 @@ define('ADVAGG_GLOBAL_COUNTER', 0);
 /**
  * Send non blocking requests in order to generate aggregated files via HTTPRL.
  */
-define('ADVAGG_USE_HTTPRL', TRUE);
+define('ADVAGG_USE_HTTPRL', FALSE);
 
 /**
  * Combine css files by using media queries instead of media attributes.
@@ -266,7 +271,12 @@ define('ADVAGG_STRICT_MTIME_CHECK', TRUE);
 /**
  * Default value to see if .br files should be created as well.
  */
-define('ADVAGG_BROTLI', TRUE);
+if (function_exists('brotli_compress')) {
+  define('ADVAGG_BROTLI', TRUE);
+}
+else {
+  define('ADVAGG_BROTLI', FALSE);
+}
 
 /**
  * Default value to see zopfli_encode should not be used.
@@ -332,6 +342,22 @@ define('ADVAGG_HTTP_200_CODE', 200);
  * Verify all 3 hashes from the filename, if TRUE only verify 1st hash.
  */
 define('ADVAGG_WEAK_FILE_VERIFICATION', FALSE);
+
+/**
+ * If FALSE lock_acquire is used before writing a file.
+ */
+define('ADVAGG_NO_LOCKS', FALSE);
+
+/**
+ * If TRUE drupal_get_html_head will be rendered at the top of the css section.
+ */
+define('ADVAGG_HTML_HEAD_IN_CSS_LOCATION', FALSE);
+
+/**
+ * If 4 the admin section gets unlocked.
+ */
+define('ADVAGG_ADMIN_MODE', 4);
+
 
 /**
  * @} End of "defgroup default_variables".
@@ -766,12 +792,18 @@ function advagg_menu() {
   $file_path = drupal_get_path('module', 'advagg');
   $config_path = advagg_admin_config_root_path();
 
+  $path_defined = FALSE;
   if (module_exists('s3fs') && is_callable('_s3fs_get_config')) {
     $s3fs_config = _s3fs_get_config();
     if (empty($s3fs_config['no_rewrite_cssjs'])) {
-      $external_css = str_replace('/test.css', '/%', ltrim(str_replace($GLOBALS['base_url'], '', file_create_url($css_path[0] . '/test.css')), '/'));
-      $external_js = str_replace('/test.js', '/%', ltrim(str_replace($GLOBALS['base_url'], '', file_create_url($js_path[0] . '/test.js')), '/'));
-
+      $external_css = trim(parse_url(str_replace('/test.css', '/%', file_create_url($css_path[0] . '/test.css')), PHP_URL_PATH));
+      if (strpos($external_css, $GLOBALS['base_path']) === 0) {
+        $external_css = substr($external_css, strlen($GLOBALS['base_path']));
+      }
+      $external_js = trim(parse_url(str_replace('/test.js', '/%', file_create_url($js_path[0] . '/test.js')), PHP_URL_PATH));
+      if (strpos($external_js, $GLOBALS['base_path']) === 0) {
+        $external_js = substr($external_js, strlen($GLOBALS['base_path']));
+      }
       $items[$external_css] = array(
         'title' => "Generate CSS Aggregate",
         'page callback' => 'advagg_missing_aggregate',
@@ -790,10 +822,11 @@ function advagg_menu() {
         'file path' => $file_path,
         'file' => 'advagg.missing.inc',
       );
+      $path_defined = TRUE;
     }
   }
 
-  if (!file_stream_wrapper_get_instance_by_uri($css_path[1])) {
+  if (!$path_defined) {
     $items[$css_path[1] . '/%'] = array(
       'title' => "Generate CSS Aggregate",
       'page callback' => 'advagg_missing_aggregate',
@@ -803,8 +836,6 @@ function advagg_menu() {
       'file path' => $file_path,
       'file' => 'advagg.missing.inc',
     );
-  }
-  if (!file_stream_wrapper_get_instance_by_uri($js_path[1])) {
     $items[$js_path[1] . '/%'] = array(
       'title' => "Generate JS Aggregate",
       'page callback' => 'advagg_missing_aggregate',
@@ -1572,7 +1603,7 @@ function _advagg_aggregate_js(array &$js_groups) {
         // If a file group can be aggregated into a single file, do so, and set
         // the group's data property to the file path of the aggregate file.
         case 'file':
-          if ($group['preprocess']) {
+          if (!empty($group['preprocess'])) {
             // Special handing for when all JS is in the footer.
             if ($all_in_footer && $group['scope'] === 'footer' && $group['group'] > 9000) {
               ++$gap_counter;
@@ -1706,17 +1737,30 @@ function _advagg_build_js_arrays_for_rendering($skip_alter = FALSE) {
 /**
  * Returns TRUE if the CSS is being loaded via JavaScript.
  *
+ * @param object $css_cache
+ *   Cache object from cache_get().
+ *
  * @return bool
  *   TRUE if CSS loaded via JS. FALSE if not.
  */
-function advagg_css_in_js() {
-  if ((module_exists('advagg_mod')
+function advagg_css_in_js($css_cache = NULL) {
+  if (module_exists('advagg_mod')
     && variable_get('advagg_mod_css_defer', ADVAGG_MOD_CSS_DEFER)
-    ) || (module_exists('css_delivery')
-      && css_delivery_enabled()
-    )
   ) {
     return TRUE;
+  }
+  if (module_exists('css_delivery')
+    && css_delivery_enabled()
+  ) {
+    return TRUE;
+  }
+  // Critical css added by another means.
+  if (!empty($css_cache->data[1]['#items'])) {
+    foreach ($css_cache->data[1]['#items'] as $values) {
+      if (!empty($values['critical-css'])) {
+        return TRUE;
+      }
+    }
   }
   return variable_get('advagg_css_in_js', ADVAGG_CSS_IN_JS);
 }
@@ -1765,10 +1809,10 @@ function advagg_get_render_cache(array $full_css, array $js_scope_array) {
   }
 
   // Special handling if the css is loaded via JS.
-  if (advagg_css_in_js()
-    && !empty($css_cache)
+  if (!empty($css_cache)
     && empty($js_cache)
-    ) {
+    && advagg_css_in_js($css_cache)
+  ) {
     // If CSS is being loaded via JavaScript and the css cache is set but the
     // js cache is not set; then unset the css cache as well.
     unset($css_cache);
@@ -1915,7 +1959,7 @@ function _advagg_process_html(&$variables) {
   // Try the render cache.
   if (!variable_get('advagg_debug', ADVAGG_DEBUG)) {
     // No Alter.
-    if (variable_get('advagg_cache_level', ADVAGG_CACHE_LEVEL) >= 5) {
+    if (variable_get('advagg_cache_level', ADVAGG_CACHE_LEVEL) >= 5 && !module_exists('advagg_relocate')) {
       // Get all CSS and JS variables needed; running no alters.
       list($variables['css'], $full_css) = _advagg_build_css_arrays_for_rendering(TRUE);
       list($javascript, $js_scope_settings_array, $js_scope_array) = _advagg_build_js_arrays_for_rendering(TRUE);
@@ -2075,7 +2119,7 @@ function _advagg_process_html(&$variables) {
 
   // If the cache isn't used.
   if (!$use_cache) {
-    if (advagg_css_in_js() && !empty($js_cache->data) && !empty($css_cache->data)) {
+    if (!empty($js_cache->data) && !empty($css_cache->data) && advagg_css_in_js($css_cache)) {
       // Render the css so it will be added to the js array;
       // advagg_pre_render_styles() gets called here.
       $variables['styles'] = drupal_render($full_css);
@@ -2112,6 +2156,12 @@ function _advagg_process_html(&$variables) {
           // Add to the bottom of this section.
           $variables['page_bottom'] .= $scripts;
           $js_cache['page_bottom'] = $scripts;
+        }
+        // Above css scripts.
+        elseif ($scope === 'above_css') {
+          // Put in this new section.
+          $variables['above_css'] = $scripts;
+          $js_cache['above_css'] = $scripts;
         }
         elseif (variable_get('advagg_scripts_scope_anywhere', ADVAGG_SCRIPTS_SCOPE_ANYWHERE)) {
           // Scripts in other places.
@@ -2193,10 +2243,17 @@ function _advagg_process_html(&$variables) {
       }
     }
   }
+  if (!empty($variables['above_css'])) {
+    $variables['styles'] = $variables['above_css'] . $variables['styles'];
+  }
 
   if (variable_get('advagg_resource_hints_preload', ADVAGG_RESOURCE_HINTS_PRELOAD)) {
     foreach ($js_scope_array as $scope => &$scripts_array) {
-      if ($scope !== 'header' && $scope !== 'footer' && !variable_get('advagg_scripts_scope_anywhere', ADVAGG_SCRIPTS_SCOPE_ANYWHERE)) {
+      if ($scope !== 'header'
+        && $scope !== 'footer'
+        && $scope !== 'above_css'
+        && !variable_get('advagg_scripts_scope_anywhere', ADVAGG_SCRIPTS_SCOPE_ANYWHERE)
+      ) {
         continue;
       }
 
@@ -2252,7 +2309,14 @@ function _advagg_process_html(&$variables) {
 
   // Parts of drupal_get_html_head().
   drupal_alter('html_head', $elements);
-  $variables['head'] = drupal_render($elements);
+  $head = drupal_render($elements);
+  if (variable_get('advagg_html_head_in_css_location', ADVAGG_HTML_HEAD_IN_CSS_LOCATION)) {
+    $variables['styles'] = $head . $variables['styles'];
+    $variables['head'] = '';
+  }
+  else {
+    $variables['head'] = $head;
+  }
 
   // Remove AdvAgg comments.
   if (variable_get('advagg_scripts_scope_anywhere', ADVAGG_SCRIPTS_SCOPE_ANYWHERE)
@@ -2367,7 +2431,9 @@ function advagg_cleanup_settings_array(array $data) {
 function advagg_add_resource_hints_array(array $values) {
   if (variable_get('advagg_resource_hints_dns_prefetch', ADVAGG_RESOURCE_HINTS_DNS_PREFETCH)
     || variable_get('advagg_resource_hints_preconnect', ADVAGG_RESOURCE_HINTS_PRECONNECT)) {
-    if (!empty($values['type']) && $values['type'] === 'external') {
+    if (!empty($values['type'])
+      && ($values['type'] === 'external' || $values['type'] === 'file')
+    ) {
       // Get external domains.
       advagg_add_dns_prefetch($values['data']);
     }
@@ -2404,160 +2470,16 @@ function advagg_add_resource_hints_array(array $values) {
  * @return bool
  *   TRUE if it was added to the head.
  */
-function advagg_add_preload_header($url = '', $as = '') {
-  // Get defaults and setup statics.
-  $list = &drupal_static(__FUNCTION__ . ':list', array());
-  $output = &drupal_static(__FUNCTION__ . ':output');
-  $header_strlen = &drupal_static(__FUNCTION__ . ':strlen', 0);
-  static $resource_hints_preload_order;
-  if (!isset($resource_hints_preload_order)) {
-    $resource_hints_preload_order = advagg_get_resource_hints_preload_settings();
-  }
-  if (!isset($output)) {
-    $keys = array_keys($resource_hints_preload_order);
-    $output = array_fill_keys($keys, array());
-  }
-
-  // Output headers.
-  if (empty($url)) {
-    // Build header string.
-    $header_value = '';
-    foreach ($output as $value) {
-      if (!empty($value)) {
-        // Remove empty values.
-        $value = array_filter($value);
-        foreach ($value as $string) {
-          $header_strlen += strlen($string) + 2;
-          // Don't add if over the limit.
-          if ($header_strlen >= variable_get('advagg_resource_hints_preload_max_size', ADVAGG_RESOURCE_HINTS_PRELOAD_MAX_SIZE)) {
-            continue;
-          }
-          // Add to $header_value string.
-          if (empty($header_value)) {
-            $header_value = $string;
-          }
-          else {
-            $header_value .= ', ' . $string;
-          }
-        }
-      }
-    }
-    if (!empty($header_value)) {
-      drupal_add_http_header('Link', $header_value, TRUE);
-    }
-    return FALSE;
-  }
-
-  // Check for duplicates.
-  if (isset($list[$url])) {
-    return FALSE;
-  }
-
-  // Detect type.
-  $parse = @parse_url($url);
-  if (empty($parse['path'])) {
-    $list[$url] = FALSE;
-    return FALSE;
-  }
-  $ext = strtolower(pathinfo($parse['path'], PATHINFO_EXTENSION));
-  if (empty($ext)) {
-    $ext = basename($parse['path']);
-  }
-  $payload = "<{$url}>; rel=preload";
-  $additional_info = '';
-  if (empty($as)) {
-    $supported = array(
-      'gif',
-      'jpg',
-      'jpeg',
-      'png',
-    );
-    if (in_array($ext, $supported)) {
-      $as = 'image';
-    }
-  }
-  if (empty($as)) {
-    $supported = array(
-      'woff2',
-    );
-    if (in_array($ext, $supported)) {
-      // Support crossorigin.
-      $as = "font";
-      $additional_info = "crossorigin; type=\"font/{$ext}\"";
-    }
-  }
-  if (empty($as)) {
-    if ($ext === 'svg') {
-      $as = 'image';
-    }
-  }
-  if (empty($as)) {
-    if ($ext === 'css') {
-      $as = 'style';
-    }
-  }
-  if (empty($as)) {
-    if ($ext === 'js') {
-      $as = 'script';
-    }
-  }
-  if (empty($as)) {
-    if ($ext === 'php') {
-      $list[$url] = FALSE;
-      return FALSE;
-    }
-  }
-
-  // Get settings.
-  if (!empty($as) && !empty($resource_hints_preload_order[$as])) {
-    $settings = $resource_hints_preload_order[$as];
-  }
-  elseif (!empty($resource_hints_preload_order['all_others'])) {
-    $settings = $resource_hints_preload_order['all_others'];
-  }
-
-  // Apply settings.
-  if (!$settings['enabled']) {
-    $list[$url] = FALSE;
-    return FALSE;
-  }
-  if (!$settings['local'] && empty($parse['host'])) {
-    $list[$url] = FALSE;
-    return FALSE;
-  }
-  if (!$settings['external'] && !empty($parse['host'])) {
-    $list[$url] = FALSE;
-    return FALSE;
-  }
-
-  // Add aditional info and queue.
-  if (!empty($as)) {
-    $payload .= "; as={$as}";
-  }
-  if (!empty($additional_info)) {
-    $payload .= "; {$additional_info}";
-  }
-  if (!$settings['push']) {
-    $payload .= "; nopush";
-  }
-  $list[$url] = TRUE;
-  $output[$as][] = $payload;
-}
-
-/**
- * Add in the dns-prefetch header for CSS and JS external files.
- *
- * @param string $url
- *   The url of the external host.
- *
- * @return bool
- *   TRUE if it was added to the head.
- */
 function advagg_add_dns_prefetch($url) {
   $advagg_resource_hints_location = variable_get('advagg_resource_hints_location', ADVAGG_RESOURCE_HINTS_LOCATION);
   // Get the host.
   $parse = @parse_url($url);
   if (empty($parse['host'])) {
+    return FALSE;
+  }
+  // Filter out local host.
+  $host = @parse_url($GLOBALS['base_root'], PHP_URL_HOST);
+  if ($parse['host'] === $host) {
     return FALSE;
   }
 
@@ -2582,12 +2504,18 @@ function advagg_add_dns_prefetch($url) {
     drupal_add_html_head($element, 'advagg_resource_hints_dns_prefetch:' . $parse['host']);
   }
   if (variable_get('advagg_resource_hints_preconnect', ADVAGG_RESOURCE_HINTS_PRECONNECT)) {
+    // HTTPS use Protocol Relative; HTTP and scheme defined use given scheme.
+    $href = '//' . $parse['host'];
+    if (!$GLOBALS['is_https'] && isset($parse['scheme'])) {
+      $href = "{$parse['scheme']}://{$parse['host']}";
+    }
+
     $element = array(
       '#type' => 'html_tag',
       '#tag' => 'link',
       '#attributes' => array(
         'rel' => 'preconnect',
-        'href' => '//' . $parse['host'],
+        'href' => $href,
       ),
       '#weight' => $advagg_resource_hints_location == 3 ? -1001 : -999.9,
     );
@@ -3359,7 +3287,7 @@ function advagg_current_hooks_hash_array() {
   $aggregate_settings = array(
     'variables' => array(
       'advagg_gzip' => variable_get('advagg_gzip', ADVAGG_GZIP),
-      'advagg_brotli' => function_exists('brotli_compress') ? variable_get('advagg_brotli', ADVAGG_BROTLI) : 0,
+      'advagg_brotli' => variable_get('advagg_brotli', ADVAGG_BROTLI),
       'advagg_no_zopfli' => variable_get('advagg_no_zopfli', ADVAGG_NO_ZOPFLI),
       'is_https' => $GLOBALS['is_https'],
       'advagg_global_counter' => advagg_get_global_counter(),
@@ -3687,7 +3615,10 @@ function advagg_build_aggregates(array $filenames, $type) {
 
     // Only create the file if we have a lock.
     $lock_name = 'advagg_' . $filename;
-    if (lock_acquire($lock_name, 10)) {
+    if (variable_get('advagg_no_locks', ADVAGG_NO_LOCKS)) {
+      $return[$filename] = advagg_missing_create_file($filename);
+    }
+    elseif (lock_acquire($lock_name, 10)) {
       $return[$filename] = advagg_missing_create_file($filename);
       lock_release($lock_name);
     }
@@ -4130,10 +4061,13 @@ function advagg_pre_render_scripts(array $elements) {
             break;
 
           case 'file':
-            $query_string = empty($item['version']) ? $default_query_string : $js_version_string . $item['version'];
             $query_string_separator = (strpos($item['data'], '?') !== FALSE) ? '&' : '?';
+            $cache_validator = REQUEST_TIME;
+            if (!empty($item['cache'])) {
+              $cache_validator = empty($item['version']) ? $default_query_string : $js_version_string . $item['version'];;
+            }
 
-            $element['#attributes']['src'] = advagg_file_create_url($item['data']) . $query_string_separator . ($item['cache'] ? $query_string : REQUEST_TIME);
+            $element['#attributes']['src'] = advagg_file_create_url($item['data']) . $query_string_separator . $cache_validator;
             break;
 
           case 'external':
@@ -4515,7 +4449,7 @@ function advagg_group_js(array $javascript) {
         // Help ensure maximum reuse of aggregate files by only grouping
         // together items that share the same 'group' value and 'every_page'
         // flag. See drupal_add_js() for details about that.
-        $group_keys = $item['preprocess'] ? array(
+        $group_keys = !empty($item['preprocess']) ? array(
           $item['type'],
           $item['group'],
           $item['every_page'],
@@ -4904,6 +4838,7 @@ function advagg_force_http_path($path) {
 function advagg_file_create_url($path, array $aggregate_settings = array(), $run_file_create_url = TRUE, $source_type = '') {
   $file_uri = $path;
   if ($run_file_create_url) {
+    // This calls hook_file_url_alter().
     $file_uri = file_create_url($path);
   }
   elseif (strpos($path, '/') !== 0 && !advagg_is_external($path)) {
@@ -4997,7 +4932,7 @@ function advagg_file_create_url($path, array $aggregate_settings = array(), $run
  * @see drupal_load_stylesheet()
  */
 function advagg_load_stylesheet($file, $optimize = FALSE, $reset_basepath = TRUE, $contents = '') {
-  // These statics are not cache variables, so we don't use drupal_static().
+  // These static's are not cache variables, so we don't use drupal_static().
   static $_optimize, $basepath;
   if ($reset_basepath) {
     $basepath = '';
@@ -5502,7 +5437,7 @@ function advagg_htaccess_rewritebase($location = DRUPAL_ROOT) {
  * @param array $library
  *   An associative array containing all information about the library.
  * @param array $options
- *   An associative array containing options for the verson parser.
+ *   An associative array containing options for the version parser.
  * @param string $url
  *   URL for the remote version to lookup.
  *
@@ -5536,7 +5471,7 @@ function advagg_get_github_version_json(array $library, array $options, $url) {
  * @param array $library
  *   An associative array containing all information about the library.
  * @param array $options
- *   An associative array containing options for the verson parser.
+ *   An associative array containing options for the version parser.
  * @param string $url
  *   URL for the remote version to lookup.
  *
@@ -5828,7 +5763,20 @@ function advagg_fix_type(array &$array, $type) {
       && $https_pos !== 0
       && $double_slash_pos !== 0
       ) {
-      $value['type'] = 'file';
+      if (is_readable($value['data'])) {
+        $value['type'] = 'file';
+      }
+      else {
+        // Fix for subdir issues.
+        $parsed = parse_url($value['data']);
+        if (strpos($parsed['path'], $GLOBALS['base_path']) === 0) {
+          $path = substr($parsed['path'], strlen($GLOBALS['base_path']));
+          if (is_readable($path)) {
+            $value['data'] = $path;
+            $value['type'] = 'file';
+          }
+        }
+      }
     }
 
     // If type is file but it starts with http, https, or // change it to
@@ -5851,11 +5799,28 @@ function advagg_fix_type(array &$array, $type) {
         || $double_slash_pos === 0
         )
     ) {
-      $value['type'] = 'file';
-      $value['group'] = JS_LIBRARY;
-      $value['every_page'] = TRUE;
-      $value['weight'] = -40000;
-      $value['data'] = substr($value['data'], $mod_base_url_pos + $mod_base_url_len);
+      $path = substr($value['data'], $mod_base_url_pos + $mod_base_url_len);
+      if (is_readable($path)) {
+        $value['data'] = $path;
+        $value['type'] = 'file';
+        $value['group'] = JS_LIBRARY;
+        $value['every_page'] = TRUE;
+        $value['weight'] = -40000;
+      }
+      else {
+        // Fix for subdir issues.
+        $parsed = parse_url($path);
+        if (strpos($parsed['path'], $GLOBALS['base_path']) === 0) {
+          $path = substr($parsed['path'], strlen($GLOBALS['base_path']));
+          if (is_readable($path)) {
+            $value['data'] = $path;
+            $value['type'] = 'file';
+            $value['group'] = JS_LIBRARY;
+            $value['every_page'] = TRUE;
+            $value['weight'] = -40000;
+          }
+        }
+      }
     }
   }
   unset($value);
@@ -6223,6 +6188,7 @@ function advagg_generate_advagg_filename_from_db($type) {
  * Display a message if there are requirement issues with AdvAgg.
  */
 function advagg_display_message_if_requirements_not_met() {
+  include_once DRUPAL_ROOT . '/includes/install.inc';
   module_load_include('install', 'advagg');
   $requirements = advagg_install_fast_checks();
   if (!empty($requirements)) {
@@ -6234,4 +6200,497 @@ function advagg_display_message_if_requirements_not_met() {
       '!report' => $report,
     )));
   }
+}
+
+/**
+ * Add in the preload header for CSS and JS external files.
+ *
+ * @param string $url
+ *   The url of the external host.
+ *
+ * @return bool
+ *   TRUE if it was added to the head.
+ */
+function advagg_add_preload_header($url = '', $as = '') {
+  // Get defaults and setup static's.
+  $list = &drupal_static(__FUNCTION__ . ':list', array());
+  $output = &drupal_static(__FUNCTION__ . ':output');
+  $header_strlen = &drupal_static(__FUNCTION__ . ':strlen', 0);
+  static $resource_hints_preload_order;
+  if (!isset($resource_hints_preload_order)) {
+    $resource_hints_preload_order = advagg_get_resource_hints_preload_settings();
+  }
+  if (!isset($output)) {
+    $keys = array_keys($resource_hints_preload_order);
+    $output = array_fill_keys($keys, array());
+  }
+
+  // Output headers.
+  if (empty($url)) {
+
+    // Call hook_advagg_preload_header_alter()
+    drupal_alter('advagg_preload_header', $output);
+
+    // Build header string.
+    $header_value = '';
+    foreach ($output as $value) {
+      if (!empty($value)) {
+        // Remove empty values.
+        $value = array_filter($value);
+        foreach ($value as $string) {
+          $header_strlen += strlen($string) + 2;
+          // Don't add if over the limit.
+          if ($header_strlen >= variable_get('advagg_resource_hints_preload_max_size', ADVAGG_RESOURCE_HINTS_PRELOAD_MAX_SIZE)) {
+            continue;
+          }
+          // Add to $header_value string.
+          if (empty($header_value)) {
+            $header_value = $string;
+          }
+          else {
+            $header_value .= ',' . $string;
+          }
+        }
+      }
+    }
+    if (!empty($header_value)) {
+      drupal_add_http_header('Link', $header_value, TRUE);
+    }
+    return FALSE;
+  }
+
+  // Check for duplicates.
+  if (isset($list[$url])) {
+    return FALSE;
+  }
+
+  // Fill in missing info.
+  $payload = "<{$url}>; rel=preload";
+  list($as, $type, $crossorigin, $parse) = advagg_get_preload_info_from_url($url, $as);
+  if (!empty($as) && $as === 'php') {
+    $list[$url] = FALSE;
+    return FALSE;
+  }
+
+  $additional_info = array();
+  if (!empty($crossorigin)) {
+    $additional_info[] = "crossorigin";
+  }
+  if (!empty($type)) {
+    $additional_info[] = $type;
+  }
+  $additional_info = implode('; ', $additional_info);
+
+  // Get settings.
+  if (!empty($as) && !empty($resource_hints_preload_order[$as])) {
+    $settings = $resource_hints_preload_order[$as];
+  }
+  elseif (!empty($resource_hints_preload_order['all_others'])) {
+    $settings = $resource_hints_preload_order['all_others'];
+  }
+
+  // Apply settings.
+  if (!$settings['enabled']) {
+    $list[$url] = FALSE;
+    return FALSE;
+  }
+  if (!$settings['local'] && empty($parse['host'])) {
+    $list[$url] = FALSE;
+    return FALSE;
+  }
+  if (!$settings['external'] && !empty($parse['host'])) {
+    $list[$url] = FALSE;
+    return FALSE;
+  }
+
+  // Add additional info and queue.
+  if (!empty($as)) {
+    $payload .= "; as={$as}";
+  }
+  if (!empty($additional_info)) {
+    $payload .= "; {$additional_info}";
+  }
+  if (!$settings['push']) {
+    $payload .= "; nopush";
+  }
+  $list[$url] = TRUE;
+  $output[$as][] = $payload;
+}
+
+/**
+ * Given a link get the as, type, and crossorigin attributes.
+ *
+ * @param string $url
+ *   Link to the url that will be preloaded.
+ * @param string $as
+ *   What type of content is this; font, image, video, etc.
+ * @param string $type
+ *   The mime type of the file.
+ * @param string $crossorigin
+ *   Preload cross-origin resources; fonts always need to be CORS.
+ *
+ * @return array
+ *   An array containing
+ */
+function advagg_get_preload_info_from_url($url, $as = '', $type = '', $crossorigin = NULL) {
+  // Get extension.
+  $parse = @parse_url($url);
+  if (empty($parse['path'])) {
+    return FALSE;
+  }
+  $file_ext = strtolower(pathinfo($parse['path'], PATHINFO_EXTENSION));
+  if (empty($file_ext)) {
+    $file_ext = basename($parse['path']);
+  }
+
+  // Detect missing parts.
+  $list = advagg_preload_list();
+  if (empty($as) && !empty($file_ext)) {
+    foreach ($list as $as_key => $list_type) {
+      $key = array_search($file_ext, $list_type);
+      if ($key !== FALSE) {
+        $as = $as_key;
+        // Type of font, ext is svg but file doesn't contain string font.
+        // This will be treated as an image.
+        if ($as === 'font'
+          && $file_ext === 'svg'
+          && stripos($url, 'font') === FALSE
+        ) {
+          $as = '';
+        }
+      }
+      if (!empty($as)) {
+        break;
+      }
+    }
+  }
+  if (empty($type) && !empty($as)) {
+    $type = "$as/$file_ext";
+    if ($file_ext === 'svg') {
+      $type .= '+xml';
+    }
+  }
+  if ($as === 'font' && is_null($crossorigin)) {
+    $crossorigin = 'anonymous';
+  }
+  return array($as, $type, $crossorigin, $parse);
+}
+
+/**
+ * Add preload link to the top of the html head.
+ *
+ * @param string $url
+ *   Link to the url that will be preloaded.
+ * @param string $media
+ *   Media types or media queries, allowing for responsive preloading.
+ * @param string $as
+ *   What type of content is this; font, image, video, etc.
+ * @param string $type
+ *   The mime type of the file.
+ * @param string $crossorigin
+ *   Preload cross-origin resources; fonts always need to be CORS.
+ */
+function advagg_add_preload_link($url, $media = '', $as = '', $type = '', $crossorigin = NULL) {
+  $attributes = array(
+    'rel' => 'preload',
+    'href' => advagg_file_create_url($url),
+  );
+
+  // Fill in missing info.
+  list($as, $type, $crossorigin) = advagg_get_preload_info_from_url($url, $as, $type, $crossorigin);
+
+  // Exit if no as.
+  if (empty($as)) {
+    return FALSE;
+  }
+  // Build up attributes array.
+  $attributes['as'] = $as;
+  if (!empty($type)) {
+    $attributes['type'] = $type;
+  }
+  if (!empty($crossorigin)) {
+    $attributes['crossorigin'] = $crossorigin;
+  }
+  if (!empty($media)) {
+    $attributes['media'] = $media;
+  }
+  // Call hook_advagg_preload_link_attributes_alter()
+  drupal_alter('advagg_preload_link_attributes', $attributes);
+
+  // Add to HTML head.
+  $element = array(
+    '#type' => 'html_tag',
+    '#tag' => 'link',
+    '#attributes' => $attributes,
+    '#weight' => -2000,
+  );
+  drupal_add_html_head($element, "advagg_preload:{$url}");
+  return TRUE;
+}
+
+/**
+ * Generate a list of file types for the as field given the extension.
+ *
+ * @return array
+ *   Returns an array of arrays.
+ */
+function advagg_preload_list() {
+  $list = array(
+    'font' => array(
+      'woff2',
+      'woff',
+      'ttf',
+      'otf',
+      'eot',
+      // Need to check if the svg file is in a font folder.
+      'svg',
+    ),
+    'image' => array(
+      'gif',
+      'jpg',
+      'jpeg',
+      'jpe',
+      'jif',
+      'jfif',
+      'jfi',
+      'png',
+      'webp',
+      'jp2',
+      'jpx',
+      'jxr',
+      'heif',
+      'heic',
+      'bpg',
+      'svg',
+    ),
+    'style' => array(
+      'css',
+    ),
+    'script' => array(
+      'js',
+    ),
+    'video' => array(
+      'mp4',
+      'webm',
+      'ogg',
+    ),
+  );
+
+  // Call hook_advagg_preload_list_alter()
+  drupal_alter('advagg_preload_list', $list);
+  return $list;
+}
+
+/**
+ * Save form defaults or recommended values.
+ *
+ * @param array $element
+ *   Form element or child element.
+ *
+ * @return array
+ *   An array of form names and the recommended value for that setting.
+ */
+function advagg_find_all_recommended_admin_values(array &$element) {
+  $results = array();
+  $children = element_children($element);
+  foreach ($children as $key) {
+    $child = $element[$key];
+    if (is_array($child)) {
+      if (!empty($child['#type'])
+        && !empty($child['#name'])
+        && isset($child['#recommended_value'])
+      ) {
+        $results[$child['#name']] = $child['#recommended_value'];
+      }
+      $results = array_merge($results, advagg_find_all_recommended_admin_values($child));
+    }
+    unset($child);
+  }
+  return $results;
+}
+
+/**
+ * Get form values that have changed.
+ *
+ * @param array $element
+ *   Form element or child element.
+ *
+ * @return array
+ *   An array of form names and the recommended value for that setting.
+ */
+function advagg_find_all_changed_admin_values(array &$element) {
+  $results = array();
+  $children = element_children($element);
+  foreach ($children as $key) {
+    $child = $element[$key];
+    if (is_array($child)) {
+      if (!empty($child['#type'])
+        && !empty($child['#name'])
+        && isset($child['#default_value'])
+        && isset($child['#value'])
+        && $child['#default_value'] != $child['#value']
+      ) {
+        $results[$child['#name']] = array($child['#value'], $child['#default_value']);
+      }
+      $results = array_merge($results, advagg_find_all_changed_admin_values($child));
+    }
+    unset($child);
+  }
+  return $results;
+}
+
+/**
+ * Get form title and description.
+ *
+ * @param array $element
+ *   Form element or child element.
+ *
+ * @return array
+ *   An array of form names and the recommended value for that setting.
+ */
+function advagg_find_title(array &$element) {
+  $results = array();
+  $children = element_children($element);
+  foreach ($children as $key) {
+    $child = $element[$key];
+    if (is_array($child)) {
+      if (!empty($child['#type'])
+        && !empty($child['#name'])
+        && isset($child['#title'])
+        && isset($child['#default_value'])
+        && !isset($results[$child['#name']])
+        && $child['#type'] !== 'radio'
+      ) {
+        $results[$child['#name']] = $child['#title'];
+      }
+      $results = array_merge($results, advagg_find_title($child));
+    }
+    unset($child);
+  }
+  return $results;
+}
+
+/**
+ * Save form defaults or recommended values.
+ *
+ * @param array $form_state
+ *   Form state array from drupal form submit.
+ * @param string $trigger_key
+ *   The key of the setting from the form that controls this.
+ */
+function advagg_set_admin_form_defaults_recommended(array &$form_state, $trigger_key) {
+  $changed = array();
+  $recommended_values = array();
+
+  // Set to recommended values.
+  if ($form_state['values'][$trigger_key] == 2) {
+    $recommended_values = advagg_find_all_recommended_admin_values($form_state['complete form']);
+    foreach ($recommended_values as $key => $value) {
+      if (!isset($form_state['values'][$key])) {
+        $changed[$key] = array($value);
+      }
+      elseif ($value != $form_state['values'][$key]) {
+        $changed[$key] = array($value, $form_state['values'][$key]);
+      }
+      $form_state['values'][$key] = $value;
+    }
+  }
+
+  // Set to defaults.
+  if ($form_state['values'][$trigger_key] == 0 || $form_state['values'][$trigger_key] == 2) {
+    // Reset to defaults.
+    foreach ($form_state['values'] as $key => &$value) {
+      // Skip non advagg settings, trigger key, or if a recommended value.
+      if (strpos($key, 'advagg_') !== 0
+        || $key === $trigger_key
+        || isset($changed[$key])
+        || isset($recommended_values[$key])
+      ) {
+        continue;
+      }
+
+      // Default to FALSE.
+      $default = FALSE;
+      if (defined(strtoupper($key))) {
+        $default = constant(strtoupper($key));
+      }
+      if ($key === 'advagg_resource_hints_preload_settings') {
+        $default = advagg_get_resource_hints_preload_settings(TRUE);
+        foreach ($default as $key => &$values) {
+          $default[$key]['weight'] = $values['#weight'];
+          unset($default[$key]['#weight'], $values['#weight'], $default[$key]['title'], $values['title']);
+          ksort($values);
+        }
+        ksort($default);
+        foreach ($value as $key => &$values) {
+          ksort($values);
+        }
+        ksort($value);
+      }
+      if ($key === 'advagg_relocate_css_inline_import_browsers') {
+        $default = array(
+          'woff2' => 'woff2',
+          'woff' => 'woff',
+          'ttf' => 'ttf',
+          'eot' => 0,
+          'svg' => 0,
+        );
+      }
+      if ($default != $value) {
+        $changed[$key] = array($default, $value);
+        $value = $default;
+      }
+    }
+  }
+
+  if ($form_state['values'][$trigger_key] == 4) {
+    $changed = advagg_find_all_changed_admin_values($form_state['complete form']);
+    if (isset($changed[$trigger_key])) {
+      unset($changed[$trigger_key]);
+    }
+  }
+
+  $all_titles_descriptions = advagg_find_title($form_state['complete form']);
+  foreach ($changed as $key => $values) {
+    // Remove things that didn't really change.
+    if (isset($values[1])) {
+      if ($values[0] == $values[1]) {
+        unset($changed[$key]);
+        continue;
+      }
+      if (is_string($values[0])
+        && is_string($values[1])
+        && trim($values[0]) == trim($values[1])
+      ) {
+        unset($changed[$key]);
+        continue;
+      }
+    }
+
+    // Make output nicer.
+    if (!isset($values[1])) {
+      $values[1] = NULL;
+    }
+    if (is_bool($values[0]) && !is_bool($values[1])
+      || !is_bool($values[0]) && is_bool($values[1])
+    ) {
+      $values[0] = (bool) $values[0];
+      $values[1] = (bool) $values[1];
+    }
+    if (is_int($values[0]) && !is_int($values[1])
+      || !is_int($values[0]) && is_int($values[1])
+    ) {
+      $values[0] = (int) $values[0];
+      $values[1] = (int) $values[1];
+    }
+
+    // Let user know what changed.
+    drupal_set_message(t('%before -> %after for %title', array(
+      '%title' => $all_titles_descriptions[$key],
+      '%before' => var_export($values[1], TRUE),
+      '%after' => var_export($values[0], TRUE),
+    )));
+  }
+
+  return $changed;
 }

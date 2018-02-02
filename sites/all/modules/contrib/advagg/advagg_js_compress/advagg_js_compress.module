@@ -453,6 +453,7 @@ function advagg_js_compress_all_js_files_list() {
   $result = db_select('advagg_files', 'af')
     ->fields('af')
     ->condition('filetype', 'js')
+    ->orderBy('filename', 'ASC')
     ->execute();
   if (empty($result)) {
     return array();
@@ -465,6 +466,7 @@ function advagg_js_compress_all_js_files_list() {
   // Check if files have been compressed.
   module_load_include('inc', 'advagg', 'advagg');
   $redo_list = array();
+  $failed_redo_list = array();
   $list = array();
   foreach ($result as $row) {
     $row = (array) $row;
@@ -494,41 +496,24 @@ function advagg_js_compress_all_js_files_list() {
     }
     // More than one compressor has an empty ratio.
     if ($empty_ratio_count > 1) {
-      $redo_list[] = $info;
+      $failed_redo_list[] = $info;
     }
     // All failed; try again.
     if ($bad_compression_count == count($info['advagg_js_compress'])) {
-      $redo_list[] = $info;
+      $failed_redo_list[] = $info;
     }
   }
 
-  // More complex metrics for the redo list once the list gets down to 5.
-  if (count($redo_list) < 5) {
-    $empty_ratio_count = 0;
-    $bad_compression_count = 0;
-    $redo_list_alt = array();
-    foreach ($redo_list as $info) {
-      foreach ($info['advagg_js_compress'] as $values) {
-        if (empty($values['ratio'])) {
-          if ($values['code'] != -1) {
-            $empty_ratio_count++;
-          }
-          else {
-            $bad_compression_count++;
-          }
-        }
-      }
-      // More than one compressor has an empty ratio.
-      if ($empty_ratio_count > $compressor_list_count - 2) {
-        $redo_list[] = $info;
-      }
-      // All failed; try again if the number of files is above 1.
-      if ($bad_compression_count == count($info['advagg_js_compress']) && count($redo_list) > 1) {
-        $redo_list[] = $info;
-      }
+  // Filter out .min.js if they have already been ran.
+  $reversed_needle = strrev('.min.js');
+  foreach ($failed_redo_list as $key => $info) {
+    if (stripos(strrev($row['filename']), $reversed_needle) === 0
+      && !empty($info['advagg_js_compress'][2]['ratio'])
+    ) {
+      unset($failed_redo_list[$key]);
     }
-    $redo_list = $redo_list_alt;
   }
+  $redo_list = array_merge($redo_list, $failed_redo_list);
   return array($list, $redo_list);
 }
 
@@ -627,11 +612,10 @@ function advagg_js_compress_batch_callback() {
     'error_message' => t('JS minification has encountered an error.'),
   );
 
-  list(, $redo_list) = advagg_js_compress_all_js_files_list();
+  list($list, $redo_list) = advagg_js_compress_all_js_files_list();
   $config_path = advagg_admin_config_root_path();
   if (empty($redo_list)) {
-    drupal_set_message(t('Nothing needed to be done.'));
-    drupal_goto($config_path . '/advagg/js-compress');
+    $redo_list = $list;
   }
 
   foreach ($redo_list as $redo) {

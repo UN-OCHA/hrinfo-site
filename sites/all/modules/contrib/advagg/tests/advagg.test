@@ -842,7 +842,7 @@ class AdvAggJavaScriptTestCase extends DrupalWebTestCase {
     // 'javascript_always_use_jquery' variable is set to FALSE, drupal_get_js()
     // should not return jQuery and other standard scripts and settings, nor
     // should it return the requested settings (since they cannot actually be
-    // addded to the page without jQuery).
+    // added to the page without jQuery).
     advagg_test_reset_statics();
     variable_set('javascript_always_use_jquery', FALSE);
     drupal_add_js(array('testJavaScriptSetting' => 'test'), 'setting');

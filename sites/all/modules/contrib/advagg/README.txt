@@ -6,11 +6,10 @@ ADVANCED CSS/JS AGGREGATION MODULE
 CONTENTS OF THIS FILE
 ---------------------
 
+ - How to get a high PageSpeed score
  - JSMin PHP Extension
  - Brotli PHP Extension
  - Zopfli PHP Extension
- - How to get a high PageSpeed score
- - Settings that Drupal.org uses
  - nginx Configuration
  - JavaScript Bookmarklet
  - Troubleshooting
@@ -18,33 +17,6 @@ CONTENTS OF THIS FILE
  - Configuration
  - Additional options for `drupal_add_css/js` functions
  - Technical Details & Hooks
-
-
-JSMIN PHP EXTENSION
--------------------
-
-The AdvAgg JS Compress module can take advantage of jsmin.c. JavaScript parsing
-and minimizing will be done in C instead of PHP dramatically speeding up the
-process. If using PHP 5.3.10 or higher https://github.com/sqmk/pecl-jsmin is
-recommended. If using PHP 5.3.9 or lower
-http://www.ypass.net/software/php_jsmin/ is recommended.
-
-
-BROTLI PHP EXTENSION
---------------------
-
-The AdvAgg module can take advantage of Brotli compression. Install this
-extension to take advantage of it. Should reduce CSS/JS files by 20%.
-https://github.com/kjdev/php-ext-brotli
-
-
-ZOPFLI PHP EXTENSION
---------------------
-
-The AdvAgg module can take advantage of the Zopfli compression algorithm.
-Install this extension to take advantage of it. This gives higher gzip
-compression ratios compared to stock PHP.
-https://github.com/kjdev/php-ext-zopfli
 
 
 HOW TO GET A HIGH PAGESPEED SCORE
@@ -57,9 +29,7 @@ problematic but they offer the biggest improvements.
 #### Advanced CSS/JS Aggregation ####
 Go to `admin/config/development/performance/advagg`
 
- - Uncheck "Use cores grouping logic"
- - Check DNS Prefetch and Preconnect under Resource Hints
- - Check "Combine CSS files by using media queries"
+Select "Use recommended (optimized) settings"
 
 #### AdvAgg Compress Javascript ####
 Install AdvAgg Compress Javascript if not enabled and go to
@@ -74,6 +44,8 @@ Install AdvAgg Async Font Loader if not enabled and go to
  - Select Local file included in aggregate (version: X.X.X). If this option is
    not available follow the directions right below the options on how to install
    it.
+ - Check "Use localStorage so the flash of unstyled text (FOUT) only happens
+   once."
  - Check "Set a cookie so the flash of unstyled text (FOUT) only happens once."
 
 #### AdvAgg Bundler ####
@@ -82,8 +54,8 @@ Install AdvAgg Bundler if not enabled and go to
 
 *HTTP/2.0 Settings*
 
- - Under "Target Number Of CSS Bundles Per Page" select 15
- - Under "Target Number Of JS Bundles Per Page" select 15
+ - Under "Target Number Of CSS Bundles Per Page" select 25
+ - Under "Target Number Of JS Bundles Per Page" select 25
  - Under "Grouping logic" select "File size"
 
 *HTTP/1.1 Settings*
@@ -92,69 +64,43 @@ Install AdvAgg Bundler if not enabled and go to
  - Under "Target Number Of JS Bundles Per Page" select 5
  - Under "Grouping logic" select "File size"
 
-15 bundles vs 2 and 5 has to do with browser caching. More files equals a better
+25 bundles vs 2 and 5 has to do with browser caching. More files equals a better
 chance of the browser having that combo in its cache, but more files means more
 connections being established and opened in HTTP 1.1. Use 2 for CSS as this
 number doesn't wait for any new connections; JS is 5 as most browsers have a
 concurrent connections limit of 6. This number for bundles was picked after many
 tests. In HTTP 2.0 there is one streaming connection and the penalty for
 multiple CSS and JS files is almost non existent; thus optimizing for the
-browser cache is the best choice; thus 15 should be used for CSS and JS when
+browser cache is the best choice; thus 25 should be used for CSS and JS when
 serving HTTP/2.0.
 
 #### AdvAgg Relocate ####
 Install AdvAgg Relocate if not enabled and go to
 `admin/config/development/performance/advagg/relocate`
 
- - Move external JS files to a local JS file
- - Only cache external JavaScript files if the browser cache TTL is under this
-   amount: 1 week
-
-Check the boxes for the various js scripts that are used. If you are using
-google analytics then you should check this box as an example *Move inline
-google analytics inline analytics.js loader code to `drupal_add_js`*
-
- - Move external CSS files to a local CSS file
- - Move external CSS font files to inline CSS
- - Inline @import CSS font files in local .css files
+Select "Use recommended (optimized) settings"
 
 #### AdvAgg Modifier ####
 Install AdvAgg Modifier if not enabled and go to
 `admin/config/development/performance/advagg/mod`
 
-*JS*
-
- - Check "Enable preprocess on all JS (recommended)"
- - Check "Resource hint src attributes found in the HTML content (recommended)"
- - Enable every checkbox under "Optimize JavaScript Ordering"
- - Under "Move JS to the footer" Select "All but what is in the
-   $all_in_footer_list (recommended)"
- - Under "Deferred JavaScript Execution: Add The defer Tag To All Script Tags"
-   Select "All but external scripts (recommended)"
- - Check "Put a wrapper around inline JS if it was added in the content section
-   incorrectly (recommended)"
-
-*CSS*
-
- - Check "Enable preprocess on all CSS (recommended)"
- - Enable every checkbox under "Optimize CSS Ordering"
- - Under "Deferred CSS Execution: Use JS to load CSS" select "All in head, use
-   link rel="preload" (recommended)"
- - Under "Defer CSS only on specific pages" select "File Controlled
-   (recommended)."
- - Under "How to include the JS loading code" select "Inline javascript loader
-   library (recommended)"
+Select "Use recommended (optimized) settings"
 
 ##### Generating Critical CSS Files #####
 Go to https://www.sitelocity.com/critical-path-css-generator and input as many
-landing pages as needed for critical css; the top 10 is usually a good start. If
-you have Google Analytics this will show you how to find your top landing pages
+landing pages as needed for critical css; the top 10 is usually a good start.
+If you have Google Analytics this will show you how to find your top landing
+pages
 https://developers.google.com/analytics/devguides/reporting/core/v3/common-queries#top-landing-pages
+or for Piwik https://piwik.org/faq/how-to/faq_160/. If you don't know what page
+to start with do your site's homepage. You can also us this to generate css
+https://chrome.google.com/webstore/detail/critical-style-snapshot/gkoeffcejdhhojognlonafnijfkcepob?hl=en
 
 Example filenames and paths below are for the "bootstrap" theme; they all start
 with `sites/all/themes/bootstrap/critical-css/`; in your theme create the
 `critical-css/` directory. The next directory is based on the user;
-`anonymous/`,  `all/`, or `authenticated/` can be used.
+`anonymous/`,  `all/`, or `authenticated/` can be used; anonymous is usually
+what you want to use.
 
 The next directory can be `urls/` or `type/`. Looking at `urls/`; front is a
 special case for the front page, all other paths use current_path() as the
@@ -187,52 +133,31 @@ JavaScript.
 https://drupal.org/node/1279226
 
 
-SETTINGS THAT DRUPAL.ORG USES
------------------------------
+JSMIN PHP EXTENSION
+-------------------
 
-Issue: https://www.drupal.org/node/2493801
+The AdvAgg JS Compress module can take advantage of jsmin.c. JavaScript parsing
+and minimizing will be done in C instead of PHP dramatically speeding up the
+process. If using PHP 5.3.10 or higher https://github.com/sqmk/pecl-jsmin is
+recommended. If using PHP 5.3.9 or lower
+http://www.ypass.net/software/php_jsmin/ is recommended.
 
-Configuration:
 
- - Enable advanced aggregation: Checked
- - Use DNS Prefetch for external CSS/JS: Enabled, below charset=utf-8
- - AdvAgg Cache Settings: Aggressive Render Cache ~ 10ms
- - Combine CSS files by using media queries: Checked
- - Fix improperly set type: Checked
- - Cron Options: Default
- - Obscure Options: Default
+BROTLI PHP EXTENSION
+--------------------
 
-Bundler:
+The AdvAgg module can take advantage of Brotli compression. Install this
+extension to take advantage of it. Should reduce CSS/JS files by 20%.
+https://github.com/kjdev/php-ext-brotli
 
- - Bundler is Active: Checked
- - Target Number Of CSS Bundles Per Page: 2
- - Target Number Of JS Bundles Per Page: 5
- - Grouping logic: File size
 
-JS Compression:
+ZOPFLI PHP EXTENSION
+--------------------
 
- - File Compression: Select a Compressor: JSMin (~2ms)
- - Inline Compression: Select a Compressor: JSMin (~2ms)
- - Inline Compression: Use even if this page is not cacheable: Checked
-
-Modifications:
-
- - Remove ajaxPageState CSS and JS data if ajax.js is not used on this page:
-   Checked
- - Move all external scripts to the top of the execution order: Checked
- - Move all inline scripts to the bottom of the execution order: Checked
- - Move Google Analytics analytics.js code from inline to be a file: Checked
- - Prefetch stats.g.doubleclick.net/robots.txt: Checked
- - Move JS to the footer: All but what is in the `$all_in_footer_list`
- - Deferred JavaScript Execution: Add The defer Tag To All Script Tags: All but
-   external scripts
- - Deferred inline JavaScript Execution: Put a wrapper around inline JS so it
-   runs from a setTimeout call: Checked
-
-Relocate:
-
- - Check Move external CSS font files to inline CSS
- - Check Inline @import CSS font files in local .css files
+The AdvAgg module can take advantage of the Zopfli compression algorithm.
+Install this extension to take advantage of it. This gives higher gzip
+compression ratios compared to stock PHP.
+https://github.com/kjdev/php-ext-zopfli
 
 
 NGINX CONFIGURATION
@@ -514,8 +439,6 @@ Settings page is located at:
    cache hit ratio will be low; if that is the case consider using
    Drupal.settings for a better cache hit ratio.
 
-
-
 **Resource Hints**
 
 Preemptively get resources (CSS/JS & sub requests). This will set tags in the
@@ -554,9 +477,9 @@ Adjusting the frequency of how often something happens on cron.
    inside of an iframe.
  - Convert absolute paths to be protocol relative paths: Safe to use unless you
    need to support IE6.
- - Convert http:// to https://: Usually not needed, but here incase you do.
+ - Convert http:// to https://: Usually not needed, but here in case you do.
  - Do not run CSS url() values through file_create_url(): Usually not needed,
-   but here incase you do.
+   but here in case you do.
 
 
 **CSS Options & JS Options**

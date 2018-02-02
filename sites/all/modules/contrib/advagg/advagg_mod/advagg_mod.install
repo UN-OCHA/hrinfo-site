@@ -11,6 +11,14 @@
  */
 
 /**
+ * Implements hook_install().
+ */
+function advagg_mod_install() {
+  // New install gets a locked admin section.
+  variable_set('advagg_mod_admin_mode', 0);
+}
+
+/**
  * Merge advagg_mod_css_defer_rel_preload into advagg_mod_css_defer.
  */
 function advagg_mod_update_7201(&$sandbox) {

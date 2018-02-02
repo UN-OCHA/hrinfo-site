@@ -34,6 +34,8 @@ function advagg_install() {
     // Change utf8_bin to ascii_bin.
     advagg_install_change_table_collation($table, $fields, 'ascii_bin', $schema[$table]['fields']);
   }
+  // New install gets a locked admin section.
+  variable_set('advagg_admin_mode', 0);
 }
 
 /**
@@ -1203,7 +1205,18 @@ function advagg_requirements($phase) {
     return $requirements;
   }
 
-  // Make sure http requests will work correctly.
+  // Make sure outbound http requests will work.
+  $request = drupal_http_request('https://www.google.com/robots.txt', array('timeout' => 8));
+  if (empty($request->data) || $request->code != 200) {
+    $requirements['advagg_drupal_http_request_failure'] = array(
+      'title' => $t('Adv CSS/JS Agg - drupal_http_request test'),
+      'severity' => REQUIREMENT_WARNING,
+      'value' => $t('An external request for https://www.google.com/robots.txt could not be fulfilled.'),
+      'description' => $t('If drupal_http_request does not work, the tests that AdvAgg performs may not be accurate.'),
+    );
+  }
+
+  // Make sure http requests to advagg will work.
   advagg_install_check_via_http($requirements);
 
   // Check that file writes happen without any errors.
@@ -2508,7 +2521,7 @@ function advagg_install_apache_mod_loaded($mod) {
     }
   }
   elseif (is_callable('phpinfo') && FALSE === strpos(ini_get('disable_functions'), 'phpinfo')) {
-    // Use static so we don't run phpinfo mutiple times.
+    // Use static so we don't run phpinfo multiple times.
     $phpinfo = &drupal_static(__FUNCTION__);
     if (empty($phpinfo)) {
       // Use phpinfo to get the info if apache_get_modules doesn't exist.

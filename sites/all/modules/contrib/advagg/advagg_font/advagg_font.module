@@ -16,9 +16,14 @@
 define('ADVAGG_FONT_FONTFACEOBSERVER', 0);
 
 /**
+ * Default value to use localStorage in order to prevent the FOUT.
+ */
+define('ADVAGG_FONT_STORAGE', 1);
+
+/**
  * Default value to use a cookie in order to prevent the FOUT.
  */
-define('ADVAGG_FONT_COOKIE', 1);
+define('ADVAGG_FONT_COOKIE', 0);
 
 /**
  * Default value to only replace the font if it's been downloaded.
@@ -49,50 +54,42 @@ function advagg_font_module_implements_alter(&$implementations, $hook) {
 /**
  * Implements hook_page_alter().
  */
-function advagg_font_page_alter(&$page) {
-  // The $page variable is not an array; or the content key does not exist.
-  if (!is_array($page) || !isset($page['content'])) {
-    return;
-  }
+function advagg_font_page_alter() {
   $advagg_font_ffo = variable_get('advagg_font_fontfaceobserver', ADVAGG_FONT_FONTFACEOBSERVER);
   // Fontface Observer is disabled.
   if (empty($advagg_font_ffo)) {
     return;
   }
 
-  $page['content']['#attached']['js'][] = array(
-    'type' => 'setting',
-    'data' => array(
-      'advagg_font_cookie' => variable_get('advagg_font_cookie', ADVAGG_FONT_COOKIE),
-      'advagg_font_no_fout' => variable_get('advagg_font_no_fout', ADVAGG_FONT_NO_FOUT),
-    ),
-  );
+  // Add settings.
+  drupal_add_js(array(
+    'advagg_font' => array(),
+    'advagg_font_storage' => variable_get('advagg_font_storage', ADVAGG_FONT_STORAGE),
+    'advagg_font_cookie' => variable_get('advagg_font_cookie', ADVAGG_FONT_COOKIE),
+    'advagg_font_no_fout' => variable_get('advagg_font_no_fout', ADVAGG_FONT_NO_FOUT),
+  ), array('type' => 'setting'));
 
   // Add inline script for reading the cookies and adding the fonts already
   // loaded to the html class.
-  if (variable_get('advagg_font_cookie', ADVAGG_FONT_COOKIE)) {
-    $inline_script_min = 'var fonts=document.cookie.split("advaggf");for(var key in fonts){var font=fonts[key].split("="),pos=font[0].indexOf("ont_");-1!==pos&&(window.document.documentElement.className+=" "+font[0].substr(4).replace(/[^a-zA-Z0-9\-]/g,""))}';
-    $page['content']['#attached']['js']['advagg_font.inline.js'] = array(
+  if (variable_get('advagg_font_cookie', ADVAGG_FONT_COOKIE) || variable_get('advagg_font_storage', ADVAGG_FONT_STORAGE)) {
+    $inline_script_min = 'for(var fonts=document.cookie.split("advaggf"),i=0;i<fonts.length;i++){var font=fonts[i].split("="),pos=font[0].indexOf("ont_");-1!==pos&&(window.document.documentElement.className+=" "+font[0].substr(4).replace(/[^a-zA-Z0-9\-]/g,""))}if(void 0!==Storage){fonts=JSON.parse(localStorage.getItem("advagg_fonts"));var current_time=(new Date).getTime();for(var key in fonts)fonts[key]>=current_time&&(window.document.documentElement.className+=" "+key.replace(/[^a-zA-Z0-9\-]/g,""))}';
+    drupal_add_js($inline_script_min, array(
       'type' => 'inline',
       'group' => JS_LIBRARY - 1,
       'weight' => -50000,
+      'scope' => 'above_css',
       'scope_lock' => TRUE,
       'movable' => FALSE,
       'no_defer' => TRUE,
-      'data' => $inline_script_min,
-    );
+    ));
   }
-
-  // Add advagg_font.js; sets cookie and changes the class of the top level
-  // element once a font has been downloaded.
-  $file_path = drupal_get_path('module', 'advagg_font') . '/advagg_font.js';
-  $page['content']['#attached']['js'][$file_path] = array(
-    'async' => TRUE,
-    'defer' => TRUE,
-  );
 
   // Get library data for fontfaceobserver.
   $library = advagg_library('fontfaceobserver', 'advagg_font');
+  // If libraries_load() does not exist load library externally.
+  if (!is_callable('libraries_load')) {
+    $advagg_font_ffo = 6;
+  }
   // Add fontfaceobserver.js.
   if ($advagg_font_ffo != 6 && empty($library['installed'])) {
     // The fontfaceobserver library is not installed; use external variant.
@@ -114,6 +111,14 @@ function advagg_font_page_alter(&$page) {
       libraries_load('fontfaceobserver');
     }
   }
+
+  // Add advagg_font.js; sets cookie and changes the class of the top level
+  // element once a font has been downloaded.
+  $file_path = drupal_get_path('module', 'advagg_font') . '/advagg_font.js';
+  drupal_add_js($file_path, array(
+    'async' => TRUE,
+    'defer' => TRUE,
+  ));
 }
 
 /**
@@ -254,7 +259,35 @@ function advagg_font_get_replacements_array($css_string) {
   $property = 'font';
   $property_alt = 'font-family';
   $replacements = array();
+  $fonts_with_no_replacements = array();
   $lower = strtolower($css_string);
+  $safe_fonts_list = array(
+    'georgia' => TRUE,
+    'palatino' => TRUE,
+    'times new roman' => TRUE,
+    'times' => TRUE,
+
+    'arial' => TRUE,
+    'helvetica' => TRUE,
+    'gadget' => TRUE,
+    'verdana' => TRUE,
+    'geneva' => TRUE,
+    'tahoma' => TRUE,
+    'garamond' => TRUE,
+    'bookman' => TRUE,
+    'comic sans ms' => TRUE,
+    'cursive' => TRUE,
+    'trebuchet ms' => TRUE,
+    'arial black' => TRUE,
+    'impact' => TRUE,
+    'charcoal' => TRUE,
+
+    'courier new' => TRUE,
+    'courier' => TRUE,
+    'monaco' => TRUE,
+
+    'system' => TRUE,
+  );
 
   while (($property_position = strpos($lower, $property, $property_position)) !== FALSE) {
     // Find the start of the values for the property.
@@ -308,19 +341,23 @@ function advagg_font_get_replacements_array($css_string) {
     $values_string = substr($css_string, $start_of_values + 1, $declaration_end - ($start_of_values + 1));
     // Parse values string into an array of values.
     $values_array = explode(',', $values_string);
-    // Skip if only one font is listed.
-    if (count($values_array) <= 1) {
+    if (empty($values_array)) {
       continue;
     }
-    $values_array[0] = trim($values_array[0]);
 
-    // Values array has more than 1 value and first element is a quoted string.
+    // Values array, first element is a quoted string.
     $dq = strpos($values_array[0], '"');
     $sq = strpos($values_array[0], "'");
     $quote_pos = ($sq !== FALSE) ? $sq : $dq;
-
     // Skip if the first font is not quoted.
     if ($quote_pos === FALSE) {
+      continue;
+    }
+
+    $values_array[0] = trim($values_array[0]);
+    // Skip if only one font is listed.
+    if (count($values_array) === 1) {
+      $fonts_with_no_replacements[$values_array[0]] = '';
       continue;
     }
 
@@ -338,6 +375,7 @@ function advagg_font_get_replacements_array($css_string) {
     $removed_value_classname = str_replace(' ', '-', $removed_value_classname);
 
     // Remove value if it contains a quote.
+    $values_array_copy = $values_array;
     foreach ($values_array as $key => $value) {
       if (strpos($value, '"') !== FALSE || strpos($value, "'") !== FALSE) {
         unset($values_array[$key]);
@@ -346,9 +384,30 @@ function advagg_font_get_replacements_array($css_string) {
         break;
       }
     }
+
     if (empty($values_array)) {
-      // No unquoted values left; do not modify the css.
-      continue;
+      // See if there's a "safe" fallback that is quoted.
+      $values_array = $values_array_copy;
+      foreach ($values_array as $key => $value) {
+        if (strpos($value, '"') !== FALSE || strpos($value, "'") !== FALSE) {
+          if ($key !== 0) {
+            $lower_key = trim(trim(strtolower(trim($value)), '"'), "'");
+            if (!empty($safe_fonts_list[$lower_key])) {
+              break;
+            }
+          }
+          unset($values_array[$key]);
+        }
+        elseif ($key !== 0) {
+          break;
+        }
+      }
+      if (empty($values_array)) {
+        // No unquoted values left; do not modify the css.
+        $key = array_shift($values_array_copy);
+        $fonts_with_no_replacements[$key] = implode(',', $values_array_copy);
+        continue;
+      }
     }
 
     $extra = '';
@@ -414,5 +473,5 @@ function advagg_font_get_replacements_array($css_string) {
       $next_value_original,
     );
   }
-  return $replacements;
+  return array($replacements, $fonts_with_no_replacements);
 }

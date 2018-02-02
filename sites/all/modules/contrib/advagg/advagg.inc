@@ -542,7 +542,7 @@ function &advagg_load_files_info_into_static_cache(array $files) {
   // Get the static cache of this data.
   $cached_data = &drupal_static('advagg_get_info_on_file');
 
-  // Get that staticly cached data for all the given files.
+  // Get the statically cached data for all the given files.
   $cache_ids = array();
   foreach ($files as $file) {
     $cache_id = 'advagg:file:' . advagg_drupal_hash_base64($file);
@@ -1166,7 +1166,7 @@ function advagg_split_css_file(array $file_info, $file_contents = '') {
     // Save file.
     $subfile = advagg_create_subfile($value, $overall_counter, $file_info);
     if (empty($subfile)) {
-      // Somthing broke; do not create a subfile.
+      // Something broke; do not create a subfile.
       watchdog('advagg', 'Spliting up a CSS file failed. File info: <code>@info</code>', array('@info' => var_export($file_info, TRUE)));
       return array();
     }
