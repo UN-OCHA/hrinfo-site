@@ -919,7 +919,7 @@ function advagg_detect_subfile_changes($filename, array $subfiles, $keyname, $sa
       );
     }
 
-    // Set the info incase a save happens.
+    // Set the info in case a save happens.
     $info[$keyname][$subfile] = $current_file_info;
 
     // Check for any differences.

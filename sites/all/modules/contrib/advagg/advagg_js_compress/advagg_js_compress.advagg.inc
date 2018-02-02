@@ -484,6 +484,7 @@ function advagg_js_compress_string_contains_multibyte_characters($string) {
 function advagg_js_compress_jsminplus(&$contents, $log_errors = TRUE) {
   $no_errors = TRUE;
   $contents_before = $contents;
+  $old_error = error_get_last();
 
   // Set max nesting level.
   if (!class_exists('JSMinPlus')) {
@@ -505,12 +506,18 @@ function advagg_js_compress_jsminplus(&$contents, $log_errors = TRUE) {
   ob_start();
   try {
     // JSMin+ the contents of the aggregated file.
-    $contents = JSMinPlus::minify($contents);
+    $contents = @JSMinPlus::minify($contents);
 
     // Capture any output from JSMinPlus.
     $error = trim(ob_get_contents());
     if (!empty($error)) {
       $no_errors = FALSE;
+      throw new Exception($error);
+    }
+    $recent_error = error_get_last();
+    if (!empty($recent_error) && serialize($recent_error) !== serialize($old_error)) {
+      $no_errors = FALSE;
+      $error = print_r($recent_error, TRUE);
       throw new Exception($error);
     }
   }
