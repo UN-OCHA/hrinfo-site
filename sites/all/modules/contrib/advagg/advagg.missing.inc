@@ -112,7 +112,17 @@ function advagg_missing_generate($input = '') {
   $uri = $GLOBALS['base_path'] . $_GET['q'];
   $created = FALSE;
   $files_to_save = array();
-  if (lock_acquire($lock_name, 10) || $redirect_counter > 4) {
+  if (variable_get('advagg_no_locks', ADVAGG_NO_LOCKS)) {
+    $return = advagg_missing_create_file($filename, FALSE, $data);
+    if (!is_array($return)) {
+      return $return;
+    }
+    else {
+      list($files_to_save, $type) = $return;
+      $created = TRUE;
+    }
+  }
+  elseif (lock_acquire($lock_name, 10) || $redirect_counter > 4) {
     if ($redirect_counter > 4) {
       $return = advagg_missing_create_file($filename, TRUE, $data);
     }

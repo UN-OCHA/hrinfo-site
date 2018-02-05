@@ -78,7 +78,7 @@ function advagg_css_compress_admin_settings_form($form, $form_state) {
   $results = db_select('advagg_files', 'af')
     ->fields('af', array('filename'))
     ->condition('filetype', 'css')
-    ->orderBy('af.filename', 'ASC')
+    ->orderBy('filename', 'ASC')
     ->execute();
   $file_settings = variable_get('advagg_css_compressor_file_settings', array());
   foreach ($results as $row) {

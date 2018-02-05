@@ -91,7 +91,7 @@ function advagg_js_compress_admin_settings_form($form, $form_state) {
     '#description' => t("Stripping everything will produce somewhat better scores in
    some automated scans but otherwise should not affect your site. Providing a link to the original source and keeping important comments is enabled by default in order to better follow the spirit of the GPL by linking to the original unminified javascript source files."),
     '#options' => array(
-      0 => t('Strip everything'),
+      0 => t('Strip everything (smallest files)'),
       1 => t('Provide a link to the original source as a comment'),
       2 => t('Keep important comments if the minifier supports it'),
       3 => t('Do both; try to keep important comments and provide a link'),
@@ -100,19 +100,12 @@ function advagg_js_compress_admin_settings_form($form, $form_state) {
 
   $options[-1] = t('Default');
   ksort($options);
-
   $form['per_file_settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Per File Settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
-  // Get filename and filename_hash.
-  $results = db_select('advagg_files', 'af')
-    ->fields('af', array('filename'))
-    ->condition('filetype', 'js')
-    ->orderBy('af.filename', 'ASC')
-    ->execute();
   $file_settings = variable_get('advagg_js_compressor_file_settings', array());
   foreach ($list as $row) {
     $dir = dirname($row['data']);
@@ -151,7 +144,7 @@ function advagg_js_compress_admin_settings_form($form, $form_state) {
   }
 
   // No js files are found.
-  if (empty($results)) {
+  if (empty($list)) {
     $form['per_file_settings']['#description'] = t('No JS files have been aggregated. You need to enable aggregation. No js files where found in the advagg_files table.');
   }
 

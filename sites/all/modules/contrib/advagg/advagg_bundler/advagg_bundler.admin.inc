@@ -41,13 +41,23 @@ function advagg_bundler_admin_settings_form() {
     13 => 13,
     14 => 14,
     15 => 15,
+    16 => 16,
+    17 => 17,
+    18 => 18,
+    19 => 19,
+    20 => 20,
+    21 => 21,
+    22 => 22,
+    23 => 23,
+    24 => 24,
+    25 => 25,
   );
   $form['advagg_bundler_max_css'] = array(
     '#type' => 'select',
     '#title' => t('Target Number Of CSS Bundles Per Page'),
     '#default_value' => variable_get('advagg_bundler_max_css', ADVAGG_BUNDLER_MAX_CSS),
     '#options' => $options,
-    '#description' => t('If 0 is selected then the bundler is disabled. 2 is recommended for HTTP 1.1 and 15 for HTTP 2.0.'),
+    '#description' => t('If 0 is selected then the bundler is disabled. 2 is recommended for HTTP 1.1 and 15+ for HTTP 2.0.'),
     '#states' => array(
       'disabled' => array(
         '#edit-advagg-bundler-active' => array('checked' => FALSE),
@@ -59,7 +69,7 @@ function advagg_bundler_admin_settings_form() {
     '#title' => t('Target Number Of JS Bundles Per Page'),
     '#default_value' => variable_get('advagg_bundler_max_js', ADVAGG_BUNDLER_MAX_JS),
     '#options' => $options,
-    '#description' => t('If 0 is selected then the bundler is disabled. 5 is recommended for HTTP 1.1 and 15 for HTTP 2.0.'),
+    '#description' => t('If 0 is selected then the bundler is disabled. 5 is recommended for HTTP 1.1 and 15+ for HTTP 2.0.'),
     '#states' => array(
       'disabled' => array(
         '#edit-advagg-bundler-active' => array('checked' => FALSE),

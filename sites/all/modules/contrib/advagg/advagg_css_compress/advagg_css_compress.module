@@ -187,7 +187,7 @@ function advagg_css_compress_libraries_info() {
  * @param array $library
  *   An associative array containing all information about the library.
  * @param array $options
- *   An associative array containing options for the verson parser.
+ *   An associative array containing options for the version parser.
  *
  * @return string
  *   Version number.

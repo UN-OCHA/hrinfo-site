@@ -86,10 +86,10 @@ function advagg_ext_compress_advagg_css_compress_configuration_alter(&$options_d
  * @param string $ext
  *   The string css or js.
  * @param array $debug
- *   Optinal debug array.
+ *   Optional debug array.
  *
  * @return string
- *   The filename containting the compressed css/js data.
+ *   The filename containing the compressed css/js data.
  */
 function advagg_ext_compress_execute_cmd($input_file, $ext = '', array &$debug = array()) {
   $run = variable_get("advagg_ext_compress_{$ext}_cmd", '');
