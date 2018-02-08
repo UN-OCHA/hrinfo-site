@@ -93,6 +93,11 @@ function hr_users_user_login(&$edit, $account) {
         $changed = TRUE;
       }
 
+      if (empty($profile->field_job_title_other[LANGUAGE_NONE][0]['value']) || $profile->field_job_title_other[LANGUAGE_NONE][0]['value'] != $data['job_title']) {
+        $profile->field_job_title_other[LANGUAGE_NONE][0]['value'] = $data['job_title'];
+        $changed = TRUE;
+      }
+
       if ($changed) {
         $profile->save();
         user_save($account);
