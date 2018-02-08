@@ -3241,7 +3241,7 @@ div.region-top div.block { display: inline-block; }
 
 @media (min-width: 768px) { .alert-container .close { top: -10px; }
   .og-context .alert-container .close, .front .alert-container .close { margin-top: -20px; top: 50%; } }
-.block-menu h2, .block-menu-block h2, .block-og-menu h2, .block-locale h2 { display: none; }
+.block-menu h2, .block-menu-block h2, .block-og-menu h2, .block-og-menu h4, .block-locale h2, .block-locale h4 { display: none; }
 
 .navbar { min-height: 0; }
 
@@ -3845,13 +3845,7 @@ body #footer { margin: 0; }
 #sidebar-first .block-current-search .current-reset-filter { height: 33px; line-height: 36px; color: #bc2e3c; }
 #sidebar-first .block-current-search .current-reset-filter a { height: 28px; width: 19px; background: url(../images/cross.png) no-repeat center bottom transparent; float: left; margin-right: 5px; }
 #sidebar-first .block-current-search .reset-all-filters { height: 33px; line-height: 36px; color: #bc2e3c; }
-#sidebar-first .block-current-search .reset-all-filters a {
-  color: $p-main;
-  width: 19px;
-  background: url(../images/cross.png) no-repeat left bottom rgba(0, 0, 0, 0);
-  padding-left: 25px;
- }
-
+#sidebar-first .block-current-search .reset-all-filters a { color: #bc2e3c; width: 19px; background: url(../images/cross.png) no-repeat left bottom transparent; padding-left: 25px; }
 #sidebar-first .block-current-search .current-search-item-active { margin-top: 10px; margin-bottom: -8px; }
 #sidebar-first .block-current-search .current-search-item-active .current-selected-item { color: #BC2E3C; list-style: none outside none; }
 #sidebar-first .block-current-search .current-search-item-active .current-selected-item li { margin-left: 0; line-height: 22px; color: black; font-size: 0.8em; }
@@ -4452,12 +4446,6 @@ table.stylish-table tr:nth-child(2n) { background-color: #dedede; }
 
 .front .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system { margin-bottom: 30px; }
 
-div#modalContent {
-  max-height: calc(100% - 100px);
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%);
-}
+div#modalContent { max-height: calc(100% - 100px); position: fixed !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); }
 
 /*# sourceMappingURL=screen.css.map */
