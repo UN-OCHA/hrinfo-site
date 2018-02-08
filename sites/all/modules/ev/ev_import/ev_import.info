@@ -1,0 +1,4 @@
+name = Events import
+description = Import events from Humanitarian Events
+core = 7.x
+package = Humanitarianresponse
