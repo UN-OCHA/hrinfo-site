@@ -3416,17 +3416,17 @@ div.region-top div.block { display: inline-block; }
 .node-search-result .row .panel-panel .pane-hr-node-links { text-align: right; }
 .node-search-result .row .panel-panel .pane-hr-node-links div { display: inline-block; }
 
-#block-hr-layout-hr-layout-share-links .content { border-radius: 10px; background-color: #bbd9e1; color: #0fa4de; padding: 10px; }
-#block-hr-layout-hr-layout-share-links .content h2 { margin: 0 0 -10px; text-align: center; font-weight: bold; font-size: 1.1em; }
-#block-hr-layout-hr-layout-share-links .content h2 span { text-transform: uppercase; }
-#block-hr-layout-hr-layout-share-links .content hr { border-top: 1px dotted white; clear: both; }
-#block-hr-layout-hr-layout-share-links .content .cluster { margin: 0px 27px -10px 56px; text-align: right; font-weight: bold; }
-#block-hr-layout-hr-layout-share-links .content .cluster .image { width: 38px; height: 38px; background: grey; float: right; margin-left: 10px; margin-bottom: 10px; }
-#block-hr-layout-hr-layout-share-links .content .manager { font-size: 1.1em; color: #0fa4de; text-align: center; }
-#block-hr-layout-hr-layout-share-links .content .space-follow { position: relative; }
-#block-hr-layout-hr-layout-share-links .content .space-follow .flag-throbber { position: absolute; }
-#block-hr-layout-hr-layout-share-links .content .space-follow .flag-wrapper.flag-waiting { display: block; }
-#block-hr-layout-hr-layout-share-links .content .space-follow .flag-wrapper.flag-waiting a i { display: none; }
+#block-hr-layout-hr-layout-share-links .block__content { border-radius: 10px; background-color: #bbd9e1; color: #0fa4de; padding: 10px; }
+#block-hr-layout-hr-layout-share-links .block__content h2 { margin: 0 0 -10px; text-align: center; font-weight: bold; font-size: 1.1em; }
+#block-hr-layout-hr-layout-share-links .block__content h2 span { text-transform: uppercase; }
+#block-hr-layout-hr-layout-share-links .block__content hr { border-top: 1px dotted white; clear: both; }
+#block-hr-layout-hr-layout-share-links .block__content .cluster { margin: 0px 27px -10px 56px; text-align: right; font-weight: bold; }
+#block-hr-layout-hr-layout-share-links .block__content .cluster .image { width: 38px; height: 38px; background: grey; float: right; margin-left: 10px; margin-bottom: 10px; }
+#block-hr-layout-hr-layout-share-links .block__content .manager { font-size: 1.1em; color: #0fa4de; text-align: center; }
+#block-hr-layout-hr-layout-share-links .block__content .space-follow { position: relative; }
+#block-hr-layout-hr-layout-share-links .block__content .space-follow .flag-throbber { position: absolute; }
+#block-hr-layout-hr-layout-share-links .block__content .space-follow .flag-wrapper.flag-waiting { display: block; }
+#block-hr-layout-hr-layout-share-links .block__content .space-follow .flag-wrapper.flag-waiting a i { display: none; }
 @-ms-keyframes spin { from { -ms-transform: rotate(0deg); }
   to { -ms-transform: rotate(360deg); } }
 @-moz-keyframes spin { from { -moz-transform: rotate(0deg); }
@@ -3435,17 +3435,17 @@ div.region-top div.block { display: inline-block; }
   to { -webkit-transform: rotate(360deg); } }
 @keyframes spin { from { transform: rotate(0deg); }
   to { transform: rotate(360deg); } }
-#block-hr-layout-hr-layout-share-links .content .space-follow .flag-wrapper.flag-waiting .flag-throbber { right: 41px; top: 2px; background: none; width: 21px; height: 16px; line-height: 16px; color: white; font-size: 1.4em; text-align: center; -webkit-animation: spin 2s infinite linear; -moz-animation: spin 2s infinite linear; -ms-animation: spin 2s infinite linear; animation: spin 2s infinite linear; display: block; font-size: 0; padding: 0; }
-#block-hr-layout-hr-layout-share-links .content .space-follow .flag-wrapper.flag-waiting .flag-throbber:after { font-family: FontAwesome; content: "\f110"; font-size: 17px; }
+#block-hr-layout-hr-layout-share-links .block__content .space-follow .flag-wrapper.flag-waiting .flag-throbber { right: 41px; top: 2px; background: none; width: 21px; height: 16px; line-height: 16px; color: white; font-size: 1.4em; text-align: center; -webkit-animation: spin 2s infinite linear; -moz-animation: spin 2s infinite linear; -ms-animation: spin 2s infinite linear; animation: spin 2s infinite linear; display: block; font-size: 0; padding: 0; }
+#block-hr-layout-hr-layout-share-links .block__content .space-follow .flag-wrapper.flag-waiting .flag-throbber:after { font-family: FontAwesome; content: "\f110"; font-size: 17px; }
 #block-hr-layout-hr-layout-share-links a.btn { color: white; display: block; margin: 6px 27px; font-size: 0.95em; text-transform: uppercase; text-align: left; position: relative; }
 #block-hr-layout-hr-layout-share-links a.btn i { position: absolute; right: 10px; float: right; font-size: 1.4em; }
 
 #views-form-og-members-admin-default thead tr th a, #views-form-og-members-admin-default thead tr .ui-widget-header a { color: white; }
 #views-form-og-members-admin-default thead tr th.views-field.active a { color: #0fa4de; }
 
-#block-hr-operations-operations-status .content .operation-status { border-radius: 10px; text-align: center; color: white; position: relative; text-transform: uppercase; font-weight: bold; font-style: italic; padding: 8px; background-color: #54b1c8; font-family: Exo; font-size: 1.1em; }
-#block-hr-operations-operations-status .content .operation-status.archived { background-color: #bc2e3c; }
-#block-hr-operations-operations-status .content .operation-status i { display: block; position: absolute; right: 10px; top: 50%; border: 2px solid white; width: 20px; height: 20px; border-radius: 20px; line-height: 18px; margin-top: -10px; }
+#block-hr-operations-operations-status .block__content .operation-status { border-radius: 10px; text-align: center; color: white; position: relative; text-transform: uppercase; font-weight: bold; font-style: italic; padding: 8px; background-color: #54b1c8; font-family: Exo; font-size: 1.1em; }
+#block-hr-operations-operations-status .block__content .operation-status.archived { background-color: #bc2e3c; }
+#block-hr-operations-operations-status .block__content .operation-status i { display: block; position: absolute; right: 10px; top: 50%; border: 2px solid white; width: 20px; height: 20px; border-radius: 20px; line-height: 18px; margin-top: -10px; }
 
 .form-item-range { margin-top: 0; }
 
