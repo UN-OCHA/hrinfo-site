@@ -116,6 +116,10 @@ function ev_import_process_row_from_hrinfo($row) {
       $row['date']['value'] = str_replace(' ', 'T', $row['date']['value']);
       $row['date']['value2'] = str_replace(' ', 'T', $row['date']['value2']);
     }
+    else {
+      $row['date']['value'] = str_replace('T', ' ', $row['date']['value']);
+      $row['date']['value2'] = str_replace('T', ' ', $row['date']['value2']);
+    }
 
     // Build all values.
     $date_data = date_repeat_build_dates($row['date']['rrule'], NULL, $field_info, $row['date']);
@@ -124,8 +128,9 @@ function ev_import_process_row_from_hrinfo($row) {
     $date_data[0] = $row['date'];
   }
 
-  $event->field_event_date['en'] = $date_data;
+  $event->field_event_date[LANGUAGE_NONE] = $date_data;
 
+  // Set body.
   if (isset($row['description']['safe_value'])) {
     $event->body['en'][] = array(
       'value' => $row['description']['safe_value'],
@@ -133,17 +138,35 @@ function ev_import_process_row_from_hrinfo($row) {
     );
   }
 
-  if (isset($row['address']) && isset($row['address']['locality'])) {
-    $event->field_event_location_details['en'][]['value'] = $row['address']['locality'];
+  // Set organic group.
+  $event->og_group_ref['und'][0]['target_id'] = variable_get('ev_import_ethiopia_nid', 65);
+
+  // Category.
+  dpm($row['category'], 'category');
+  if (isset($row['category'])) {
+    // Make it plural
+    $row['category'] .= 's';
+
+    if ($category = ev_import_get_term($row['category'], 'hr_event_category')) {
+      $event->field_event_category['und'][0]['target_id'] = $category->tid;
+    }
   }
 
-  if (isset($row['category']) && $category = ev_import_get_term($row['category'], 'ev_category')) {
-    $event->field_event_category['en'][]['tid'] = $category->tid;
+  if (isset($row['location']) && $location = ev_import_get_term($row['location'], 'hr_location')) {
+    $event->field_location['und'][0]['target_id'] = $location->tid;
   }
 
-  if (isset($row['location']) && $location = ev_import_get_term($row['location'], 'ev_location')) {
-    $event->field_event_location['en'][]['tid'] = $location->tid;
+  if (isset($row['location_details']) && isset($row['location_details'])) {
+    $event->field_address['und'][0]['locality'] = $row['location_details'];
   }
+
+$event = node_submit($event);
+node_save($event);
+dpm($event);
+return;
+
+
+
 
   if (isset($row['themes']) && is_array($row['themes'])) {
     $current_original_theme = isset($event->field_event_original_theme['en'][0]['value']) ? $event->field_event_original_theme['en'][0]['value'] : '';
@@ -301,7 +324,7 @@ function ev_import_get_term($name, $vocabulary) {
   $query->entityCondition('bundle', $vocabulary, '=');
   $query->propertyCondition('name', $name, '=');
   $result = $query->execute();
-
+dpm($result['taxonomy_term'], $name);
   // Make sure term exists.
   if (!isset($result['taxonomy_term'])) {
     return FALSE;
