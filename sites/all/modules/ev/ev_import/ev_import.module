@@ -17,46 +17,6 @@ function ev_import_log($message) {
 }
 
 /**
- * Implements hook_cron().
- */
-function ev_import_cron() {
-  if (variable_get('ev_import_sync_from_hrinfo', FALSE)) {
-    _ev_import_events_from_hrinfo();
-  }
-  if (variable_get('ev_import_sync_from_reliefweb', FALSE)) {
-    _ev_import_events_from_reliefweb();
-  }
-}
-
-/**
- * Sync from HRInfo.
- */
-function _ev_import_events_from_hrinfo() {
-  // HRInfo, reset every 7 days.
-  $last_run = variable_get('ev_import_last_run_hrinfo', 0);
-  if ((REQUEST_TIME - $last_run) >= 7 * 86400) {
-    // Reset kill switch if needed.
-    if (variable_get('ev_import_stop_processing_hrinfo', FALSE)) {
-      variable_del('ev_import_stop_processing_hrinfo');
-      variable_set('ev_import_page_hrinfo', 0);
-    }
-  }
-
-  if (variable_get('ev_import_stop_processing_hrinfo', FALSE)) {
-    return;
-  }
-
-  module_load_include('inc', 'ev_migrate', 'ev_migrate.hrinfo');
-
-  // Migrate n batches.
-  for ($i = 0; $i < variable_get('ev_import_num_of_runs', 10); $i++) {
-    ev_import_events_from_hrinfo();
-  }
-
-  variable_set('ev_import_last_run_hrinfo', REQUEST_TIME);
-}
-
-/**
  * Migrate events.
  */
 function ev_import_events_from_hrinfo() {
