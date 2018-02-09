@@ -176,6 +176,7 @@ function ev_import_process_row_from_hrinfo($row) {
     foreach ($row['coordination_hubs'] as $coordination_hub) {
       // Remove prefix.
       $coordination_hub['name'] = str_replace('Ethiopia: ', '', $coordination_hub['name']);
+
       if ($coordination_hub = ev_import_get_node($coordination_hub['name'], 'hr_office')) {
         $event->field_coordination_hubs['und'][] = array(
           'target_id' => $coordination_hub->nid,
@@ -183,6 +184,36 @@ function ev_import_process_row_from_hrinfo($row) {
       }
     }
   }
+
+  if (isset($row['bundles']) && is_array($row['bundles'])) {
+    $event->field_bundles['und'] = array();
+    foreach ($row['bundles'] as $bundle) {
+      // Remove prefix.
+      $bundle = str_replace('Ethiopia: ', '', $bundle);
+
+      if ($bundle = ev_import_get_node($bundle, 'hr_bundle')) {
+        $event->field_bundles['und'][] = array(
+          'target_id' => $bundle->nid,
+        );
+      }
+    }
+  }
+
+  if (isset($row['themes']) && is_array($row['themes'])) {
+    $event->field_themes['und'] = array();
+    foreach ($row['themes'] as $theme) {
+      if ($theme == 'Safety and Security') {
+        $theme = 'Safety & Security';
+      }
+
+      if ($theme = ev_import_get_term($theme, 'hr_theme')) {
+        $event->field_themes['und'][] = array(
+          'target_id' => $theme->tid,
+        );
+      }
+    }
+  }
+
 
 $event = node_submit($event);
 node_save($event);
@@ -243,19 +274,6 @@ return;
     }
   }
 
-  if (isset($row['bundles']) && is_array($row['bundles'])) {
-    foreach ($row['bundles'] as $name) {
-      if ($bundle = ev_import_get_term($name, 'ev_list')) {
-        $cluster_tids[] = $bundle->tid;
-      }
-      elseif (isset($row['location']) && $bundle = ev_import_get_term($row['location'] . ': ' . $name, 'ev_list')) {
-        $cluster_tids[] = $bundle->tid;
-      }
-      elseif (isset($row['country']) && $bundle = ev_import_get_term($row['country'] . ': ' . $name, 'ev_list')) {
-        $cluster_tids[] = $bundle->tid;
-      }
-    }
-  }
 
   if (!empty($cluster_tids)) {
     $current_cluster_tids = isset($event->field_event_cluster['en']) ? $event->field_event_cluster['en'] : array();
