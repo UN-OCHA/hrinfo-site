@@ -142,7 +142,6 @@ function ev_import_process_row_from_hrinfo($row) {
   $event->og_group_ref['und'][0]['target_id'] = variable_get('ev_import_ethiopia_nid', 65);
 
   // Category.
-  dpm($row['category'], 'category');
   if (isset($row['category'])) {
     // Make it plural
     $row['category'] .= 's';
@@ -214,111 +213,6 @@ function ev_import_process_row_from_hrinfo($row) {
     }
   }
 
-
-$event = node_submit($event);
-node_save($event);
-dpm($event);
-return;
-
-
-
-
-  if (isset($row['themes']) && is_array($row['themes'])) {
-    $current_original_theme = isset($event->field_event_original_theme['en'][0]['value']) ? $event->field_event_original_theme['en'][0]['value'] : '';
-
-    $event->field_event_theme['en'] = array();
-    $event->field_event_original_theme['en'][0]['value'] = '';
-    foreach ($row['themes'] as $name) {
-      if ($theme = ev_import_get_term($name, 'ev_theme')) {
-        $event->field_event_theme['en'][]['tid'] = $theme->tid;
-      }
-      else {
-        if (!isset($event->field_event_original_theme['en'][0]['value'])) {
-          $event->field_event_original_theme['en'][0]['value'] = $name;
-        }
-        else {
-          $event->field_event_original_theme['en'][0]['value'] .= ', ' . $name;
-        }
-      }
-    }
-
-    // Limit to 250 characters.
-    if (isset($event->field_event_original_theme['en'][0]['value'])) {
-      $event->field_event_original_theme['en'][0]['value'] = substr($event->field_event_original_theme['en'][0]['value'], 0, 250);
-    }
-  }
-
-
-  if (isset($row['disasters']) && is_array($row['disasters'])) {
-    $current_disaster = isset($event->field_event_disasters['en']) ? $event->field_event_disasters['en'] : array();
-    $event->field_event_disasters['en'] = array();
-    foreach ($row['disasters'] as $name) {
-      if ($disaster = ev_import_get_term($name, 'ev_disaster')) {
-        $event->field_event_disasters['en'][]['tid'] = $disaster->tid;
-      }
-    }
-  }
-
-  $cluster_tids = array();
-  if (isset($row['sectors']) && is_array($row['sectors'])) {
-    foreach ($row['sectors'] as $name) {
-      if ($sector = ev_import_get_term($name, 'ev_list')) {
-        $cluster_tids[] = $sector->tid;
-      }
-      elseif (isset($row['location']) && $sector = ev_import_get_term($row['location'] . ': ' . $name, 'ev_list')) {
-        $cluster_tids[] = $sector->tid;
-      }
-      elseif (isset($row['country']) && $sector = ev_import_get_term($row['country'] . ': ' . $name, 'ev_list')) {
-        $cluster_tids[] = $sector->tid;
-      }
-    }
-  }
-
-
-  if (!empty($cluster_tids)) {
-    $current_cluster_tids = isset($event->field_event_cluster['en']) ? $event->field_event_cluster['en'] : array();
-    $event->field_event_cluster['en'] = array();
-    // Remove duplicates.
-    $cluster_tids = array_unique($cluster_tids);
-    foreach ($cluster_tids as $cluster_tid) {
-      $event->field_event_cluster['en'][]['tid'] = $cluster_tid;
-    }
-  }
-
-
-  $current_documents = isset($event->field_event_documents['en']) ? $event->field_event_documents['en'] : array();
-  if (isset($row['event_meeting_minutes']) && is_array($row['event_meeting_minutes'])) {
-    $meeting_minute_term_info = events_config_get_term('Meeting Minutes', 'ev_document_type');
-    $meeting_minute_tid = $meeting_minute_term_info['term']->tid;
-    foreach ($row['event_meeting_minutes'] as $event_meeting_minute) {
-      $fid = ev_import_fetch_and_save_file($event_meeting_minute['name'], $event_meeting_minute['url'], $event->created);
-      if ($fid) {
-        $event->field_event_documents['en'][0]['field_document_type']['en'][0]['tid'] = $meeting_minute_tid;
-        $event->field_event_documents['en'][0]['field_document_file']['en'][0] = array(
-          'fid' => $fid,
-          'display' => 1,
-          'description' => $event_meeting_minute['name'],
-        );
-      }
-    }
-  }
-
-  if (isset($row['event_agenda']) && is_array($row['event_agenda'])) {
-    $meeting_minute_term_info = events_config_get_term('Agenda', 'ev_document_type');
-    $meeting_minute_tid = $meeting_minute_term_info['term']->tid;
-    foreach ($row['event_agenda'] as $event_meeting_minute) {
-      $fid = ev_import_fetch_and_save_file($event_meeting_minute['name'], $event_meeting_minute['url'], $event->created);
-      if ($fid) {
-        $event->field_event_documents['en'][0]['field_document_type']['en'][0]['tid'] = $meeting_minute_tid;
-        $event->field_event_documents['en'][0]['field_document_file']['en'][0] = array(
-          'fid' => $fid,
-          'display' => 1,
-          'description' => $event_meeting_minute['name'],
-        );
-      }
-    }
-  }
-
   $event = node_submit($event);
   node_save($event);
 
@@ -369,15 +263,14 @@ function ev_import_get_node($title, $node_type) {
   $query->entityCondition('bundle', $node_type, '=');
   $query->propertyCondition('title', $title, '=');
   $result = $query->execute();
-dpm($result['node'], $title);
-  // Make sure term exists.
+
+  // Make sure node exists.
   if (!isset($result['node'])) {
     return FALSE;
   }
 
   $node_nid = reset($result['node']);
   $node = node_load($node_nid->nid);
-  dpm($node, 'node');
   return $node;
 }
 
