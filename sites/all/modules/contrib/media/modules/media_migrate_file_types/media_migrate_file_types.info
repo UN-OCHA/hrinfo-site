@@ -8,9 +8,9 @@ dependencies[] = media
 
 configure = admin/structure/file-types/upgrade
 
-; Information added by Drupal.org packaging script on 2018-02-05
-version = "7.x-2.15"
+; Information added by Drupal.org packaging script on 2018-02-09
+version = "7.x-2.16"
 core = "7.x"
 project = "media"
-datestamp = "1517856073"
+datestamp = "1518139099"
 
