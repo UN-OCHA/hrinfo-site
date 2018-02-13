@@ -33,14 +33,14 @@
 
 		//facets
 		$("#sidebar-first .block.block-facetapi h2").live("click", function() {
-			$(this).toggleClass('opened').next('.content').slideToggle('fast');
+			$(this).toggleClass('opened').next('.block__content').slideToggle('fast');
 		});
-		if($("#sidebar-first .block.block-current-search .content .current-search-item-reset").length > 0) {
-			$("#sidebar-first .block.block-current-search .content .current-search-item-reset").appendTo('#sidebar-first .block.block-current-search .content');
+		if($("#sidebar-first .block.block-current-search .block__content .current-search-item-reset").length > 0) {
+			$("#sidebar-first .block.block-current-search .block__content .current-search-item-reset").appendTo('#sidebar-first .block.block-current-search .block__content');
 		}
 
 		$("#sidebar-first .block.block-facetapi .facetapi-active").each(function() {
-			$(this).closest('.content').show().prev("h2").addClass("opened");
+			$(this).closest('.block__content').show().prev("h2").addClass("opened");
 			$(this).parent().addClass('redactive');
 		});
 

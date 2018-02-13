@@ -46,20 +46,20 @@
   }
 }
 
-.node-full.node-hr-document,
-.node-full.node-hr-infographic,
-.node-full.node-hr-news,
-.node-full.node-hr-event,
-.node-full.node-hr-dataset,
-.node-full.node-hr-indicator,
-.node-full.node-hr-contact,
-.node-full.node-hr-assessment,
-.node-full.node-hr-office,
-.page-node.node-type-hr-disaster:not(.hr-group-context) .node-full.node-hr-disaster,
-.node-full.node-hr-funding,
-.node-full.node-hr-discussion,
-.node-full.node-acc-incident,
-.node-full.node-hr-toolbox-item,
+.view-mode-full.node-hr-document,
+.view-mode-full.node-hr-infographic,
+.view-mode-full.node-hr-news,
+.view-mode-full.node-hr-event,
+.view-mode-full.node-hr-dataset,
+.view-mode-full.node-hr-indicator,
+.view-mode-full.node-hr-contact,
+.view-mode-full.node-hr-assessment,
+.view-mode-full.node-hr-office,
+.page-node.node-type-hr-disaster:not(.hr-group-context) .view-mode-full.node-hr-disaster,
+.view-mode-full.node-hr-funding,
+.view-mode-full.node-hr-discussion,
+.view-mode-full.node-acc-incident,
+.view-mode-full.node-hr-toolbox-item,
 .user-full {
 
   padding-bottom: 10px;
@@ -214,7 +214,7 @@
 
 // Search results
 
-.node-search-result {
+.node-view-mode-search-result {
 
   background-color: #F9F9F9;
   border: 1px solid #FFF;
@@ -622,38 +622,38 @@
   display: inline-block;
 }
 
-.node-full.node-hr-document .container-fluid .row,
-.node-full.node-hr-infographic .container-fluid .row,
-.node-full.node-hr-news .container-fluid .row,
-.node-full.node-hr-event .container-fluid .row,
-.node-full.node-hr-dataset .container-fluid .row,
-.node-full.node-hr-indicator .container-fluid .row,
-.node-full.node-hr-contact .container-fluid .row,
-.node-full.node-hr-assessment .container-fluid .row,
-.node-full.node-hr-office .container-fluid .row,
-.page-node.node-type-hr-disaster:not(.hr-group-context) .node-full.node-hr-disaster .container-fluid .row,
-.node-full.node-hr-funding .container-fluid .row,
-.node-full.node-hr-discussion .container-fluid .row,
-.node-full.node-acc-incident .container-fluid .row,
-.node-full.node-hr-toolbox-item .container-fluid .row,
+.view-mode-full.node-hr-document .container-fluid .row,
+.view-mode-full.node-hr-infographic .container-fluid .row,
+.view-mode-full.node-hr-news .container-fluid .row,
+.view-mode-full.node-hr-event .container-fluid .row,
+.view-mode-full.node-hr-dataset .container-fluid .row,
+.view-mode-full.node-hr-indicator .container-fluid .row,
+.view-mode-full.node-hr-contact .container-fluid .row,
+.view-mode-full.node-hr-assessment .container-fluid .row,
+.view-mode-full.node-hr-office .container-fluid .row,
+.page-node.node-type-hr-disaster:not(.hr-group-context) .view-mode-full.node-hr-disaster .container-fluid .row,
+.view-mode-full.node-hr-funding .container-fluid .row,
+.view-mode-full.node-hr-discussion .container-fluid .row,
+.view-mode-full.node-acc-incident .container-fluid .row,
+.view-mode-full.node-hr-toolbox-item .container-fluid .row,
 .user-full .container-fluid .row {
   overflow: visible;
 }
 
-.node-full.node-hr-document .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-hr-infographic .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-hr-news .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-hr-event .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-hr-dataset .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-hr-indicator .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-hr-contact .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-hr-assessment .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-hr-office .container-fluid .row .radix-layouts-sidebar,
-.page-node.node-type-hr-disaster:not(.hr-group-context) .node-full.node-hr-disaster .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-hr-funding .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-hr-discussion .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-acc-incident .container-fluid .row .radix-layouts-sidebar,
-.node-full.node-hr-toolbox-item .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-document .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-infographic .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-news .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-event .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-dataset .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-indicator .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-contact .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-assessment .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-office .container-fluid .row .radix-layouts-sidebar,
+.page-node.node-type-hr-disaster:not(.hr-group-context) .view-mode-full.node-hr-disaster .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-funding .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-discussion .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-acc-incident .container-fluid .row .radix-layouts-sidebar,
+.view-mode-full.node-hr-toolbox-item .container-fluid .row .radix-layouts-sidebar,
 .user-full .container-fluid .row .radix-layouts-sidebar {
   margin-bottom: auto;
   padding: 0;

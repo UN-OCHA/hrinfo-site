@@ -43,7 +43,7 @@
 
   }
 
-  // highlight first item in secondary nav  
+  // highlight first item in secondary nav
   .menu li {
     float: none;
 
@@ -126,7 +126,8 @@
 .block-og-menu h2,
 .block-og-menu h4,
 .block-locale h2,
-.block-locale h4 {
+.block-locale h4,
+#block-system-user-menu h4 {
   display: none;
 }
 
@@ -641,7 +642,3 @@
     text-transform: lowercase;
   }
 }
-
-
-
-
