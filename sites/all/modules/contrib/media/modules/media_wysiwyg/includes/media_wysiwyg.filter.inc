@@ -5,7 +5,7 @@
  * Functions related to the WYSIWYG editor and the media input filter.
  */
 
-define('MEDIA_WYSIWYG_TOKEN_REGEX', '/\[\[\{.+?"type":"media".+?\}\]\]/s');
+define('MEDIA_WYSIWYG_TOKEN_REGEX', '/\[\[\{.*?"type":"media".+?\}\]\]/s');
 
 /**
  * Filter callback for media markup filter.
