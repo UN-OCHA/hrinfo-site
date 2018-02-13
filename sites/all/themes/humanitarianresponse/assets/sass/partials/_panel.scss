@@ -814,3 +814,11 @@
 
 
 }
+
+.modal-body {
+  overflow-y: scroll;
+}
+
+div#modalContent {
+  overflow: visible;
+}
