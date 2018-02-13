@@ -3824,7 +3824,7 @@ body #footer { margin: 0; }
 
 .modal-body { overflow-y: scroll; }
 
-div#modalContent { overflow: visible; }
+div#modalContent { overflow: visible !important; }
 
 #sidebar-first .block.block-facetapi { padding: 0; border-top: 1px solid #FEFEFE; border-bottom: 1px solid #d8d8d8; }
 #sidebar-first .block.block-facetapi h4 { color: black; cursor: pointer; background: url(../images/facet-down.png) no-repeat right center transparent; font-weight: normal; }
