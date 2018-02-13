@@ -3263,6 +3263,7 @@ div.region-top div.block { display: inline-block; }
   .page-node-blog #content, .page-node-offices #content, .page-node-datasets #content, .page-node-assessments #content, .page-node-events #content, .page-node-contacts #content, .page-node-documents #content { max-width: 100%; } }
 .page-node-blog .nav-tabs.primary, .page-node-offices .nav-tabs.primary, .page-node-datasets .nav-tabs.primary, .page-node-assessments .nav-tabs.primary, .page-node-events .nav-tabs.primary, .page-node-contacts .nav-tabs.primary, .page-node-documents .nav-tabs.primary { margin-top: 6px; }
 @media screen and (max-width: 992px) { .page-node-blog .nav-tabs.primary, .page-node-offices .nav-tabs.primary, .page-node-datasets .nav-tabs.primary, .page-node-assessments .nav-tabs.primary, .page-node-events .nav-tabs.primary, .page-node-contacts .nav-tabs.primary, .page-node-documents .nav-tabs.primary { margin-top: 36px; } }
+.page-node-blog .page-header h1, .page-node-offices .page-header h1, .page-node-datasets .page-header h1, .page-node-assessments .page-header h1, .page-node-events .page-header h1, .page-node-contacts .page-header h1, .page-node-documents .page-header h1 { display: none; }
 
 #hr-space-tab.white a.dropdown-toggle { background: #FFF; position: relative; z-index: 1; }
 #hr-space-tab.white a.dropdown-toggle:hover { border-color: #FFF; }
@@ -3822,7 +3823,7 @@ body #footer { margin: 0; }
 .powered-by .hr-highlighted .pane-hr-reliefweb-ocha-products .pane-content a.list-group-item:last-child { border-radius: 0; }
 
 #sidebar-first .block.block-facetapi { padding: 0; border-top: 1px solid #FEFEFE; border-bottom: 1px solid #d8d8d8; }
-#sidebar-first .block.block-facetapi h4 { color: black; cursor: pointer; background: url(../images/facet-down.png) no-repeat right center transparent; }
+#sidebar-first .block.block-facetapi h4 { color: black; cursor: pointer; background: url(../images/facet-down.png) no-repeat right center transparent; font-weight: normal; }
 #sidebar-first .block.block-facetapi h4.opened { background-image: url(../images/facet-up.png); }
 #sidebar-first .block.block-facetapi .block__content { display: none; }
 #sidebar-first .block.block-facetapi .block__content ul { list-style: none; list-style-type: none; list-style-image: none; }
