@@ -14,3 +14,54 @@ function hr_api_ctools_plugin_directory($module, $plugin) {
     return 'plugins/' . $plugin;
   }
 }
+
+function hr_api_bundle_to_restful_plugin($bundle, $type) {
+  $resource = '';
+  $plugins = restful_get_restful_plugins();
+  foreach ($plugins as $key => $plugin) {
+    if ($plugin['bundle'] == $bundle && $plugin['entity_type'] == $type) {
+      $resource = $plugin['resource'];
+    }
+  }
+  return $resource;
+}
+
+/**
+ * Send entity updates to web hooks
+ */
+function hr_api_entity_update($entity, $type) {
+  $event = 'update';
+  $wrapper = entity_metadata_wrapper($type, $entity->id());
+  $bundle = $wrapper->getBundle();
+  $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
+  $handler = restful_get_restful_handler($resource);
+  $tmp_entity = $handler->get($entity->id());
+  $json_entity = reset($tmp_entity);
+  hr_api_call_webhooks($event, $resource, $json_entity);
+}
+
+function hr_api_call_webhooks($event, $resource, $entity) {
+  $url = 'https://www.gvj-web.com/test_webhook.php';
+  $json = new \stdClass();
+  $json->type = $resource;
+  $json->entity = $entity;
+
+  $headers = array(
+    'X-HRInfo-Event: ' . $event
+  );
+
+  $ch = curl_init();
+
+  // set URL and other appropriate options
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($json));
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+  // grab URL and pass it to the browser
+  curl_exec($ch);
+
+  // close cURL resource, and free up system resources
+  curl_close($ch);
+}
