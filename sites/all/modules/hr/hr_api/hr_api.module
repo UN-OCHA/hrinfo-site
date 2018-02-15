@@ -27,10 +27,27 @@ function hr_api_bundle_to_restful_plugin($bundle, $type) {
 }
 
 /**
- * Send entity updates to web hooks
+ * Implements hook_entity_insert()
+ */
+function hr_api_entity_insert($entity, $type) {
+  hr_api_entity_hook('create', $entity, $type);
+}
+
+/**
+ * Implements hook_entity_update()
  */
 function hr_api_entity_update($entity, $type) {
-  $event = 'update';
+  hr_api_entity_hook('update', $entity, $type);
+}
+
+/**
+ * Implements hook_entity_delete()
+ */
+function hr_api_entity_delete($entity, $type) {
+  hr_api_entity_hook('delete', $entity, $type);
+}
+
+function hr_api_entity_hook($event, $entity, $type) {
   list($id) = entity_extract_ids($type, $entity);
   $wrapper = entity_metadata_wrapper($type, $id);
   $bundle = $wrapper->getBundle();
@@ -42,7 +59,7 @@ function hr_api_entity_update($entity, $type) {
 }
 
 function hr_api_call_webhooks($event, $resource, $entity) {
-  $url = 'https://www.gvj-web.com/test_webhook.php';
+  $url = 'https://api2.dev.humanitarian.id/api/v2/webhooks/hrinfo';
   $json = new \stdClass();
   $json->type = $resource;
   $json->entity = $entity;
