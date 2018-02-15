@@ -31,11 +31,12 @@ function hr_api_bundle_to_restful_plugin($bundle, $type) {
  */
 function hr_api_entity_update($entity, $type) {
   $event = 'update';
-  $wrapper = entity_metadata_wrapper($type, $entity->id());
+  list($id) = entity_extract_ids($type, $entity);
+  $wrapper = entity_metadata_wrapper($type, $id);
   $bundle = $wrapper->getBundle();
   $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
   $handler = restful_get_restful_handler($resource);
-  $tmp_entity = $handler->get($entity->id());
+  $tmp_entity = $handler->get($id);
   $json_entity = reset($tmp_entity);
   hr_api_call_webhooks($event, $resource, $json_entity);
 }
