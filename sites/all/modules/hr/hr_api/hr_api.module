@@ -65,7 +65,8 @@ function hr_api_call_webhooks($event, $resource, $entity) {
   $json->entity = $entity;
 
   $headers = array(
-    'X-HRInfo-Event: ' . $event
+    'X-HRInfo-Event: ' . $event,
+    'Accept: application/json'
   );
 
   $ch = curl_init();
