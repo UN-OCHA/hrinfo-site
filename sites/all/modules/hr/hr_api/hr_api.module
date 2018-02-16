@@ -54,11 +54,11 @@ function hr_api_entity_delete($entity, $type) {
 }
 
 function hr_api_entity_hook($event, $entity, $type) {
+  global $language;
   list($id) = entity_extract_ids($type, $entity);
   $wrapper = entity_metadata_wrapper($type, $id);
   $bundle = $wrapper->getBundle();
-  $info = $wrapper->info();
-  $langcode = $info['langcode'];
+  $langcode = $language->language;
   $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
   $handler = restful_get_restful_handler($resource);
   $tmp_entity = $handler->get($id);
