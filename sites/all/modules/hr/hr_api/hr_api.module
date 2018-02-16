@@ -50,30 +50,27 @@ function hr_api_entity_delete($entity, $type) {
   $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
   $json_entity = new \stdClass();
   $json_entity->id = $id;
-  hr_api_call_webhooks('delete', $resource, $json_entity);
+  hr_api_call_webhooks('delete', $resource, 'en', $json_entity);
 }
 
 function hr_api_entity_hook($event, $entity, $type) {
   list($id) = entity_extract_ids($type, $entity);
   $wrapper = entity_metadata_wrapper($type, $id);
   $bundle = $wrapper->getBundle();
+  $info = $wrapper->info();
+  $langcode = $info['langcode'];
   $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
-  if ($event != 'delete') {
-    $handler = restful_get_restful_handler($resource);
-    $tmp_entity = $handler->get($id);
-    $json_entity = reset($tmp_entity);
-  }
-  else {
-    $json_entity = new \stdClass();
-    $json_entity->id = $id;
-  }
-  hr_api_call_webhooks($event, $resource, $json_entity);
+  $handler = restful_get_restful_handler($resource);
+  $tmp_entity = $handler->get($id);
+  $json_entity = reset($tmp_entity);
+  hr_api_call_webhooks($event, $resource, $langcode, $json_entity);
 }
 
-function hr_api_call_webhooks($event, $resource, $entity) {
+function hr_api_call_webhooks($event, $resource, $langcode, $entity) {
   $url = 'https://api2.dev.humanitarian.id/api/v2/webhooks/hrinfo';
   $json = new \stdClass();
   $json->type = $resource;
+  $json->language = $langcode;
   $json->entity = $entity;
 
   $headers = array(
