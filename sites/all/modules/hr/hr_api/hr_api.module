@@ -44,13 +44,18 @@ function hr_api_entity_update($entity, $type) {
  * Implements hook_entity_delete()
  */
 function hr_api_entity_delete($entity, $type) {
+  global $conf;
   list($id) = entity_extract_ids($type, $entity);
   $wrapper = entity_metadata_wrapper($type, $entity);
   $bundle = $wrapper->getBundle();
   $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
   $json_entity = new \stdClass();
   $json_entity->id = $id;
-  hr_api_call_webhooks('delete', $resource, 'en', $json_entity);
+  foreach ($conf['hr_api_webhooks'] as $webhook) {
+    if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
+      hr_api_call_webhook($webhook, 'delete', $resource, 'en', $json_entity);
+    }
+  }
 }
 
 function hr_api_entity_hook($event, $entity, $type) {
