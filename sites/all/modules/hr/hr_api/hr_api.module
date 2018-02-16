@@ -44,7 +44,13 @@ function hr_api_entity_update($entity, $type) {
  * Implements hook_entity_delete()
  */
 function hr_api_entity_delete($entity, $type) {
-  hr_api_entity_hook('delete', $entity, $type);
+  list($id) = entity_extract_ids($type, $entity);
+  $wrapper = entity_metadata_wrapper($type, $entity);
+  $bundle = $wrapper->getBundle();
+  $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
+  $json_entity = new \stdClass();
+  $json_entity->id = $id;
+  hr_api_call_webhooks('delete', $resource, $json_entity);
 }
 
 function hr_api_entity_hook($event, $entity, $type) {
@@ -52,9 +58,15 @@ function hr_api_entity_hook($event, $entity, $type) {
   $wrapper = entity_metadata_wrapper($type, $id);
   $bundle = $wrapper->getBundle();
   $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
-  $handler = restful_get_restful_handler($resource);
-  $tmp_entity = $handler->get($id);
-  $json_entity = reset($tmp_entity);
+  if ($event != 'delete') {
+    $handler = restful_get_restful_handler($resource);
+    $tmp_entity = $handler->get($id);
+    $json_entity = reset($tmp_entity);
+  }
+  else {
+    $json_entity = new \stdClass();
+    $json_entity->id = $id;
+  }
   hr_api_call_webhooks($event, $resource, $json_entity);
 }
 
