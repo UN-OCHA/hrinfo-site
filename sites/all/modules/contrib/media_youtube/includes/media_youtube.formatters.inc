@@ -68,8 +68,7 @@ function media_youtube_file_formatter_video_view($file, $display, $langcode) {
     $display['settings']['attributes'] = array();
 
     foreach (array('width', 'height', 'autohide', 'autoplay', 'color', 'enablejsapi', 'loop', 'modestbranding', 'nocookie', 'origin', 'protocol', 'protocol_specify', 'rel', 'showinfo', 'theme', 'attributes', 'captions','controls') as $setting) {
-      $element['#options'][$setting] = isset($file->metadata[$setting]) ? $file->metadata[$setting]
-        : (isset($file->override[$setting]) ? $file->override[$setting] : $display['settings'][$setting]);
+      $element['#options'][$setting] = isset($file->override[$setting]) ? $file->override[$setting] : $display['settings'][$setting];
     }
 
     return $element;
