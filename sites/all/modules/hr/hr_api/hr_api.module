@@ -67,11 +67,13 @@ function hr_api_entity_hook($event, $entity, $type) {
   $langcode = $language->language;
   $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
   $handler = restful_get_restful_handler($resource);
-  $tmp_entity = $handler->get($id);
-  $json_entity = reset($tmp_entity);
-  foreach ($conf['hr_api_webhooks'] as $webhook) {
-    if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
-      hr_api_call_webhook($webhook, $event, $resource, $langcode, $json_entity);
+  if ($handler) {
+    $tmp_entity = $handler->get($id);
+    $json_entity = reset($tmp_entity);
+    foreach ($conf['hr_api_webhooks'] as $webhook) {
+      if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
+        hr_api_call_webhook($webhook, $event, $resource, $langcode, $json_entity);
+      }
     }
   }
 }
