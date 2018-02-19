@@ -70,11 +70,6 @@ class MediaInternetYouTubeHandler extends MediaInternetBaseHandler {
     // Try to default the file name to the video's title.
     if (empty($file->fid) && $info = $this->getOEmbed()) {
       $file->filename = truncate_utf8($info['title'], 255);
-      foreach (array('width', 'height') as $setting) {
-        if (!empty($info[$setting])) {
-          $file->metadata[$setting] = $info[$setting];
-        }
-      }
     }
 
     return $file;
