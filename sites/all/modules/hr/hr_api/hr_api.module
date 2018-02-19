@@ -53,7 +53,7 @@ function hr_api_entity_delete($entity, $type) {
   $json_entity->id = $id;
   foreach ($conf['hr_api_webhooks'] as $webhook) {
     if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
-      hr_api_call_webhook($webhook, 'delete', $resource, 'en', $json_entity);
+      hr_api_call_webhook($webhook, 'delete', $resource, 'en', array(), $json_entity);
     }
   }
 }
@@ -71,11 +71,14 @@ function hr_api_entity_hook($event, $entity, $type) {
   $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
   $handler = restful_get_restful_handler($resource);
   if ($handler) {
+    $thandler = entity_translation_get_handler($type, $entity);
+    $translations = $thandler->getTranslations();
+    $translations = array_keys($translations->data);
     $tmp_entity = $handler->get($id);
     $json_entity = reset($tmp_entity);
     foreach ($conf['hr_api_webhooks'] as $webhook) {
       if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
-        hr_api_call_webhook($webhook, $event, $resource, $langcode, $json_entity);
+        hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $json_entity);
       }
     }
   }
@@ -97,7 +100,7 @@ function hr_api_should_call_webhook($webhook, $type, $bundle) {
   }
 }
 
-function hr_api_call_webhook($webhook, $event, $resource, $langcode, $entity) {
+function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $entity) {
   $url = $webhook['url'];
   if (!empty($webhook['secret'])) {
     $url .= '?secret=' . $webhook['secret'];
@@ -105,6 +108,7 @@ function hr_api_call_webhook($webhook, $event, $resource, $langcode, $entity) {
   $json = new \stdClass();
   $json->type = $resource;
   $json->language = $langcode;
+  $json->translations = $translations;
   $json->entity = $entity;
 
   $headers = array(
