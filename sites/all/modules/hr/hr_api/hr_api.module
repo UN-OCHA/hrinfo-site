@@ -64,22 +64,30 @@ function hr_api_entity_hook($event, $entity, $type) {
   if ($type == 'node' || $type == 'taxonomy_term') {
     global $language;
     global $conf;
+    $call_webhook = false;
     list($id) = entity_extract_ids($type, $entity);
     entity_get_controller($type)->resetCache(array($id));
     $wrapper = entity_metadata_wrapper($type, $id);
     $bundle = $wrapper->getBundle();
-    $langcode = $language->language;
-    $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
-    $handler = restful_get_restful_handler($resource);
-    if ($handler) {
-      $thandler = entity_translation_get_handler($type, $entity);
-      $translations = $thandler->getTranslations();
-      $translations = array_keys($translations->data);
-      $tmp_entity = $handler->get($id);
-      $json_entity = reset($tmp_entity);
-      foreach ($conf['hr_api_webhooks'] as $webhook) {
-        if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
-          hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $json_entity);
+    foreach ($conf['hr_api_webhooks'] as $webhook) {
+      if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
+        $call_webhook = true;
+      }
+    }
+    if ($call_webhook) {
+      $langcode = $language->language;
+      $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
+      $handler = restful_get_restful_handler($resource);
+      if ($handler) {
+        $thandler = entity_translation_get_handler($type, $entity);
+        $translations = $thandler->getTranslations();
+        $translations = array_keys($translations->data);
+        $tmp_entity = $handler->get($id);
+        $json_entity = reset($tmp_entity);
+        foreach ($conf['hr_api_webhooks'] as $webhook) {
+          if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
+            hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $json_entity);
+          }
         }
       }
     }
