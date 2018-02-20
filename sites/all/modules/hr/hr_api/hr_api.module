@@ -65,9 +65,7 @@ function hr_api_entity_hook($event, $entity, $type) {
     global $language;
     global $conf;
     list($id) = entity_extract_ids($type, $entity);
-    if ($event == 'update' && $type == 'node') {
-      entity_get_controller('node')->resetCache(array($id));
-    }
+    entity_get_controller($type)->resetCache(array($id));
     $wrapper = entity_metadata_wrapper($type, $id);
     $bundle = $wrapper->getBundle();
     $langcode = $language->language;
