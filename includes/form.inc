@@ -2095,7 +2095,7 @@ function _form_builder_handle_input_element($form_id, &$element, &$form_state) {
       if (!$input_exists && !$form_state['rebuild'] && !$form_state['programmed']) {
         // Add the necessary parent keys to $form_state['input'] and sets the
         // element's input value to NULL.
-        drupal_array_set_nested_value($form_state['input'], $element['#parents'], NULL, TRUE);
+        drupal_array_set_nested_value($form_state['input'], $element['#parents'], NULL);
         $input_exists = TRUE;
       }
       // If we have input for the current element, assign it to the #value
