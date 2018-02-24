@@ -41,6 +41,11 @@ define('ADVAGG_BUNDLER_ACTIVE', TRUE);
 define('ADVAGG_BUNDLER_GROUPING_LOGIC', 1);
 
 /**
+ * If 4 the admin section gets unlocked.
+ */
+define('ADVAGG_BUNDLER_ADMIN_MODE', 4);
+
+/**
  * @} End of "addtogroup default_variables".
  */
 

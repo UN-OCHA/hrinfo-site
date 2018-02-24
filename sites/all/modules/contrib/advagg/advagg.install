@@ -66,6 +66,22 @@ function advagg_enable() {
       @chgrp($stat_js[0], $stat_public['gid']);
     }
   }
+  if (drupal_is_cli()) {
+    // Remove advagg and public dirs if empty and running from command line.
+    list($css_path, $js_path) = advagg_get_root_files_dir();
+    $files = file_scan_directory($css_path[1], '/.*/');
+    if (empty($files)) {
+      rmdir($css_path[1]);
+    }
+    $files = file_scan_directory($js_path[1], '/.*/');
+    if (empty($files)) {
+      rmdir($js_path[1]);
+    }
+    $files = file_scan_directory('public://', '/.*/');
+    if (empty($files)) {
+      rmdir('public://');
+    }
+  }
 
   // Make sure the advagg_flush_all_cache_bins() function is available.
   module_load_include('inc', 'advagg', 'advagg');

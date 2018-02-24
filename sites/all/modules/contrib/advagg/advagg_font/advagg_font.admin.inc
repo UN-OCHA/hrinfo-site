@@ -17,14 +17,11 @@ function advagg_font_admin_settings_form() {
   advagg_display_message_if_requirements_not_met();
   $form = array();
 
-  $versions = advagg_get_remote_libraries_versions();
-  $library = advagg_library('fontfaceobserver', 'advagg_font');
-  if (empty($versions['fontfaceobserver']['remote'])) {
-    $versions['fontfaceobserver']['remote'] = 'NULL';
-  }
+  $library = advagg_get_library('fontfaceobserver', 'advagg_font');
+  $version = advagg_get_remote_libraries_version('fontfaceobserver', $library);
   $options = array(
     0 => t('Disabled'),
-    6 => t('Externally load the latest from github (version: @version)', array('@version' => $versions['fontfaceobserver']['remote'])),
+    6 => t('Externally load the latest from github (version: @version)', array('@version' => $version)),
   );
   $description = t('This will use the fallback font until the font has been downloaded. See <a href="@link">fontfaceobserver</a> for more info.', array(
     '@link' => $library['vendor url'],

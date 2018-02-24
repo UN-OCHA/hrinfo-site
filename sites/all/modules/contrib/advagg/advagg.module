@@ -358,6 +358,15 @@ define('ADVAGG_HTML_HEAD_IN_CSS_LOCATION', FALSE);
  */
 define('ADVAGG_ADMIN_MODE', 4);
 
+/**
+ * If TRUE farfuture headers will go out if the file is delivered by php.
+ */
+define('ADVAGG_FARFUTURE_PHP', FALSE);
+
+/**
+ * Internal urls set here will have advagg disabled on those pages.
+ */
+define('ADVAGG_DISABLE_ON_LISTED_PAGES', '');
 
 /**
  * @} End of "defgroup default_variables".
@@ -1444,6 +1453,10 @@ function advagg_modify_js_pre_render(array $elements) {
  *   A render array that will render to a string of JavaScript tags.
  */
 function advagg_modify_css_pre_render(array $elements) {
+  if (!advagg_enabled()) {
+    return $elements;
+  }
+
   // Put children elements into a reference array.
   $children = array();
   foreach ($elements as $key => &$value) {
@@ -3153,6 +3166,22 @@ function advagg_enabled() {
     $arg = arg();
     $arg += array(1 => '', 2 => '', 3 => '', 4 => '', 5 => '');
     $admin_theme = variable_get('admin_theme');
+
+    // List of all the pages which will not have Advanced Aggregator enabled.
+    $list_of_pages = variable_get('advagg_disable_on_listed_pages');
+
+    $pages = trim(drupal_strtolower($list_of_pages));
+    // Convert the Drupal path to lowercase.
+    $path = drupal_strtolower(drupal_get_path_alias(current_path()));
+
+    // Compare the lowercase internal and lowercase path alias (if any).
+    $page_match = drupal_match_path($path, $pages);
+    if ($page_match) {
+      $GLOBALS['conf']['advagg_enabled'] = FALSE;
+      $GLOBALS['conf']['preprocess_css'] = FALSE;
+      $GLOBALS['conf']['preprocess_js'] = FALSE;
+    }
+
     // Disable advagg if on admin page and configured to do so.
     // AND theme is admin theme
     // AND NOT /admin/reports/status
@@ -4041,7 +4070,7 @@ function advagg_pre_render_scripts(array $elements) {
         // Element properties that depend on item type.
         switch ($item['type']) {
           case 'setting':
-            $data = advagg_cleanup_settings_array(drupal_array_merge_deep_array($item['data']));
+            $data = advagg_cleanup_settings_array(drupal_array_merge_deep_array(array_filter($item['data'], 'is_array')));
             $json_data = advagg_json_encode($data);
             $element['#value_prefix'] = $embed_prefix;
             $element['#value'] = 'jQuery.extend(Drupal.settings, ' . $json_data . ");";
@@ -4162,6 +4191,11 @@ function advagg_get_css_prefix_suffix() {
  * @see drupal_get_css()
  */
 function advagg_pre_render_styles(array $elements) {
+  // Skip if advagg is disabled.
+  if (!advagg_enabled()) {
+    return drupal_pre_render_styles($elements);
+  }
+
   // Don't run it twice.
   if (!empty($elements['#groups'])) {
     return $elements;
@@ -5675,7 +5709,7 @@ function advagg_get_remote_libraries_version($name, array $library, $use_cache =
  * @return array
  *   The library array.
  */
-function advagg_library($name, $module_name) {
+function advagg_get_library($name, $module_name) {
   $library = cache_get($name, 'cache_libraries');
   if ($library) {
     $library = $library->data;
@@ -6102,7 +6136,7 @@ function advagg_get_version_description($library_name, $module_name, $only_remot
     && (empty($versions[$library_name]['local'])
     || $versions[$library_name]['local'] !== $versions[$library_name]['remote']
   )) {
-    $library = advagg_library($library_name, $module_name);
+    $library = advagg_get_library($library_name, $module_name);
     if (empty($versions[$library_name]['local'])) {
       $versions[$library_name]['local'] = 'NULL';
     }
@@ -6490,7 +6524,7 @@ function advagg_preload_list() {
  * @return array
  *   An array of form names and the recommended value for that setting.
  */
-function advagg_find_all_recommended_admin_values(array &$element) {
+function advagg_find_all_recommended_admin_values(array &$element, $key_name = '#recommended_value') {
   $results = array();
   $children = element_children($element);
   foreach ($children as $key) {
@@ -6498,11 +6532,11 @@ function advagg_find_all_recommended_admin_values(array &$element) {
     if (is_array($child)) {
       if (!empty($child['#type'])
         && !empty($child['#name'])
-        && isset($child['#recommended_value'])
+        && isset($child[$key_name])
       ) {
-        $results[$child['#name']] = $child['#recommended_value'];
+        $results[$child['#name']] = $child[$key_name];
       }
-      $results = array_merge($results, advagg_find_all_recommended_admin_values($child));
+      $results = array_merge($results, advagg_find_all_recommended_admin_values($child, $key_name));
     }
     unset($child);
   }
