@@ -28,72 +28,82 @@ function hr_disasters_og_features_registry() {
 
 /**
  * Implements hook_cron()
- * Updates the latest 50 disaster items taken from Reliefweb
+ * Updates the disasters from Reliefweb
  */
 function hr_disasters_cron() {
-  hr_disasters_reliefweb_disasters(50);
-}
-
-/**
- * Updates the latest number disaster items taken from Reliefweb
- */
-function hr_disasters_reliefweb_disasters($number) {
-  $url = HR_DISASTERS_RELIEFWEB_API.'?sort[]=date:desc&limit='.$number;
+  $fields = array(
+    'glide',
+    'related_glide',
+    'status',
+    'description',
+    'date',
+    'country',
+    'type'
+  );
+  $params = array(
+    'sort[]' => 'date:desc',
+    'limit' => 1000,
+    'offset' => 0
+  );
+  $params['fields[include]'] = $fields;
+  $url = HR_DISASTERS_RELIEFWEB_API . '?' . http_build_query($params);
   $json = file_get_contents($url);
   $disasters = json_decode($json);
-  foreach ($disasters->data as $data) {
-    _hr_disasters_reliefweb_disaster($data->id);
+  while ($disasters->links->next) {
+    foreach ($disasters->data as $data) {
+      _hr_disasters_reliefweb_disaster($data);
+    }
+    $params['offset'] = $params['offset'] + 1000;
+    $url = HR_DISASTERS_RELIEFWEB_API . '?' . http_build_query($params);
+    $json = file_get_contents($url);
+    $disasters = json_decode($json);
   }
 }
 
 /**
  * Updates one single disaster from Reliefweb
  */
-function _hr_disasters_reliefweb_disaster($id) {
-  $url = HR_DISASTERS_RELIEFWEB_API.'/'.$id;
-  $json = file_get_contents($url);
-  // Process the request only if it worked
-  if (!empty($json)) {
-    $disaster = json_decode($json);
-    $fields = $disaster->data[0]->fields;
-    $glide = $fields->glide;
-    if (!empty($glide)) {
-      // Does this disaster already exist ?
-      // Check related glides as well.
-      $glides = array();
-      $glides[] = $glide;
-      if (isset($fields->related_glide) && is_array($fields->related_glide)) {
-        $glides = array_merge($glides, $fields->related_glide);
-      }
-      $query = new EntityFieldQuery();
-      $results = $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'hr_disaster')
-        ->fieldCondition('field_glide_number', 'value', $glides, 'IN')
-        ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT')
-        ->execute();
+function _hr_disasters_reliefweb_disaster($disaster) {
+  $fields = $disaster->fields;
+  $glide = $fields->glide;
+  if (!empty($glide)) {
+    // Does this disaster already exist ?
+    // Check related glides as well.
+    $glides = array();
+    $glides[] = $glide;
+    if (isset($fields->related_glide) && is_array($fields->related_glide)) {
+      $glides = array_merge($glides, $fields->related_glide);
+    }
+    $query = new EntityFieldQuery();
+    $results = $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'hr_disaster')
+      ->fieldCondition('field_glide_number', 'value', $glides, 'IN')
+      ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT')
+      ->execute();
 
-      if (!empty($results['node'])) {
-        $nids = array_keys($results['node']);
-        $nid = reset($nids);
-        $node = node_load($nid);
-        $wrapper = entity_metadata_wrapper('node', $nid);
-        if(isset($wrapper->field_hr_disaster_sync_disaster)) {
-          $field_sync_disaster = $wrapper->field_hr_disaster_sync_disaster->value();
-          if(empty($field_sync_disaster)) {
-            if (_hr_disasters_reliefweb_disaster_map($node, $fields)) {
-              node_save($node);
-            }
+    if (!empty($results['node'])) {
+      $nids = array_keys($results['node']);
+      $nid = reset($nids);
+      $node = node_load($nid);
+      $wrapper = entity_metadata_wrapper('node', $nid);
+      if(isset($wrapper->field_hr_disaster_sync_disaster)) {
+        $field_sync_disaster = $wrapper->field_hr_disaster_sync_disaster->value();
+        if(empty($field_sync_disaster)) {
+          if (_hr_disasters_reliefweb_disaster_map($node, $data)) {
+            node_save($node);
           }
         }
       }
-      // We should create a new disaster node and sync it with ReliefWeb
-      // because this disaster does not exist in HR.info.
-      else {
+    }
+    // We should create a new disaster node and sync it with ReliefWeb
+    // because this disaster does not exist in HR.info.
+    else {
+      if ($disaster->id > 45000) {
         $node = new stdClass();
         $node->type = 'hr_disaster';
         $node->language = 'en';
         $node->is_new = TRUE;
-        _hr_disasters_reliefweb_disaster_map($node, $fields);
+        _hr_disasters_reliefweb_disaster_map($node, $data);
         node_save($node);
       }
     }
@@ -103,7 +113,8 @@ function _hr_disasters_reliefweb_disaster($id) {
 /**
  * Helper function: maps disaster fields from Reliefweb API to hr_disaster nodes
  */
-function _hr_disasters_reliefweb_disaster_map(&$node, $fields) {
+function _hr_disasters_reliefweb_disaster_map(&$node, $disaster) {
+  $fields = $disaster->fields;
   $glide_type = taxonomy_get_term_by_name($fields->type[0]->name, 'hr_glide_type');
   $type = reset($glide_type);
 
@@ -132,8 +143,8 @@ function _hr_disasters_reliefweb_disaster_map(&$node, $fields) {
     $changed = TRUE;
   }
 
-  if ($node->is_new || $node->field_reliefweb_id[LANGUAGE_NONE][0]['value'] != $fields->id) {
-    $node->field_reliefweb_id = array(LANGUAGE_NONE => array(0 => array('value' => $fields->id)));
+  if ($node->is_new || $node->field_reliefweb_id[LANGUAGE_NONE][0]['value'] != $disaster->id) {
+    $node->field_reliefweb_id = array(LANGUAGE_NONE => array(0 => array('value' => $disaster->id)));
     $changed = TRUE;
   }
 
