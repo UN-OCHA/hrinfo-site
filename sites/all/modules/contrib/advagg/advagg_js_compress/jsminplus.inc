@@ -300,16 +300,16 @@ class JSMinPlus {
         // FALL THROUGH
 
       case JS_BLOCK:
-        $childs = $n->treeNodes;
+        $children = $n->treeNodes;
         $lastType = 0;
-        for ($c = 0, $i = 0, $j = count($childs); $i < $j; $i++) {
-          $type = $childs[$i]->type;
-          $t = $this->parseTree($childs[$i]);
+        for ($c = 0, $i = 0, $j = count($children); $i < $j; $i++) {
+          $type = $children[$i]->type;
+          $t = $this->parseTree($children[$i]);
           if (strlen($t)) {
             if ($c) {
               $s = rtrim($s, ';');
 
-              if ($type == KEYWORD_FUNCTION && $childs[$i]->functionForm == DECLARED_FORM) {
+              if ($type == KEYWORD_FUNCTION && $children[$i]->functionForm == DECLARED_FORM) {
                 // put declared functions on a new line
                 $s .= "\n";
               }
@@ -476,9 +476,9 @@ class JSMinPlus {
       case KEYWORD_VAR:
       case KEYWORD_CONST:
         $s = $n->value . ' ';
-        $childs = $n->treeNodes;
-        for ($i = 0, $j = count($childs); $i < $j; $i++) {
-          $t = $childs[$i];
+        $children = $n->treeNodes;
+        for ($i = 0, $j = count($children); $i < $j; $i++) {
+          $t = $children[$i];
           $s .= ($i ? ',' : '') . $t->name;
           $u = $t->initializer;
           if ($u) {
@@ -531,9 +531,9 @@ class JSMinPlus {
       case TOKEN_CONDCOMMENT_START:
       case TOKEN_CONDCOMMENT_END:
         $s = $n->value . ($n->type == TOKEN_CONDCOMMENT_START ? ' ' : '');
-        $childs = $n->treeNodes;
-        for ($i = 0, $j = count($childs); $i < $j; $i++) {
-          $s .= $this->parseTree($childs[$i]);
+        $children = $n->treeNodes;
+        for ($i = 0, $j = count($children); $i < $j; $i++) {
+          $s .= $this->parseTree($children[$i]);
         }
         break;
 
@@ -548,9 +548,9 @@ class JSMinPlus {
         break;
 
       case OP_COMMA:
-        $childs = $n->treeNodes;
-        for ($i = 0, $j = count($childs); $i < $j; $i++) {
-          $s .= ($i ? ',' : '') . $this->parseTree($childs[$i]);
+        $children = $n->treeNodes;
+        for ($i = 0, $j = count($children); $i < $j; $i++) {
+          $s .= ($i ? ',' : '') . $this->parseTree($children[$i]);
         }
         break;
 
@@ -648,9 +648,9 @@ class JSMinPlus {
         break;
 
       case JS_LIST:
-        $childs = $n->treeNodes;
-        for ($i = 0, $j = count($childs); $i < $j; $i++) {
-          $s .= ($i ? ',' : '') . $this->parseTree($childs[$i]);
+        $children = $n->treeNodes;
+        for ($i = 0, $j = count($children); $i < $j; $i++) {
+          $s .= ($i ? ',' : '') . $this->parseTree($children[$i]);
         }
         break;
 
@@ -665,18 +665,18 @@ class JSMinPlus {
 
       case JS_ARRAY_INIT:
         $s = '[';
-        $childs = $n->treeNodes;
-        for ($i = 0, $j = count($childs); $i < $j; $i++) {
-          $s .= ($i ? ',' : '') . $this->parseTree($childs[$i]);
+        $children = $n->treeNodes;
+        for ($i = 0, $j = count($children); $i < $j; $i++) {
+          $s .= ($i ? ',' : '') . $this->parseTree($children[$i]);
         }
         $s .= ']';
         break;
 
       case JS_OBJECT_INIT:
         $s = '{';
-        $childs = $n->treeNodes;
-        for ($i = 0, $j = count($childs); $i < $j; $i++) {
-          $t = $childs[$i];
+        $children = $n->treeNodes;
+        for ($i = 0, $j = count($children); $i < $j; $i++) {
+          $t = $children[$i];
           if ($i) {
             $s .= ',';
           }
@@ -1765,9 +1765,9 @@ class JSParser {
     }
 
     // Include closing bracket or postfix operator in [start,end]
-    $te = $this->t->currentToken()->end;
-    if ($n->end < $te) {
-      $n->end = $te;
+    $token_end = $this->t->currentToken()->end;
+    if ($n->end < $token_end) {
+      $n->end = $token_end;
     }
 
     array_push($operands, $n);

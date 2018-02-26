@@ -55,6 +55,10 @@ function advagg_font_module_implements_alter(&$implementations, $hook) {
  * Implements hook_page_alter().
  */
 function advagg_font_page_alter() {
+  // Skip if advagg is disabled.
+  if (!advagg_enabled()) {
+    return;
+  }
   $advagg_font_ffo = variable_get('advagg_font_fontfaceobserver', ADVAGG_FONT_FONTFACEOBSERVER);
   // Fontface Observer is disabled.
   if (empty($advagg_font_ffo)) {
@@ -85,7 +89,7 @@ function advagg_font_page_alter() {
   }
 
   // Get library data for fontfaceobserver.
-  $library = advagg_library('fontfaceobserver', 'advagg_font');
+  $library = advagg_get_library('fontfaceobserver', 'advagg_font');
   // If libraries_load() does not exist load library externally.
   if (!is_callable('libraries_load')) {
     $advagg_font_ffo = 6;

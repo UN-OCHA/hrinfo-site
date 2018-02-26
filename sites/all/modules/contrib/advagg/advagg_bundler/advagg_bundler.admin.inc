@@ -17,64 +17,17 @@ function advagg_bundler_admin_settings_form() {
   advagg_display_message_if_requirements_not_met();
 
   $form = array();
-  $form['advagg_bundler_active'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Bundler is Active (recommended)'),
-    '#default_value' => variable_get('advagg_bundler_active', ADVAGG_BUNDLER_ACTIVE),
-    '#description' => t('If not checked, the bundler will passively monitor your site, but it will not split up aggregates.'),
-  );
-
   $options = array(
-    0 => 0,
-    1 => 1,
-    2 => 2,
-    3 => 3,
-    4 => 4,
-    5 => 5,
-    6 => 6,
-    7 => 7,
-    8 => 8,
-    9 => 9,
-    10 => 10,
-    11 => 11,
-    12 => 12,
-    13 => 13,
-    14 => 14,
-    15 => 15,
-    16 => 16,
-    17 => 17,
-    18 => 18,
-    19 => 19,
-    20 => 20,
-    21 => 21,
-    22 => 22,
-    23 => 23,
-    24 => 24,
-    25 => 25,
+    0 => t('Use HTTP 1.1 settings'),
+    2 => t('Use HTTP 2.0 settings'),
+    4 => t('Use customized settings'),
   );
-  $form['advagg_bundler_max_css'] = array(
-    '#type' => 'select',
-    '#title' => t('Target Number Of CSS Bundles Per Page'),
-    '#default_value' => variable_get('advagg_bundler_max_css', ADVAGG_BUNDLER_MAX_CSS),
+  $form['advagg_bundler_admin_mode'] = array(
+    '#type' => 'radios',
+    '#title' => t('AdvAgg Settings'),
+    '#default_value' => variable_get('advagg_bundler_admin_mode', ADVAGG_BUNDLER_ADMIN_MODE),
     '#options' => $options,
-    '#description' => t('If 0 is selected then the bundler is disabled. 2 is recommended for HTTP 1.1 and 15+ for HTTP 2.0.'),
-    '#states' => array(
-      'disabled' => array(
-        '#edit-advagg-bundler-active' => array('checked' => FALSE),
-      ),
-    ),
-  );
-  $form['advagg_bundler_max_js'] = array(
-    '#type' => 'select',
-    '#title' => t('Target Number Of JS Bundles Per Page'),
-    '#default_value' => variable_get('advagg_bundler_max_js', ADVAGG_BUNDLER_MAX_JS),
-    '#options' => $options,
-    '#description' => t('If 0 is selected then the bundler is disabled. 5 is recommended for HTTP 1.1 and 15+ for HTTP 2.0.'),
-    '#states' => array(
-      'disabled' => array(
-        '#edit-advagg-bundler-active' => array('checked' => FALSE),
-      ),
-    ),
+    '#description' => t("Default settings will mirror core as closely as possible. <br>Recommended settings are optimized for speed."),
   );
 
   // Test http2.
@@ -144,13 +97,85 @@ function advagg_bundler_admin_settings_form() {
     );
   }
 
-  $form['advagg_bundler_grouping_logic'] = array(
+  $form['global_container'] = array(
+    '#type' => 'container',
+    '#hidden' => TRUE,
+    '#states' => array(
+      'visible' => array(
+        ':input[name="advagg_bundler_admin_mode"]' => array('value' => '4'),
+      ),
+    ),
+  );
+
+  $form['global_container']['advagg_bundler_active'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Bundler is Active (recommended)'),
+    '#default_value' => variable_get('advagg_bundler_active', ADVAGG_BUNDLER_ACTIVE),
+    '#description' => t('If not checked, the bundler will passively monitor your site, but it will not split up aggregates.'),
+  );
+
+  $options = array(
+    0 => 0,
+    1 => 1,
+    2 => 2,
+    3 => 3,
+    4 => 4,
+    5 => 5,
+    6 => 6,
+    7 => 7,
+    8 => 8,
+    9 => 9,
+    10 => 10,
+    11 => 11,
+    12 => 12,
+    13 => 13,
+    14 => 14,
+    15 => 15,
+    16 => 16,
+    17 => 17,
+    18 => 18,
+    19 => 19,
+    20 => 20,
+    21 => 21,
+    22 => 22,
+    23 => 23,
+    24 => 24,
+    25 => 25,
+  );
+  $form['global_container']['advagg_bundler_max_css'] = array(
+    '#type' => 'select',
+    '#title' => t('Target Number Of CSS Bundles Per Page'),
+    '#default_value' => variable_get('advagg_bundler_max_css', ADVAGG_BUNDLER_MAX_CSS),
+    '#options' => $options,
+    '#description' => t('If 0 is selected then the bundler is disabled. 2 is recommended for HTTP 1.1 and 25 for HTTP 2.0.'),
+    '#states' => array(
+      'disabled' => array(
+        '#edit-advagg-bundler-active' => array('checked' => FALSE),
+      ),
+    ),
+    '#recommended_value' => 25,
+  );
+  $form['global_container']['advagg_bundler_max_js'] = array(
+    '#type' => 'select',
+    '#title' => t('Target Number Of JS Bundles Per Page'),
+    '#default_value' => variable_get('advagg_bundler_max_js', ADVAGG_BUNDLER_MAX_JS),
+    '#options' => $options,
+    '#description' => t('If 0 is selected then the bundler is disabled. 5 is recommended for HTTP 1.1 and 25 for HTTP 2.0.'),
+    '#states' => array(
+      'disabled' => array(
+        '#edit-advagg-bundler-active' => array('checked' => FALSE),
+      ),
+    ),
+    '#recommended_value' => 25,
+  );
+
+  $form['global_container']['advagg_bundler_grouping_logic'] = array(
     '#type' => 'radios',
     '#title' => t('Grouping logic'),
     '#default_value' => variable_get('advagg_bundler_grouping_logic', ADVAGG_BUNDLER_GROUPING_LOGIC),
     '#options' => array(
       0 => t('File count'),
-      1 => t('File size (recommended)'),
+      1 => t('File size'),
     ),
     '#description' => t('If file count is selected then each bundle will try to have a similar number of original files aggregated inside of it. If file size is selected then each bundle will try to have a similar file size.'),
     '#states' => array(
@@ -158,9 +183,10 @@ function advagg_bundler_admin_settings_form() {
         '#edit-advagg-bundler-active' => array('checked' => FALSE),
       ),
     ),
+    '#recommended_value' => 0,
   );
 
-  $form['info'] = array(
+  $form['global_container']['info'] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -170,7 +196,7 @@ function advagg_bundler_admin_settings_form() {
   $analysis = advagg_bundler_analysis('', TRUE);
 
   $rawtext = print_r($analysis, TRUE);
-  $form['info']['advagg_bundler_info'] = array(
+  $form['global_container']['info']['advagg_bundler_info'] = array(
     '#type' => 'textarea',
     '#title' => t('%count different groupings', array('%count' => count($analysis))),
     '#default_value' => $rawtext,
@@ -197,4 +223,7 @@ function advagg_bundler_admin_settings_form_submit($form, &$form_state) {
   if (isset($form_state['values']['advagg_bundler_info'])) {
     unset($form_state['values']['advagg_bundler_info']);
   }
+
+  // Reset this form to defaults or recommended values; also show what changed.
+  advagg_set_admin_form_defaults_recommended($form_state, 'advagg_bundler_admin_mode');
 }

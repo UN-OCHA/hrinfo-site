@@ -36,6 +36,8 @@ Install AdvAgg Compress Javascript if not enabled and go to
 `admin/config/development/performance/advagg/js-compress`
 
  - Select JSMin if available; otherwise select JSMin+
+ - Select Strip everything (smallest files)
+ - Click the batch compress link to process these files
 
 #### AdvAgg Async Font Loader ####
 Install AdvAgg Async Font Loader if not enabled and go to
@@ -58,7 +60,7 @@ Install AdvAgg Bundler if not enabled and go to
  - Under "Target Number Of JS Bundles Per Page" select 25
  - Under "Grouping logic" select "File size"
 
-*HTTP/1.1 Settings*
+*HTTP/1.1 Settings (default)*
 
  - Under "Target Number Of CSS Bundles Per Page" select 2
  - Under "Target Number Of JS Bundles Per Page" select 5
