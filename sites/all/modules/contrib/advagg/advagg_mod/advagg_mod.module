@@ -269,6 +269,9 @@ function advagg_mod_module_implements_alter(&$implementations, $hook) {
  * Implements hook_library_alter().
  */
 function advagg_mod_library_alter(&$javascript, $module) {
+  if (!advagg_enabled()) {
+    return;
+  }
   if (!module_exists('jquery_update')) {
     return;
   }
@@ -589,6 +592,10 @@ function advagg_mod_process_move_js(array &$variables) {
  * Implements hook_page_alter().
  */
 function advagg_mod_page_alter() {
+  // Skip if advagg is disabled.
+  if (!advagg_enabled()) {
+    return;
+  }
   // Return early if this setting is disabled.
   list(, , , , , , , , , , $css_defer) = advagg_mod_get_lists();
   if (empty($css_defer)) {
@@ -611,7 +618,7 @@ function advagg_mod_page_alter() {
     && is_readable($filenames[0])
   ) {
     module_load_include('inc', 'advagg', 'advagg');
-    $inline_css = advagg_load_css_stylesheet($filenames[0], TRUE);
+    $inline_css = advagg_load_stylesheet($filenames[0], TRUE);
 
     // Allow other modules to modify this files contents.
     // Call hook_advagg_get_css_file_contents_alter().
@@ -1567,7 +1574,7 @@ function advagg_mod_add_loadcss_js_lib(array $js = array(), array $css = array()
   }
 
   static $added;
-  $library = advagg_library('loadCSS', 'advagg_mod');
+  $library = advagg_get_library('loadCSS', 'advagg_mod');
   $options_defaults = advagg_mod_loadcss_js_defaults();
 
   $preload = '-onload';
@@ -1578,7 +1585,7 @@ function advagg_mod_add_loadcss_js_lib(array $js = array(), array $css = array()
   $css_defer_js_code = variable_get('advagg_mod_css_defer_js_code', ADVAGG_MOD_CSS_DEFER_JS_CODE);
   // Inline load.
   if ($css_defer_js_code == 0) {
-    if ($library['installed']) {
+    if (!empty($library['installed'])) {
       libraries_load('loadCSS', "inline{$preload}");
     }
     else {
@@ -1802,7 +1809,7 @@ function advagg_mod_js_post_alter(array &$js) {
 
   // Only add JS if it's actually needed.
   if (variable_get('advagg_mod_js_remove_unused', ADVAGG_MOD_JS_REMOVE_UNUSED)) {
-    advagg_remove_js_if_not_used($js);
+    advagg_mod_remove_js_if_not_used($js);
   }
 
   // Change sort order so aggregates do not get split up.
@@ -3439,7 +3446,7 @@ function advagg_mod_ga_inline_to_file(array &$js) {
  * @param array $js
  *   JS array.
  */
-function advagg_remove_js_if_not_used(array &$js) {
+function advagg_mod_remove_js_if_not_used(array &$js) {
   $files_skiplist = array(
     'drupal.js',
     'jquery.js',

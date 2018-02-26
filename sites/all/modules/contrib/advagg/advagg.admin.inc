@@ -491,12 +491,6 @@ function advagg_admin_settings_form($form, $form_state) {
     '#default_value' => variable_get('advagg_ajax_render_alter', ADVAGG_AJAX_RENDER_ALTER),
     '#description' => t('If disabled, AdvAgg will not alter the aggregates returned by ajax requests.'),
   );
-  $form['global_container']['global']['obscure']['advagg_disable_on_admin'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Do not use AdvAgg or any aggregation in the admin section.'),
-    '#default_value' => variable_get('advagg_disable_on_admin', ADVAGG_DISABLE_ON_ADMIN),
-    '#description' => t('If checked, AdvAgg will not be used in the /admin section as well as any place the admin theme is used.'),
-  );
   $form['global_container']['global']['obscure']['advagg_include_base_url'] = array(
     '#type' => 'checkbox',
     '#title' => t('Include the base_url variable in the hooks hash array.'),
@@ -553,6 +547,21 @@ function advagg_admin_settings_form($form, $form_state) {
     '#title' => t('Use "Options +SymLinksIfOwnerMatch"'),
     '#default_value' => variable_get('advagg_htaccess_symlinksifownermatch', ADVAGG_HTACCESS_SYMLINKSIFOWNERMATCH),
     '#description' => t('By default the custom .htaccess files are configured to use "<code>Options +FollowSymLinks</code>". Some hosting companies do not support this so "<code>Options +SymLinksIfOwnerMatch</code>" must be used instead.'),
+  );
+  $form['global_container']['global']['obscure']['advagg_disable_on_admin'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Do not use AdvAgg or any aggregation in the admin section.'),
+    '#default_value' => variable_get('advagg_disable_on_admin', ADVAGG_DISABLE_ON_ADMIN),
+    '#description' => t('If checked, AdvAgg will not be used in the /admin section as well as any place the admin theme is used.'),
+  );
+  $form['global_container']['global']['obscure']['advagg_disable_on_listed_pages'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Do not use AdvAgg or any aggregation in the following pages'),
+    '#default_value' => variable_get('advagg_disable_on_listed_pages', ADVAGG_DISABLE_ON_LISTED_PAGES),
+    '#description' => t("Specify pages by using their paths. Enter one path per line. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog.", array(
+      '%blog' => 'blog',
+      '%blog-wildcard' => 'blog/*',
+    )),
   );
   // Get core htaccess files.
   $core_htaccess = advagg_htaccess_rewritebase();

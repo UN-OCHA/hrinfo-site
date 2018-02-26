@@ -418,6 +418,8 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
         'type' => 'external',
         'async' => TRUE,
         'defer' => TRUE,
+        'noasync' => FALSE,
+        'nodefer' => FALSE,
       );
       $js[$analytics_js_url] += $value;
 
@@ -463,6 +465,8 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
           'type' => 'external',
           'async' => TRUE,
           'defer' => TRUE,
+          'noasync' => FALSE,
+          'nodefer' => FALSE,
         );
         $js[$url] += $value;
       }
@@ -532,6 +536,8 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
         'type' => $type,
         'async' => TRUE,
         'defer' => TRUE,
+        'noasync' => FALSE,
+        'nodefer' => FALSE,
       );
 
       // Strip loader string.
@@ -591,6 +597,8 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
       'type' => 'external',
       'async' => TRUE,
       'defer' => TRUE,
+      'noasync' => FALSE,
+      'nodefer' => FALSE,
     );
     $js[$gtm_url] += $value;
 
@@ -636,6 +644,8 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
       'type' => 'external',
       'async' => TRUE,
       'defer' => TRUE,
+      'noasync' => FALSE,
+      'nodefer' => FALSE,
     );
     $js[$url] += $value;
 
@@ -693,6 +703,8 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
       'type' => 'external',
       'async' => TRUE,
       'defer' => TRUE,
+      'noasync' => FALSE,
+      'nodefer' => FALSE,
     );
     $js[$url] += $value;
 
@@ -757,10 +769,14 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
 
     // Check for any .write( statements in the JS code.
     if (strpos($value->data, '.write(') !== FALSE) {
-      $js[$relative_path]['async'] = FALSE;
-      $js[$relative_path]['defer'] = FALSE;
-      $js[$relative_path]['noasync'] = TRUE;
-      $js[$relative_path]['nodefer'] = TRUE;
+      if ((!isset($js[$relative_path]['noasync']) || $js[$relative_path]['noasync'] !== FALSE)
+        || (!isset($js[$relative_path]['nodefer']) || $js[$relative_path]['nodefer'] !== FALSE)
+      ) {
+        $js[$relative_path]['async'] = FALSE;
+        $js[$relative_path]['defer'] = FALSE;
+        $js[$relative_path]['noasync'] = TRUE;
+        $js[$relative_path]['nodefer'] = TRUE;
+      }
     }
 
     // Handle domain prefectch.

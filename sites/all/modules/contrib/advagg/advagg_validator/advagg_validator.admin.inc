@@ -61,7 +61,7 @@ function advagg_validator_admin_css_lint_form() {
   }
 
   $form += advagg_validator_admin_form_generator('css', TRUE);
-  $library = advagg_library('csslint', 'advagg_validator');
+  $library = advagg_get_library('csslint', 'advagg_validator');
   if (!empty($library['installed'])) {
     $form['#attached']['libraries_load'][] = array('csslint');
   }
@@ -111,7 +111,7 @@ function advagg_validator_admin_js_hint_form() {
   }
 
   $form = advagg_validator_admin_form_generator('js', TRUE);
-  $library = advagg_library('jshint', 'advagg_validator');
+  $library = advagg_get_library('jshint', 'advagg_validator');
 
   if (!empty($library['installed'])) {
     libraries_load('jshint');
