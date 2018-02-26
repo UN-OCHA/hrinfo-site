@@ -89,7 +89,7 @@ function _hr_disasters_reliefweb_disaster($disaster) {
       if(isset($wrapper->field_hr_disaster_sync_disaster)) {
         $field_sync_disaster = $wrapper->field_hr_disaster_sync_disaster->value();
         if(empty($field_sync_disaster)) {
-          if (_hr_disasters_reliefweb_disaster_map($node, $data)) {
+          if (_hr_disasters_reliefweb_disaster_map($node, $disaster)) {
             node_save($node);
           }
         }
@@ -103,7 +103,7 @@ function _hr_disasters_reliefweb_disaster($disaster) {
         $node->type = 'hr_disaster';
         $node->language = 'en';
         $node->is_new = TRUE;
-        _hr_disasters_reliefweb_disaster_map($node, $data);
+        _hr_disasters_reliefweb_disaster_map($node, $disaster);
         node_save($node);
       }
     }
