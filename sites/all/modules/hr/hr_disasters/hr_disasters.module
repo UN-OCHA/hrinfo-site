@@ -69,7 +69,7 @@ function hr_disasters_cron() {
 function _hr_disasters_reliefweb_disaster($disaster) {
   $fields = $disaster->fields;
   $glide = $fields->glide;
-  if (!empty($glide)) {
+  if (!empty($glide) && $glide != '-') {
     // Does this disaster already exist ?
     // Check related glides as well.
     $glides = array();
