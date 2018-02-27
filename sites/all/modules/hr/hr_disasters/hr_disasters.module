@@ -101,7 +101,7 @@ function _hr_disasters_reliefweb_disaster($disaster) {
     // We should create a new disaster node and sync it with ReliefWeb
     // because this disaster does not exist in HR.info.
     else {
-      if ($disaster->id > 45000) {
+      if (intval($disaster->id) > 45000) {
         $node = new stdClass();
         $node->type = 'hr_disaster';
         $node->language = 'en';
