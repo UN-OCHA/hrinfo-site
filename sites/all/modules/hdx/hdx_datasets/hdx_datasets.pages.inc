@@ -84,8 +84,13 @@ function hdx_datasets_list_callback($node) {
 function hdx_datasets_get_country_from_operation($wrapper) {
   if (isset($wrapper->field_country) && isset($wrapper->field_country->field_pcode)) {
     $iso2 = $wrapper->field_country->field_pcode->value();
-    $country_codes = hdx_datasets_get_country_codes();
-    return drupal_strtolower($country_codes[$iso2]);
+    if (strlen($iso2) == 3) {
+      return $iso2;
+    }
+    else {
+      $country_codes = hdx_datasets_get_country_codes();
+      return drupal_strtolower($country_codes[$iso2]);
+    }
   }
 
   return '';
