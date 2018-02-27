@@ -31,6 +31,8 @@ function hr_disasters_og_features_registry() {
  * Updates the disasters from Reliefweb
  */
 function hr_disasters_cron() {
+  $original_user = $GLOBALS['user'];
+  $GLOBALS['user'] = user_load(1);
   $fields = array(
     'glide',
     'related_glide',
@@ -58,6 +60,7 @@ function hr_disasters_cron() {
     $json = file_get_contents($url);
     $disasters = json_decode($json);
   }
+  $GLOBALS['user'] = $original_user;
 }
 
 /**
