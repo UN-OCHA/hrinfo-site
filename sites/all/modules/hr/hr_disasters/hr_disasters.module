@@ -48,7 +48,7 @@ function hr_disasters_cron() {
     'offset' => 0
   );
   $params['fields[include]'] = $fields;
-  $url = HR_DISASTERS_RELIEFWEB_API . '?' . http_build_query($params);
+  $url = HR_DISASTERS_RELIEFWEB_API . '?' . http_build_query($params, '', '&');
   $json = file_get_contents($url);
   $disasters = json_decode($json);
   while ($disasters->links->next) {
@@ -56,7 +56,7 @@ function hr_disasters_cron() {
       _hr_disasters_reliefweb_disaster($data);
     }
     $params['offset'] = $params['offset'] + 1000;
-    $url = HR_DISASTERS_RELIEFWEB_API . '?' . http_build_query($params);
+    $url = HR_DISASTERS_RELIEFWEB_API . '?' . http_build_query($params, '', '&');
     $json = file_get_contents($url);
     $disasters = json_decode($json);
   }
