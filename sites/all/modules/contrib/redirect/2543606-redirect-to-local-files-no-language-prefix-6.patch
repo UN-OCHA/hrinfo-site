@@ -1,0 +1,20 @@
+diff --git a/redirect.module b/redirect.module
+index 5d92399..80aaf14 100644
+--- a/redirect.module
++++ b/redirect.module
+@@ -1122,7 +1122,14 @@ function redirect_redirect($redirect = NULL) {
+  */
+ function redirect_goto($redirect) {
+   $redirect->redirect_options['absolute'] = TRUE;
+-  $url = url($redirect->redirect, $redirect->redirect_options);
++  // Check if this points on a file on the server.
++  if (file_exists(DRUPAL_ROOT . '/' . $redirect->redirect)) {
++    // We don't use url() directly for files to avoid a language prefix being added.
++    $url = url(file_create_url($redirect->redirect), $redirect->redirect_options);
++  }
++  else {
++    $url = url($redirect->redirect, $redirect->redirect_options);
++  }
+   drupal_add_http_header('Location', $url);
+   drupal_add_http_header('Status', redirect_status_code_options($redirect->status_code));
+ 
