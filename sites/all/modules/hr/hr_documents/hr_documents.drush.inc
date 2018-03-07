@@ -45,7 +45,7 @@ function hr_documents_file_move($fid) {
 }
 
 
-function drush_hr_documents_migrate($path) {
+function drush_hr_documents_migrate() {
   // Load all fids of the documents and infographics
   $result = db_select('field_data_field_file', 'f')
     ->fields('f')
