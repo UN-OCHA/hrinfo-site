@@ -29,7 +29,7 @@ function hr_documents_drush_command() {
   return $items;
 }
 
-function hr_documents_file_move($fid) {
+function drush_hr_documents_file_move($fid) {
   $file = file_load($fid);
   if (strpos($file->uri, 'private://') === 0) {
     $destination = str_replace('private://', 'public://', $file->uri);
@@ -53,6 +53,7 @@ function drush_hr_documents_migrate() {
   while ($record = $result->fetchAssoc()) {
     // Foreach fid, move the file to public
     $fid = $record['field_file_fid'];
-    hr_documents_file_move($fid);
+    echo $fid."\n";
+    drush_hr_documents_file_move($fid);
   }
 }
