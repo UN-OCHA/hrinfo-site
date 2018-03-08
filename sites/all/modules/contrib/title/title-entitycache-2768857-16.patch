@@ -1,0 +1,67 @@
+diff --git a/title.module b/title.module
+index 74d9c9a..cd40d97 100644
+--- a/title.module
++++ b/title.module
+@@ -224,10 +224,62 @@ function title_entity_load($entities, $type) {
+  * synchronization will not be performed on entity load.
+  */
+ function title_entitycache_load($entities, $type) {
++  // Reset the title sync cache.
++  $entity_ids = array();
++  foreach ($entities as $entity) {
++    list($id, $vid, $bundle) = entity_extract_ids($type, $entity);
++    $entity_ids[] = $id;
++  }
++  title_entity_sync_static_reset($type, $entity_ids);
++  // Sync regular field values into the legacy field.
+   title_entity_load($entities, $type);
+ }
+
+ /**
++ * Implements hook_entitycache_pre_cache_set_alter().
++ */
++function title_entitycache_pre_cache_set_alter($entities, $entity_type) {
++  // Let's make sure entitycache stores the legacy field in the original
++  // language of the entity. We revert this change in
++  // title_entitycache_post_cache_set_alter() to make sure we use the correct legacy
++  // field value later.
++  $entity_info = entity_get_info($entity_type);
++  if (!empty($entity_info['fieldable']) && !empty($entity_info['field replacement'])) {
++    foreach ($entities as $entity) {
++      foreach ($entity_info['field replacement'] as $legacy_field => $data) {
++        $entity->{'entitycache_old_' . $legacy_field} = $entity->{$legacy_field};
++      }
++      list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
++      title_entity_sync_static_reset($entity_type, array($id));
++      $entity_langcode = title_entity_language($entity_type, $entity);
++      title_entity_sync($entity_type, $entity, $entity_langcode);
++    }
++  }
++}
++
++/**
++ * Implements hook_entitycache_post_cache_set_alter().
++ */
++function title_entitycache_post_cache_set_alter($entities, $entity_type) {
++  // Entitycache is set, now revert the change made in
++  // title_entitycache_pre_cache_set_alter().
++  $entity_info = entity_get_info($entity_type);
++  if (!empty($entity_info['fieldable']) && !empty($entity_info['field replacement'])) {
++    foreach ($entity_info['field replacement'] as $legacy_field => $data) {
++      foreach ($entities as $entity) {
++        $entity->{$legacy_field} = $entity->{'entitycache_old_' . $legacy_field};
++        unset($entity->{'entitycache_old_' . $legacy_field});
++
++        // Clear the sync static cache to make sure the wrong value is not
++        // cached.
++        list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
++        title_entity_sync_static_reset($entity_type, array($id));
++      }
++    }
++  }
++}
++
++/**
+  * Implements hook_entitycache_reset().
+  *
+  * When the entity cache is reset the field sync has to be done again.
