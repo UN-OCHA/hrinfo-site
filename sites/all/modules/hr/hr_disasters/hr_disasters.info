@@ -77,3 +77,4 @@ features[variable][] = panelizer_node:hr_disaster_default
 features[variable][] = pathauto_node_hr_disaster_pattern
 features[views_view][] = hr_disasters
 features[views_view][] = hr_disasters_panes
+registry_autoload[] = PSR-4
