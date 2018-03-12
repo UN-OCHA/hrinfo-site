@@ -34,7 +34,7 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
   public function publicFields() {
     $public_fields = parent::publicFields();
 
-    $public_fields['@id'] = array(
+    /*$public_fields['@id'] = array(
       'callback' => array($this, 'getDisasterUrl'),
     );
 
@@ -80,7 +80,7 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
 
     $public_fields['changed'] = array(
       'property' => 'changed',
-    );
+    );*/
 
     return $public_fields;
   }
