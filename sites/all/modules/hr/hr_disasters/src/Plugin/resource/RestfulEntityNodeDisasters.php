@@ -9,7 +9,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  * @package Drupal\hr_disasters\Plugin\resource
  *
  * @Resource(
- *   name = "hr_disaster:1.0",
+ *   name = "disasters:1.0",
  *   resource = "disasters",
  *   label = "Disasters",
  *   description = "Disasters pulled from reliefweb.int",
