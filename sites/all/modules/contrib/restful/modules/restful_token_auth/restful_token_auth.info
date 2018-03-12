@@ -5,17 +5,14 @@ dependencies[] = restful
 dependencies[] = entityreference
 configure = admin/config/services/restful/token-auth
 
-; Plugins
-files[] = includes/RestfulTokenAuth.php
-files[] = includes/RestfulTokenAuthController.php
-files[] = includes/RestfulTokenAuthenticationBase.php
+registry_autoload[] = PSR-0
+registry_autoload[] = PSR-4
 
-; Tests
 files[] = tests/RestfulTokenAuthenticationTestCase.test
 
 ; Information added by Drupal.org packaging script on 2017-02-15
-version = "7.x-1.8"
+version = "7.x-2.16"
 core = "7.x"
 project = "restful"
-datestamp = "1487139788"
+datestamp = "1487139488"
 

@@ -5,17 +5,20 @@
  * Contains RestfulSimpleJsonTestCase
  */
 
+use Drupal\restful\Formatter\FormatterManager;
+use Drupal\restful\Http\Request;
+
 class RestfulSimpleJsonTestCase extends RestfulCurlBaseTestCase {
 
   public static function getInfo() {
     return array(
-      'name' => 'View HAL+JSON',
+      'name' => 'View Simple JSON',
       'description' => 'Test the viewing of an entity in HAL+JSON format.',
       'group' => 'RESTful',
     );
   }
 
-  function setUp() {
+  public function setUp() {
     parent::setUp('restful_example', 'restful_test', 'entityreference');
 
     restful_test_add_fields();
@@ -25,13 +28,25 @@ class RestfulSimpleJsonTestCase extends RestfulCurlBaseTestCase {
    * Test the Simple JSON formatter.
    */
   public function testSimpleJson() {
+    $resource_manager = restful()->getResourceManager();
     $node = restful_test_create_node_with_tags();
-    $handler = restful_get_restful_handler('articles', 1, 5);
+    $handler = $resource_manager->getPlugin('articles:1.5');
+    $resource_manager->clearPluginCache($handler->getPluginId());
     // Use the simple JSON formatter.
-    $handler->setPluginKey('formatter', 'json');
+    $plugin_definition = $handler->getPluginDefinition();
+    $plugin_definition['formatter'] = 'json';
+    $handler->setPluginDefinition($plugin_definition);
 
-    $response = $handler->get($node->nid);
-    $formatter = \RestfulManager::outputFormat($handler);
+    $handler->setRequest(Request::create('/api/v1.5/articles/' . $node->nid));
+    $handler->setPath($node->nid);
+    $response = drupal_json_decode(restful()
+      ->getFormatterManager()
+      ->format($handler->process(), 'json'));
+    $response = $response['data'];
+    $formatter_manager = new FormatterManager($handler);
+    $accept = empty($GLOBALS['_SERVER']['HTTP_ACCEPT']) ? NULL : $GLOBALS['_SERVER']['HTTP_ACCEPT'];
+    $formatter = $formatter_manager->negotiateFormatter($accept, 'json');
+
     $result = $formatter->format($response);
     if ($decoded_json = drupal_json_decode($result)) {
       $this->pass('Valid JSON output generated.');
@@ -52,15 +67,54 @@ class RestfulSimpleJsonTestCase extends RestfulCurlBaseTestCase {
     // Assert the HATEOAS.
     // Create another node for pagination.
     restful_test_create_node_with_tags();
-    $handler->setRange(1);
-    $response = $handler->get();
-    $result = $formatter->format($response);
-    $decoded_json = drupal_json_decode($result);
+    // Change the max range.
+    $handler->getDataProvider()->setRange(1);
+    $handler->setRequest(Request::create(''));
+    $handler->setPath('');
+    $results = $handler->process();
+    $formatter = restful()->getFormatterManager()->getPlugin('json');
+    $formatter->setResource($handler);
+    $data = $formatter->prepare($results);
 
-    $this->assertNotNull($decoded_json['self'], '"Self" property added.');
-    $this->assertEqual($decoded_json['count'], 2, 'Count was populated correctly.');
-    $this->assertEqual(count($decoded_json['data']), 1, 'The correct number of items was listed.');
-    $this->assertNotNull($decoded_json['next'], '"Next" property added.');
+    $this->assertNotNull($data['self'], '"Self" property added.');
+    $this->assertEqual($data['count'], 2, 'Count was populated correctly.');
+    $this->assertEqual(count($data['data']), 1, 'The correct number of items was listed.');
+    $this->assertNotNull($data['next'], '"Next" property added.');
+
+    // Test the pagination links for bigger ranges.
+    // Create an extra node for more pagination options.
+    restful_test_create_node_with_tags();
+    $handler->getDataProvider()->setRange(50);
+    $handler->setRequest(Request::create('', array(
+      'range' => 1,
+      'page' => 2,
+    )));
+    $handler->setPath('');
+    $results = $handler->process();
+    $formatter = restful()->getFormatterManager()->getPlugin('json');
+    $formatter->setResource($handler);
+    $data = $formatter->prepare($results);
+
+    $this->assertEqual($data['count'], 3, 'Count was populated correctly.');
+    $this->assertEqual(count($data['data']), 1, 'The correct number of items was listed.');
+    $this->assertNotNull($data['next'], '"Next" property added.');
+    $this->assertNotNull($data['previous'], '"Previous" property added.');
+
+    // Test the max cap for the range.
+    $handler->getDataProvider()->setRange(1);
+    $handler->setRequest(Request::create('/api/v1.5/articles', array(
+      'page' => array(
+        'size' => 1000,
+        'number' => 2,
+      ),
+    )));
+    $handler->setPath('');
+    $results = $handler->process();
+    $formatter = restful()->getFormatterManager()->getPlugin('json');
+    $formatter->setResource($handler);
+    $data = $formatter->prepare($results);
+
+    $this->assertNotNull($data['next'], '"Next" property added.');
   }
 
 }

@@ -7,6 +7,9 @@
 
 class RestfulCreatePrivateNodeTestCase extends DrupalWebTestCase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Node access integration',
@@ -15,7 +18,10 @@ class RestfulCreatePrivateNodeTestCase extends DrupalWebTestCase {
     );
   }
 
-  function setUp() {
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
     parent::setUp('restful_example', 'restful_node_access_test');
     // Add entity reference fields.
     restful_test_add_fields('node', 'article');
@@ -32,7 +38,7 @@ class RestfulCreatePrivateNodeTestCase extends DrupalWebTestCase {
    *
    * @see restful_node_access_test_node_access_records()
    */
-  function testCreateNodeWithReference() {
+  public function testCreateNodeWithReference() {
     $user1 = $this->drupalCreateUser(array('create article content'));
     $user2 = $this->drupalCreateUser(array('create article content'));
     $this->drupalLogin($user1);
@@ -51,16 +57,19 @@ class RestfulCreatePrivateNodeTestCase extends DrupalWebTestCase {
     // Assert another user doesn't have access to the node.
     $this->assertFalse(node_access('view', $node1, $user2), 'Authenticated user, but not author does not have access to view the node.');
 
-    $handler = restful_get_restful_handler('test_articles', 1, 2);
+    $handler = restful()->getResourceManager()->getPlugin('test_articles:1.2');
+    $formatter = restful()->getFormatterManager()->getPlugin('json');
+    $formatter->setResource($handler);
     $handler->setAccount($user1);
 
-    $request = array(
+    $parsed_body = array(
       'label' => $this->randomName(),
       'entity_reference_single' => $node1->nid,
     );
-    $result = $handler->post('', $request);
+    $result = $formatter->prepare($handler->doPost($parsed_body));
 
     $this->assertTrue($result, 'Private node with reference to another private node was created.');
 
   }
+
 }

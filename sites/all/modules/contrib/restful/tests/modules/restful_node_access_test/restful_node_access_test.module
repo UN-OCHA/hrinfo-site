@@ -10,11 +10,11 @@
  */
 function restful_node_access_test_node_grants($account, $op) {
   if ($op != 'view') {
-    return;
+    return NULL;
   }
 
   if (!$account->uid) {
-    return;
+    return NULL;
   }
 
   $grants = array();
@@ -28,7 +28,7 @@ function restful_node_access_test_node_grants($account, $op) {
  */
 function restful_node_access_test_node_access_records($node) {
   $grants = array();
-  $grants[] = array (
+  $grants[] = array(
     'realm' => 'restful_test',
     'gid' => $node->uid,
     'grant_view' => 1,

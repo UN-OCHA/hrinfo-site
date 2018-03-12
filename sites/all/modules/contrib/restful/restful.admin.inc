@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\restful\Plugin\FormatterPluginManager;
+
 /**
  * Menu callback; Admin settings form.
  */
@@ -16,7 +18,9 @@ function restful_admin_settings($form_state) {
   );
 
   $element = &$form['restful_default_output_formatter'];
-  foreach (restful_get_formatter_plugins() as $plugin_name => $plugin) {
+  $formatter_manager = FormatterPluginManager::create();
+
+  foreach ($formatter_manager->getDefinitions() as $plugin_name => $plugin) {
     $element['#options'][$plugin_name] = check_plain($plugin['label']);
 
     // Add description for each formatter.
@@ -55,29 +59,18 @@ function restful_admin_settings($form_state) {
     ),
   );
 
-  $form['restful_cache'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Cache'),
-    '#description' => t('Cache options for the different layers of RESTful.'),
-    '#collapsible' => FALSE,
+  $form['restful_show_access_denied'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show access denied records'),
+    '#description' => t('Check this box to get an HTTP 403 error when requesting entities with access denied. Listing denied entities will remove them from the output and have a flag indicating the access violation. Leave it unchecked to hide access denied records. If you do not care about unpriviledged users knowing that records they do not have access to exist, you can check this box.'),
+    '#default_value' => variable_get('restful_show_access_denied', FALSE),
   );
 
-  $form['restful_cache']['restful_page_cache'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Page cache'),
-    '#description' => t('RESTful can leverage page cache, this will boost your performace for anonymous traffic. !link to start caching responses. Status: <strong>@status</strong>. <strong>CAUTION:</strong> If your resources are using authentication providers other than cookie, you will want to turn this off. Otherwise you may get cached anonymous values for your authenticated GET requests.', array(
-      '!link' => l(t('Enable page cache'), 'admin/config/development/performance'),
-      '@status' => variable_get('cache', FALSE) ? t('Enabled') : t('Disabled'),
-    )),
-    '#disabled' => !variable_get('cache', FALSE),
-    '#default_value' => variable_get('restful_page_cache', FALSE) && variable_get('cache', FALSE),
-  );
-
-  $form['restful_cache']['restful_render_cache'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Cache results'),
-    '#description' => t('When enabled any resource that has not explicitly disabled the caching will be cached. Note that the first hit may result with slower response, although the next ones would be significantly faster. This is different from the page cache in the sense that it acts at the row level (a single entity, a single database row, ...), therefore allowing you to assemble non cached pages with the cached bits faster.'),
-    '#default_value' => variable_get('restful_render_cache', FALSE),
+  $form['restful_allowed_origin'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Allowed origin'),
+    '#description' => t('When you make an XHR (AJAX) call to a resource under a different host, most modern browsers will make an initial OPTIONS request to the resource. The response to that can contain the Access-Control-Allow-Origin, if that includes the domain making the request the browser will allow the cross-domain request. The contents of this field will be used in that header. Use <em>*</em> to allow any origin.'),
+    '#default_value' => variable_get('restful_allowed_origin', ''),
   );
 
   $form['advanced'] = array(

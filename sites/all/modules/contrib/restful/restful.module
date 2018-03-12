@@ -6,130 +6,18 @@
  */
 
 include_once __DIR__ . '/restful.entity.inc';
+include_once __DIR__ . '/restful.cache.inc';
 
-/**
- * Implements hook_ctools_plugin_directory().
- */
-function restful_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'restful') {
-    return 'plugins/' . $plugin;
-  }
-}
-
-/**
- * Add defaults values to the restful related plugins.
- */
-function restful_plugin_process(&$plugin, $info) {
-  // Common operations.
-  $plugin += array(
-    'description' => '',
-  );
-
-  // Call the plugin specific process functions.
-  $function = array('\RestfulManager', 'pluginProcess' . preg_replace('/ /', '', ucwords(preg_replace('/_/', ' ', $info['type']))));
-  if (is_callable($function)) {
-    $plugin = call_user_func_array($function, array($plugin, $info));
-  }
-}
-
-/**
- * Implements hook_ctools_plugin_type().
- */
-function restful_ctools_plugin_type() {
-  $plugins['authentication'] = $plugins['restful'] = $plugins['rate_limit'] = $plugins['formatter'] = array(
-    'classes' => array('class'),
-    'process' => 'restful_plugin_process',
-  );
-  $plugins['restful']['child plugins'] = TRUE;
-  return $plugins;
-}
-
-
-/**
- * Include CTools plugins and get all restful plugins.
- *
- * @return array
- *   All plugins for restful resources.
- */
-function restful_get_restful_plugins() {
-  ctools_include('plugins');
-  return ctools_get_plugins('restful', 'restful');
-}
-
-/**
- * Include CTools plugins and get all authentication plugins.
- *
- * @return array
- *   All plugins for restful authentication.
- */
-function restful_get_authentication_plugins() {
-  ctools_include('plugins');
-  return ctools_get_plugins('restful', 'authentication');
-}
-
-/**
- * Include CTools plugins and get all rate_limit plugins.
- *
- * @return array
- *   All the restful rate_limit plugins.
- */
-function restful_get_rate_limit_plugins() {
-  ctools_include('plugins');
-  return ctools_get_plugins('restful', 'rate_limit');
-}
-
-/**
- * Include CTools plugins and get all formatter plugins.
- *
- * @return array
- *   All the restful formatter plugins.
- */
-function restful_get_formatter_plugins() {
-  ctools_include('plugins');
-  return ctools_get_plugins('restful', 'formatter');
-}
-
-/**
- * Include CTools plugins and get the specified authentication plugin.
- *
- * @param string $plugin_name
- *   If provided this function only returns the selected plugin.
- *
- * @return array
- *   The selected plugin for restful authentication.
- */
-function restful_get_authentication_plugin($plugin_name) {
-  ctools_include('plugins');
-  return ctools_get_plugins('restful', 'authentication', $plugin_name);
-}
-
-/**
- * Include CTools plugins and get the specified formatter plugin.
- *
- * @param string $plugin_name
- *   If provided this function only returns the selected plugin.
- *
- * @return array
- *   The selected plugin for restful formatter.
- */
-function restful_get_formatter_plugin($plugin_name) {
-  ctools_include('plugins');
-  return ctools_get_plugins('restful', 'formatter', $plugin_name);
-}
-
-/**
- * Include CTools plugins and get the specified rate_limit plugin.
- *
- * @param string $plugin_name
- *   If provided this function only returns the selected plugin.
- *
- * @return array
- *   The selected plugin for rate limits.
- */
-function restful_get_rate_limit_plugin($plugin_name) {
-  ctools_include('plugins');
-  return ctools_get_plugins('restful', 'rate_limit', $plugin_name);
-}
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Component\Plugin\PluginBase;
+use Drupal\restful\Exception\RestfulException;
+use Drupal\restful\Http\HttpHeader;
+use Drupal\restful\Http\RequestInterface;
+use Drupal\restful\Http\ResponseInterface;
+use Drupal\restful\Plugin\resource\Decorators\CacheDecoratedResource;
+use Drupal\restful\Plugin\resource\Decorators\RateLimitDecoratedResource;
+use Drupal\restful\Plugin\resource\ResourceInterface;
+use Drupal\restful\RestfulManager;
 
 /**
  * Implements hook_menu().
@@ -137,43 +25,52 @@ function restful_get_rate_limit_plugin($plugin_name) {
 function restful_menu() {
   $base_path = variable_get('restful_hook_menu_base_path', 'api');
   $items = array();
-  foreach (restful_get_restful_plugins() as $plugin) {
-    if (!$plugin['hook_menu']) {
+  $plugins = restful()
+    ->getResourceManager()
+    ->getPlugins();
+  foreach ($plugins->getIterator() as $plugin) {
+    if (!$plugin instanceof ResourceInterface) {
+      // If the plugin is disabled $plugin gets set to NULL. If that is the case
+      // do not set any menu values based on it.
+      continue;
+    }
+    $plugin_definition = $plugin->getPluginDefinition();
+    if (!$plugin_definition['hookMenu']) {
       // Plugin explicitly declared no hook menu should be created automatically
       // for it.
       continue;
     }
     $item = array(
-      'title' => $plugin['name'],
-      'access callback' => 'restful_menu_access_callback',
-      'access arguments' => array($plugin['resource']),
-      'page callback' => 'restful_menu_process_callback',
-      'page arguments' => array($plugin['resource']),
-      'delivery callback' => 'restful_formatted_delivery',
+      'title' => $plugin_definition['name'],
+      'access callback' => RestfulManager::FRONT_CONTROLLER_ACCESS_CALLBACK,
+      'access arguments' => array($plugin_definition['resource']),
+      'page callback' => RestfulManager::FRONT_CONTROLLER_CALLBACK,
+      'page arguments' => array($plugin_definition['resource']),
+      'delivery callback' => 'restful_delivery',
       'type' => MENU_CALLBACK,
     );
     // If there is no specific menu item allow the different version variations.
-    if ($plugin['hook_menu'] && empty($plugin['menu_item'])) {
+    if (!isset($plugin_definition['menuItem'])) {
       // Add the version string to the arguments.
       $item['access arguments'][] = 1;
       $item['page arguments'][] = 1;
-        // Ex: api/v1.2/articles
-      $items[$base_path . '/v' . $plugin['major_version'] . '.' . $plugin['minor_version'] . '/' . $plugin['resource']] = $item;
+      // Ex: api/v1.2/articles
+      $items[$base_path . '/v' . $plugin_definition['majorVersion'] . '.' . $plugin_definition['minorVersion'] . '/' . $plugin_definition['resource']] = $item;
       // Ex: api/v1/articles will use the latest minor version.
-      $items[$base_path . '/v' . $plugin['major_version'] . '/' . $plugin['resource']] = $item;
+      $items[$base_path . '/v' . $plugin_definition['majorVersion'] . '/' . $plugin_definition['resource']] = $item;
       // Ex: api/articles will use the header or the latest version.
       // Do not add the version string to the arguments.
       $item['access arguments'] = $item['page arguments'] = array(1);
-      $items[$base_path . '/' . $plugin['resource']] = $item;
+      $items[$base_path . '/' . $plugin_definition['resource']] = $item;
     }
     else {
-      $items[$plugin['menu_item']] = $item;
-    }
-  }
+      $path = implode('/', array($base_path, $plugin_definition['menuItem']));
 
-  // Make sure the CRSF token endpoint is not HAL.
-  if (!empty($items[$base_path . '/session/token'])) {
-    $items[$base_path . '/session/token']['delivery callback'] = 'restful_unprepared_delivery';
+      // Remove trailing slashes that can lead to 404 errors.
+      $path = rtrim($path, '/');
+
+      $items[$path] = $item;
+    }
   }
 
   // Make sure the Login endpoint has the correct access callback.
@@ -192,12 +89,23 @@ function restful_menu() {
   );
   $items['admin/config/services/restful/restful'] = $items['admin/config/services/restful'];
   $items['admin/config/services/restful/restful']['type'] = MENU_DEFAULT_LOCAL_TASK;
+  // Add cache administration page.
+  $items['admin/config/services/restful/cache'] = array(
+    'title' => 'Cache',
+    'description' => 'Administer the RESTful module cache system.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('restful_admin_cache_settings'),
+    'access arguments' => array('administer restful'),
+    'file' => 'restful.cache.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
+  );
 
   return $items;
 }
 
 /**
- *  Implements hook_permission().
+ * Implements hook_permission().
  */
 function restful_permission() {
   return array(
@@ -205,260 +113,116 @@ function restful_permission() {
       'title' => t('Administer the RESTful module'),
       'description' => t('Access the administration pages for the RESTful module.'),
     ),
+    'administer restful resources' => array(
+      'title' => t('Administer the resources'),
+      'description' => t('Perform operations on the resources.'),
+    ),
+    'restful clear render caches' => array(
+      'title' => t('Clear RESTful render caches'),
+      'description' => t('Clear the render caches and their correspoding cache fragments.'),
+    ),
   );
 }
 
 /**
- *  Implements hook_help().
+ * Implements hook_help().
  */
 function restful_help($path, $arg) {
   switch ($path) {
-    case 'admin/structure/block':
+    case 'admin/config/services/restful':
     case 'admin/help#restful':
-      return '<p>' . t('This module is managed in GitHub. Please make sure to read the docs in the !link page for more help.', array(
-        '!link' => l('README.md', 'https://github.com/Gizra/restful/blob/7.x-1.x/README.md'),
-      )) . '</p>';
+      $message = t('This module is managed in GitHub. Please make sure to read the files in the !link folder for more help.', array(
+        '!link' => l(t('Docs'), 'https://github.com/RESTful-Drupal/restful/tree/7.x-2.x/docs'),
+      ));
+      return '<p>' . $message . '</p>';
+
+    case 'admin/config/services/restful/cache':
+      $message = t('The RESTful module contains several layers of caching for enhanced performance: (1) page cache (aka URL level caching) for anonymous users. This cache is extremely fast, but not very flexible. (2) The render cache can be configured for each resource and allows you to serve cached versions of your records (even to authenticated users!). The render cache also contains smart invalidation, which means that you do not need to have a TTL based cache system. Instead the caches are evicted when automatically when necessary.');
+      return '<p>' . $message . '</p>';
+
   }
 }
 
 /**
- * Return the handler based on major and minor version, and resource name.
+ * Get the RestfulManager.
  *
- * @param $resource_name
- *   The name of the resource (e.g. "articles").
- * @param int $major_version
- *   (optional) The major version (not prefixed with "v"). Defaults to 1.
- * @param int $minor_version
- *   (optional) The minor version. Defaults to 0.
+ * Calling restful() from anywhere in the code will give you access to the
+ * RestfulManager. That in turn will provide you access to all the elements
+ * involved.
  *
- * @return RestfulInterface | NULL
- *   The handler object if found, or NULL.
+ * @return RestfulManager
+ *   The manager.
  */
-function restful_get_restful_handler($resource_name, $major_version = 1, $minor_version = 0) {
-  $cache = &drupal_static(__FUNCTION__);
-  $identifier = implode(':', array($major_version, $resource_name, $minor_version));
-  if (isset($cache[$identifier])) {
-    return $cache[$identifier];
+function restful() {
+  static $manager;
+  if (!isset($manager)) {
+    $manager = RestfulManager::createFromGlobals();
   }
-
-  $cache[$identifier] = NULL;
-
-
-  // Array with all the handlers with the same major version and resource name.
-  // We get all of them, so we can find the correct one if minor version is
-  // present.
-  $valid_plugins = array();
-  foreach (restful_get_restful_plugins() as $plugin) {
-    if ($plugin['major_version'] != $major_version) {
-      continue;
-    }
-
-    if ($plugin['resource'] != $resource_name) {
-      continue;
-    }
-
-    if ($minor_version == $plugin['minor_version']) {
-      // We found out handler, so we can break.
-      $valid_plugins[$plugin['minor_version']] = $plugin;
-      break;
-    }
-
-    if ($plugin['minor_version'] > $minor_version) {
-      // Minor version is above the needed one.
-      continue;
-    }
-
-    $valid_plugins[$plugin['minor_version']] = $plugin;
-  }
-
-  if (!$valid_plugins) {
-    return;
-  }
-
-  // Sort the handlers, and get the last one, as it is the closest one to the
-  // requested minor version.
-  ksort($valid_plugins);
-  $plugin = end($valid_plugins);
-
-  $cache[$identifier] = restful_get_restful_handler_by_name($plugin['name']);
-
-  return $cache[$identifier];
-}
-
-/**
- * Return the handler based on major and minor version, and resource name.
- *
- * @param $plugin_name
- *   The name of the plugin, including version. (e.g. "articles__1_2").
- *
- * @return RestfulInterface
- *   The handler object if found, or NULL.
- *
- * @throws \RestfulException
- */
-function restful_get_restful_handler_by_name($plugin_name) {
-  ctools_include('plugins');
-  $plugin = ctools_get_plugins('restful', 'restful', $plugin_name);
-  if (!$class = ctools_plugin_load_class('restful', 'restful', $plugin_name, 'class')) {
-    throw new \RestfulServiceUnavailable(format_string('Restful plugin class (@plugin) was not found.', array('@plugin' => $plugin_name)));
-  }
-  $handler = new $class($plugin);
-  // If the restful plugin needs authentication load the corresponding
-  // authentication plugin.
-
-  // Handler set explicitly to allow all authentication types.
-  $auth_plugins = $plugin['authentication_types'] === TRUE ? array_keys(restful_get_authentication_plugins()) : $plugin['authentication_types'];
-
-  // We can have multiple authentication plugins.
-  foreach ($auth_plugins as $auth_plugin_name) {
-    $auth_handler = restful_get_authentication_handler($auth_plugin_name);
-    $handler->getAuthenticationManager()->addAuthenticationProvider($auth_handler);
-  }
-
-  // Set the "optional" flag of the authentication manager.
-  $handler->getAuthenticationManager()->setIsOptional($plugin['authentication_optional']);
-
-  return $handler;
-}
-
-/**
- * Return the authentication handler based on the authentication plugin name.
- *
- * @param string $auth_plugin_name
- *   Name of the authentication plugin.
- *
- * @return \RestfulAuthenticationInterface
- *   The authentication provider object.
- *
- * @throws \RestfulException if the authentication provider does not exist.
- */
-function restful_get_authentication_handler($auth_plugin_name) {
-  $auth_plugin = restful_get_authentication_plugin($auth_plugin_name);
-  if (!$auth_class = ctools_plugin_get_class($auth_plugin, 'class')) {
-    throw new \RestfulServiceUnavailable(format_string('Authentication plugin class (@plugin) was not found.', array('@plugin' => $auth_plugin_name)));
-  }
-  return new $auth_class($auth_plugin);
-}
-
-/**
- * Return the formatter handler based on the formatter plugin name.
- *
- * @param string $formatter_plugin_name
- *   Name of the formatter plugin.
- *
- * @param \RestfulBase $restful_handler
- *   The resource handler.
- *
- * @return \RestfulFormatterInterface
- *   The formatter provider object.
- *
- * @throws \RestfulException if the formatter provider does not exist.
- */
-function restful_get_formatter_handler($formatter_plugin_name, $restful_handler) {
-  $formatter_plugin = restful_get_formatter_plugin($formatter_plugin_name);
-  if (!$formatter_class = ctools_plugin_get_class($formatter_plugin, 'class')) {
-    throw new \RestfulServiceUnavailable(format_string('Formatter plugin class (@plugin) was not found.', array('@plugin' => $formatter_plugin_name)));
-  }
-  return new $formatter_class($formatter_plugin, $restful_handler);
-}
-
-/**
- * Helper function to get the restful handler for the selected path.
- *
- * @param string $path
- *   The path you want to get the handler for. Defaults to the current page.
- *
- * @return \RestfulEntityBase
- *   The restful handler or NULL.
- */
-function restful_get_restful_handler_for_path($path = NULL) {
-  $handlers = &drupal_static(__FUNCTION__);
-  $path = is_null($path) ? $_GET['q'] : $path;
-  if (isset($handlers[$path])) {
-    return $handlers[$path];
-  }
-  $router_item = \RestfulBase::getMenuItem($path);
-  // We can only get the information if the current path was processed by
-  // restful_menu_process_callback.
-  if ($router_item['page_callback'] != 'restful_menu_process_callback') {
-    $handlers[$path] = FALSE;
-    return;
-  }
-  list($resource,) = \RestfulBase::getPageArguments($path);
-  list($major_version, $minor_version) = \RestfulBase::getVersionFromRequest($path);
-
-  $handlers[$path] = restful_get_restful_handler($resource, $major_version, $minor_version);
-  return $handlers[$path];
+  return $manager;
 }
 
 /**
  * Access callback; Determine access for an API call.
  *
- * @param $version
- *   The version, prefixed with v (e.g. v1, v2.2).
- * @param $resource_name
+ * @param string $resource_name
  *   The name of the resource (e.g. "articles").
+ *
+ * @param string $version_string
+ *   The version array.
  *
  * @return bool
  *   TRUE if user is allowed to access resource.
  */
-function restful_menu_access_callback($resource_name, $version = NULL) {
-  if (!$versions = \RestfulBase::getVersionFromRequest()) {
+function restful_menu_access_callback($resource_name, $version_string = NULL) {
+  $resource_manager = restful()->getResourceManager();
+  if (!empty($version_string) && preg_match('/v[0-9]+(\.[0-9]+)?/', $version_string)) {
+    $version_string = substr($version_string, 1);
+    $parsed_versions = explode('.', $version_string);
+    if (count($parsed_versions) == 2) {
+      // If there is only the major we need to get the version from the request,
+      // to get the latest version within the major version.
+      $versions = $parsed_versions;
+    }
+  }
+  if (empty($versions) && !$versions = $resource_manager->getVersionFromRequest()) {
     // No version could be found.
-    return;
-  }
-
-  if (!$handler = restful_get_restful_handler($resource_name, $versions[0], $versions[1])) {
-    return;
-  }
-
-  if (!\RestfulBase::isValidMethod($_SERVER['REQUEST_METHOD'], FALSE)) {
-    return;
-  }
-
-  $method = strtoupper($_SERVER['REQUEST_METHOD']);
-  if ($method == \RestfulInterface::POST && \RestfulManager::getRequestHttpHeader('X-HTTP-Method-Override')) {
-    $method = strtoupper(\RestfulManager::getRequestHttpHeader('X-HTTP-Method-Override'));
-  }
-
-  if (!\RestfulBase::isValidMethod($method, FALSE)) {
-    // HTTP method is invalid.
-    return;
-  }
-
-  // Set the request and method on the handler, so access callbacks have full
-  // access to the request and account.
-  $path = func_get_args();
-  array_shift($path);
-  if (preg_match('/^v\d+(\.\d+)?$/', $version)) {
-    array_shift($path);
-  }
-  $path = implode('/', $path);
-
-  $request = restful_parse_request();
-  $handler->setPath($path);
-  $handler->setMethod($method);
-  $handler->setRequest($request);
-
-  try {
-    $access = $handler->access();
-    return $access;
-  }
-  catch(Exception $e) {
     return FALSE;
   }
 
+  try {
+    $instance_id = $resource_name . PluginBase::DERIVATIVE_SEPARATOR . implode('.', $versions);
+    $resource = $resource_manager->getPlugin($instance_id, restful()->getRequest());
+    if (!$resource) {
+      // Throw a PluginNotFoundException exception instead of a denied access.
+      throw new PluginNotFoundException($instance_id);
+    }
+    return $resource->access();
+  }
+  catch (RestfulException $e) {
+    // We can get here if the request method is not valid or if no resource can
+    // be negotiated.
+    $response = restful()->getResponse();
+    $output = _restful_build_http_api_error($e, $response);
+    $response->setStatusCode($e->getCode());
+    $response->setContent(drupal_json_encode($output));
+    $response->send();
+    exit();
+  }
+  catch (PluginNotFoundException $e) {
+    restful_delivery(MENU_NOT_FOUND);
+    exit();
+  }
 }
 
 /**
  * Page callback; Return the response for an API call.
  *
- * @param $resource_name
+ * @param string $resource_name
  *   The name of the resource (e.g. "articles").
- * @param $version
+ * @param string $version
  *   The version, prefixed with v (e.g. v1, v2.2).
  *
- * @throws RestfulServiceUnavailable
+ * @throws \Drupal\restful\Exception\ServiceUnavailableException
  *
  * @return string
  *   JSON output with the result of the API call.
@@ -466,82 +230,53 @@ function restful_menu_access_callback($resource_name, $version = NULL) {
  * @see http://tools.ietf.org/html/draft-nottingham-http-problem-06
  */
 function restful_menu_process_callback($resource_name, $version = NULL) {
-  list($major_version, $minor_version) = \RestfulBase::getVersionFromRequest();
-  $handler = restful_get_restful_handler($resource_name, $major_version, $minor_version);
-  if (!$handler instanceof \RestfulDataProviderInterface) {
-    throw new \RestfulServiceUnavailable(format_string('The selected plugin (@plugin) does not implement \RestfulDataProviderInterface.', array('@plugin' => $resource_name . ' v' . $major_version . '.' . $minor_version)));
-  }
-
-  // Vary the response with the presence of the X-API-Version or Accept headers.
-  $headers = $handler->getHttpHeaders();
-  $additional_variations = empty($headers['Vary']) ? array('Accept') : array($headers['Vary'], 'Accept');
-  if (\RestfulManager::getRequestHttpHeader('X-API-Version')) {
-    $additional_variations[] = 'X-API-Version';
-  }
-  if ($additional_variations) {
-    $handler->setHttpHeaders('Vary', implode(',', $additional_variations));
-  }
-
-  // Always add the allow origin if configured.
-  if ($allowed_origin = $handler->getPluginKey('allow_origin')) {
-    $handler->setHttpHeaders('Access-Control-Allow-Origin', $allowed_origin);
-  }
-
-  $method = strtoupper($_SERVER['REQUEST_METHOD']);
-
-  if ($method == \RestfulInterface::POST && \RestfulManager::getRequestHttpHeader('X-HTTP-Method-Override')) {
-    $method = \RestfulManager::getRequestHttpHeader('X-HTTP-Method-Override');
-  }
-
-  $method = strtolower($method);
-
   $path = func_get_args();
   array_shift($path);
   if (preg_match('/^v\d+(\.\d+)?$/', $version)) {
     array_shift($path);
   }
-  $path = implode('/', $path);
+  $resource_manager = restful()->getResourceManager();
+  list($major_version, $minor_version) = $resource_manager->getVersionFromRequest();
+  $request = restful()->getRequest();
+  $request->setViaRouter(TRUE);
+  $resource = $resource_manager->getPlugin($resource_name . PluginBase::DERIVATIVE_SEPARATOR . $major_version . '.' . $minor_version, $request);
 
-  $request = restful_parse_request();
+  $response_headers = restful()
+    ->getResponse()
+    ->getHeaders();
+
+  $version_array = $resource->getVersion();
+  $version_string = 'v' . $version_array['major'] . '.' . $version_array['minor'];
+  $response_headers->add(HttpHeader::create('X-API-Version', $version_string));
+
+  // Vary the response with the presence of the X-API-Version or Accept headers.
+  $vary = $request
+    ->getHeaders()
+    ->get('Vary')
+    ->getValueString() ?: '';
+  $additional_variations = array($vary, 'Accept');
+  if ($x_api_version = $request
+    ->getHeaders()
+    ->get('X-API-Version')
+    ->getValueString()) {
+    $additional_variations[] = 'X-API-Version';
+  }
+  if ($additional_variations) {
+    $response_headers->append(HttpHeader::create('Vary', implode(',', $additional_variations)));
+  }
+
+  // Always add the allow origin if configured.
+  $plugin_definition = $resource->getPluginDefinition();
+  if (!empty($plugin_definition['allowOrigin'])) {
+    $response_headers->append(HttpHeader::create('Access-Control-Allow-Origin', $plugin_definition['allowOrigin']));
+  }
 
   try {
-    if (!\RestfulBase::isValidMethod($method, FALSE)) {
-      throw new RestfulBadRequestException(format_string('Unsupported method @method.', array(
-        '@method' => $method,
-      )));
-    }
-    return $handler->{$method}($path, $request);
+    $resource->setPath(implode('/', $path));
+    $result = $resource->process();
   }
   catch (RestfulException $e) {
-    $result = array(
-      'type' => $e->getType(),
-      'title' => $e->getMessage(),
-      'status' => $e->getCode(),
-      'detail' => $e->getDescription(),
-    );
-
-    if ($instance = $e->getInstance()) {
-      $result['instance'] = $instance;
-    }
-
-    if ($errors = $e->getFieldErrors()) {
-      $result['errors'] = $errors;
-    }
-
-    foreach ($e->getHeaders() as $header_name => $header_value) {
-      drupal_add_http_header($header_name, $header_value);
-    }
-
-    if ($e->getCode() < 500) {
-      // Even though it's an exception, it's in fact not a server error - it
-      // might be just access denied, or a bad request, so we just want to log
-      // it, but without marking it as an actual exception.
-      watchdog('restful', $e->getMessage());
-    }
-    else {
-      // This one should really be considered as an error.
-      watchdog_exception('restful', $e);
-    }
+    $result = _restful_build_http_api_error($e);
   }
   catch (Exception $e) {
     $result = array(
@@ -549,60 +284,11 @@ function restful_menu_process_callback($resource_name, $version = NULL) {
       'title' => $e->getMessage(),
       'status' => 500,
     );
-
-    watchdog_exception('restful', $e);
   }
 
-  // Adhere to the API Problem draft proposal.
-  drupal_add_http_header('Status', $result['status']);
-  drupal_add_http_header('Content-Type', 'application/problem+json; charset=utf-8');
+  // If the user was switched during the execution thread, then switch it back.
+  $resource->switchUserBack();
   return $result;
-}
-
-/**
- * Build the request array from PHP globals and input stream.
- *
- * @return array
- *   The request array.
- */
-function restful_parse_request() {
-  $request = &drupal_static(__FUNCTION__, NULL);
-  if ($request) {
-    return $request;
-  }
-
-  $method = strtoupper($_SERVER['REQUEST_METHOD']);
-
-  if ($method == \RestfulInterface::GET) {
-    $request = $_GET;
-  }
-  elseif ($method == \RestfulInterface::POST) {
-    $request = $_POST;
-  }
-
-  if (!$request && $query_string = _restful_get_query_string_from_php_input()) {
-    // When trying to POST using curl on simpleTest it doesn't reach
-    // $_POST, so we try to re-grab it here.
-    // Also, sometimes the client might send the input still encoded.
-    if ($decoded_json = drupal_json_decode($query_string)) {
-      $request = $decoded_json;
-    }
-    else {
-      parse_str($query_string, $request);
-    }
-  }
-
-  // This flag is used to identify if the request is done "via Drupal" or "via
-  // CURL";
-  $request['__application'] = array(
-    'rest_call' => TRUE,
-    'csrf_token' => \RestfulManager::getRequestHttpHeader('X-CSRF-Token'),
-  );
-
-  // Allow implementing modules to alter the request.
-  drupal_alter('restful_parse_request', $request);
-
-  return $request;
 }
 
 /**
@@ -611,81 +297,83 @@ function restful_parse_request() {
  * We do not use drupal_json_output(), in order to maintain the "Content-Type"
  * header.
  *
- * @param $var
+ * @param mixed $var
  *   (optional) If set, the variable will be converted to JSON and output.
- * @param string $method
- *   Name of the method for the formatter.
  *
  * @see restful_menu_process_callback()
  */
-function restful_delivery($var = NULL, $method = 'format') {
-  if ($restful_handler = restful_get_restful_handler_for_path()) {
-    // Allow the handler to change the HTTP headers.
-    foreach ($restful_handler->getHttpHeaders() as $key => $value) {
-      drupal_add_http_header($key, $value);
-    }
-  }
-
+function restful_delivery($var = NULL) {
   if (!isset($var)) {
     return;
   }
 
+  $request = restful()->getRequest();
+  $response = restful()->getResponse();
+  if (!empty($var['status'])) {
+    $response->setStatusCode($var['status']);
+  }
   if (is_int($var)) {
-    _restful_get_json_from_menu_status($var);
+    _restful_get_data_from_menu_status($var);
+    if (!empty($var['status'])) {
+      $response->setStatusCode($var['status']);
+    }
 
-    // Adhere to the API Problem draft proposal.
-    drupal_add_http_header('Status', $var['status']);
-    drupal_add_http_header('Content-Type', 'application/problem+json; charset=utf-8');
-  }
+    try {
+      // Adhere to the API Problem draft proposal.
+      $formatter_id = variable_get('restful_default_output_formatter', 'json');
+      // Get the data in the default output format.
+      $data = restful()
+        ->getFormatterManager()
+        ->negotiateFormatter(NULL, $formatter_id)
+        ->format($var);
 
-  // If we are returning from an OPTIONS call, always use render.
-  if ($restful_handler && $restful_handler->getMethod() == \RestfulInterface::OPTIONS) {
-    $method = 'render';
-  }
-
-  // Get the formatter for the current resource.
-  try {
-    $formatter_handler = \RestfulManager::outputFormat($restful_handler);
-    $output = $formatter_handler->{$method}($var);
-    // The content type header is modified after the massaging if there is
-    // an error code. Therefore we need to set the content type header after
-    // formatting the output.
-    drupal_add_http_header('Content-Type', $formatter_handler->getContentTypeHeader());
-  }
-  catch (\RestfulException $e) {
-    // Handle if the formatter does not exist.
-    drupal_add_http_header('Status', $e->getCode());
-    echo $e->getMessage();
+      $response->setContent($data);
+      $response->prepare($request);
+      $response->send();
+    }
+    catch (RestfulException $e) {
+      // If there is an exception during delivery, just JSON encode this.
+      $output = _restful_build_http_api_error($e, $response);
+      $response->setStatusCode($e->getCode());
+      $response->setContent(drupal_json_encode($output));
+      $response->send();
+      return;
+    }
     return;
   }
 
-  print $output;
-  \RestfulManager::pageFooter();
-}
+  try {
+    // Get the formatter for the current resource.
+    $resource = restful()
+      ->getResourceManager()
+      ->negotiate();
+    // Get a new formatter manager.
+    $formatter_manager = restful()
+      ->getFormatterManager();
+    $formatter_manager->setResource($resource);
+    $plugin_definition = $resource->getPluginDefinition();
+    if ($request->getMethod() == RequestInterface::METHOD_OPTIONS) {
+      // There is no guarantee that other formatters can process the
+      // auto-discovery output correctly.
+      $formatter_name = 'json';
+    }
+    else {
+      $formatter_name = isset($plugin_definition['formatter']) ? $plugin_definition['formatter'] : NULL;
+    }
+    $output = $formatter_manager->format($var, $formatter_name);
+    $response->setContent($output);
+  }
+  catch (RestfulException $e) {
+    // Handle if the formatter does not exist.
+    $output = _restful_build_http_api_error($e, $response);
+    $response->setStatusCode($e->getCode());
+    $response->setContent(drupal_json_encode($output));
+    $response->send();
+    return;
+  }
 
-/**
- * Returns data in JSON format using data preparation in the formatter plugin.
- *
- * @param $var
- *   (optional) If set, the variable will be converted to JSON and output.
- *
- * @see restful_menu_process_callback()
- */
-function restful_formatted_delivery($var = NULL) {
-  restful_delivery($var, 'format');
-}
-
-/**
- * Returns data in JSON format not using data preparation in the formatter
- * plugin.
- *
- * @param $var
- *   (optional) If set, the variable will be converted to JSON and output.
- *
- * @see restful_menu_process_callback()
- */
-function restful_unprepared_delivery($var = NULL) {
-  restful_delivery($var, 'render');
+  $response->prepare($request);
+  $response->send();
 }
 
 /**
@@ -694,40 +382,78 @@ function restful_unprepared_delivery($var = NULL) {
  * @param int $var
  *   The integer value of the menu status, passed by reference.
  */
-function _restful_get_json_from_menu_status(&$var) {
+function _restful_get_data_from_menu_status(&$var) {
   switch ($var) {
     case MENU_NOT_FOUND:
-      $class_name = 'RestfulNotFoundException';
+      $class_name = '\Drupal\restful\Exception\NotFoundException';
       $message = 'Invalid URL path.';
       break;
 
     case MENU_ACCESS_DENIED:
-      $class_name = 'RestfulForbiddenException';
+      $class_name = '\Drupal\restful\Exception\ForbiddenException';
       $message = 'Access denied.';
       break;
 
     case MENU_SITE_OFFLINE:
-      $class_name = 'RestfulServiceUnavailable';
+      $class_name = '\Drupal\restful\Exception\ServiceUnavailableException';
       $message = 'Site is offline.';
       break;
+
+    default:
+      $class_name = '\Drupal\restful\Exception\RestfulException';
+      $message = 'Unknown exception';
   }
 
-  $e = new $class_name($message);
+  $var = _restful_build_http_api_error(new $class_name($message));
+}
 
-  $var = array(
-    'type' => $e->getType(),
-    'title' => $e->getMessage(),
-    'status' => $e->getCode(),
-    'detail' => $e->getDescription(),
+/**
+ * Helper function to build the structured array for the error output.
+ *
+ * @param RestfulException $exception
+ *   The exception.
+ * @param ResponseInterface $response
+ *   The response object to alter.
+ *
+ * @return array
+ *   The structured output.
+ */
+function _restful_build_http_api_error(RestfulException $exception, ResponseInterface $response = NULL) {
+  $response = $response ?: restful()->getResponse();
+  // Adhere to the API Problem draft proposal.
+  $exception->setHeader('Content-Type', 'application/problem+json; charset=utf-8');
+  $result = array(
+    'type' => $exception->getType(),
+    'title' => $exception->getMessage(),
+    'status' => $exception->getCode(),
+    'detail' => $exception->getDescription(),
   );
 
-  if ($instance = $e->getInstance()) {
-    $var['instance'] = $instance;
+  if ($instance = $exception->getInstance()) {
+    $result['instance'] = $instance;
   }
 
-  if ($errors = $e->getFieldErrors()) {
-    $var['errors'] = $errors;
+  if ($errors = $exception->getFieldErrors()) {
+    $result['errors'] = $errors;
   }
+
+  $headers = $response->getHeaders();
+  foreach ($exception->getHeaders() as $header_name => $header_value) {
+    $headers->add(HttpHeader::create($header_name, $header_value));
+  }
+  drupal_page_is_cacheable(FALSE);
+
+  // Add a log entry with the error / warning.
+  if ($exception->getCode() < 500) {
+    // Even though it's an exception, it's in fact not a server error - it
+    // might be just access denied, or a bad request, so we just want to log
+    // it, but without marking it as an actual exception.
+    watchdog('restful', $exception->getMessage());
+  }
+  else {
+    watchdog_exception('restful', $exception);
+  }
+  return $result;
 }
 
 /**
@@ -768,14 +494,14 @@ function restful_deliver_menu_not_found($page_callback_result) {
  * Implements hook_cron().
  */
 function restful_cron() {
-  \RestfulRateLimitManager::deleteExpired();
+  \Drupal\restful\RateLimit\RateLimitManager::deleteExpired();
 }
 
 /**
  * Page callback: returns a session token for the currently active user.
  */
 function restful_csrf_session_token() {
-  return array('X-CSRF-Token' => drupal_get_token(\RestfulInterface::TOKEN_VALUE));
+  return array('X-CSRF-Token' => drupal_get_token(\Drupal\restful\Plugin\authentication\Authentication::TOKEN_VALUE));
 }
 
 /**
@@ -795,34 +521,56 @@ function restful_date_time_format_element_validate($element, &$form_state) {
 }
 
 /**
- * Determine if this is the first time we try to switch the user.
+ * Implements hook_restful_resource_alter().
  *
- * @return bool
- *   TRUE if this static function was already called.
+ * Decorate an existing resource with other services (e.g. rate limit and render
+ * cache).
  */
-function restful_is_user_switched() {
-  $restful_switch_user = &drupal_static(__FUNCTION__, FALSE);
-
-  if (!$restful_switch_user) {
-    $restful_switch_user = TRUE;
-    return FALSE;
+function restful_restful_resource_alter(ResourceInterface &$resource) {
+  // Disable any plugin in the disabled plugins variable.
+  $disabled_plugins = array(
+    // Disable the Files Upload resource based on the settings variable.
+    'files_upload:1.0' => (bool) !variable_get('restful_file_upload', FALSE),
+    // Disable the Users resources based on the settings variable.
+    'users:1.0' => (bool) !variable_get('restful_enable_users_resource', TRUE),
+    // Disable the Login Cookie resources based on the settings variable.
+    'login_cookie:1.0' => (bool) !variable_get('restful_enable_user_login_resource', TRUE),
+    // Disable the Discovery resource based on the settings variable.
+    'discovery:1.0' => (bool) !variable_get('restful_enable_discovery_resource', TRUE),
+  ) + variable_get('restful_disabled_plugins', array());
+  if (!empty($disabled_plugins[$resource->getResourceName()])) {
+    $resource->disable();
+  }
+  elseif (
+    isset($disabled_plugins[$resource->getResourceName()]) &&
+    $disabled_plugins[$resource->getResourceName()] === FALSE &&
+    !$resource->isEnabled()
+  ) {
+    $resource->enable();
   }
 
-  return TRUE;
-}
+  $plugin_definition = $resource->getPluginDefinition();
 
-/**
- * Get the query string from php Input.
- *
- * @return string
- *   The query string from request.
- */
-function _restful_get_query_string_from_php_input() {
-    $query_string = &drupal_static(__FUNCTION__);
-    if (!isset($query_string)) {
-      // In php 5.6 and below php://input can only be read once.
-      $query_string = file_get_contents('php://input');
-    }
+  // If render cache is enabled for the current resource, or there is no render
+  // cache information for the resource but render cache is enabled globally,
+  // then decorate the resource with cache capabilities.
+  if (
+    !empty($plugin_definition['renderCache']['render']) ||
+    (!isset($plugin_definition['renderCache']['render']) && variable_get('restful_render_cache', FALSE))
+  ) {
+    $resource = new CacheDecoratedResource($resource);
+  }
+  // Check for the rate limit configuration.
+  if (!empty($plugin_definition['rateLimit']) || variable_get('restful_global_rate_limit', 0)) {
+    $resource = new RateLimitDecoratedResource($resource);
+  }
 
-    return $query_string;
+  // Disable the discovery endpoint if it's disabled.
+  if (
+    $resource->getResourceMachineName() == 'discovery' &&
+    !variable_get('restful_enable_discovery_resource', TRUE) &&
+    $resource->isEnabled()
+  ) {
+    $resource->disable();
+  }
 }

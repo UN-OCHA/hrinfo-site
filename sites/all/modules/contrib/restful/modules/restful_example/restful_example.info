@@ -3,9 +3,12 @@ description = Example module for the RESTful module.
 core = 7.x
 dependencies[] = restful
 
+registry_autoload[] = PSR-0
+registry_autoload[] = PSR-4
+
 ; Information added by Drupal.org packaging script on 2017-02-15
-version = "7.x-1.8"
+version = "7.x-2.16"
 core = "7.x"
 project = "restful"
-datestamp = "1487139788"
+datestamp = "1487139488"
 

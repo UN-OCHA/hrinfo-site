@@ -6,18 +6,9 @@
  */
 
 /**
- * Implements hook_ctools_plugin_directory().
- */
-function restful_test_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'restful') {
-    return 'plugins/' . $plugin;
-  }
-}
-
-/**
- * Flag a field to not be accessible.
+ * Flag a node to not be accessible.
  *
- * @param $nid
+ * @param int $nid
  *   The node ID to deny access.
  */
 function restful_test_deny_access_node($nid) {
@@ -36,15 +27,15 @@ function restful_test_clear_access_node() {
  */
 function restful_test_node_access($node, $op, $account) {
   if (!$nid = variable_get('restful_test_deny_access_node')) {
-    return;
+    return NULL;
   }
 
   if ($op != 'view') {
-    return;
+    return NULL;
   }
 
   if ($node->nid != $nid) {
-    return;
+    return NULL;
   }
 
   // Deny access.
@@ -55,7 +46,7 @@ function restful_test_node_access($node, $op, $account) {
 /**
  * Flag a field to not be accessible.
  *
- * @param $field_name
+ * @param string $field_name
  *   The field name. Defaults to "body".
  */
 function restful_test_deny_access_field($field_name = 'body') {
@@ -74,12 +65,13 @@ function restful_test_clear_access_field() {
  */
 function restful_test_field_access($op, $field, $entity_type, $entity, $account) {
   if (!$field_name = variable_get('restful_test_deny_access_field')) {
-    return;
+    return NULL;
   }
 
   if ($field_name == $field['field_name']) {
     return FALSE;
   }
+  return NULL;
 }
 
 /**
@@ -425,7 +417,7 @@ function restful_test_entity_info() {
     'restful_test_translatable_entity' => array(
       'label' => t('Translatable Test Entity'),
       'plural label' => t('Translatable Test Entities'),
-      'description' => t('An entity type used by the Restful tests.'),
+      'description' => t('An entity type used by the RESTful tests.'),
       'entity class' => 'Entity',
       'controller class' => 'EntityAPIController',
       'base table' => 'restful_test_translatable_entity',
@@ -434,14 +426,15 @@ function restful_test_entity_info() {
         'id' => 'pid',
         'bundle' => 'name',
         'label' => 'label',
+        'uuid' => 'uuid',
       ),
       // Make use the class' label() and uri() implementation by default.
       'label callback' => 'entity_class_label',
       'uri callback' => 'entity_class_uri',
       'bundles' => array(
         'restful_test_translatable_entity' => array(
-          'label' => 'Translatable Test Entity'
-        )
+          'label' => 'Translatable Test Entity',
+        ),
       ),
       'bundle keys' => array(
         'bundle' => 'name',
@@ -450,6 +443,57 @@ function restful_test_entity_info() {
       'translation' => array(
         'locale' => TRUE,
       ),
+      'uuid' => TRUE,
     ),
   );
+}
+
+/**
+ * Implements hook_restful_resource_alter().
+ *
+ * Decorate an existing resource with other services (e.g. rate limit and render
+ * cache).
+ */
+function restful_test_restful_resource_alter(\Drupal\restful\Plugin\resource\ResourceInterface &$resource) {
+  // Disable the Files Upload resource based on the settings variable.
+  if ($resource->getResourceMachineName() == 'files_upload_test') {
+    variable_get('restful_file_upload', FALSE) ? $resource->enable() : $resource->disable();
+  }
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function restful_test_entity_info_alter(&$entity_info) {
+  $entity_info['entity_test']['uuid'] = TRUE;
+  $entity_info['entity_test']['entity keys']['uuid'] = 'uuid';
+}
+
+/**
+ * Implements hook_entity_property_info_alter().
+ */
+function restful_test_entity_property_info_alter(&$info) {
+  $entity_types = array('entity_test', 'restful_test_translatable_entity');
+  foreach ($entity_types as $entity_type) {
+    $entity_info = entity_get_info($entity_type);
+    if (isset($entity_info['uuid']) && $entity_info['uuid'] == TRUE
+      && !empty($entity_info['entity keys']['uuid'])
+      && empty($info[$entity_type]['properties'][$entity_info['entity keys']['uuid']])) {
+      $info[$entity_type]['properties'][$entity_info['entity keys']['uuid']] = array(
+        'label' => t('UUID'),
+        'type' => 'text',
+        'description' => t('The universally unique ID.'),
+        'schema field' => $entity_info['entity keys']['uuid'],
+      );
+      if (!empty($entity_info['entity keys']['revision uuid'])
+        && empty($info[$entity_type]['properties'][$entity_info['entity keys']['revision uuid']])) {
+        $info[$entity_type]['properties'][$entity_info['entity keys']['revision uuid']] = array(
+          'label' => t('Revision UUID'),
+          'type' => 'text',
+          'description' => t("The revision's universally unique ID."),
+          'schema field' => $entity_info['entity keys']['revision uuid'],
+        );
+      }
+    }
+  }
 }
