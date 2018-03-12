@@ -29,10 +29,10 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
 class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInterface {
 
   /**
-   * Overrides EntityNode::publicFieldsInfo().
+   * Overrides ResourceEntity::publicFields().
    */
-  public function publicFieldsInfo() {
-    $public_fields = parent::publicFieldsInfo();
+  public function publicFields() {
+    $public_fields = parent::publicFields();
 
     $public_fields['@id'] = array(
       'callback' => array($this, 'getDisasterUrl'),
