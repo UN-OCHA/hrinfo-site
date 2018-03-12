@@ -34,9 +34,9 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
   public function publicFields() {
     $public_fields = parent::publicFields();
 
-    $public_fields['@id'] = array(
+    /*$public_fields['@id'] = array(
       'callback' => array($this, 'getDisasterUrl'),
-    );
+    );*/
 
     $public_fields['glide'] = array(
       'property' => 'field_glide_number',
@@ -60,7 +60,7 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
       'sub_property' => 'value',
     );
 
-    $public_fields['body'] = array(
+    /*$public_fields['body'] = array(
       'property' => 'body',
       'sub_property' => 'value',
       'process_callbacks' => array(array($this, 'getBodyRaw')),
@@ -72,7 +72,7 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
         'hr_operation' => 'operations',
       ),
       'process_callbacks' => array(array($this, 'getEntity')),
-    );
+    );*/
 
     $public_fields['created'] = array(
       'property' => 'created',
