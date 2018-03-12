@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\restful_custom\Plugin\resource;
+namespace Drupal\hr_disasters\Plugin\resource;
 use Drupal\restful\Plugin\resource\ResourceEntity;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
