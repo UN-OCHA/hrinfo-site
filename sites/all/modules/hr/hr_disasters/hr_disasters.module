@@ -221,12 +221,3 @@ function _hr_disasters_get_operation_by_name($name) {
     return NULL;
   }
 }
-
-/**
- * Implements hook_ctools_plugin_directory().
- */
-function hr_disasters_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'restful') {
-    return 'plugins/' . $plugin;
-  }
-}
