@@ -34,9 +34,9 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
   public function publicFields() {
     $public_fields = parent::publicFields();
 
-    /*$public_fields['@id'] = array(
+    $public_fields['@id'] = array(
       'callback' => array($this, 'getDisasterUrl'),
-    );*/
+    );
 
     $public_fields['glide'] = array(
       'property' => 'field_glide_number',
@@ -66,13 +66,13 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
       'process_callbacks' => array(array($this, 'getBodyRaw')),
     );
 
-    /*$public_fields['operation'] = array(
+    $public_fields['operation'] = array(
       'property' => 'og_group_ref',
       'resource' => array(
         'hr_operation' => 'operations',
       ),
       'process_callbacks' => array(array($this, 'getEntity')),
-    );*/
+    );
 
     $public_fields['created'] = array(
       'property' => 'created',
@@ -85,7 +85,7 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
     return $public_fields;
   }
 
-  protected function getEntity($wrapper) {
+  public function getEntity($wrapper) {
     foreach ($wrapper as &$item) {
       $array_item = (array)$item;
       $properties = array_keys($array_item);
@@ -103,7 +103,7 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
     return strip_tags($value);
   }
 
-  protected function getDisasterUrl($wrapper) {
+  public function getDisasterUrl($wrapper) {
     $rid = $wrapper->field_reliefweb_id->value();
     if (!$rid) {
       return $this->versionedUrl($wrapper->getIdentifier());
