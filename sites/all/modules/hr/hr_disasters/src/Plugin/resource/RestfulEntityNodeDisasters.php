@@ -88,7 +88,8 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
     return $public_fields;
   }
 
-  public function getEntity($wrapper) {
+  public function getEntity(DataInterpreterInterface $di) {
+    $wrapper = $di->getWrapper();
     foreach ($wrapper as &$item) {
       $array_item = (array)$item;
       $properties = array_keys($array_item);
