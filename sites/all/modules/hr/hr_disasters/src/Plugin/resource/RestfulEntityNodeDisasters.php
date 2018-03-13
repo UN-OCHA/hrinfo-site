@@ -99,7 +99,7 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
     return $wrapper;
   }
 
-  protected function getBodyRaw($value) {
+  public function getBodyRaw($value) {
     return strip_tags($value);
   }
 
