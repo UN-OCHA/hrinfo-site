@@ -60,13 +60,13 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
       'sub_property' => 'value',
     );
 
-    /*$public_fields['body'] = array(
+    $public_fields['body'] = array(
       'property' => 'body',
       'sub_property' => 'value',
       'process_callbacks' => array(array($this, 'getBodyRaw')),
     );
 
-    $public_fields['operation'] = array(
+    /*$public_fields['operation'] = array(
       'property' => 'og_group_ref',
       'resource' => array(
         'hr_operation' => 'operations',
