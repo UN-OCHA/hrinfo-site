@@ -44,3 +44,4 @@ features[field_validation_rule][] = hr_locations_pcode_unique
 features[taxonomy][] = hr_location
 features[variable][] = entity_translation_settings_taxonomy_term__hr_location
 features[views_view][] = hr_locations
+registry_autoload[] = PSR-4

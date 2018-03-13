@@ -66,13 +66,13 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
       'process_callbacks' => array(array($this, 'getBodyRaw')),
     );
 
-    /*$public_fields['operation'] = array(
+    $public_fields['operation'] = array(
       'property' => 'og_group_ref',
       'resource' => array(
         'hr_operation' => 'operations',
       ),
       'process_callbacks' => array(array($this, 'getEntity')),
-    );*/
+    );
 
     $public_fields['created'] = array(
       'property' => 'created',
