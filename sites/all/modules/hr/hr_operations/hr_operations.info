@@ -94,3 +94,4 @@ features[variable][] = panelizer_node:hr_operation_allowed_types_default
 features[variable][] = panelizer_node:hr_operation_default
 features[variable][] = pathauto_node_hr_operation_pattern
 features[views_view][] = hr_operations
+registry_autoload[] = PSR-4
