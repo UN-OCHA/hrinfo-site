@@ -1,6 +1,7 @@
 <?php
 
 namespace Drupal\hr_disasters\Plugin\resource;
+use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 use Drupal\restful\Plugin\resource\ResourceEntity;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
@@ -105,9 +106,10 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
     return strip_tags($value);
   }
 
-  public function getDisasterUrl($wrapper) {
-    if ($wrapper->field_reliefweb_id) {
-      $rid = $wrapper->field_reliefweb_id->value();
+  public function getDisasterUrl(DataInterpreterInterface $di) {
+    $wrapper = $di->getWrapper();
+    $rid = $wrapper->field_reliefweb_id->value();
+    if (!$rid) {
       return $this->versionedUrl($wrapper->getIdentifier());
     }
     else {
