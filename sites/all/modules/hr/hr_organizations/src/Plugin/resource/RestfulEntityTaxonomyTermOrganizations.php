@@ -50,8 +50,8 @@ class RestfulEntityTaxonomyTermOrganizations extends ResourceEntity implements R
       'property' => 'field_organization_type',
       'resource' => array(
         'name' => 'organization_types',
-        'majorVersion' => '1',
-        'minorVersion' => '0',
+        'majorVersion' => 1,
+        'minorVersion' => 0,
       ),
     );
 

@@ -76,3 +76,4 @@ features[variable][] = panelizer_node:hr_space_allowed_types
 features[variable][] = panelizer_node:hr_space_allowed_types_default
 features[variable][] = panelizer_node:hr_space_default
 features[views_view][] = hr_spaces
+registry_autoload[] = PSR-4
