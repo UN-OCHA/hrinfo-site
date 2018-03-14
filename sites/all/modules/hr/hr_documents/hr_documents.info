@@ -175,3 +175,4 @@ features[variable][] = publishcontent_hr_document
 features[views_view][] = hr_document_types
 features[views_view][] = hr_documents
 features[views_view][] = hr_documents_panes
+registry_autoload[] = PSR-4
