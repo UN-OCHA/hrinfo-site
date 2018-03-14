@@ -145,3 +145,4 @@ features[variable][] = publishcontent_hr_infographic
 features[views_view][] = hr_infographics
 features[views_view][] = hr_infographics_panes
 features[views_view][] = hr_infographics_types
+registry_autoload[] = PSR-4

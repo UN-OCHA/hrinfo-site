@@ -18,3 +18,4 @@ features[field_instance][] = taxonomy_term-hr_theme-field_acronym
 features[field_instance][] = taxonomy_term-hr_theme-name_field
 features[taxonomy][] = hr_theme
 features[views_view][] = hr_themes
+registry_autoload[] = PSR-4

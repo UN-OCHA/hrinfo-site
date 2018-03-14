@@ -42,3 +42,4 @@ features[taxonomy][] = hr_organization_type
 features[variable][] = entity_translation_settings_taxonomy_term__hr_organization
 features[variable][] = entity_translation_settings_taxonomy_term__hr_organization_type
 features[views_view][] = hr_organizations
+registry_autoload[] = PSR-4
