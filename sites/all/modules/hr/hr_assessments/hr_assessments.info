@@ -239,3 +239,4 @@ features[variable][] = publishcontent_hr_assessment
 features[views_view][] = hr_assessments
 features[views_view][] = hr_assessments_panes
 features[views_view][] = hr_geographic_levels
+registry_autoload[] = PSR-4
