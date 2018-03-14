@@ -88,3 +88,4 @@ features[variable][] = panelizer_node:hr_sector_allowed_types_default
 features[variable][] = panelizer_node:hr_sector_default
 features[variable][] = pathauto_node_hr_sector_pattern
 features[views_view][] = hr_sectors
+registry_autoload[] = PSR-4
