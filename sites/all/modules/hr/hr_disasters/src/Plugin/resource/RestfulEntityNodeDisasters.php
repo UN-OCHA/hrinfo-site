@@ -69,7 +69,7 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
 
     $public_fields['operation'] = array(
       'property' => 'og_group_ref',
-      'class' => '\Drupal\hr_disasters\Plugin\resource\fields\ResourceFieldEntityOperation'
+      'class' => '\Drupal\hr_disasters\Plugin\resource\fields\ResourceFieldEntityOperation',
       'resource' => array(
         'name' => 'operations',
         'majorVersion' => 1,
