@@ -141,3 +141,4 @@ features[views_view][] = hr_event_categories
 features[views_view][] = hr_events
 features[views_view][] = hr_events_calendar
 features[views_view][] = hr_events_panes
+registry_autoload[] = PSR-4

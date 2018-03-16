@@ -1,24 +1,24 @@
 <?php
 
-namespace Drupal\hr_infographics\Plugin\resource;
+namespace Drupal\hr_documents\Plugin\resource;
 use Drupal\restful\Plugin\resource\ResourceEntity;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityTaxonoyTermInfographicTypes
- * @package Drupal\hr_infographics\Plugin\resource
+ * Class RestfulEntityTaxonoyTermDocumentTypes
+ * @package Drupal\hr_documents\Plugin\resource
  *
  * @Resource(
- *   name = "infographic_types:1.0",
- *   resource = "infographic_types",
- *   label = "Infographic Types",
- *   description = "Infographic Types used for Humanitarianresponse infographics",
+ *   name = "document_types:1.0",
+ *   resource = "document_types",
+ *   label = "Document Types",
+ *   description = "Document Types used for Humanitarianresponse documents",
  *   authenticationTypes = TRUE,
  *   authenticationOptional = TRUE,
  *   dataProvider = {
  *     "entityType": "taxonomy_term",
  *     "bundles": {
- *       "hr_infographic_type"
+ *       "hr_document_type"
  *     },
  *   },
  *   majorVersion = 1,
@@ -26,6 +26,6 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  * )
  */
 
-class RestfulEntityTaxonomyTermInfographicTypes extends ResourceEntity implements ResourceInterface {
+class RestfulEntityTaxonomyTermDocumentTypes extends ResourceEntity implements ResourceInterface {
 
 }

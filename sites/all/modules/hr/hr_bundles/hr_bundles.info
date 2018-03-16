@@ -148,3 +148,4 @@ features[variable][] = panelizer_node:hr_bundle_allowed_types_default
 features[variable][] = panelizer_node:hr_bundle_default
 features[variable][] = pathauto_node_hr_bundle_pattern
 features[views_view][] = hr_bundles
+registry_autoload[] = PSR-4

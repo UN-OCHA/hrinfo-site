@@ -73,3 +73,4 @@ features[variable][] = panelizer_node:hr_office_default
 features[variable][] = pathauto_node_hr_office_pattern
 features[views_view][] = hr_offices
 features[views_view][] = hr_offices_panes
+registry_autoload[] = PSR-4

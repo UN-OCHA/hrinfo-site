@@ -52,7 +52,7 @@ class RestfulEntityNodeSpaces extends ResourceEntity implements ResourceInterfac
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      'process_callbacks' => array(array($this, 'getEntity')),
+      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['created'] = array(
