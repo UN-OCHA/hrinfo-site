@@ -36,42 +36,42 @@ class RestfulEntityNodeAssessments extends ResourceEntity implements ResourceInt
 
     $public_fields['bundles'] = array(
       'property' => 'field_bundles',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'bundles',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['organizations'] = array(
       'property' => 'field_organizations',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'organizations',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['participating_organizations'] = array(
       'property' => 'field_organizations2',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'organizations',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['locations'] = array(
       'property' => 'field_locations',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'locations',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['other_location'] = array(
@@ -160,12 +160,12 @@ class RestfulEntityNodeAssessments extends ResourceEntity implements ResourceInt
 
     $public_fields['operation'] = array(
       'property' => 'og_group_ref',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'operations',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['created'] = array(
@@ -181,20 +181,6 @@ class RestfulEntityNodeAssessments extends ResourceEntity implements ResourceInt
     );
 
     return $public_fields;
-  }
-
-  protected function getEntity($wrapper) {
-    foreach ($wrapper as &$item) {
-      $array_item = (array)$item;
-      $properties = array_keys($array_item);
-      foreach ($properties as $property) {
-        if (!in_array($property, array('id', 'label', 'self'))) {
-          unset($array_item[$property]);
-        }
-      }
-      $item = (object)$array_item;
-    }
-    return $wrapper;
   }
 
   protected function formatDate($value) {

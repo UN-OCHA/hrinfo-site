@@ -55,12 +55,15 @@ class RestfulEntityNodeOperations extends ResourceEntity implements ResourceInte
       'property' => 'field_hid_access',
     );
 
-    /*$public_fields['country'] = array(
+    $public_fields['country'] = array(
       'property' => 'field_country',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
-        'hr_location' => 'locations',
+        'name' => 'locations',
+        'majorVersion' => 1,
+        'minorVersion' => 0,
       ),
-    );*/
+    );
 
     $public_fields['launch_date'] = array(
       'property' => 'field_launch_date',

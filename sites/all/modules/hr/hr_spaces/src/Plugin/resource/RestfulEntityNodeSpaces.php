@@ -47,12 +47,12 @@ class RestfulEntityNodeSpaces extends ResourceEntity implements ResourceInterfac
 
     $public_fields['organizations'] = array(
       'property' => 'field_organizations',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'organizations',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['created'] = array(
@@ -68,20 +68,6 @@ class RestfulEntityNodeSpaces extends ResourceEntity implements ResourceInterfac
     );
 
     return $public_fields;
-  }
-
-  protected function getEntity($wrapper) {
-    foreach ($wrapper as &$item) {
-      $array_item = (array)$item;
-      $properties = array_keys($array_item);
-      foreach ($properties as $property) {
-        if (!in_array($property, array('id', 'label', 'self'))) {
-          unset($array_item[$property]);
-        }
-      }
-      $item = (object)$array_item;
-    }
-    return $wrapper;
   }
 
 }

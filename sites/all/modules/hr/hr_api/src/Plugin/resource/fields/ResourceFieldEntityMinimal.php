@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\restful\Plugin\resource\fields\ResourceFieldEntityOperation.
+ * Contains \Drupal\restful\Plugin\resource\fields\ResourceFieldEntityMinimal.
  */
 
-namespace Drupal\hr_disasters\Plugin\resource\fields;
+namespace Drupal\hr_api\Plugin\resource\fields;
 
 use Drupal\restful\Plugin\resource\Field\ResourceFieldEntity;
 use Drupal\restful\Plugin\resource\Field\ResourceFieldEntityInterface;
@@ -21,7 +21,7 @@ use Drupal\restful\Plugin\resource\Field\PublicFieldInfo\PublicFieldInfoEntityIn
 use Drupal\restful\Plugin\resource\Field\PublicFieldInfo\PublicFieldInfoInterface;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
-class ResourceFieldEntityOperation extends ResourceFieldEntity implements ResourceFieldEntityInterface {
+class ResourceFieldEntityMinimal extends ResourceFieldEntity implements ResourceFieldEntityInterface {
 
   protected function singleValue(\EntityMetadataWrapper $property_wrapper, \EntityDrupalWrapper $wrapper, $account) {
     if ($resource = $this->getResource()) {

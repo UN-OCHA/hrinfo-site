@@ -45,42 +45,42 @@ class RestfulEntityNodeBundles extends ResourceEntity implements ResourceInterfa
 
     $public_fields['global_cluster'] = array(
       'property' => 'field_sector',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'global_clusters',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['lead_agencies'] = array(
       'property' => 'field_organizations',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'organizations',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['partners'] = array(
       'property' => 'field_partners',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'organizations',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['activation_document'] = array(
       'property' => 'field_activation_document',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'documents',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['cluster_coordinators'] = array(
@@ -94,12 +94,12 @@ class RestfulEntityNodeBundles extends ResourceEntity implements ResourceInterfa
 
     $public_fields['operation'] = array(
       'property' => 'og_group_ref',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'operations',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['created'] = array(
@@ -111,31 +111,6 @@ class RestfulEntityNodeBundles extends ResourceEntity implements ResourceInterfa
     );
 
     return $public_fields;
-  }
-
-  protected function getEntity($wrapper) {
-    $single = FALSE;
-    foreach ($wrapper as $id => &$item) {
-      if (is_string($item) || $single == TRUE) {
-        if ($single == FALSE) {
-          $single = TRUE;
-        }
-        if (!in_array($id, array('id', 'label', 'self', 'country'))) {
-          unset($wrapper[$id]);
-        }
-      }
-      else {
-        $array_item = (array)$item;
-        $properties = array_keys($array_item);
-        foreach ($properties as $property) {
-          if (!in_array($property, array('id', 'label', 'self', 'country'))) {
-            unset($array_item[$property]);
-          }
-        }
-        $item = (object)$array_item;
-      }
-    }
-    return $wrapper;
   }
 
   protected function getClusterCoordinators($wrapper) {

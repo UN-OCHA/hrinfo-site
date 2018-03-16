@@ -52,22 +52,22 @@ class RestfulEntityNodeEvents extends ResourceEntity implements ResourceInterfac
 
     $public_fields['meeting_minutes'] = array(
       'property' => 'field_event_meeting_minutes',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'documents',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['agenda'] = array(
       'property' => 'field_event_agenda',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'documents',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['body-html'] = array(
@@ -83,52 +83,52 @@ class RestfulEntityNodeEvents extends ResourceEntity implements ResourceInterfac
 
     $public_fields['global_clusters'] = array(
       'property' => 'field_sectors',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'global_clusters',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['bundles'] = array(
       'property' => 'field_bundles',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'bundles',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['organizations'] = array(
       'property' => 'field_organizations',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'organizations',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['location'] = array(
       'property' => 'field_location',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'locations',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['offices'] = array(
       'property' => 'field_coordination_hubs',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'offices',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['themes'] = array(
@@ -147,22 +147,22 @@ class RestfulEntityNodeEvents extends ResourceEntity implements ResourceInterfac
 
     $public_fields['operation'] = array(
       'property' => 'og_group_ref',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'operations',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['space'] = array(
       'property' => 'og_group_ref',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'spaces',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
-      //'process_callbacks' => array(array($this, 'getEntity')),
     );
 
     $public_fields['created'] = array(
@@ -178,31 +178,6 @@ class RestfulEntityNodeEvents extends ResourceEntity implements ResourceInterfac
     );
 
     return $public_fields;
-  }
-
-  protected function getEntity($wrapper) {
-    $single = FALSE;
-    foreach ($wrapper as $id => &$item) {
-      if (is_string($item) || $single == TRUE) {
-        if ($single == FALSE) {
-          $single = TRUE;
-        }
-        if (!in_array($id, array('id', 'label', 'self'))) {
-          unset($wrapper[$id]);
-        }
-      }
-      else {
-        $array_item = (array)$item;
-        $properties = array_keys($array_item);
-        foreach ($properties as $property) {
-          if (!in_array($property, array('id', 'label', 'self'))) {
-            unset($array_item[$property]);
-          }
-        }
-        $item = (object)$array_item;
-      }
-    }
-    return $wrapper;
   }
 
   protected function getDisasters($values) {
