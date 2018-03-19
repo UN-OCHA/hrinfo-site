@@ -78,6 +78,7 @@ class RestfulEntityTaxonomyTermLocations extends ResourceEntity implements Resou
 
     $public_fields['parent'] = array(
       'property' => 'parent',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'locations',
         'majorVersion' => 1,
