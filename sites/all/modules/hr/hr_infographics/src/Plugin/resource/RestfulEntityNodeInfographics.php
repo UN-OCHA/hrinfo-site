@@ -9,10 +9,10 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  * @package Drupal\hr_infographics\Plugin\resource
  *
  * @Resource(
- *   name = "infographic_types:1.0",
- *   resource = "infographic_types",
- *   label = "Infographic Types",
- *   description = "Infographic Types used for Humanitarianresponse infographics",
+ *   name = "infographics:1.0",
+ *   resource = "infographics",
+ *   label = "Infographics",
+ *   description = "Infographics used for Humanitarianresponse",
  *   authenticationTypes = TRUE,
  *   authenticationOptional = TRUE,
  *   dataProvider = {
@@ -176,7 +176,7 @@ class RestfulEntityNodeInfographics extends ResourceEntity implements ResourceIn
     $return = array();
     if (!empty($values)) {
       foreach ($values as $value) {
-        $tmp = new stdClass();
+        $tmp = new \stdClass();
         $tmp->glide = $value->field_glide_number[LANGUAGE_NONE][0]['value'];
         $tmp->label = $value->title;
         if (!empty($value->field_reliefweb_id)) {
@@ -196,8 +196,8 @@ class RestfulEntityNodeInfographics extends ResourceEntity implements ResourceIn
     $return = array();
     if (!empty($values)) {
       foreach ($values as $value) {
-        $tmp = new stdClass();
-        $tmp->file = new stdClass();
+        $tmp = new \stdClass();
+        $tmp->file = new \stdClass();
         $field_file = $value->field_file[LANGUAGE_NONE][0];
         $tmp->file->fid = $field_file['fid'];
         $tmp->file->filename = $field_file['filename'];
@@ -216,7 +216,7 @@ class RestfulEntityNodeInfographics extends ResourceEntity implements ResourceIn
     $return = array();
     if (!empty($values)) {
       foreach ($values as $value) {
-        $tmp = new stdClass();
+        $tmp = new \stdClass();
         $tmp->url = $value['url'];
         $tmp->title = $value['title'];
         $return[] = $tmp;
