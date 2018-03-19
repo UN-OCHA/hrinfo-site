@@ -183,7 +183,7 @@ class RestfulEntityNodeAssessments extends ResourceEntity implements ResourceInt
     return $public_fields;
   }
 
-  protected function formatDate($value) {
+  public function formatDate($value) {
     if (isset($value['value'])) {
       $value['from'] = $value['value'];
       unset($value['value']);
@@ -202,7 +202,7 @@ class RestfulEntityNodeAssessments extends ResourceEntity implements ResourceInt
     return $value;
   }
 
-  protected function getDisasters($values) {
+  public function getDisasters($values) {
     $return = array();
     if (!empty($values)) {
       foreach ($values as $value) {
@@ -218,7 +218,7 @@ class RestfulEntityNodeAssessments extends ResourceEntity implements ResourceInt
     return $return;
   }
 
-  protected function formatFieldCollection($value) {
+  public function formatFieldCollection($value) {
     $tmp = new stdClass();
     if (!empty($value->field_asst_accessibility)) {
       $tmp->accessibility = $value->field_asst_accessibility[LANGUAGE_NONE][0]['value'];

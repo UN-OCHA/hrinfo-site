@@ -164,11 +164,11 @@ class RestfulEntityNodeDocuments extends ResourceEntity implements ResourceInter
     return $public_fields;
   }
 
-  protected function formatTimestamp($value) {
+  public function formatTimestamp($value) {
     return strftime('%F', $value);
   }
 
-  protected function getDisasters($values) {
+  public function getDisasters($values) {
     $return = array();
     if (!empty($values)) {
       foreach ($values as $value) {
@@ -184,11 +184,11 @@ class RestfulEntityNodeDocuments extends ResourceEntity implements ResourceInter
     return $return;
   }
 
-  protected function getBodyRaw($value) {
+  public function getBodyRaw($value) {
     return strip_tags($value);
   }
 
-  protected function getFiles($values) {
+  public function getFiles($values) {
     $return = array();
     if (!empty($values)) {
       foreach ($values as $value) {

@@ -113,7 +113,7 @@ class RestfulEntityNodeBundles extends ResourceEntity implements ResourceInterfa
     return $public_fields;
   }
 
-  protected function getClusterCoordinators($wrapper) {
+  public function getClusterCoordinators($wrapper) {
     $return  = array();
     if (!empty($wrapper)) {
       foreach ($wrapper as $item) {

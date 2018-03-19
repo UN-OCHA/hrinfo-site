@@ -180,7 +180,7 @@ class RestfulEntityNodeEvents extends ResourceEntity implements ResourceInterfac
     return $public_fields;
   }
 
-  protected function getDisasters($values) {
+  public function getDisasters($values) {
     $return = array();
     if (!empty($values)) {
       foreach ($values as $value) {
@@ -196,11 +196,11 @@ class RestfulEntityNodeEvents extends ResourceEntity implements ResourceInterfac
     return $return;
   }
 
-  protected function getBodyRaw($value) {
+  public function getBodyRaw($value) {
     return strip_tags($value);
   }
 
-  protected function formatDate($values) {
+  public function formatDate($values) {
     foreach ($values as &$value) {
       if (isset($value['date_type'])) {
         unset($value['date_type']);
@@ -209,7 +209,7 @@ class RestfulEntityNodeEvents extends ResourceEntity implements ResourceInterfac
     return $values;
   }
 
-  protected function formatAddress($value) {
+  public function formatAddress($value) {
     unset($value['organisation_name']);
     unset($value['name_line']);
     unset($value['first_name']);

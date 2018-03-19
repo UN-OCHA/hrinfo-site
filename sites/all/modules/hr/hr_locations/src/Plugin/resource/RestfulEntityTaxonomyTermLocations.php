@@ -4,6 +4,7 @@ namespace Drupal\hr_locations\Plugin\resource;
 use Drupal\restful\Plugin\resource\ResourceEntity;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
+use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterEMW;
 
 /**
  * Class RestfulEntityTaxonomyTermLocations
@@ -88,10 +89,12 @@ class RestfulEntityTaxonomyTermLocations extends ResourceEntity implements Resou
   }
 
   public function getParents(DataInterpreterInterface $di) {
+    global $user;
     $wrapper = $di->getWrapper();
     $labels = array();
     foreach ($wrapper->parents_all->getIterator() as $delta => $term_wrapper) {
-      $labels[] = $this->getEntitySelf($term_wrapper);
+      $tdi = new DataInterpreterEMW($user, $term_wrapper);
+      $labels[] = $this->getEntitySelf($tdi);
     }
     return $labels;
   }
