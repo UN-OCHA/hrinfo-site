@@ -117,7 +117,7 @@ class RestfulEntityNodeBundles extends ResourceEntity implements ResourceInterfa
     $return  = array();
     if (!empty($wrapper)) {
       foreach ($wrapper as $item) {
-        $tmp = new stdClass();
+        $tmp = new \stdClass();
         if (!empty($item->field_cluster_coordinator)) {
           $account = user_load($item->field_cluster_coordinator[LANGUAGE_NONE][0]['target_id']);
           $tmp->name = $account->realname;
