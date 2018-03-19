@@ -206,7 +206,7 @@ class RestfulEntityNodeAssessments extends ResourceEntity implements ResourceInt
     $return = array();
     if (!empty($values)) {
       foreach ($values as $value) {
-        $tmp = new stdClass();
+        $tmp = new \stdClass();
         $tmp->glide = $value->field_glide_number[LANGUAGE_NONE][0]['value'];
         $tmp->label = $value->title;
         if (!empty($value->field_reliefweb_id)) {
@@ -219,12 +219,12 @@ class RestfulEntityNodeAssessments extends ResourceEntity implements ResourceInt
   }
 
   public function formatFieldCollection($value) {
-    $tmp = new stdClass();
+    $tmp = new \stdClass();
     if (!empty($value->field_asst_accessibility)) {
       $tmp->accessibility = $value->field_asst_accessibility[LANGUAGE_NONE][0]['value'];
     }
     if (!empty($value->field_asst_file)) {
-      $tmp->file = new stdClass();
+      $tmp->file = new \stdClass();
       $field_file = $value->field_asst_file[LANGUAGE_NONE][0];
       $tmp->file->fid = $field_file['fid'];
       $tmp->file->filename = $field_file['filename'];

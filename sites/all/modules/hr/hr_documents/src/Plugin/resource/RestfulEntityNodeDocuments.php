@@ -172,7 +172,7 @@ class RestfulEntityNodeDocuments extends ResourceEntity implements ResourceInter
     $return = array();
     if (!empty($values)) {
       foreach ($values as $value) {
-        $tmp = new stdClass();
+        $tmp = new \stdClass();
         $tmp->glide = $value->field_glide_number[LANGUAGE_NONE][0]['value'];
         $tmp->label = $value->title;
         if (!empty($value->field_reliefweb_id)) {
@@ -192,8 +192,8 @@ class RestfulEntityNodeDocuments extends ResourceEntity implements ResourceInter
     $return = array();
     if (!empty($values)) {
       foreach ($values as $value) {
-        $tmp = new stdClass();
-        $tmp->file = new stdClass();
+        $tmp = new \stdClass();
+        $tmp->file = new \stdClass();
         $field_file = $value->field_file[LANGUAGE_NONE][0];
         $tmp->file->fid = $field_file['fid'];
         $tmp->file->filename = $field_file['filename'];
