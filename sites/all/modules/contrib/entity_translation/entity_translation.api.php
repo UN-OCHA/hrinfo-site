@@ -164,3 +164,17 @@ function hook_entity_translation_delete($entity_type, $entity, $langcode) {
  */
 function hook_entity_translation_delete_revision($entity_type, $entity, $langcode) {
 }
+
+/**
+ * Allows to sets the right values in the form state when adding a translation.
+ */
+function hook_entity_translation_source_field_state_alter(&$field_state) {
+  if (isset($field_state['entity'])) {
+    module_load_include('inc', 'entity', 'includes/entity.ui');
+    foreach ($field_state['entity'] as $delta => $entity) {
+      if ($entity instanceof FieldCollectionItemEntity) {
+        $field_state['entity'][$delta] = entity_ui_clone_entity('field_collection_item', $entity);
+      }
+    }
+  }
+}

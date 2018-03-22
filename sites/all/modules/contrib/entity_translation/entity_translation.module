@@ -244,6 +244,13 @@ function entity_translation_menu() {
     'file' => 'entity_translation.admin.inc',
   );
 
+  $items['entity_translation/taxonomy_term/autocomplete'] = array(
+    'title' => 'Entity translation autocomplete',
+    'page callback' => 'entity_translation_taxonomy_term_autocomplete',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -1253,11 +1260,14 @@ function entity_translation_field_attach_form($entity_type, $entity, &$form, &$f
       list(, , $bundle) = entity_extract_ids($entity_type, $entity);
       foreach (field_info_instances($entity_type, $bundle) as $instance) {
         $field_name = $instance['field_name'];
-        $field = field_info_field($field_name);
-        // If access is not set or is granted we check whether the user has
-        // access to shared fields.
-        $form[$field_name]['#access'] = (!isset($form[$field_name]['#access']) || $form[$field_name]['#access']) && ($field['translatable'] || $shared_access);
-        $form[$field_name]['#multilingual'] = (boolean) $field['translatable'];
+        // Check if a field is part of the form array.
+        if (isset($form[$field_name])) {
+          $field = field_info_field($field_name);
+          // If access is not set or is granted we check whether the user has
+          // access to shared fields.
+          $form[$field_name]['#access'] = (!isset($form[$field_name]['#access']) || $form[$field_name]['#access']) && ($field['translatable'] || $shared_access);
+          $form[$field_name]['#multilingual'] = (boolean) $field['translatable'];
+        }
       }
     }
 
@@ -1597,6 +1607,9 @@ function entity_translation_field_attach_submit($entity_type, $entity, $form, &$
     // Update the wrapped entity with the submitted values.
     $handler->setEntity($entity);
     $handler->entityFormSubmit($form, $form_state);
+
+    // Process in-place translations for the taxonomy autocomplete widget.
+    entity_translation_taxonomy_term_field_attach_submit($entity_type, $entity, $form, $form_state);
   }
 }
 
@@ -1671,7 +1684,7 @@ function theme_entity_translation_language_tabs($variables) {
  * Adds an option to enable field synchronization.
  * Enable a selector to choose whether a field is translatable.
  */
-function entity_translation_form_field_ui_field_edit_form_alter(&$form, $form_state) {
+function entity_translation_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
   $instance = $form['#instance'];
   $entity_type = $instance['entity_type'];
   $field_name = $instance['field_name'];
@@ -1691,7 +1704,8 @@ function entity_translation_form_field_ui_field_edit_form_alter(&$form, $form_st
   $label = t('Field translation');
   $title = t('Users may translate all occurrences of this field:') . _entity_translation_field_desc($field);
 
-  if (field_has_data($field)) {
+  $form_state['field_has_data'] = field_has_data($field);
+  if ($form_state['field_has_data']) {
     $path = "admin/config/regional/entity_translation/translatable/$field_name";
     $status = $translatable ? $title : (t('All occurrences of this field are untranslatable:') . _entity_translation_field_desc($field));
     $link_title = !$translatable ? t('Enable translation') : t('Disable translation');
@@ -1718,6 +1732,11 @@ function entity_translation_form_field_ui_field_edit_form_alter(&$form, $form_st
       '#title' => $title,
       '#default_value' => $translatable,
     );
+  }
+
+  $function = 'entity_translation_form_field_ui_field_edit_' . $instance['widget']['type'] . '_form_alter';
+  if (function_exists($function)) {
+    $function($form, $form_state);
   }
 }
 
@@ -1867,16 +1886,8 @@ function entity_translation_language($entity_type, $entity) {
  *   A class implementing EntityTranslationHandlerInterface.
  */
 function entity_translation_get_handler($entity_type = NULL, $entity = NULL) {
-  if (class_exists('EntityTranslationHandlerFactory')) {
-    $factory = EntityTranslationHandlerFactory::getInstance();
-    return empty($entity) ? $factory->getLastHandler($entity_type) : $factory->getHandler($entity_type, $entity);
-  }
-  // @todo BC layer. Remove before the first stable release.
-  elseif (!empty($entity_type) && is_object($entity)) {
-    $entity_info = entity_get_info($entity_type);
-    return new EntityTranslationDefaultHandler($entity_type, $entity_info, $entity);
-  }
-  return NULL;
+  $factory = EntityTranslationHandlerFactory::getInstance();
+  return empty($entity) ? $factory->getLastHandler($entity_type) : $factory->getHandler($entity_type, $entity);
 }
 
 /**
@@ -1921,7 +1932,7 @@ function entity_translation_current_form_get_handler() {
 }
 
 /**
- * Returns an array of edit form info as defined in hook_translation_info().
+ * Returns an array of edit form info as defined in hook_entity_info().
  *
  * @param $form
  *   The entity edit form.
@@ -2052,7 +2063,7 @@ function entity_translation_pathauto_alias_alter(&$alias, array &$context) {
       if (!$pathauto_start_language) {
         $pathauto_start_language = $context['language'];
       }
-      if ($context['language'] == $pathauto_start_language) {
+      if ($context['language'] == $pathauto_start_language && $context['language'] != LANGUAGE_NONE) {
         foreach ($translations->data as $language => $translation) {
           // We already have an alias for the starting language, so let's not
           // create another one.

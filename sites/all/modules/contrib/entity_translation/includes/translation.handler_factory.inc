@@ -87,10 +87,7 @@ class EntityTranslationHandlerFactory {
     if (!isset($this->handlers[$entity_type][$id])) {
       $entity_info = entity_get_info($entity_type);
       $class = $entity_info['translation']['entity_translation']['class'];
-      // @todo Remove the fourth parameter once 3rd-party translation handlers
-      //   have been fixed and no longer require the deprecated entity_id
-      //   parameter.
-      $handler = new $class($entity_type, $entity_info, $entity, NULL);
+      $handler = new $class($entity_type, $entity_info, $entity);
       $handler->setFactory($this);
       $this->handlers[$entity_type][$id] = $handler;
     }

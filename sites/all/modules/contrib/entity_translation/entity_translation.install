@@ -175,6 +175,9 @@ function entity_translation_install() {
 
   // Enable revision support for entity translation.
   variable_set('entity_translation_revision_enabled', TRUE);
+
+  // Enable taxonomy autocomplete support.
+  variable_set('entity_translation_taxonomy_autocomplete', TRUE);
 }
 
 /**

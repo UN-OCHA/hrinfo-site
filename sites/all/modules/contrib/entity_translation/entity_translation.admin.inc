@@ -323,7 +323,7 @@ function entity_translation_overview($entity_type, $entity, $callback = NULL) {
           $link = isset($add_links->links[$langcode]['href']) ? $add_links->links[$langcode] : array('href' => $add_path, 'language' => $language);
           $link['query'] = isset($_GET['destination']) ? drupal_get_destination() : FALSE;
           $options[] = $translatable ? l(t('add'), $link['href'], $link) : t('No translatable fields');
-          $classes[] = $translatable ? '' : 'non-traslatable';
+          $classes[] = $translatable ? '' : 'non-translatable';
         }
         $status = t('Not translated');
         // Show fallback information if required.
