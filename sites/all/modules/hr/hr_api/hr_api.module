@@ -69,7 +69,7 @@ function hr_api_entity_hook($event, $entity, $type) {
     if ($call_webhook) {
       $langcode = $language->language;
       $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
-      if ($handler) {
+      if ($resource) {
         $thandler = entity_translation_get_handler($type, $entity);
         $translations = $thandler->getTranslations();
         $translations = array_keys($translations->data);
