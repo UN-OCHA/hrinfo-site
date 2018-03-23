@@ -73,7 +73,8 @@ function hr_api_entity_hook($event, $entity, $type) {
         $thandler = entity_translation_get_handler($type, $entity);
         $translations = $thandler->getTranslations();
         $translations = array_keys($translations->data);
-        $json_entity = restful()->getFormatterManager()->format($resource->doGet($id), 'json');
+        $json_entities = json_decode(restful()->getFormatterManager()->format($resource->doGet($id), 'json'));
+        $json_entity = reset($json_entities->data);
         foreach ($conf['hr_api_webhooks'] as $webhook) {
           if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
             hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $json_entity);
