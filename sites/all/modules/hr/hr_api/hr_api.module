@@ -6,18 +6,9 @@
 
 include_once 'hr_api.features.inc';
 
-/**
- * Implements hook_ctools_plugin_directory().
- */
-function hr_api_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'restful') {
-    return 'plugins/' . $plugin;
-  }
-}
-
 function hr_api_bundle_to_restful_plugin($bundle, $type) {
   $resource = '';
-  $plugins = restful_get_restful_plugins();
+  $plugins = restful()->getResourceManager()->getPlugins();
   foreach ($plugins as $key => $plugin) {
     if ($plugin['bundle'] == $bundle && $plugin['entity_type'] == $type) {
       $resource = $plugin['resource'];
