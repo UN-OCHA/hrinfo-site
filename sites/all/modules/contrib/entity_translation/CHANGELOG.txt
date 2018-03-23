@@ -4,6 +4,23 @@ Entity Translation 7.x-1.x, xxxx-xx-xx
 
 
 
+Entity Translation 7.x-1.0-rc1, 2018-03-21
+------------------------------------------
+#2927815 by Skabbkladden, dawehner: Infinite loop with language neutral alias
+  and pathauto.
+#2890683 by tobiberlin, stefanos.petrakis: entity_translation_field_attach_form()
+  adding unwanted fields to form.
+#2907366 by swati.nuna: Invalid hook hook_translation_info() mentioned in
+  docblock for entity_translation_edit_form_info().
+#1799770 by plach, bforchhammer: Update id and bundle when setting a wrapped
+  entity.
+#2339315 by plach: Added documentation for
+  hook_entity_translation_source_field_state_alter().
+#1506054 by plach, Owen Barton: Taxonomy term reference: language-aware widget
+  and autocomplete.
+#2907275 by jalpesh: CSS class name misspelled in entity_translation_overview().
+
+
 Entity Translation 7.x-1.0-beta7, 2017-08-21
 --------------------------------------------
 #2903195 by stefanos.petrakis, BAHbKA, plach: Enabling translation for not
