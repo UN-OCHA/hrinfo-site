@@ -1058,3 +1058,286 @@ class EntityTranslationToggleFieldsTranslatabilityTestCase extends EntityTransla
   }
 
 }
+
+/**
+ * Tests for the taxonomy autocomplete translation modes.
+ */
+class EntityTranslationTaxonomyAutocompleteTestCase extends EntityTranslationTestCase {
+
+  /**
+   * Returns the test information.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Entity translation taxonomy autocomplete',
+      'description' => 'Tests for the taxonomy autocomplete translation modes.',
+      'group' => 'Entity translation',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  function setUp() {
+    parent::setUp('locale', 'entity_translation', 'taxonomy', 'title');
+    $this->login($this->getAdminUser(array(
+      'administer taxonomy',
+      'administer entity translation',
+    )));
+    $this->addLanguage('en');
+    $this->addLanguage('it');
+    $this->addLanguage('fr');
+    $this->enableUrlLanguageDetection();
+    $this->configureVocabulary();
+    $this->configureContentType();
+  }
+
+  /**
+   * Makes the "Tags" vocabulary translatable.
+   */
+  function configureVocabulary() {
+    $edit = array(
+      'entity_translation_entity_types[taxonomy_term]' => TRUE,
+    );
+    $this->drupalPost('admin/config/regional/entity_translation', $edit, t('Save configuration'));
+
+    $edit = array(
+      'entity_translation_taxonomy' => TRUE,
+    );
+    $this->drupalPost('admin/structure/taxonomy/tags/edit', $edit, t('Save'));
+
+    $edit = array(
+      'enabled' => TRUE,
+    );
+    $this->drupalPost('admin/structure/taxonomy/tags/fields/replace/name', $edit, t('Save settings'));
+
+    $edit = array(
+      'enabled' => TRUE,
+    );
+    $this->drupalPost('admin/structure/taxonomy/tags/fields/replace/description', $edit, t('Save settings'));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  function configureContentType() {
+    parent::configureContentType();
+
+    // Create an untranslatable term reference field with unlimited cardinality.
+    $edit = array(
+      'fields[_add_new_field][label]' => 'Test tags',
+      'fields[_add_new_field][field_name]' => 'test_tags',
+      'fields[_add_new_field][type]' => 'taxonomy_term_reference',
+      'fields[_add_new_field][widget_type]' => 'taxonomy_autocomplete',
+    );
+    $this->drupalPost('admin/structure/types/manage/page/fields', $edit, t('Save'));
+
+    $edit = array(
+      'field[settings][allowed_values][0][vocabulary]' => 'tags',
+    );
+    $this->drupalPost('admin/structure/types/manage/page/fields/field_test_tags/field-settings', $edit, t('Save field settings'));
+
+    // Verify the in-place translation option is available.
+    $this->drupalGet('admin/structure/types/manage/page/fields/field_test_tags');
+    $this->assertRaw(t('Enable in-place translation of terms'));
+
+    $edit = array(
+      'field[cardinality]' => FIELD_CARDINALITY_UNLIMITED,
+    );
+    $this->drupalPost(NULL, $edit, t('Save settings'));
+
+    // Ensure entity info is up-to-date.
+    drupal_flush_all_caches();
+  }
+
+  /**
+   * Enables in-place translation.
+   */
+  function enableInPlaceTranslation() {
+    $edit = array(
+      'instance[settings][entity_translation_taxonomy_autocomplete_translate]' => TRUE,
+    );
+    $this->drupalPost('admin/structure/types/manage/page/fields/field_test_tags', $edit, t('Save settings'));
+  }
+
+  /**
+   * Tests that in-place translation works as expected.
+   */
+  function testInPlaceTranslation() {
+    $this->enableInPlaceTranslation();
+    $this->login($this->getTranslatorUser(array(
+      'administer taxonomy',
+    )));
+
+    $values = array(
+      'Red' => 'Rosso',
+      'Green' => 'Verde',
+      'Blue' => 'Blu',
+    );
+
+    // Create an English node with a few new tags.
+    $edit = array(
+      'title' => 'Test 1',
+      'field_test_tags[' . LANGUAGE_NONE . ']' => implode(', ', array_keys($values)),
+      'language' => 'en',
+    );
+    $this->drupalPost('node/add/page', $edit, t('Save'));
+    $node = $this->drupalGetNodeByTitle($edit['title']);
+
+    // Create an Italian translation and translate the English tags.
+    $this->drupalGet('node/' . $node->nid . '/translate');
+    $this->clickLink('add', 1);
+    $edit = array();
+    foreach (array_values($values) as $delta => $value) {
+      $edit['field_test_tags[' . LANGUAGE_NONE . '][' . $delta . ']'] = $value;
+    }
+    $this->drupalPost(NULL, $edit, t('Save'));
+
+    // Verify that the Italian values are correctly stored/displayed.
+    foreach ($values as $original => $translation) {
+      $this->assertRaw($translation);
+    }
+
+    // Verify that the original English values were correctly retained.
+    $this->drupalGet('node/' . $node->nid);
+    foreach ($values as $original => $translation) {
+      $this->assertRaw($original);
+    }
+  }
+
+  /**
+   * That the autocomplete works with translated terms.
+   */
+  function testTranslatedAutocomplete() {
+    $this->login($this->getTranslatorUser(array(
+      'administer taxonomy',
+    )));
+
+    $vocabulary = taxonomy_vocabulary_machine_name_load('tags');
+    $entity_type = 'taxonomy_term';
+    $existing_values = array();
+    $translated_values = array(
+      'en' => array(
+        'Red' => 'Rosso',
+        'Green' => 'Verde',
+      ),
+      'it' => array(
+        'Blu' => 'Blue',
+      ),
+    );
+    $langcodes = array_keys($translated_values);
+
+    // Create a few existing tags with different original language and translate
+    // them accordingly.
+    foreach ($translated_values as $langcode => $values) {
+      title_active_language($langcode);
+      $translation_langcode = current(array_diff($langcodes, array($langcode)));
+
+      foreach ($values as $original => $translation) {
+        $term = (object) array(
+          'vid' => $vocabulary->vid,
+          'vocabulary_machine_name' => $vocabulary->machine_name,
+          'name' => $original,
+          'name_field' => array(
+            $langcode => array(array('value' => $original)),
+            $translation_langcode => array(array('value' => $translation)),
+          ),
+        );
+        $translation = array(
+          'language' => $translation_langcode,
+          'source' => $langcode,
+          'status' => TRUE,
+        );
+
+        $handler = entity_translation_get_handler($entity_type, $term);
+        $handler->setOriginalLanguage($langcode);
+        $handler->initTranslations();
+        $handler->setTranslation($translation);
+        taxonomy_term_save($term);
+
+        $existing_values[$term->name_field['en'][0]['value']] = $term->name_field['it'][0]['value'];
+      }
+    }
+
+    // Verify that the English autocomplete route returns results for terms
+    // originally created in English.
+    $this->autocompleteGet('en', 'Re');
+    $this->assertRaw('Red');
+    $this->assertRaw('Green');
+
+    // Verify that the English autocomplete route returns results for terms
+    // translated into English.
+    $this->autocompleteGet('en', 'Blu');
+    $this->assertRaw('Blue');
+
+    // Verify that the Italian autocomplete route returns results for terms
+    // originally created in Italian.
+    $this->autocompleteGet('it', 'Blu');
+    $this->assertRaw('Blu');
+    $this->assertNoRaw('Blue');
+
+    // Verify that the Italian autocomplete route returns results for terms
+    // translated into Italian.
+    $this->autocompleteGet('it', 'R');
+    $this->assertRaw('Rosso');
+    $this->assertRaw('Verde');
+
+    // Verify that existing tags are correctly referenced and new tags are
+    // correctly created, when saving an English node.
+    $new_values = array(
+      'Cyan' => 'Ciano',
+      'Magenta' => 'Magenta',
+      'Yellow' => 'Giallo',
+      'Black' => 'Nero',
+    );
+    $all_values = $existing_values + $new_values;
+
+    $edit = array(
+      'title' => 'Test 1',
+      'field_test_tags[' . LANGUAGE_NONE . ']' => implode(', ', array_keys($all_values)),
+      'language' => 'en',
+    );
+    $this->drupalPost('node/add/page', $edit, t('Save'));
+    foreach ($all_values as $original => $translation) {
+      $this->assertRaw($original);
+    }
+
+    // Verify that existing translated tags are correctly referenced and new
+    // tags are correctly created, when translated the node into Italian.
+    $node = $this->drupalGetNodeByTitle($edit['title']);
+    $this->drupalGet('node/' . $node->nid . '/translate');
+    $this->clickLink('add', 1);
+    $edit = array(
+      'field_test_tags[' . LANGUAGE_NONE . ']' => implode(', ', $all_values),
+    );
+    $this->drupalPost(NULL, $edit, t('Save'));
+    foreach ($all_values as $original => $translation) {
+      $this->assertRaw($translation);
+    }
+
+    // Verify that existing (translated) tags were preserved, while new Italian
+    // tags replaced the corresponding English versions.
+    $this->drupalGet('node/' . $node->nid);
+    foreach ($existing_values as $original => $translation) {
+      $this->assertRaw($original);
+    }
+    foreach ($new_values as $original => $translation) {
+      $this->assertRaw($translation);
+    }
+  }
+
+  /**
+   * Performs a GET request to the autocomplete path.
+   *
+   * @param string $langcode
+   *   The language to use to query results.
+   * @param string $query
+   *   The search query string.
+   */
+  protected function autocompleteGet($langcode, $query) {
+    $path = 'entity_translation/taxonomy_term/autocomplete/' . $langcode . '/field_test_tags/' . $query;
+    $languages = language_list();
+    $this->drupalGet($path, array('language' => $languages[$langcode]));
+  }
+
+}
