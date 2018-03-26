@@ -45,7 +45,7 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
 
     $public_fields['primary_type'] = array(
       'property' => 'field_glide_type',
-      'sub_property' => 'label',
+      'process_callbacks' => array(array($this, 'getPrimaryType')),
     );
 
     $public_fields['status'] = array(
@@ -86,6 +86,11 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
     );
 
     return $public_fields;
+  }
+
+  public function getPrimaryType($value) {
+    $term = taxonomy_term_load($value);
+    return $term->label;
   }
 
   public function getBodyRaw($value) {
