@@ -45,7 +45,7 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
 
     $public_fields['primary_type'] = array(
       'property' => 'field_glide_type',
-      'sub_property' => 'name',
+      'sub_property' => 'label',
     );
 
     $public_fields['status'] = array(
