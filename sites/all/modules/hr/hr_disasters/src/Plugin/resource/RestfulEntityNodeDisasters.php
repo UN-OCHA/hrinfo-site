@@ -90,7 +90,7 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
 
   public function getPrimaryType($value) {
     $term = taxonomy_term_load($value);
-    return $term->label;
+    return $term->name;
   }
 
   public function getBodyRaw($value) {
