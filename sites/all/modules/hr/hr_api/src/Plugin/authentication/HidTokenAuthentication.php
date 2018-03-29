@@ -47,15 +47,20 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
 12d12SDToooj7Howeti4Z1YsPA3ZX60e87XoTik0U6Dz+I4SX3p08kZUF7OW68h+
 /wIDAQAB
 -----END PUBLIC KEY-----';
-    $decoded = JWT::decode($token, $publicKey, array('RS256'));
-    $hid = $decoded->id;
-    $uid = db_query("SELECT uid FROM {hid_profiles} WHERE cid = :cid", array(':cid' => $hid))->fetchField();
-    if (!$uid) {
-      $contact = hid_profiles_get_contact($hid);
-      $uid = db_query("SELECT uid FROM {hid_profiles} WHERE cid = :cid", array(':cid' => $contact->user_id))->fetchField();
-    }
+    try {
+      $decoded = JWT::decode($token, $publicKey, array('RS256'));
+      $hid = $decoded->id;
+      $uid = db_query("SELECT uid FROM {hid_profiles} WHERE cid = :cid", array(':cid' => $hid))->fetchField();
+      if (!$uid) {
+        $contact = hid_profiles_get_contact($hid);
+        $uid = db_query("SELECT uid FROM {hid_profiles} WHERE cid = :cid", array(':cid' => $contact->user_id))->fetchField();
+      }
 
-    return user_load($uid);
+      return user_load($uid);
+    }
+    catch (Exception $err) {
+      return user_load(0);
+    }
   }
 
 }

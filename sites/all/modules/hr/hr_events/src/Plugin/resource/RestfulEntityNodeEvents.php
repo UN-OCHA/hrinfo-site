@@ -13,7 +13,9 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   resource = "events",
  *   label = "Events",
  *   description = "Humanitarianresponse events",
- *   authenticationTypes = TRUE,
+ *   authenticationTypes = {
+ *     "hid_token"
+ *   },
  *   authenticationOptional = TRUE,
  *   dataProvider = {
  *     "entityType": "node",
