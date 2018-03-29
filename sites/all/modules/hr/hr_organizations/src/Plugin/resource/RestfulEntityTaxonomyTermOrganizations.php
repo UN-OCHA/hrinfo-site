@@ -13,7 +13,9 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   resource = "organizations",
  *   label = "Organizations",
  *   description = "Humanitarianresponse organizations",
- *   authenticationTypes = TRUE,
+ *   authenticationTypes = {
+ *     "hid_token"
+ *   },
  *   authenticationOptional = TRUE,
  *   dataProvider = {
  *     "entityType": "taxonomy_term",

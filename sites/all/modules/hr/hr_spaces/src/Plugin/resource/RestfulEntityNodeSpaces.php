@@ -13,7 +13,9 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   resource = "spaces",
  *   label = "Spaces",
  *   description = "Export the global spaces",
- *   authenticationTypes = TRUE,
+ *   authenticationTypes = {
+ *     "hid_token"
+ *   },
  *   authenticationOptional = TRUE,
  *   dataProvider = {
  *     "entityType": "node",

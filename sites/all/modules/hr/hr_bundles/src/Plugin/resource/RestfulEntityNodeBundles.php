@@ -13,7 +13,9 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   resource = "bundles",
  *   label = "Clusters/Sectors",
  *   description = "Export the clusters/sectors",
- *   authenticationTypes = TRUE,
+ *   authenticationTypes = {
+ *     "hid_token"
+ *   },
  *   authenticationOptional = TRUE,
  *   dataProvider = {
  *     "entityType": "node",

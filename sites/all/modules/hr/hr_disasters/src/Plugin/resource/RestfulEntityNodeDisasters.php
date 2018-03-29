@@ -14,7 +14,9 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   resource = "disasters",
  *   label = "Disasters",
  *   description = "Disasters pulled from reliefweb.int",
- *   authenticationTypes = TRUE,
+ *   authenticationTypes = {
+ *     "hid_token"
+ *   },
  *   authenticationOptional = TRUE,
  *   dataProvider = {
  *     "entityType": "node",

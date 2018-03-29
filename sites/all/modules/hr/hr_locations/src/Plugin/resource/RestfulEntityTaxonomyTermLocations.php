@@ -15,7 +15,9 @@ use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterEMW;
  *   resource = "locations",
  *   label = "Locations",
  *   description = "Humanitarianresponse locations",
- *   authenticationTypes = TRUE,
+ *   authenticationTypes = {
+ *     "hid_token"
+ *   },
  *   authenticationOptional = TRUE,
  *   dataProvider = {
  *     "entityType": "taxonomy_term",

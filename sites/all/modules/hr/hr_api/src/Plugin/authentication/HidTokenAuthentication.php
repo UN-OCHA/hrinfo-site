@@ -58,7 +58,7 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
 
       return user_load($uid);
     }
-    catch (Exception $err) {
+    catch (\Exception $err) {
       return user_load(0);
     }
   }
