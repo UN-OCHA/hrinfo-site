@@ -2,18 +2,19 @@
 
 /**
  * @file
- * Contains \Drupal\hid_api\Plugin\authentication\TokenAuthentication
+ * Contains \Drupal\hr_api\Plugin\authentication\TokenAuthentication
  */
 
-namespace Drupal\hid_api\Plugin\authentication;
+namespace Drupal\hr_api\Plugin\authentication;
 
 use Drupal\restful\Http\RequestInterface;
 use Drupal\restful\Plugin\authentication\Authentication;
+use Drupal\restful_token_auth\Plugin\authentication\TokenAuthentication;
 use \Firebase\JWT\JWT;
 
 /**
  * Class HidTokenAuthentication
- * @package Drupal\hid_api\Plugin\authentication
+ * @package Drupal\hr_api\Plugin\authentication
  *
  * @Authentication(
  *   id = "hid_token",

@@ -5,6 +5,7 @@ dependencies[] = hr_locations
 dependencies[] = hr_organizations
 dependencies[] = hr_themes
 dependencies[] = restful
+dependencies[] = restful_token_auth
 dependencies[] = strongarm
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
