@@ -13,7 +13,9 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   resource = "document_types",
  *   label = "Document Types",
  *   description = "Document Types used for Humanitarianresponse documents",
- *   authenticationTypes = TRUE,
+ *   authenticationTypes = {
+ *     "hid_token"
+ *   },
  *   authenticationOptional = TRUE,
  *   dataProvider = {
  *     "entityType": "taxonomy_term",
