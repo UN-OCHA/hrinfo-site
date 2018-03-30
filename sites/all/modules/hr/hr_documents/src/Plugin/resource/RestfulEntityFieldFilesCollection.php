@@ -44,6 +44,11 @@ class RestfulEntityFieldFilesCollection extends ResourceEntity implements Resour
       'property' => 'field_language',
     );
 
+    $public_fields['host_entity'] = array(
+      'property' => 'host_entity',
+      'process_callbacks' => array(array($this, 'getHostEntity'))
+    )
+
     return $public_fields;
   }
 
@@ -52,6 +57,13 @@ class RestfulEntityFieldFilesCollection extends ResourceEntity implements Resour
    */
   protected function dataProviderClassName() {
     return '\Drupal\hr_documents\Plugin\resource\DataProviderFieldFilesCollection';
+  }
+
+  public function getHostEntity($value) {
+    $tmp = new \stdClass();
+    $tmp->id = $value->nid;
+    $tmp->label = $value->title;
+    return $tmp;
   }
 
 }
