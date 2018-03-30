@@ -9,6 +9,7 @@ namespace Drupal\hr_documents\Plugin\resource;
 
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
+use Drupal\restful\Http\RequestInterface;
 
 class DataProviderFieldFilesCollection  extends DataProviderEntity implements DataProviderInterface {
 
@@ -34,6 +35,7 @@ class DataProviderFieldFilesCollection  extends DataProviderEntity implements Da
     if (isset($object['host_entity'])) {
       $host_entity = entity_load_single('node', $object['host_entity']);
       $entity->setHostEntity('node', $host_entity);
+      unset($object['host_entity']);
     }
 
     /* @var \EntityDrupalWrapper $wrapper */
