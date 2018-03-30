@@ -18,7 +18,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   },
  *   authenticationOptional = TRUE,
  *   dataProvider = {
- *     "entityType": "field_collection",
+ *     "entityType": "field_collection_item",
  *     "bundles": {
  *       "field_files_collection"
  *     },
