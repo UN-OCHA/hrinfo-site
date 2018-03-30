@@ -47,4 +47,11 @@ class RestfulEntityFieldFilesCollection extends ResourceEntity implements Resour
     return $public_fields;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_documents\Plugin\resource\DataProviderFieldFilesCollection';
+  }
+
 }
