@@ -46,8 +46,8 @@ class RestfulEntityFieldFilesCollection extends ResourceEntity implements Resour
 
     $public_fields['host_entity'] = array(
       'property' => 'host_entity',
-      'process_callbacks' => array(array($this, 'getHostEntity'))
-    )
+      'process_callbacks' => array(array($this, 'getHostEntity')),
+    );
 
     return $public_fields;
   }
