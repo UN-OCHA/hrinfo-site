@@ -4,6 +4,12 @@ Entity Translation 7.x-1.x, xxxx-xx-xx
 
 
 
+
+Entity Translation 7.x-1.0, 2018-04-01
+--------------------------------------
+(no change)
+
+
 Entity Translation 7.x-1.0-rc1, 2018-03-21
 ------------------------------------------
 #2927815 by Skabbkladden, dawehner: Infinite loop with language neutral alias
