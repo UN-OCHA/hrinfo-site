@@ -5,9 +5,9 @@ core = 7.x
 dependencies[] = entity_translation
 files[] = entity_translation_upgrade.test
 
-; Information added by Drupal.org packaging script on 2018-03-21
-version = "7.x-1.0-rc1"
+; Information added by Drupal.org packaging script on 2018-04-01
+version = "7.x-1.0"
 core = "7.x"
 project = "entity_translation"
-datestamp = "1521631087"
+datestamp = "1522600694"
 
