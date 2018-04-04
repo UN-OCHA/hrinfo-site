@@ -56,6 +56,7 @@ function hr_api_entity_hook($event, $entity, $type) {
   if ($type == 'node' || $type == 'taxonomy_term') {
     global $language;
     global $conf;
+    global $user;
     $call_webhook = false;
     list($id) = entity_extract_ids($type, $entity);
     entity_get_controller($type)->resetCache(array($id));
@@ -70,6 +71,7 @@ function hr_api_entity_hook($event, $entity, $type) {
       $langcode = $language->language;
       $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
       if ($resource) {
+        $resource->setAccount($user);
         $thandler = entity_translation_get_handler($type, $entity);
         $translations = $thandler->getTranslations();
         $translations = array_keys($translations->data);
