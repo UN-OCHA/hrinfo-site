@@ -56,7 +56,7 @@ function hr_api_entity_hook($event, $entity, $type) {
   if ($type == 'node' || $type == 'taxonomy_term') {
     global $language;
     global $conf;
-    global $user;
+    $user = user_load(1);
     $call_webhook = false;
     list($id) = entity_extract_ids($type, $entity);
     entity_get_controller($type)->resetCache(array($id));
