@@ -169,7 +169,7 @@ function _fts_visualization_get_data($settings) {
     // @todo add cluster to query.
     $appeal_data = _fts_visualization_get_appeal_data($appeal, $groupby, $cluster);
     $funding_data = array();
-    if ($type == 'pie') {
+    if ($type == 'pie' || $type == 'bar') {
       $fields['val'] = array(
         'label' => t('Value'),
         'enabled' => TRUE,
