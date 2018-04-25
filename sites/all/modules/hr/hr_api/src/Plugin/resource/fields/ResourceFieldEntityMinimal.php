@@ -44,7 +44,7 @@ class ResourceFieldEntityMinimal extends ResourceFieldEntity implements Resource
         'include' => implode(',', $this->nestedDottedChildren('include')),
         'filter' => $this->nestedDottedChildren('filter'),
       );
-      $parsed_input['fields'] = 'id,label,self';
+      $parsed_input['fields'] = 'id,label,self,iso3';
       $request = Request::create('', array_filter($parsed_input), RequestInterface::METHOD_GET);
 
       // Get a plugin (that can be altered with decorators.
