@@ -45,7 +45,6 @@ function _hr_bundles_get_bundles($gid) {
   $query = new EntityFieldQuery();
   $entities = $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'hr_bundle')
-    ->propertyCondition('status', 1)
     ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $gid, '=')
     ->fieldCondition(OG_GROUP_FIELD, 'value', 1, '=')
     ->execute();
