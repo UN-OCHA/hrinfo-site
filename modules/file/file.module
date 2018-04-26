@@ -42,8 +42,6 @@ function file_menu() {
     'access arguments' => array('access content'),
     'theme callback' => 'ajax_base_page_theme',
     'type' => MENU_CALLBACK,
-    'file' => 'node.pages.inc',
-    'file path' => drupal_get_path('module', 'node'),
   );
   $items['file/progress'] = array(
     'page callback' => 'file_ajax_progress',
@@ -240,6 +238,9 @@ function file_file_download($uri, $field_type = 'file') {
 function file_ajax_upload() {
   $form_parents = func_get_args();
   $form_build_id = (string) array_pop($form_parents);
+
+  // Sanitize form parents before using them.
+  $form_parents = array_filter($form_parents, 'element_child');
 
   if (empty($_POST['form_build_id']) || $form_build_id != $_POST['form_build_id']) {
     // Invalid request.
