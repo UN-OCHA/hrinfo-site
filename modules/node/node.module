@@ -962,12 +962,12 @@ function node_load_multiple($nids = array(), $conditions = array(), $reset = FAL
  */
 function node_load($nid = NULL, $vid = NULL, $reset = FALSE) {
   // Make sure nid is numeric.
-  if (!is_numeric($nid)) {
+  if (isset($nid) && !is_numeric($nid)) {
     return FALSE;
   }
 
   // Ignore non-numeric vid.
-  if (!is_numeric($vid)) {
+  if (isset($vid) && !is_numeric($vid)) {
     $vid = NULL;
   }
   $nids = (isset($nid) ? array($nid) : array());
