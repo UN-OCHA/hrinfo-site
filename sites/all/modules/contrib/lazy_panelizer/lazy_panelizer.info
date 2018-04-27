@@ -1,8 +1,0 @@
-name = Lazy Panelizer
-description = Improves panels performance by lazy loading panels.
-package = "Panels"
-dependencies[] = panels
-dependencies[] = ctools
-dependencies[] = page_manager
-core = 7.x
-
