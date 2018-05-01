@@ -26,7 +26,8 @@ use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterEMW;
  *     },
  *   },
  *   majorVersion = 1,
- *   minorVersion = 0
+ *   minorVersion = 0,
+ *   allowOrigin = "*"
  * )
  */
 class RestfulEntityTaxonomyTermLocations extends ResourceEntity implements ResourceInterface {
