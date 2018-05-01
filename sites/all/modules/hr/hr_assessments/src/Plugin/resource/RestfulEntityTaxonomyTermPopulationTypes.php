@@ -22,6 +22,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *     "bundles": {
  *       "hr_population_type"
  *     },
+ *     "range" = 100
  *   },
  *   majorVersion = 1,
  *   minorVersion = 0,
