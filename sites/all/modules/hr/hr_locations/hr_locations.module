@@ -20,20 +20,6 @@ function hr_locations_taxonomy_term_presave($term) {
 }
 
 /**
- * Implements hook_query_TAG_alter()
- * Allows filter by parent in the API
- */
-function hr_locations_query_hr_locations_filter_parent_alter($query) {
-  $conditions = &$query->conditions();
-  foreach ($conditions as &$condition) {
-    if (is_array($condition) && $condition['field'] == 'taxonomy_term_data.' && is_numeric($condition['value'])) {
-      $condition['field'] = 'th.parent';
-      $query->join('taxonomy_term_hierarchy', 'th', 'taxonomy_term_data.tid = th.tid');
-    }
-  }
-}
-
-/**
  * Implements hook_shs_json_callbacks_alter()
  * Allows filter by parent in the API
  */

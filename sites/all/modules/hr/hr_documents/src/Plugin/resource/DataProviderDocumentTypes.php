@@ -2,16 +2,16 @@
 
 /**
  * @file
- * Contains \Drupal\hr_locations\Plugin\resource\DataProviderLocations.
+ * Contains \Drupal\hr_documents\Plugin\resource\DataProviderDocumentTypes.
  */
 
-namespace Drupal\hr_locations\Plugin\resource;
+namespace Drupal\hr_documents\Plugin\resource;
 
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
 use Drupal\restful\Http\RequestInterface;
 
-class DataProviderLocations  extends DataProviderEntity implements DataProviderInterface {
+class DataProviderDocumentTypes  extends DataProviderEntity implements DataProviderInterface {
 
   /**
    * Adds query tags and metadata to the EntityFieldQuery.
