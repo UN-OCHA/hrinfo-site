@@ -41,7 +41,7 @@ class RestfulEntityTaxonomyTermDocumentTypes extends ResourceEntity implements R
       'property' => 'parent',
       'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
-        'name' => 'locations',
+        'name' => 'document_types',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
