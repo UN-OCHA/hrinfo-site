@@ -22,7 +22,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *     "bundles": {
  *       "hr_space"
  *     },
- *     range = "100",
+ *     "range" = 100,
  *   },
  *   majorVersion = 1,
  *   minorVersion = 0,
