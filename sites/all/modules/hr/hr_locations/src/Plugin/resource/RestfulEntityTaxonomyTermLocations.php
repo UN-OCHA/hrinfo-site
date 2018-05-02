@@ -108,4 +108,11 @@ class RestfulEntityTaxonomyTermLocations extends ResourceEntity implements Resou
     $geofield = $wrapper->field_geofield->value();
     return array('lat' => $geofield['lat'], 'lon' => $geofield['lon']);
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_locations\Plugin\resource\DataProviderLocations';
+  }
 }
