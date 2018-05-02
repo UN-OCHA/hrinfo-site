@@ -33,27 +33,6 @@ use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterEMW;
 class RestfulEntityTaxonomyTermLocations extends ResourceEntity implements ResourceInterface {
 
   /**
-   * Overrides RestfulEntityBaseNode::addExtraInfoToQuery()
-   *
-   * Adds proper query tags
-   */
-  protected function addExtraInfoToQuery($query) {
-    parent::addExtraInfoToQuery($query);
-    $filters = $this->parseRequestForListFilter();
-    if (!empty($filters)) {
-      $addTag = FALSE;
-      foreach ($filters as $filter) {
-        if ($filter['public_field'] == 'parent') {
-          $addTag = TRUE;
-        }
-      }
-      if ($addTag == TRUE) {
-        $query->addTag('hr_locations_filter_parent');
-      }
-    }
-  }
-
-  /**
    * Overrides \RestfulEntityBase::publicFields().
    */
   public function publicFields() {
