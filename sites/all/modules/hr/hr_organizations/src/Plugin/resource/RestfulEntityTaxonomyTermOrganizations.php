@@ -62,4 +62,11 @@ class RestfulEntityTaxonomyTermOrganizations extends ResourceEntity implements R
     return $public_fields;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_organizations\Plugin\resource\DataProviderOrganizations';
+  }
+
 }

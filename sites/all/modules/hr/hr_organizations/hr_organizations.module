@@ -14,3 +14,23 @@ function hr_organizations_ctools_plugin_directory($module, $plugin) {
     return 'plugins/' . $plugin;
   }
 }
+
+function hr_organizations_query_hr_organizations_acronym_alter($query) {
+  //$request = $query->alterMetaData['restful_data_provider']->getRequest()->getParsedInput();
+  $request = isset($_REQUEST['q']) ? $_REQUEST['q'] : '';
+  if (!empty($request)) {
+    debug($query->__toString());
+    //$query->join('field_data_field_acronym', 'field_data_field_acronym', 'taxonomy_term.tid = field_data_field_acronym.entity_id');
+  }
+  /*$tid = 8; // country music genre tag
+  $query->join('field_data_field_genres', 'field_data_field_genres', 'node.nid = field_data_field_genres.entity_id');
+  $or = db_or();
+  if (!empty($name)) {
+      $prefix = '%'. db_like($request) . '%';
+      $or->condition('title', array($prefix), 'LIKE');
+  }
+  if (!empty($tid)) {
+      $or->condition('field_data_field_genres.field_genres_tid', array($tid), "=");
+  }
+  $query->condition($or);*/
+}
