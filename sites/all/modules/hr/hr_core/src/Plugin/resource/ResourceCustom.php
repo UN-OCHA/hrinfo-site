@@ -2,6 +2,7 @@
 
 namespace Drupal\hr_core\Plugin\resource;
 use Drupal\restful\Plugin\resource\ResourceEntity;
+use Drupal\restful\Http\HttpHeader;
 
 abstract class ResourceCustom extends ResourceEntity {
   /**
