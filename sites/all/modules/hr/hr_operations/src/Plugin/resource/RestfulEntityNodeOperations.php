@@ -88,4 +88,11 @@ class RestfulEntityNodeOperations extends ResourceEntity implements ResourceInte
     return $public_fields;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+  }
+
 }

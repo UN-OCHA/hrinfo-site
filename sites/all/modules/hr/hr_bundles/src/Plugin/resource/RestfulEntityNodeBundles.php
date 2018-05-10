@@ -141,4 +141,11 @@ class RestfulEntityNodeBundles extends ResourceEntity implements ResourceInterfa
     return $return;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+  }
+
 }

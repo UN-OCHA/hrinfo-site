@@ -244,4 +244,11 @@ class RestfulEntityNodeAssessments extends ResourceEntity implements ResourceInt
     return $tmp;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+  }
+
 }

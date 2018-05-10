@@ -31,5 +31,10 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  */
 
 class RestfulEntityTaxonomyTermThemes extends ResourceEntity implements ResourceInterface {
-
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+  }
 }

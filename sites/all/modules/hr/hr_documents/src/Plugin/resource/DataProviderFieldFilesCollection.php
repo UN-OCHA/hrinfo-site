@@ -16,6 +16,13 @@ class DataProviderFieldFilesCollection  extends DataProviderEntity implements Da
   /**
    * {@inheritdoc}
    */
+  public function discover($path = NULL) {
+    return array();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function create($object) {
     $this->validateBody($object);
     $entity_info = $this->getEntityInfo();

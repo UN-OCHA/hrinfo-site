@@ -111,4 +111,11 @@ class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInter
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+  }
+
 }

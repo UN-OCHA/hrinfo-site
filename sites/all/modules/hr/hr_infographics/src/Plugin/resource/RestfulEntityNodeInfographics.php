@@ -228,4 +228,11 @@ class RestfulEntityNodeInfographics extends ResourceEntity implements ResourceIn
     return $return;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+  }
+
 }

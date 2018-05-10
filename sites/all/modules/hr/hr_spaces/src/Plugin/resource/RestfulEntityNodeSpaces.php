@@ -74,4 +74,11 @@ class RestfulEntityNodeSpaces extends ResourceEntity implements ResourceInterfac
     return $public_fields;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+  }
+
 }

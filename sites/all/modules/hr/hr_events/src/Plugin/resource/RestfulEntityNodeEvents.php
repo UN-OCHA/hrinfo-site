@@ -222,4 +222,11 @@ class RestfulEntityNodeEvents extends ResourceEntity implements ResourceInterfac
     return $value;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+  }
+
 }

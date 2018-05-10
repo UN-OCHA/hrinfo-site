@@ -14,6 +14,13 @@ use Drupal\restful\Http\RequestInterface;
 class DataProviderLocations  extends DataProviderEntity implements DataProviderInterface {
 
   /**
+   * {@inheritdoc}
+   */
+  public function discover($path = NULL) {
+    return array();
+  }
+
+  /**
    * Adds query tags and metadata to the EntityFieldQuery.
    *
    * @param \EntityFieldQuery $query

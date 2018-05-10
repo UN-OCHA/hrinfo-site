@@ -88,4 +88,11 @@ class RestfulEntityNodeOffices extends ResourceEntity implements ResourceInterfa
     return $public_fields;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+  }
+
 }
