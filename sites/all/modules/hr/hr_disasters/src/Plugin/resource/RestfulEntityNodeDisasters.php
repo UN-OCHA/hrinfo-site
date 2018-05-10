@@ -2,7 +2,7 @@
 
 namespace Drupal\hr_disasters\Plugin\resource;
 use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
-use Drupal\restful\Plugin\resource\ResourceEntity;
+use Drupal\hr_core\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
@@ -30,7 +30,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  * )
  */
 
-class RestfulEntityNodeDisasters extends ResourceEntity implements ResourceInterface {
+class RestfulEntityNodeDisasters extends ResourceCustom implements ResourceInterface {
 
   /**
    * Overrides ResourceEntity::publicFields().

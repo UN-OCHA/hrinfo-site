@@ -1,7 +1,7 @@
 <?php
 
 namespace Drupal\hr_locations\Plugin\resource;
-use Drupal\restful\Plugin\resource\ResourceEntity;
+use Drupal\hr_core\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterEMW;
@@ -30,7 +30,7 @@ use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterEMW;
  *   allowOrigin = "*"
  * )
  */
-class RestfulEntityTaxonomyTermLocations extends ResourceEntity implements ResourceInterface {
+class RestfulEntityTaxonomyTermLocations extends ResourceCustom implements ResourceInterface {
 
   /**
    * Overrides \RestfulEntityBase::publicFields().

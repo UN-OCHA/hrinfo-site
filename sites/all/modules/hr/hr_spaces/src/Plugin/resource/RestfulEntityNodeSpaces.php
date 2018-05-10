@@ -1,7 +1,7 @@
 <?php
 
 namespace Drupal\hr_spaces\Plugin\resource;
-use Drupal\restful\Plugin\resource\ResourceEntity;
+use Drupal\hr_core\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
@@ -30,7 +30,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  * )
  */
 
-class RestfulEntityNodeSpaces extends ResourceEntity implements ResourceInterface {
+class RestfulEntityNodeSpaces extends ResourceCustom implements ResourceInterface {
 
   public function publicFields() {
     $public_fields = parent::publicFields();

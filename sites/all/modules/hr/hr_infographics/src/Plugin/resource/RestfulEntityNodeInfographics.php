@@ -1,7 +1,7 @@
 <?php
 
 namespace Drupal\hr_infographics\Plugin\resource;
-use Drupal\restful\Plugin\resource\ResourceEntity;
+use Drupal\hr_core\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
@@ -29,7 +29,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  * )
  */
 
-class RestfulEntityNodeInfographics extends ResourceEntity implements ResourceInterface {
+class RestfulEntityNodeInfographics extends ResourceCustom implements ResourceInterface {
 
   /**
    * Overrides \RestfulEntityBase::publicFields().

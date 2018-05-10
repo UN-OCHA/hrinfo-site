@@ -1,7 +1,7 @@
 <?php
 
 namespace Drupal\hr_operations\Plugin\resource;
-use Drupal\restful\Plugin\resource\ResourceEntity;
+use Drupal\hr_core\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
@@ -30,7 +30,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  * )
  */
 
-class RestfulEntityNodeOperations extends ResourceEntity implements ResourceInterface {
+class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInterface {
 
   /**
    * Overrides RestfulEntity::publicFields().

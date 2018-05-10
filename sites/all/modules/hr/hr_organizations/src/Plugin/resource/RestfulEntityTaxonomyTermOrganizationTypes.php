@@ -1,7 +1,7 @@
 <?php
 
 namespace Drupal\hr_organizations\Plugin\resource;
-use Drupal\restful\Plugin\resource\ResourceEntity;
+use Drupal\hr_core\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
@@ -30,7 +30,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  * )
  */
 
-class RestfulEntityTaxonomyTermOrganizationTypes extends ResourceEntity implements ResourceInterface {
+class RestfulEntityTaxonomyTermOrganizationTypes extends ResourceCustom implements ResourceInterface {
   /**
    * {@inheritdoc}
    */
