@@ -211,4 +211,11 @@ class RestfulEntityNodeDocuments extends ResourceEntity implements ResourceInter
     return $return;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+  }
+
 }
