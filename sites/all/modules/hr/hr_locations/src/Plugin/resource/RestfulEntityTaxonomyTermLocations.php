@@ -92,6 +92,6 @@ class RestfulEntityTaxonomyTermLocations extends ResourceCustom implements Resou
    * {@inheritdoc}
    */
   protected function dataProviderClassName() {
-    return '\Drupal\hr_locations\Plugin\resource\DataProviderLocations';
+    return '\Drupal\hr_api\Plugin\resource\DataProviderTermWithParent';
   }
 }

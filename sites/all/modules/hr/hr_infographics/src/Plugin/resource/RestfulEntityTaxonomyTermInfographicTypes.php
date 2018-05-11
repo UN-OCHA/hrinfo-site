@@ -34,6 +34,6 @@ class RestfulEntityTaxonomyTermInfographicTypes extends ResourceCustom implement
    * {@inheritdoc}
    */
   protected function dataProviderClassName() {
-    return '\Drupal\hr_api\Plugin\resource\DataProviderOptimized';
+    return '\Drupal\hr_api\Plugin\resource\DataProviderTermWithParent';
   }
 }
