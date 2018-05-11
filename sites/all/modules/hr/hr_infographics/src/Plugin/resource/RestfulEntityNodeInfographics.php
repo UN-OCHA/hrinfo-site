@@ -1,7 +1,7 @@
 <?php
 
 namespace Drupal\hr_infographics\Plugin\resource;
-use Drupal\hr_core\Plugin\resource\ResourceCustom;
+use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
@@ -232,7 +232,7 @@ class RestfulEntityNodeInfographics extends ResourceCustom implements ResourceIn
    * {@inheritdoc}
    */
   protected function dataProviderClassName() {
-    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+    return '\Drupal\hr_api\Plugin\resource\DataProviderOptimized';
   }
 
 }

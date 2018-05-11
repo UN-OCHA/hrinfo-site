@@ -1,7 +1,7 @@
 <?php
 
 namespace Drupal\hr_spaces\Plugin\resource;
-use Drupal\hr_core\Plugin\resource\ResourceCustom;
+use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
@@ -78,7 +78,7 @@ class RestfulEntityNodeSpaces extends ResourceCustom implements ResourceInterfac
    * {@inheritdoc}
    */
   protected function dataProviderClassName() {
-    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+    return '\Drupal\hr_api\Plugin\resource\DataProviderOptimized';
   }
 
 }

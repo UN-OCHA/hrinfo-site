@@ -2,7 +2,7 @@
 
 namespace Drupal\hr_disasters\Plugin\resource;
 use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
-use Drupal\hr_core\Plugin\resource\ResourceCustom;
+use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
@@ -115,7 +115,7 @@ class RestfulEntityNodeDisasters extends ResourceCustom implements ResourceInter
    * {@inheritdoc}
    */
   protected function dataProviderClassName() {
-    return '\Drupal\hr_core\Plugin\resource\DataProviderOptimized';
+    return '\Drupal\hr_api\Plugin\resource\DataProviderOptimized';
   }
 
 }
