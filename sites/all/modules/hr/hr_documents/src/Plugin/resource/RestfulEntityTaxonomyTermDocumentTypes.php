@@ -54,7 +54,7 @@ class RestfulEntityTaxonomyTermDocumentTypes extends ResourceCustom implements R
    * {@inheritdoc}
    */
   protected function dataProviderClassName() {
-    return '\Drupal\hr_documents\Plugin\resource\DataProviderDocumentTypes';
+    return '\Drupal\hr_api\Plugin\resource\DataProviderTermWithParent';
   }
 
 }
