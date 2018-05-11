@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\hr_core\Plugin\resource;
+namespace Drupal\hr_api\Plugin\resource;
 use Drupal\restful\Plugin\resource\ResourceEntity;
 use Drupal\restful\Http\HttpHeader;
 
