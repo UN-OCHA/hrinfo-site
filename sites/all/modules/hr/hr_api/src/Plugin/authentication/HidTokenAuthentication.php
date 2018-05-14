@@ -61,6 +61,7 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
     catch (\Exception $err) {
       return user_load(0);
     }
+  }
 
     /**
      * Extract the token from the request.
@@ -77,6 +78,5 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
       $token = str_replace('Bearer ', '', $authorization);
       return $token;
     }
-  }
 
 }
