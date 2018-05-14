@@ -61,6 +61,22 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
     catch (\Exception $err) {
       return user_load(0);
     }
+
+    /**
+     * Extract the token from the request.
+     *
+     * @param RequestInterface $request
+     *   The request.
+     *
+     * @return string
+     *   The extracted token.
+     */
+    protected function extractToken(RequestInterface $request) {
+      $plugin_definition = $this->getPluginDefinition();
+      $authorization = $request->getHeaders()->get('Authorization')->getValueString();
+      $token = str_replace('Bearer ', '', $authorization);
+      return $token;
+    }
   }
 
 }
