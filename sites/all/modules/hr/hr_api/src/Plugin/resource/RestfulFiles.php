@@ -2,21 +2,22 @@
 
 /**
  * @file
- * Contains \Drupal\hr_api\Plugin\resource\FilesUpload
+ * Contains \Drupal\hr_api\Plugin\resource\RestfulFiles
  */
 
 namespace Drupal\hr_api\Plugin\resource;
 
 use Drupal\restful\Exception\UnauthorizedException;
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
+use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class FilesUpload
+ * Class RestfulFiles
  * @package Drupal\hr_api\Plugin\Resource
  *
  * @Resource(
- *   name = "files_upload:1.0",
- *   resource = "files_upload",
+ *   name = "files:1.0",
+ *   resource = "files",
  *   label = "File upload",
  *   description = "A file upload wrapped with RESTful.",
  *   authenticationTypes = {
@@ -28,33 +29,13 @@ use Drupal\hr_api\Plugin\resource\ResourceCustom;
  *       "scheme": "public"
  *     }
  *   },
- *   menuItem = "file-upload",
+ *   menuItem = "files",
  *   majorVersion = 1,
  *   minorVersion = 0,
  *   allowOrigin = "*"
  * )
  */
-class FilesUpload extends ResourceCustom {
-
-  /**
-   * Constructs a FilesUpload__1_0 object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    // Set dynamic options that cannot be set in the annotation.
-    $plugin_definition = $this->getPluginDefinition();
-    $plugin_definition['authenticationOptional'] = (bool) variable_get('restful_file_upload_allow_anonymous_user', FALSE);
-
-    // Store the plugin definition.
-    $this->pluginDefinition = $plugin_definition;
-  }
+class RestfulFiles extends ResourceCustom implements ResourceInterface {
 
   /**
    * {@inheritdoc}
