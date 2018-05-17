@@ -10,6 +10,7 @@ namespace Drupal\hr_api\Plugin\resource;
 use Drupal\restful\Exception\UnauthorizedException;
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
+use Drupal\restful\Http\RequestInterface;
 
 /**
  * Class RestfulFiles
@@ -20,6 +21,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   resource = "files",
  *   label = "File upload",
  *   description = "A file upload wrapped with RESTful.",
+ *   authenticationOptional = TRUE,
  *   authenticationTypes = {
  *     "hid_token"
  *   },
@@ -45,6 +47,9 @@ class RestfulFiles extends ResourceCustom implements ResourceInterface {
    * upload. Defaults to authenticated user.
    */
   public function access() {
+    if ($this->getRequest()->getMethod() == RequestInterface::METHOD_OPTIONS) {
+      return true;
+    }
     // The getAccount method may return an UnauthorizedException when an
     // authenticated user cannot be found. Since this is called from the access
     // callback, not from the page callback we need to catch the exception.
