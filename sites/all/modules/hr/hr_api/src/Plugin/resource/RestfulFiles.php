@@ -8,6 +8,7 @@
 namespace Drupal\hr_api\Plugin\resource;
 
 use Drupal\restful\Exception\UnauthorizedException;
+use Drupal\hr_api\Plugin\resource\ResourceCustom;
 
 /**
  * Class FilesUpload
@@ -33,7 +34,7 @@ use Drupal\restful\Exception\UnauthorizedException;
  *   allowOrigin = "*"
  * )
  */
-class FilesUpload extends ResourceEntity {
+class FilesUpload extends ResourceCustom {
 
   /**
    * Constructs a FilesUpload__1_0 object.
@@ -79,6 +80,13 @@ class FilesUpload extends ResourceEntity {
     }
 
     return (variable_get('restful_file_upload_allow_anonymous_user', FALSE) || $account->uid) && parent::access();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\restful\Plugin\resource\DataProvider\DataProviderFile';
   }
 
 }
