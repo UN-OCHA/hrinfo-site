@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\hr_api\Plugin\resource\Field\ResourceFieldEntityText.Custom
+ * Contains \Drupal\hr_api\Plugin\resource\Field\ResourceFieldEntityTextCustom
  */
 
 namespace Drupal\hr_api\Plugin\resource\Field;

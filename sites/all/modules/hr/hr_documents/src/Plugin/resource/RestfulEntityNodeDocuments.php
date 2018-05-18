@@ -153,6 +153,10 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
       ),
     );
 
+    $public_fields['language'] = array(
+      'property' => 'language'
+    );
+
     $public_fields['created'] = array(
       'property' => 'created',
     );
