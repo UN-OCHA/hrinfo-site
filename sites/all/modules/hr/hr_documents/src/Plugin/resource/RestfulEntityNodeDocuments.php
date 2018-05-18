@@ -55,6 +55,7 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
     $public_fields['body'] = array(
       'property' => 'body',
       'sub_property' => 'value',
+      'class' => '\Drupal\hr_api\Plugin\resource\Field\ResourceFieldEntityTextCustom',
       'process_callbacks' => array(array($this, 'getBodyRaw')),
     );
 
