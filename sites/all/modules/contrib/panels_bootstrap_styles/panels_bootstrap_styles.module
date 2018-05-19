@@ -1,7 +1,12 @@
 <?php
 
 /**
- * Implements hook_ctools_plugin_directory()
+ * @file
+ * Main file for panels bootstrap styles module.
+ */
+
+/**
+ * Implements hook_ctools_plugin_directory().
  */
 function panels_bootstrap_styles_ctools_plugin_directory($module, $plugin) {
   if ($module == "panels" && in_array($plugin, array('styles'))) {
@@ -10,7 +15,40 @@ function panels_bootstrap_styles_ctools_plugin_directory($module, $plugin) {
 }
 
 /**
- * Implementation of hook_theme()
+ * Implements hook_help().
+ */
+function panels_bootstrap_styles_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#panels_bootstrap_styles':
+
+      $filepath = dirname(__FILE__) . '/README.md';
+      if (file_exists($filepath)) {
+        $readme = file_get_contents($filepath);
+      }
+      if (!isset($readme)) {
+        return NULL;
+      }
+      if (module_exists('markdown')) {
+        $filters = module_invoke('markdown', 'filter_info');
+        $info = $filters['filter_markdown'];
+
+        if (function_exists($info['process callback'])) {
+          $output = $info['process callback']($readme, NULL);
+        }
+        else {
+          $output = '<pre>' . $readme . '</pre>';
+        }
+      }
+      else {
+        $output = '<pre>' . $readme . '</pre>';
+      }
+
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_theme().
  */
 function panels_bootstrap_styles_theme() {
   $theme = array();
@@ -36,13 +74,39 @@ function panels_bootstrap_styles_theme() {
     'file' => 'theme.inc',
     'template' => 'panels-bootstrap-region',
   );
+
+  $theme['panels_bootstrap_tabs'] = array(
+    'variables' => array(
+      'output' => array(),
+      'panes' => array(),
+      'display' => array()
+    ),
+    'path' => drupal_get_path('module', 'panels_bootstrap_styles') . '/theme',
+    'file' => 'theme.inc',
+    'template' => 'panels-bootstrap-tabs',
+  );
+
+  $theme['panels_bootstrap_accordion'] = array(
+    'variables' => array(
+      'output' => array(),
+      'panes' => array(),
+      'display' => array()
+    ),
+    'path' => drupal_get_path('module', 'panels_bootstrap_styles') . '/theme',
+    'file' => 'theme.inc',
+    'template' => 'panels-bootstrap-accordion',
+  );
   return $theme;
 }
 
 /**
  * Retrieves a single or all substyles.
+ *
  * @param string $name
+ *   The name to retrieve a single substyle.
+ *
  * @return array
+ *   The array of substyles.
  */
 function panels_bootstrap_styles_load_substyles($name = NULL) {
   $substyles = &drupal_static(__FUNCTION__, array());
@@ -50,11 +114,11 @@ function panels_bootstrap_styles_load_substyles($name = NULL) {
   if (empty($substyles)) {
     $substyles = module_invoke_all('panels_bootstrap_substyles');
     $default = array(
-      'description' => '',
+      'description' => 'p',
       // Default elements.
       'wrapper_element' => 'div',
       'header_element' => 'div',
-      'title_element' => 'div',
+      'title_element' => 'h3',
       'content_element' => 'div',
       'links_element' => 'div',
       'footer_element' => 'div',
@@ -73,7 +137,7 @@ function panels_bootstrap_styles_load_substyles($name = NULL) {
 }
 
 /**
- * Implements hook_panels_bootstrap_substyles.
+ * Implements hook_panels_bootstrap_substyles().
  */
 function panels_bootstrap_styles_panels_bootstrap_substyles() {
 
@@ -81,29 +145,30 @@ function panels_bootstrap_styles_panels_bootstrap_substyles() {
     'panel' => array(
       'name' => 'panel',
       'title' => 'Panel',
-      'description' => t('Renders as bootstrap panel class.'),
+      'description' => t('Renders as Bootstrap panel class.'),
       'panes' => TRUE,
       'regions' => TRUE,
       'collapsible' => TRUE,
       'modifier_classes' => TRUE,
       'hide_classes' => TRUE,
-      'additional_classes' => TRUE,
+      'additional_classes' => TRUE
     ),
     'jumbotron' => array(
       'name' => 'jumbotron',
       'title' => 'Jumbotron',
-      'description' => t('Renders as bootstrap jumbotron class.'),
+      'description' => t('Renders as Bootstrap jumbotron class.'),
       'panes' => TRUE,
       'regions' => TRUE,
       'collapsible' => FALSE,
       'modifier_classes' => FALSE,
       'hide_classes' => TRUE,
       'additional_classes' => TRUE,
+      'title_element' => 'h2'
     ),
     'well' => array(
       'name' => 'well',
       'title' => 'Well',
-      'description' => t('Renders as bootstrap well class.'),
+      'description' => t('Renders as Bootstrap well class.'),
       'panes' => TRUE,
       'regions' => TRUE,
       'collapsible' => FALSE,
@@ -114,25 +179,25 @@ function panels_bootstrap_styles_panels_bootstrap_substyles() {
     'alert' => array(
       'name' => 'alert',
       'title' => 'Alert',
-      'description' => t('Renders as alert class.'),
+      'description' => t('Renders as Bootstrap alert class.'),
       'panes' => TRUE,
       'regions' => FALSE,
       'collapsible' => FALSE,
       'modifier_classes' => TRUE,
       'hide_classes' => TRUE,
       'additional_classes' => TRUE,
-    ),
-    'tabs' => array(
-      'name' => 'tabs',
-      'title' => 'Tabs',
-      'description' => t('Renders as tabs.'),
-      'panes' => FALSE,
-      'regions' => TRUE,
-      'collapsible' => FALSE,
-      'modifier_classes' => FALSE,
-      'hide_classes' => FALSE,
-      'additional_classes' => FALSE,
+      'title_element' => 'strong'
     ),
   );
   return $styles;
+}
+
+/**
+ * Implements hook_process_panels_pane().
+ */
+function panels_bootstrap_styles_process_panels_pane(&$variables) {
+  // Store pane title in static cache so we can use it at the region level.
+  $pane_id = $variables['pane']->pid;
+  $pane_title = &drupal_static('pane_' . $pane_id . '_title');
+  $pane_title = $variables['title'];
 }
