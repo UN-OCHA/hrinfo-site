@@ -1,7 +1,8 @@
 <?php
+
 /**
- * @file panels-pane.tpl.php
- * Main panel pane template
+ * @file
+ * Region panel pane template.
  *
  * Variables available:
  * - $pane->type: the content type inside this pane
@@ -24,7 +25,7 @@
     <<?php print $header_element; ?> <?php print $header_attributes; ?>>
       <<?php print $title_element; ?> <?php print $title_attributes; ?>>
         <?php if ($collapsible): ?>
-          <a href="#<?php print $id; ?>" data-toggle="collapse" data-target="#<?php print $id; ?>">
+          <a href="#" data-toggle="collapse" data-target="#<?php print $id; ?>">
             <?php print $title; ?>
           </a>
         <?php else: ?>

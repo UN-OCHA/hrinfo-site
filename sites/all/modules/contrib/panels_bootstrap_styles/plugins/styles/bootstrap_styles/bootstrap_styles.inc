@@ -64,115 +64,46 @@ function panels_bootstrap_styles_merge_plugin($plugin, $style_name, $substyle) {
 }
 
 /**
- * Theme fuction for the region styles.
+ * Theme function for the region styles.
  */
 function theme_panels_bootstrap_styles_render_region(&$variables) {
   $settings = $variables['settings'];
   $style = $variables['style'];
   $substyle = $style['substyle'];
 
-  $output = "";
-  if ($substyle['name'] != 'tabs') {
-    // Prepare the classes.
-    $base = $substyle['name'];
-    $wrapper_classes = array($base);
-    if (!empty($substyle['modifier_classes'])) {
-      $wrapper_classes[] = !empty($settings['modifier_class']) ? $settings['modifier_class'] : $base . '-default';
-    }
-    $hide_classes = isset($settings['hide_classes']) ? array_filter($settings['hide_classes']) : array();
-    $additional_classes = isset($settings['additional_classes']) ? array_filter($settings['additional_classes']) : array();
-
-    // Combine all wrapper classes together.
-    $wrapper_classes = array_merge($wrapper_classes, $hide_classes, $additional_classes);
-
-    $style = array(
-      'region_title' => !empty($settings['region_title']) ? $settings['region_title'] : '',
-      'wrapper_classes' => $wrapper_classes,
-      'header_class' => $base . '-heading',
-      'title_class' => $base . '-title',
-      'content_class' => $base . '-body',
-      'footer_class' => $base . '-footer',
-      'wrapper_element' => $substyle['wrapper_element'],
-      'header_element' => $substyle['header_element'],
-      'title_element' => $substyle['title_element'],
-      'content_element' => $substyle['content_element'],
-      'footer_element' => $substyle['footer_element'],
-      'links_element' => $substyle['links_element'],
-    );
-
-    $variables['#collapsible'] = !empty($settings['collapsible']);
-    $variables['#collapsed'] = !empty($settings['collapsible']) && !empty($settings['collapsed']);
-
-    $variables['style_settings'] = $style;
-    $output = theme('panels_bootstrap_region', $variables);
+  // Prepare the classes.
+  $base = $substyle['name'];
+  $wrapper_classes = array($base);
+  if (!empty($substyle['modifier_classes'])) {
+    $wrapper_classes[] = !empty($settings['modifier_class']) ? $settings['modifier_class'] : $base . '-default';
   }
-  else {
-    $output = theme_panels_bootstrap_styles_tabs_render_region($variables);
-  }
+  $hide_classes = isset($settings['hide_classes']) ? array_filter($settings['hide_classes']) : array();
+  $additional_classes = isset($settings['additional_classes']) ? array_filter($settings['additional_classes']) : array();
+
+  // Combine all wrapper classes together.
+  $wrapper_classes = array_merge($wrapper_classes, $hide_classes, $additional_classes);
+
+  $style = array(
+    'region_title' => !empty($settings['region_title']) ? $settings['region_title'] : '',
+    'wrapper_classes' => $wrapper_classes,
+    'header_class' => $base . '-heading',
+    'title_class' => $base . '-title',
+    'content_class' => $base . '-body',
+    'footer_class' => $base . '-footer',
+    'wrapper_element' => $substyle['wrapper_element'],
+    'header_element' => $substyle['header_element'],
+    'title_element' => $substyle['title_element'],
+    'content_element' => $substyle['content_element'],
+    'footer_element' => $substyle['footer_element'],
+    'links_element' => $substyle['links_element'],
+  );
+  $variables['#collapsible'] = !empty($settings['collapsible']) || $substyle['name'];
+  $variables['#collapsed'] = (!empty($settings['collapsible']) || $substyle['name']) && !empty($settings['collapsed']);
+
+  $variables['style_settings'] = $style;
+  $output = theme('panels_bootstrap_region', $variables);
   return $output;
 }
-
-/**
- * Render callback
- */
-function theme_panels_bootstrap_styles_tabs_render_region($vars) {
-  // Include some basic information.
-  $display = $vars['display'];
-  $panes = $vars['panes'];
-  $did = $vars['display']->did;
-
-  // Create the output.
-
-  // Start the Region Wrapper.
-  $output = '<div class="bootstrap-panels-horizontal-tabs">';
-
-  // Start the Tabs.
-  $output .= '<ul class="nav nav-pills">';
-
-  $i = 0;
-  foreach ($panes as $pane_id => $pane) {
-    if ($i == 0 ) {
-      $output .= '<li class="active">';
-      $i++;
-    }
-    else {
-      $output .= '<li>';
-      $i++;
-    }
-    if (!empty($display->content[$pane_id]->configuration['override_title'])) {
-      $pane_title = $display->content[$pane_id]->configuration['override_title_text'];
-    }
-    if (empty($pane_title)) {
-      $pane_title = 'This pane needs a title.';
-    }
-    $output .= '<a href="#pane-' . $pane_id . '" data-toggle="tab">' . $pane_title .  '</a>';
-
-    $output .= '</li>';
-  }
-  $output .= '</ul>';
-  // End the Tabs.
-
-  // Start Panes output.
-  $output .= '<div class="tab-content">';
-  $i = 0;
-  foreach ($panes as $pane_id => $pane) {
-    if ($i == 0) {
-      $output .= '<div id="pane-' . $pane_id . '" class="tab-pane active">' . $pane . '</div>';
-      $i++;
-    }
-    else {
-      $output .= '<div id="pane-' . $pane_id . '" class="tab-pane">' . $pane . '</div>';
-    }
-  }
-  // End Panes output.
-  $output .= '</div>';
-
-  // End Region Wrapper.
-  $output .= '</div>';
-
-  return $output;
-}
-
 
 /**
  * Theme function for the pane style.
@@ -183,7 +114,7 @@ function theme_panels_bootstrap_styles_render_pane(&$variables) {
   $substyle = $style['substyle'];
 
   // Prepare the classes.
-  $base = $substyle['name'];
+  $base = ($substyle['name'] == 'accordion' ? 'panel' : $substyle['name']);
   $wrapper_classes = array($base);
   if (!empty($substyle['modifier_classes'])) {
     $wrapper_classes[] = !empty($settings['modifier_class']) ? $settings['modifier_class'] : $base . '-default';
@@ -207,9 +138,8 @@ function theme_panels_bootstrap_styles_render_pane(&$variables) {
     'footer_element' => $substyle['footer_element'],
     'links_element' => $substyle['links_element'],
   );
-
-  $variables['#collapsible'] = !empty($settings['collapsible']);
-  $variables['#collapsed'] = !empty($settings['collapsible']) && !empty($settings['collapsed']);
+  $variables['#collapsible'] = !empty($settings['collapsible'])|| $substyle['name'] == 'accordion';
+  $variables['#collapsed'] = (!empty($settings['collapsible'])|| $substyle['name'] == 'accordion') && !empty($settings['collapsed']);
 
   $variables['style_settings'] = $style;
   $output = theme('panels_bootstrap_pane', $variables);
