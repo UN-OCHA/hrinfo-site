@@ -1,0 +1,9 @@
+/*
+ * Remove display of the Pane titles. It's difficult to remove these
+ * Pane titles without a lot of processing, so I'm resorting to CSS.
+ * Use child selectors instead of descendant selectors to avoid
+ * removing pane titles for panes that are within Mini-Panels.
+ */
+.panels-bootstrap-tabs .tab-pane > .panel-pane > .pane-title {
+  display: none;
+}
