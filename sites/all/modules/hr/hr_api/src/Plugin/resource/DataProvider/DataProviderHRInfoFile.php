@@ -12,7 +12,7 @@ use Drupal\restful\Exception\ForbiddenException;
 use Drupal\restful\Exception\ServiceUnavailableException;
 use Drupal\restful\Http\RequestInterface;
 use Drupal\restful\Plugin\resource\Field\ResourceFieldCollectionInterface;
-use Drupal\restful\Plugin\resource\DataProviderFile;
+use Drupal\restful\Plugin\resource\DataProvider\DataProviderFile;
 
 /**
  * Class DataProviderFile.
