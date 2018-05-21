@@ -43,8 +43,10 @@ class DataProviderHRInfoFile extends DataProviderFile {
     $provider_options = $this->getOptions();
     $options = $provider_options['options'];
 
+    $datedir = date('Y/m');
     $validators = empty($options['validators']) ? NULL : $options['validators'];
-    $destination = $options['scheme'] . "://";
+    $destination = $options['scheme'] . "://" . $datedir;
+    file_prepare_directory($destination, FILE_CREATE_DIRECTORY);
     $replace = empty($options['replace']) ? NULL : $options['replace'];
 
     // Return cached objects without processing since the file will have
