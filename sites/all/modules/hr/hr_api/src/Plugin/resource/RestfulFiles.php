@@ -91,7 +91,7 @@ class RestfulFiles extends ResourceCustom implements ResourceInterface {
    * {@inheritdoc}
    */
   protected function dataProviderClassName() {
-    return '\Drupal\restful\Plugin\resource\DataProvider\DataProviderFile';
+    return '\Drupal\hr_api\Plugin\resource\DataProvider\DataProviderHRInfoFile';
   }
 
 }
