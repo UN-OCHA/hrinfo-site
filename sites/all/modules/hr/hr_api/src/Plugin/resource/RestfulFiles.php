@@ -40,6 +40,25 @@ use Drupal\restful\Http\RequestInterface;
 class RestfulFiles extends ResourceCustom implements ResourceInterface {
 
   /**
+   * Overrides \RestfulEntityBase::publicFields().
+   */
+  public function publicFields() {
+    $public_fields = parent::publicFields();
+
+    $public_fields['uri'] = array(
+      'callback' => array(array($this, 'getFileUri')),
+    );
+
+    return $public_fields;
+  }
+
+  public function getFileUri($di) {
+    $wrapper = $di->getWrapper();
+    $id = $wrapper->getIdentifier();
+    return file_create_url(file_load($id)->uri);
+  }
+
+  /**
    * {@inheritdoc}
    *
    * If "File entity" module exists, determine access by its provided
