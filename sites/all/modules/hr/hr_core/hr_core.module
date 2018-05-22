@@ -1076,7 +1076,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
 
     // Reliefweb.
     'hr_layout_reliefweb' => array(
-      'category' => 'Content by RW',
+      'category' => 'Outdated',
       'title' => 'ReliefWeb API',
     ),
     'hr_reliefweb_ocha_products' => array(
@@ -1163,7 +1163,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   if (isset($plugin['name']) && $plugin['name'] == 'views_panes') {
     if (is_array($subtype['category'])) {
       $key = strtolower($subtype['category'][0]);
-      if (array_key_exists($key, $categories)) {
+      if (array_key_exists(t($key), $categories)) {
         $plugin['category'] = $categories[$key]['category'];
         $subtype['category'] = $categories[$key]['category'];
         if (isset($categories[$key]['title'])) {
