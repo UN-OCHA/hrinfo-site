@@ -46,7 +46,7 @@ class RestfulFiles extends ResourceCustom implements ResourceInterface {
     $public_fields = parent::publicFields();
 
     $public_fields['uri'] = array(
-      'callback' => array(array($this, 'getFileUri')),
+      'callback' => array($this, 'getFileUri'),
     );
 
     return $public_fields;
