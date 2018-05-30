@@ -60,4 +60,38 @@ class DataProviderFieldFilesCollection  extends DataProviderEntity implements Da
     return $output;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function update($identifier, $object, $replace = FALSE) {
+    $this->validateBody($object);
+    $entity_id = $this->getEntityIdByFieldId($identifier);
+    $this->isValidEntity('update', $entity_id);
+
+    if (isset($object['host_entity'])) {
+      unset($object['host_entity']);
+    }
+
+    /* @var \EntityDrupalWrapper $wrapper */
+    $wrapper = entity_metadata_wrapper($this->entityType, $entity_id);
+
+    $this->setPropertyValues($wrapper, $object, $replace);
+
+    // Set the HTTP headers.
+    $this->setHttpHeader('Status', 201);
+
+    if (!empty($wrapper->url) && $url = $wrapper->url->value()) {
+      $this->setHttpHeader('Location', $url);
+    }
+
+    // The access calls use the request method. Fake the view to be a GET.
+    $old_request = $this->getRequest();
+    $this->getRequest()->setMethod(RequestInterface::METHOD_GET);
+    $output = array($this->view($identifier));
+    // Put the original request back to a PUT/PATCH.
+    $this->request = $old_request;
+
+    return $output;
+  }
+
 }
