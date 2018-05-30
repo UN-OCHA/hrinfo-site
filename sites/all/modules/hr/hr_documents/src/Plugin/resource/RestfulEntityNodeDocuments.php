@@ -201,6 +201,7 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
     if (!empty($values)) {
       foreach ($values as $value) {
         $tmp = new \stdClass();
+        $tmp->item_id = $value->item_id;
         $tmp->file = new \stdClass();
         $field_file = $value->field_file[LANGUAGE_NONE][0];
         $tmp->file->fid = $field_file['fid'];
