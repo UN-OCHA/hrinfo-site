@@ -128,6 +128,10 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
       ),
     );
 
+    $public_fields['related_content'] = array(
+      'property' => 'field_related_content'
+    );
+
     $public_fields['disasters'] = array(
       'property' => 'field_disasters',
       'process_callbacks' => array(array($this, 'getDisasters')),
