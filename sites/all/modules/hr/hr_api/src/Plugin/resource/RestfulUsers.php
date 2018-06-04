@@ -15,9 +15,9 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  * @package Drupal\hr_api\Plugin\resource
  *
  * @Resource(
- *   name = "users:1.0",
- *   resource = "users",
- *   label = "Users",
+ *   name = "user:1.0",
+ *   resource = "user",
+ *   label = "User",
  *   description = "Export the User entity.",
  *   authenticationOptional = FALSE,
  *   authenticationTypes = {
@@ -42,12 +42,33 @@ class RestfulUsers extends ResourceCustom implements ResourceInterface {
   protected function publicFields() {
     $public_fields = parent::publicFields();
 
-    // The mail will be shown only to the own user or privileged users.
-    $public_fields['mail'] = array(
-      'property' => 'mail',
+    $public_fields['roles'] = array(
+      'callback' => array($this, 'getRoles')
+    );
+
+    $public_fields['spaces'] = array(
+      'property' => 'og_user_node',
+      'process_callbacks' => array(array($this, 'getGroupRoles'))
     );
 
     return $public_fields;
+  }
+
+  public function getRoles($di) {
+    $wrapper = $di->getWrapper();
+    $id = $wrapper->getIdentifier();
+    return array_values(user_roles($id));
+  }
+
+  public function getGroupRoles($values) {
+    $return = array();
+    if (!empty($values)) {
+      foreach ($values as $value) {
+        $roles = og_get_user_roles('node', $value, $this->getAccount()->uid);
+        $return[$value] = array_values($roles);
+      }
+    }
+    return $return;
   }
 
   /**
