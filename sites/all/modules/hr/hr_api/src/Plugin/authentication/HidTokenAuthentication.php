@@ -73,9 +73,20 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
      *   The extracted token.
      */
     protected function extractToken(RequestInterface $request) {
+      $token = '';
       $plugin_definition = $this->getPluginDefinition();
       $authorization = $request->getHeaders()->get('Authorization')->getValueString();
-      $token = str_replace('Bearer ', '', $authorization);
+      if (!empty($authorization)) {
+        $token = str_replace('Bearer ', '', $authorization);
+        return $token;
+      }
+      else {
+        // Try to get token from URL
+        $args = $request->getParsedInput();
+        if (isset($args['access_token'])) {
+          $token = $args['access_token'];
+        }
+      }
       return $token;
     }
 
