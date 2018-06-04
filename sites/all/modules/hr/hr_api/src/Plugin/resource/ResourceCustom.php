@@ -20,4 +20,14 @@ abstract class ResourceCustom extends ResourceEntity {
 
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function remove($path) {
+    // TODO: Compare this with 1.x logic.
+    $this->getDataProvider()->remove($path);
+    $output = array();
+    return $output;
+  }
+
 }
