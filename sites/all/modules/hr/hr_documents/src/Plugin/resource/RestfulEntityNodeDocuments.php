@@ -212,6 +212,7 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
         $tmp->file->filename = $field_file['filename'];
         $tmp->file->filesize = $field_file['filesize'];
         $tmp->file->url = file_create_url($field_file['uri']);
+        $tmp->file->preview = file_create_url(_pdfpreview_create_preview($tmp->file));
         if (!empty($value->field_language)) {
           $tmp->language = $value->field_language[LANGUAGE_NONE][0]['value'];
         }

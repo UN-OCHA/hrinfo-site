@@ -49,6 +49,10 @@ class RestfulFiles extends ResourceCustom implements ResourceInterface {
       'callback' => array($this, 'getFileUri'),
     );
 
+    $public_fields['preview'] = array(
+      'callback' => array($this, 'getPreview')
+    );
+
     return $public_fields;
   }
 
@@ -56,6 +60,13 @@ class RestfulFiles extends ResourceCustom implements ResourceInterface {
     $wrapper = $di->getWrapper();
     $id = $wrapper->getIdentifier();
     return file_create_url(file_load($id)->uri);
+  }
+
+  public function getPreview($di) {
+    $wrapper = $di->getWrapper();
+    $id = $wrapper->getIdentifier();
+    $file = file_load($id);
+    return file_create_url(_pdfpreview_create_preview($file));
   }
 
   /**
