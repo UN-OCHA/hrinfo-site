@@ -41,7 +41,7 @@ class RestfulEntityTaxonomyTermInfographicTypes extends ResourceCustom implement
       'property' => 'parent',
       'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
-        'name' => 'document_types',
+        'name' => 'infographic_types',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
@@ -49,7 +49,7 @@ class RestfulEntityTaxonomyTermInfographicTypes extends ResourceCustom implement
 
     return $public_fields;
   }
-  
+
   /**
    * {@inheritdoc}
    */
