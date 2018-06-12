@@ -131,6 +131,10 @@ class RestfulEntityNodeInfographics extends ResourceCustom implements ResourceIn
       ),
     );
 
+    $public_fields['related_content'] = array(
+      'property' => 'field_related_content'
+    );
+
     $public_fields['disasters'] = array(
       'property' => 'field_disasters',
       'process_callbacks' => array(array($this, 'getDisasters')),

@@ -30,6 +30,26 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  */
 
 class RestfulEntityTaxonomyTermInfographicTypes extends ResourceCustom implements ResourceInterface {
+
+  /**
+   * Overrides \RestfulEntityBase::publicFields().
+   */
+  public function publicFields() {
+    $public_fields = parent::publicFields();
+
+    $public_fields['parent'] = array(
+      'property' => 'parent',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
+      'resource' => array(
+        'name' => 'document_types',
+        'majorVersion' => 1,
+        'minorVersion' => 0,
+      ),
+    );
+
+    return $public_fields;
+  }
+  
   /**
    * {@inheritdoc}
    */
