@@ -129,7 +129,7 @@ class flag_flag {
 
     // Populate the options with the defaults.
     $options = (array) unserialize($row->options);
-    $options += $flag->options();
+    $options = array_merge($options, $flag->options());
 
     // Make the unserialized options accessible as normal properties.
     foreach ($options as $option => $value) {
