@@ -200,4 +200,69 @@ class DataProviderHRInfoFile extends DataProviderFile {
     throw new ServiceUnavailableException('Unknown error has occurred.');
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function create($object) {
+    $ids = array();
+    $files = $this->getRequest()->getFiles();
+    if (!$files) {
+      $this->validateBody($object);
+      if ($object['link']) {
+        $provider_options = $this->getOptions();
+        $options = $provider_options['options'];
+
+        $datedir = date('Y/m');
+        $validators = empty($options['validators']) ? NULL : $options['validators'];
+        $destination = $options['scheme'] . "://" . $datedir;
+        file_prepare_directory($destination, FILE_CREATE_DIRECTORY);
+        $replace = empty($options['replace']) ? NULL : $options['replace'];
+
+        $file = system_retrieve_file($object['link'], $destination, true, $replace);
+        file_usage_add($file, 'restful', 'files', $file->fid);
+
+        $ids[] = $file->fid;
+
+      }
+      else {
+        throw new BadRequestException('No files sent with the request.');
+      }
+    }
+    else {
+      foreach ($files as $file_info) {
+        // Populate the $_FILES the way file_save_upload() expects.
+        $name = $file_info['name'];
+        foreach ($file_info as $key => $value) {
+          $files['files'][$key][$name] = $value;
+        }
+
+        if (!$file = $this->fileSaveUpload($name, $files)) {
+          throw new BadRequestException('Unacceptable file sent with the request.');
+        }
+
+        // Required to be able to reference this file.
+        file_usage_add($file, 'restful', 'files', $file->fid);
+
+        $ids[] = $file->fid;
+      }
+    }
+
+    $return = array();
+    foreach ($ids as $id) {
+      // The access calls use the request method. Fake the view to be a GET.
+      $old_request = $this->getRequest();
+      $this->getRequest()->setMethod(RequestInterface::METHOD_GET);
+      try {
+        $return[] = array($this->view($id));
+      }
+      catch (ForbiddenException $e) {
+        // A forbidden element should not forbid access to the whole list.
+      }
+      // Put the original request back to a POST.
+      $this->request = $old_request;
+    }
+
+    return $return;
+  }
+
 }
