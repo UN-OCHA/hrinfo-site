@@ -85,6 +85,10 @@ class RestfulEntityNodeOffices extends ResourceCustom implements ResourceInterfa
       'property' => 'changed',
     );
 
+    $public_fields['published'] = array(
+      'property' => 'status',
+    );
+
     return $public_fields;
   }
 

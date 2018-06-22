@@ -172,6 +172,10 @@ class RestfulEntityNodeInfographics extends ResourceCustom implements ResourceIn
       'property' => 'url',
     );
 
+    $public_fields['published'] = array(
+      'property' => 'status',
+    );
+
     return $public_fields;
   }
 

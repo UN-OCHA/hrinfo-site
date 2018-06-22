@@ -184,6 +184,10 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
       'property' => 'url',
     );
 
+    $public_fields['published'] = array(
+      'property' => 'status',
+    );
+
     return $public_fields;
   }
 

@@ -85,6 +85,10 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
       'property' => 'url',
     );
 
+    $public_fields['published'] = array(
+      'property' => 'status',
+    );
+
     return $public_fields;
   }
 

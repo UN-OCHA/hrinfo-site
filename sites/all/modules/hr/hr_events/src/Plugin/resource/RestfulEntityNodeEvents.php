@@ -181,6 +181,10 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
       'property' => 'url',
     );
 
+    $public_fields['published'] = array(
+      'property' => 'status',
+    );
+
     return $public_fields;
   }
 
