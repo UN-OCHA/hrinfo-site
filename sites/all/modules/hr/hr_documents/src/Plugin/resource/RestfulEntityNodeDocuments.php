@@ -173,6 +173,10 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
       'property' => 'url',
     );
 
+    $public_fields['published'] = array(
+      'property' => 'status'
+    )
+
     return $public_fields;
   }
 
