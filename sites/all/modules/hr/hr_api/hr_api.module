@@ -106,9 +106,6 @@ function hr_api_should_call_webhook($webhook, $type, $bundle) {
 function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $entity) {
   $definition = $resource->getPluginDefinition();
   $url = $webhook['url'];
-  if (!empty($webhook['secret'])) {
-    $url .= '?secret=' . $webhook['secret'];
-  }
   $json = new \stdClass();
   $json->type = $definition['resource'];
   $json->language = $langcode;
@@ -118,6 +115,7 @@ function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translatio
   $headers = array(
     'X-HRInfo-Event: ' . $event,
     'Accept: application/json',
+    'Authorization: ' + $webhook['secret'],
     'Content-Type: application/json',
   );
 
