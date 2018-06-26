@@ -78,31 +78,21 @@ function hr_sectors_feeds_importer_default() {
             'unique' => FALSE,
           ),
           7 => array(
-            'source' => 'Mailchimp API key',
-            'target' => 'field_mailchimp_api_key',
-            'unique' => FALSE,
-          ),
-          8 => array(
-            'source' => 'Mailchimp List',
-            'target' => 'field_mailchimp_list',
-            'unique' => FALSE,
-          ),
-          9 => array(
             'source' => 'Visibility',
             'target' => 'group_access',
             'unique' => FALSE,
           ),
-          10 => array(
+          8 => array(
             'source' => 'Acronym:en',
             'target' => 'field_acronym:et:en',
             'unique' => FALSE,
           ),
-          11 => array(
+          9 => array(
             'source' => 'Acronym:fr',
             'target' => 'field_acronym:et:fr',
             'unique' => FALSE,
           ),
-          12 => array(
+          10 => array(
             'source' => 'Acronym:es',
             'target' => 'field_acronym:et:es',
             'unique' => FALSE,

@@ -88,31 +88,21 @@ function hr_operations_feeds_importer_default() {
             'unique' => FALSE,
           ),
           9 => array(
-            'source' => 'Mailchimp API key',
-            'target' => 'field_mailchimp_api_key',
-            'unique' => FALSE,
-          ),
-          10 => array(
-            'source' => 'Mailchimp List',
-            'target' => 'field_mailchimp_list',
-            'unique' => FALSE,
-          ),
-          11 => array(
             'source' => 'Launch Date',
             'target' => 'field_launch_date:start',
             'unique' => FALSE,
           ),
-          12 => array(
+          10 => array(
             'source' => 'Visibility',
             'target' => 'group_access',
             'unique' => FALSE,
           ),
-          13 => array(
+          11 => array(
             'source' => 'Status',
             'target' => 'field_operation_status',
             'unique' => FALSE,
           ),
-          14 => array(
+          12 => array(
             'source' => 'Published',
             'target' => 'status',
             'unique' => FALSE,

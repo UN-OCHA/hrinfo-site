@@ -79,41 +79,31 @@ function hr_bundles_feeds_importer_default() {
             'unique' => FALSE,
           ),
           7 => array(
-            'source' => 'Mailchimp API key',
-            'target' => 'field_mailchimp_api_key',
-            'unique' => FALSE,
-          ),
-          8 => array(
-            'source' => 'Mailchimp List',
-            'target' => 'field_mailchimp_list',
-            'unique' => FALSE,
-          ),
-          9 => array(
             'source' => 'Lead Agencies',
             'target' => 'field_organizations:label',
             'unique' => FALSE,
           ),
-          10 => array(
+          8 => array(
             'source' => 'Partners',
             'target' => 'field_partners:label',
             'unique' => FALSE,
           ),
-          11 => array(
+          9 => array(
             'source' => 'NGO Participation',
             'target' => 'field_ngo_participation',
             'unique' => FALSE,
           ),
-          12 => array(
+          10 => array(
             'source' => 'Government Participation',
             'target' => 'field_government_participation',
             'unique' => FALSE,
           ),
-          13 => array(
+          11 => array(
             'source' => 'Intercluster',
             'target' => 'field_inter_cluster',
             'unique' => FALSE,
           ),
-          14 => array(
+          12 => array(
             'source' => 'Path',
             'target' => 'path_alias',
             'pathauto_override' => 1,
