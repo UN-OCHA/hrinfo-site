@@ -190,16 +190,6 @@ function hr_layout_block_view($delta = '') {
           $block['content'] .= '<hr/>';
         }
 
-        // Follow flag.
-        $block['content'] .= '<div class="space-follow">';
-        if (user_is_logged_in()) {
-          $block['content'].= flag_create_link('hr_follow', $gid);
-        }
-        else {
-          $block['content'].= l(t('Login to follow').' <i class="fa fa-random"></i>', 'user/login', array('attributes' => array('class' => array('btn', 'btn-primary')), 'html' => TRUE));
-        }
-        $block['content'] .= '</div>';
-
         // Add the RSS link.
         $block['content'] .= _hr_layout_rss_icon('node', $gid);
 
