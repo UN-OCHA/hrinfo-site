@@ -169,6 +169,10 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
       ),
     );
 
+    $public_fields['language'] = array(
+      'property' => 'language'
+    );
+
     $public_fields['created'] = array(
       'property' => 'created',
     );
