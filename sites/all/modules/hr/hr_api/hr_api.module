@@ -115,7 +115,7 @@ function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translatio
   $headers = array(
     'X-HRInfo-Event: ' . $event,
     'Accept: application/json',
-    'Authorization: ' + $webhook['secret'],
+    'Authorization: ' . $webhook['secret'],
     'Content-Type: application/json',
   );
 
