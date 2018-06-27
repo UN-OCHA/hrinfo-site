@@ -69,9 +69,6 @@ function hr_layout_add_content($node) {
  */
 function hr_layout_block_info() {
   return array(
-    'hr_layout_checkin' => array(
-      'info' => t('Checkin block'),
-    ),
     'hr_layout_login' => array(
       'info' => t('HR Login block'),
     ),
@@ -105,61 +102,6 @@ function hr_layout_block_view($delta = '') {
   $block = array();
 
   switch ($delta) {
-    case 'hr_layout_checkin':
-      $block['content'] = '';
-      if (user_is_logged_in()) {
-        $gid = og_context_determine_context('node');
-        // Philippines.
-        if ($gid != 84) {
-          if (!empty($gid)) {
-            $og_group = entity_load('node', array($gid));
-            $og_group = $og_group[$gid];
-            if (!og_is_member('node', $gid)) {
-              if (og_user_access('node', $gid, 'subscribe') || og_user_access('node', $gid, 'subscribe without approval')) {
-                if ($og_group->type == 'hr_operation') {
-                  $block['content'] = '<!-- Single button -->
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        '.t('Check-in').' <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu" role="menu">
-                        <li>'.l(t('As In-country/emergency responder'), 'group/node/'.$gid.'/subscribe/field_responder_in', array('query' => array(OG_AUDIENCE_FIELD => $gid))).'</li>
-                        <li>'.l(t('As support/desk officer'), 'group/node/'.$gid.'/subscribe/og_user_node').'</li>
-                      </ul>
-                    </div>';
-                }
-                else {
-                  $block['content'] = l(t('Check-in'), 'group/node/'.$gid.'/subscribe/og_user_node', array('attributes' => array('class' => array('btn', 'btn-default'))));
-                }
-              }
-            }
-            else {
-              $block['content'] = l(t('Check out'), 'group/node/'.$gid.'/unsubscribe', array('attributes' => array('class' => array('btn', 'btn-default'))));
-            }
-            $uri = entity_uri('node', $og_group);
-            $variables['og_group'] = l($og_group->title, $uri['path'], $uri['options']);
-          }
-        }
-        else {
-          // HID checkin
-          $data = hid_profiles_get_user_data($user->uid);
-          $checkedin = FALSE;
-          $cid = '';
-          foreach ($data->contacts as $contact) {
-            if ($contact->status == 1 && $contact->{'type'} == 'local' && $contact->locationId == 'hrinfo:'.$gid) {
-              $checkedin = TRUE;
-              $cid = $contact->{'_id'};
-            }
-          }
-          if ($checkedin) {
-            $block['content'] = l(t('Check out'), 'hid/checkout/'.$cid, array('attributes' => array('class' => array('btn', 'btn-default')), 'query' => array('destination' => current_path())));
-          }
-          else {
-            $block['content'] = l(t('Check-in'), variable_get('hid_profiles_app_url', NULL).'/#/checkin', array('attributes' => array('class' => array('btn', 'btn-default'), 'target' => '_blank')));
-          }
-        }
-      }
-      break;
     case 'hr_layout_create_links':
       $block['content'] = hr_layout_create_links();
       break;
