@@ -31,6 +31,10 @@ class HidTokenAuthentication extends TokenAuthentication {
    * {@inheritdoc}
    */
   public function authenticate(RequestInterface $request) {
+    // Allow OPTIONS requests by default
+    if ($request->getMethod() == 'OPTIONS') {
+      return user_load(1);
+    }
     // Access token may be on the request, or in the headers.
     if (!$token = $this->extractToken($request)) {
       return NULL;
@@ -73,21 +77,18 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
      *   The extracted token.
      */
     protected function extractToken(RequestInterface $request) {
-      $token = '';
+      // Allow OPTIONS requests by default
+      if ($request->getMethod() == 'OPTIONS') {
+        return true;
+      }
       $plugin_definition = $this->getPluginDefinition();
       $authorization = $request->getHeaders()->get('Authorization')->getValueString();
       if (!empty($authorization)) {
-        $token = str_replace('Bearer ', '', $authorization);
-        return $token;
+        return str_replace('Bearer ', '', $authorization);
       }
       else {
-        // Try to get token from URL
-        $args = $request->getParsedInput();
-        if (isset($args['access_token'])) {
-          $token = $args['access_token'];
-        }
+        return FALSE;
       }
-      return $token;
     }
 
 }
