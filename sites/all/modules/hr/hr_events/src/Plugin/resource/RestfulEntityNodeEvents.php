@@ -169,6 +169,10 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
       ),
     );
 
+    $public_fields['contacts'] = array(
+      'property' => 'field_hid_contact_ref',
+    );
+
     $public_fields['language'] = array(
       'property' => 'language'
     );

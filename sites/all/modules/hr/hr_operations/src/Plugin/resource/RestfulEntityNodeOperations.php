@@ -59,11 +59,43 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
       'property' => 'field_hid_access',
     );
 
+    $public_fields['body-html'] = array(
+      'property' => 'body',
+      'sub_property' => 'value',
+    );
+
+    $public_fields['body'] = array(
+      'property' => 'body',
+      'sub_property' => 'value',
+      'class' => '\Drupal\hr_api\Plugin\resource\Field\ResourceFieldEntityTextCustom',
+      'process_callbacks' => array(array($this, 'getBodyRaw')),
+    );
+
     $public_fields['country'] = array(
       'property' => 'field_country',
       'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
       'resource' => array(
         'name' => 'locations',
+        'majorVersion' => 1,
+        'minorVersion' => 0,
+      ),
+    );
+
+    $public_fields['region'] = array(
+      'property' => 'field_operation_region',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
+      'resource' => array(
+        'name' => 'operations',
+        'majorVersion' => 1,
+        'minorVersion' => 0,
+      ),
+    );
+
+    $public_fields['cluster_configuration'] = array(
+      'property' => 'field_cluster_configuration',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
+      'resource' => array(
+        'name' => 'documents',
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
@@ -87,6 +119,10 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
 
     $public_fields['published'] = array(
       'property' => 'status',
+    );
+
+    $public_fields['language'] = array(
+      'property' => 'language'
     );
 
     return $public_fields;
