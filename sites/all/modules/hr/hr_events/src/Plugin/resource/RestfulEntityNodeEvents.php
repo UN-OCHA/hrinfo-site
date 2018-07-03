@@ -171,7 +171,7 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
 
     $public_fields['contacts'] = array(
       'property' => 'field_hid_contact_ref',
-      'class' => 'Drupal\restful\Plugin\resource\Field\ResourceFieldEntity'
+      'class' => 'Drupal\hr_api\Plugin\resource\Field\ResourceFieldHidContact'
     );
 
     $public_fields['language'] = array(
