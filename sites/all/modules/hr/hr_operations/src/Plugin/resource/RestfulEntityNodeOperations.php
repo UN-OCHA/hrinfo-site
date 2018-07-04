@@ -3,6 +3,7 @@
 namespace Drupal\hr_operations\Plugin\resource;
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
+use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 
 /**
  * Class RestfulEntityNodeOperations
@@ -99,6 +100,24 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
+    );
+
+    $public_fields['managed_by'] = array(
+      'property' => 'field_organizations',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
+      'resource' => array(
+        'name' => 'organizations',
+        'majorVersion' => 1,
+        'minorVersion' => 0,
+      ),
+    );
+
+    $public_fields['focal_points'] = array(
+      'property' => 'field_users'
+    );
+
+    $public_fields['social_media'] = array(
+      'property' => 'field_social_media'
     );
 
     $public_fields['launch_date'] = array(
