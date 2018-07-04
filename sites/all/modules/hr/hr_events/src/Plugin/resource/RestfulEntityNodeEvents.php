@@ -170,9 +170,7 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
     );
 
     $public_fields['contacts'] = array(
-      'property' => 'field_hid_contact_ref',
-      'class' => 'Drupal\hr_api\Plugin\resource\Field\ResourceFieldHidContact',
-      'process_callbacks' => array(array($this, 'getContacts')),
+      'callback' => array($this, 'getContacts')
     );
 
     $public_fields['language'] = array(
@@ -214,9 +212,17 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
     return $return;
   }
 
-  public function getContacts($values) {
-    debug($values);
-    return 'test';
+  public function getContacts(DataInterpreterInterface $di) {
+    $cids = array();
+    $wrapper = $di->getWrapper();
+    $nid = $wrapper->getIdentifier();
+    $node = node_load($nid);
+    if (!empty($node->field_hid_contact_ref)) {
+      foreach ($node->field_hid_contact_ref[LANGUAGE_NONE] as $cid) {
+        $cids[] = $cid['cid'];
+      }
+    }
+    return $cids;
   }
 
   public function getBodyRaw($value) {
