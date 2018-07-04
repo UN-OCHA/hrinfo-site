@@ -147,6 +147,10 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
     return $public_fields;
   }
 
+  public function getBodyRaw($value) {
+    return strip_tags($value);
+  }
+
   /**
    * {@inheritdoc}
    */
