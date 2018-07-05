@@ -101,7 +101,7 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
     );
 
     $public_fields['focal_points'] = array(
-      'property' => 'field_users'
+      'callback' => array($this, 'getContacts')
     );
 
     $public_fields['social_media'] = array(
@@ -133,6 +133,19 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
     );
 
     return $public_fields;
+  }
+
+  public function getContacts(DataInterpreterInterface $di) {
+    $cids = array();
+    $wrapper = $di->getWrapper();
+    $nid = $wrapper->getIdentifier();
+    $node = node_load($nid);
+    if (!empty($node->field_hid_contact_ref)) {
+      foreach ($node->field_hid_contact_ref[LANGUAGE_NONE] as $cid) {
+        $cids[] = $cid['cid'];
+      }
+    }
+    return $cids;
   }
 
   /**
