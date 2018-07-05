@@ -60,18 +60,6 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
       'property' => 'field_hid_access',
     );
 
-    $public_fields['body-html'] = array(
-      'property' => 'body',
-      'sub_property' => 'value',
-    );
-
-    $public_fields['body'] = array(
-      'property' => 'body',
-      'sub_property' => 'value',
-      'class' => '\Drupal\hr_api\Plugin\resource\Field\ResourceFieldEntityTextCustom',
-      'process_callbacks' => array(array($this, 'getBodyRaw')),
-    );
-
     $public_fields['country'] = array(
       'property' => 'field_country',
       'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
@@ -145,10 +133,6 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
     );
 
     return $public_fields;
-  }
-
-  public function getBodyRaw($value) {
-    return strip_tags($value);
   }
 
   /**
