@@ -523,6 +523,50 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-hr_operation-field_hid_contact_ref'
+  $field_instances['node-hr_operation-field_hid_contact_ref'] = array(
+    'bundle' => 'hr_operation',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'hid_contact_reference',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 17,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_hid_contact_ref',
+    'label' => 'Focal points',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'hid_contact_reference',
+      'settings' => array(),
+      'type' => 'hid_contact_reference_autocomplete',
+      'weight' => 14,
+    ),
+  );
+
   // Exported field_instance: 'node-hr_operation-field_website'.
   $field_instances['node-hr_operation-field_website'] = array(
     'bundle' => 'hr_operation',
