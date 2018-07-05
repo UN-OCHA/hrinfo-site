@@ -10,7 +10,7 @@
 function hr_operations_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-hr_operation-field_cluster_configuration'
+  // Exported field_instance: 'node-hr_operation-field_cluster_configuration'.
   $field_instances['node-hr_operation-field_cluster_configuration'] = array(
     'bundle' => 'hr_operation',
     'default_value' => NULL,
@@ -20,11 +20,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 13,
       ),
       'search_result' => array(
@@ -66,7 +63,7 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_country'
+  // Exported field_instance: 'node-hr_operation-field_country'.
   $field_instances['node-hr_operation-field_country'] = array(
     'bundle' => 'hr_operation',
     'default_value' => array(),
@@ -75,11 +72,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 5,
       ),
       'search_result' => array(
@@ -121,11 +115,11 @@ function hr_operations_field_default_field_instances() {
         ),
       ),
       'type' => 'taxonomy_shs',
-      'weight' => 8,
+      'weight' => 4,
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_email'
+  // Exported field_instance: 'node-hr_operation-field_email'.
   $field_instances['node-hr_operation-field_email'] = array(
     'bundle' => 'hr_operation',
     'default_value' => NULL,
@@ -134,9 +128,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'email',
         'settings' => array(),
-        'type' => 'email_default',
+        'type' => 'hidden',
         'weight' => 8,
       ),
       'search_result' => array(
@@ -171,7 +164,7 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_hid_access'
+  // Exported field_instance: 'node-hr_operation-field_hid_access'.
   $field_instances['node-hr_operation-field_hid_access'] = array(
     'bundle' => 'hr_operation',
     'default_value' => array(
@@ -184,9 +177,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 18,
       ),
       'search_result' => array(
@@ -219,7 +211,7 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_launch_date'
+  // Exported field_instance: 'node-hr_operation-field_launch_date'.
   $field_instances['node-hr_operation-field_launch_date'] = array(
     'bundle' => 'hr_operation',
     'deleted' => 0,
@@ -227,16 +219,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'date',
-        'settings' => array(
-          'format_type' => 'long',
-          'fromto' => 'both',
-          'multiple_from' => '',
-          'multiple_number' => '',
-          'multiple_to' => '',
-          'show_repeat_rule' => 'show',
-        ),
-        'type' => 'date_default',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 12,
       ),
       'search_result' => array(
@@ -269,7 +253,7 @@ function hr_operations_field_default_field_instances() {
       'module' => 'date',
       'settings' => array(
         'display_all_day' => 0,
-        'increment' => 15,
+        'increment' => 1,
         'input_format' => 'm/d/Y - H:i:s',
         'input_format_custom' => '',
         'label_position' => 'above',
@@ -282,7 +266,7 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_operation_region'
+  // Exported field_instance: 'node-hr_operation-field_operation_region'.
   $field_instances['node-hr_operation-field_operation_region'] = array(
     'bundle' => 'hr_operation',
     'default_value' => NULL,
@@ -291,11 +275,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 7,
       ),
       'search_result' => array(
@@ -330,7 +311,7 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_operation_status'
+  // Exported field_instance: 'node-hr_operation-field_operation_status'.
   $field_instances['node-hr_operation-field_operation_status'] = array(
     'bundle' => 'hr_operation',
     'default_value' => NULL,
@@ -339,9 +320,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 15,
       ),
       'search_result' => array(
@@ -372,11 +352,11 @@ function hr_operations_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_operation_type'
+  // Exported field_instance: 'node-hr_operation-field_operation_type'.
   $field_instances['node-hr_operation-field_operation_type'] = array(
     'bundle' => 'hr_operation',
     'default_value' => NULL,
@@ -385,9 +365,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 6,
       ),
       'search_result' => array(
@@ -422,21 +401,18 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_organizations'
+  // Exported field_instance: 'node-hr_operation-field_organizations'.
   $field_instances['node-hr_operation-field_organizations'] = array(
     'bundle' => 'hr_operation',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 16,
       ),
       'search_result' => array(
@@ -473,6 +449,7 @@ function hr_operations_field_default_field_instances() {
       'module' => 'entityreference',
       'settings' => array(
         'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete_tags',
@@ -480,7 +457,7 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_social_media'
+  // Exported field_instance: 'node-hr_operation-field_social_media'.
   $field_instances['node-hr_operation-field_social_media'] = array(
     'bundle' => 'hr_operation',
     'default_value' => NULL,
@@ -489,9 +466,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'link_icons',
         'settings' => array(),
-        'type' => 'link_icons',
+        'type' => 'hidden',
         'weight' => 9,
       ),
       'search_result' => array(
@@ -531,6 +507,7 @@ function hr_operations_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'none',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -546,51 +523,7 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_hid_contact_ref'
-  $field_instances['node-hr_operation-field_hid_contact_ref'] = array(
-    'bundle' => 'hr_operation',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'hid_contact_reference',
-        'settings' => array(),
-        'type' => 'hid_contact_reference_full',
-        'weight' => 17,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_hid_contact_ref',
-    'label' => 'Focal Points',
-    'required' => 0,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'hid_contact_reference',
-      'settings' => array(),
-      'type' => 'hid_contact_reference_autocomplete',
-      'weight' => 14,
-    ),
-  );
-
-  // Exported field_instance: 'node-hr_operation-field_website'
+  // Exported field_instance: 'node-hr_operation-field_website'.
   $field_instances['node-hr_operation-field_website'] = array(
     'bundle' => 'hr_operation',
     'default_value' => NULL,
@@ -599,9 +532,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'link',
         'settings' => array(),
-        'type' => 'link_default',
+        'type' => 'hidden',
         'weight' => 3,
       ),
       'search_result' => array(
@@ -637,6 +569,7 @@ function hr_operations_field_default_field_instances() {
       'entity_translation_sync' => FALSE,
       'rel_remove' => 'default',
       'title' => 'none',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -652,7 +585,7 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-group_access'
+  // Exported field_instance: 'node-hr_operation-group_access'.
   $field_instances['node-hr_operation-group_access'] = array(
     'bundle' => 'hr_operation',
     'default_value' => array(
@@ -665,9 +598,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 14,
       ),
       'search_result' => array(
@@ -685,8 +617,8 @@ function hr_operations_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'group_access',
-    'label' => 'Group visibility',
-    'required' => TRUE,
+    'label' => 'Visibility',
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
@@ -702,15 +634,16 @@ function hr_operations_field_default_field_instances() {
       ),
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 5,
+      'weight' => 6,
     ),
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_operation-group_group'
+  // Exported field_instance: 'node-hr_operation-group_group'.
   $field_instances['node-hr_operation-group_group'] = array(
     'bundle' => 'hr_operation',
     'default_value' => array(
@@ -723,11 +656,8 @@ function hr_operations_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
-        'settings' => array(
-          'field_name' => 'og_user_node',
-        ),
-        'type' => 'og_group_subscribe',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'search_result' => array(
@@ -772,11 +702,11 @@ function hr_operations_field_default_field_instances() {
         'og_hide' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-title_field'
+  // Exported field_instance: 'node-hr_operation-title_field'.
   $field_instances['node-hr_operation-title_field'] = array(
     'bundle' => 'hr_operation',
     'default_value' => NULL,
@@ -834,10 +764,7 @@ function hr_operations_field_default_field_instances() {
   t('Email');
   t('Focal Points');
   t('Group');
-  t('Group visibility');
   t('Launch date');
-  t('Mailchimp API key');
-  t('Mailchimp List');
   t('Managed by');
   t('Region');
   t('Secure Humanitarian ID contact list ?');
@@ -845,6 +772,7 @@ function hr_operations_field_default_field_instances() {
   t('Status');
   t('Title');
   t('Type');
+  t('Visibility');
   t('Website');
 
   return $field_instances;
