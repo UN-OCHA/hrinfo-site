@@ -10,57 +10,6 @@
 function hr_operations_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-hr_operation-body'
-  $field_instances['node-hr_operation-body'] = array(
-    'bundle' => 'hr_operation',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 1,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(
-          'trim_length' => 600,
-        ),
-        'type' => 'text_summary_or_trimmed',
-        'weight' => 1,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'body',
-    'label' => 'Body',
-    'required' => FALSE,
-    'settings' => array(
-      'display_summary' => TRUE,
-      'entity_translation_sync' => FALSE,
-      'text_processing' => 1,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'text',
-      'settings' => array(
-        'rows' => 20,
-        'summary_rows' => 5,
-      ),
-      'type' => 'text_textarea_with_summary',
-      'weight' => 7,
-    ),
-  );
-
   // Exported field_instance: 'node-hr_operation-field_cluster_configuration'
   $field_instances['node-hr_operation-field_cluster_configuration'] = array(
     'bundle' => 'hr_operation',
@@ -597,21 +546,18 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_users'
-  $field_instances['node-hr_operation-field_users'] = array(
+  // Exported field_instance: 'node-hr_operation-field_hid_contact_ref'
+  $field_instances['node-hr_operation-field_hid_contact_ref'] = array(
     'bundle' => 'hr_operation',
     'default_value' => NULL,
-    'default_value_function' => '',
     'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'module' => 'hid_contact_reference',
+        'settings' => array(),
+        'type' => 'hid_contact_reference_full',
         'weight' => 17,
       ),
       'search_result' => array(
@@ -628,27 +574,18 @@ function hr_operations_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_users',
+    'field_name' => 'field_hid_contact_ref',
     'label' => 'Focal Points',
     'required' => 0,
     'settings' => array(
-      'behaviors' => array(
-        'prepopulate' => array(
-          'status' => 0,
-        ),
-      ),
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 1,
-      'module' => 'entityreference',
-      'settings' => array(
-        'match_operator' => 'CONTAINS',
-        'path' => '',
-        'size' => 60,
-      ),
-      'type' => 'entityreference_autocomplete',
+      'active' => 0,
+      'module' => 'hid_contact_reference',
+      'settings' => array(),
+      'type' => 'hid_contact_reference_autocomplete',
       'weight' => 14,
     ),
   );
