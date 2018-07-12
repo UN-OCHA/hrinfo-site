@@ -6,8 +6,8 @@ core = 7.x
 
 files[] = i18n_translation.inc
 
-; Information added by Drupal.org packaging script on 2018-04-20
-version = "7.x-1.24"
+; Information added by Drupal.org packaging script on 2018-07-11
+version = "7.x-1.25"
 core = "7.x"
 project = "i18n"
-datestamp = "1524222489"
+datestamp = "1531342125"
