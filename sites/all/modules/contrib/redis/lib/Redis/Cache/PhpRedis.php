@@ -122,28 +122,95 @@ class Redis_Cache_PhpRedis extends Redis_Cache_Base
 
     public function deleteByPrefix($prefix)
     {
-        $client = $this->getClient();
-        $ret = $client->eval(self::EVAL_DELETE_PREFIX, array($this->getKey($prefix . '*')));
-        if (1 != $ret) {
-            trigger_error(sprintf("EVAL failed: %s", $client->getLastError()), E_USER_ERROR);
+        $pattern = $this->getKey($prefix . '*');
+        if (variable_get('redis_delete_scan_enabled', FALSE) === TRUE) {
+            $this->deleteByPrefixUsingScan($pattern);
+        }
+        else {
+            $this->deleteByPrefixUsingKeys(self::EVAL_DELETE_PREFIX, $pattern);
         }
     }
 
     public function flush()
     {
-        $client = $this->getClient();
-        $ret = $client->eval(self::EVAL_DELETE_PREFIX, array($this->getKey('*')));
-        if (1 != $ret) {
-            trigger_error(sprintf("EVAL failed: %s", $client->getLastError()), E_USER_ERROR);
+        $pattern = $this->getKey('*');
+        if (variable_get('redis_delete_scan_enabled', FALSE) === TRUE) {
+            $this->deleteByPrefixUsingScan($pattern);
+        }
+        else {
+            $this->deleteByPrefixUsingKeys(self::EVAL_DELETE_PREFIX, $pattern);
         }
     }
 
     public function flushVolatile()
     {
+        $pattern = $this->getKey('*');
+        if (variable_get('redis_delete_scan_enabled', FALSE) === TRUE) {
+            $this->deleteByPrefixUsingScan($pattern, TRUE);
+        }
+        else {
+            $this->deleteByPrefixUsingKeys(self::EVAL_DELETE_VOLATILE, $pattern);
+        }
+    }
+
+    public function deleteByPrefixUsingKeys($eval_script, $pattern)
+    {
+        // Skip duplicate runs.
+        static $memory = array();
+        if (isset($memory[$pattern])) {
+            return;
+        }
+        $memory[$pattern] = 1;
+
         $client = $this->getClient();
-        $ret = $client->eval(self::EVAL_DELETE_VOLATILE, array($this->getKey('*')));
+        $ret = $client->eval($eval_script, array($pattern));
         if (1 != $ret) {
             trigger_error(sprintf("EVAL failed: %s", $client->getLastError()), E_USER_ERROR);
+        }
+    }
+
+    public function deleteByPrefixUsingScan($pattern, $volatile = FALSE)
+    {
+        // Skip duplicate runs.
+        static $memory = array();
+        if (isset($memory[$pattern])) {
+            return;
+        }
+        $memory[$pattern] = 1;
+
+        // Initialize Redis client with SCAN and SCAN_RETRY.
+        $client = $this->getClient();
+        $client->setOption(Redis::OPT_SCAN, Redis::SCAN_RETRY);
+        $delete_keys = array();
+        $count = variable_get('redis_delete_scan_count');
+        if (!is_int($count) || $count <= 0) {
+            $count = 100;
+        }
+
+        // Find keys using SCAN.
+        $iterator = NULL;
+        while ($keys = $client->scan($iterator, $pattern, $count)) {
+            if ($volatile) {
+                foreach ($keys as $i => $k) {
+                    if ($client->hget($k, 'volatile') == 1) {
+                        $delete_keys[] = $k;
+                    }
+                }
+            }
+            else {
+                $delete_keys = array_merge($delete_keys, $keys);
+            }
+        }
+
+        // Delete keys in pipeline mode.
+        if (!empty($delete_keys)) {
+            $pipe = $client->multi(Redis::PIPELINE);
+            $batch_size = variable_get('redis_delete_batch_size', 20);
+            do {
+              $batch = array_splice($delete_keys, 0, $batch_size);
+              $pipe->del($batch);
+            } while (!empty($delete_keys));
+            $pipe->exec();
         }
     }
 }
