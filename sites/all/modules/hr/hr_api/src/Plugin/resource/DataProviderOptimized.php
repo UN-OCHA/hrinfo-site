@@ -57,6 +57,7 @@ class DataProviderOptimized  extends DataProviderEntity implements DataProviderI
       }
       node_object_prepare($node);
       $node->uid = $this->getAccount()->uid;
+      $node->path['pathauto'] = TRUE;
     }
   }
 }
