@@ -57,7 +57,8 @@ class RestfulUsers extends ResourceCustom implements ResourceInterface {
   public function getRoles($di) {
     $wrapper = $di->getWrapper();
     $id = $wrapper->getIdentifier();
-    return array_values(user_roles($id));
+    $user = user_load($id);
+    return array_values($user->roles);
   }
 
   public function getGroupRoles($values) {
