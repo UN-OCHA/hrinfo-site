@@ -160,23 +160,6 @@ function hr_notifications_default_rules_configuration() {
       ]
     }
   }');
-  $items['rules_hr_submit_to_reliefweb'] = entity_import('rules_config', '{ "rules_hr_submit_to_reliefweb" : {
-      "LABEL" : "Submit to Reliefweb",
-      "PLUGIN" : "reaction rule",
-      "OWNER" : "rules",
-      "REQUIRES" : [ "rules", "flag" ],
-      "ON" : { "flag_flagged_hr_reliefweb" : [] },
-      "DO" : [
-        { "mail" : {
-            "to" : "submit-subscriptions@reliefweb.int",
-            "subject" : "[HumanitarianResponse] New content submitted : [flagged-node:title]",
-            "message" : "A new [flagged-node:content-type] ([flagged-node:title]) was submitted on Humanitarianresponse.\r\n\r\nSpace(s): [flagged-node:og_group_ref]\r\nOrganization: [flagged-node:field-organizations]\r\nPublication Date: [flagged-node:field-publication-date]\r\nDocument type: [flagged-node:field-document-type]\r\n\r\nYou can see it here: [flagged-node:url].",
-            "language" : [ "" ]
-          }
-        }
-      ]
-    }
-  }');
   $items['rules_manager'] = entity_import('rules_config', '{ "rules_manager" : {
       "LABEL" : "manager",
       "PLUGIN" : "rule",
