@@ -855,7 +855,7 @@ function hr_documents_views_default_views() {
     'guid_field' => 'nid',
     'guid_field_is_permalink' => 0,
   );
-  $handler->display->display_options['path'] = 'documents/feedrw2';
+  $handler->display->display_options['path'] = 'documents/feedrw';
   $translatables['hr_documents_feed'] = array(
     t('Master'),
     t('more'),
