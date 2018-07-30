@@ -172,7 +172,6 @@
       <i class="fa fa-question-circle"></i> <a href="mailto:help@humanitarianresponse.info">help@humanitarianresponse.info</a><br />
       <i class="fa fa-info-circle"></i> <?php print l('humanitarianresponse.info', '<front>'); ?><br />
       <i class="fa fa-rss-square"></i> <?php print l(t('RSS feed'), 'feed'); ?><br />
-      <i class="fa <?php ($follow_us_link_status == 'flag') ? print 'fa-check' : print 'fa-times'; ?>"></i> <?php print l($follow_us_link_title, $follow_us_link_href, array('attributes' => array('rel' => 'nofollow'))); ?><br />
       <i class="fa fa-question-circle"></i> <a target="tac" href="https://www.un.org/en/sections/about-website/terms-use/">Terms and conditions</a><br />
     </div>
   </div>
