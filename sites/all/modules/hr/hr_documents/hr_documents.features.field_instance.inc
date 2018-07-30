@@ -474,6 +474,56 @@ function hr_documents_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-hr_document-field_exclude_reliefweb'.
+  $field_instances['node-hr_document-field_exclude_reliefweb'] = array(
+    'bundle' => 'hr_document',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 18,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_exclude_reliefweb',
+    'label' => 'Exclude from Reliefweb',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 18,
+    ),
+  );
+
   // Exported field_instance: 'node-hr_document-field_files_collection'.
   $field_instances['node-hr_document-field_files_collection'] = array(
     'bundle' => 'hr_document',
@@ -728,7 +778,7 @@ function hr_documents_field_default_field_instances() {
         'no_fieldset' => 0,
         'repeat_collapsed' => 0,
         'text_parts' => array(),
-        'year_range' => '-15:+0',
+        'year_range' => '-0:-30',
       ),
       'type' => 'date_select',
       'weight' => 3,
@@ -1250,6 +1300,7 @@ function hr_documents_field_default_field_instances() {
   t('Disaster(s)/Emergency');
   t('Document type');
   t('Documents');
+  t('Exclude from Reliefweb');
   t('File');
   t('File(s)');
   t('Global Cluster(s)');

@@ -29,7 +29,7 @@ function hr_documents_field_default_field_bases() {
     'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'handler' => 'base',
+      'handler' => 'ref_hr_core',
       'handler_settings' => array(
         'behaviors' => array(
           'views-select-list' => array(
@@ -110,7 +110,7 @@ function hr_documents_field_default_field_bases() {
         0 => 'fid',
       ),
       'profile2_private' => FALSE,
-      'uri_scheme' => 'private',
+      'uri_scheme' => 'public',
     ),
     'translatable' => 0,
     'type' => 'file',
