@@ -83,7 +83,7 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Try to always include here the text of the document (like the entire press release or the executive summary in case of lengthy publications). If no text is available add a description of the file(s) you are publishing.',
+    'description' => ' Try to always include here the text (in full or part of it) of the map/infographic. If no text is available add a description of the file(s) you are publishing.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -110,7 +110,7 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'body',
-    'label' => 'Body',
+    'label' => 'Description or Summary of content',
     'required' => 0,
     'settings' => array(
       'display_summary' => 0,
@@ -126,7 +126,7 @@ function hr_infographics_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 14,
+      'weight' => 7,
     ),
   );
 
@@ -136,7 +136,7 @@ function hr_infographics_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => ' Indicate the cluster(s)/sector(s) the map/infographic refers to.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -163,11 +163,12 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_bundles',
-    'label' => 'Clusters/Sectors',
+    'label' => 'Cluster(s)/Sector(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
+          'access_override' => 0,
           'admin' => array(
             'widget_type' => 'options_select',
           ),
@@ -198,7 +199,7 @@ function hr_infographics_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select the coordination hub(s) the map/infographic refers to (if any).',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -225,7 +226,7 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_coordination_hubs',
-    'label' => 'Coordination hubs',
+    'label' => 'Coordination hub(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -243,7 +244,7 @@ function hr_infographics_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 9,
+      'weight' => 11,
     ),
   );
 
@@ -252,7 +253,7 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the title and the url of the row data file used to create the map/infographic',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -276,12 +277,13 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_data_sources',
-    'label' => 'Data sources',
+    'label' => 'Data source(s)',
     'required' => 0,
     'settings' => array(
       'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
+        'configurable_class' => 0,
         'configurable_title' => 0,
         'rel' => '',
         'target' => '_blank',
@@ -298,7 +300,7 @@ function hr_infographics_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'optional',
-      'title_label_use_field_label' => FALSE,
+      'title_label_use_field_label' => 0,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -310,7 +312,7 @@ function hr_infographics_field_default_field_instances() {
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 15,
+      'weight' => 9,
     ),
   );
 
@@ -320,7 +322,7 @@ function hr_infographics_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select the disaster(s) or emergency the map/infographic refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations. See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -347,7 +349,7 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_disasters',
-    'label' => 'Disasters',
+    'label' => 'Disaster(s)/Emergency',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -365,7 +367,57 @@ function hr_infographics_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 10,
+      'weight' => 12,
+    ),
+  );
+
+  // Exported field_instance: 'node-hr_infographic-field_exclude_reliefweb'.
+  $field_instances['node-hr_infographic-field_exclude_reliefweb'] = array(
+    'bundle' => 'hr_infographic',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 19,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_exclude_reliefweb',
+    'label' => 'Exclude from Reliefweb',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 19,
     ),
   );
 
@@ -374,7 +426,7 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the map/infographic. It is best to publish one file per record, however you can add up to four. In case you need to upload more than four files save the map/infographic as draft then edit it to add more files. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -415,72 +467,17 @@ function hr_infographics_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 3,
-    ),
-  );
-
-  // Exported field_instance: 'node-hr_infographic-field_fundings'.
-  $field_instances['node-hr_infographic-field_fundings'] = array(
-    'bundle' => 'hr_infographic',
-    'default_value' => NULL,
-    'default_value_function' => '',
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'bypass_access' => FALSE,
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 17,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_fundings',
-    'label' => 'Fundings',
-    'required' => 0,
-    'settings' => array(
-      'behaviors' => array(
-        'prepopulate' => array(
-          'status' => 0,
-        ),
-      ),
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'apply_chosen' => 1,
-      ),
-      'type' => 'options_select',
-      'weight' => 12,
+      'weight' => 8,
     ),
   );
 
   // Exported field_instance: 'node-hr_infographic-field_infographic_type'.
   $field_instances['node-hr_infographic-field_infographic_type'] = array(
     'bundle' => 'hr_infographic',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Select the map/infographic type and sub-type that best describe the map/infographic.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -507,7 +504,7 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_infographic_type',
-    'label' => 'Type',
+    'label' => 'Map/Infographic Type',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -523,8 +520,9 @@ function hr_infographics_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'shs',
+      'module' => 'options',
       'settings' => array(
+        'apply_chosen' => '',
         'shs' => array(
           'create_new_levels' => 0,
           'create_new_terms' => 0,
@@ -533,7 +531,7 @@ function hr_infographics_field_default_field_instances() {
           'use_chosen' => 'always',
         ),
       ),
-      'type' => 'taxonomy_shs',
+      'type' => 'options_select',
       'weight' => 2,
     ),
   );
@@ -541,10 +539,10 @@ function hr_infographics_field_default_field_instances() {
   // Exported field_instance: 'node-hr_infographic-field_locations'.
   $field_instances['node-hr_infographic-field_locations'] = array(
     'bundle' => 'hr_infographic',
-    'default_value' => array(),
+    'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).',
+    'description' => 'Select from the menu the country(ies) the map/infographic is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your map/infographic as draft then edit it to add more locations.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -571,7 +569,7 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_locations',
-    'label' => 'Locations',
+    'label' => 'Location(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -586,33 +584,29 @@ function hr_infographics_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => TRUE,
+      'active' => 1,
       'module' => 'shs',
       'settings' => array(
-        'create_new_levels' => 0,
-        'create_new_terms' => 0,
-        'force_deepest' => 0,
-        'node_count' => 0,
         'shs' => array(
-          'create_new_levels' => FALSE,
-          'create_new_terms' => FALSE,
-          'force_deepest' => FALSE,
-          'node_count' => FALSE,
+          'create_new_levels' => 0,
+          'create_new_terms' => 0,
+          'force_deepest' => 0,
+          'node_count' => 0,
+          'use_chosen' => 'chosen',
         ),
-        'use_chosen' => 'chosen',
       ),
       'type' => 'taxonomy_shs',
-      'weight' => 7,
+      'weight' => 10,
     ),
   );
 
   // Exported field_instance: 'node-hr_infographic-field_organizations'.
   $field_instances['node-hr_infographic-field_organizations'] = array(
     'bundle' => 'hr_infographic',
-    'default_value' => array(),
+    'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Type in and select the source(s) of the map/infographic. To indicate multiple organizations add a comma after each entry.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -639,7 +633,7 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_organizations',
-    'label' => 'Organization',
+    'label' => 'Organization(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -661,8 +655,8 @@ function hr_infographics_field_default_field_instances() {
         'path' => '',
         'size' => 60,
       ),
-      'type' => 'entityreference_autocomplete',
-      'weight' => 8,
+      'type' => 'entityreference_autocomplete_tags',
+      'weight' => 4,
     ),
   );
 
@@ -670,7 +664,7 @@ function hr_infographics_field_default_field_instances() {
   $field_instances['node-hr_infographic-field_publication_date'] = array(
     'bundle' => 'hr_infographic',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate when the map/infographic has originally been created.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -718,15 +712,16 @@ function hr_infographics_field_default_field_instances() {
       'settings' => array(
         'display_all_day' => 0,
         'increment' => 15,
-        'input_format' => 'm/d/Y - H:i:s',
+        'input_format' => 'd/m/Y - H:i:s',
         'input_format_custom' => '',
         'label_position' => 'above',
+        'no_fieldset' => 0,
         'repeat_collapsed' => 0,
         'text_parts' => array(),
-        'year_range' => '-10:+0',
+        'year_range' => '-0:-10',
       ),
       'type' => 'date_select',
-      'weight' => 4,
+      'weight' => 3,
     ),
   );
 
@@ -735,7 +730,7 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Add links of content that is related to the map/infographic you are publishing (example: language versions of the same map/infographic) by indicating the title of the content and its url. When using the Search function make sure to search by content title.',
+    'description' => 'Add links to content that is related to the map/infographic you are publishing (example: language versions of the same map/infographic) by indicating the title of the content and its url. When using the Search function make sure to search by content title.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -804,7 +799,7 @@ function hr_infographics_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the Global Cluster(s) the map/infographic refers to',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -831,7 +826,7 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_sectors',
-    'label' => 'Global Clusters',
+    'label' => 'Global Cluster(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -859,7 +854,7 @@ function hr_infographics_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select all relevant themes. Choose only themes the map/infographic substantively refers to.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -886,7 +881,7 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_themes',
-    'label' => 'Themes',
+    'label' => 'Theme(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -907,7 +902,7 @@ function hr_infographics_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 13,
+      'weight' => 15,
     ),
   );
 
@@ -920,7 +915,7 @@ function hr_infographics_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Choose whether the map/infographic will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -944,8 +939,8 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'group_content_access',
-    'label' => 'Group content visibility',
-    'required' => TRUE,
+    'label' => 'Content visibility',
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
@@ -961,12 +956,13 @@ function hr_infographics_field_default_field_instances() {
       ),
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'options',
       'settings' => array(
         'apply_chosen' => '',
       ),
       'type' => 'options_select',
-      'weight' => 17,
+      'weight' => 18,
     ),
     'widget_type' => 'options_select',
   );
@@ -977,7 +973,7 @@ function hr_infographics_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select where to publish the map/infographic (operation, regional site or thematic site).',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1001,11 +997,12 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Space(s)',
+    'label' => 'Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
+          'access_override' => 0,
           'admin' => array(
             'widget_type' => 'entityreference_autocomplete',
           ),
@@ -1019,6 +1016,7 @@ function hr_infographics_field_default_field_instances() {
           'action_on_edit' => 0,
           'fallback' => 'form_error',
           'providers' => array(
+            'og_context' => 0,
             'url' => 1,
           ),
           'skip_perm' => 'administer modules',
@@ -1045,7 +1043,7 @@ function hr_infographics_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 18,
+      'weight' => 17,
     ),
   );
 
@@ -1054,7 +1052,8 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Type the original title of the map/infographic. Try not to use abbreviations.To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.
+',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1078,17 +1077,22 @@ function hr_infographics_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'title_field',
     'label' => 'Title',
-    'required' => TRUE,
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'hide_label' => array(
-        'entity' => FALSE,
-        'page' => FALSE,
+        'entity' => 0,
+        'page' => 0,
+      ),
+      'linkit' => array(
+        'enable' => 0,
+        'insert_plugin' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'text',
       'settings' => array(
         'size' => 60,
@@ -1176,29 +1180,43 @@ function hr_infographics_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t(' Indicate the cluster(s)/sector(s) the map/infographic refers to.');
+  t(' Try to always include here the text (in full or part of it) of the map/infographic. If no text is available add a description of the file(s) you are publishing.');
   t('Acronym');
-  t('Add links of content that is related to the map/infographic you are publishing (example: language versions of the same map/infographic) by indicating the title of the content and its url. When using the Search function make sure to search by content title.');
-  t('Body');
-  t('Clusters/Sectors');
-  t('Coordination hubs');
-  t('Data sources');
-  t('Disasters');
+  t('Add links to content that is related to the map/infographic you are publishing (example: language versions of the same map/infographic) by indicating the title of the content and its url. When using the Search function make sure to search by content title.');
+  t('Choose whether the map/infographic will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
+  t('Click on the field and select all relevant themes. Choose only themes the map/infographic substantively refers to.');
+  t('Click on the field and select the coordination hub(s) the map/infographic refers to (if any).');
+  t('Click on the field and select the disaster(s) or emergency the map/infographic refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations. See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.');
+  t('Click on the field and select where to publish the map/infographic (operation, regional site or thematic site).');
+  t('Cluster(s)/Sector(s)');
+  t('Content visibility');
+  t('Coordination hub(s)');
+  t('Data source(s)');
+  t('Description or Summary of content');
+  t('Disaster(s)/Emergency');
+  t('Exclude from Reliefweb');
   t('File(s)');
-  t('Fundings');
-  t('Global Clusters');
-  t('Group content visibility');
+  t('Global Cluster(s)');
+  t('Indicate the Global Cluster(s) the map/infographic refers to');
+  t('Indicate the title and the url of the row data file used to create the map/infographic');
+  t('Indicate when the map/infographic has originally been created.');
   t('Infographics');
-  t('Locations');
+  t('Location(s)');
+  t('Map/Infographic Type');
   t('Name');
-  t('Organization');
+  t('Organization(s)');
   t('Original Publication Date');
   t('Related content');
-  t('Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).');
-  t('Space(s)');
-  t('Themes');
+  t('Select from the menu the country(ies) the map/infographic is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your map/infographic as draft then edit it to add more locations.');
+  t('Select the map/infographic type and sub-type that best describe the map/infographic.');
+  t('Theme(s)');
   t('Title');
-  t('Try to always include here the text of the document (like the entire press release or the executive summary in case of lengthy publications). If no text is available add a description of the file(s) you are publishing.');
-  t('Type');
+  t('Type in and select the source(s) of the map/infographic. To indicate multiple organizations add a comma after each entry.');
+  t('Type the original title of the map/infographic. Try not to use abbreviations.To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.
+');
+  t('Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the map/infographic. It is best to publish one file per record, however you can add up to four. In case you need to upload more than four files save the map/infographic as draft then edit it to add more files. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
+  t('Webspace(s)');
 
   return $field_instances;
 }

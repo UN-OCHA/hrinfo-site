@@ -13,51 +13,23 @@ function hr_infographics_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_anonymous_hr_infographic';
-  $strongarm->value = 0;
-  $export['comment_anonymous_hr_infographic'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_mode_hr_infographic';
+  $strongarm->name = 'diff_enable_revisions_page_node_hr_infographic';
   $strongarm->value = 1;
-  $export['comment_default_mode_hr_infographic'] = $strongarm;
+  $export['diff_enable_revisions_page_node_hr_infographic'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_default_per_page_hr_infographic';
-  $strongarm->value = '50';
-  $export['comment_default_per_page_hr_infographic'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_form_location_hr_infographic';
+  $strongarm->name = 'diff_show_preview_changes_node_hr_infographic';
   $strongarm->value = 1;
-  $export['comment_form_location_hr_infographic'] = $strongarm;
+  $export['diff_show_preview_changes_node_hr_infographic'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'comment_hr_infographic';
-  $strongarm->value = '1';
-  $export['comment_hr_infographic'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_preview_hr_infographic';
-  $strongarm->value = '1';
-  $export['comment_preview_hr_infographic'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'comment_subject_field_hr_infographic';
-  $strongarm->value = 1;
-  $export['comment_subject_field_hr_infographic'] = $strongarm;
+  $strongarm->name = 'diff_view_mode_preview_node_hr_infographic';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_hr_infographic'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -81,16 +53,16 @@ function hr_infographics_strongarm() {
     'extra_fields' => array(
       'form' => array(
         'path' => array(
-          'weight' => '19',
+          'weight' => '20',
         ),
         'redirect' => array(
-          'weight' => '20',
+          'weight' => '21',
         ),
         'language' => array(
           'weight' => '0',
         ),
         'flag' => array(
-          'weight' => '11',
+          'weight' => '13',
         ),
       ),
       'display' => array(),
