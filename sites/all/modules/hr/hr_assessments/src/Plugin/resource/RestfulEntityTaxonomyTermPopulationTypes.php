@@ -39,4 +39,21 @@ class RestfulEntityTaxonomyTermPopulationTypes extends ResourceCustom implements
     return '\Drupal\hr_api\Plugin\resource\DataProviderOptimized';
   }
 
+  /**
+   * Overrides \RestfulEntityBase::publicFieldsInfo().
+   */
+  public function publicFields() {
+    $public_fields = parent::publicFields();
+
+    $public_fields['created'] = array(
+      'property' => 'created',
+    );
+
+    $public_fields['changed'] = array(
+      'property' => 'changed',
+    );
+
+    return $public_fields;
+  }
+
 }

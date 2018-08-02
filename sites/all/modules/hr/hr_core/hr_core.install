@@ -454,3 +454,22 @@ function hr_core_update_7026() {
 function hr_core_update_7027() {
   module_enable(array('facetapi_bonus'));
 }
+
+/**
+ * Enable taxonomy_creation_date.
+ */
+function hr_core_update_7028() {
+  module_enable(array('taxonomy_creation_date'));
+}
+
+/**
+ * Update created and changed data of all terms.
+ */
+function hr_core_update_7029() {
+  // At least 30 days ago.
+  $now = REQUEST_TIME - 2592000;
+  db_query('UPDATE {taxonomy_term_data} set created = floor(:now - random() * 2592000)', array(
+    ':now' => (int) $now,
+  ));
+  db_query('UPDATE {taxonomy_term_data} set changed = created');
+}
