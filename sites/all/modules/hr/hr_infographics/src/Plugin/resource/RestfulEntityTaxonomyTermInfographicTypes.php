@@ -47,6 +47,14 @@ class RestfulEntityTaxonomyTermInfographicTypes extends ResourceCustom implement
       ),
     );
 
+    $public_fields['created'] = array(
+      'property' => 'created',
+    );
+
+    $public_fields['changed'] = array(
+      'property' => 'changed',
+    );
+
     return $public_fields;
   }
 

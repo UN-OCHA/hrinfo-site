@@ -59,6 +59,14 @@ class RestfulEntityTaxonomyTermOrganizations extends ResourceCustom implements R
       ),
     );
 
+    $public_fields['created'] = array(
+      'property' => 'created',
+    );
+
+    $public_fields['changed'] = array(
+      'property' => 'changed',
+    );
+
     return $public_fields;
   }
 
