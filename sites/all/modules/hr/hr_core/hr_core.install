@@ -468,8 +468,8 @@ function hr_core_update_7028() {
 function hr_core_update_7029() {
   // At least 30 days ago.
   $now = REQUEST_TIME - 2592000;
-  db_query('UPDATE {taxonomy_term_data} set created = FLOOR(:now - RAND() * 2592000)', array(
-    ':now' => $now,
+  db_query('UPDATE {taxonomy_term_data} set created = floor(:now - random() * 2592000)', array(
+    ':now' => (int) $now,
   ));
   db_query('UPDATE {taxonomy_term_data} set changed = created');
 }
