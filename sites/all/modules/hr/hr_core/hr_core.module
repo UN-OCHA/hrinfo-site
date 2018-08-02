@@ -1239,3 +1239,22 @@ function hr_core_boot() {
     newrelic_add_custom_parameter('hr_uid', 0);
   }
 }
+
+/**
+ * Implements hook_entity_property_info_alter().
+ */
+function hr_core_entity_property_info_alter(&$entity_info) {
+  $properties = &$entity_info['taxonomy_term']['properties'];
+  $properties['created'] = array(
+    'label' => t('Date created'),
+    'description' => t('The date the term was posted.'),
+    'type' => 'date',
+    'schema field' => 'created',
+  );
+  $properties['changed'] = array(
+    'label' => t('Date changed'),
+    'description' => t('The date the term was most recently updated.'),
+    'type' => 'date',
+    'schema field' => 'changed',
+  );
+}

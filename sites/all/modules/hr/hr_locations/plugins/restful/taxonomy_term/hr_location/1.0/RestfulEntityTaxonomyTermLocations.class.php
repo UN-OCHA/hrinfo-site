@@ -54,6 +54,14 @@ class RestfulEntityTaxonomyTermLocations extends \RestfulEntityBaseTaxonomyTerm 
       'callback' => array($this, 'getGeolocation'),
     );
 
+    $public_fields['created'] = array(
+      'property' => 'created',
+    );
+
+    $public_fields['changed'] = array(
+      'property' => 'changed',
+    );
+
     $public_fields['parent'] = array(
       'property' => 'parent',
       'resource' => array(

@@ -454,3 +454,10 @@ function hr_core_update_7026() {
 function hr_core_update_7027() {
   module_enable(array('facetapi_bonus'));
 }
+
+/**
+ * Enable taxonomy_creation_date.
+ */
+function hr_core_update_7028() {
+  module_enable(array('taxonomy_creation_date'));
+}
