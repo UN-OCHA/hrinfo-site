@@ -1399,3 +1399,22 @@ function hr_core_query_hr_core_filter_parent_alter($query) {
     }
   }
 }
+
+/**
+ * Implements hook_entity_property_info_alter().
+ */
+function hr_core_entity_property_info_alter(&$entity_info) {
+  $properties = &$entity_info['taxonomy_term']['properties'];
+  $properties['created'] = array(
+    'label' => t('Date created'),
+    'description' => t('The date the term was posted.'),
+    'type' => 'date',
+    'schema field' => 'created',
+  );
+  $properties['changed'] = array(
+    'label' => t('Date changed'),
+    'description' => t('The date the term was most recently updated.'),
+    'type' => 'date',
+    'schema field' => 'changed',
+  );
+}
