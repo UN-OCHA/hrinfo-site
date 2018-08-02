@@ -174,8 +174,7 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
     );
 
     $public_fields['exclude_from_reliefweb'] = array(
-      'property' => 'field_exclude_reliefweb',
-      'sub_property' => 'value',
+      'property' => 'field_exclude_reliefweb'
     );
 
     $public_fields['published'] = array(
