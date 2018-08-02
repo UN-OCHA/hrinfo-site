@@ -387,7 +387,7 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_exclude_reliefweb',
-    'label' => 'Exclude from Reliefweb',
+    'label' => 'Do not share with Reliefweb',
     'required' => 0,
     'settings' => array(
       'entity_translation_sync' => FALSE,

@@ -172,6 +172,11 @@ class RestfulEntityNodeInfographics extends ResourceCustom implements ResourceIn
       'property' => 'url',
     );
 
+    $public_fields['exclude_from_reliefweb'] = array(
+      'property' => 'field_exclude_reliefweb',
+      'sub_property' => 'value',
+    );
+
     $public_fields['published'] = array(
       'property' => 'status',
     );
