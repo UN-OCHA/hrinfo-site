@@ -305,6 +305,16 @@ function tmgmt_entity_tmgmt_source_suggestions(array $items, TMGMTJob $job) {
               foreach ($field_items as $field_item) {
                 $ref_entity = entity_load_single($target_type, $field_item['target_id']);
 
+                // Check if field refer to a missing entity.
+                if (!$ref_entity) {
+                  continue;
+                }
+
+                // Check if entity is language neutral and cannot be translated.
+                if (entity_language($target_type, $ref_entity) == LANGUAGE_NONE) {
+                  continue;
+                }
+
                 // Check if there is already a translation available for this
                 // entity. If so, just continue with the next one.
                 $handler = entity_translation_get_handler($target_type, $ref_entity);

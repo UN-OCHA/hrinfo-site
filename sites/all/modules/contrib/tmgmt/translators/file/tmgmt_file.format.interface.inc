@@ -26,12 +26,14 @@ interface TMGMTFileFormatInterface {
    *
    * @param string $imported_file
    *   File path to the file to be imported.
+   * @param bool $is_file
+   *   (optional) Whether $imported_file is the path to a file or not.
    *
    * @return TMGMTJob
    *   Returns the corresponding translation job entity if the import file is
    *   valid, FALSE otherwise.
    */
-  public function validateImport($imported_file);
+  public function validateImport($imported_file, $is_file = TRUE);
 
   /**
    * Converts an exported file content back to the translated data.

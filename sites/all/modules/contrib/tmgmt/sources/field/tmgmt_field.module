@@ -5,6 +5,8 @@
  * Main module file for the Translation Management Source Field module.
  */
 
+include_once 'tmgmt_field.field_collection.inc';
+
 /**
  * Implements hook_tmgmt_source_translation_structure().
  *

@@ -10,9 +10,8 @@ dependencies[] = tmgmt_file
 dependencies[] = tmgmt_local
 dependencies[] = google_chart_tools
 
-; Information added by Drupal.org packaging script on 2016-07-01
-version = "7.x-1.0-rc2"
+; Information added by Drupal.org packaging script on 2018-08-02
+version = "7.x-1.0-rc3"
 core = "7.x"
 project = "tmgmt"
-datestamp = "1467358441"
-
+datestamp = "1533219610"

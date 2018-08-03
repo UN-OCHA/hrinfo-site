@@ -150,6 +150,29 @@ class TMGMTSuggestionsTestCase extends TMGMTBaseTestCase {
       ),
     ));
 
+    // Create a node that will be referenced and then deleted, so the entity
+    // reference field will refer to a missing node.
+    $missing_node = $this->drupalCreateNode(array(
+      'type' => $type->type,
+      'language' => 'en',
+      'body' => array(
+        'en' => array(
+          array('value' => $this->randomName() . ' ' . $this->randomName()),
+        ),
+      ),
+    ));
+
+    // Create an untranslatable node.
+    $untranslatable_node = $this->drupalCreateNode(array(
+      'type' => $type->type,
+      'language' => LANGUAGE_NONE,
+      'body' => array(
+        LANGUAGE_NONE => array(
+          array('value' => $this->randomName() . ' ' . $this->randomName()),
+        ),
+      ),
+    ));
+
     // Create a node with two translatable and two non-translatable files.
     $node = $this->drupalCreateNode(array(
       'type' => $type->type,
@@ -185,8 +208,12 @@ class TMGMTSuggestionsTestCase extends TMGMTBaseTestCase {
       )),
       $field3['field_name'] => array(LANGUAGE_NONE => array(
         array('target_id' => $referenced_node->nid),
+        array('target_id' => $missing_node->nid),
+        array('target_id' => $untranslatable_node->nid),
       )),
     ));
+
+    node_delete($missing_node->nid);
 
     // Create a translatable menu.
     $config = array(
