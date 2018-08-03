@@ -61,7 +61,7 @@ class TMGMTFileFormatHTML implements TMGMTFileFormatInterface {
   /**
    * {@inheritdoc}
    */
-  public function validateImport($imported_file) {
+  public function validateImport($imported_file, $is_file = TRUE) {
     $dom = new DOMDocument();
     if (!$dom->loadHTMLFile($imported_file)) {
       return FALSE;

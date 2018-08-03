@@ -99,6 +99,10 @@ abstract class TMGMTEntityTestCaseUtility extends TMGMTBaseTestCase {
 
     $this->attachFields('taxonomy_term', $vocabulary->machine_name, $fields_translatable);
 
+    $info = variable_get('entity_translation_taxonomy', array());
+    $info[$machine_name] = TRUE;
+    variable_set('entity_translation_taxonomy', $info);
+
     return $vocabulary;
   }
 

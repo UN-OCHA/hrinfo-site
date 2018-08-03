@@ -47,11 +47,7 @@ class TMGMTEntitySourceListTestCase extends TMGMTEntityTestCaseUtility {
    */
   function testTermBundleFilter() {
 
-    $vocabulary1 = entity_create('taxonomy_vocabulary', array(
-      'machine_name' => 'vocab1',
-      'name' => $this->randomName(),
-    ));
-    taxonomy_vocabulary_save($vocabulary1);
+    $vocabulary1 = $this->createTaxonomyVocab('vocab1', $this->randomName());
 
     $term1 = entity_create('taxonomy_term', array(
       'name' => $this->randomName(),
@@ -59,11 +55,7 @@ class TMGMTEntitySourceListTestCase extends TMGMTEntityTestCaseUtility {
     ));
     taxonomy_term_save($term1);
 
-    $vocabulary2 = (object) array(
-      'machine_name' => 'vocab2',
-      'name' => $this->randomName(),
-    );
-    taxonomy_vocabulary_save($vocabulary2);
+    $vocabulary2 = $this->createTaxonomyVocab('vocab2', $this->randomName());
 
     $term2 = entity_create('taxonomy_term', array(
       'name' => $this->randomName(),

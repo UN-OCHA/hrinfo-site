@@ -37,7 +37,9 @@ class tmgmt_handler_field_tmgmt_job_item_operations extends views_handler_field_
         'title' => t('delete'),
       );
     }
-    return drupal_render($element);
+    if (!empty($element['#links'])) {
+      return drupal_render($element);
+    }
   }
 
 }

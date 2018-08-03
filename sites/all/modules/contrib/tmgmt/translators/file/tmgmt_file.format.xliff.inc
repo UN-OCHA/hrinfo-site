@@ -201,14 +201,14 @@ class TMGMTFileformatXLIFF extends XMLWriter implements TMGMTFileFormatInterface
   /**
    * {@inheritdoc}
    */
-  public function validateImport($imported_file) {
+  public function validateImport($imported_file, $is_file = TRUE) {
     // Validates imported XLIFF file.
     // Checks:
     // - Job ID
     // - Target ans source languages
     // - Content integrity.
 
-    if (!($xml = $this->getImportedXML($imported_file))) {
+    if (!($xml = $this->getImportedXML($imported_file, $is_file))) {
       drupal_set_message(t('The imported file is not a valid XML.'), 'error');
       return FALSE;
     }

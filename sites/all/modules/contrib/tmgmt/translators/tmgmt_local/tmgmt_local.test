@@ -609,6 +609,6 @@ class TMGMTLocalTestCase extends TMGMTBaseTestCase {
     $this->loginAsAdmin(array('administer translation tasks'));
     $this->drupalGet('manage-translate');
     $this->assertFieldById('edit-actionviews-bulk-operations-argument-selector-action--2', t('Assign to...'));
-    $this->assertFieldById('edit-actionviews-bulk-operations-argument-selector-action', t('Assign to...'));
+    $this->assertFieldById('edit-actionviews-bulk-operations-argument-selector-action', t('Reassign to...'));
   }
 }
