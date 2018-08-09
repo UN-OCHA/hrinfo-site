@@ -10,10 +10,10 @@
 function ev_migrate_menu() {
   $items = array();
 
-  $items['ev-migrate/events/%/%/%'] = array(
+  $items['ev-migrate/events/%/%/%/%'] = array(
     'title' => 'Events',
     'page callback' => 'ev_migrate_fetch_events',
-    'page arguments' => array(2, 3, 4),
+    'page arguments' => array(2, 3, 4, 5),
     'access arguments' => array('access content'),
   );
 
@@ -39,7 +39,7 @@ function ev_migrate_fetch_event($nid, $timestamp = 0, $hash = '') {
   ev_migrate_json_output($data);
 }
 
-function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
+function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '', $highwater_mark = 0) {
   $page_size = 20;
 
   $shared_secret = variable_get('ev_migrate_shared_secret', 'ThisIsMySecret');
@@ -51,6 +51,8 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '') {
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'hr_event', '=')
+    ->propertyCondition('changed', $highwater_mark, '>')
+    ->propertyOrderBy('changed')
     ->propertyOrderBy('nid')
     ->range($page * $page_size, $page_size);
   $result = $query->execute();
