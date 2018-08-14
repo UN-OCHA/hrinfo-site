@@ -24,7 +24,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *     "hid_token"
  *   },
  *   dataProvider = {
- *     "entityType": "og_memberhips",
+ *     "entityType": "og_membership",
  *   },
  *   majorVersion = 1,
  *   minorVersion = 0,
