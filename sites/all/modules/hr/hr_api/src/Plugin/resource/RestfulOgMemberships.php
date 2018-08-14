@@ -25,6 +25,9 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   },
  *   dataProvider = {
  *     "entityType": "og_membership",
+ *     "bundles": {
+ *       "og_membership_type_default"
+ *     },
  *   },
  *   majorVersion = 1,
  *   minorVersion = 0,
