@@ -48,7 +48,8 @@ class RestfulOgMemberships extends ResourceCustom implements ResourceInterface {
                                                      
     $public_fields['entity'] = array(    
       'property' => 'entity',            
-      'sub_property' => 'uid'            
+      'sub_property' => 'uid',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldOgMembershipGroup'
     );                                   
                                          
     $public_fields['group_type'] = array(
@@ -56,10 +57,15 @@ class RestfulOgMemberships extends ResourceCustom implements ResourceInterface {
     );                                
                                       
     $public_fields['group'] = array(            
-      'property' => 'group',          
-      'sub_property' => 'nid'         
-    );                                
-                                      
+      'property' => 'group',
+      'sub_property' => 'nid',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldOgMembershipGroup'
+    );
+
+    $public_fields['roles'] = array(
+      'callback' => array($this, 'getRoles')
+    );
+
     $public_fields['created'] = array(
       'property' => 'created'        
     );                              
@@ -69,7 +75,14 @@ class RestfulOgMemberships extends ResourceCustom implements ResourceInterface {
     );                    
                           
     return $public_fields;
-  } 
+  }
+
+  public function getRoles($di) {
+   $wrapper = $di->getWrapper();
+   $uid = $wrapper->entity->getIdentifier();
+   $nid = $wrapper->group->getIdentifier();
+   return array_values(og_get_user_roles('node', $nid, $uid));
+ }
 
 
 }
