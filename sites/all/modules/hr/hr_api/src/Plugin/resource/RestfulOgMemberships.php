@@ -15,7 +15,7 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  * @package Drupal\hr_api\Plugin\resource
  *
  * @Resource(
- *   name = "og_memberhips:1.0",
+ *   name = "og_membership:1.0",
  *   resource = "og_membership",
  *   label = "OG Membership",
  *   description = "Export the OG Memberships.",
@@ -35,5 +35,41 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  * )
  */
 class RestfulOgMemberships extends ResourceCustom implements ResourceInterface {
+
+  /**                                             
+   * Overrides \RestfulEntityBase::publicFields().
+   */                                       
+  public function publicFields() {                              
+    $public_fields = parent::publicFields();
+                                          
+    $public_fields['entity_type'] = array(
+      'property' => 'entity_type'        
+    );                                           
+                                                     
+    $public_fields['entity'] = array(    
+      'property' => 'entity',            
+      'sub_property' => 'uid'            
+    );                                   
+                                         
+    $public_fields['group_type'] = array(
+      'property' => 'group_type'      
+    );                                
+                                      
+    $public_fields['group'] = array(            
+      'property' => 'group',          
+      'sub_property' => 'nid'         
+    );                                
+                                      
+    $public_fields['created'] = array(
+      'property' => 'created'        
+    );                              
+                                     
+    $public_fields['state'] = array(
+      'property' => 'state'
+    );                    
+                          
+    return $public_fields;
+  } 
+
 
 }
