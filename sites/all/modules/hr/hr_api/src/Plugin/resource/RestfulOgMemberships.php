@@ -41,22 +41,22 @@ class RestfulOgMemberships extends ResourceCustom implements ResourceInterface {
    */                                       
   public function publicFields() {                              
     $public_fields = parent::publicFields();
-                                          
+
     $public_fields['entity_type'] = array(
-      'property' => 'entity_type'        
-    );                                           
-                                                     
-    $public_fields['entity'] = array(    
-      'property' => 'entity',            
-      'sub_property' => 'uid',
+      'property' => 'entity_type'
+    );
+
+    $public_fields['entity'] = array(
+      'property' => 'entity',
+      'process_callbacks' => array(array($this, 'getUser')),
       'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldOgMembershipGroup'
-    );                                   
-                                         
+    );
+
     $public_fields['group_type'] = array(
-      'property' => 'group_type'      
-    );                                
-                                      
-    $public_fields['group'] = array(            
+      'property' => 'group_type'
+    );
+
+    $public_fields['group'] = array(
       'property' => 'group',
       'sub_property' => 'nid',
       'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldOgMembershipGroup'
@@ -67,22 +67,28 @@ class RestfulOgMemberships extends ResourceCustom implements ResourceInterface {
     );
 
     $public_fields['created'] = array(
-      'property' => 'created'        
-    );                              
-                                     
+      'property' => 'created'
+    );
+
     $public_fields['state'] = array(
       'property' => 'state'
-    );                    
-                          
+    );
+
     return $public_fields;
   }
 
   public function getRoles($di) {
-   $wrapper = $di->getWrapper();
-   $uid = $wrapper->entity->getIdentifier();
-   $nid = $wrapper->group->getIdentifier();
-   return array_values(og_get_user_roles('node', $nid, $uid));
- }
+    $wrapper = $di->getWrapper();
+    $uid = $wrapper->entity->getIdentifier();
+    $nid = $wrapper->group->getIdentifier();
+    return array_values(og_get_user_roles('node', $nid, $uid));
+  }
 
+ public function getUser($value) {
+   $valueOut = new \stdClass();
+   $valueOut->uid = $value->uid;
+   $valueOut->label = $value->realname;
+   return $valueOut;
+ }
 
 }
