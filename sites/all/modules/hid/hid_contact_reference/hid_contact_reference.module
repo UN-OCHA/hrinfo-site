@@ -16,8 +16,35 @@ function hid_contact_reference_field_info() {
       'instance_settings' => array(),
       'default_widget' => 'hid_contact_reference_autocomplete',
       'default_formatter' => 'hid_contact_reference_full',
+      'property_type' => 'hid_contact_reference',
+      'property_callbacks' => array('hid_contact_reference_property_info_callback'),
     ),
   );
+}
+
+/**
+ * Callback to alter the property info of contact reference fields.
+ *
+ * @see hid_contact_reference_field_info().
+ */
+function hid_contact_reference_property_info_callback(&$info, $entity_type, $field, $instance, $field_type) {
+  $name = $field['field_name'];
+  $property = &$info[$entity_type]['bundles'][$instance['bundle']]['properties'][$name];
+
+  $property['type'] = ($field['cardinality'] != 1) ? 'list<hid_contact_reference>' : 'hid_contact_reference';
+  $property['getter callback'] = 'entity_metadata_field_verbatim_get';
+  $property['setter callback'] = 'entity_metadata_field_verbatim_set';
+  //$property['auto creation'] = 'addressfield_auto_creation';
+  $property['property info']['cid'] = array(
+    'type' => 'text',
+    'label' => t('Humanitarian ID'),
+    'description' => t('Humanitarian ID of the user'),
+    'getter callback' => 'entity_property_verbatim_get',
+    'setter callback' => 'entity_property_verbatim_set',
+    'required' => TRUE,
+  );
+
+  unset($property['query callback']);
 }
 
 /**
