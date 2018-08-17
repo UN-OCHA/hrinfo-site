@@ -215,19 +215,6 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
     return $return;
   }
 
-  public function getContacts(DataInterpreterInterface $di) {
-    $cids = array();
-    $wrapper = $di->getWrapper();
-    $nid = $wrapper->getIdentifier();
-    $node = node_load($nid);
-    if (!empty($node->field_hid_contact_ref)) {
-      foreach ($node->field_hid_contact_ref[LANGUAGE_NONE] as $cid) {
-        $cids[] = $cid['cid'];
-      }
-    }
-    return $cids;
-  }
-
   public function getBodyRaw($value) {
     return strip_tags($value);
   }
