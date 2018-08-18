@@ -11,8 +11,8 @@ files[] = i18n_taxonomy.pages.inc
 files[] = i18n_taxonomy.admin.inc
 files[] = i18n_taxonomy.test
 
-; Information added by Drupal.org packaging script on 2018-07-11
-version = "7.x-1.25"
+; Information added by Drupal.org packaging script on 2018-08-17
+version = "7.x-1.26"
 core = "7.x"
 project = "i18n"
-datestamp = "1531342125"
+datestamp = "1534531985"
