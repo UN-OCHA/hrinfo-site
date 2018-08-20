@@ -59,6 +59,7 @@ function hid_profiles_update_7003() {
       db_merge('hid_profiles')
         ->key(array('uid' => $uid))
         ->fields(array(
+          'cid' => $cid,
           'hid' => $hid
         ))
         ->execute();
