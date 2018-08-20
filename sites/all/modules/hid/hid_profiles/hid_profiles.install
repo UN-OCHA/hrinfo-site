@@ -43,6 +43,30 @@ function hid_profiles_schema() {
 }
 
 /**
+ * Add hid of all users in authmap to hid_profiles
+ */
+function hid_profiles_update_7003() {
+  $result = db_select('authmap', 'a')
+       ->fields('a') 
+       ->execute();
+  while ($record = $result->fetchAssoc()) {
+    $uid = $record['uid'];
+    $cid = str_replace('oauthconnector_hid_oauth__', '', $record['authname']);
+    $params['user_id'] = $cid;
+    $contact = hid_profiles_v2_get_contact($params);
+    if ($contact) {
+      $hid = $contact->id;
+      db_merge('hid_profiles')
+        ->key(array('uid' => $uid))
+        ->fields(array(
+          'hid' => $hid
+        ))
+        ->execute();
+    }
+  }
+}
+
+/**
  * Add the hid column to the schema
  */
 function hid_profiles_update_7002() {
