@@ -53,12 +53,7 @@ function hid_profiles_update_7002() {
     'not null' => TRUE,
     'default' => ''
   );
-  $keys = array(
-    'unique keys' => array(
-      'hid' => array('hid')
-    )
-  );
-  db_add_field('hid_profiles', 'hid', $field, $keys);
+  db_add_field('hid_profiles', 'hid', $field);
 }
 
 /**
