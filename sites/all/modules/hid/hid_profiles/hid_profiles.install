@@ -19,19 +19,46 @@ function hid_profiles_schema() {
         'default' => 0,
       ),
       'cid' => array(
-        'description' => 'The Humanitarian ID profile identifier.',
+        'description' => 'The Humanitarian ID auth identifier.',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,
         'default' => '',
       ),
+      'hid' => array(
+        'description' => 'The Humanitarian ID profile identifier',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => ''
+      ),
     ),
     'unique keys' => array(
       'uid' => array('uid'),
       'cid' => array('cid'),
+      'hid' => array('hid'),
     ),
   );
   return $schema;
+}
+
+/**
+ * Add the hid column to the schema
+ */
+function hid_profiles_update_7002() {
+  $field = array(
+    'description' => 'The Humanitarian ID profile identifier',
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => TRUE,
+    'default' => ''
+  );
+  $keys = array(
+    'unique keys' => array(
+      'hid' => array('hid')
+    )
+  );
+  db_add_field('hid_profiles', 'hid', $field, $keys);
 }
 
 /**
