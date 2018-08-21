@@ -683,6 +683,26 @@ function _hid_profiles_get_cid_by_uid($uid) {
 }
 
 /**
+ * Get the Humanitarian ID Profile API HID from the Drupal user ID
+ * lookup table.
+ *
+ * @param int $uid
+ *    The Drupal user ID.
+ *
+ * @return string
+ *    The Humanitarian ID Profile API HID.
+ */
+function _hid_profiles_get_hid_by_uid($uid) {
+  static $uid_cid = array();
+
+  if (!isset($uid_cid[$uid])) {
+    $uid_cid[$uid] = db_query("SELECT hid FROM {hid_profiles} WHERE uid = :uid", array(':uid' => $uid))->fetchField();
+  }
+
+  return $uid_cid[$uid];
+}
+
+/**
  * Save user profile information to the Humanitarian ID Profile API.
  *
  * @param string $cid

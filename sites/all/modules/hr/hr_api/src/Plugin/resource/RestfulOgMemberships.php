@@ -84,11 +84,12 @@ class RestfulOgMemberships extends ResourceCustom implements ResourceInterface {
     return array_values(og_get_user_roles('node', $nid, $uid));
   }
 
- public function getUser($value) {
-   $valueOut = new \stdClass();
-   $valueOut->uid = $value->uid;
-   $valueOut->label = $value->realname;
-   return $valueOut;
- }
+  public function getUser($value) {
+    $valueOut = new \stdClass();
+    $valueOut->uid = $value->uid;
+    $valueOut->hid = _hid_profiles_get_hid_by_uid($value->uid);
+    $valueOut->label = $value->realname;
+    return $valueOut;
+  }
 
 }
