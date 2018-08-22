@@ -92,4 +92,11 @@ class RestfulOgMemberships extends ResourceCustom implements ResourceInterface {
     return $valueOut;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function dataProviderClassName() {
+    return '\Drupal\hr_api\Plugin\resource\DataProvider\DataProviderOgMemberships';
+  }
+
 }

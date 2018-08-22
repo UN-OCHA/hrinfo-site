@@ -17,7 +17,7 @@ use Drupal\restful\Plugin\resource\DataProvider\DataProviderFile;
 /**
  * Class DataProviderFile.
  *
- * @package Drupal\restful\Plugin\resource\DataProvider
+ * @package Drupal\hr_api\Plugin\resource\DataProvider
  */
 class DataProviderHRInfoFile extends DataProviderFile {
 

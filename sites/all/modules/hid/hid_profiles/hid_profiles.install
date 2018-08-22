@@ -46,7 +46,7 @@ function hid_profiles_schema() {
  * Add hid of all users in authmap to hid_profiles
  */
 function hid_profiles_update_7003() {
-  $result = db_select('authmap', 'a')
+  /*$result = db_select('authmap', 'a')
        ->fields('a') 
        ->execute();
   while ($record = $result->fetchAssoc()) {
@@ -64,7 +64,7 @@ function hid_profiles_update_7003() {
         ))
         ->execute();
     }
-  }
+  }*/
 }
 
 /**
