@@ -22,8 +22,10 @@ class DataProviderOgMemberships extends DataProviderEntity {
    * {@inheritdoc}
    */
   public function create($object) {
+    $gid = $object['group'];
+    $uid = hid_profiles_get_uid_by_hid($object['entity']);
 
-    $og_membership = og_membership_create('node', $object['group'], 'user', hid_profiles_get_uid_by_hid($object['entity']), 'og_user_node');
+    $og_membership = og_membership_create('node', $gid, 'user', $uid, 'og_user_node');
 
     if ($this->checkEntityAccess('create', $this->entityType, $og_membership) === FALSE) {
       // User does not have access to create entity.
@@ -31,6 +33,19 @@ class DataProviderOgMemberships extends DataProviderEntity {
     }
 
     $og_membership->save();
+
+    if (isset($object['role'])) {
+      $rid = NULL;
+      $roles = og_roles('node', NULL, $gid);
+      foreach ($roles as $trid => $role) {
+        if ($role == $object['role']) {
+          $rid = $trid;
+        }
+      }
+      if (!empty($rid)) {
+        og_role_grant('node', $gid, $uid, $rid);
+      }
+    }
 
     // The access calls use the request method. Fake the view to be a GET.
     $old_request = $this->getRequest();
