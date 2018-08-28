@@ -1814,7 +1814,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_geographic_level',
-    'label' => 'Level of Representation',
+    'label' => 'Level of Representation (deprecated)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
