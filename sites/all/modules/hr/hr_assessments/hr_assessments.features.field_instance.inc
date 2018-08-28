@@ -11,7 +11,7 @@ function hr_assessments_field_default_field_instances() {
   $field_instances = array();
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_data-field_asst_accessibility'
+  // 'field_collection_item-field_asst_data-field_asst_accessibility'.
   $field_instances['field_collection_item-field_asst_data-field_asst_accessibility'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => array(
@@ -27,6 +27,12 @@ function hr_assessments_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 0,
       ),
     ),
@@ -50,7 +56,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_data-field_asst_file'
+  // 'field_collection_item-field_asst_data-field_asst_file'.
   $field_instances['field_collection_item-field_asst_data-field_asst_file'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => array(),
@@ -64,6 +70,12 @@ function hr_assessments_field_default_field_instances() {
         'type' => 'file_default',
         'weight' => 1,
       ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
     ),
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_asst_file',
@@ -72,6 +84,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -108,7 +121,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_data-field_asst_file_rest'
+  // 'field_collection_item-field_asst_data-field_asst_file_rest'.
   $field_instances['field_collection_item-field_asst_data-field_asst_file_rest'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => array(),
@@ -122,6 +135,12 @@ function hr_assessments_field_default_field_instances() {
         'type' => 'file_default',
         'weight' => 3,
       ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
     ),
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_asst_file_rest',
@@ -130,6 +149,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -166,7 +186,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_data-field_asst_instructions'
+  // 'field_collection_item-field_asst_data-field_asst_instructions'.
   $field_instances['field_collection_item-field_asst_data-field_asst_instructions'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => NULL,
@@ -179,6 +199,12 @@ function hr_assessments_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 5,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'field_collection_item',
@@ -206,7 +232,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_data-field_asst_url'
+  // 'field_collection_item-field_asst_data-field_asst_url'.
   $field_instances['field_collection_item-field_asst_data-field_asst_url'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => NULL,
@@ -219,6 +245,12 @@ function hr_assessments_field_default_field_instances() {
         'settings' => array(),
         'type' => 'link_label',
         'weight' => 2,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'field_collection_item',
@@ -262,7 +294,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_data-field_asst_url_rest'
+  // 'field_collection_item-field_asst_data-field_asst_url_rest'.
   $field_instances['field_collection_item-field_asst_data-field_asst_url_rest'] = array(
     'bundle' => 'field_asst_data',
     'default_value' => NULL,
@@ -275,6 +307,12 @@ function hr_assessments_field_default_field_instances() {
         'settings' => array(),
         'type' => 'link_label',
         'weight' => 4,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'field_collection_item',
@@ -318,7 +356,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_questionnaire-field_asst_accessibility'
+  // 'field_collection_item-field_asst_questionnaire-field_asst_accessibility'.
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_accessibility'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => array(
@@ -334,6 +372,12 @@ function hr_assessments_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 0,
       ),
     ),
@@ -357,7 +401,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_questionnaire-field_asst_file'
+  // 'field_collection_item-field_asst_questionnaire-field_asst_file'.
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_file'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => array(),
@@ -371,6 +415,12 @@ function hr_assessments_field_default_field_instances() {
         'type' => 'file_default',
         'weight' => 1,
       ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
     ),
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_asst_file',
@@ -379,6 +429,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -415,7 +466,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_questionnaire-field_asst_file_rest'
+  // 'field_collection_item-field_asst_questionnaire-field_asst_file_rest'.
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_file_rest'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => array(),
@@ -429,6 +480,12 @@ function hr_assessments_field_default_field_instances() {
         'type' => 'file_default',
         'weight' => 3,
       ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
     ),
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_asst_file_rest',
@@ -437,6 +494,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -473,7 +531,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_questionnaire-field_asst_instructions'
+  // 'field_collection_item-field_asst_questionnaire-field_asst_instructions'.
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_instructions'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => NULL,
@@ -486,6 +544,12 @@ function hr_assessments_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 5,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'field_collection_item',
@@ -513,7 +577,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_questionnaire-field_asst_url'
+  // 'field_collection_item-field_asst_questionnaire-field_asst_url'.
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_url'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => NULL,
@@ -526,6 +590,12 @@ function hr_assessments_field_default_field_instances() {
         'settings' => array(),
         'type' => 'link_label',
         'weight' => 2,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'field_collection_item',
@@ -569,7 +639,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_questionnaire-field_asst_url_rest'
+  // 'field_collection_item-field_asst_questionnaire-field_asst_url_rest'.
   $field_instances['field_collection_item-field_asst_questionnaire-field_asst_url_rest'] = array(
     'bundle' => 'field_asst_questionnaire',
     'default_value' => NULL,
@@ -582,6 +652,12 @@ function hr_assessments_field_default_field_instances() {
         'settings' => array(),
         'type' => 'link_label',
         'weight' => 4,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'field_collection_item',
@@ -625,7 +701,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_report-field_asst_accessibility'
+  // 'field_collection_item-field_asst_report-field_asst_accessibility'.
   $field_instances['field_collection_item-field_asst_report-field_asst_accessibility'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => array(
@@ -641,6 +717,12 @@ function hr_assessments_field_default_field_instances() {
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 0,
       ),
     ),
@@ -664,7 +746,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_report-field_asst_file'
+  // 'field_collection_item-field_asst_report-field_asst_file'.
   $field_instances['field_collection_item-field_asst_report-field_asst_file'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => array(),
@@ -678,6 +760,12 @@ function hr_assessments_field_default_field_instances() {
         'type' => 'file_default',
         'weight' => 1,
       ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
     ),
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_asst_file',
@@ -686,6 +774,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -722,7 +811,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_report-field_asst_file_rest'
+  // 'field_collection_item-field_asst_report-field_asst_file_rest'.
   $field_instances['field_collection_item-field_asst_report-field_asst_file_rest'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => array(),
@@ -736,6 +825,12 @@ function hr_assessments_field_default_field_instances() {
         'type' => 'file_default',
         'weight' => 3,
       ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
     ),
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_asst_file_rest',
@@ -744,6 +839,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -780,7 +876,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_report-field_asst_instructions'
+  // 'field_collection_item-field_asst_report-field_asst_instructions'.
   $field_instances['field_collection_item-field_asst_report-field_asst_instructions'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => NULL,
@@ -793,6 +889,12 @@ function hr_assessments_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 5,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'field_collection_item',
@@ -820,7 +922,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_report-field_asst_url'
+  // 'field_collection_item-field_asst_report-field_asst_url'.
   $field_instances['field_collection_item-field_asst_report-field_asst_url'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => NULL,
@@ -833,6 +935,12 @@ function hr_assessments_field_default_field_instances() {
         'settings' => array(),
         'type' => 'link_label',
         'weight' => 2,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'field_collection_item',
@@ -876,7 +984,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_asst_report-field_asst_url_rest'
+  // 'field_collection_item-field_asst_report-field_asst_url_rest'.
   $field_instances['field_collection_item-field_asst_report-field_asst_url_rest'] = array(
     'bundle' => 'field_asst_report',
     'default_value' => NULL,
@@ -889,6 +997,12 @@ function hr_assessments_field_default_field_instances() {
         'settings' => array(),
         'type' => 'link_label',
         'weight' => 4,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'field_collection_item',
@@ -932,7 +1046,7 @@ function hr_assessments_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'fieldable_panels_pane-hr_assessments-field_assessments'
+  // 'fieldable_panels_pane-hr_assessments-field_assessments'.
   $field_instances['fieldable_panels_pane-hr_assessments-field_assessments'] = array(
     'bundle' => 'hr_assessments',
     'default_value' => NULL,
@@ -945,6 +1059,7 @@ function hr_assessments_field_default_field_instances() {
         'module' => 'entityreference',
         'settings' => array(
           'links' => 0,
+          'use_content_language' => TRUE,
           'view_mode' => 'default',
         ),
         'type' => 'entityreference_entity_view',
@@ -954,6 +1069,7 @@ function hr_assessments_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => 1,
         ),
         'type' => 'entityreference_label',
@@ -964,6 +1080,7 @@ function hr_assessments_field_default_field_instances() {
         'module' => 'entityreference',
         'settings' => array(
           'links' => 0,
+          'use_content_language' => TRUE,
           'view_mode' => 'teaser',
         ),
         'type' => 'entityreference_entity_view',
@@ -996,7 +1113,8 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'fieldable_panels_pane-hr_assessments-title_field'
+  // Exported field_instance:
+  // 'fieldable_panels_pane-hr_assessments-title_field'.
   $field_instances['fieldable_panels_pane-hr_assessments-title_field'] = array(
     'bundle' => 'hr_assessments',
     'default_value' => NULL,
@@ -1046,7 +1164,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_collection_method'
+  // Exported field_instance: 'node-hr_assessment-field_asst_collection_method'.
   $field_instances['node-hr_assessment-field_asst_collection_method'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1092,7 +1210,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_data'
+  // Exported field_instance: 'node-hr_assessment-field_asst_data'.
   $field_instances['node-hr_assessment-field_asst_data'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1142,7 +1260,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_date'
+  // Exported field_instance: 'node-hr_assessment-field_asst_date'.
   $field_instances['node-hr_assessment-field_asst_date'] = array(
     'bundle' => 'hr_assessment',
     'deleted' => 0,
@@ -1157,6 +1275,7 @@ function hr_assessments_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
           'show_repeat_rule' => 'show',
         ),
         'type' => 'date_default',
@@ -1205,7 +1324,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_freq'
+  // Exported field_instance: 'node-hr_assessment-field_asst_freq'.
   $field_instances['node-hr_assessment-field_asst_freq'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1251,7 +1370,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_key_findings'
+  // Exported field_instance: 'node-hr_assessment-field_asst_key_findings'.
   $field_instances['node-hr_assessment-field_asst_key_findings'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1302,7 +1421,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_methodology'
+  // Exported field_instance: 'node-hr_assessment-field_asst_methodology'.
   $field_instances['node-hr_assessment-field_asst_methodology'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1353,7 +1472,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_other_location'
+  // Exported field_instance: 'node-hr_assessment-field_asst_other_location'.
   $field_instances['node-hr_assessment-field_asst_other_location'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1404,7 +1523,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_questionnaire'
+  // Exported field_instance: 'node-hr_assessment-field_asst_questionnaire'.
   $field_instances['node-hr_assessment-field_asst_questionnaire'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1454,7 +1573,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_report'
+  // Exported field_instance: 'node-hr_assessment-field_asst_report'.
   $field_instances['node-hr_assessment-field_asst_report'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1504,7 +1623,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_sample_size'
+  // Exported field_instance: 'node-hr_assessment-field_asst_sample_size'.
   $field_instances['node-hr_assessment-field_asst_sample_size'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1555,7 +1674,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_status'
+  // Exported field_instance: 'node-hr_assessment-field_asst_status'.
   $field_instances['node-hr_assessment-field_asst_status'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1601,7 +1720,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_subject'
+  // Exported field_instance: 'node-hr_assessment-field_asst_subject'.
   $field_instances['node-hr_assessment-field_asst_subject'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1652,7 +1771,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_asst_unit'
+  // Exported field_instance: 'node-hr_assessment-field_asst_unit'.
   $field_instances['node-hr_assessment-field_asst_unit'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1698,7 +1817,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_bundles'
+  // Exported field_instance: 'node-hr_assessment-field_bundles'.
   $field_instances['node-hr_assessment-field_bundles'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1710,6 +1829,7 @@ function hr_assessments_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -1764,7 +1884,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_disasters'
+  // Exported field_instance: 'node-hr_assessment-field_disasters'.
   $field_instances['node-hr_assessment-field_disasters'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => array(),
@@ -1776,6 +1896,7 @@ function hr_assessments_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -1821,7 +1942,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_geographic_level'
+  // Exported field_instance: 'node-hr_assessment-field_geographic_level'.
   $field_instances['node-hr_assessment-field_geographic_level'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1833,6 +1954,7 @@ function hr_assessments_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -1853,7 +1975,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_geographic_level',
-    'label' => 'Level of Representation',
+    'label' => 'Level of Representation (deprecated)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -1875,7 +1997,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_hid_contact_ref'
+  // Exported field_instance: 'node-hr_assessment-field_hid_contact_ref'.
   $field_instances['node-hr_assessment-field_hid_contact_ref'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1919,7 +2041,54 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_locations'
+  // Exported field_instance:
+  // 'node-hr_assessment-field_level_of_representation'.
+  $field_instances['node-hr_assessment-field_level_of_representation'] = array(
+    'bundle' => 'hr_assessment',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Select at what geographical level the assessment is (has been) conducted.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 28,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_level_of_representation',
+    'label' => 'Level of Representation',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'apply_chosen' => 1,
+      ),
+      'type' => 'options_select',
+      'weight' => 22,
+    ),
+  );
+
+  // Exported field_instance: 'node-hr_assessment-field_locations'.
   $field_instances['node-hr_assessment-field_locations'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -1931,6 +2100,7 @@ function hr_assessments_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -1982,7 +2152,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_organizations'
+  // Exported field_instance: 'node-hr_assessment-field_organizations'.
   $field_instances['node-hr_assessment-field_organizations'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => array(),
@@ -1994,6 +2164,7 @@ function hr_assessments_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -2041,7 +2212,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_organizations2'
+  // Exported field_instance: 'node-hr_assessment-field_organizations2'.
   $field_instances['node-hr_assessment-field_organizations2'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => array(),
@@ -2053,6 +2224,7 @@ function hr_assessments_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -2101,10 +2273,10 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_population_types'
+  // Exported field_instance: 'node-hr_assessment-field_population_types'.
   $field_instances['node-hr_assessment-field_population_types'] = array(
     'bundle' => 'hr_assessment',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => '',
@@ -2113,6 +2285,7 @@ function hr_assessments_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -2164,7 +2337,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_related_content'
+  // Exported field_instance: 'node-hr_assessment-field_related_content'.
   $field_instances['node-hr_assessment-field_related_content'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -2231,7 +2404,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_themes'
+  // Exported field_instance: 'node-hr_assessment-field_themes'.
   $field_instances['node-hr_assessment-field_themes'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => array(),
@@ -2243,6 +2416,7 @@ function hr_assessments_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -2291,7 +2465,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-group_content_access'
+  // Exported field_instance: 'node-hr_assessment-group_content_access'.
   $field_instances['node-hr_assessment-group_content_access'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => array(
@@ -2351,7 +2525,7 @@ function hr_assessments_field_default_field_instances() {
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_assessment-og_group_ref'
+  // Exported field_instance: 'node-hr_assessment-og_group_ref'.
   $field_instances['node-hr_assessment-og_group_ref'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -2429,7 +2603,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-title_field'
+  // Exported field_instance: 'node-hr_assessment-title_field'.
   $field_instances['node-hr_assessment-title_field'] = array(
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
@@ -2478,7 +2652,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_geographic_level-field_admin_level'
+  // Exported field_instance: 'node-hr_geographic_level-field_admin_level'.
   $field_instances['node-hr_geographic_level-field_admin_level'] = array(
     'bundle' => 'hr_geographic_level',
     'default_value' => NULL,
@@ -2524,7 +2698,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_geographic_level-og_group_ref'
+  // Exported field_instance: 'node-hr_geographic_level-og_group_ref'.
   $field_instances['node-hr_geographic_level-og_group_ref'] = array(
     'bundle' => 'hr_geographic_level',
     'default_value' => NULL,
@@ -2600,7 +2774,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_geographic_level-title_field'
+  // Exported field_instance: 'node-hr_geographic_level-title_field'.
   $field_instances['node-hr_geographic_level-title_field'] = array(
     'bundle' => 'hr_geographic_level',
     'default_value' => NULL,
@@ -2649,7 +2823,7 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_population_type-name_field'
+  // Exported field_instance: 'taxonomy_term-hr_population_type-name_field'.
   $field_instances['taxonomy_term-hr_population_type-name_field'] = array(
     'bundle' => 'hr_population_type',
     'default_value' => NULL,
@@ -2716,6 +2890,7 @@ function hr_assessments_field_default_field_instances() {
   t('Related content');
   t('Report Date');
   t('Sample size');
+  t('Select at what geographical level the assessment is (has been) conducted.');
   t('Space(s)');
   t('Status');
   t('Subject/Objective');

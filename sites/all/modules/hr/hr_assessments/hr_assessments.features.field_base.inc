@@ -10,7 +10,7 @@
 function hr_assessments_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_admin_level'
+  // Exported field_base: 'field_admin_level'.
   $field_bases['field_admin_level'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -42,7 +42,7 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_assessments'
+  // Exported field_base: 'field_assessments'.
   $field_bases['field_assessments'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -82,7 +82,7 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_asst_accessibility'
+  // Exported field_base: 'field_asst_accessibility'.
   $field_bases['field_asst_accessibility'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -112,13 +112,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_asst_collection_method'
+  // Exported field_base: 'field_asst_collection_method'.
   $field_bases['field_asst_collection_method'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_collection_method',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -148,16 +151,22 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_asst_data'
+  // Exported field_base: 'field_asst_data'.
   $field_bases['field_asst_data'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_data',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'revision_id' => array(
         0 => 'revision_id',
+      ),
+      'value' => array(
+        0 => 'value',
       ),
     ),
     'locked' => 0,
@@ -165,6 +174,7 @@ function hr_assessments_field_default_field_bases() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'hide_blank_items' => 1,
+      'hide_initial_item' => FALSE,
       'path' => '',
       'profile2_private' => FALSE,
     ),
@@ -172,7 +182,7 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'field_collection',
   );
 
-  // Exported field_base: 'field_asst_date'
+  // Exported field_base: 'field_asst_date'.
   $field_bases['field_asst_date'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -207,13 +217,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_asst_file'
+  // Exported field_base: 'field_asst_file'.
   $field_bases['field_asst_file'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_file',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'fid' => array(
         0 => 'fid',
@@ -234,13 +247,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'file',
   );
 
-  // Exported field_base: 'field_asst_file_rest'
+  // Exported field_base: 'field_asst_file_rest'.
   $field_bases['field_asst_file_rest'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_file_rest',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'fid' => array(
         0 => 'fid',
@@ -261,13 +277,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'file',
   );
 
-  // Exported field_base: 'field_asst_freq'
+  // Exported field_base: 'field_asst_freq'.
   $field_bases['field_asst_freq'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_freq',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -291,7 +310,7 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_asst_instructions'
+  // Exported field_base: 'field_asst_instructions'.
   $field_bases['field_asst_instructions'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -313,13 +332,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_asst_key_findings'
+  // Exported field_base: 'field_asst_key_findings'.
   $field_bases['field_asst_key_findings'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_key_findings',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -335,13 +357,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_asst_methodology'
+  // Exported field_base: 'field_asst_methodology'.
   $field_bases['field_asst_methodology'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_methodology',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -357,13 +382,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_asst_other_location'
+  // Exported field_base: 'field_asst_other_location'.
   $field_bases['field_asst_other_location'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_other_location',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -380,16 +408,22 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_asst_questionnaire'
+  // Exported field_base: 'field_asst_questionnaire'.
   $field_bases['field_asst_questionnaire'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_questionnaire',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'revision_id' => array(
         0 => 'revision_id',
+      ),
+      'value' => array(
+        0 => 'value',
       ),
     ),
     'locked' => 0,
@@ -397,6 +431,7 @@ function hr_assessments_field_default_field_bases() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'hide_blank_items' => 1,
+      'hide_initial_item' => FALSE,
       'path' => '',
       'profile2_private' => FALSE,
     ),
@@ -404,16 +439,22 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'field_collection',
   );
 
-  // Exported field_base: 'field_asst_report'
+  // Exported field_base: 'field_asst_report'.
   $field_bases['field_asst_report'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_report',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'revision_id' => array(
         0 => 'revision_id',
+      ),
+      'value' => array(
+        0 => 'value',
       ),
     ),
     'locked' => 0,
@@ -421,6 +462,7 @@ function hr_assessments_field_default_field_bases() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'hide_blank_items' => 1,
+      'hide_initial_item' => FALSE,
       'path' => '',
       'profile2_private' => FALSE,
     ),
@@ -428,13 +470,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'field_collection',
   );
 
-  // Exported field_base: 'field_asst_sample_size'
+  // Exported field_base: 'field_asst_sample_size'.
   $field_bases['field_asst_sample_size'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_sample_size',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -451,13 +496,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_asst_status'
+  // Exported field_base: 'field_asst_status'.
   $field_bases['field_asst_status'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_status',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -481,13 +529,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_asst_subject'
+  // Exported field_base: 'field_asst_subject'.
   $field_bases['field_asst_subject'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_subject',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -503,13 +554,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_asst_unit'
+  // Exported field_base: 'field_asst_unit'.
   $field_bases['field_asst_unit'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_asst_unit',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -532,7 +586,7 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_asst_url'
+  // Exported field_base: 'field_asst_url'.
   $field_bases['field_asst_url'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -563,7 +617,7 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'link_field',
   );
 
-  // Exported field_base: 'field_asst_url_rest'
+  // Exported field_base: 'field_asst_url_rest'.
   $field_bases['field_asst_url_rest'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -594,13 +648,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'link_field',
   );
 
-  // Exported field_base: 'field_geographic_level'
+  // Exported field_base: 'field_geographic_level'.
   $field_bases['field_geographic_level'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_geographic_level',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -632,7 +689,42 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_organizations2'
+  // Exported field_base: 'field_level_of_representation'.
+  $field_bases['field_level_of_representation'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_level_of_representation',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        'admin0' => 'National',
+        'admin1' => 'Governorate / State / Regional',
+        'admin2' => 'District / Province / Locality / County',
+        'admin3' => 'Sub-district',
+        'admin4' => 'Village',
+        'other' => 'Other',
+        'non-representative' => 'Non-representative',
+      ),
+      'allowed_values_function' => '',
+      'entity_translation_sync' => FALSE,
+      'profile2_private' => FALSE,
+    ),
+    'translatable' => 0,
+    'type' => 'list_text',
+  );
+
+  // Exported field_base: 'field_organizations2'.
   $field_bases['field_organizations2'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -671,13 +763,16 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_population_types'
+  // Exported field_base: 'field_population_types'.
   $field_bases['field_population_types'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_population_types',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
