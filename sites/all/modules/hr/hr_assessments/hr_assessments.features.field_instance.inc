@@ -1879,6 +1879,53 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance:
+  // 'node-hr_assessment-field_level_of_representation'.
+  $field_instances['node-hr_assessment-field_level_of_representation'] = array(
+    'bundle' => 'hr_assessment',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Select at what geographical level the assessment is (has been) conducted.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 28,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_level_of_representation',
+    'label' => 'Level of Representation',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'apply_chosen' => 1,
+      ),
+      'type' => 'options_select',
+      'weight' => 22,
+    ),
+  );
+
   // Exported field_instance: 'node-hr_assessment-field_locations'.
   $field_instances['node-hr_assessment-field_locations'] = array(
     'bundle' => 'hr_assessment',
