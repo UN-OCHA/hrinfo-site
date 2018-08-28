@@ -61,7 +61,7 @@ function hr_assessments_field_default_field_bases() {
     'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'handler' => 'base',
+      'handler' => 'ref_hr_core',
       'handler_settings' => array(
         'behaviors' => array(
           'views-select-list' => array(
@@ -689,41 +689,6 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_level_of_representation'.
-  $field_bases['field_level_of_representation'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_level_of_representation',
-    'field_permissions' => array(
-      'type' => 0,
-    ),
-    'indexes' => array(
-      'value' => array(
-        0 => 'value',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'list',
-    'settings' => array(
-      'allowed_values' => array(
-        'admin0' => 'National',
-        'admin1' => 'Governorate / State / Regional',
-        'admin2' => 'District / Province / Locality / County',
-        'admin3' => 'Sub-district',
-        'admin4' => 'Village',
-        'other' => 'Other',
-        'non-representative' => 'Non-representative',
-      ),
-      'allowed_values_function' => '',
-      'entity_translation_sync' => FALSE,
-      'profile2_private' => FALSE,
-    ),
-    'translatable' => 0,
-    'type' => 'list_text',
-  );
-
   // Exported field_base: 'field_organizations2'.
   $field_bases['field_organizations2'] = array(
     'active' => 1,
@@ -782,7 +747,7 @@ function hr_assessments_field_default_field_bases() {
     'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'handler' => 'base',
+      'handler' => 'ref_hr_core',
       'handler_settings' => array(
         'behaviors' => array(
           'views-select-list' => array(

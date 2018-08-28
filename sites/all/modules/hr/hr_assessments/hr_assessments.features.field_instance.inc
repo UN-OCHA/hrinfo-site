@@ -84,7 +84,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
-      'file_chooser_field_enabled' => FALSE,
+      'file_chooser_field_enabled' => 1,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -94,26 +94,7 @@ function hr_assessments_field_default_field_instances() {
       'active' => 1,
       'module' => 'file',
       'settings' => array(
-        'allowed_schemes' => array(
-          'private' => 0,
-          'public' => 'public',
-          'vimeo' => 0,
-          'youtube' => 0,
-        ),
-        'allowed_types' => array(
-          'audio' => 0,
-          'document' => 'document',
-          'image' => 0,
-          'video' => 0,
-        ),
-        'browser_plugins' => array(
-          'media_default--media_browser_1' => 0,
-          'media_default--media_browser_my_files' => 0,
-          'media_internet' => 0,
-          'upload' => 0,
-          'youtube' => 0,
-        ),
-        'progress_indicator' => 'bar',
+        'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
       'weight' => 34,
@@ -149,7 +130,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
-      'file_chooser_field_enabled' => FALSE,
+      'file_chooser_field_enabled' => 1,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -159,26 +140,7 @@ function hr_assessments_field_default_field_instances() {
       'active' => 1,
       'module' => 'file',
       'settings' => array(
-        'allowed_schemes' => array(
-          'private' => 'private',
-          'public' => 0,
-          'vimeo' => 0,
-          'youtube' => 0,
-        ),
-        'allowed_types' => array(
-          'audio' => 0,
-          'document' => 'document',
-          'image' => 0,
-          'video' => 0,
-        ),
-        'browser_plugins' => array(
-          'media_default--media_browser_1' => 0,
-          'media_default--media_browser_my_files' => 0,
-          'media_internet' => 0,
-          'upload' => 0,
-          'youtube' => 0,
-        ),
-        'progress_indicator' => 'bar',
+        'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
       'weight' => 38,
@@ -429,7 +391,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
-      'file_chooser_field_enabled' => FALSE,
+      'file_chooser_field_enabled' => 1,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -439,26 +401,7 @@ function hr_assessments_field_default_field_instances() {
       'active' => 1,
       'module' => 'file',
       'settings' => array(
-        'allowed_schemes' => array(
-          'private' => 0,
-          'public' => 'public',
-          'vimeo' => 0,
-          'youtube' => 0,
-        ),
-        'allowed_types' => array(
-          'audio' => 0,
-          'document' => 'document',
-          'image' => 0,
-          'video' => 0,
-        ),
-        'browser_plugins' => array(
-          'media_default--media_browser_1' => 0,
-          'media_default--media_browser_my_files' => 0,
-          'media_internet' => 0,
-          'upload' => 0,
-          'youtube' => 0,
-        ),
-        'progress_indicator' => 'bar',
+        'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
       'weight' => 32,
@@ -494,7 +437,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
-      'file_chooser_field_enabled' => FALSE,
+      'file_chooser_field_enabled' => 1,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -504,26 +447,7 @@ function hr_assessments_field_default_field_instances() {
       'active' => 1,
       'module' => 'file',
       'settings' => array(
-        'allowed_schemes' => array(
-          'private' => 'private',
-          'public' => 0,
-          'vimeo' => 0,
-          'youtube' => 0,
-        ),
-        'allowed_types' => array(
-          'audio' => 0,
-          'document' => 'document',
-          'image' => 0,
-          'video' => 0,
-        ),
-        'browser_plugins' => array(
-          'media_default--media_browser_1' => 0,
-          'media_default--media_browser_my_files' => 0,
-          'media_internet' => 0,
-          'upload' => 0,
-          'youtube' => 0,
-        ),
-        'progress_indicator' => 'bar',
+        'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
       'weight' => 34,
@@ -774,7 +698,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
-      'file_chooser_field_enabled' => FALSE,
+      'file_chooser_field_enabled' => 1,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -784,25 +708,6 @@ function hr_assessments_field_default_field_instances() {
       'active' => 1,
       'module' => 'file',
       'settings' => array(
-        'allowed_schemes' => array(
-          'private' => 0,
-          'public' => 'public',
-          'vimeo' => 0,
-          'youtube' => 0,
-        ),
-        'allowed_types' => array(
-          'audio' => 0,
-          'document' => 'document',
-          'image' => 0,
-          'video' => 0,
-        ),
-        'browser_plugins' => array(
-          'media_default--media_browser_1' => 0,
-          'media_default--media_browser_my_files' => 0,
-          'media_internet' => 0,
-          'upload' => 0,
-          'youtube' => 0,
-        ),
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
@@ -839,7 +744,7 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
-      'file_chooser_field_enabled' => FALSE,
+      'file_chooser_field_enabled' => 1,
       'file_directory' => 'assessments',
       'file_extensions' => 'txt pdf doc docx xls xlsx zip rar',
       'max_filesize' => '',
@@ -849,26 +754,7 @@ function hr_assessments_field_default_field_instances() {
       'active' => 1,
       'module' => 'file',
       'settings' => array(
-        'allowed_schemes' => array(
-          'private' => 'private',
-          'public' => 0,
-          'vimeo' => 0,
-          'youtube' => 0,
-        ),
-        'allowed_types' => array(
-          'audio' => 0,
-          'document' => 'document',
-          'image' => 0,
-          'video' => 0,
-        ),
-        'browser_plugins' => array(
-          'media_default--media_browser_1' => 0,
-          'media_default--media_browser_my_files' => 0,
-          'media_internet' => 0,
-          'upload' => 0,
-          'youtube' => 0,
-        ),
-        'progress_indicator' => 'bar',
+        'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
       'weight' => 38,
@@ -1169,13 +1055,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select the collection method(s) used to gather information during the assessment.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 19,
       ),
       'search_result' => array(
@@ -1193,7 +1078,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_asst_collection_method',
-    'label' => 'Collection Method',
+    'label' => 'Collection Method(s)',
     'required' => 0,
     'settings' => array(
       'entity_translation_sync' => FALSE,
@@ -1206,7 +1091,7 @@ function hr_assessments_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 11,
+      'weight' => 18,
     ),
   );
 
@@ -1215,19 +1100,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Upload the assessment data file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'field_collection',
-        'settings' => array(
-          'add' => 'Add',
-          'delete' => 'Delete',
-          'description' => TRUE,
-          'edit' => 'Edit',
-          'view_mode' => 'full',
-        ),
-        'type' => 'field_collection_view',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 23,
       ),
       'search_result' => array(
@@ -1256,7 +1134,7 @@ function hr_assessments_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 20,
+      'weight' => 14,
     ),
   );
 
@@ -1264,21 +1142,12 @@ function hr_assessments_field_default_field_instances() {
   $field_instances['node-hr_assessment-field_asst_date'] = array(
     'bundle' => 'hr_assessment',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the start/end dates of the assessment.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'date',
-        'settings' => array(
-          'format_type' => 'long',
-          'fromto' => 'both',
-          'multiple_from' => '',
-          'multiple_number' => '',
-          'multiple_to' => '',
-          'show_remaining_days' => FALSE,
-          'show_repeat_rule' => 'show',
-        ),
-        'type' => 'date_default',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 12,
       ),
       'search_result' => array(
@@ -1296,7 +1165,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_asst_date',
-    'label' => 'Report Date',
+    'label' => 'Assessment Date(s)',
     'required' => 1,
     'settings' => array(
       'default_value' => 'now',
@@ -1312,7 +1181,7 @@ function hr_assessments_field_default_field_instances() {
       'settings' => array(
         'display_all_day' => 0,
         'increment' => 15,
-        'input_format' => 'm/d/Y - H:i:s',
+        'input_format' => 'd/m/Y - H:i:s',
         'input_format_custom' => '',
         'label_position' => 'above',
         'repeat_collapsed' => 0,
@@ -1320,7 +1189,7 @@ function hr_assessments_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => 15,
+      'weight' => 2,
     ),
   );
 
@@ -1329,13 +1198,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the assessment frequency in case it is being repeated over time.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 13,
       ),
       'search_result' => array(
@@ -1366,7 +1234,7 @@ function hr_assessments_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 16,
+      'weight' => 22,
     ),
   );
 
@@ -1375,13 +1243,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Insert a brief summary of the assessment’s results.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'text',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 9,
       ),
       'search_result' => array(
@@ -1417,7 +1284,7 @@ function hr_assessments_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 9,
+      'weight' => 11,
     ),
   );
 
@@ -1426,13 +1293,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => ' Insert a brief description of the procedures and the techniques used to collect, store and analyse the data.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'text',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 8,
       ),
       'search_result' => array(
@@ -1468,7 +1334,7 @@ function hr_assessments_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 8,
+      'weight' => 10,
     ),
   );
 
@@ -1477,13 +1343,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'You can specify here a location not available in the Location(s) field list.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'text',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 6,
       ),
       'search_result' => array(
@@ -1519,7 +1384,7 @@ function hr_assessments_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -1528,19 +1393,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Upload the assessment questionnaire file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'field_collection',
-        'settings' => array(
-          'add' => 'Add',
-          'delete' => 'Delete',
-          'description' => TRUE,
-          'edit' => 'Edit',
-          'view_mode' => 'full',
-        ),
-        'type' => 'field_collection_view',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 22,
       ),
       'search_result' => array(
@@ -1569,7 +1427,7 @@ function hr_assessments_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 19,
+      'weight' => 13,
     ),
   );
 
@@ -1578,19 +1436,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Upload the assessment report file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'field_collection',
-        'settings' => array(
-          'add' => 'Add',
-          'delete' => 'Delete',
-          'description' => TRUE,
-          'edit' => 'Edit',
-          'view_mode' => 'full',
-        ),
-        'type' => 'field_collection_view',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 21,
       ),
       'search_result' => array(
@@ -1619,7 +1470,7 @@ function hr_assessments_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 18,
+      'weight' => 12,
     ),
   );
 
@@ -1628,13 +1479,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the number of communities/households/individuals surveyed during the assessment.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'text',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 10,
       ),
       'search_result' => array(
@@ -1670,7 +1520,7 @@ function hr_assessments_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 12,
+      'weight' => 20,
     ),
   );
 
@@ -1679,13 +1529,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the phase of the assessment. Please remember to update this field as phases move on.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 14,
       ),
       'search_result' => array(
@@ -1716,7 +1565,7 @@ function hr_assessments_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 17,
+      'weight' => 1,
     ),
   );
 
@@ -1725,13 +1574,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Insert a brief description of the topic of the assessment and what its goals are.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'text',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 7,
       ),
       'search_result' => array(
@@ -1767,7 +1615,7 @@ function hr_assessments_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 7,
+      'weight' => 9,
     ),
   );
 
@@ -1776,13 +1624,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select the unit(s) of measurement used for the assessment.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 18,
       ),
       'search_result' => array(
@@ -1800,7 +1647,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_asst_unit',
-    'label' => 'Unit of Measurement',
+    'label' => 'Unit(s) of Measurement',
     'required' => 0,
     'settings' => array(
       'entity_translation_sync' => FALSE,
@@ -1813,7 +1660,7 @@ function hr_assessments_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 10,
+      'weight' => 19,
     ),
   );
 
@@ -1823,16 +1670,12 @@ function hr_assessments_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the cluster(s)/sector(s) the assessment refers to.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'bypass_access' => FALSE,
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 2,
       ),
       'search_result' => array(
@@ -1850,11 +1693,12 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_bundles',
-    'label' => 'Clusters/Sectors',
-    'required' => FALSE,
+    'label' => 'Cluster(s)/Sector(s)',
+    'required' => 0,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
+          'access_override' => 0,
           'admin' => array(
             'widget_type' => 'options_select',
           ),
@@ -1865,10 +1709,13 @@ function hr_assessments_field_default_field_instances() {
         ),
         'prepopulate' => array(
           'action' => 'none',
+          'action_on_edit' => 0,
           'fallback' => 'none',
           'providers' => array(
+            'og_context' => 0,
             'url' => 1,
           ),
+          'skip_perm' => 0,
           'status' => 1,
         ),
       ),
@@ -1880,7 +1727,7 @@ function hr_assessments_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 1,
+      'weight' => 15,
     ),
   );
 
@@ -1890,16 +1737,12 @@ function hr_assessments_field_default_field_instances() {
     'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Type in and select the disaster(s) and/or the emergency the assessment refers to. To indicate multiple disasters/emergency add a comma after each entry.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'bypass_access' => FALSE,
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 16,
       ),
       'search_result' => array(
@@ -1917,7 +1760,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_disasters',
-    'label' => 'Emergencies',
+    'label' => 'Disaster(s)/Emergency',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -1930,15 +1773,15 @@ function hr_assessments_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'entityreference',
+      'module' => 'options',
       'settings' => array(
         'apply_chosen' => 1,
         'match_operator' => 'CONTAINS',
         'path' => '',
         'size' => 60,
       ),
-      'type' => 'entityreference_autocomplete_tags',
-      'weight' => 24,
+      'type' => 'options_select',
+      'weight' => 17,
     ),
   );
 
@@ -1948,16 +1791,12 @@ function hr_assessments_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Select at what geographical level the assessment is (has been) conducted.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'bypass_access' => FALSE,
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 25,
       ),
       'search_result' => array(
@@ -1975,7 +1814,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_geographic_level',
-    'label' => 'Level of Representation (deprecated)',
+    'label' => 'Level of Representation',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -1993,7 +1832,7 @@ function hr_assessments_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 13,
+      'weight' => 21,
     ),
   );
 
@@ -2002,13 +1841,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate here a person (or more)  that can be contacted for questions regarding the assessment. To show up in the list, the person must have a <a href="https://humanitarian.id/" target="info">HumanitarianID</a> profile.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'hid_contact_reference',
         'settings' => array(),
-        'type' => 'hid_contact_reference_full',
+        'type' => 'hidden',
         'weight' => 27,
       ),
       'search_result' => array(
@@ -2037,54 +1875,7 @@ function hr_assessments_field_default_field_instances() {
       'module' => 'hid_contact_reference',
       'settings' => array(),
       'type' => 'hid_contact_reference_autocomplete',
-      'weight' => 22,
-    ),
-  );
-
-  // Exported field_instance:
-  // 'node-hr_assessment-field_level_of_representation'.
-  $field_instances['node-hr_assessment-field_level_of_representation'] = array(
-    'bundle' => 'hr_assessment',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Select at what geographical level the assessment is (has been) conducted.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 28,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_level_of_representation',
-    'label' => 'Level of Representation',
-    'required' => 0,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'apply_chosen' => 1,
-      ),
-      'type' => 'options_select',
-      'weight' => 22,
+      'weight' => 23,
     ),
   );
 
@@ -2094,16 +1885,13 @@ function hr_assessments_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Select from the menu the country(ies) the assessment is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your assessment as draft then edit it to add more locations.
+',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'bypass_access' => FALSE,
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 5,
       ),
       'search_result' => array(
@@ -2121,7 +1909,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_locations',
-    'label' => 'Locations',
+    'label' => 'Location(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -2144,30 +1932,26 @@ function hr_assessments_field_default_field_instances() {
           'create_new_terms' => 0,
           'force_deepest' => 0,
           'node_count' => 0,
-          'use_chosen' => 'always',
+          'use_chosen' => 'chosen',
         ),
       ),
       'type' => 'taxonomy_shs',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
   // Exported field_instance: 'node-hr_assessment-field_organizations'.
   $field_instances['node-hr_assessment-field_organizations'] = array(
     'bundle' => 'hr_assessment',
-    'default_value' => array(),
+    'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Type in and select from the list the organization(s) conducting the assessment. To indicate multiple organizations add a comma after each entry.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'bypass_access' => FALSE,
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 3,
       ),
       'search_result' => array(
@@ -2185,7 +1969,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_organizations',
-    'label' => 'Leading/Coordinating Organizations',
+    'label' => 'Leading/Coordinating Organization(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -2208,26 +1992,22 @@ function hr_assessments_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete_tags',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
   // Exported field_instance: 'node-hr_assessment-field_organizations2'.
   $field_instances['node-hr_assessment-field_organizations2'] = array(
     'bundle' => 'hr_assessment',
-    'default_value' => array(),
+    'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Type in and select from the list the organization(s) taking part into (but not leading) the assessment. To indicate multiple organizations add a comma after each entry.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'bypass_access' => FALSE,
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 4,
       ),
       'search_result' => array(
@@ -2245,7 +2025,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_organizations2',
-    'label' => 'Participating Organizations',
+    'label' => 'Participating Organization(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -2269,26 +2049,22 @@ function hr_assessments_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete_tags',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
   // Exported field_instance: 'node-hr_assessment-field_population_types'.
   $field_instances['node-hr_assessment-field_population_types'] = array(
     'bundle' => 'hr_assessment',
-    'default_value' => array(),
+    'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select the segment(s) of the population targeted by the assessment. You can select multiple population types.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'bypass_access' => FALSE,
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 20,
       ),
       'search_result' => array(
@@ -2306,7 +2082,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_population_types',
-    'label' => 'Population Types',
+    'label' => 'Population Type(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -2322,18 +2098,12 @@ function hr_assessments_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'shs',
+      'module' => 'options',
       'settings' => array(
-        'shs' => array(
-          'create_new_levels' => 0,
-          'create_new_terms' => 0,
-          'force_deepest' => 0,
-          'node_count' => 0,
-          'use_chosen' => 'always',
-        ),
+        'apply_chosen' => '',
       ),
-      'type' => 'taxonomy_shs',
-      'weight' => 14,
+      'type' => 'options_select',
+      'weight' => 7,
     ),
   );
 
@@ -2342,13 +2112,12 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Add a link to content related to the assessment you are publishing.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'link',
         'settings' => array(),
-        'type' => 'link_default',
+        'type' => 'hidden',
         'weight' => 17,
       ),
       'search_result' => array(
@@ -2372,6 +2141,7 @@ function hr_assessments_field_default_field_instances() {
       'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
+        'configurable_class' => 0,
         'configurable_title' => 0,
         'rel' => '',
         'target' => 'user',
@@ -2388,7 +2158,7 @@ function hr_assessments_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'optional',
-      'title_label_use_field_label' => FALSE,
+      'title_label_use_field_label' => 0,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -2400,26 +2170,22 @@ function hr_assessments_field_default_field_instances() {
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 25,
+      'weight' => 24,
     ),
   );
 
   // Exported field_instance: 'node-hr_assessment-field_themes'.
   $field_instances['node-hr_assessment-field_themes'] = array(
     'bundle' => 'hr_assessment',
-    'default_value' => array(),
+    'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select all relevant themes. Choose only themes the assessment substantively refers to.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'bypass_access' => FALSE,
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 15,
       ),
       'search_result' => array(
@@ -2437,7 +2203,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_themes',
-    'label' => 'Themes',
+    'label' => 'Theme(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -2453,15 +2219,12 @@ function hr_assessments_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'entityreference',
+      'module' => 'options',
       'settings' => array(
         'apply_chosen' => 1,
-        'match_operator' => 'CONTAINS',
-        'path' => '',
-        'size' => 60,
       ),
-      'type' => 'entityreference_autocomplete_tags',
-      'weight' => 23,
+      'type' => 'options_select',
+      'weight' => 16,
     ),
   );
 
@@ -2474,13 +2237,12 @@ function hr_assessments_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Choose whether the assessment will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 26,
       ),
       'search_result' => array(
@@ -2498,8 +2260,8 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'group_content_access',
-    'label' => 'Group content visibility',
-    'required' => TRUE,
+    'label' => 'Content visibility',
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
@@ -2515,6 +2277,7 @@ function hr_assessments_field_default_field_instances() {
       ),
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'options',
       'settings' => array(
         'apply_chosen' => 1,
@@ -2531,13 +2294,12 @@ function hr_assessments_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select where to publish the assessment (operation, regional site or thematic site).',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
         'settings' => array(),
-        'type' => 'og_list_default',
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'search_result' => array(
@@ -2555,11 +2317,12 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Space(s)',
+    'label' => 'Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
+          'access_override' => 0,
           'admin' => array(
             'widget_type' => 'entityreference_autocomplete',
           ),
@@ -2573,6 +2336,7 @@ function hr_assessments_field_default_field_instances() {
           'action_on_edit' => 0,
           'fallback' => 'form_error',
           'providers' => array(
+            'og_context' => 0,
             'url' => 1,
           ),
           'skip_perm' => 'administer modules',
@@ -2599,7 +2363,7 @@ function hr_assessments_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 27,
+      'weight' => 25,
     ),
   );
 
@@ -2608,7 +2372,7 @@ function hr_assessments_field_default_field_instances() {
     'bundle' => 'hr_assessment',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -2632,23 +2396,28 @@ function hr_assessments_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'title_field',
     'label' => 'Title',
-    'required' => TRUE,
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'hide_label' => array(
-        'entity' => FALSE,
-        'page' => FALSE,
+        'entity' => 0,
+        'page' => 0,
+      ),
+      'linkit' => array(
+        'enable' => 0,
+        'insert_plugin' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'text',
       'settings' => array(
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 6,
+      'weight' => 8,
     ),
   );
 
@@ -2728,11 +2497,12 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Space(s)',
+    'label' => 'Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
+          'access_override' => 0,
           'admin' => array(
             'widget_type' => 'entityreference_autocomplete',
           ),
@@ -2745,7 +2515,10 @@ function hr_assessments_field_default_field_instances() {
           'action' => 'none',
           'action_on_edit' => 0,
           'fallback' => 'none',
-          'og_context' => 0,
+          'providers' => array(
+            'og_context' => 0,
+            'url' => 1,
+          ),
           'skip_perm' => 0,
           'status' => 1,
         ),
@@ -2862,43 +2635,69 @@ function hr_assessments_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t(' Insert a brief description of the procedures and the techniques used to collect, store and analyse the data.');
   t('A field replacing fieldable panel pane title.');
   t('Accessibility');
+  t('Add a link to content related to the assessment you are publishing.');
   t('Admin Level');
   t('Assessment Data');
+  t('Assessment Date(s)');
   t('Assessment Questionnaire');
   t('Assessment Report');
   t('Assessments');
-  t('Clusters/Sectors');
-  t('Collection Method');
+  t('Choose whether the assessment will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
+  t('Click on the field and select all relevant themes. Choose only themes the assessment substantively refers to.');
+  t('Click on the field and select the collection method(s) used to gather information during the assessment.');
+  t('Click on the field and select the segment(s) of the population targeted by the assessment. You can select multiple population types.');
+  t('Click on the field and select the unit(s) of measurement used for the assessment.');
+  t('Click on the field and select where to publish the assessment (operation, regional site or thematic site).');
+  t('Cluster(s)/Sector(s)');
+  t('Collection Method(s)');
   t('Contact(s)');
-  t('Emergencies');
+  t('Content visibility');
+  t('Disaster(s)/Emergency');
   t('File');
   t('File (Restricted)');
   t('Frequency');
-  t('Group content visibility');
+  t('Indicate here a person (or more)  that can be contacted for questions regarding the assessment. To show up in the list, the person must have a <a href="https://humanitarian.id/" target="info">HumanitarianID</a> profile.');
+  t('Indicate the assessment frequency in case it is being repeated over time.');
+  t('Indicate the cluster(s)/sector(s) the assessment refers to.');
+  t('Indicate the number of communities/households/individuals surveyed during the assessment.');
+  t('Indicate the phase of the assessment. Please remember to update this field as phases move on.');
+  t('Indicate the start/end dates of the assessment.');
+  t('Insert a brief description of the topic of the assessment and what its goals are.');
+  t('Insert a brief summary of the assessment’s results.');
   t('Instructions');
   t('Key findings');
-  t('Leading/Coordinating Organizations');
+  t('Leading/Coordinating Organization(s)');
   t('Level of Representation');
-  t('Locations');
+  t('Location(s)');
   t('Methodology');
   t('Name');
   t('Other location');
-  t('Participating Organizations');
-  t('Population Types');
+  t('Participating Organization(s)');
+  t('Population Type(s)');
   t('Related content');
-  t('Report Date');
   t('Sample size');
   t('Select at what geographical level the assessment is (has been) conducted.');
-  t('Space(s)');
+  t('Select from the menu the country(ies) the assessment is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your assessment as draft then edit it to add more locations.
+');
   t('Status');
   t('Subject/Objective');
-  t('Themes');
+  t('Theme(s)');
   t('Title');
+  t('Type in and select from the list the organization(s) conducting the assessment. To indicate multiple organizations add a comma after each entry.');
+  t('Type in and select from the list the organization(s) taking part into (but not leading) the assessment. To indicate multiple organizations add a comma after each entry.');
+  t('Type in and select the disaster(s) and/or the emergency the assessment refers to. To indicate multiple disasters/emergency add a comma after each entry.');
+  t('Type the original title of the assessment. Try not to use abbreviations. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
   t('URL');
   t('URL (Restricted)');
-  t('Unit of Measurement');
+  t('Unit(s) of Measurement');
+  t('Upload the assessment data file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
+  t('Upload the assessment questionnaire file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
+  t('Upload the assessment report file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
+  t('Webspace(s)');
+  t('You can specify here a location not available in the Location(s) field list.');
 
   return $field_instances;
 }
