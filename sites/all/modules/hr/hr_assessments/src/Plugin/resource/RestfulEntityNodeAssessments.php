@@ -107,8 +107,7 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
     );
 
     $public_fields['geographic_level'] = array(
-      'property' => 'field_geographic_level',
-      'sub_property' => 'field_admin_level',
+      'property' => 'field_level_of_representation',
     );
 
     $public_fields['population_types'] = array(
