@@ -10,38 +10,6 @@
 function hr_assessments_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_admin_level'.
-  $field_bases['field_admin_level'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_admin_level',
-    'indexes' => array(
-      'value' => array(
-        0 => 'value',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'list',
-    'settings' => array(
-      'allowed_values' => array(
-        'admin0' => 'Admin 0',
-        'admin1' => 'Admin 1',
-        'admin2' => 'Admin 2',
-        'admin3' => 'Admin 3',
-        'admin4' => 'Admin 4',
-        'admin5' => 'Admin 5',
-        'other' => 'Other',
-      ),
-      'allowed_values_function' => '',
-      'entity_translation_sync' => FALSE,
-      'profile2_private' => FALSE,
-    ),
-    'translatable' => 0,
-    'type' => 'list_text',
-  );
-
   // Exported field_base: 'field_assessments'.
   $field_bases['field_assessments'] = array(
     'active' => 1,
