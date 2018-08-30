@@ -648,47 +648,6 @@ function hr_assessments_field_default_field_bases() {
     'type' => 'link_field',
   );
 
-  // Exported field_base: 'field_geographic_level'.
-  $field_bases['field_geographic_level'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_geographic_level',
-    'field_permissions' => array(
-      'type' => 0,
-    ),
-    'indexes' => array(
-      'target_id' => array(
-        0 => 'target_id',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'entityreference',
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'handler' => 'views',
-      'handler_settings' => array(
-        'behaviors' => array(
-          'views-select-list' => array(
-            'status' => 0,
-          ),
-        ),
-        'view' => array(
-          'args' => array(
-            0 => '[current-page:query:og_group_ref]',
-          ),
-          'display_name' => 'entityreference_1',
-          'view_name' => 'hr_geographic_levels',
-        ),
-      ),
-      'profile2_private' => FALSE,
-      'target_type' => 'node',
-    ),
-    'translatable' => 0,
-    'type' => 'entityreference',
-  );
-
   // Exported field_base: 'field_level_of_representation'.
   $field_bases['field_level_of_representation'] = array(
     'active' => 1,

@@ -1785,57 +1785,6 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_geographic_level'.
-  $field_instances['node-hr_assessment-field_geographic_level'] = array(
-    'bundle' => 'hr_assessment',
-    'default_value' => NULL,
-    'default_value_function' => '',
-    'deleted' => 0,
-    'description' => 'Select at what geographical level the assessment is (has been) conducted.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 25,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_geographic_level',
-    'label' => 'Level of Representation (deprecated)',
-    'required' => 0,
-    'settings' => array(
-      'behaviors' => array(
-        'prepopulate' => array(
-          'status' => 0,
-        ),
-      ),
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'apply_chosen' => 1,
-      ),
-      'type' => 'options_select',
-      'weight' => 21,
-    ),
-  );
-
   // Exported field_instance: 'node-hr_assessment-field_hid_contact_ref'.
   $field_instances['node-hr_assessment-field_hid_contact_ref'] = array(
     'bundle' => 'hr_assessment',
