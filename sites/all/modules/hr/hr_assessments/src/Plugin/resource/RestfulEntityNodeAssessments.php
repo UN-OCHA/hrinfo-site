@@ -189,7 +189,6 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
 
     $public_fields['author'] = array(
       'property' => 'author',
-      'sub_property' => 'uid',
       'process_callbacks' => array(array($this, 'getUser'))
     );
 

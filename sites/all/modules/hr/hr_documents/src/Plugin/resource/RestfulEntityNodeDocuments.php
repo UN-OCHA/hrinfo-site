@@ -181,7 +181,20 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
       'property' => 'status',
     );
 
+    $public_fields['author'] = array(
+      'property' => 'author',
+      'process_callbacks' => array(array($this, 'getUser'))
+    );
+
     return $public_fields;
+  }
+
+  public function getUser($value) {
+    $valueOut = new \stdClass();
+    $valueOut->uid = $value->uid;
+    $valueOut->hid = _hid_profiles_get_hid_by_uid($value->uid);
+    $valueOut->label = $value->realname;
+    return $valueOut;
   }
 
   public function formatTimestamp($value) {
