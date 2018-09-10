@@ -140,16 +140,9 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
         $tmp = new \stdClass();
         if (!empty($item->field_cluster_coordinator)) {
           $account = user_load($item->field_cluster_coordinator[LANGUAGE_NONE][0]['target_id']);
-          $tmp->name = $account->realname;
-          $tmp->email = $account->mail;
-        }
-        else {
-          if (!empty($item->field_cluster_coordinator_name)) {
-            $tmp->name = $item->field_cluster_coordinator_name[LANGUAGE_NONE][0]['value'];
-          }
-          if (!empty($item->field_email)) {
-            $tmp->email = $item->field_email[LANGUAGE_NONE][0]['email'];
-          }
+          $tmp->hid = _hid_profiles_get_hid_by_uid($account->uid);
+          $tmp->uid = $account->uid;
+          $tmp->label = $account->realname;
         }
         $return[] = $tmp;
       }
