@@ -87,11 +87,6 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
       ),
     );
 
-    $public_fields['cluster_coordinators'] = array(
-      'property' => 'field_cluster_coordinators',
-      'process_callbacks' => array(array($this, 'getClusterCoordinators')),
-    );
-
     $public_fields['hid_access'] = array(
       'property' => 'field_bundle_hid_access',
     );
@@ -131,23 +126,6 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
     );
 
     return $public_fields;
-  }
-
-  public function getClusterCoordinators($wrapper) {
-    $return  = array();
-    if (!empty($wrapper)) {
-      foreach ($wrapper as $item) {
-        $tmp = new \stdClass();
-        if (!empty($item->field_cluster_coordinator)) {
-          $account = user_load($item->field_cluster_coordinator[LANGUAGE_NONE][0]['target_id']);
-          $tmp->hid = _hid_profiles_get_hid_by_uid($account->uid);
-          $tmp->uid = $account->uid;
-          $tmp->label = $account->realname;
-        }
-        $return[] = $tmp;
-      }
-    }
-    return $return;
   }
 
   /**
