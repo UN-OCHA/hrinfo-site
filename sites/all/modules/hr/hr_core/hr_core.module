@@ -209,7 +209,7 @@ function _hr_core_files_download_button($entity, $type) {
       $file_language = !empty($language['value']) ? '(' . $language_list[$language['value']]['name_native'] . ')' : '';
     }
 
-    $file_title = $file['title'] ? $file['title'] : $file['filename'];
+    $file_title = isset($file['title']) ? $file['title'] : $file['filename'];
     $file_url = file_create_url($file['uri']);
 
     $output .= '<li>' . l($file_title . ' ' . $file_language, $file_url, array(
