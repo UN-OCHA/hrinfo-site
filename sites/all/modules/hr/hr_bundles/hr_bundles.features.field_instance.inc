@@ -1197,8 +1197,6 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
   t('HID Access');
   t('Inter-cluster');
   t('Lead Agencies');
-  t('Mailchimp API key');
-  t('Mailchimp List');
   t('NGO Participation');
   t('Parent cluster');
   t('Partners');
