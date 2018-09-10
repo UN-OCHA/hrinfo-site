@@ -11,7 +11,7 @@ function hr_bundles_field_default_field_instances() {
   $field_instances = array();
 
   // Exported field_instance:
-  // 'field_collection_item-field_cluster_coordinators-field_cluster_coordinator'
+  // 'field_collection_item-field_cluster_coordinators-field_cluster_coordinator'.
   $field_instances['field_collection_item-field_cluster_coordinators-field_cluster_coordinator'] = array(
     'bundle' => 'field_cluster_coordinators',
     'default_value' => NULL,
@@ -23,15 +23,23 @@ function hr_bundles_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => 1,
         ),
         'type' => 'entityreference_label',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'token' => array(
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -65,7 +73,7 @@ function hr_bundles_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_cluster_coordinators-field_cluster_coordinator_name'
+  // 'field_collection_item-field_cluster_coordinators-field_cluster_coordinator_name'.
   $field_instances['field_collection_item-field_cluster_coordinators-field_cluster_coordinator_name'] = array(
     'bundle' => 'field_cluster_coordinators',
     'default_value' => NULL,
@@ -78,6 +86,12 @@ function hr_bundles_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 1,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'token' => array(
         'label' => 'above',
@@ -112,7 +126,7 @@ function hr_bundles_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_cluster_coordinators-field_email'
+  // 'field_collection_item-field_cluster_coordinators-field_email'.
   $field_instances['field_collection_item-field_cluster_coordinators-field_email'] = array(
     'bundle' => 'field_cluster_coordinators',
     'default_value' => NULL,
@@ -125,6 +139,12 @@ function hr_bundles_field_default_field_instances() {
         'settings' => array(),
         'type' => 'email_default',
         'weight' => 2,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
       'token' => array(
         'label' => 'above',
@@ -153,7 +173,7 @@ function hr_bundles_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-body'
+  // Exported field_instance: 'node-hr_bundle-body'.
   $field_instances['node-hr_bundle-body'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -162,9 +182,8 @@ function hr_bundles_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'text',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 2,
       ),
       'search_result' => array(
@@ -175,11 +194,8 @@ function hr_bundles_field_default_field_instances() {
       ),
       'teaser' => array(
         'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(
-          'trim_length' => 600,
-        ),
-        'type' => 'text_summary_or_trimmed',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 1,
       ),
     ),
@@ -204,7 +220,7 @@ function hr_bundles_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_activation_document'
+  // Exported field_instance: 'node-hr_bundle-field_activation_document'.
   $field_instances['node-hr_bundle-field_activation_document'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -214,11 +230,8 @@ function hr_bundles_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 17,
       ),
       'search_result' => array(
@@ -260,7 +273,7 @@ function hr_bundles_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_bundle_hid_access'
+  // Exported field_instance: 'node-hr_bundle-field_bundle_hid_access'.
   $field_instances['node-hr_bundle-field_bundle_hid_access'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => array(
@@ -274,9 +287,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 23,
       ),
       'search_result' => array(
@@ -309,7 +321,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_bundle_type'
+  // Exported field_instance: 'node-hr_bundle-field_bundle_type'.
   $field_instances['node-hr_bundle-field_bundle_type'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -318,9 +330,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 4,
       ),
       'search_result' => array(
@@ -355,7 +366,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_cluster_coordinators'
+  // Exported field_instance: 'node-hr_bundle-field_cluster_coordinators'.
   $field_instances['node-hr_bundle-field_cluster_coordinators'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -364,15 +375,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'field_collection',
-        'settings' => array(
-          'add' => 'Add',
-          'delete' => 'Delete',
-          'description' => TRUE,
-          'edit' => 'Edit',
-          'view_mode' => 'full',
-        ),
-        'type' => 'field_collection_view',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 22,
       ),
       'search_result' => array(
@@ -405,7 +409,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_email'
+  // Exported field_instance: 'node-hr_bundle-field_email'.
   $field_instances['node-hr_bundle-field_email'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -414,9 +418,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'email',
         'settings' => array(),
-        'type' => 'email_default',
+        'type' => 'hidden',
         'weight' => 8,
       ),
       'search_result' => array(
@@ -451,7 +454,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_government_participation'
+  // Exported field_instance: 'node-hr_bundle-field_government_participation'.
   $field_instances['node-hr_bundle-field_government_participation'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -460,9 +463,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 15,
       ),
       'search_result' => array(
@@ -495,7 +497,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_inter_cluster'
+  // Exported field_instance: 'node-hr_bundle-field_inter_cluster'.
   $field_instances['node-hr_bundle-field_inter_cluster'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -504,9 +506,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 16,
       ),
       'search_result' => array(
@@ -539,7 +540,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_ngo_participation'
+  // Exported field_instance: 'node-hr_bundle-field_ngo_participation'.
   $field_instances['node-hr_bundle-field_ngo_participation'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => array(
@@ -552,9 +553,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 14,
       ),
       'search_result' => array(
@@ -587,7 +587,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_organizations'
+  // Exported field_instance: 'node-hr_bundle-field_organizations'.
   $field_instances['node-hr_bundle-field_organizations'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => array(),
@@ -597,11 +597,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 12,
       ),
       'search_result' => array(
@@ -646,7 +643,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_parent_cluster'
+  // Exported field_instance: 'node-hr_bundle-field_parent_cluster'.
   $field_instances['node-hr_bundle-field_parent_cluster'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -655,11 +652,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 6,
       ),
       'search_result' => array(
@@ -694,7 +688,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_partners'
+  // Exported field_instance: 'node-hr_bundle-field_partners'.
   $field_instances['node-hr_bundle-field_partners'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -704,11 +698,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 13,
       ),
       'search_result' => array(
@@ -751,7 +742,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_sector'
+  // Exported field_instance: 'node-hr_bundle-field_sector'.
   $field_instances['node-hr_bundle-field_sector'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -761,11 +752,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 3,
       ),
       'search_result' => array(
@@ -805,7 +793,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_social_media'
+  // Exported field_instance: 'node-hr_bundle-field_social_media'.
   $field_instances['node-hr_bundle-field_social_media'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -814,9 +802,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'link_icons',
         'settings' => array(),
-        'type' => 'link_icons',
+        'type' => 'hidden',
         'weight' => 9,
       ),
       'search_result' => array(
@@ -872,7 +859,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_website'
+  // Exported field_instance: 'node-hr_bundle-field_website'.
   $field_instances['node-hr_bundle-field_website'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -881,9 +868,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'link',
         'settings' => array(),
-        'type' => 'link_default',
+        'type' => 'hidden',
         'weight' => 7,
       ),
       'search_result' => array(
@@ -935,7 +921,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-group_access'
+  // Exported field_instance: 'node-hr_bundle-group_access'.
   $field_instances['node-hr_bundle-group_access'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => array(
@@ -948,9 +934,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 18,
       ),
       'search_result' => array(
@@ -968,8 +953,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
     'entity_type' => 'node',
     'field_name' => 'group_access',
-    'label' => 'Group visibility',
-    'required' => TRUE,
+    'label' => 'Visibility',
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
@@ -985,6 +970,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       ),
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
@@ -993,7 +979,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_bundle-group_group'
+  // Exported field_instance: 'node-hr_bundle-group_group'.
   $field_instances['node-hr_bundle-group_group'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => array(
@@ -1006,11 +992,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
-        'settings' => array(
-          'field_name' => FALSE,
-        ),
-        'type' => 'og_group_subscribe',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'search_result' => array(
@@ -1059,7 +1042,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-og_group_ref'
+  // Exported field_instance: 'node-hr_bundle-og_group_ref'.
   $field_instances['node-hr_bundle-og_group_ref'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -1069,9 +1052,8 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
         'settings' => array(),
-        'type' => 'og_list_default',
+        'type' => 'hidden',
         'weight' => 1,
       ),
       'search_result' => array(
@@ -1130,7 +1112,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-title_field'
+  // Exported field_instance: 'node-hr_bundle-title_field'.
   $field_instances['node-hr_bundle-title_field'] = array(
     'bundle' => 'hr_bundle',
     'default_value' => NULL,
@@ -1192,7 +1174,6 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
   t('Global Cluster');
   t('Government Participation');
   t('Group');
-  t('Group visibility');
   t('Groups audience');
   t('HID Access');
   t('Inter-cluster');
@@ -1205,6 +1186,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
   t('Social media');
   t('Title');
   t('Type');
+  t('Visibility');
   t('Website');
 
   return $field_instances;

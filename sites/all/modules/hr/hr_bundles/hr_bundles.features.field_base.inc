@@ -10,7 +10,7 @@
 function hr_bundles_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_activation_document'
+  // Exported field_base: 'field_activation_document'.
   $field_bases['field_activation_document'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -26,7 +26,7 @@ function hr_bundles_field_default_field_bases() {
     'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'handler' => 'base',
+      'handler' => 'ref_hr_core',
       'handler_settings' => array(
         'behaviors' => array(
           'views-select-list' => array(
@@ -47,7 +47,7 @@ function hr_bundles_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_bundle_hid_access'
+  // Exported field_base: 'field_bundle_hid_access'.
   $field_bases['field_bundle_hid_access'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -78,7 +78,7 @@ function hr_bundles_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_bundle_type'
+  // Exported field_base: 'field_bundle_type'.
   $field_bases['field_bundle_type'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -106,7 +106,7 @@ function hr_bundles_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_bundles'
+  // Exported field_base: 'field_bundles'.
   $field_bases['field_bundles'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -150,7 +150,7 @@ function hr_bundles_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_cluster_coordinator'
+  // Exported field_base: 'field_cluster_coordinator'.
   $field_bases['field_cluster_coordinator'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -166,7 +166,7 @@ function hr_bundles_field_default_field_bases() {
     'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'handler' => 'base',
+      'handler' => 'ref_hr_core',
       'handler_settings' => array(
         'behaviors' => array(
           'views-select-list' => array(
@@ -185,7 +185,7 @@ function hr_bundles_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_cluster_coordinator_name'
+  // Exported field_base: 'field_cluster_coordinator_name'.
   $field_bases['field_cluster_coordinator_name'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -208,7 +208,7 @@ function hr_bundles_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_cluster_coordinators'
+  // Exported field_base: 'field_cluster_coordinators'.
   $field_bases['field_cluster_coordinators'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -219,12 +219,16 @@ function hr_bundles_field_default_field_bases() {
       'revision_id' => array(
         0 => 'revision_id',
       ),
+      'value' => array(
+        0 => 'value',
+      ),
     ),
     'locked' => 0,
     'module' => 'field_collection',
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'hide_blank_items' => 1,
+      'hide_initial_item' => FALSE,
       'path' => '',
       'profile2_private' => FALSE,
     ),
@@ -232,7 +236,7 @@ function hr_bundles_field_default_field_bases() {
     'type' => 'field_collection',
   );
 
-  // Exported field_base: 'field_government_participation'
+  // Exported field_base: 'field_government_participation'.
   $field_bases['field_government_participation'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -259,7 +263,7 @@ function hr_bundles_field_default_field_bases() {
     'type' => 'list_boolean',
   );
 
-  // Exported field_base: 'field_inter_cluster'
+  // Exported field_base: 'field_inter_cluster'.
   $field_bases['field_inter_cluster'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -286,7 +290,7 @@ function hr_bundles_field_default_field_bases() {
     'type' => 'list_boolean',
   );
 
-  // Exported field_base: 'field_ngo_participation'
+  // Exported field_base: 'field_ngo_participation'.
   $field_bases['field_ngo_participation'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -313,7 +317,7 @@ function hr_bundles_field_default_field_bases() {
     'type' => 'list_boolean',
   );
 
-  // Exported field_base: 'field_parent_cluster'
+  // Exported field_base: 'field_parent_cluster'.
   $field_bases['field_parent_cluster'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -349,7 +353,7 @@ function hr_bundles_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_partners'
+  // Exported field_base: 'field_partners'.
   $field_bases['field_partners'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -365,7 +369,7 @@ function hr_bundles_field_default_field_bases() {
     'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'handler' => 'base',
+      'handler' => 'ref_hr_core',
       'handler_settings' => array(
         'behaviors' => array(
           'views-select-list' => array(
