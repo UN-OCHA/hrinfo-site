@@ -216,7 +216,7 @@ function hr_bundles_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 17,
+      'weight' => 18,
     ),
   );
 
@@ -317,7 +317,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 14,
+      'weight' => 15,
     ),
   );
 
@@ -394,7 +394,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
     ),
     'entity_type' => 'node',
     'field_name' => 'field_cluster_coordinators',
-    'label' => 'Cluster coordinators',
+    'label' => 'Cluster coordinators (deprecated)',
     'required' => 0,
     'settings' => array(
       'entity_translation_sync' => FALSE,
@@ -450,7 +450,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
         'size' => 60,
       ),
       'type' => 'email_textfield',
-      'weight' => 19,
+      'weight' => 20,
     ),
   );
 
@@ -494,6 +494,50 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'settings' => array(),
       'type' => 'options_buttons',
       'weight' => 8,
+    ),
+  );
+
+  // Exported field_instance: 'node-hr_bundle-field_hid_contact_ref'.
+  $field_instances['node-hr_bundle-field_hid_contact_ref'] = array(
+    'bundle' => 'hr_bundle',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'hid_contact_reference',
+        'settings' => array(),
+        'type' => 'hid_contact_reference_full',
+        'weight' => 24,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_hid_contact_ref',
+    'label' => 'Cluster coordinators',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'hid_contact_reference',
+      'settings' => array(),
+      'type' => 'hid_contact_reference_autocomplete',
+      'weight' => 12,
     ),
   );
 
@@ -855,7 +899,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 20,
+      'weight' => 21,
     ),
   );
 
@@ -917,7 +961,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 18,
+      'weight' => 19,
     ),
   );
 
@@ -974,7 +1018,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 15,
+      'weight' => 16,
     ),
     'widget_type' => 'options_select',
   );
@@ -1038,7 +1082,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
         'og_hide' => 0,
       ),
       'type' => 'options_onoff',
-      'weight' => 12,
+      'weight' => 13,
     ),
   );
 
@@ -1108,7 +1152,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 16,
+      'weight' => 17,
     ),
   );
 
@@ -1169,6 +1213,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
   t('Cluster coordinator Email');
   t('Cluster coordinator name');
   t('Cluster coordinators');
+  t('Cluster coordinators (deprecated)');
   t('Determine if this is an OG group.');
   t('Email');
   t('Global Cluster');
