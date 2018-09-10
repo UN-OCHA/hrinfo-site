@@ -73,7 +73,7 @@
     <p class="text-right"><?php print t('Timezone'); ?> : <strong><?php print date_default_timezone(); ?></strong></p>
   </div>
   <?php if ($rows): ?>
-    <div class="<?php print $view_content_class; ?>">
+    <div class="<?php if (isset($view_content_class)) { print $view_content_class; } ?>">
       <?php print $rows; ?>
     </div>
   <?php elseif ($empty): ?>
