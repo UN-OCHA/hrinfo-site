@@ -142,9 +142,13 @@
       width: 10%;
     }
 
-    th.views-field-title,
+    th.views-field-title {
+      width: 30%;
+    }
+
+    th.views-field-field-hid-contact-ref,
     th.views-field-field-address {
-      width: 40%;
+      width: 25%;
     }
 
   }

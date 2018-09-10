@@ -21,7 +21,8 @@
   .page-node-events-print .filters, .page-node-events-print .filter { background-color: #2a5d81 !important; color: white !important; text-transform: capitalize; line-height: 2em; }
   .page-node-events-print .filter { background-color: #54b1c8 !important; margin-left: 5px; padding: 2px; border-radius: 2px; }
   .view-hr-events-calendar.view-display-id-print_master th.views-field-field-event-date, .view-hr-events-calendar.view-display-id-print_master th.views-field-field-event-date-1 { width: 10%; }
-  .view-hr-events-calendar.view-display-id-print_master th.views-field-title, .view-hr-events-calendar.view-display-id-print_master th.views-field-field-address { width: 40%; }
+  .view-hr-events-calendar.view-display-id-print_master th.views-field-title { width: 30%; }
+  .view-hr-events-calendar.view-display-id-print_master th.views-field-field-hid-contact-ref, .view-hr-events-calendar.view-display-id-print_master th.views-field-field-address { width: 25%; }
   .view-hr-events-calendar.view-display-id-print_week th.views-field-field-event-date, .view-hr-events-calendar.view-display-id-print_week th.views-field-field-event-date-1, .view-hr-events-calendar.view-display-id-print_day th.views-field-field-event-date, .view-hr-events-calendar.view-display-id-print_day th.views-field-field-event-date-1 { width: 10%; }
   .view-hr-events-calendar.view-display-id-print_week th.views-field-field-event-date-2, .view-hr-events-calendar.view-display-id-print_day th.views-field-field-event-date-2 { width: 5%; } }
 
