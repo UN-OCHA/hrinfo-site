@@ -44,6 +44,15 @@ function _fts_visualization_get_appeal_options() {
   return $appeals_options;
 }
 
+function _fts_visualization_get_cluster_options($appeal) {
+  $clusters = fts_get_clusters_by_appeal($appeal);
+  $cluster_options = array();
+  foreach ($clusters as $cluster) {
+    $cluster_options[$cluster->id] = $cluster->name;
+  }
+  return $cluster_options;
+}
+
 /**
  * Helper function: get global cluster options.
  */
@@ -293,11 +302,15 @@ function fts_visualization_render_table($options) {
 
 function fts_visualization_ajax_clusters($form, $form_state) {
   // Get the value of the 'city' field.
-  $appeals = isset($form_state['values']['appeals']) ? $form_state['values']['appeals'] : null;
-  if (!empty($appeals)) {
-    debug($appeals);
+  $appeals = null;
+  if (isset($form_state['values']['appeals']) && !empty($form_state['values']['appeals'])) {
+    $appeals = $form_state['values']['appeals'];
   }
-  return $form;
+  if (!empty($appeals)) {
+    $clusters = _fts_visualization_get_cluster_options(reset($appeals));
+    $form['settings']['clusters_wrapper']['cluster']['#options'] = $clusters;
+  }
+  return $form['settings']['clusters_wrapper'];
 }
 
 /**

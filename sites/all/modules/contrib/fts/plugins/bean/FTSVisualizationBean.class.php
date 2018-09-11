@@ -55,13 +55,13 @@ class FTSVisualizationBean extends BeanPlugin {
       '#default_value' => isset($bean->settings['appeals']) ? $bean->settings['appeals'] : '',
       '#ajax' => array(
         'event' => 'change',
-        'wrapper' => 'squadron-wrapper',
+        'wrapper' => 'clusters-wrapper',
         'callback' => 'fts_visualization_ajax_clusters',
         'method' => 'replace',
       ),
     );
 
-    $form['settings']['clusters_wrapper'] = array('#prefix' => '<div class="clusters-wrapper">', '#suffix' => '</div>');
+    $form['settings']['clusters_wrapper'] = array('#prefix' => '<div id="clusters-wrapper">', '#suffix' => '</div>');
     $form['settings']['clusters_wrapper']['cluster'] = array(
       '#type' => 'select',
       '#title' => t('Cluster'),
