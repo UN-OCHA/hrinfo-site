@@ -68,7 +68,8 @@ class FTSVisualizationBean extends BeanPlugin {
       '#description' => t('Not all clusters might have data available.'),
       '#required' => FALSE,
       '#default_value' => isset($bean->settings['cluster']) ? $bean->settings['cluster'] : '',
-      '#options' => _fts_visualization_get_global_cluster_options(),
+      '#options' => isset($bean->settings['appeals']) ? _fts_visualization_get_cluster_options(reset($bean->settings['appeals'])) : array()
+,
     );
 
     $groupby_options = array(
