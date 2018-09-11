@@ -169,12 +169,13 @@ function fts_get_clusters_by_appeal($id) {
   }
   $cache = cache_get('clusters_by_appeal'.$id, 'cache');
   if(!$cache){
-    $url = FTS_URL . 'cluster/appeal/'.$id.'.xml';
-    $xml = simplexml_load_file($url);
+    $url = FTS_URL . 'fts/flow?planId='.$id.'&groupby=cluster';
+    $response = drupal_http_request($url);
+    $data = json_decode($response->data);
     $clusters = array();
-    if (isset($xml->Cluster)) {
-      foreach ($xml->Cluster as $cluster) {
-        $clusters[] = json_decode(json_encode($cluster));
+    if (isset($data->data)) {
+      foreach ($data->data->requirements->objects as $cluster) {
+        $clusters[] = $cluster;
       }
       cache_set('clusters_by_appeal'.$id, $clusters, 'cache', REQUEST_TIME + 24*60*60);
     }

@@ -86,7 +86,7 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
     if ($cluster) {
       // We need to get revisedRequirements from another API call first.
       $data_total_revisedRequirements = 0;
-      $params['groupby'] = 'globalCluster';
+      $params['groupby'] = 'cluster';
       $funding = fts_get_funding($params);
       foreach ($funding->raw_data->requirements->objects as $object) {
         if ($object->id == $cluster) {
@@ -94,29 +94,6 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
           break;
         }
       }
-
-      // Overwrite params for the second API call.
-      $params = array(
-        'report' => 3,
-        'countryISO3' => $appeal->locations[0]->iso3,
-        'year' => $appeal->years[0]->year,
-        'groupby' => 'globalCluster',
-      );
-      $plan_only = FALSE;
-      $filtered = TRUE;
-    }
-
-    // Get funding.
-    $funding = fts_get_funding($params);
-    $data['financed'] = (int) $funding->funding;
-    $data['data'] = isset($funding->data) ? $funding->data : array();
-
-    $data['total'] = (int) $funding->current_requirements;
-    if ($plan_only) {
-      $data['total'] = (int) $appeal->revisedRequirements;
-    }
-
-    if ($filtered) {
       // Total.
       $data['total'] = $data_total_revisedRequirements;
 
@@ -126,6 +103,18 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
           $data['financed'] = (int) $object->totalFunding;
           break;
         }
+      }
+
+    }
+    else {
+      // Get funding.
+      $funding = fts_get_funding($params);
+      $data['financed'] = (int) $funding->funding;
+      $data['data'] = isset($funding->data) ? $funding->data : array();
+
+      $data['total'] = (int) $funding->current_requirements;
+      if ($plan_only) {
+        $data['total'] = (int) $appeal->revisedRequirements;
       }
     }
 
@@ -300,6 +289,15 @@ function fts_visualization_render_table($options) {
     '#header' => $headers,
     '#rows' => $rows,
   );
+}
+
+function fts_visualization_ajax_clusters($form, $form_state) {
+  // Get the value of the 'city' field.
+  $appeals = isset($form_state['values']['appeals']) ? $form_state['values']['appeals'] : null;
+  if (!empty($appeals)) {
+    debug($appeals);
+  }
+  return $form;
 }
 
 /**
