@@ -302,15 +302,6 @@ function fts_visualization_render_table($options) {
 }
 
 function fts_visualization_ajax_clusters($form, $form_state) {
-  // Get the value of the 'city' field.
-  $appeals = null;
-  if (isset($form_state['values']['settings']['appeals']) && !empty($form_state['values']['settings']['appeals'])) {
-    $appeals = $form_state['values']['settings']['appeals'];
-  }
-  if (!empty($appeals)) {
-    $clusters = _fts_visualization_get_cluster_options(reset($appeals));
-    $form['settings']['clusters_wrapper']['cluster']['#options'] = $clusters;
-  }
   return $form['settings']['clusters_wrapper'];
 }
 
