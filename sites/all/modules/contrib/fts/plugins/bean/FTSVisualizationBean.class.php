@@ -61,6 +61,11 @@ class FTSVisualizationBean extends BeanPlugin {
       ),
     );
 
+    $appeals = isset($bean->settings['appeals']) ? $bean->settings['appeals'] : '';
+    if (empty($appeals)) {
+      $appeals = isset($form_state['values']['settings']['appeals']) ? $form_state['values']['settings']['appeals'] : '';
+    }
+
     $form['settings']['clusters_wrapper'] = array('#prefix' => '<div id="clusters-wrapper">', '#suffix' => '</div>');
     $form['settings']['clusters_wrapper']['cluster'] = array(
       '#type' => 'select',
@@ -68,8 +73,7 @@ class FTSVisualizationBean extends BeanPlugin {
       '#description' => t('Not all clusters might have data available.'),
       '#required' => FALSE,
       '#default_value' => isset($bean->settings['clusters_wrapper']['cluster']) ? $bean->settings['clusters_wrapper']['cluster'] : '',
-      '#options' => isset($bean->settings['appeals']) ? _fts_visualization_get_cluster_options(reset($bean->settings['appeals'])) : array()
-,
+      '#options' => !empty($appeals) ? _fts_visualization_get_cluster_options(reset($appeals)) : array(),
     );
 
     $groupby_options = array(
