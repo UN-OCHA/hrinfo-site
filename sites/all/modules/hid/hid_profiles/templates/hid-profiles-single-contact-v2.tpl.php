@@ -6,7 +6,7 @@
 
 <article class="hid-contact" itemscope itemtype="https://schema.org/Person">
   <?php 
-    if ($settings['show_name']) {
+    if (!empty($settings['show_name'])) {
   ?>
     <span itemprop="name">
       <strong>
@@ -15,28 +15,28 @@
     </span>
   <?php
     }
-    if ($settings['show_organization']) {
+    if (!empty($settings['show_organization'])) {
   ?>
     <div itemscope itemtype="https://schema.org/Organization">
       <span itemprop="name" > <?php print $contact->organization->name; ?> </span>
     </div>
   <?php 
     }
-    if ($settings['show_job_title']) {
+    if (!empty($settings['show_job_title'])) {
   ?>
   <div itemprop="jobTitle">
     <span><?php print $contact->job_title; ?></span>
   </div>
   <?php 
     }
-    if ($settings['show_email']) {
+    if (!empty($settings['show_email'])) {
   ?>
   <div itemprop="email">
     <span><?php print $contact->email; ?></span>
   </div>
   <?php
     }
-    if ($settings['show_phone_number'] && !empty($contact->phone_number)) {
+    if (!empty($settings['show_phone_number']) && !empty($contact->phone_number)) {
     ?>
         <div itemprop="contactPoint" itemscope itemtype="http://schema.org/ContactPoint">
           <span itemprop="telephone"><?php print $contact->phone_number; ?></span>

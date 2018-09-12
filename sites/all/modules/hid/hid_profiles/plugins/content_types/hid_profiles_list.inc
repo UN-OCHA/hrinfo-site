@@ -119,6 +119,13 @@ function hid_profiles_list_render($subtype, $conf, $panel_args, $context = NULL)
   $block = new stdClass();
   $block->title = t('Contacts');
   $block->content = array();
+  $settings = array(
+    'show_name' => true,
+    'show_organization' => true,
+    'show_job_title' => true,
+    'show_email' => true,
+    'show_phone_number' => true
+  );
 
   foreach ($conf['contacts'] as $cid) {
     if (!empty($cid)) {
