@@ -47,6 +47,7 @@ function _fts_visualization_get_appeal_options() {
 function _fts_visualization_get_cluster_options($appeal) {
   $clusters = fts_get_clusters_by_appeal($appeal);
   $cluster_options = array();
+  $cluster_options[0] = 'None';
   foreach ($clusters as $cluster) {
     $cluster_options[$cluster->id] = $cluster->name;
   }
@@ -92,7 +93,7 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
       $params['groupby'] = 'globalCluster';
     }
 
-    if ($cluster) {
+    if (!empty($cluster)) {
       // We need to get revisedRequirements from another API call first.
       $data_total_revisedRequirements = 0;
       $params['groupby'] = 'cluster';
