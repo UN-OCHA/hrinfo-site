@@ -198,10 +198,7 @@ function hid_contact_reference_field_formatter_settings_summary($field, $instanc
  * Implements hook_field_formatter_view().
  */
 function hid_contact_reference_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, &$items, $display) {
-  $theme = 'hid_profiles_single_contact';
-  if (variable_get('hid_profiles_v2', FALSE)) {
-    $theme = 'hid_profiles_single_contact_v2';
-  }
+  $theme = 'hid_profiles_single_contact_v2';
   $element = array();
   switch ($display['type']) {
     case 'hid_contact_reference_full':
