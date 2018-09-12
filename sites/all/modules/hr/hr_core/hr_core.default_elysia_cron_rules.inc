@@ -13,16 +13,6 @@ function hr_core_default_elysia_cron_rules() {
   $cron_rule = new stdClass;
   $cron_rule->disabled = FALSE; /* Edit this to true to make a default cron_rule disabled initially */
   $cron_rule->api_version = 1;
-  $cron_rule->name = 'piwik_cron';
-  $cron_rule->disable = NULL;
-  $cron_rule->rule = NULL;
-  $cron_rule->weight = NULL;
-  $cron_rule->context = NULL;
-  $cron_rules['piwik_cron'] = $cron_rule;
-
-  $cron_rule = new stdClass;
-  $cron_rule->disabled = FALSE; /* Edit this to true to make a default cron_rule disabled initially */
-  $cron_rule->api_version = 1;
   $cron_rule->name = 'restful_cron';
   $cron_rule->disable = NULL;
   $cron_rule->rule = NULL;
@@ -199,16 +189,6 @@ function hr_core_default_elysia_cron_rules() {
   $cron_rule->weight = NULL;
   $cron_rule->context = NULL;
   $cron_rules['hr_disasters_cron'] = $cron_rule;
-
-  $cron_rule = new stdClass;
-  $cron_rule->disabled = FALSE; /* Edit this to true to make a default cron_rule disabled initially */
-  $cron_rule->api_version = 1;
-  $cron_rule->name = 'hr_fundings_cron';
-  $cron_rule->disable = NULL;
-  $cron_rule->rule = NULL;
-  $cron_rule->weight = NULL;
-  $cron_rule->context = NULL;
-  $cron_rules['hr_fundings_cron'] = $cron_rule;
 
   $cron_rule = new stdClass;
   $cron_rule->disabled = FALSE; /* Edit this to true to make a default cron_rule disabled initially */

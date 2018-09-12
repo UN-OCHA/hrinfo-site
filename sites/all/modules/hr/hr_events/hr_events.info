@@ -26,7 +26,6 @@ dependencies[] = hr_api
 dependencies[] = hr_bundles
 dependencies[] = hr_core
 dependencies[] = hr_disasters
-dependencies[] = hr_fundings
 dependencies[] = hr_layout
 dependencies[] = hr_locations
 dependencies[] = hr_offices
