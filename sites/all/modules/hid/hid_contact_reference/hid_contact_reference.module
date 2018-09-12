@@ -156,6 +156,25 @@ function hid_contact_reference_field_formatter_info() {
 }
 
 /**
+ * Implements hook_field_formatter_settings_form()
+ */
+function hid_contact_reference_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $element = array();
+  if ($display['type'] == 'hid_contact_reference_full') {
+    $element['target'] = array(
+      '#type' => 'select',
+      '#title' => t('HREF target'),
+      '#options' => array('_blank' => 'New window', '_self' => 'Same window'),
+      '#default_value' => $settings['target'],
+      '#description' => t('Control where the link opens (i.e. set the TARGET attribute of the A element).'),
+    );
+  }
+  return $element;
+}
+
+/**
  * Implements hook_ield_formatter_settings_summary().
  */
 function hid_contact_reference_field_formatter_settings_summary($field, $instance, $view_mode) {
