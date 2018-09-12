@@ -47,7 +47,7 @@ function _fts_visualization_get_appeal_options() {
 function _fts_visualization_get_cluster_options($appeal) {
   $clusters = fts_get_clusters_by_appeal($appeal);
   $cluster_options = array();
-  $cluster_options[0] = 'None';
+  $cluster_options[0] = t('None');
   foreach ($clusters as $cluster) {
     $cluster_options[$cluster->id] = $cluster->name;
   }
