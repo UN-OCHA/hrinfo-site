@@ -10,7 +10,6 @@ dependencies[] = entityreference_autocomplete
 dependencies[] = fts_visualization
 dependencies[] = hr_assessments
 dependencies[] = hr_bookmarks
-dependencies[] = hr_datasets
 dependencies[] = hr_events
 dependencies[] = hr_help
 dependencies[] = hr_indicators
