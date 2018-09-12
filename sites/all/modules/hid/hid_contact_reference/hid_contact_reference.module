@@ -163,12 +163,25 @@ function hid_contact_reference_field_formatter_settings_form($field, $instance, 
   $settings = $display['settings'];
   $element = array();
   if ($display['type'] == 'hid_contact_reference_full') {
-    $element['target'] = array(
-      '#type' => 'select',
-      '#title' => t('HREF target'),
-      '#options' => array('_blank' => 'New window', '_self' => 'Same window'),
-      '#default_value' => $settings['target'],
-      '#description' => t('Control where the link opens (i.e. set the TARGET attribute of the A element).'),
+    $element['show_name'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show user name'),
+    );
+    $element['show_organization'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show organization'),
+    );
+    $element['show_job_title'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show Job title'),
+    );
+    $element['show_email'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show email'),
+    );
+    $element['show_phone_number'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show phone number'),
     );
   }
   return $element;
@@ -192,12 +205,14 @@ function hid_contact_reference_field_formatter_view($entity_type, $entity, $fiel
   $element = array();
   switch ($display['type']) {
     case 'hid_contact_reference_full':
+      $settings = $display['settings'];
       $wrapper = entity_metadata_wrapper($entity_type, $entity);
       foreach ($items as $delta => $item) {
         if ($contact = hid_profiles_get_contact($item['cid'])) {
           $element[$delta] = array(
             '#theme' => $theme,
             '#contact' => $contact,
+            '#settings' => $settings,
             '#cache' => array(
               'keys' => array('hid_contact', $entity_type, $wrapper->getIdentifier(), $item['cid']),
               'bin' => 'cache',

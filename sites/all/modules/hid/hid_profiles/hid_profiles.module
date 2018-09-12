@@ -1120,6 +1120,7 @@ function hid_profiles_theme() {
   return array(
     'hid_profiles_single_contact' => array(
       'variables' => array(
+        'settings' => array(),
         'contact' => array(),
         'url' => '',
       ),
