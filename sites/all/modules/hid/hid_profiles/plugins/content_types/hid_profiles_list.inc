@@ -132,6 +132,7 @@ function hid_profiles_list_render($subtype, $conf, $panel_args, $context = NULL)
       if ($contact = hid_profiles_get_contact($cid)) {
         $block->content[$cid] = array(
           '#theme' => $theme,
+          '#settings' => $settings,
           '#contact' => $contact,
           '#cache' => array(
             'keys' => array(
