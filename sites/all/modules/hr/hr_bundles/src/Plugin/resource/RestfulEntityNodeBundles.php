@@ -57,6 +57,16 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
       ),
     );
 
+    $public_fields['parent_cluster'] = array(
+      'property' => 'field_parent_cluster',
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
+      'resource' => array(
+        'name' => 'bundles',
+        'majorVersion' => 1,
+        'minorVersion' => 0,
+      ),
+    );
+
     $public_fields['lead_agencies'] = array(
       'property' => 'field_organizations',
       'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
