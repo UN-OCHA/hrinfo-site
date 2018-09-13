@@ -85,12 +85,7 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
     );
 
     if ($group_by) {
-      //$params['groupby'] = drupal_strtolower($group_by);
-      $plan_only = FALSE;
-      unset($params['planId']);
-      $params['countryISO3'] = $appeal->locations[0]->iso3;
-      $params['year'] = $appeal->years[0]->year;
-      $params['groupby'] = 'globalCluster';
+      $params['groupby'] = drupal_strtolower($group_by);
     }
 
     if (!empty($cluster)) {
