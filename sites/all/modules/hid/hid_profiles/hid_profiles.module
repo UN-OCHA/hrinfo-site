@@ -634,7 +634,7 @@ function hid_profiles_v2_get_contact($params) {
     )
   ));
   $contacts = json_decode($req->data);
-  if ($contacts[0]) {
+  if (isset($contacts[0])) {
     return $contacts[0];
   }
   else {
