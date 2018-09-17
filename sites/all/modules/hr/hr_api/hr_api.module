@@ -11,7 +11,7 @@ function hr_api_bundle_to_restful_plugin($bundle, $type) {
   $plugins = restful()->getResourceManager()->getPlugins();
   foreach ($plugins as $key => $plugin) {
     $definition = $plugin->getPluginDefinition();
-    if (in_array($bundle, $definition['dataProvider']['bundles']) && $definition['dataProvider']['entityType'] == $type) {
+    if (!empty($definition['dataProvider']['bundles']) && in_array($bundle, $definition['dataProvider']['bundles']) && $definition['dataProvider']['entityType'] == $type) {
       $resource = $plugin;
     }
   }
