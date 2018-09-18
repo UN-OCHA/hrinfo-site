@@ -145,21 +145,6 @@ function hr_users_hybridauth_user_login($account, $data) {
 }
 
 /**
- * Implements hook_init().
- *
- * For authenticated users when the 'hr_users_require_profile' flag is set,
- * check the profile fields on each page.
- */
-function hr_users_init() {
-  global $user;
-  if (!user_is_anonymous() && !empty($_SESSION['hr_users_require_profile'])) {
-    $edit = array();
-    hr_users_user_login($edit, $user);
-    hr_users_check_profile(TRUE);
-  }
-}
-
-/**
  * Helper function to load the current user's main profile and ensure the
  * required fields have been filled in.
  */
