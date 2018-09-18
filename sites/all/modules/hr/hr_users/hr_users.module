@@ -7,6 +7,42 @@
 include_once 'hr_users.features.inc';
 
 /**
+ * Implements hook_menu().
+ */
+function hr_users_menu() {
+  $items['login'] = array(
+    'title' => 'Log in',
+    'page callback' => 'hr_users_login_redirect',
+    'access callback' => 'user_is_anonymous',
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function hr_users_menu_alter(&$items) {
+  // Disable the user registration page for all users.
+  $items['user/register']['access callback'] = FALSE;
+  $items['user/password']['page callback'] = FALSE;
+  $items['user/login']['access callback'] = FALSE;
+}
+
+
+/**
+ * Redirect to hybrid auth.
+ */
+function hr_users_login_redirect() {
+  drupal_goto('hybridauth/window/HumanitarianId', array(
+    'destination' => drupal_get_destination(),
+    'destination_error' => '',
+  ));
+}
+
+
+/**
  * Implements hook_field_formatter_info().
  */
 function hr_users_field_formatter_info() {
@@ -63,51 +99,40 @@ function hr_users_og_features_registry() {
 }
 
 /**
- * Implements hook_user_login().
+ * Implements hook_hybridauth_user_login().
  */
-function hr_users_user_login(&$edit, $account) {
-  // Get account data from the auth service, and ensure the user's name is
-  // up to date in Drupal.
-  if (function_exists('hid_auth_get_user_data')) {
-    $data = hid_auth_get_user_data();
-    $profile = profile2_load_by_user($account, 'main');
-    if (empty($profile)) {
-      $profile_type = profile2_get_types('main');
-      $profile = profile2_create(array('user' => $account, 'type' => $profile_type));
+function hr_users_hybridauth_user_login($account, $data) {
+  $profile = profile2_load_by_user($account, 'main');
+  if (empty($profile)) {
+    $profile_type = profile2_get_types('main');
+    $profile = profile2_create(array('user' => $account, 'type' => $profile_type));
+  }
+  if (!empty($data) && $profile) {
+    $changed = FALSE;
+
+    if (empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) || $profile->field_first_name[LANGUAGE_NONE][0]['value'] != $data['given_name']) {
+      $profile->field_first_name[LANGUAGE_NONE][0]['value'] = $data['given_name'];
+      $changed = TRUE;
     }
-    if (!empty($data) && $profile) {
-      $changed = FALSE;
+    if (empty($profile->field_last_name[LANGUAGE_NONE][0]['value']) || $profile->field_last_name[LANGUAGE_NONE][0]['value'] != $data['family_name']) {
+      $profile->field_last_name[LANGUAGE_NONE][0]['value'] = $data['family_name'];
+      $changed = TRUE;
+    }
 
-      $first_name_attribute = 'name_given';
-      $last_name_attribute = 'name_family';
-      if (variable_get('hid_profiles_v2', FALSE)) {
-        $first_name_attribute = 'given_name';
-        $last_name_attribute = 'family_name';
-      }
-      if (empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) || $profile->field_first_name[LANGUAGE_NONE][0]['value'] != $data['name_given']) {
-        $profile->field_first_name[LANGUAGE_NONE][0]['value'] = $data[$first_name_attribute];
-        $changed = TRUE;
-      }
-      if (empty($profile->field_last_name[LANGUAGE_NONE][0]['value']) || $profile->field_last_name[LANGUAGE_NONE][0]['value'] != $data['name_family']) {
-        $profile->field_last_name[LANGUAGE_NONE][0]['value'] = $data[$last_name_attribute];
-        $changed = TRUE;
-      }
+    if (empty($profile->field_job_title_other[LANGUAGE_NONE][0]['value']) || $profile->field_job_title_other[LANGUAGE_NONE][0]['value'] != $data['job_title']) {
+      $profile->field_job_title_other[LANGUAGE_NONE][0]['value'] = $data['job_title'];
+      $changed = TRUE;
+    }
 
-      if (empty($profile->field_job_title_other[LANGUAGE_NONE][0]['value']) || $profile->field_job_title_other[LANGUAGE_NONE][0]['value'] != $data['job_title']) {
-        $profile->field_job_title_other[LANGUAGE_NONE][0]['value'] = $data['job_title'];
-        $changed = TRUE;
-      }
+    if ($changed) {
+      $profile->save();
+      user_save($account);
+    }
 
-      if ($changed) {
-        $profile->save();
-        user_save($account);
-      }
-
-      // Update email if needed
-      if ($account->mail != $data['email']) {
-        $account->mail = $data['email'];
-        user_save($account);
-      }
+    // Update email if needed
+    if ($account->mail != $data['email']) {
+      $account->mail = $data['email'];
+      user_save($account);
     }
   }
 
