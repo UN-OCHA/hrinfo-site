@@ -97,6 +97,13 @@ class SearchApiSolrDocument implements IteratorAggregate {
   protected $fieldBoosts = array();
 
   /**
+   * Document field update values, indexed by name.
+   *
+   * @var array
+   */
+  protected $fieldUpdates = array();
+
+  /**
    * Clears all boosts and fields from this document.
    */
   public function clear() {
@@ -104,6 +111,7 @@ class SearchApiSolrDocument implements IteratorAggregate {
 
     $this->fields = array();
     $this->fieldBoosts = array();
+    $this->fieldUpdates = array();
   }
 
   /**
@@ -263,6 +271,42 @@ class SearchApiSolrDocument implements IteratorAggregate {
   }
 
   /**
+   * Gets the currently set field's 'update' attribute for a document field.
+   *
+   * @param string $key
+   *   The name of the field.
+   *
+   * @return string|false
+   *   The currently set field's update attribute, or FALSE if none was set.
+   */
+  public function getFieldUpdate($key) {
+    return isset($this->fieldUpdates[$key]) ? $this->fieldUpdates[$key] : FALSE;
+  }
+
+  /**
+   * Sets the field's 'update' attribute for a document field.
+   *
+   * @param string $key
+   *   The name of the field.
+   * @param string|false $update
+   *   One of the allowed update values ('add', 'set', 'inc').
+   */
+  public function setFieldUpdate($key, $update) {
+    $this->fieldUpdates[$key] = $update;
+  }
+
+  /**
+   * Retrieves all currently set field updates.
+   *
+   * @return string[]
+   *   Associative array of field's "update" attributes that were set, keyed by
+   *   field name.
+   */
+  public function getFieldUpdates() {
+    return $this->fieldUpdates;
+  }
+
+  /**
    * Gets the names of all fields in this document.
    *
    * @return array
@@ -382,6 +426,7 @@ class SearchApiSolrDocument implements IteratorAggregate {
 
     foreach ($this->fields as $key => $value) {
       $fieldBoost = $this->getFieldBoost($key);
+      $fieldUpdate = $this->getFieldUpdate($key);
       $key = htmlspecialchars($key, ENT_COMPAT, 'UTF-8');
 
       if (is_array($value)) {
@@ -395,6 +440,10 @@ class SearchApiSolrDocument implements IteratorAggregate {
             $fieldBoost = FALSE;
           }
 
+          if ($fieldUpdate !== FALSE) {
+            $xml .= ' update="' . $fieldUpdate . '"';
+          }
+
           $xml .= '>' . htmlspecialchars($multivalue, ENT_NOQUOTES, 'UTF-8') . '</field>';
         }
       }
@@ -403,6 +452,10 @@ class SearchApiSolrDocument implements IteratorAggregate {
 
         if ($fieldBoost !== FALSE) {
           $xml .= ' boost="' . $fieldBoost . '"';
+        }
+
+        if ($fieldUpdate !== FALSE) {
+          $xml .= ' update="' . $fieldUpdate . '"';
         }
 
         $xml .= '>' . htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8') . '</field>';
@@ -432,4 +485,5 @@ class SearchApiSolrDocument implements IteratorAggregate {
     // Printable utf-8 does not include any of these chars below x7F
     return preg_replace('@[\x00-\x08\x0B\x0C\x0E-\x1F]@', ' ', $string);
   }
+
 }
