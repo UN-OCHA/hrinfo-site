@@ -28,6 +28,9 @@ function hr_users_menu_alter(&$items) {
   $items['user/register']['access callback'] = FALSE;
   $items['user/password']['page callback'] = FALSE;
   $items['user/login']['access callback'] = FALSE;
+  if (isset($items['masquerade/unswitch'])) {
+    $items['masquerade/unswitch']['menu_name'] = 'user-menu';
+  }
 }
 
 
@@ -184,22 +187,39 @@ function hr_users_check_profile($redirect = NULL) {
 }
 
 /**
- * Implements hook_menu_alter().
- *
- * Place masquerade switch back link in user menu
- */
-function hr_users_menu_alter(&$items) {
-  if (isset($items['masquerade/unswitch'])) {
-    $items['masquerade/unswitch']['menu_name'] = 'user-menu';
-  }
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function hr_users_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
   $form['account']['mail']['#title'] = t('Login e-mail');
   $form['account']['mail']['#description'] = t('The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail. To change your login address, please contact our support team: <a href="@mailto">info@humanitarianresponse.info</a>.', array('@mailto' => 'mailto:info@humanitarianresponse.info'));
+  // Only change the standard "account" user page.
+  if (!empty($form['#user_category']) && $form['#user_category'] !== 'account') {
+    return;
+  }
+
+  // Check if the user has a Connector module account.
+  $uid = !empty($form['#user']->uid) ? $form['#user']->uid : FALSE;
+  $authname = $uid ? db_query("SELECT authname FROM {authmap} WHERE module = 'connector' AND uid = :uid", array(':uid' => $uid))->fetchField() : FALSE;
+  if ($authname) {
+    // Make the email field readonly
+    $form['account']['mail']['#disabled'] = TRUE;
+    $form['account']['mail']['#weight'] = -4;
+
+    // Hide and disable the username field
+    $form['account']['name']['#type'] = 'value';
+
+    // Hide and disable password fields
+    $form['account']['current_pass']['#type'] = 'value';
+    $form['account']['pass']['#type'] = 'value';
+
+    // Add a link to the authentication server's account update page.
+    $form['account']['auth_link'] = array(
+      '#type' => 'item',
+      '#title' => t('Change your password'),
+      '#markup' => t('!Click here to update your password for Humanitarian ID Sign In applications.', array('!Click here to update your password' => l(t('Click here to update your password'), hid_auth_get_base_url() . '/account', array('query' => array('redirect_uri' => url(current_path(), array('absolute' => TRUE))))))),
+      '#weight' => -5,
+    );
+  }
 }
 
 /**
