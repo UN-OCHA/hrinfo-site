@@ -10,6 +10,13 @@
  */
 class SearchApiSavedSearchesViewsHandlerFieldName extends views_handler_field {
 
+  /**
+   * The ID of the currently rendered search.
+   *
+   * @var int|null
+   */
+  protected $currentSearchId;
+
   public function option_definition() {
     $options = parent::option_definition();
 
@@ -29,24 +36,27 @@ class SearchApiSavedSearchesViewsHandlerFieldName extends views_handler_field {
   }
 
   public function render($values) {
-    $value = parent::render($values);
-    if ($value && $this->options['link_to_page']) {
-      $this->render_link($values);
-    }
-    return $value;
+    $this->currentSearchId = isset($values->id) ? $values->id : NULL;
+    return parent::render($values);
   }
 
-  public function render_link($values) {
-    $search = !empty($values->id) ? search_api_saved_search_load($values->id) : NULL;
-    if (search_api_saved_search_edit_access(NULL, $search) && !empty($search->options['page'])) {
-      $this->options['alter']['make_link'] = TRUE;
-      $page = $search->options['page'] + array(
-        'path' => NULL,
-        'query' => array(),
-        'absolute' => TRUE,
-      );
-      $this->options['alter']['path'] = url($page['path'], $page);
+  public function render_text($alter) {
+    if ($this->options['link_to_page'] && $this->currentSearchId) {
+      $search = search_api_saved_search_load($this->currentSearchId);
+      if ($search && search_api_saved_search_edit_access(NULL, $search) && !empty($search->options['page'])) {
+        $alter['make_link'] = TRUE;
+        $page = $search->options['page'] + array(
+          'path' => NULL,
+          'query' => array(),
+        );
+        $alter['path'] = $page['path'];
+        if ($page['query']) {
+          $query = urldecode(drupal_http_build_query($page['query']));
+          $alter['path'] .= '?' . $query;
+        }
+      }
     }
+    return parent::render_text($alter);
   }
 
 }

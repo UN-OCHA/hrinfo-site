@@ -194,7 +194,7 @@ function search_api_saved_searches_search_edit_form(array $form, array &$form_st
     '#type' => 'textfield',
     '#title' => t('Name'),
     '#description' => t('The name that will be displayed for this saved search.'),
-    '#maxlength' => 50,
+    '#maxlength' => 255,
     '#required' => TRUE,
     '#default_value' => $search->name,
   );

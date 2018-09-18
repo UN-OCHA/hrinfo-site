@@ -98,7 +98,7 @@ function search_api_saved_searches_schema() {
       'name' => array(
         'description' => 'The displayed name for this saved search.',
         'type' => 'varchar',
-        'length' => 50,
+        'length' => 255,
         'not null' => TRUE,
       ),
       'mail' => array(
@@ -242,4 +242,17 @@ function search_api_saved_searches_update_7105() {
       'enabled' => 0,
     ))
     ->execute();
+}
+
+/**
+ * Increase the maximum length of the {search_api_saved_search}.name field.
+ */
+function search_api_saved_searches_update_7106() {
+  $spec = array(
+    'description' => 'The displayed name for this saved search.',
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => TRUE,
+  );
+  db_change_field('search_api_saved_search', 'name', 'name', $spec);
 }

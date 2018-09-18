@@ -11,7 +11,7 @@ Facet, Views or other filters set for the search will also be included in a
 saved search, thus reflecting exactly the same search results as displayed.
 
 Bug reports, feature suggestions and latest developments:
-  http://drupal.org/project/issues/search_api_saved_searches
+  https://www.drupal.org/project/issues/search_api_saved_searches
 
 Installation
 ------------
