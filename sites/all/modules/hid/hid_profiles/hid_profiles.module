@@ -300,43 +300,6 @@ function hid_profiles_ctools_plugin_directory($module, $plugin) {
   }
 }
 
-
-/**
- * Implements hook_user_login().
- *
- * When a user logs in, check if they have an ID from the Humanitarian ID auth
- * system. If so, check that the account is mapped in {hid_profiles}.
- */
-function hid_profiles_user_login(&$edit, $account) {
-  if (!empty($account->uid) && function_exists('hid_auth_get_user_id')) {
-    $auth_id = hid_auth_get_user_id();
-    if (!empty($auth_id)) {
-      $cid = _hid_profiles_get_cid_by_uid($account->uid);
-      if (empty($cid)) {
-        $user_data = hid_auth_get_user_data($auth_id);
-        $nid = db_insert('hid_profiles')
-          ->fields(array(
-            'uid' => $account->uid,
-            'cid' => $auth_id,
-            'hid' => $user_data->id
-          ))
-          ->execute();
-        watchdog('hid_profiles', 'Adding authentication ID for %name (user %uid).', array('%name' => $account->name, '%uid' => $account->uid));
-      }
-      elseif ($auth_id !== $cid) {
-        $num_updated = db_update('hid_profiles')
-          ->fields(array(
-            'uid' => $account->uid,
-            'cid' => $auth_id,
-          ))
-          ->condition('uid', $account->uid, '=')
-          ->execute();
-        watchdog('hid_profiles', 'Mismatch found between the stored authentication ID for %name (user %uid) and the current one. Updating the stored ID.', array('%name' => $account->name, '%uid' => $account->uid));
-      }
-    }
-  }
-}
-
 /**
  * Menu callback to return app data for the current user in JSON format.
  */
@@ -841,9 +804,10 @@ function hid_profiles_restclient_post($resource_path, $variables = array()) {
 }
 
 function hid_profiles_get_token() {
-  $cid = hid_auth_get_user_id();
-  $provider = oauthconnector_provider_load('hid_oauth');
-  $token = (!empty($cid) && !empty($provider->csid)) ? oauthconnector_get_connection_token($provider, $cid) : FALSE;
+  global $user;
+  $session = _hybridauth_session_load_by_uid($user->uid);
+  $data = unserialize($session['data']);
+  $token = unserialize($data['hauth_session.humanitarianid.token.access_token']);
   return $token;
 }
 
