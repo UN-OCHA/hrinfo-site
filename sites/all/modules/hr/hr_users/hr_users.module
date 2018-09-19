@@ -38,7 +38,17 @@ function hr_users_menu_alter(&$items) {
  * Redirect to hybrid auth.
  */
 function hr_users_login_redirect() {
-  drupal_goto('hybridauth/window/HumanitarianId');
+  drupal_goto('hybridauth/window/HumanitarianId', array(
+    'destination' => drupal_get_destination(),
+    'destination_error' => '',
+  ));
+}
+
+/**
+ * Implements hook_hybridauth_destination_options_alter().
+ */
+function hr_users_hybridauth_destination_options_alter(&$destination_options) {
+  $destination_options['path'] = 'home';
 }
 
 
