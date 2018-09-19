@@ -101,7 +101,7 @@ function hr_users_og_features_registry() {
 /**
  * Implements hook_hybridauth_user_login().
  */
-function hr_users_hybridauth_user_login($account, $data) {
+/*function hr_users_hybridauth_user_login($account, $data) {
   $profile = profile2_load_by_user($account, 'main');
   if (empty($profile)) {
     $profile_type = profile2_get_types('main');
@@ -139,7 +139,7 @@ function hr_users_hybridauth_user_login($account, $data) {
   // Check if the user's profile is complete. If not, set a session variable to
   // enforce that the user complete the profile.
   //hr_users_check_profile();
-}
+}*/
 
 /**
  * Helper function to load the current user's main profile and ensure the
