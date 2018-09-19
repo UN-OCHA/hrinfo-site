@@ -38,10 +38,7 @@ function hr_users_menu_alter(&$items) {
  * Redirect to hybrid auth.
  */
 function hr_users_login_redirect() {
-  drupal_goto('hybridauth/window/HumanitarianId', array(
-    'destination' => drupal_get_destination(),
-    'destination_error' => '',
-  ));
+  drupal_goto('hybridauth/window/HumanitarianId');
 }
 
 
@@ -141,7 +138,7 @@ function hr_users_hybridauth_user_login($account, $data) {
 
   // Check if the user's profile is complete. If not, set a session variable to
   // enforce that the user complete the profile.
-  hr_users_check_profile();
+  //hr_users_check_profile();
 }
 
 /**
