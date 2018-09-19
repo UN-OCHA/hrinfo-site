@@ -226,10 +226,11 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
     $return = array();
     if (!empty($values)) {
       foreach ($values as $value) {
+        $node = node_load($value);
         $tmp = new \stdClass();
-        $tmp->glide = $value->field_glide_number[LANGUAGE_NONE][0]['value'];
-        $tmp->label = $value->title;
-        if (!empty($value->field_reliefweb_id)) {
+        $tmp->glide = $node->field_glide_number[LANGUAGE_NONE][0]['value'];
+        $tmp->label = $node->title;
+        if (!empty($node->field_reliefweb_id)) {
           $tmp->self = 'http://api.reliefweb.int/v1/disasters/'.$value->field_reliefweb_id[LANGUAGE_NONE][0]['value'];
         }
         $return[] = $tmp;
