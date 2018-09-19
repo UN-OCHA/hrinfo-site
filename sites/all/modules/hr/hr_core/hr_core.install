@@ -473,3 +473,22 @@ function hr_core_update_7029() {
   ));
   db_query('UPDATE {taxonomy_term_data} set changed = created');
 }
+
+/**
+ * Perform the hybridauth migration
+ */
+function hr_core_update_7030() {
+  module_enable(array('hybridauth'));
+  $results = db_select('hid_profiles', 'h')
+    ->fields('h')
+    ->execute()
+    ->fetchAll();
+
+  foreach ($results as $row) {
+    $identity = array();
+    $identity['provider'] = 'HumanitarianId';
+    $identity['identifier'] = $row->hid;
+    _hybridauth_identity_save($identity, $row->uid);
+  }
+  module_disable(array('hid_auth'));
+}
