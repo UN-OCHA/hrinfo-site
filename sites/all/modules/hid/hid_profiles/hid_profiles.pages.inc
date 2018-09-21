@@ -312,18 +312,17 @@ function hid_profiles_local_contacts_no_access($reason) {
  */
 function hid_profiles_local_contacts($node) {
   context_set('context', 'hr_space_menu', FALSE);
-  $operation = $node->type == 'hr_bundle' ? $op = node_load(_hr_bundles_get_operation($node->nid)) : $node;
-  $operation_wrapper = entity_metadata_wrapper('node', $operation);
+  $hid_access = 'open';
   $hid = hid_profiles_get_user_data();
+  if ($node->type === 'hr_bundle' || $node->type == 'hr_operation') {
+    $operation = $node->type == 'hr_bundle' ? $op = node_load(_hr_bundles_get_operation($node->nid)) : $node;
+    $operation_wrapper = entity_metadata_wrapper('node', $operation);
 
-  // Open access operations list their contacts in public, whereas closed, only
-  // show to those logged in and verified.
-  $hid_access = $operation_wrapper->field_hid_access->value();
-  $version = 1;
-  if (variable_get('hid_profiles_v2', FALSE)) {
-    $version = 2;
+    // Open access operations list their contacts in public, whereas closed, only
+    // show to those logged in and verified.
+    $hid_access = $operation_wrapper->field_hid_access->value();
   }
-  if ((($hid_access == 'open' ||  $hid->profile->verified) && $version == 1) || ($version == 2 && !hid_auth_user_is_anonymous())) {
+  if (!user_is_anonymous()) {
     $templates = array(
       'contacts_list_table_row',
       'contacts_view',
@@ -333,23 +332,19 @@ function hid_profiles_local_contacts($node) {
     }
 
     $settings = array();
-    $settings['operation_id'] = $operation->nid;
+    $settings['operation_id'] = $operation ? $operation->nid : '';
     // Get the operation id from the cluster.
     $settings['bundle'] = $node->type == 'hr_bundle' ? $node->title : '';
     $settings['bundle_id'] = $node->type == 'hr_bundle' ? $node->nid : '';
-    $settings['v2'] = variable_get('hid_profiles_v2', FALSE);
-    if ($settings['v2']) {
-      $settings['api_endpoint'] = variable_get('hid_profiles_v2_api_endpoint', NULL);
-    }
-    else {
-      $settings['api_endpoint'] = variable_get('hid_profiles_api_endpoint', NULL);
-    }
+    $settings['disaster'] = $node->type == 'hr_disaster' ? $node->title : '';
+    $settings['disaster_id'] = $node->type == 'hr_disaster' ? $node->nid : '';
+    $settings['api_endpoint'] = variable_get('hid_profiles_v2_api_endpoint', NULL);
     $token = hid_profiles_get_token();
     if ($token) {
       $settings['token'] = $token->key;
     }
 
-    if (!$token && $settings['v2']) {
+    if (!$token) {
       return hid_profiles_local_contacts_no_access('anonymous');
     }
 
@@ -375,7 +370,7 @@ function hid_profiles_local_contacts($node) {
   else {
 
     // Display the HID Login / Register screen for anonymous users.
-    if (hid_auth_user_is_anonymous()) {
+    if (user_is_anonymous()) {
       $reason = 'anonymous';
     }
 

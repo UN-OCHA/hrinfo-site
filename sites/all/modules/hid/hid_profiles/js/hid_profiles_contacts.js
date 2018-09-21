@@ -4,23 +4,14 @@ Drupal.behaviors.hidProfilesContacts = {
 
     var _sync = Backbone.sync;
     Backbone.sync = function(method, model, options) {
-
-        if (settings.hid_profiles.v2) {
-          options.headers = {};
-          options.headers.Authorization = 'Bearer ' + settings.hid_profiles.token;
-        }
-
+        options.headers = {};
+        options.headers.Authorization = 'Bearer ' + settings.hid_profiles.token;
         return _sync.call( this, method, model, options );
     };
 
     Contact = Backbone.Model.extend({
       url: function() {
-        if (settings.hid_profiles.v2) {
-          return settings.hid_profiles.api_endpoint + '/api/v2/user/' + this.get('_id');
-        }
-        else {
-          return window.location.protocol + '//' + window.location.host + '/hid/proxy?api_path=v0/contact/view&_id='+this.get('_id');
-        }
+        return settings.hid_profiles.api_endpoint + '/api/v2/user/' + this.get('_id');
       },
       parse: function(response) {
         if (response.contacts != undefined) {
@@ -31,140 +22,69 @@ Drupal.behaviors.hidProfilesContacts = {
         }
       },
       getFullName: function() {
-        if (settings.hid_profiles.v2) {
-          return this.get('name');
-        }
-        else {
-          return this.get('nameGiven') + ' ' + this.get('nameFamily');
-        }
+        return this.get('name');
       },
 
       getMainOrganizationName: function() {
-        if (settings.hid_profiles.v2) {
-          var org = this.get('organization');
-          if (org) {
-            return org.name;
-          }
-          else {
-            return '';
-          }
+        var org = this.get('organization');
+        if (org) {
+          return org.name;
         }
         else {
-          var organizations = this.get('organization');
-          if (organizations.length > 0 && organizations[0] !== null) {
-            return organizations[0].name;
-          }
+          return '';
         }
       },
       getLocationName: function() {
-        if (settings.hid_profiles.v2) {
-          var ops = this.get('operations');
-          var names = [];
-          _.each(ops, function (operation) {
-            names.push(operation.name);
-          });
-          return names.join(", ");
-        }
-        else {
-          var address = this.get('address');
-          if (address.length > 0) {
-            return address[0].locality;
-          }
-        }
+        var ops = this.get('operations');
+        var names = [];
+        _.each(ops, function (operation) {
+          names.push(operation.name);
+        });
+        return names.join(", ");
       },
 
       getBundles: function() {
-        if (settings.hid_profiles.v2) {
-          var bundles = this.get('bundles');
-          var names = [];
-          _.each(bundles, function (bundle) {
-            names.push(bundle.name);
-          });
-          return names.join(", ");
-        }
-        else {
-          var bundles = this.get('bundle');
-          if (bundles.length > 0) {
-            return bundles.join(", ");
-          }
-        }
+        var bundles = this.get('bundles');
+        var names = [];
+        _.each(bundles, function (bundle) {
+          names.push(bundle.name);
+        });
+        return names.join(", ");
       },
 
       getJobTitle: function() {
-        if (settings.hid_profiles.v2) {
-          return this.get('job_title');
-        }
-        else {
-          return this.get('jobtitle');
-        }
+        return this.get('job_title');
       },
 
       getVerified: function () {
-        if (settings.hid_profiles.v2) {
-          return this.get('verified');
-        }
-        else {
-          return this.get('_profile').verified;
-        }
+        return this.get('verified');
       },
 
       getEmail: function() {
-        if (settings.hid_profiles.v2) {
-          return this.get('email');
-        }
-        else {
-          var emails = this.get('email');
-          if (emails.length > 0) {
-            var addresses = new Array();
-            _.each(emails, function(email) {
-              addresses.push(email.address);
-            });
-            return addresses.join(", ");
-          }
-        }
+        return this.get('email');
       },
 
       getEmails: function() {
-        if (settings.hid_profiles.v2) {
-          var out = [];
-          out.push({address: this.get('email')});
-          return out;
-        }
-        else {
-          return this.get('email');
-        }
+        var out = [];
+        out.push({address: this.get('email')});
+        return out;
       },
 
       getPhoneNumbers: function() {
-        if (settings.hid_profiles.v2) {
-          return this.get('phone_numbers');
-        }
-        else {
-          return this.get('phones');
-        }
+        return this.get('phone_numbers');
       },
 
       getWebsites: function() {
-        if (settings.hid_profiles.v2) {
-          var webs = this.get('websites');
-          var websites = [];
-          _.each(webs, function (web) {
-            websites.push(web.uri);
-          });
-          return websites;
-        }
-        else {
-          return this.get('uri');
-        }
+        var webs = this.get('websites');
+        var websites = [];
+        _.each(webs, function (web) {
+          websites.push(web.uri);
+        });
+        return websites;
       },
 
       getVoip: function() {
-        if (settings.hid_profiles.v2) {
-          return this.get('voips');
-        }
-        else {
-          return this.get('voip');
-        }
+        return this.get('voips');
       },
     });
 
@@ -180,19 +100,16 @@ Drupal.behaviors.hidProfilesContacts = {
         url: function() {
           var index = window.location.hash.indexOf('?');
           var url = '';
-          if (settings.hid_profiles.v2) {
-            url = settings.hid_profiles.api_endpoint + '/api/v2/user?limit=' + this.limit + '&offset=' + this.skip + '&sort=name';
-            if (settings.hid_profiles.bundle) {
-              url = url + '&bundles.list=' + this.listId;
+          url = settings.hid_profiles.api_endpoint + '/api/v2/user?limit=' + this.limit + '&offset=' + this.skip + '&sort=name';
+          if (settings.hid_profiles.bundle) {
+            url = url + '&bundles.list=' + this.listId;
+          }
+          else {
+            if (settings.hid_profiles.disaster) {
+              url = url + '&disasters.list=' + this.listId;
             }
             else {
               url = url + '&operations.list=' + this.listId;
-            }
-          }
-          else {
-            url = window.location.protocol + '//' + window.location.host + '/hid/proxy?api_path=v0/contact/view&locationId=hrinfo:' + settings.hid_profiles.operation_id + '&status=1&type=local&limit=' + this.limit + '&skip=' + this.skip;
-            if (settings.hid_profiles.bundle !== '') {
-              url += '&bundle=' + settings.hid_profiles.bundle;
             }
           }
           if (index != -1) {
@@ -204,14 +121,8 @@ Drupal.behaviors.hidProfilesContacts = {
           return url;
         },
         parse: function(response, options) {
-          if (settings.hid_profiles.v2) {
-            this.count = options.xhr.getResponseHeader('X-Total-Count');
-            return response;
-          }
-          else {
-            this.count = response.count;
-            return response.contacts;
-          }
+          this.count = options.xhr.getResponseHeader('X-Total-Count');
+          return response;
         },
         limit: 5,
         skip: 0,
@@ -249,29 +160,7 @@ Drupal.behaviors.hidProfilesContacts = {
         },
 
         loadResults: function () {
-          if (settings.hid_profiles.v2) {
-            this.loadResultsV2();
-          }
-          else {
-            this.loadResultsV1();
-          }
-        },
-
-        loadResultsV1: function() {
-          var that = this;
-          this.contactsList.fetch({
-            success: function (contacts) {
-              var template = _.template($('#contacts_list_table_row').html());
-              var pdf_url = that.contactsList.url();
-              pdf_url = pdf_url.replace('&limit=' + that.numItems + '&skip=' + that.contactsList.skip, '');
-              var csv_url = pdf_url + '&export=csv';
-              pdf_url = pdf_url + '&export=pdf';
-              $('#contacts-list-pdf').attr('href', pdf_url);
-              $('#contacts-list-csv').attr('href', csv_url);
-              $('#contacts-list-table tbody').append(template({contacts: contacts.models}));
-              that.finishedLoading();
-            },
-          });
+          this.loadResultsV2();
         },
 
         loadResultsV2: function () {
@@ -374,154 +263,78 @@ Drupal.behaviors.hidProfilesContacts = {
 
         filterByProtectedRoles: function(event) {
           var val = $('#protectedRoles').val();
-          if (settings.hid_profiles.v2) {
-            if (val !== '') {
-              this.contactsList.params['functional_roles.list'] = val;
-            }
-            else {
-              delete this.contactsList.params['functional_roles.list'];
-            }
+          if (val !== '') {
+            this.contactsList.params['functional_roles.list'] = val;
           }
           else {
-            if (val !== '') {
-              this.contactsList.params.protectedRoles = val;
-            }
-            else {
-              delete this.contactsList.params.protectedRoles;
-            }
+            delete this.contactsList.params['functional_roles.list'];
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
 
         filterByBundles: function(event) {
           var val = $('#bundles').val();
-          if (settings.hid_profiles.v2) {
-            if (val !== '') {
-              this.contactsList.params['bundles.list'] = val;
-            }
-            else {
-              delete this.contactsList.params['bundles.list'];
-            }
+          if (val !== '') {
+            this.contactsList.params['bundles.list'] = val;
           }
           else {
-            if (val !== '') {
-              if (val.charAt(0) == '#') {
-                this.contactsList.params.protectedBundles = val.substr(1);
-              }
-              else {
-                this.contactsList.params.bundle = val;
-              }
-            }
-            else {
-              delete this.contactsList.params.bundle;
-              delete this.contactsList.params.protectedBundles;
-            }
+            delete this.contactsList.params['bundles.list'];
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
 
         filterByOrganization: function(event, ui) {
           var val = ui.item.label;
-          if (settings.hid_profiles.v2) {
-            val = ui.item._id;
-            if (val !== '') {
-              this.contactsList.params['organizations.list'] = val;
-            }
-            else {
-              delete this.contactsList.params['organizations.list'];
-            }
+          val = ui.item._id;
+          if (val !== '') {
+            this.contactsList.params['organizations.list'] = val;
           }
           else {
-            if (val != '') {
-              this.contactsList.params.organization_name = val;
-            }
-            else {
-              delete this.contactsList.params.organization_name;
-            }
+            delete this.contactsList.params['organizations.list'];
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
 
         filterByCountry: function(event) {
           var val = $('#countries').val();
-          if (settings.hid_profiles.v2) {
-            if (val !== '') {
-              this.contactsList.params.country = val;
-            }
-            else {
-              delete this.contactsList.params.country;
-            }
+          if (val !== '') {
+            this.contactsList.params.country = val;
           }
           else {
-            if (val !== '') {
-              this.contactsList.params.address_country = val;
-            }
-            else {
-              delete this.contactsList.params.address_country;
-            }
+            delete this.contactsList.params.country;
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
 
         filterByLocation: function(event) {
           var val = $('#locations').val();
-          if (settings.hid_profiles.v2) {
-            if (val !== '') {
-              this.contactsList.params['location.region.name'] = val;
-            }
-            else {
-              delete this.contactsList.params['location.region.name'];
-            }
+          if (val !== '') {
+            this.contactsList.params['location.region.name'] = val;
           }
           else {
-            if (val !== '') {
-              this.contactsList.params.address_administrative_area = val;
-            }
-            else {
-              delete this.contactsList.params.address_administrative_area;
-            }
+            delete this.contactsList.params['location.region.name'];
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
 
         filterByOffice: function(event) {
           var val = $('#offices').val();
-          if (settings.hid_profiles.v2) {
-            if (val !== '') {
-              this.contactsList.params['offices.list'] = val;
-            }
-            else {
-              delete this.contactsList.params['offices.list'];
-            }
+          if (val !== '') {
+            this.contactsList.params['offices.list'] = val;
           }
           else {
-            if (val != '') {
-              this.contactsList.params.office_name = val;
-            }
-            else {
-              delete this.contactsList.params.office_name;
-            }
+            delete this.contactsList.params['offices.list'];
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
 
         filterByDisaster: function(event) {
           var val = $('#disasters').val();
-          if (settings.hid_profiles.v2) {
-            if (val !== '') {
-              this.contactsList.params['disasters.list'] = val;
-            }
-            else {
-              delete this.contactsList.params['disasters.list'];
-            }
+          if (val !== '') {
+            this.contactsList.params['disasters.list'] = val;
           }
           else {
-            if (val != '') {
-              this.contactsList.params.disasters_remote_id = val;
-            }
-            else {
-              delete this.contactsList.params.disasters_remote_id;
-            }
+            delete this.contactsList.params['disasters.list'];
           }
           this.router.navigateWithParams('table/1', this.contactsList.params);
         },
@@ -609,44 +422,24 @@ Drupal.behaviors.hidProfilesContacts = {
 
     var contact_router = new ContactRouter();
 
-    if (settings.hid_profiles.v2) {
-      $('#organizations').autocomplete({
-        source: function (request, response) {
-          $.ajax({
-            url: settings.hid_profiles.api_endpoint + "/api/v2/list?type=organization&limit=10&name=" + request.term,
-            dataType: "json",
-            headers: {
-              'Authorization': 'Bearer ' + settings.hid_profiles.token
-            },
-            success: function( data ) {
-              var orgs = [];
-              _.each(data, function(element, index) {
-                orgs.push({'label': element.name, 'value': element.name, '_id': element._id});
-              });
-              response( orgs );
-            }
-          });
-        }
-      });
-    }
-    else {
-      // Autocomplete for organization
-      $('#organizations').autocomplete({
-        source: function (request, response) {
-          $.ajax({
-            url: "/hid/organizations/autocomplete/"+request.term,
-            dataType: "json",
-            success: function( data ) {
-              var orgs = [];
-              _.each(data, function(element, index) {
-                orgs.push({'label': element, 'value': element});
-              });
-              response( orgs );
-            }
-          });
-        },
-      });
-    }
+    $('#organizations').autocomplete({
+      source: function (request, response) {
+        $.ajax({
+          url: settings.hid_profiles.api_endpoint + "/api/v2/list?type=organization&limit=10&name=" + request.term,
+          dataType: "json",
+          headers: {
+            'Authorization': 'Bearer ' + settings.hid_profiles.token
+          },
+          success: function( data ) {
+            var orgs = [];
+            _.each(data, function(element, index) {
+              orgs.push({'label': element.name, 'value': element.name, '_id': element._id});
+            });
+            response( orgs );
+          }
+        });
+      }
+    });
 
     // Chosen configuration
     $('select').chosen({allow_single_deselect: true});
