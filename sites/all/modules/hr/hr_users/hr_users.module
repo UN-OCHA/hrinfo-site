@@ -121,11 +121,11 @@ function hr_users_hybridauth_user_login($account, $data) {
     $changed = FALSE;
 
     if (empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) || $profile->field_first_name[LANGUAGE_NONE][0]['value'] != $data['given_name']) {
-      $profile->field_first_name[LANGUAGE_NONE][0]['value'] = $data['given_name'];
+      $profile->field_first_name[LANGUAGE_NONE][0]['value'] = $data['firstName'];
       $changed = TRUE;
     }
     if (empty($profile->field_last_name[LANGUAGE_NONE][0]['value']) || $profile->field_last_name[LANGUAGE_NONE][0]['value'] != $data['family_name']) {
-      $profile->field_last_name[LANGUAGE_NONE][0]['value'] = $data['family_name'];
+      $profile->field_last_name[LANGUAGE_NONE][0]['value'] = $data['lastName'];
       $changed = TRUE;
     }
 
@@ -203,14 +203,6 @@ function hr_users_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
     // Hide and disable password fields
     $form['account']['current_pass']['#type'] = 'value';
     $form['account']['pass']['#type'] = 'value';
-
-    // Add a link to the authentication server's account update page.
-    $form['account']['auth_link'] = array(
-      '#type' => 'item',
-      '#title' => t('Change your password'),
-      '#markup' => t('!Click here to update your password for Humanitarian ID Sign In applications.', array('!Click here to update your password' => l(t('Click here to update your password'), hid_auth_get_base_url() . '/account', array('query' => array('redirect_uri' => url(current_path(), array('absolute' => TRUE))))))),
-      '#weight' => -5,
-    );
   }
 }
 
