@@ -895,7 +895,7 @@ function hid_v2_get_lists($params) {
   $req = hid_profiles_restclient_get('api/v2/list', array(
     'query' => $params,
     'headers' => array(
-      'Authorization' => 'Bearer '.$token->key
+      'Authorization' => 'Bearer '.$token
     )
   ));
   $lists = json_decode($req->data);

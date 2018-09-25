@@ -339,12 +339,9 @@ function hid_profiles_local_contacts($node) {
     $settings['disaster'] = $node->type == 'hr_disaster' ? $node->title : '';
     $settings['disaster_id'] = $node->type == 'hr_disaster' ? $node->nid : '';
     $settings['api_endpoint'] = variable_get('hid_profiles_v2_api_endpoint', NULL);
-    $token = hid_profiles_get_token();
-    if ($token) {
-      $settings['token'] = $token->key;
-    }
+    $settings['token'] = hid_profiles_get_token();
 
-    if (!$token) {
+    if (!$settings['token']) {
       return hid_profiles_local_contacts_no_access('anonymous');
     }
 
