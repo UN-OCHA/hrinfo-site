@@ -40,8 +40,9 @@ class DataProviderOrganizations  extends DataProviderEntity implements DataProvi
     $entity_id = $this->getEntityIdByFieldId($identifier);
     $this->isValidEntity('update', $entity_id);
 
-    $term = taxonomy_term_load($entity_id);
-    $handler  = entity_translation_get_handler('taxonomy_term', $term);
+    /* @var \EntityDrupalWrapper $wrapper */
+    $wrapper = entity_metadata_wrapper($this->entityType, $entity_id);
+    $handler  = entity_translation_get_handler($this->entityType, $wrapper->value());
     $translations = $handler->getTranslations();
     $languages = array_keys($translations->data);
     if (!in_array($language->language, $languages)) {
@@ -54,9 +55,6 @@ class DataProviderOrganizations  extends DataProviderEntity implements DataProvi
       );
       $handler->setTranslation($translation);
     }
-
-    /* @var \EntityDrupalWrapper $wrapper */
-    $wrapper = entity_metadata_wrapper($this->entityType, $entity_id);
     $wrapper_translated = $wrapper->language($language->language);
 
     $this->setPropertyValues($wrapper_translated, $object, $replace);
