@@ -44,6 +44,7 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
 
     $public_fields['website'] = array(
       'property' => 'field_website',
+      'sub_property' => 'url',
     );
 
     $public_fields['type'] = array(
