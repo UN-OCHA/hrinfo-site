@@ -50,6 +50,18 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
       'property' => 'field_bundle_type',
     );
 
+    $public_fields['body-html'] = array(
+      'property' => 'body',
+      'sub_property' => 'value',
+    );
+
+    $public_fields['body'] = array(
+      'property' => 'body',
+      'sub_property' => 'value',
+      'class' => '\Drupal\hr_api\Plugin\resource\Field\ResourceFieldEntityTextCustom',
+      'process_callbacks' => array(array($this, 'getBodyRaw')),
+    );
+
 
     $public_fields['global_cluster'] = array(
       'property' => 'field_sector',
@@ -144,6 +156,10 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
     );
 
     return $public_fields;
+  }
+
+  public function getBodyRaw($value) {
+    return strip_tags($value);
   }
 
   /**
