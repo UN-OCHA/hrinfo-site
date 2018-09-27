@@ -24,7 +24,7 @@ GEM
       bootstrap-sass (~> 3.2)
       compass (~> 1.0)
     execjs (2.6.0)
-    ffi (1.9.10)
+    ffi (1.9.25)
     json (1.8.3)
     multi_json (1.11.2)
     rb-fsevent (0.9.6)
