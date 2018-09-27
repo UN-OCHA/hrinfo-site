@@ -42,6 +42,10 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
       'property' => 'field_email',
     );
 
+    $public_fields['website'] = array(
+      'property' => 'field_website',
+    );
+
     $public_fields['type'] = array(
       'property' => 'field_bundle_type',
     );
@@ -121,6 +125,10 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
 
     $public_fields['inter_cluster'] = array(
       'property' => 'field_inter_cluster'
+    );
+
+    $public_fields['social_media'] = array(
+      'property' => 'field_social_media',
     );
 
     $public_fields['created'] = array(
