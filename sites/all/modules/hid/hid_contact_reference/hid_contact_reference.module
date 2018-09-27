@@ -232,6 +232,9 @@ function hid_contact_reference_field_update($entity_type, $entity, $field, $inst
   // Clear the render cache for the contact field.
   if ($field['type'] == 'hid_contact_reference') {
     $wrapper = entity_metadata_wrapper($entity_type, $entity);
-    cache_clear_all('hid_contact:' . $entity_type . ':' . $wrapper->getIdentifier() . ':', 'cache', TRUE);
+    foreach ($items as $delta => $item) {
+      cache_clear_all('hid_contact:' . $entity_type . ':' . $wrapper->getIdentifier() . ':' . $item['cid'], 'cache');
+    }
+    //cache_clear_all('hid_contact:' . $entity_type . ':' . $wrapper->getIdentifier() . ':', 'cache', TRUE);
   }
 }
