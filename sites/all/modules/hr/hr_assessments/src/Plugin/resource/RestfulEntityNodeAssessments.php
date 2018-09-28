@@ -110,6 +110,11 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
       'property' => 'field_level_of_representation',
     );
 
+    $public_fields['contacts'] = array(
+      'property' => 'field_hid_contact_ref',
+      'sub_property' => 'cid'
+    );
+
     $public_fields['population_types'] = array(
       'property' => 'field_population_types',
       'resource' => array(
@@ -147,6 +152,10 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
       'process_callbacks' => array(array($this, 'formatFieldCollection')),
     );
 
+    $public_fields['related_content'] = array(
+      'property' => 'field_related_content'
+    );
+
     $public_fields['themes'] = array(
       'property' => 'field_themes',
       'resource' => array(
@@ -169,6 +178,10 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
         'majorVersion' => 1,
         'minorVersion' => 0,
       ),
+    );
+
+    $public_fields['language'] = array(
+      'property' => 'language'
     );
 
     $public_fields['created'] = array(
