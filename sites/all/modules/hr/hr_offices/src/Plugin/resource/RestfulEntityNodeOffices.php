@@ -59,6 +59,10 @@ class RestfulEntityNodeOffices extends ResourceCustom implements ResourceInterfa
       'property' => 'field_email',
     );
 
+    $public_fields['coordination_hub'] = array(
+      'property' => 'field_is_coordination_hub'
+    );
+
     $public_fields['organizations'] = array(
       'property' => 'field_organizations',
       'resource' => array(
