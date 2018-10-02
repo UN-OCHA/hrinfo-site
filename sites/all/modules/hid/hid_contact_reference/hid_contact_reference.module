@@ -150,11 +150,11 @@ function hid_contact_reference_field_formatter_info() {
     'label' => t('Hid contact reference formatter'),
     'field types' => array('hid_contact_reference'),
     'settings' => array(
-      'show_name' => 1,
-      'show_organization' => 0,
-      'show_job_title' => 0,
-      'show_email' => 0,
-      'show_phone_number' => 0
+      'show_name' => TRUE,
+      'show_organization' => FALSE,
+      'show_job_title' => FALSE,
+      'show_email' => FALSE,
+      'show_phone_number' => FALSE
     )
   );
 
@@ -172,22 +172,27 @@ function hid_contact_reference_field_formatter_settings_form($field, $instance, 
     $element['show_name'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show user name'),
+      '#default_value' => $settings['show_name']
     );
     $element['show_organization'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show organization'),
+      '#default_value' => $settings['show_organization']
     );
     $element['show_job_title'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show Job title'),
+      '#default_value' => $settings['show_job_title']
     );
     $element['show_email'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show email'),
+      '#default_value' => $settings['show_email']
     );
     $element['show_phone_number'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show phone number'),
+      '#default_value' => $settings['show_phone_number']
     );
   }
   return $element;
