@@ -278,7 +278,7 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
    * {@inheritdoc}
    */
   protected function dataProviderClassName() {
-    return '\Drupal\hr_api\Plugin\resource\DataProviderOptimized';
+    return '\Drupal\hr_assessments\Plugin\resource\DataProviderAssessments';
   }
 
 }
