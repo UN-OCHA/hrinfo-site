@@ -149,7 +149,13 @@ function hid_contact_reference_field_formatter_info() {
   $return['hid_contact_reference_full'] = array(
     'label' => t('Hid contact reference formatter'),
     'field types' => array('hid_contact_reference'),
-
+    'settings' => array(
+      'show_name' => 1,
+      'show_organization' => 0,
+      'show_job_title' => 0,
+      'show_email' => 0,
+      'show_phone_number' => 0
+    )
   );
 
   return $return;
