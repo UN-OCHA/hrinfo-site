@@ -1,27 +1,6 @@
 <?php
 
 /**
- * Page callback for Humanitarian ID user debug page.
- */
-function hid_profiles_user_debug($user) {
-  $output = 'No Humanitarian ID Profiles data is found for this user.';
-
-  // Get the Humanitarian ID Profiles API _id value for the user
-  $cid = db_query("SELECT cid FROM {hid_profiles} WHERE uid = :uid ", array(':uid' => $user->uid))->fetchField();
-
-  if (!empty($cid)) {
-    $data = _hid_profiles_get_user_by_cid($cid);
-
-    $output = "<p>User ID: $cid</p>";
-    $output .= '<pre>' . var_export($data, TRUE) . '</pre>';
-  }
-
-  return array(
-    '#markup' => $output,
-  );
-}
-
-/**
  * Admin form for managing the system variables associated with this module.
  */
 function hid_profiles_settings_form($form, &$form_state) {
@@ -378,48 +357,4 @@ function hid_profiles_local_contacts($node) {
 
     return hid_profiles_local_contacts_no_access($reason);
   }
-}
-
-/**
- * Callback for hid/checkout
- */
-function hid_profiles_checkout($form, &$form_state, $cid) {
-  global $user;
-  $form['cid'] = array(
-    '#type' => 'hidden',
-    '#value' => $cid,
-  );
-  $data = hid_profiles_get_user_data($user->uid);
-  $location = '';
-  foreach ($data->contacts as $contact) {
-    if ($contact->{'_id'} == $cid) {
-      $location = $contact->location;
-    }
-  }
-  return confirm_form($form, t('Are you sure you want to checkout of @location ?', array('@location' => $location)), 'check-ins');
-}
-
-function hid_profiles_checkout_submit($form, &$form_state) {
-  global $user;
-  $cid = $form_state['values']['cid'];
-  // Checkout from cid.
-  $data = hid_profiles_get_user_data($user->uid);
-  $location = '';
-  foreach ($data->contacts as $contact) {
-    if ($contact->{'_id'} == $cid) {
-      $location = $contact->location;
-    }
-  }
-  $params = array(
-    '_id' => $cid,
-    '_profile' => $data->profile->{'_id'},
-    'status' => '0',
-  );
-  if (_hid_profiles_save_contact($data->profile->userid, $params) != FALSE) {
-    drupal_set_message('You have successfully checked out of '.$location);
-  }
-  else {
-    drupal_set_message('There was an error checking you out of '.$location, 'error');
-  }
-  $form_state['redirect'] = 'check-ins';
 }

@@ -60,19 +60,8 @@ function hid_profiles_list_edit_form($form, &$form_state) {
 function _hid_profiles_list_form_contact($conf, $delta) {
   $default_value = '';
   if (!empty($conf['contacts'][$delta])) {
-    if (variable_get('hid_profiles_v2', FALSE)) {
-      $contact = hid_profiles_get_contact($conf['contacts'][$delta]);
-      $default_value = $contact->name." [id: $contact->_id]";
-    }
-    else {
-      if ($contact = hid_profiles_get_contact_by_id($conf['contacts'][$delta])) {
-        $location = !empty($contact->location) ? $contact->location : t(
-          'Global profile'
-        );
-        $label = "$contact->nameGiven $contact->nameFamily ($location)";
-        $default_value = "$label [id: $contact->_id]";
-      }
-    }
+    $contact = hid_profiles_get_contact($conf['contacts'][$delta]);
+    $default_value = $contact->name." [id: $contact->_id]";
   }
 
   $elt = array(
@@ -111,10 +100,7 @@ function hid_profiles_list_edit_form_submit($form, &$form_state) {
  * See ctools_plugin_examples for more advanced info
  */
 function hid_profiles_list_render($subtype, $conf, $panel_args, $context = NULL) {
-  $theme = 'hid_profiles_single_contact';
-  if (variable_get('hid_profiles_v2', FALSE)) {
-    $theme = 'hid_profiles_single_contact_v2';
-  }
+  $theme = 'hid_profiles_single_contact_v2';
 
   $block = new stdClass();
   $block->title = t('Contacts');
