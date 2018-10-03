@@ -53,11 +53,14 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
 -----END PUBLIC KEY-----';
     try {
       $decoded = JWT::decode($token, $publicKey, array('RS256'));
-      $hid = $decoded->id;
-      $uid = db_query("SELECT uid FROM {hid_profiles} WHERE cid = :cid", array(':cid' => $hid))->fetchField();
+      $data = array(
+        'provider' => 'HumanitarianId',
+        'identifier' => $decoded->id
+      );
+      $identity = _hybridauth_identity_load($data);
+      $uid = $identity['uid'];
       if (!$uid) {
-        $contact = hid_profiles_get_contact($hid);
-        $uid = db_query("SELECT uid FROM {hid_profiles} WHERE cid = :cid", array(':cid' => $contact->user_id))->fetchField();
+        return user_load(0);
       }
 
       return user_load($uid);
