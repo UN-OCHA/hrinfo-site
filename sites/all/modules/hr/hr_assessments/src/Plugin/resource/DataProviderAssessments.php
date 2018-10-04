@@ -13,12 +13,66 @@ use Drupal\restful\Http\RequestInterface;
 use Drupal\restful\Exception\ForbiddenException;
 
 class DataProviderAssessments  extends DataProviderEntity implements DataProviderInterface {
+  /**
+   * Overrides DataProviderEntity::getQueryForList().
+   *
+   * Expose only published nodes.
+   */
+  public function getQueryForList() {
+    $query = parent::getQueryForList();
+    if ($this->entityType === 'node') {
+      $query->propertyCondition('status', NODE_PUBLISHED);
+    }
+    return $query;
+  }
+
+  /**
+   * Overrides DataProviderEntity::getQueryCount().
+   *
+   * Only count published nodes.
+   */
+  public function getQueryCount() {
+    $query = parent::getQueryCount();
+    if ($this->entityType === 'node') {
+      $query->propertyCondition('status', NODE_PUBLISHED);
+    }
+    return $query;
+  }
 
   /**
    * {@inheritdoc}
    */
   public function discover($path = NULL) {
     return array();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function entityPreSave(\EntityDrupalWrapper $wrapper) {
+    if ($this->entityType === 'node') {
+      $node = $wrapper->value();
+      if (!empty($node->nid)) {
+        // Node is already saved.
+        return;
+      }
+      node_object_prepare($node);
+      $node->uid = $this->getAccount()->uid;
+      $node->path['pathauto'] = TRUE;
+    }
+  }
+
+  protected function setFieldCollectionValues($wrapper, $values) {
+    if ($values['accessibility']) {
+      $wrapper->field_asst_accessibility->set($values['accessibility']);
+    }
+    if ($values['file']) {
+      $wrapper->field_asst_file->set($values['file']);
+    }
+    if ($values['url']) {
+      $wrapper->field_asst_url->set($values['url']);
+    }
+    $wrapper->save();
   }
 
   /**
@@ -42,19 +96,19 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
 
     $report = null;
     if (isset($object['report'])) {
-      $report = clone $object['report'];
+      $report = $object['report'];
       unset($object['report']);
     }
 
     $questionnaire = null;
     if (isset($object['questionnaire'])) {
-      $questionnaire = clone $object['questionnaire'];
+      $questionnaire = $object['questionnaire'];
       unset($object['questionnaire']);
     }
 
     $adata = null;
     if (isset($object['data'])) {
-      $adata = clone $object['data'];
+      $adata = $object['data'];
       unset($object['data']);
     }
 
@@ -64,24 +118,24 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
     $this->setPropertyValues($wrapper, $object, TRUE);
 
     if ($report) {
-      $ereport = entity_create('field_collection_item', array('bundles' => 'field_asst_report'));
+      $ereport = entity_create('field_collection_item', array('field_name' => 'field_asst_report'));
       $ereport->setHostEntity('node', $entity);
       $wreport = entity_metadata_wrapper('field_collection_item', $ereport);
-      $this->setPropertyValues($wreport, $report, TRUE);
+      $this->setFieldCollectionValues($wreport, $report);
     }
 
     if ($questionnaire) {
-      $equestionnaire = entity_create('field_collection_item', array('bundles' => 'field_asst_questionnaire'));
+      $equestionnaire = entity_create('field_collection_item', array('field_name' => 'field_asst_questionnaire'));
       $equestionnaire->setHostEntity('node', $entity);
       $wquestionnaire = entity_metadata_wrapper('field_collection_item', $equestionnaire);
-      $this->setPropertyValues($wquestionnaire, $questionnaire, TRUE);
+      $this->setFieldCollectionValues($wquestionnaire, $questionnaire);
     }
 
     if ($adata) {
-      $edata = entity_create('field_collection_item', array('bundles' => 'field_asst_data'));
+      $edata = entity_create('field_collection_item', array('field_name' => 'field_asst_data'));
       $edata->setHostEntity('node', $entity);
       $wdata = entity_metadata_wrapper('field_collection_item', $edata);
-      $this->setPropertyValues($wdata, $adata, TRUE);
+      $this->setFieldCollectionValues($wdata, $adata);
     }
 
     // The access calls use the request method. Fake the view to be a GET.
