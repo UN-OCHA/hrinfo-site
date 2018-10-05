@@ -7,11 +7,11 @@
 
 namespace Drupal\hr_organizations\Plugin\resource;
 
-use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
+use Drupal\restful\Plugin\resource\DataProvider\DataProviderTaxonomyTerm;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
 use Drupal\restful\Http\RequestInterface;
 
-class DataProviderOrganizations  extends DataProviderEntity implements DataProviderInterface {
+class DataProviderOrganizations  extends DataProviderTaxonomyTerm implements DataProviderInterface {
 
   /**
    * {@inheritdoc}
