@@ -217,18 +217,6 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
   }
 
   public function formatDate($value) {
-    if (isset($value['value'])) {
-      $value['from'] = $value['value'];
-      unset($value['value']);
-    }
-    if (isset($value['value2'])) {
-      $value['to'] = $value['value2'];
-      unset($value['value2']);
-    }
-    if (isset($value['timezone_db'])) {
-      $value['timezone'] = $value['timezone_db'];
-      unset($value['timezone_db']);
-    }
     if (isset($value['date_type'])) {
       unset($value['date_type']);
     }
