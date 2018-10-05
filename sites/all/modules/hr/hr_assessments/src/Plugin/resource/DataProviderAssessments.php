@@ -67,7 +67,7 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
       $wrapper->field_asst_accessibility->set($values['accessibility']);
     }
     if ($values['file']) {
-      $wrapper->field_asst_file->set($values['file']);
+      $wrapper->field_asst_file->set(array('fid' => $values['file'], 'display' => 1));
     }
     if ($values['url']) {
       $wrapper->field_asst_url->set($values['url']);
@@ -163,7 +163,43 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
     /* @var \EntityDrupalWrapper $wrapper */
     $wrapper = entity_metadata_wrapper($this->entityType, $entity_id);
 
+    $report = null;
+    if (isset($object['report'])) {
+      $report = $object['report'];
+      unset($object['report']);
+    }
+
+    $questionnaire = null;
+    if (isset($object['questionnaire'])) {
+      $questionnaire = $object['questionnaire'];
+      unset($object['questionnaire']);
+    }
+
+    $adata = null;
+    if (isset($object['data'])) {
+      $adata = $object['data'];
+      unset($object['data']);
+    }
+
     $this->setPropertyValues($wrapper, $object, $replace);
+
+    if ($report) {
+      $raw_report = $wrapper->field_asst_report->value();
+      $wreport = entity_metadata_wrapper('field_collection_item', $raw_report);
+      $this->setFieldCollectionValues($wreport, $report);
+    }
+
+    if ($questionnaire) {
+      $raw_questionnaire = $wrapper->field_asst_questionnaire->value();
+      $wquestionnaire = entity_metadata_wrapper('field_collection_item', $raw_questionnaire);
+      $this->setFieldCollectionValues($wquestionnaire, $questionnaire);
+    }
+
+    if ($adata) {
+      $raw_data = $wrapper->field_asst_data->value();
+      $wdata = entity_metadata_wrapper('field_collection_item', $raw_data);
+      $this->setFieldCollectionValues($wdata, $adata);
+    }
 
     // Set the HTTP headers.
     $this->setHttpHeader('Status', 201);
