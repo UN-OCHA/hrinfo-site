@@ -93,6 +93,10 @@ class RestfulEntityNodeOffices extends ResourceCustom implements ResourceInterfa
       'property' => 'status',
     );
 
+    $public_fields['language'] = array(
+      'property' => 'language'
+    );
+
     return $public_fields;
   }
 
