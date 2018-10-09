@@ -39,7 +39,7 @@ function hr_layout_menu() {
     'access arguments' => array(1),
     'description' => 'Edit in new app',
     'type' => MENU_LOCAL_TASK,
-    'weight' => 3,
+    'weight' => 0,
   );
 
   return $items;
@@ -92,7 +92,7 @@ function hr_layout_edit_new_app($node) {
     'hr_bundle' => 'groups',
     'hr_office' => 'offices'
   );
-  drupal_goto('https://app.humanitarianresponse.info/'.$types[$node->type].'/'.$node->nid);
+  drupal_goto('https://app.humanitarianresponse.info/'.$types[$node->type].'/'.$node->nid.'/edit');
 }
 
 /**
