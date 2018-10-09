@@ -665,14 +665,15 @@ function hr_layout_form_alter(&$form, &$form_state, $form_id) {
         '#weight' => 1,
       );
     }
-    elseif ($form_id == 'hr_document_node_form') {
-      drupal_set_message('To publish your content, try the new and improved forms ! Click here and login with your Humanitarian ID. For feedback send us an email: info@humanitarianresponse.info.');
-    }
 
     $form['uuid'] = array(
       '#markup' => '<strong>UUID:</strong>'.$form_state['pane']->uuid,
       '#weight' => 2,
     );
+  }
+
+  if ($form_id == 'hr_document_node_form') {
+    drupal_set_message('To publish your content, try the new and improved forms ! Click here and login with your Humanitarian ID. For feedback send us an email: info@humanitarianresponse.info.');
   }
 }
 
