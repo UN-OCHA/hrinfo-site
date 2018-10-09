@@ -31,17 +31,6 @@ function hr_layout_menu() {
     'access arguments' => array('access content'),
   );
 
-  $items['node/%node/edit_in_app'] = array(
-    'title' => 'Edit in new form',
-    'page callback' => 'hr_layout_edit_new_app',
-    'page arguments' => array(1),
-    'access callback' => 'hr_layout_edit_new_app_access',
-    'access arguments' => array(1),
-    'description' => 'Edit in new app',
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 0,
-  );
-
   return $items;
 }
 
@@ -73,26 +62,6 @@ function hr_layout_add_content($node) {
   ));
 
   return $title . $intro . '<p>' . implode('</p><p>', $content) . '</p>';
-}
-
-function hr_layout_edit_new_app_access($node) {
-  if (in_array($node->type, array('hr_event', 'hr_document', 'hr_infographic', 'hr_assessment', 'hr_operation', 'hr_bundle', 'hr_office'))) {
-    return node_access('update', $node);
-  }
-  return FALSE;
-}
-
-function hr_layout_edit_new_app($node) {
-  $types = array(
-    'hr_event' => 'events',
-    'hr_document' => 'documents',
-    'hr_infographic' => 'infographics',
-    'hr_assessment' => 'assessments',
-    'hr_operation' => 'operations',
-    'hr_bundle' => 'groups',
-    'hr_office' => 'offices'
-  );
-  drupal_goto('https://app.humanitarianresponse.info/'.$types[$node->type].'/'.$node->nid.'/edit');
 }
 
 /**
@@ -679,7 +648,7 @@ function hr_layout_form_alter(&$form, &$form_state, $form_id) {
     if ($nid) {
       $link = 'https://app.humanitarianresponse.info/' . str_replace('hr_', '', $type) . 's/' . $nid . '/edit';
     }
-    drupal_set_message('To publish your content, try the new and improved forms ! Click <a href="' . $link . '">here</a> and login with your Humanitarian ID. For feedback send us an email: info@humanitarianresponse.info.');
+    drupal_set_message('To publish your content, try the new and improved forms ! Click <a href="' . $link . '" target="_blank">here</a> and login with your Humanitarian ID. For feedback send us an email: info@humanitarianresponse.info.');
   }
 }
 
