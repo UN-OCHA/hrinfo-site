@@ -672,11 +672,12 @@ function hr_layout_form_alter(&$form, &$form_state, $form_id) {
     );
   }
 
-  if ($form_id == 'hr_document_node_form') {
+  if (in_array($form_id, array('hr_document_node_form', 'hr_infographic_node_form', 'hr_event_node_form', 'hr_assessment_node_form', 'hr_operation_node_form', 'hr_bundle_node_form', 'hr_office_node_form'))) {
+    $type = str_replace('_node_form', '', $form_id);
     $nid = $form_state['build_info']['args'][0]->nid;
-    $link = 'https://app.humanitarianresponse.info/documents/new';
+    $link = 'https://app.humanitarianresponse.info/' . str_replace('hr_', '', $type) . 's/new';
     if ($nid) {
-      $link = 'https://app.humanitarianresponse.info/documents/' . $nid;
+      $link = 'https://app.humanitarianresponse.info/' . str_replace('hr_', '', $type) . 's/' . $nid . '/edit';
     }
     drupal_set_message('To publish your content, try the new and improved forms ! Click <a href="' . $link . '">here</a> and login with your Humanitarian ID. For feedback send us an email: info@humanitarianresponse.info.');
   }
