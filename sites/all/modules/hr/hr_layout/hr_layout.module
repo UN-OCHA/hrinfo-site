@@ -678,7 +678,7 @@ function hr_layout_form_alter(&$form, &$form_state, $form_id) {
     if ($nid) {
       $link = 'https://app.humanitarianresponse.info/documents/' . $nid;
     }
-    drupal_set_message('To publish your content, try the new and improved forms ! Click <a href="' . $nid . '">here</a> and login with your Humanitarian ID. For feedback send us an email: info@humanitarianresponse.info.');
+    drupal_set_message('To publish your content, try the new and improved forms ! Click <a href="' . $link . '">here</a> and login with your Humanitarian ID. For feedback send us an email: info@humanitarianresponse.info.');
   }
 }
 
