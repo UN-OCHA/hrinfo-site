@@ -170,7 +170,7 @@ function hr_bundles_form_node_form_alter(&$form, &$form_state) {
       $op = $op[$op_gid];
       if ($op->type == 'hr_operation') {
         $roles = og_get_user_roles('node', $op_gid);
-        if (!in_array('manager', $roles) && !in_array('editor', $roles) && !in_array('contributor', $roles) && $op->uid != $user->uid && !in_array('editor', $user->roles)) {
+        if (!in_array('manager', $roles) && !in_array('editor', $roles) && !in_array('contributor', $roles) && $op->uid != $user->uid && !in_array('editor', $user->roles) && !in_array('administrator', $user->roles)) {
           // If user is not a manager or editor of operation, make bundles field required
           $form['field_bundles'][LANGUAGE_NONE][0]['#required'] = TRUE;
           $form['field_bundles'][LANGUAGE_NONE][0]['default']['#required'] = TRUE;
