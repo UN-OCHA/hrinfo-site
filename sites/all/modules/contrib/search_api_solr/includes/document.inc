@@ -104,6 +104,13 @@ class SearchApiSolrDocument implements IteratorAggregate {
   protected $fieldUpdates = array();
 
   /**
+   * Document nested objects.
+   *
+   * @var SearchApiSolrDocument[]
+   */
+  protected $nestedObjects = array();
+
+  /**
    * Clears all boosts and fields from this document.
    */
   public function clear() {
@@ -112,6 +119,7 @@ class SearchApiSolrDocument implements IteratorAggregate {
     $this->fields = array();
     $this->fieldBoosts = array();
     $this->fieldUpdates = array();
+    $this->nestedObjects = array();
   }
 
   /**
@@ -327,6 +335,29 @@ class SearchApiSolrDocument implements IteratorAggregate {
   }
 
   /**
+   * Retrieves the nested documents set on this document.
+   *
+   * @return \SearchApiSolrDocument[]
+   *   The nested documents.
+   */
+  public function getNestedObjects() {
+    return $this->nestedObjects;
+  }
+
+  /**
+   * Sets an array of nested documents.
+   *
+   * Populate nested documents for use with block join queries. Note that this
+   * will lead to errors when used with Solr versions older than 4.5.
+   *
+   * @param SearchApiSolrDocument[] $nested_documents
+   *   An array of SearchApiSolrDocument objects.
+   */
+  public function setNestedDocuments(array $nested_documents) {
+    $this->nestedObjects = $nested_documents;
+  }
+
+  /**
    * Implements IteratorAggregate::getIterator().
    *
    * Implementing the IteratorAggregate interface allows the following usage:
@@ -424,34 +455,23 @@ class SearchApiSolrDocument implements IteratorAggregate {
 
     $xml .= '>';
 
-    foreach ($this->fields as $key => $value) {
+    foreach ($this->fields as $key => $values) {
       $fieldBoost = $this->getFieldBoost($key);
       $fieldUpdate = $this->getFieldUpdate($key);
       $key = htmlspecialchars($key, ENT_COMPAT, 'UTF-8');
 
-      if (is_array($value)) {
-        foreach ($value as $multivalue) {
-          $xml .= '<field name="' . $key . '"';
-
-          if ($fieldBoost !== FALSE) {
-            $xml .= ' boost="' . $fieldBoost . '"';
-
-            // Only set the boost for the first field in the set.
-            $fieldBoost = FALSE;
-          }
-
-          if ($fieldUpdate !== FALSE) {
-            $xml .= ' update="' . $fieldUpdate . '"';
-          }
-
-          $xml .= '>' . htmlspecialchars($multivalue, ENT_NOQUOTES, 'UTF-8') . '</field>';
-        }
+      if (!is_array($values)) {
+        $values = array($values);
       }
-      else {
+
+      foreach ($values as $value) {
         $xml .= '<field name="' . $key . '"';
 
         if ($fieldBoost !== FALSE) {
           $xml .= ' boost="' . $fieldBoost . '"';
+
+          // Only set the boost for the first field in the set.
+          $fieldBoost = FALSE;
         }
 
         if ($fieldUpdate !== FALSE) {
@@ -460,6 +480,18 @@ class SearchApiSolrDocument implements IteratorAggregate {
 
         $xml .= '>' . htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8') . '</field>';
       }
+    }
+
+    // If nested objects have been added, include them in the XML to be indexed.
+    foreach ($this->nestedObjects as $object) {
+      // Skip any documents that aren't of the correct type.
+      if (!($object instanceof SearchApiSolrDocument)) {
+        $vars['@type'] = is_object($object) ? get_class($object) : gettype($object);
+        watchdog('search_api_solr', 'Attempt to add an invalid nested Solr document of type @type.', $vars, WATCHDOG_ERROR);
+        continue;
+      }
+      // Generate the markup for each nested document.
+      $xml .= $object->toXml();
     }
 
     $xml .= '</doc>';

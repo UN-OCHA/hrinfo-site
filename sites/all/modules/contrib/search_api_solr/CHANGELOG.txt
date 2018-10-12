@@ -1,3 +1,8 @@
+Search API Solr Search 1.x, dev (xxxx-xx-xx):
+---------------------------------------------
+- #3003819 by mandclu, drunken monkey: Added support for indexing nested
+  documents.
+
 Search API Solr Search 1.13 (2018-09-17):
 -----------------------------------------
 - #2998931 by drunken monkey, mahipal46: Fixed warning during excerpt creation.
