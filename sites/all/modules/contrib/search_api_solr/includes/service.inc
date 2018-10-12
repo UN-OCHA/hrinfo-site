@@ -1348,7 +1348,7 @@ class SearchApiSolrService extends SearchApiAbstractService {
 
       $index_id = $this->getIndexId($index->machine_name);
       $solr_id = $this->createId($index_id, $result['id']);
-      $excerpt = $this->getExcerpt($response, $solr_id, $result['fields'], $fields);
+      $excerpt = $this->getExcerpt($response, $solr_id, $result['fields'], $fields, $query->getFields());
       if ($excerpt) {
         $result['excerpt'] = $excerpt;
       }
@@ -1374,55 +1374,86 @@ class SearchApiSolrService extends SearchApiAbstractService {
    * Will also use highlighted fields to replace retrieved field data, if the
    * corresponding option is set.
    */
-  protected function getExcerpt($response, $id, array &$fields, array $field_mapping) {
+  protected function getExcerpt($response, $id, array &$fields, array $field_mapping, array $fulltext_fields) {
     if (!isset($response->highlighting->$id)) {
       return FALSE;
     }
     $output = '';
+    $highlighting = $response->highlighting->$id;
 
-    if (!empty($this->options['excerpt']) && !empty($response->highlighting->$id->content)) {
-      foreach ($response->highlighting->$id->content as $snippet) {
-        $snippet = strip_tags($snippet);
-        $snippet = preg_replace('/^.*>|<.*$/', '', $snippet);
-        $snippet = check_plain($snippet);
-        $snippet = $this->formatHighlighting($snippet);
-        // The created fragments sometimes have leading or trailing punctuation.
-        // We remove that here for all common cases, but take care not to remove
-        // < or > (so HTML tags stay valid).
-        $snippet = trim($snippet, "\00..\x2F:;=\x3F..\x40\x5B..\x60");
-        $output .= $snippet . ' … ';
-      }
+    $highlight_fields = !empty($this->options['highlight_data']);
+    $create_excerpt = !empty($this->options['excerpt']);
+    if (!$highlight_fields && !$create_excerpt) {
+      return FALSE;
     }
-    if (!empty($this->options['highlight_data'])) {
-      $prefix = variable_get('search_api_solr_highlight_prefix', 'tm_');
-      $prefix_length = strlen($prefix);
-      foreach ($field_mapping as $search_api_property => $solr_property) {
-        if (substr($solr_property, 0, $prefix_length) == $prefix && !empty($response->highlighting->$id->$solr_property)) {
-          $value = $response->highlighting->$id->$solr_property;
-          $value = $this->sanitizeHighlightValue($value, $search_api_property);
-          // Remove highlight prefixes and suffixes so we could compare values
-          // in order to replace the correspond items.
-          $orig_value = preg_replace('#\[(/?)HIGHLIGHT\]#', '', $value);
-          $field_values = array();
-          if (!empty($fields[$search_api_property])) {
-            $field_values = $this->sanitizeHighlightValue($fields[$search_api_property]);
-          }
-          foreach ($field_values as $delta => $field_value) {
-            foreach ($orig_value as $num => $item) {
-              if ($item === $field_value) {
-                $field_values[$delta] = $this->formatHighlighting($value[$num]);
-                $change = TRUE;
-                continue 2;
-              }
-            }
-          }
-          if (!empty($change)) {
-            $fields[$search_api_property] = array(
-              '#value' => $field_values,
-              '#sanitize_callback' => FALSE,
-            );
+
+    // Collect highlighted field values for the excerpt and set them in the
+    // field values, if requested.
+    $excerpt_parts = array();
+    $field_mapping = array_flip($field_mapping);
+    $fulltext_fields = drupal_map_assoc($fulltext_fields);
+    foreach ($highlighting as $solr_property => $values) {
+      $values = (array) $values;
+      if (empty($field_mapping[$solr_property])) {
+        continue;
+      }
+      $search_api_property = $field_mapping[$solr_property];
+
+      // Only use fields that were actually searched for the excerpt.
+      if (isset($fulltext_fields[$search_api_property])) {
+        // Remember the highlighted value so we can use it for the excerpt, if
+        // requested.
+        $excerpt_parts = array_merge($excerpt_parts, $values);
+      }
+
+      if (!$highlight_fields) {
+        continue;
+      }
+
+      $values = $this->sanitizeHighlightValue($values, $search_api_property);
+      // Remove highlight prefixes and suffixes so we can compare values in
+      // order to replace the corresponding items.
+      $orig_values = preg_replace('#\[(/?)HIGHLIGHT\]#', '', $values);
+      $field_values = array();
+      if (!empty($fields[$search_api_property])) {
+        $field_values = $this->sanitizeHighlightValue($fields[$search_api_property]);
+      }
+      foreach ($field_values as $delta => $field_value) {
+        foreach ($orig_values as $num => $item) {
+          if ($item === $field_value) {
+            $field_values[$delta] = $this->formatHighlighting($values[$num]);
+            $change = TRUE;
+            continue 2;
           }
         }
+      }
+      if (!empty($change)) {
+        $fields[$search_api_property] = array(
+          '#value' => $field_values,
+          '#sanitize_callback' => FALSE,
+        );
+      }
+    }
+
+    // Create an excerpt, if requested.
+    if ($create_excerpt && $excerpt_parts) {
+      $excerpt = array();
+      $excerpt_length = 0;
+      foreach ($excerpt_parts as $value) {
+        // Excerpts don't have HTML (except for the highlighting tags, of
+        // course).
+        $value = strip_tags($value);
+        foreach ($this->extractHighlightingSnippets($value) as $snippet) {
+          $excerpt[] = $snippet;
+          $excerpt_length += drupal_strlen($snippet);
+          // Restrict ourselves to three snippets or 300 characters.
+          if (count($excerpt) >= 3 || $excerpt_length >= 300) {
+            break 2;
+          }
+        }
+      }
+      if ($excerpt) {
+        $output = implode(' … ', $excerpt) . ' …';
       }
     }
 
@@ -1461,6 +1492,84 @@ class SearchApiSolrService extends SearchApiAbstractService {
    */
   protected function formatHighlighting($snippet) {
     return preg_replace('#\[(/?)HIGHLIGHT\]#', '<$1strong>', $snippet);
+  }
+
+  /**
+   * Extracts short snippets with highlighting from highlighted field values.
+   *
+   * @param string $value
+   *   A highlighted field value.
+   *
+   * @return string[]
+   *   An array of short, highlighted snippets extracted from the field value.
+   */
+  protected function extractHighlightingSnippets($value) {
+    $snippets = array();
+    $parts = preg_split('#\[/?HIGHLIGHT\]#', $value);
+    $i = 0;
+    $combined_length = 0;
+    while (isset($parts[$i + 2])) {
+      $prefix = $parts[$i];
+      $short_prefix = FALSE;
+      $key = $parts[++$i];
+      $suffix = $parts[++$i];
+
+      // Make sure prefix and suffix are not too long.
+      $length = drupal_strlen($prefix);
+      if ($length > 30) {
+        $space = strrpos(substr($prefix, 0, -25), ' ');
+        // Fall back to just cutting at an arbitrary position, space or no.
+        if ($space === FALSE) {
+          $space = $length - 30;
+        }
+        $prefix = substr($prefix, $space + 1);
+      }
+      else {
+        $short_prefix = TRUE;
+      }
+
+      $length = drupal_strlen($suffix);
+      if ($length > 30) {
+        $space = strpos($suffix, ' ', 25);
+        // Fall back to just cutting at an arbitrary position, space or no.
+        if ($space === FALSE) {
+          $space = 30;
+        }
+        $suffix = substr($suffix, 0, $space);
+      }
+
+      // Fuse two snippets if they are separated by less than 30 characters.
+      $previous = NULL;
+      if ($short_prefix) {
+        $previous = array_pop($snippets);
+        if ($previous) {
+          $prefix = '';
+        }
+      }
+      $snippet = $prefix . '[HIGHLIGHT]' . $key . '[/HIGHLIGHT]' . $suffix;
+
+      // Sanitize and format the snippet.
+      $snippet = check_plain($snippet);
+      $snippet = $this->formatHighlighting($snippet);
+      // The created fragments sometimes have leading or trailing punctuation.
+      // We remove that here for all common cases, but take care not to remove
+      // < or > (so HTML tags stay valid).
+      $snippet = trim($snippet, "\00..\x2F:;=\x3F..\x40\x5B..\x60");
+
+      // Prepend the previous snippet if we're fusing.
+      if ($previous) {
+        $snippet = $previous . $snippet;
+      }
+
+      $snippets[] = $snippet;
+      $combined_length += drupal_strlen($snippet);
+
+      // Restrict ourselves to three snippets or 300 characters.
+      if (count($snippets) >= 3 || $combined_length >= 300) {
+        break;
+      }
+    }
+    return $snippets;
   }
 
   /**
@@ -1825,29 +1934,11 @@ class SearchApiSolrService extends SearchApiAbstractService {
 
     if (!empty($this->options['excerpt']) || !empty($this->options['highlight_data'])) {
       $highlight_params['hl'] = 'true';
-      $highlight_params['hl.fl'] = 'content';
+      $highlight_params['hl.fl'] = variable_get('search_api_solr_highlight_prefix', 'tm_') . '*';
       $highlight_params['hl.simple.pre'] = '[HIGHLIGHT]';
       $highlight_params['hl.simple.post'] = '[/HIGHLIGHT]';
-      $highlight_params['hl.snippets'] = 3;
-      $highlight_params['hl.fragsize'] = 70;
-      $highlight_params['hl.mergeContiguous'] = 'true';
-    }
-
-    if (!empty($this->options['highlight_data'])) {
-      $highlight_params['hl.fl'] = variable_get('search_api_solr_highlight_prefix', 'tm_') . '*';
       $highlight_params['hl.snippets'] = 1;
       $highlight_params['hl.fragsize'] = 0;
-      if (!empty($this->options['excerpt'])) {
-        // If we also generate a "normal" excerpt, set the settings for the
-        // "content" field (which we use to generate the excerpt) back to the
-        // above values.
-        $highlight_params['f.content.hl.snippets'] = 3;
-        $highlight_params['f.content.hl.fragsize'] = 70;
-        // It regrettably doesn't seem to be possible to set hl.fl to several
-        // values, if one contains wild cards (i.e., "t_*,content" wouldn't
-        // work).
-        $highlight_params['hl.fl'] = '*';
-      }
     }
 
     return $highlight_params;
@@ -2295,7 +2386,7 @@ class SearchApiSolrService extends SearchApiAbstractService {
         }
       }
 
-      $excerpt = $this->getExcerpt($response, $solr_id, $result['fields'], $fields);
+      $excerpt = $this->getExcerpt($response, $solr_id, $result['fields'], $fields, $search_fields);
       if ($excerpt) {
         $result['excerpt'] = $excerpt;
       }
