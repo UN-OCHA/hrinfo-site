@@ -535,7 +535,7 @@ function hr_layout_create_links() {
                       'hr_assessment' => 'assessment',
                       'hr_office' => 'office'
                     );
-                    $button .= '<li class="create-link-new"><a href="https://app.humanitarianresponse.info/' . $types[$type] . 's/new" target="_blank">' . ucfirst(t($types[$type])) .' (new)</a></li>';
+                    $button .= '<li class="create-link-new"><a href="https://app.humanitarianresponse.info/' . $types[$type] . 's/new" target="_blank">' . ucfirst(t($types[$type])) .' (Try the new forms)</a></li>';
                   }
                 }
               }
