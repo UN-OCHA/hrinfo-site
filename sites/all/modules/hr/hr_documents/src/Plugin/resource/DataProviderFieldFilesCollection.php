@@ -35,11 +35,6 @@ class DataProviderFieldFilesCollection  extends DataProviderEntity implements Da
 
     $entity = entity_create($this->entityType, $values);
 
-    if ($this->checkEntityAccess('create', $this->entityType, $entity) === FALSE) {
-      // User does not have access to create entity.
-      throw new ForbiddenException('You do not have access to create a new resource.');
-    }
-
     if (isset($object['host_entity'])) {
       $host_entity = entity_load_single('node', $object['host_entity']);
       $entity->setHostEntity('node', $host_entity);
