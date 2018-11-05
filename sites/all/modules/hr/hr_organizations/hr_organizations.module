@@ -18,7 +18,7 @@ function hr_organizations_ctools_plugin_directory($module, $plugin) {
 function hr_organizations_query_hr_organizations_acronym_alter($query) {
   $request = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
   if (!empty($request)) {
-    $query->join('field_data_field_acronym', 'field_data_field_acronym', 'taxonomy_term_data.tid = field_data_field_acronym.entity_id');
+    $query->leftJoin('field_data_field_acronym', 'field_data_field_acronym', 'taxonomy_term_data.tid = field_data_field_acronym.entity_id');
     $or = db_or();
     $prefix = '%' . db_like($request) . '%';
     $or->condition('name', $prefix, 'LIKE');
