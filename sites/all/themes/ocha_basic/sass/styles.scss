@@ -1,0 +1,26 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design
+//
+// Imports everything in the `cd` folder and ensures that the templates provided
+// in this theme for the Header/Footer will carry Common Design branding.
+//——————————————————————————————————————————————————————————————————————————————
+@import 'cd/cd';
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Theme extras
+//
+// These optional Sass files can be used to start out with a more complete theme
+// if you want something to get you started quickly.
+//——————————————————————————————————————————————————————————————————————————————
+
+// @import 'base/_a-reset';
+@import 'base/_base';
+@import 'base/_grid';
+@import 'base/_helpers';
+@import 'base/_typography';
+@import 'components/_buttons';
+// @import 'components/_dropdown';
+@import 'components/_forms';
+@import 'components/_tabs';
+@import 'components/_tables';

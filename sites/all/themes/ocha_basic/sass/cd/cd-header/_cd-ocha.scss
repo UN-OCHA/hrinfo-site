@@ -1,0 +1,182 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Sites Menu ('OCHA Services')
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-ocha {
+  float: left;
+}
+
+.cd-ocha-btn {
+  align-items: center;
+  background: transparent;
+  color: $cd-white-text-color;
+  display: flex;
+  @include font-size($cd-font-size-tiny);
+  height: $cd-global-header-height;
+  padding: 0;
+  position: relative;
+  transition: background 0.3s ease;
+
+  &:focus {
+    outline: 0; // outline is replaced by bright underline.
+  }
+
+  @include tablet {
+    display: flex;
+    width: auto;
+
+    &:hover,
+    &:focus {
+      .cd-ocha-btn__label {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .icon--arrow-down {
+    @include tablet {
+      margin-left: 4px;
+    }
+  }
+}
+
+.cd-ocha-btn__logo {
+  background: url('../img/logos/ocha-logo-white.svg') center no-repeat;
+  background-size: contain;
+  display: inline-block;
+  flex-shrink: 0;
+  height: 18px;
+  margin-right: 4px;
+  width: 21px;
+}
+
+.cd-ocha-btn__label {
+  @include max-width(md) {
+    @include hide;
+  }
+}
+
+.cd-ocha-dropdown {
+  padding: 22px 0;
+  width: 100%;
+}
+
+.cd-ocha-dropdown__inner {
+  padding: 0 $cd-container-padding;
+  max-width: $cd-max-width;
+
+  @include tablet {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 12px;
+    margin: 0 auto;
+    padding: 0 $cd-container-padding-tablet;
+  }
+  @include xlarge {
+    grid-gap: 100px;
+    padding: 0 $cd-container-padding-xlarge;
+  }
+}
+
+.cd-ocha-dropdown__section {
+  @include clearfix;
+
+  // On mobile the link sections need space.
+  margin-bottom: $cd-base-unit*3;
+
+  // For the see-all link
+  position: relative;
+
+  @include tablet {
+    // remove space between sections
+    margin-bottom: 0;
+
+    // ensure a min-height for IE11
+    min-height: 120px;
+  }
+
+  // on mobile, the two middle columns should look like one list.
+  &:nth-child(2) {
+    @include max-width(md) {
+      margin-bottom: 0;
+    }
+  }
+
+  //
+  // Grid not supported, fall back to floats on desktop
+  //
+  @include desktop {
+    .no-cssgrid & {
+      float: left;
+      width: 21.25%;
+      margin-right: 5%;
+    }
+    .no-cssgrid &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.cd-ocha-dropdown__heading {
+  color: $cd-lighter-blue;
+  margin: 0 0 10px 0;
+  padding-bottom: 2px;
+
+  // there's an invisible heading in the third column to keep the links inside
+  // column 2/3 in line with each other. it's hidden on mobile.
+  .cd-ocha-dropdown__section:nth-child(3) & {
+    @include max-width(md) {
+      @include hide;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+.cd-ocha-dropdown__list {
+  margin: 0;
+  padding: 0;
+}
+
+.cd-ocha-dropdown__link {
+  display: block;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  padding: 0;
+
+  a {
+    border-bottom: 1px solid transparent;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      border-color: $cd-bright-blue;
+      color: $cd-white-text-color;
+    }
+  }
+
+  @include xlarge {
+    white-space: nowrap;
+  }
+}
+
+// @TODO: remove generic `a` selector that requires the tag-based override.
+a.cd-ocha-dropdown__see-all {
+  display: block;
+  width: 100%;
+  @include font-size($cd-font-size-small);
+  font-weight: 700;
+  padding: 12px;
+  background: $cd-bright-blue;
+  color: $cd-dark-blue;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+
+  @include tablet {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}

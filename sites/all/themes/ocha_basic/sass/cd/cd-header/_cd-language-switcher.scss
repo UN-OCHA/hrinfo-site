@@ -1,0 +1,72 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Language Switcher
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-language-switcher {
+  
+  &.open {
+    position: relative;
+  }
+}
+
+// Language switcher button
+#cd-language-toggle {
+  font-weight: 600;
+  padding-right: 14px;
+  display: flex;
+  align-items: center;
+  box-sizing: content-box;
+
+  // Lanaguage switcher is always on the far edge of the global header.
+  // Cancel the border that we render for other elements.
+  &::after {
+    content: none;
+  }
+
+  // Place toggle indicator on edge of Global Header
+  .icon--arrow-down {
+    fill: $cd-white;
+    width: 9px;
+    height: 9px;
+    position: absolute;
+    right: 0;
+    top: -1px;
+    min-height: 100%; // IE11 fix.
+  }
+}
+
+// Language switcher dropdown
+#cd-language-dropdown {
+  // Add active icon to the active language option
+  li {
+    &::after {
+      content: none;
+    }
+
+    &.active::after {
+      position: absolute;
+      right: 0;
+      content: "";
+      width: 14px;
+      height: 14px;
+      background-image: url(../img/icons/selected--highlighted.svg);
+      background-repeat: no-repeat;
+      background-position: 0 50%;
+      background-size: 14px 14px;
+    }
+  }
+}
+
+#cd-language {
+  right: 0;
+
+  li a {
+    @extend .cd-user-menu__dropdown-link;
+    color: $cd-white;
+
+    &:hover,
+    &:focus {
+      color: $cd-bright-blue;
+    }
+  }
+}

@@ -1,0 +1,42 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Base styles
+//——————————————————————————————————————————————————————————————————————————————
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, input {
+  // Font size should be set at the correct percentage to match the base-font-size
+  // 16px = 100%
+  // 18px = 112.5%
+  // See http://pxtoem.com/ for conversion chart
+  font-size: ($cd-font-size-base / 16 * 100) + %;
+}
+
+body {
+  font-family: $cd-font;
+  @include font-size($cd-font-size-base);
+  color: $cd-dark-grey;
+  line-height: 1.5;
+
+  &.no-scroll {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media print {
+  #toolbar {
+    display: none!important;
+  }
+}

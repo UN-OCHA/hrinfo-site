@@ -1,0 +1,15 @@
+<div class="cd-global-header">
+  <div class="cd-container cd-global-header__inner">
+    <?php include 'cd-ocha.html'; ?>
+
+    <?php if (isset($page['language_switcher'])): ?>
+      <div class="cd-global-header__language-switcher">
+        <?php print $page['language_switcher']; ?>
+      </div>
+    <?php endif; ?>
+
+    <div class="cd-global-header__user-menu">
+      <?php print render($page['header_top']); ?>
+    </div>
+  </div>
+</div>

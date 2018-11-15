@@ -1,0 +1,328 @@
+/**
+ * Common Design Search form in header.
+ */
+
+.cd-search--inline {
+  float: left;
+
+  .cssgrid.flexbox & {
+    float: none;
+  }
+}
+
+.cd-search--inline_btn {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: $cd-primary-bg-color;
+  display: flex;
+  font-size: 24px;
+  height: $cd-site-header-height;
+  padding: 0 20px;
+  transition: background 0.3s ease;
+
+  svg {
+    box-sizing: content-box;
+    width: 26px;
+    height: 26px;
+    fill: $cd-ocha-blue;
+  }
+
+  &:hover,
+  &:focus {
+    background: $cd-white-bg-color;
+    outline: none;
+    color: $cd-highlight-red;
+
+    svg {
+      fill: $cd-highlight-red;
+    }
+  }
+
+  &:focus {
+    color: $cd-highlight-red;
+
+    svg {
+      fill: $cd-highlight-red;
+    }
+  }
+
+  .open & {
+    color: $cd-highlight-red;
+    position: relative;
+
+    &:before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 6px 6px 6px;
+      border-color: transparent transparent $cd-border-color transparent;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      margin-left: -6px;
+    }
+
+    svg {
+      fill: $cd-highlight-red;
+    }
+
+    &:hover,
+    &:focus {
+      color: $cd-highlight-red;
+    }
+  }
+}
+
+.cd-search--inline_btn-text {
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  display: none;
+
+  .open & {
+    color: $cd-highlight-red;
+  }
+}
+
+.cd-search--inline__form {
+  background: $cd-mid-bluey-grey;
+  display: none;
+  height: $cd-site-header-height;
+  left: 0;
+  position: absolute;
+  right: 0;
+  z-index: map-get($zindex, sidebar);
+
+  .open & {
+    display: block;
+  }
+}
+
+.cd-search--inline__form-inner {
+  padding: 8px $cd-container-padding;
+}
+
+.cd-search--inline__input[type=search]  {
+  -webkit-appearance: none;
+  background: $cd-white-bg-color;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: $cd-default-text-color;
+  @include font-size(16);
+  height: calc(#{$cd-site-header-height} - 16px); //padding.
+  padding: 0 45px 0 25px;
+  width: 100%;
+
+  &:focus {
+    outline: 0;
+    box-shadow: 0 0 4px rgba($cd-mid-grey,  0.7);
+  }
+}
+
+.cd-search--inline__input::-webkit-input-placeholder {
+  color: $cd-dark-grey;
+  font-style: italic;
+}
+.cd-search--inline__input::-moz-placeholder {
+  color: $cd-dark-grey;
+  font-style: italic;
+}
+.cd-search--inline__input:-ms-input-placeholder {
+  color: $cd-dark-grey;
+  font-style: italic;
+}
+.cd-search--inline__input:-moz-placeholder {
+  color: $cd-dark-grey;
+  font-style: italic;
+}
+
+.cd-search--inline__input::-webkit-search-cancel-button {
+  position: relative;
+  right: 10px;
+}
+
+.cd-search--inline__submit {
+  align-items: center;
+  background: $cd-dark-grey;
+  border: 0;
+  color: $cd-white-text-color;
+  display: flex;
+  @include font-size($cd-font-size-medium);
+  font-weight: bold;
+  height: calc(#{$cd-site-header-height} - 16px); //padding.
+  width: 46px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: $cd-container-padding;
+  text-transform: uppercase;
+  top: 8px;
+
+  svg {
+    box-sizing: content-box;
+    width: 26px;
+    height: 26px;
+    fill: $cd-white-text-color;
+    margin: 0 auto;
+  }
+
+  &.js-has-focus {
+    background-color: $cd-highlight-red;
+  }
+
+}
+
+// Start inline search for desktop only.
+@include desktop {
+
+  .cd-search--inline_btn {
+    display: none;
+  }
+
+  .cd-search--inline {
+    float: left;
+    border-left: 1px solid $cd-border-color;
+    border-right: 1px solid $cd-border-color;
+    flex: 0 1 400px;
+    margin-left: 30px;
+  }
+
+  .cd-search--inline__form {
+    background: $cd-white-bg-color;
+    display: block;
+    position: relative;
+  }
+
+  .cd-search--inline__form-inner {
+    padding: 0;
+    &::before {
+      bottom: -3px;
+      content: '';
+      background: transparent;
+      height: 3px;
+      left: -1px;
+      position: absolute;
+      right: -1px;
+      transition: background 0.3s ease;
+      width: calc(100% + 1px);
+    }
+  }
+
+  .cd-search--inline__form-inner.js-has-focus {
+    &::before {
+      background: $cd-highlight-red;
+    }
+  }
+
+  .cd-search--inline__input[type=search]  {
+    -webkit-appearance: none;
+    background: $cd-white-bg-color;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    color: $cd-default-text-color;
+    @include font-size($cd-font-size-small);
+    height: $cd-site-header-height;
+    padding: 0 72px 0 16px;
+    width: 100%;
+    min-width: 230px;
+
+    &:focus {
+      outline: 0;
+      box-shadow: none;
+    }
+  }
+
+  .cd-search--inline__input::-webkit-search-cancel-button {
+    position: relative;
+    right: -10px;
+  }
+  .cd-search--inline__input::-webkit-input-placeholder {
+    color: $cd-mid-grey;
+    font-style: italic;
+  }
+  .cd-search--inline__input::-moz-placeholder {
+    color: $cd-mid-grey;
+    font-style: italic;
+  }
+  .cd-search--inline__input:-ms-input-placeholder {
+    color: $cd-mid-grey;
+    font-style: italic;
+  }
+  .cd-search--inline__input:-moz-placeholder {
+    color: $cd-mid-grey;
+    font-style: italic;
+  }
+
+  .cd-search--inline__submit {
+    background: $cd-white-bg-color;
+    border: 0;
+    border-left: 1px solid $cd-mid-bluey-grey;
+    color: $cd-dark-text-color;
+    @include font-size($cd-font-size-medium);
+    font-weight: bold;
+    height: $cd-site-header-height;
+    width: unset;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    svg {
+      box-sizing: content-box;
+      width: 26px;
+      height: 26px;
+      fill: $cd-mid-grey;
+      padding: 0 16px;
+    }
+
+    &.js-has-focus,
+    &:hover,
+    &:focus {
+      background-color: $cd-mid-bluey-grey;
+      outline: 0;
+      box-shadow: none;
+
+      svg {
+        fill: $cd-highlight-red;
+      }
+    }
+  }
+
+  // Submit button treatment for modern browsers.
+  .cssgrid.flexbox {
+
+    .cd-search--inline__submit {
+      align-items: center;
+      border: 0;
+      display: flex;
+
+      &::before {
+        content: '';
+        background: $cd-mid-bluey-grey;
+        width: 2px;
+        height: 24px;
+        position: absolute;
+      }
+    }
+  }
+  @media all and (-ms-high-contrast:none) {
+
+    // Removes search cancel x on IE 11 only.
+    input[type=search]::-ms-clear,
+    input[type=search]::-ms-reveal {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    .cd-search--inline__submit svg {
+      padding: 0;
+    }
+  }
+}

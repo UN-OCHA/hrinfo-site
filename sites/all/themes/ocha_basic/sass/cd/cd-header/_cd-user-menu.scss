@@ -1,0 +1,202 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: User Menu
+//
+// Includes user-centered settings and/or actions.
+//
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-user-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    float: left;
+    position: relative;
+  }
+
+  &--no-language-switcher {
+    li.last a {
+      padding-right: 0;
+
+      &:after {
+        content: none;
+      }
+    }
+  }
+}
+
+.cd-user-menu__item {
+  background: transparent;
+  color: $cd-white-text-color;
+  display: block;
+  height: $cd-global-header-height;
+  line-height: $cd-global-header-height;
+  max-width: 90px;
+  overflow: hidden;
+  padding: 0 20px;
+  position: relative;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  transition: background 0.3s ease;
+  white-space: nowrap;
+
+  @include tablet {
+    max-width: none;
+    padding: 0 20px;
+  }
+
+  &:after {
+    color: $cd-light-blue-border-color;
+    content: '|';
+    position: absolute;
+    right: -1px;
+    top: 0;
+  }
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+    outline: 0; // outline is replaced by text-decoration
+  }
+}
+
+// Menu list item with icon
+.cd-user-menu__icon {
+  a {
+    padding-left: 26px;
+
+    @include tablet {
+      padding-left: 34px;
+    }
+  }
+  &:before {
+    position: absolute;
+    content: "";
+    height: $cd-global-header-height;
+    width: 14px;
+    left: 7px;
+    background-repeat: no-repeat;
+    background-position: 0 46%;
+    background-size: 14px 14px;
+
+    @include tablet {
+      left: 11px;
+    }
+  }
+}
+
+// Menu item with plus icon
+.cd-user-menu__icon-plus {
+  @extend .cd-user-menu__icon;
+  &:before {
+    background-image: url(../img/icons/add--white.svg);
+    background-size: 12px 12px;
+    height: 33px;
+    left: 15px;
+  }
+}
+
+// Menu item with user icon
+.cd-user-menu__icon-login {
+  @extend .cd-user-menu__icon;
+  &:before {
+    background-image: url(../img/icons/user--white.svg);
+  }
+}
+
+.cd-user-menu__label {
+  .cd-user-menu__item--small & {
+    max-width: 60px;
+  }
+}
+
+.cd-user-menu__label {
+  border-bottom: 1px solid transparent;
+}
+
+.cd-user-menu__dropdown {
+  list-style: none;
+  margin: 0;
+  width: 125px;
+  padding: 12px 24px;
+  left: auto;
+
+  li {
+    display: block;
+    float: none;
+  }
+
+  .cd-user-menu__item--small + & {
+    &:before {
+      left: 55px;
+    }
+  }
+}
+
+.cd-user-menu__dropdown-link {
+  display: block;
+  padding: 12px 0;
+  text-decoration: none;
+
+  &.active {
+    font-weight: bold;
+    padding-right: 12px;
+    position: relative;
+
+    &:after {
+      position: absolute;
+      right: 0;
+      content: "";
+      width: 14px;
+      height: 14px;
+      background-image: url(../img/icons/selected--highlighted.svg);
+      background-repeat: no-repeat;
+      background-position: 0 50%;
+      background-size: 14px 14px;
+    }
+  }
+}
+
+@include tablet {
+  .cd-user-menu__item--small {
+    max-width: 70px;
+
+    .cd-user-menu__dropdown {
+      left: 30px;
+    }
+  }
+}
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Drupal selectors
+//——————————————————————————————————————————————————————————————————————————————
+
+// Hide default block titles
+.region-header-top .block-locale h2,
+.region-header-top .block-menu h2 {
+  @extend .element-invisible;
+}
+
+.region-header-top .menu {
+  @extend .cd-user-menu;
+
+  // If there's no language switcher in the Global Header, uncomment this line
+  // to apply special treatment to the last link in the list.
+  // @extend .cd-user-menu--no-language-switcher;
+}
+
+.region-header-top .menu > li a {
+  @extend .cd-user-menu__item;
+}
+
+// Login/Logout item as last item in user menu
+.region-header-top .menu > li:last-child {
+  @extend .cd-user-menu__icon-login;
+}
+
+// Add content menu item as first item in user menu
+.logged-in .region-header-top .menu > li:first-child {
+  @extend .cd-user-menu__icon-plus;
+}

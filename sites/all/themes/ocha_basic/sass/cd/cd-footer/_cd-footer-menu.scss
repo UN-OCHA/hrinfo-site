@@ -1,0 +1,35 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Footer menu
+//
+// Used for team and project specific links plus links to legalese.
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-footer-menu {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+  text-transform: uppercase;
+}
+
+.cd-footer-menu__item {
+  display: block;
+  margin-bottom: 12px;
+
+  @include tablet {
+    display: inline-block;
+    margin: 0 8px;
+  }
+  @include desktop {
+    margin: 0 32px 0 0;
+  }
+}
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Drupal selectors
+//——————————————————————————————————————————————————————————————————————————————
+
+// Apply menu item styles to Drupal Menu items
+.cd-footer-menu > li {
+  @extend .cd-footer-menu__item;
+}

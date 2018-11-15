@@ -1,0 +1,97 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Footer
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-footer {
+  grid-row: 3/3; // Position footer so visible on short pages.
+  background: $cd-primary-bg-color;
+  color: $cd-white-text-color;
+  padding: 48px 0 0 0;
+  text-align: center;
+  line-height: 1.5;
+
+  a {
+    border-bottom: 1px solid transparent;
+    color: $cd-white-text-color;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      color: $cd-white;
+      border-color: $cd-bright-border-color;
+    }
+  }
+}
+
+.cd-footer__section {
+  margin: 0 auto;
+  padding-bottom: 48px;
+
+  // When we know a section contains no content, we can set an empty variant
+  // to collapse it to zero-height which helps especially on mobile, without
+  // disrupting the layout on larger viewport widths.
+  &--empty {
+    padding-bottom: 0;
+  }
+}
+
+//——————————————————————————————————————————————————————————————————————————————
+// Common Footer: Layout
+//
+// The entire layout for the Common Footer is defined here. Each section has a
+// BEM modifier assigned to it now, and the block-level class
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-footer__inner {
+  @include tablet {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  // Applying clearfix to our container results in a gap between footer and the
+  // viewport edge. Cancel the clearfix on this container to ensure the footer
+  // is flush with window.
+  &::after {
+    content: none;
+  }
+}
+
+.cd-footer__section--menu {
+  @include tablet {
+    flex: 1 0 100%;
+  }
+  @include desktop {
+    text-align: left;
+    flex: 1 0 70%;
+  }
+}
+
+.cd-footer__section--social {
+  @include tablet {
+    flex: 1 0 100%;
+  }
+  @include desktop {
+    flex: 0 1 auto;
+  }
+}
+
+.cd-footer__section--mandate {
+  @include tablet {
+    flex: 1 0 100%;
+  }
+  @include desktop {
+    max-width: 780px;
+    flex: 1 0 50%;
+    margin: 0;
+  }
+}
+
+.cd-footer__section--copyright {
+  @include tablet {
+    flex: 1 0 100%;
+  }
+  @include desktop {
+    flex: 0 1 350px;
+    margin: 0;
+  }
+}

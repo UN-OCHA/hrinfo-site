@@ -1,0 +1,54 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Dropdowns for nested menus
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-dropdown {
+  display: none;
+  .open > & {
+    display: block;
+  }
+}
+
+.icon--arrow-down {
+  fill: $cd-white;
+  width: 9px;
+  height: 9px;
+}
+
+.open {
+  > [data-toggle="dropdown"] > .icon--arrow-down {
+    transform: rotate(180deg);
+  }
+}
+
+/**
+ * Global header specific dropdown styles.
+ */
+.cd-global-header__dropdown {
+  background: $cd-primary-bg-color;
+  box-shadow: 0 3px 6px 0 rgba(0,0,0,0.30);
+  left: 0;
+  position: absolute;
+  @include z-index(dropdown);
+
+  a {
+    color: $cd-white-text-color;
+  }
+}
+
+.cd-global-header__dropdown-btn {
+  .open & {
+    &:before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 6px 6px 6px;
+      border-color: transparent transparent $cd-primary-bg-color transparent;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      margin-left: -6px;
+    }
+  }
+}

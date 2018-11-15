@@ -1,0 +1,36 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: root file
+//——————————————————————————————————————————————————————————————————————————————
+
+// Sass utilities
+@import 'cd-variables';
+@import 'cd-extends';
+@import 'cd-mixins';
+@import 'cd-resets';
+@import 'cd-icons';
+
+// Layout
+@import 'cd-layout/cd-layout';
+@import 'cd-layout/cd-skip-link';
+
+// Header
+@import 'cd-header/cd-header';
+@import 'cd-header/cd-dropdowns';
+@import 'cd-header/cd-dropdowns-drupal';
+@import 'cd-header/cd-global-header';
+@import 'cd-header/cd-user-menu';
+@import 'cd-header/cd-ocha';
+@import 'cd-header/cd-logo';
+@import 'cd-header/cd-nav';
+@import 'cd-header/cd-search';
+@import 'cd-header/cd-search--inline';
+@import 'cd-header/cd-search-drupal';
+@import 'cd-header/cd-language-switcher';
+
+// Footer
+@import 'cd-footer/cd-footer';
+@import 'cd-footer/cd-footer-copyright';
+@import 'cd-footer/cd-footer-menu';
+@import 'cd-footer/cd-mandate';
+@import 'cd-footer/cd-footer-social';
+@import 'cd-footer/cd-soft-footer';

@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ *   Displays footer navigation for Common Footer.
+ */
+?>
+
+<div class="cd-footer__section cd-footer__section--menu">
+  <?php
+    print theme('links__menu_footer_menu', [
+      'links' => menu_navigation_links('menu-footer-menu'),
+      'attributes' => ['class' => ['cd-footer-menu']]
+    ]);
+  ?>
+</div>

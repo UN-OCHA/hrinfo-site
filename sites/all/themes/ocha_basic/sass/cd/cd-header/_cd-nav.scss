@@ -1,0 +1,420 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Main Navigation
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-site-header__nav-holder {
+  float: left;
+
+  .cssgrid.flexbox & {
+    float: none;
+  }
+}
+
+.cd-site-header__nav-toggle {
+  background: transparent;
+  border: 0 none $cd-border-color;
+  border-left: 1px solid $cd-border-color;
+  border-right: 1px solid $cd-border-color;
+  @include font-size($cd-font-size-small);
+  color: $cd-default-text-color;
+  height: $cd-site-header-height;
+  padding: 0 20px;
+  text-transform: uppercase;
+  transition: background 0.3s ease;
+
+  .cd-site-header__nav-label {
+    font-weight: 600;
+  }
+
+  .icon--arrow-down {
+    margin-left: 2px;
+    fill: $cd-highlight-red;
+  }
+
+  .open & {
+    position: relative;
+    z-index: 101;
+    color: $cd-dark-text-color;
+
+    &:before {
+      bottom: -3px;
+      content: '';
+      background: $cd-highlight-red;
+      height: 3px;
+      left: -1px;
+      position: absolute;
+      right: -1px;
+      transition: background 0.3s ease;
+      width: calc(100% + 1px);
+    }
+
+    &:focus {
+      background: $cd-white-bg-color;
+    }
+
+    .icon--arrow-down {
+      transform: rotate(180deg);
+    }
+  }
+
+  &:hover,
+  &:focus {
+    color: $cd-dark-text-color;
+    background: $cd-mid-bg-color;
+    outline: none; // default browser outline is replaced by background colour change.
+  }
+}
+
+.cd-nav {
+  background: $cd-white-bg-color;
+  height: calc(100vh - (#{$cd-global-header-height} + #{$cd-site-header-height} + 3px));
+  padding: 20px 0 36px 0;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: calc(#{$cd-global-header-height} + #{$cd-site-header-height} + 3px);
+  width: 100vw;
+  z-index: 100; // arbitrary high zindex, may need adjusting depending on other site content.
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  > ul {
+    background: $cd-white-bg-color;
+  }
+
+  a,
+  button {
+    color: $cd-default-text-color;
+    display: flex;
+    padding: 15px 30px;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      background: $cd-mid-bg-color;
+      color: $cd-dark-text-color;
+      outline: none; // default browser outline is replaced by background colour change.
+    }
+  }
+
+  button {
+    background: none;
+    border: 0;
+    @include font-size($cd-font-size-tiny);
+    text-align: left;
+    width: 100%;
+  }
+}
+
+.cd-nav > ul > li,
+.cd-nav__item {
+  &.open {
+    background: $cd-white-bg-color;
+
+    > button {
+      color: $cd-dark-text-color;
+
+      &:hover,
+      &:focus {
+        background: $cd-mid-bg-color;
+      }
+    }
+  }
+
+  > a,
+  > button {
+    font-weight: bold;
+    text-transform: uppercase;
+    &:before {
+      background: $cd-highlight-red;
+    }
+  }
+}
+
+.cd-nav > ul > li > ul,
+ul.cd-nav__child-nav {
+  background: $cd-white-bg-color;
+
+  a,
+  button {
+    display: flex;
+    color: $cd-dark-text-color;
+    font-weight: 600;
+
+    &:hover {
+      background: $cd-mid-bg-color;
+    }
+  }
+}
+
+.cd-nav > ul > li > ul > li > ul,
+ul.cd-nav__grandchild-nav {
+  padding-bottom: 5px;
+  a,
+  button {
+    font-weight: 200;
+  }
+}
+
+.cd-nav > ul > li > ul > li > ul > li,
+.cd-nav__grandchild-item {
+  a,
+  button {
+    padding: 10px 30px;
+  }
+}
+
+// Fix nav position in IE 8.
+.no-mediaqueries {
+  .cd-site-header__nav-holder {
+    position: relative;
+  }
+
+  .cd-nav {
+    right: 0;
+    top: $cd-site-header-height;
+    width: 300px;
+  }
+}
+
+// Active trail for mobile menu.
+@include max-width(lg) {
+
+  .cd-nav > ul > li {
+
+    a {
+      position: relative;
+      &:before {
+        position: absolute;
+        content: '';
+        width: 3px;
+        top: 0;
+        height: 48px; // Height of menu item.
+        left: 15px; // Half of the left padding.
+        background: transparent;
+      }
+    }
+
+    > a.active:before,
+    > a.active.active-trail:before {
+      background: $cd-highlight-red;
+    }
+
+    // First level menu item with children.
+    // Classes based on Drupal menu item configuration.
+    &.collapsed,
+    &.expanded {
+      > a.active:before,
+      > a.active.active-trail:before {
+        background: rgba($cd-highlight-red, 0.2);
+      }
+    }
+
+    &.active-trail {
+
+      a {
+        position: relative;
+        &:before {
+          position: absolute;
+          content: '';
+          width: 3px;
+          top: 0;
+          height: 48px; // Height of menu item.
+          left: 15px; // Half of the left padding.
+          background: rgba($cd-highlight-red, 0.2);
+        }
+
+        a.active:before {
+          background: $cd-highlight-red;
+        }
+      }
+    }
+
+    > ul > li.active-trail {
+
+      a:before {
+        background: rgba($cd-highlight-red, 0.6);
+      }
+
+      a.active:before {
+        background: $cd-highlight-red;
+      }
+    }
+
+  }
+
+  // Grandchild items have different top/bottom padding and therefore height.
+  .cd-nav > ul > li.active-trail > ul > li > ul > li a:before,
+  .cd-nav > ul > li > ul > li.active-trail > ul > li a:before {
+    height: 38px; // Height of menu item.
+  }
+}
+
+.cd-nav {
+  display: none;
+  .open & {
+    display: block;
+  }
+}
+
+@include desktop {
+  .cd-site-header__nav-toggle {
+    display: none;
+  }
+
+  .cd-nav {
+    background: none;
+    display: block;
+    height: $cd-site-header-height;
+    max-width: none;
+    padding: 0;
+    position: relative;
+    right: auto;
+    top: auto;
+    width: auto;
+    z-index: 0;
+  }
+
+  .cd-nav > ul {
+    background: transparent;
+  }
+
+  .cd-nav > ul > li,
+  .cd-nav__item {
+    border-right: 1px solid $cd-border-color;
+    float: left;
+    margin: 0;
+
+    &:first-child {
+      border-left: 1px solid $cd-border-color;
+    }
+
+    &:last-child {
+      ul.cd-nav__child-nav {
+        left: auto;
+        right: -1px;
+      }
+    }
+
+    &.open {
+      position: relative;
+
+      > a,
+      > button {
+
+        &:before {
+          background: $cd-highlight-red;
+        }
+
+        &:hover {
+          background: $cd-mid-bg-color;
+        }
+
+        &:focus {
+          &:before {
+            background: $cd-highlight-red;
+          }
+        }
+      }
+    }
+
+    > a,
+    > button {
+      align-items: center;
+      background: transparent;
+      display: flex;
+      height: $cd-site-header-height;
+      padding: 0 14px;
+      position: relative;
+      transition: background 0.3s ease;
+
+      &:before {
+        bottom: -3px;
+        content: '';
+        background: transparent;
+        height: 3px;
+        left: -1px;
+        position: absolute;
+        right: -1px;
+        transition: background 0.3s ease;
+        width: calc(100% + 2px);
+      }
+
+      &:hover {
+        background: $cd-mid-bg-color;
+      }
+
+      &:focus {
+        background: $cd-white-bg-color;
+      }
+
+      &.active,
+      &.active-trail,
+      &.active-trail.active,
+      &:focus {
+        &:before {
+          background: $cd-highlight-red;
+        }
+      }
+    }
+  }
+
+  .cd-nav > ul > li > ul,
+  ul.cd-nav__child-nav {
+    background: $cd-white-bg-color;
+    box-shadow: 0 1px 8px rgba($cd-dark-bluey-grey, 0.8);
+    left: -1px;
+    margin: 0;
+    max-width: 300px;
+    min-width: 200px;
+    padding: 20px 0;
+    top: calc(#{$cd-site-header-height} + 3px); // border-bottom height
+    position: absolute;
+
+    a,
+    button {
+      &:hover {
+        background: $cd-mid-bg-color;
+      }
+      &.active-trail {
+        border-left: 3px solid rgba($cd-highlight-red, 0.6);
+        padding-left: 27px; // Anchor padding - width of border.
+      }
+
+      &.active {
+        border-left: 3px solid rgba($cd-highlight-red, 0.2);
+      }
+    }
+
+    > li.active-trail a {
+      border-left: 3px solid rgba($cd-highlight-red, 0.2);
+
+      &.active {
+        border-left: 3px solid $cd-highlight-red;
+      }
+    }
+  }
+
+  .cd-nav > ul > li > ul > li,
+  .cd-nav__child-item {
+    &.open {
+      background: $cd-white-bg-color;
+    }
+  }
+
+  .cd-nav > ul > li > ul > li > ul,
+  ul.cd-nav__grandchild-nav {
+    padding-bottom: 0;
+
+    a {
+      &:hover,
+      &:focus {
+        background: $cd-mid-bg-color;
+      }
+    }
+  }
+}

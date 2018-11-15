@@ -1,0 +1,221 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Search
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-search {
+  float: left;
+  @include z-index(search);
+
+  .cssgrid.flexbox & {
+    float: none;
+  }
+}
+
+.cd-search_btn {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: $cd-blue-text-color;
+  display: flex;
+  font-size: 24px;
+  height: $cd-site-header-height;
+  padding: 0 20px;
+  transition: background 0.3s ease;
+
+  svg {
+    width: 26px;
+    height: 26px;
+    fill: $cd-blue-text-color;
+  }
+
+  &:hover,
+  &:focus {
+    background: $cd-white-bg-color;
+    outline: none;
+    color: $cd-bright-blue-text-color;
+
+    svg {
+      fill: $cd-bright-blue-text-color;
+    }
+  }
+
+  &:focus {
+    color: $cd-highlight-red;
+
+    svg {
+      fill: $cd-highlight-red;
+    }
+  }
+
+  .open & {
+    color: $cd-highlight-red;
+    position: relative;
+
+    &:before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 6px 6px 6px;
+      border-color: transparent transparent $cd-border-color transparent;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      margin-left: -6px;
+    }
+
+    svg {
+      fill: $cd-highlight-red;
+    }
+
+    &:hover,
+    &:focus {
+      background: $cd-white-bg-color;
+      outline: none;
+      color: $cd-bright-blue-text-color;
+    }
+  }
+}
+
+.cd-search_btn-text {
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  display: none;
+
+  .open & {
+    color: $cd-highlight-red;
+  }
+}
+
+.cd-search__form {
+  background: $cd-mid-bluey-grey;
+  display: none;
+  height: $cd-site-header-height;
+  left: 0;
+  position: absolute;
+  right: 0;
+
+  .open & {
+    display: block;
+  }
+}
+
+.cd-search__form-inner {
+  padding: 8px $cd-container-padding;
+}
+
+.cd-search__input[type=search] {
+  -webkit-appearance: none;
+  background: $cd-white-bg-color;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: $cd-default-text-color;
+  @include font-size($cd-font-size-base);
+  height: calc(#{$cd-site-header-height} - 16px); //Padding.
+  padding: 0 45px 0 25px;
+  width: 100%;
+
+  &:focus {
+    outline: 0;
+    box-shadow: 0 0 4px rgba($cd-mid-grey, 0.7);
+  }
+}
+
+.cd-search__input::-webkit-input-placeholder {
+  color: $cd-dark-grey;
+  font-style: italic;
+}
+.cd-search__input::-moz-placeholder {
+  color: $cd-dark-grey;
+  font-style: italic;
+}
+.cd-search__input:-ms-input-placeholder {
+  color: $cd-dark-grey;
+  font-style: italic;
+}
+.cd-search__input:-moz-placeholder {
+  color: $cd-dark-grey;
+  font-style: italic;
+}
+
+.cd-search__input::-webkit-search-cancel-button {
+  position: relative;
+  right: 10px;
+}
+
+.cd-search__submit {
+  align-items: center;
+  background: $cd-dark-grey;
+  border: 0;
+  color: $cd-white-text-color;
+  display: flex;
+  @include font-size($cd-font-size-base);
+  font-weight: bold;
+  height: calc(#{$cd-site-header-height} - 16px); //padding.
+  width: 46px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: $cd-container-padding;
+  text-transform: uppercase;
+  top: 8px;
+
+  svg {
+    box-sizing: content-box;
+    width: 26px;
+    height: 26px;
+    fill: $cd-white-text-color;
+    margin: 0 auto;
+  }
+
+  &.js-has-focus {
+    background-color: $cd-highlight-red;
+  }
+}
+
+@include tablet {
+  .cd-search__form-inner {
+    margin: 0 auto;
+    max-width: $cd-max-width;
+    padding: 8px $cd-container-padding-tablet;
+    position: relative;
+  }
+
+  .cd-search__input {
+    padding: 0 44px 0 30px;
+  }
+
+  .cd-search__submit {
+    right: $cd-container-padding-tablet;
+  }
+}
+
+@include desktop {
+
+  .cd-search_btn svg {
+    width: 22px;
+    height: 22px;
+    padding: 0 4px 0 0;
+  }
+
+  .cd-search_btn-text {
+    display: block;
+  }
+}
+
+@include xlarge {
+  .cd-search__form {
+    left: 8px;
+    right: 8px;
+  }
+
+  .cd-search__form-inner {
+    padding: 8px $cd-container-padding-xlarge;
+  }
+
+  .cd-search__submit {
+    right: $cd-container-padding-xlarge;
+  }
+}
