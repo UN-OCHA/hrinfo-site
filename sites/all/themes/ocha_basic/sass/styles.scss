@@ -24,3 +24,9 @@
 @import 'components/_forms';
 @import 'components/_tabs';
 @import 'components/_tables';
+
+// HRinfo CD overrides and custom
+@import 'hrinfo-custom/_cd-language-switcher.scss';
+@import 'hrinfo-custom/_cd-logo.scss';
+@import 'hrinfo-custom/_cd-ocha.scss';
+@import 'hrinfo-custom/_cd-user-menu.scss';

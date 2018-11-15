@@ -1,0 +1,24 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Logo
+//
+// Replace images with your site logo.
+//——————————————————————————————————————————————————————————————————————————————
+.cd-site-logo {
+  width: 48px;
+  background: url('../img/logos/hr-info-logo-mobile.svg') center no-repeat;
+
+  .no-svg & {
+    background: url('../img/logos/hr-info-logo-mobile.png') center no-repeat;
+  }
+}
+
+@include tablet {
+  .cd-site-logo {
+    background: url('../img/logos/hr-info-logo.svg') center no-repeat;
+    width: 132px; // width may need to be adjusted depending on logo width.
+
+    .no-svg & {
+      background: url('../img/logos/hr-info-logo.png') center no-repeat;
+    }
+  }
+}
