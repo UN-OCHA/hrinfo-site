@@ -198,5 +198,5 @@
 
 // Add content menu item as first item in user menu
 .logged-in .region-header-top .menu > li:first-child {
-  @extend .cd-user-menu__icon-plus;
+  //@extend .cd-user-menu__icon-plus;
 }
