@@ -220,3 +220,13 @@ function ocha_basic_menu_link(array $variables) {
 
   return '<li' . drupal_attributes($attributes) . '>' . l($title, $href, $options) . $sub_menu . "</li>\n";
 }
+
+
+function ocha_basic_menu_tree__user_menu(&$variables) {
+  global $user;
+  $before = '<button type="button" class="cd-user-menu__item cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--user"><use xlink:href="#user"></use></svg><span class="cd-user-menu__label">';
+  $before .= check_plain(format_username($user));
+  $before .= '</span><svg class="icon icon--arrow-down"><use xlink:href="#arrow-down"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown" role="menu">';
+  $after = '</ul>';
+  return $before.$variables['tree'].$after;
+}
