@@ -147,12 +147,12 @@ function ocha_basic_preprocess_page(&$vars) {
   $vars['page']['language_switcher'] = $output;
 
 
-  // Set variable based on path alias to include inline-search.
-  $path = drupal_get_path_alias();
-  if ($path == 'inline-search') {
-    $inline_search = TRUE;
-    $vars['inline_search'] = $inline_search;
-  }
+//  // Set variable based on path alias to include inline-search.
+//  $path = drupal_get_path_alias();
+//  if ($path == 'inline-search') {
+//    $inline_search = TRUE;
+//    $vars['inline_search'] = $inline_search;
+//  }
 
 }
 
