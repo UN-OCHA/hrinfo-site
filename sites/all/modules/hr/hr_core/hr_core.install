@@ -492,3 +492,14 @@ function hr_core_update_7030() {
   }
   module_disable(array('hid_auth'));
 }
+
+/**
+ * Remove the trusted role.
+ */
+function hr_core_update_7031() {
+  $trusted = user_role_load_by_name('trusted');
+  user_role_delete($trusted);
+  module_disable(array('hr_translations', 'tmgmt_local', 'tmgmt_entity_ui', 'tmgmt_i18n_string', 'tmgmt_entity', 'tmgmt_language_combination', 'tmgmt_field', 'tmgmt_ui', 'tmgmt'));
+  $translator = user_role_load_by_name('translator');
+  user_role_delete($translator);
+}

@@ -25,7 +25,6 @@ function hr_wysiwyg_user_default_permissions() {
     'roles' => array(
       'administrator' => 'administrator',
       'editor' => 'editor',
-      'trusted' => 'trusted',
     ),
     'module' => 'filter',
   );

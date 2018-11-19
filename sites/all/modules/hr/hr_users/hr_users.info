@@ -78,7 +78,6 @@ features[user_permission][] = view own main profile
 features[user_permission][] = view revisions
 features[user_role][] = contributor
 features[user_role][] = editor
-features[user_role][] = trusted
 features[variable][] = auto_entitylabel_pattern_profile2_main
 features[variable][] = auto_entitylabel_profile2_main
 features[variable][] = honeypot_form_user_register_form
