@@ -1,0 +1,124 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Grid system
+//
+// Generate semantic grid columns with these mixins.
+// Adapted from Bootstrap v4 https://github.com/twbs/bootstrap/tree/v4-dev/scss
+//
+// @TODO: replace with Singularity or CSS Grid
+//——————————————————————————————————————————————————————————————————————————————
+
+$grid-columns: 12 !default;
+
+@mixin make-container() {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: $cd-max-width;
+  @include clearfix;
+}
+
+@mixin make-row() {
+  margin-right: $cd-base-unit* -2;
+  margin-left:  $cd-base-unit* -2;
+}
+
+@mixin make-gutters() {
+  padding-left: $cd-base-unit*2;
+  padding-right: $cd-base-unit*2;
+}
+
+@mixin make-col-ready() {
+  position: relative;
+  min-height: 1px;
+}
+
+@mixin make-col($size, $columns: $grid-columns) {
+  float: left;
+  width: percentage($size / $columns);
+}
+
+@mixin make-col-offset($size, $columns: $grid-columns) {
+  margin-left: percentage($size / $columns);
+}
+
+@mixin make-col-push($size, $columns: $grid-columns) {
+  left: if($size > 0, percentage($size / $columns), auto);
+}
+
+@mixin make-col-pull($size, $columns: $grid-columns) {
+  right: if($size > 0, percentage($size / $columns), auto);
+}
+
+@mixin make-col-modifier($type, $size, $columns) {
+  @if $type == push {
+    @include make-col-push($size, $columns);
+  } @else if $type == pull {
+    @include make-col-pull($size, $columns);
+  } @else if $type == offset {
+    @include make-col-offset($size, $columns);
+  }
+}
+
+@mixin make-grid-columns($columns: $grid-columns, $breakpoints: $grid-breakpoints) {
+  %grid-column {
+    position: relative;
+    min-height: 1px;
+    @include make-gutters();
+  }
+
+  $breakpoint-counter: 0;
+  @each $breakpoint in map-keys($breakpoints) {
+    $breakpoint-counter: ($breakpoint-counter + 1);
+
+    .col-#{$breakpoint} {
+      @extend %grid-column;
+    }
+
+    @for $i from 1 through $columns {
+      .col-#{$breakpoint}-#{$i} {
+        @extend %grid-column;
+      }
+    }
+    @include min-width($breakpoint) {
+
+      @for $i from 1 through $columns {
+        .col-#{$breakpoint}-#{$i} {
+          @include make-col($i, $columns);
+        }
+      }
+
+      @each $modifier in (pull, push) {
+        @for $i from 0 through $columns {
+          .#{$modifier}-#{$breakpoint}-#{$i} {
+            @include make-col-modifier($modifier, $i, $columns)
+          }
+        }
+      }
+
+      // `$columns - 1` because offsetting by the width of an entire row isn't possible
+      @for $i from 0 through ($columns - 1) {
+        @if $breakpoint-counter != 1 or $i != 0 { // Avoid emitting useless .offset-xs-0
+          .offset-#{$breakpoint}-#{$i} {
+            @include make-col-modifier(offset, $i, $columns)
+          }
+        }
+      }
+    }
+  }
+}
+
+.container {
+  @include make-container();
+  @include make-gutters();
+
+  @include min-width(xl) {
+    padding-left: $cd-base-unit*5;
+    padding-right: $cd-base-unit*5;
+  }
+}
+
+.row {
+  @include clearfix;
+  @include make-row();
+}
+
+@include make-grid-columns();

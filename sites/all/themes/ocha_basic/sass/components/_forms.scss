@@ -1,0 +1,38 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Form styles
+//——————————————————————————————————————————————————————————————————————————————
+
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+textarea {
+  @include font-size($cd-font-size-base);
+  padding: $cd-base-unit;
+  border: 1px solid #ccc;
+  max-width: 100%;
+  color: $cd-dark-grey;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+}
+
+.form-item input.error,
+.form-item textarea.error,
+.form-item select.error {
+  border-color: $cd-highlight-red;
+}
+
+//
+// Minor overrides to D7 defaults per Chrome Lighthouse a11y audit.
+//
+.form-required {
+  font-weight: 700;
+  color: $cd-contrast-red;
+}

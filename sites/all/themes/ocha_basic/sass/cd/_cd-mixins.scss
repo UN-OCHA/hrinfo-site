@@ -1,0 +1,175 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Mixins
+//——————————————————————————————————————————————————————————————————————————————
+
+//
+// Standard clearfix.
+//
+// Drupal 7.59 system.base.css
+//
+@mixin clearfix {
+  &:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
+
+//
+// Hide content offscreen accessibly.
+//
+// @TODO: remove and replace all uses with `@extend .element-invisible`
+//
+@mixin hide {
+  clip: rect(0,0,0,0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+//
+// Un-hide content.
+//
+// @TODO: just remove this outright, it shouldn't even exist. If something should
+//        be hidden at only a certain breakpoint, just write a more specific MQ.
+//
+@mixin unhide {
+  height: auto;
+  margin: 0;
+  position: static;
+  width: auto;
+}
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Breakpoints
+//
+// `min-width` and `max-width` mixins are supplied, with convenience functions
+// for CD dimensions. All CD convenience functions are `min-width`.
+//——————————————————————————————————————————————————————————————————————————————
+@mixin min-width($breakpoint) {
+  @if map-has-key($grid-breakpoints, $breakpoint) {
+    @media (min-width: #{map-get($grid-breakpoints, $breakpoint)}) {
+      @content;
+    }
+  }
+  @else {
+    @warn "`#{$breakpoint}` not found in `$grid-breakpoints` map.";
+  }
+}
+
+@mixin max-width($breakpoint) {
+  @if map-has-key($grid-breakpoints, $breakpoint) {
+    @media (max-width: #{map-get($grid-breakpoints, $breakpoint)-1}) {
+      @content;
+    }
+  }
+  @else {
+    @warn "`#{$breakpoint}` not found in `$grid-breakpoints` map.";
+  }
+}
+
+//
+// Grid breakpoints
+//
+@mixin xs {
+  @include min-width('xs') {
+    @content;
+  }
+}
+
+@mixin sm {
+  @include min-width('sm') {
+    @content;
+  }
+}
+
+@mixin md {
+  @include min-width('md') {
+    @content;
+  }
+}
+
+@mixin lg {
+  @include min-width('lg') {
+    @content;
+  }
+}
+
+@mixin xl {
+  @include min-width('xl') {
+    @content;
+  }
+}
+
+@mixin xxl {
+  @include min-width('xxl') {
+    @content;
+  }
+}
+
+//
+// CD breakpoints
+//
+@mixin tablet {
+  @include md {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @include lg {
+    @content;
+  }
+}
+
+@mixin xlarge {
+  @include xl {
+    @content;
+  }
+}
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: z-index
+//
+// Provides syntactic sugar for common z-index values.
+//
+// Usage: @include z-index(dropdown);
+//——————————————————————————————————————————————————————————————————————————————
+@mixin z-index($value: 0) {
+  @if map-has-key($zindex, $value) {
+    z-index: #{map-get($zindex, $value)};
+  }
+  @else {
+    @warn "`#{$value}` not found in `$zindex` map.";
+  }
+}
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Common-Design: font-size
+//
+// Usage:
+//   @include font-size(14);
+//
+// Results in (with a $base-font-size of 18):
+//   font-size: 14px;
+//
+// If another unit were desired, it could be added to the output after the px
+// declarations to override the pixel value. However, prior experience has shown
+// that using another unit such as `rem` causes rounding errors when paired with
+// other math operations, such as unitless `line-height` properties.
+//
+// Example to output rem in addition to px:
+//   font-size: $size + px;
+//   font-size: #{$size / $cd-font-size-base}rem;
+//——————————————————————————————————————————————————————————————————————————————
+@mixin font-size($size) {
+  font-size: $size + px;
+}

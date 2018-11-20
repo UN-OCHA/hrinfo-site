@@ -1,0 +1,16 @@
+<div class="cd-site-header__nav-holder">
+  <?php if($page['header_navigation']): ?>
+    <button type="button" id="cd-nav-toggle" class="cd-site-header__nav-toggle">
+      <span class="cd-site-header__nav-label">Menu</span>
+      <svg class="icon icon--arrow-down">
+        <use xlink:href="#arrow-down"></use>
+      </svg>
+      <span class="element-invisible">Close menu</span>
+    </button>
+
+    <nav role="navigation" id="cd-nav" class="cd-nav" aria-labelledby="cd-nav-toggle">
+      <?php print render($page['header_navigation']); ?>
+    </nav>
+  <?php
+  endif; ?>
+</div>

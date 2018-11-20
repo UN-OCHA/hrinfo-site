@@ -1,0 +1,29 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Button styles
+//——————————————————————————————————————————————————————————————————————————————
+
+button, input[type="submit"] {
+  -webkit-appearance: none;
+  @include font-size($cd-font-size-base);
+  color: $cd-dark-grey;
+  background: none;
+  border: none;
+  box-shadow: none;
+  font-family: $cd-font;
+}
+
+.btn-primary, .form-actions input[type="submit"] {
+  border-radius: 4px;
+  background: $hrinfo-red;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: $cd-white;
+  padding: $cd-base-unit*1.5;
+  transition: background 0.3s ease;
+
+  &:hover,
+  &:focus {
+    background: darken($hrinfo-red, 10%);
+    color: $cd-white;
+  }
+}

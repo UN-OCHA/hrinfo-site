@@ -1,0 +1,133 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Variables
+//
+// Don't use any maps directly. Please refer to `_cd-mixins.scss` partial.
+//——————————————————————————————————————————————————————————————————————————————
+
+//
+// Grid Breakpoints
+//
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1200px,
+  xxl: 1400px
+) !default;
+
+//
+// CD Breakpoints correspond to the following grid breakpoints:
+//
+$cd-breakpoints: (
+  tablet: #{map-get($grid-breakpoints, 'md')},
+  desktop: #{map-get($grid-breakpoints, 'lg')},
+  xlarge: #{map-get($grid-breakpoints, 'xl')}
+);
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Measurements
+//——————————————————————————————————————————————————————————————————————————————
+
+// @TODO: get rid of this thing
+$cd-base-unit: 8px;
+$cd-site-padding: $cd-base-unit;
+
+$cd-max-body-width: 1400px;
+$cd-max-width: 1220px;
+
+$cd-container-padding: 12px;
+$cd-container-padding-tablet: 24px;
+$cd-container-padding-xlarge: 40px;
+
+$cd-global-header-height: 35px;
+$cd-site-header-height: 60px;
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Colours
+//——————————————————————————————————————————————————————————————————————————————
+
+// Colour palette
+$cd-ocha-blue: #026CB6;
+$cd-dark-blue: #025995;
+$cd-bright-blue: #80CBFF;
+$cd-light-blue: #9EC5E2;
+$cd-lighter-blue: #B7E0FF;
+$cd-light-grey: #F2F2F2;
+$cd-mid-light-grey: #CCCCCC;
+$cd-mid-grey: #595959;
+$cd-dark-grey: #4A4A4A;
+$cd-dark-bluey-grey: #D3DDE5;
+$cd-mid-bluey-grey: #E6ECF1;
+$cd-light-bluey-grey: #F2F5F8;
+$cd-highlight-red: #EB5C6D;
+$cd-white: #FFFFFF;
+$cd-black: #000000;
+
+// Custom colour palette
+$hrinfo-red: #bc2e3c;
+$hrinfo-dark-red: #9a2d3b;
+// Get rid of this eventually
+$p-main: $hrinfo-red;
+
+
+
+// This shade of red has been selected based on WCAG AAA requirements for contrast.
+$cd-contrast-red: #E00000;
+
+// Background colours
+$cd-site-bg-color: $cd-mid-bluey-grey;
+$cd-white-bg-color: $cd-white;
+$cd-primary-bg-color: $hrinfo-red;
+$cd-dark-primary-bg-color: $hrinfo-dark-red;
+$cd-dark-bg-color: $cd-dark-bluey-grey;
+$cd-mid-bg-color: $cd-mid-bluey-grey;
+$cd-light-bg-color: $cd-light-bluey-grey;
+
+// Border colours
+$cd-border-color: $cd-mid-bluey-grey;
+$cd-bright-border-color: $cd-bright-blue;
+$cd-light-blue-border-color: $cd-light-blue;
+$cd-white-border: #FFF;
+
+// Text colours
+$cd-white-text-color: #FFF;
+$cd-default-text-color: $cd-dark-grey;
+$cd-dark-text-color: #000;
+$cd-blue-text-color: $cd-ocha-blue;
+$cd-bright-blue-text-color: $cd-bright-blue;
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Fonts
+//——————————————————————————————————————————————————————————————————————————————
+
+$cd-font: helvetica, arial, sans-serif;
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Font sizes
+//——————————————————————————————————————————————————————————————————————————————
+
+$cd-font-size-tiny: 12;
+$cd-font-size-small: 14;
+$cd-font-size-base: 16;
+$cd-font-size-medium: 20;
+$cd-font-size-xlarge: 30;
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// z-indices
+//——————————————————————————————————————————————————————————————————————————————
+
+$zindex: (
+  default: 1,
+  hidden: -1,
+  sidebar: 110,
+  sidebar-underlay: 100,
+  search: 199,
+  dropdown: 200,
+  skip-link: 1000
+);

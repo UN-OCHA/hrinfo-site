@@ -1,0 +1,40 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Social links
+//——————————————————————————————————————————————————————————————————————————————
+
+// To override `.cd-footer a` we must use tag in selector
+a.cd-footer-social__link {
+  border: 0 none;
+  display: inline-block;
+  margin: 0 10px;
+
+  @include desktop {
+    margin: 0 0 0 20px;
+
+    &:first-child {
+      margin: 0;
+    }
+  }
+
+  svg {
+    height: 26px;
+    width: 26px;
+    fill: $cd-white;
+
+    &.hover-style {
+      display: none;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    svg {
+      display: none;
+    }
+
+    .hover-style {
+      display: inline-block;
+    }
+  }
+}
+

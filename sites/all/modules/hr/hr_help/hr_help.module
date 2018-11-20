@@ -37,18 +37,14 @@ function hr_help_block_view($delta = '') {
         }
       }
       if (!empty($tours)) {
-        $block['content'] = '<div class="btn-group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-question fa-lg"></i>
-          </button>
-          <ul class="dropdown-menu">';
+        $block['content'] = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--help"><use xlink:href="#help"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">';
         foreach ($tours as $key => $tour) {
           if (!in_array($key, $manager_tours) || og_is_member('node', HR_SANDBOX_GID)) {
             $block['content'] .= '<li>'.l(t($tour->title), $tour->steps[0]['path'], array('query' => array('tour' => $key))).'</li>';
           }
         }
         $block['content'] .= '<li>'.l(t('User Guidelines'), 'help').'</li>';
-        $block['content'] .= '</ul></div>';
+        $block['content'] .= '</ul>';
       }
       break;
   }

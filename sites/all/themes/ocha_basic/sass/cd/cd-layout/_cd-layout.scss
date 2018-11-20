@@ -1,0 +1,44 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Layout
+//——————————————————————————————————————————————————————————————————————————————
+
+html {
+  background: $cd-site-bg-color;
+  height: 100%;
+  margin: 0;
+
+  @include desktop {
+    padding: 0 $cd-site-padding;
+  }
+}
+
+body {
+  background: $cd-white-bg-color;
+  margin: 0 auto;
+  max-width: $cd-max-body-width;
+  min-height: 100%;
+  padding: 0;
+
+  // Grid is used to fix the footer to the bottom of the screen, regardless of page min-height.
+  // Just for CSS grid supporting browsers as IE fallback causes weirdness here.
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.cd-container {
+  @include clearfix;
+  box-sizing: border-box;
+  padding: 0 $cd-container-padding;
+  margin: 0 auto;
+  max-width: $cd-max-width;
+
+  @include tablet {
+    padding: 0 $cd-container-padding-tablet;
+  }
+
+  @include xlarge {
+    padding: 0 $cd-container-padding-xlarge;
+  }
+}
+
+

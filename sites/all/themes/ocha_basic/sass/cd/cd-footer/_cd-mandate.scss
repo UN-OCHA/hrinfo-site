@@ -1,0 +1,58 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: OCHA mandate
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-mandate {
+  width: 100%;
+
+  @include desktop {
+    margin: 0;
+  }
+}
+
+.cd-mandate__logo {
+  display: block;
+  width: 149px;
+  height: 37px;
+  margin: 0 auto 16px;
+  background: url('../img/logos/ocha-lockup-white.svg') 0 center no-repeat;
+
+  .no-svg & {
+    background: url('../img/logos/ocha-lockup-white@149x37.png') 0 center no-repeat;
+  }
+
+  @include desktop {
+    box-sizing: content-box;
+    float: left;
+    margin: -4px $cd-container-padding 0 auto;
+    padding-right: $cd-container-padding;
+    border-right: 1px solid $cd-border-color;
+  }
+}
+
+.cd-mandate__heading {
+  display: block;
+  margin-bottom: 16px;
+  padding: 0 $cd-container-padding;
+
+  @include desktop {
+    text-align: left;
+    padding: 0;
+  }
+}
+
+.cd-mandate__text {
+  display: block;
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 0 $cd-container-padding;
+
+  @include desktop {
+    text-align: left;
+    padding: 0;
+    padding-right: $cd-container-padding-xlarge;
+    margin: 0;
+    max-width: 100%;
+  }
+}
+

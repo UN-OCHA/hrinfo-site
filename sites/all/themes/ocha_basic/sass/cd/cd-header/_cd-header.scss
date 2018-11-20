@@ -1,0 +1,97 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Header
+//——————————————————————————————————————————————————————————————————————————————
+
+//
+// Global Header.
+// Top header bar, contains Sites Menu ('OCHA Services') and User Menu.
+//
+.cd-global-header {
+  background: $cd-primary-bg-color;
+  background-image: linear-gradient(-180deg, $cd-primary-bg-color 67%, $cd-dark-primary-bg-color 97%);
+  color: $cd-white-text-color;
+  height: $cd-global-header-height;
+  position: relative;
+
+  button {
+    border: 0;
+  }
+}
+
+//
+// Site Header.
+// Bottom header bar, contains Logo, Search and Navigation.
+//
+.cd-site-header {
+  border-bottom: 3px solid $cd-border-color;
+  color: $cd-default-text-color;
+}
+
+.cd-site-header__inner {
+  height: $cd-site-header-height;
+
+  .cssgrid.flexbox & {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    grid-template-rows: $cd-site-header-height;
+    grid-column-gap: 1em;
+
+    @include tablet {
+      grid-template-columns: 186px 1fr;
+    }
+  }
+}
+
+.cd-site-logo {
+  .cssgrid.flexbox & {
+    grid-column: 1 / 1;
+  }
+}
+
+.cd-site-header__actions {
+  float: right;
+
+  .cssgrid.flexbox & {
+    float: none;
+    grid-column: 2 / 2;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+
+    @include desktop {
+      .cd-search {
+        flex: 0 0 auto;
+      }
+      .cd-site-header__nav-holder {
+        flex: 0 0 auto;
+      }
+    }
+  }
+}
+
+.cd-nav > ul {
+  .cssgrid.flexbox & {
+    display: block;
+
+    @include desktop {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: flex-end;
+    }
+
+    > li,
+    > .cd-nav__item {
+      flex: 1 0 100%;
+
+      @include desktop {
+        flex: 1 1 auto;
+        max-width: 112px;
+      }
+      @include xlarge {
+        flex: 1 1 auto;
+        max-width: 160px;
+      }
+    }
+  }
+}

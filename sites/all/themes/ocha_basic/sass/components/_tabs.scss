@@ -1,0 +1,58 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Tab styles
+//——————————————————————————————————————————————————————————————————————————————
+
+.tabs {
+  border-bottom: 2px solid $cd-site-bg-color;
+  margin: 18px 0;
+  padding: 0;
+  display: block;
+  @include clearfix;
+
+
+  > li {
+    float: left;
+    position: relative;
+    display: block;
+    margin-bottom: -2px; // Height of border bottom.
+  }
+
+  > li > a {
+    position: relative;
+    display: block;
+    padding: 4px 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+    @include font-size($cd-font-size-tiny);
+    text-align: center;
+    background: none;
+    border-radius: 0;
+    margin: 0;
+    border: none;
+    text-decoration: none;
+    border-bottom: 2px solid $cd-site-bg-color;
+    color: $hrinfo-red;
+
+    @media (min-width:768px) {
+      min-width: 110px;
+    }
+
+    &.active,
+    &:hover {
+      border: none !important;
+      border-bottom: 2px solid $cd-site-bg-color !important;
+      background-color: $cd-site-bg-color;
+      color: $hrinfo-red;
+    }
+
+    &:focus {
+      background: $cd-site-bg-color;
+    }
+  }
+
+  > li.active > a,
+  > li.active > a:hover,
+  > li.active > a:focus {
+    background-color: $cd-site-bg-color;
+  }
+}
