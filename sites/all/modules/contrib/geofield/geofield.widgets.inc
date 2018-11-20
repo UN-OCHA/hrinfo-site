@@ -114,7 +114,7 @@ function geofield_field_widget_form(&$form, &$form_state, $field, $instance,
       $default_value = '';
       if (!empty($items[$delta]['geom'])) {
         geophp_load();
-        $geometry = geoPHP::load($items[$delta]['geom']->__toString());
+        $geometry = geoPHP::load($items[$delta]['geom']);
         $default_value = $geometry->out('wkt');
       }
       $element['geom'] = array(
@@ -131,7 +131,7 @@ function geofield_field_widget_form(&$form, &$form_state, $field, $instance,
       $default_value = '';
       if (!empty($items[$delta]['geom'])) {
         geophp_load();
-        $geometry = geoPHP::load($items[$delta]['geom']->__toString());
+        $geometry = geoPHP::load($items[$delta]['geom']);
         $default_value = $geometry->out('json');
       }
 
