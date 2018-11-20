@@ -25,7 +25,11 @@ function hr_bookmarks_block_view($delta = '') {
           $context_gid = $context['gid'];
         }
         $flags = flag_get_user_flags('node');
-        $block['content'] = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--info"><use xlink:href="#info"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">';
+        $block['content'] = '<div class="btn-group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-thumb-tack fa-lg"></i>
+          </button>
+          <ul class="dropdown-menu">';
         if (isset($flags['hr_favorite_space'])) {
           foreach ($flags['hr_favorite_space'] as $gid => $space) {
             //debug($space);
@@ -36,7 +40,7 @@ function hr_bookmarks_block_view($delta = '') {
         if ($context_gid != NULL) {
           $block['content'] .= '<li>'.flag_create_link('hr_favorite_space', $context_gid, array('after_flagging' => FALSE)).'</li>';
         }
-        $block['content'] .= '</ul>';
+        $block['content'] .= '</ul></div>';
       }
       break;
   }
