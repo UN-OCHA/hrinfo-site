@@ -66,7 +66,7 @@ class DataProviderHRInfoFile extends DataProviderFile {
     $file_array = array(
       'uid' => $this->getAccount()->uid,
       'status' => 0,
-      'filename' => trim(drupal_basename($files['files']['name'][$source]), '.'),
+      'filename' => str_replace(' ', '-', trim(drupal_basename($files['files']['name'][$source]), '.')),
       'uri' => $files['files']['tmp_name'][$source],
       'filesize' => $files['files']['size'][$source],
     );
