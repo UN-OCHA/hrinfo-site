@@ -130,7 +130,7 @@ function hr_layout_block_view($delta = '') {
         // Add the RSS link.
         $block['content'] .= _hr_layout_rss_icon('node', $gid);
 
-        if (isset($view['field_social_media'])) {
+        if (!empty($node->field_social_media)) {
           $link_social_options = array(
             'html' => TRUE,
             'absolute' => TRUE,
@@ -141,7 +141,7 @@ function hr_layout_block_view($delta = '') {
               ),
             ),
           );
-          foreach($view['field_social_media']['#items'] as $social_media) {
+          foreach($node->field_social_media[LANGUAGE_NONE] as $social_media) {
             $format = hr_layout_social_media_link($social_media['url']);
             $link_social_options['attributes']['title'] = $format['text'];
             // Render Social Media link.
