@@ -139,6 +139,7 @@ function hr_layout_block_view($delta = '') {
                 'btn',
                 'btn-primary',
               ),
+              'target' => '_blank'
             ),
           );
           foreach($node->field_social_media[LANGUAGE_NONE] as $social_media) {
