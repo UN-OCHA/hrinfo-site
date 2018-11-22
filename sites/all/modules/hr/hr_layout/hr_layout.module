@@ -46,7 +46,7 @@ function hr_layout_menu() {
 }
 
 function hr_layout_clone_new($node) {
-  $type = str_replace('-', '_', $node->bundle);
+  $type = str_replace('-', '_', $node->type);
   $types = array(
     'hr_document' => 'document',
     'hr_infographic' => 'infographic',
