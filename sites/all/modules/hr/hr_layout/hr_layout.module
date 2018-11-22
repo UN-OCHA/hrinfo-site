@@ -31,7 +31,30 @@ function hr_layout_menu() {
     'access arguments' => array('access content'),
   );
 
+  $items['node/%node/clone_new'] = array(
+    'access callback' => 'clone_access_cloning',
+    'access arguments' => array(1),
+    'page callback' => 'hr_layout_clone_new',
+    'page arguments' => array(1),
+    'title' => 'Clone content (new form)',
+    'weight' => 7,
+    'type' => MENU_LOCAL_ACTION,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+  );
+
   return $items;
+}
+
+function hr_layout_clone_new($node) {
+  $type = str_replace('-', '_', $node->bundle);
+  $types = array(
+    'hr_document' => 'document',
+    'hr_infographic' => 'infographic',
+    'hr_event' => 'event',
+    'hr_assessment' => 'assessment',
+    'hr_office' => 'office'
+  );
+  drupal_goto('https://app.humanitarianresponse.info/' . $types[$type] . 's/' . $node->nid . '/clone');
 }
 
 /**
