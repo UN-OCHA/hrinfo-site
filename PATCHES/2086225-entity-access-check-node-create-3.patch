@@ -1,0 +1,16 @@
+diff --git a/modules/callbacks.inc b/modules/callbacks.inc
+index 3865efd..ca061cc 100644
+--- a/modules/callbacks.inc
++++ b/modules/callbacks.inc
+@@ -669,6 +669,11 @@ function entity_metadata_field_file_validate_item($items, $context) {
+  */
+ function entity_metadata_no_hook_node_access($op, $node = NULL, $account = NULL) {
+   // First deal with the case where a $node is provided.
++  if ($op == 'update' && !empty($node) && empty($node->nid)) {
++    // In case checking with the wrapper $wrapper->access('edit'), we need to
++    // convert this to create.
++    $op = 'create';
++  }
+   if (isset($node)) {
+     if ($op == 'create') {
+       if (isset($node->type)) {
