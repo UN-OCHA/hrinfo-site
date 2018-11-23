@@ -669,11 +669,6 @@ function entity_metadata_field_file_validate_item($items, $context) {
  */
 function entity_metadata_no_hook_node_access($op, $node = NULL, $account = NULL) {
   // First deal with the case where a $node is provided.
-  if ($op == 'update' && !empty($node) && empty($node->nid)) {
-    // In case checking with the wrapper $wrapper->access('edit'), we need to
-    // convert this to create.
-    $op = 'create';
-  }
   if (isset($node)) {
     if (empty($node->vid) && in_array($op, array('create', 'update'))) {
       // This is a new node or the original node.
