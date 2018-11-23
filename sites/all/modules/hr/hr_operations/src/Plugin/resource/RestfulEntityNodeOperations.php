@@ -100,6 +100,10 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
       ),
     );
 
+    $public_fields['timezone'] = array(
+      'callback' => array($this, 'getTimezone')
+    );
+
     $public_fields['focal_points'] = array(
       'callback' => array($this, 'getContacts')
     );
@@ -146,6 +150,13 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
       }
     }
     return $cids;
+  }
+
+  public function getTimezone(DataInterpreterInterface $di) {
+    $wrapper = $di->getWrapper();
+    $nid = $wrapper->getIdentifier();
+    $store = variable_store('og', 'node_'.$nid);
+    return $store['date_default_timezone'];
   }
 
   /**
