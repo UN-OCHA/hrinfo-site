@@ -248,7 +248,6 @@ function hr_layout_block_view($delta = '') {
       $block['content'] .= '<li>'.l(t('NGOs'), 'coordination/ngos').'</li>';
       $block['content'] .= '<li>'.l(t('Policy and Guidance'), 'documents/document-type/policy-and-guidance').'</li>';
       $block['content'] .= '<li>'.l(t('Training and resource materials'), 'documents/document-type/training-and-resource-materials').'</li>';
-      $block['content'] .= '<li>'.l(t('Transformative Agenda'), 'topics/transformative-agenda').'</li>';
       $block['content'] .= '</ul>';
       // Add select option for global clusters available here:
       // http://www.humanitarianresponse.info/en/coordination/clusters/global
