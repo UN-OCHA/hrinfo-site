@@ -738,7 +738,7 @@ function hid_profiles_location_select($operation) {
 function hid_profiles_office_select($operation) {
   $html = '';
   $lists = hid_v2_get_lists(array('type' => 'office', 'metadata.operation.id' => $operation->nid));
-  $html = '<div id="block-hid-profiles-filters-offices" class="block"><select id="offices" class="form-control form-select" tabindex="1" data-placeholder="Filter by Office">';
+  $html = '<div id="block-hid-profiles-filters-offices" class="block"><select id="offices" class="form-control form-select" tabindex="1" data-placeholder="Filter by Coordination Hub">';
   $html .= '<option value=""></option>';
   foreach ($lists as $list) {
     $html .= '<option value="'.$list->_id.'">'.$list->name.'</option>';
