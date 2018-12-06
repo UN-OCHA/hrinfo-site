@@ -562,7 +562,7 @@ function hr_layout_create_links() {
                     if ($type == 'hr_infographic') {
                       $typeName = t('Map/Infographic');
                     }
-                    $button .= '<li class="create-link-new"><a href="https://app.humanitarianresponse.info/' . $types[$type] . 's/new" target="_blank">' . $typeName .' (Try the new forms)</a></li>';
+                    $button .= '<li class="create-link-new"><a href="https://app.humanitarianresponse.info/' . $types[$type] . 's/new" target="_blank">' . $typeName .' (' . t('Try the new forms') . ')</a></li>';
                   }
                 }
               }
