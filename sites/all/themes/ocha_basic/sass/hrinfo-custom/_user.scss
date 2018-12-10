@@ -1,0 +1,21 @@
+//
+// Styles for User pages
+// --------------------------------------------------
+
+.user-teaser h3 {
+  display: none;
+}
+
+.user-teaser dl {
+  margin-bottom: 0;
+}
+
+.panel-2col-stacked .user-teaser .panel-separator {
+  margin-bottom: 0;
+}
+
+.user-full .pane-user-picture i {
+  font-size: 15em;
+  background-color: #E1E1E1;
+	margin-top: 40px;
+}

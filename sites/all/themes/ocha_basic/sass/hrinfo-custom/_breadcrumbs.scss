@@ -1,0 +1,33 @@
+.breadcrumbs {
+  list-style: none;
+  margin: 0;
+  padding: 10px 0 0 0;
+}
+
+.breadcrumbs-item {
+  display: inline-block;
+  text-transform: uppercase;
+  font-style: italic;
+  font-size: 11px;
+
+  &:after {
+    content: "/";
+  }
+
+  &:last-child {
+    &:after {
+      content: none;
+    }
+  }
+
+  a {
+    color: #656565;
+    padding: 0 5px 0 2px;
+  }
+
+  &:first-child {
+    a {
+      padding-left: 0;
+    }
+  }
+}
