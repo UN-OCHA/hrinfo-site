@@ -1,0 +1,13 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Header
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-site-header__inner {
+  .cssgrid.flexbox & {
+    grid-template-columns: 40px 1fr;
+
+    @include tablet {
+      grid-template-columns: 282px 1fr;
+    }
+  }
+}

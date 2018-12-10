@@ -67,8 +67,11 @@ $cd-white: #FFFFFF;
 $cd-black: #000000;
 
 // Custom colour palette
-$hrinfo-red: #bc2e3c;
-$hrinfo-dark-red: #9a2d3b;
+$hrinfo-red: #A02837;
+$hrinfo-dark-red: darken(#A02837, 5%);
+$hrinfo-higlight-red: #F15156; // To be used on white background.
+$hrinfo-light: #FFC7C9; // To be used on red background.
+$hrinfo-higlight-blue: #67AAF9; //
 // Get rid of this eventually
 $p-main: $hrinfo-red;
 

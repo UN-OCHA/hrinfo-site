@@ -26,7 +26,12 @@
 @import 'components/_tables';
 
 // HRinfo CD overrides and custom
-@import 'hrinfo-custom/_cd-language-switcher.scss';
-@import 'hrinfo-custom/_cd-logo.scss';
-@import 'hrinfo-custom/_cd-ocha.scss';
-@import 'hrinfo-custom/_cd-user-menu.scss';
+@import 'hrinfo-custom/cd/_cd-dropdowns-drupal';
+@import 'hrinfo-custom/cd/_cd-footer';
+@import 'hrinfo-custom/cd/_cd-language-switcher';
+@import 'hrinfo-custom/cd/_cd-logo';
+@import 'hrinfo-custom/cd/_cd-header';
+@import 'hrinfo-custom/cd/_cd-nav';
+@import 'hrinfo-custom/cd/_cd-ocha';
+@import 'hrinfo-custom/cd/_cd-search--inline';
+@import 'hrinfo-custom/cd/_cd-user-menu';

@@ -1,0 +1,79 @@
+/**
+ * Common Design Search form in header.
+ */
+
+.cd-search--inline_btn {
+  color: $hrinfo-higlight-red;
+
+  svg {
+    fill: $hrinfo-higlight-blue;
+  }
+
+  &:hover,
+  &:focus {
+    color: $hrinfo-higlight-blue;
+
+    svg {
+      fill: $hrinfo-higlight-blue;
+    }
+  }
+
+  &:focus {
+    color: $hrinfo-higlight-blue;
+
+    svg {
+      fill: $hrinfo-higlight-blue;
+    }
+  }
+
+  .open & {
+    color: $hrinfo-higlight-blue;
+
+    svg {
+      fill: $hrinfo-higlight-blue;
+    }
+
+    &:hover,
+    &:focus {
+      color: $hrinfo-higlight-blue;
+    }
+  }
+}
+
+.cd-search--inline_btn-text {
+  .open & {
+    color: $hrinfo-higlight-blue;
+  }
+}
+
+.cd-search--inline__submit {
+  &.js-has-focus,
+  &:hover,
+  &:focus {
+    background-color: $hrinfo-higlight-blue;
+  }
+}
+
+// Start inline search for desktop only.
+@include desktop {
+
+  .cd-search--inline__form-inner.js-has-focus {
+    &::before {
+      background: $hrinfo-higlight-blue;
+    }
+  }
+
+  .cd-search--inline__submit {
+    svg {
+      fill: $hrinfo-higlight-blue;
+    }
+
+    &.js-has-focus,
+    &:hover,
+    &:focus {
+      svg {
+        fill: $hrinfo-higlight-blue;
+      }
+    }
+  }
+}

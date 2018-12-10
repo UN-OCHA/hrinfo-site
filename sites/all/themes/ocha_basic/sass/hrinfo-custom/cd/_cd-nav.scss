@@ -1,0 +1,118 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Main Navigation
+//——————————————————————————————————————————————————————————————————————————————
+.cd-site-header__nav-toggle {
+
+  .icon--arrow-down {
+    fill: $hrinfo-higlight-red;
+  }
+
+  .open & {
+    &:before {
+      background: $hrinfo-higlight-red;
+    }
+  }
+}
+
+// Active trail for mobile menu.
+@include max-width(lg) {
+
+  .cd-nav > ul > li {
+    > a.active:before,
+    > a.active.active-trail:before {
+      background: $hrinfo-higlight-red;
+    }
+
+    // First level menu item with children.
+    // Classes based on Drupal menu item configuration.
+    &.collapsed,
+    &.expanded {
+      > a.active:before,
+      > a.active.active-trail:before {
+        background: rgba($hrinfo-higlight-red, 0.2);
+      }
+    }
+
+    &.active-trail {
+
+      a {
+        &:before {
+          background: rgba($hrinfo-higlight-red, 0.2);
+        }
+
+        a.active:before {
+          background: $hrinfo-higlight-red;
+        }
+      }
+    }
+
+    > ul > li.active-trail {
+
+      a:before {
+        background: rgba($hrinfo-higlight-red, 0.6);
+      }
+
+      a.active:before {
+        background: $hrinfo-higlight-red;
+      }
+    }
+
+  }
+}
+
+@include desktop {
+  .cd-nav > ul > li,
+  .cd-nav__item {
+
+    &.open {
+
+      > a,
+      > button {
+
+        &:before {
+          background: $hrinfo-higlight-red;
+        }
+
+        &:focus {
+          &:before {
+            background: $hrinfo-higlight-red;
+          }
+        }
+      }
+    }
+
+    > a,
+    > button {
+      &.active,
+      &.active-trail,
+      &.active-trail.active,
+      &:focus {
+        &:before {
+          background: $hrinfo-higlight-red;
+        }
+      }
+    }
+  }
+
+  .cd-nav > ul > li > ul,
+  ul.cd-nav__child-nav {
+    a,
+    button {
+      &.active-trail {
+        border-left: 3px solid rgba($hrinfo-higlight-red, 0.6);
+      }
+
+      &.active {
+        border-left: 3px solid rgba($hrinfo-higlight-red, 0.2);
+      }
+    }
+
+    > li.active-trail a {
+      border-left: 3px solid rgba($hrinfo-higlight-red, 0.2);
+
+      &.active {
+        border-left: 3px solid $hrinfo-higlight-red;
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Drupal dropdowns for nested menus
+//——————————————————————————————————————————————————————————————————————————————
+.cd-nav {
+  .expanded {
+    .icon--arrow-down {
+      fill: $hrinfo-higlight-red;
+    }
+  }
+}
