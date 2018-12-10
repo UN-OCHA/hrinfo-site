@@ -48,7 +48,7 @@ function drush_hr_users_og_remove() {
           }
         }
         catch ($e) {
-          
+          debug($e->getMessage());
         }
       }
     }
