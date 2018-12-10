@@ -6,18 +6,10 @@
   color: $hrinfo-higlight-red;
 
   svg {
-    fill: $hrinfo-higlight-blue;
+    fill: $hrinfo-higlight-red;
   }
 
   &:hover,
-  &:focus {
-    color: $hrinfo-higlight-blue;
-
-    svg {
-      fill: $hrinfo-higlight-blue;
-    }
-  }
-
   &:focus {
     color: $hrinfo-higlight-blue;
 
@@ -40,16 +32,8 @@
   }
 }
 
-.cd-search--inline_btn-text {
-  .open & {
-    color: $hrinfo-higlight-blue;
-  }
-}
-
 .cd-search--inline__submit {
-  &.js-has-focus,
-  &:hover,
-  &:focus {
+  &.js-has-focus {
     background-color: $hrinfo-higlight-blue;
   }
 }
@@ -59,18 +43,20 @@
 
   .cd-search--inline__form-inner.js-has-focus {
     &::before {
-      background: $hrinfo-higlight-blue;
+     background: $hrinfo-higlight-blue;
     }
   }
 
   .cd-search--inline__submit {
+    background-color: $cd-white;
     svg {
-      fill: $hrinfo-higlight-blue;
+      fill: $hrinfo-higlight-red;
     }
 
     &.js-has-focus,
     &:hover,
     &:focus {
+      background-color: $cd-mid-bluey-grey;
       svg {
         fill: $hrinfo-higlight-blue;
       }
