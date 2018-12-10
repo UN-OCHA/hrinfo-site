@@ -74,6 +74,8 @@ $hrinfo-light: #FFC7C9; // To be used on red background.
 $hrinfo-higlight-blue: #67AAF9; //
 // Get rid of this eventually
 $p-main: $hrinfo-red;
+$p-comp: $cd-ocha-blue;
+$pane-title: $cd-ocha-blue;
 
 
 
@@ -82,6 +84,7 @@ $cd-contrast-red: #E00000;
 
 // Background colours
 $cd-site-bg-color: $cd-mid-bluey-grey;
+$cd-site-bg-color--dark: darken($cd-site-bg-color, 5%);
 $cd-white-bg-color: $cd-white;
 $cd-primary-bg-color: $hrinfo-red;
 $cd-dark-primary-bg-color: $hrinfo-dark-red;
