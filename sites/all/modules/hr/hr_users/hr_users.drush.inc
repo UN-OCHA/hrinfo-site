@@ -41,9 +41,14 @@ function drush_hr_users_og_remove() {
     $groups = og_get_groups_by_user($user);
     if (!empty($groups) && !empty($groups['node'])) {
       foreach ($groups['node'] as $gid) {
-        $roles = og_get_user_roles('node', $gid, $user->uid);
-        if (count($roles) == 1) {
-          og_ungroup('node', $gid, 'user', $user->uid);
+        try {
+          $roles = og_get_user_roles('node', $gid, $user->uid);
+          if (count($roles) == 1) {
+            og_ungroup('node', $gid, 'user', $user->uid);
+          }
+        }
+        catch ($e) {
+          
         }
       }
     }
