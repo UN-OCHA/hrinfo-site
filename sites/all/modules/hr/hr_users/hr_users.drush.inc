@@ -47,8 +47,7 @@ function drush_hr_users_og_remove() {
             og_ungroup('node', $gid, 'user', $user->uid);
           }
         }
-        catch ($e) {
-          debug($e->getMessage());
+        catch (Exception $e) {
         }
       }
     }
