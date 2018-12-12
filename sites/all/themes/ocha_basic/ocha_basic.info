@@ -4,6 +4,9 @@ screenshot = screenshot.png
 core = "7.x"
 engine = phptemplate
 
+; Base - Radix
+base theme  = radix
+
 ; ========================================
 ; Remove Drupal core stylesheets
 ; ========================================
@@ -19,8 +22,11 @@ stylesheets[all][] = css/styles.css
 ; ========================================
 scripts[] = js/bootstrap-dropdown.js
 scripts[] = js/custom-menu.js
-scripts[] = js/custom-search.js
+;scripts[] = js/custom-search.js
 scripts[] = js/custom-search--inline.js
+scripts[] = js/custom-hrinfo.js
+;scripts[] = js/respond.min.js
+scripts[] = js/highcharts.js
 
 ; ========================================
 ; Regions
@@ -35,6 +41,8 @@ regions[footer_navigation] = Footer navigation
 regions[footer_logos] = Footer logos
 regions[footer_info] = Footer info
 regions[footer_license] = Footer license
+regions[navigation] = Navigation
+
 
 ; ========================================
 ; Modernizr Test API
@@ -49,3 +57,8 @@ modernizr[tests][] = setclasses
 ; Advanced Theme Settings
 ; ========================================
 settings[ocha_basic_debug] = 0
+
+
+; Panels
+plugins[panels][layouts] = panels/layouts
+plugins[panels][styles] = panels/styles
