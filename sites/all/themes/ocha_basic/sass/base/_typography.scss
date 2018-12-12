@@ -31,7 +31,7 @@ h1, h2 ,h3 ,h4 ,h5 {
 
 h1.page-heading {
   padding-bottom: $cd-base-unit*1.5;
-  border-bottom: 1px solid $cd-mid-bluey-grey;
+  //border-bottom: 1px solid $cd-mid-bluey-grey;
   font-weight: 300;
 }
 
@@ -84,6 +84,13 @@ dt {
 
 dd {
   margin-bottom: $cd-base-unit;
+}
+
+
+ol, ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 @include min-width(sm) {

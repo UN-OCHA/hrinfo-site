@@ -247,7 +247,7 @@
 /* Featured documents and maps */
 .fieldable-panels-pane .view-mode-teaser.node-hr-infographic .container-fluid,
 .fieldable-panels-pane .view-mode-teaser.node-hr-document .container-fluid {
-  background-image: url('../images/backgrounds/BG_beige_grey.jpg');
+  background-image: url('../img/backgrounds/BG_beige_grey.jpg');
   background-repeat: no-repeat;
   padding-right: 0;
   padding-left: 0;
@@ -288,7 +288,7 @@
 .og-context-node-84 {
   .fieldable-panels-pane .view-mode-teaser.node-hr-infographic .container-fluid,
   .fieldable-panels-pane .view-mode-teaser.node-hr-document .container-fluid {
-    background-image: url('../images/backgrounds/BG_green_2.jpg');
+    background-image: url('../img/backgrounds/BG_green_2.jpg');
   }
 }
 
@@ -305,7 +305,7 @@
 
   .views-field-field-files li,
   .views-field-field-links li {
-    color: $brand-primary;
+    color: $cd-ocha-blue;
   }
 
   img.file-icon {
@@ -320,7 +320,7 @@
 
       span.file{
         display: inline-block;
-        background-image: url('../images/icons/38/Applications/APP_tools.png');
+        background-image: url('../img/icons/38/Applications/APP_tools.png');
         background-repeat: no-repeat;
         padding-left: 50px;
         padding-top: 10px;
@@ -333,7 +333,7 @@
   }
 
   a{
-    color:$brand-primary;
+    color:$cd-ocha-blue;
   }
 
 }
@@ -407,7 +407,7 @@
 
   .tab-content,
   .tab-pane {
-    background-color: $tabs-active-background;
+    background-color: $cd-light-grey;
     height: 300px;
   }
 
@@ -431,13 +431,13 @@
   a.list-group-item {
     border: none;
     background-color: transparent;
-    color: $tabs-text;
+    color: $cd-default-text-color;
 
     &.active,
     &.active:hover,
     &.active:focus {
-      color: $tabs-active-text;
-      @include background-image(linear-gradient(to bottom right, #ffffff, #e7e7e7));
+      color: $cd-dark-text-color;
+      background-image: linear-gradient(to bottom right, #ffffff, #e7e7e7);
       border-radius: 0;
     }
   }
@@ -470,14 +470,14 @@
 .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents {
   margin-bottom: 54px;
   h4 {
-    background-image:url('../images/icons/38/Homepage/DocumentsIcon38x38.png');
+    background-image:url('../img/icons/38/Homepage/DocumentsIcon38x38.png');
   }
 }
 
 .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system {
   margin-bottom: 54px;
   h4 {
-    background-image:url('../images/icons/38/Homepage/CoordinationIcon38x38.png');
+    background-image:url('../img/icons/38/Homepage/CoordinationIcon38x38.png');
   }
   .chosen-container {
     margin-top: -5px;
@@ -486,7 +486,7 @@
 
 .panel-pane.pane-block.pane-hr-operations-operations-dropdown {
   h4 {
-    background-image:url('../images/icons/38/Homepage/OperationsIcon38x38.png');
+    background-image:url('../img/icons/38/Homepage/OperationsIcon38x38.png');
   }
   p {
     margin-left: -15px;
@@ -506,13 +506,13 @@
     padding: 0;
 
     .pane-title {
-      border-bottom: 1px solid $pb-border;
+      border-bottom: 1px solid $cd-border-color;
       font-weight: normal;
       font-size: 14px;
       padding: 0 80px 6px 5px;
       margin: 0;
       text-transform: uppercase;
-      color: $pb-sub-heading-text;
+      color: $cd-mid-grey;
 
       &:after {
         content: none;
@@ -545,12 +545,12 @@
     }
 
     .pane-title + .pane-content {
-      border-bottom: 1px solid $pb-border;
+      border-bottom: 1px solid $cd-border-color;
       padding: 25px 5px;
     }
 
     a {
-      color: $pb-link-text;
+      color: $cd-ocha-blue;
       font-weight: normal
     }
 
@@ -572,7 +572,7 @@
           border: none;
           height: 100%;
           padding: 6px 10px;
-          color: $pb-sub-heading-text;
+          color: $cd-mid-grey;
 
           &:hover, &:focus {
             border: none;
@@ -626,7 +626,7 @@
 
         img {
           max-width: 100%;
-          border: 1px solid $pb-grey-bg;
+          border: 1px solid $cd-border-color;
         }
       }
 
@@ -740,7 +740,7 @@
             margin: 0 auto;
             text-align: center;
             padding: 5px;
-            border: 1px solid $pb-border;
+            border: 1px solid $cd-border-color;
 
             img {
               max-width: 100%;
@@ -749,7 +749,7 @@
           }
 
           .hr-thumbnail-no-image {
-            background: url('../images/download-icon.svg') 8px center no-repeat;
+            background: url('../img/icons/download-icon.svg') 8px center no-repeat;
             background-size: 16px;
             text-align: left;
             padding: 10px 10px 10px 34px;
@@ -772,7 +772,7 @@
 
             &:before {
               content: '';
-              background: url('../images/download-icon.svg') center no-repeat;
+              background: url('../img/icons/download-icon.svg') center no-repeat;
               background-size: 16px;
               width: 16px;
               height: 16px;
@@ -792,11 +792,11 @@
         }
 
         a.list-group-item {
-          border-bottom: 1px solid $pb-border;
+          border-bottom: 1px solid $cd-border-color;
 
           &.active {
-            background: $pb-grey-bg;
-            color: $pb-link-text;
+            background: $cd-light-bg-color;
+            color: $cd-ocha-blue;
           }
 
           &:last-child {

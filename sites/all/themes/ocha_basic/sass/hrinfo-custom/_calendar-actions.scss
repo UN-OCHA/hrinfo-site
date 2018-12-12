@@ -36,7 +36,7 @@ $base-unit: 8px;
 
 			li.active-result {
 				&.highlighted {
-					background: $brand-primary;
+					background: $hrinfo-red;
 				}
 			}
 
@@ -46,7 +46,7 @@ $base-unit: 8px;
 	.chosen-container-single.chosen-container-active {
 
 		.chosen-single {
-			border-color: $brand-primary;
+			border-color: $hrinfo-red;
 		}
 
 	}
@@ -77,7 +77,7 @@ $base-unit: 8px;
 				width: $base-unit*3;
 
 				b {
-		    	background: url(../images/arrow-down.svg) center no-repeat !important; // to over ride chosen sprite media queries
+		    	background: url(../img/icons/arrow-down.svg) center no-repeat !important; // to over ride chosen sprite media queries
 		    	background-size: 10px 10px!important;
 		    }
 		  }
