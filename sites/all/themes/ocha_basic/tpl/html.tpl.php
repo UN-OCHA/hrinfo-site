@@ -10,8 +10,8 @@
 
 ?>
 <!DOCTYPE html>
-<html lang="<?php print $language->language; ?>">
-<head>
+<html lang="<?php print $language->language; ?>" dir="<?php print $language->dir; ?>"<?php print $rdf_namespaces; ?>>
+<head profile="<?php print $grddl_profile; ?>">
   <?php print $head; ?>
   <title><?php print $head_title; ?></title>
   <?php print $styles; ?>
@@ -27,6 +27,6 @@
   <?php print $page_bottom; ?>
 
   <?php echo file_get_contents( 'sites/all/themes/ocha_basic/img/icons/icons-sprite.svg'); ?>
-
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 </html>
