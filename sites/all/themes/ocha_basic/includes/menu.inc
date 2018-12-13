@@ -29,7 +29,7 @@
 //function ocha_basic_menu_tree__main_menu(&$variables) {
 //  return _ocha_basic_menu_main_menu($variables);
 //}
-//
+
 //function ocha_basic_menu_tree__user_menu(&$variables) {
 //  global $user;
 //  $before = '<div class="btn-group">
@@ -54,19 +54,19 @@ function ocha_basic_menu_tree__menu_block(&$variables) {
 //  return _ocha_basic_menu_main_menu($variables);
 //}
 
-function ocha_basic_links__locale_block(&$variables) {
-  global $language;
-  unset($variables['links'][$language->language]);
-  $before = '<div class="btn-group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
-  $before .= strtoupper($language->language).' <span class="caret"></span></button><ul class="dropdown-menu" role="menu">';
-  $after = '</ul></div>';
-
-  foreach ($variables['links'] as &$link) {
-    $link['title'] = strtoupper($link['language']->language);
-  }
-
-  return $before.theme_links($variables).$after;
-}
+//function ocha_basic_links__locale_block(&$variables) {
+//  global $language;
+//  unset($variables['links'][$language->language]);
+//  $before = '<div class="btn-group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
+//  $before .= strtoupper($language->language).' <span class="caret"></span></button><ul class="dropdown-menu" role="menu">';
+//  $after = '</ul></div>';
+//
+//  foreach ($variables['links'] as &$link) {
+//    $link['title'] = strtoupper($link['language']->language);
+//  }
+//
+//  return $before.theme_links($variables).$after;
+//}
 
 /**
  * Implements theme_menu_link().
