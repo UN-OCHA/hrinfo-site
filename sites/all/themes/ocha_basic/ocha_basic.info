@@ -5,7 +5,7 @@ core = "7.x"
 engine = phptemplate
 
 ; Base - Radix
-base theme  = radix
+;base theme  = radix
 
 ; ========================================
 ; Remove Drupal core stylesheets
@@ -20,7 +20,7 @@ stylesheets[all][] = css/styles.css
 ; ========================================
 ; Scripts
 ; ========================================
-scripts[] = js/bootstrap-dropdown.js
+;scripts[] = js/bootstrap-dropdown.js
 scripts[] = js/custom-menu.js
 ;scripts[] = js/custom-search.js
 scripts[] = js/custom-search--inline.js
