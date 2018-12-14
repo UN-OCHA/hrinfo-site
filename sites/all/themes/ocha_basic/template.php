@@ -12,7 +12,6 @@ require_once dirname(__FILE__) . '/includes/panel.inc';
 require_once dirname(__FILE__) . '/includes/user.inc';
 require_once dirname(__FILE__) . '/includes/view.inc';
 
-
 /**
  * Implements hook_form_alter().
  */
@@ -114,21 +113,7 @@ function ocha_basic_preprocess_html(&$vars) {
       $variables['classes_array'][] = 'hr-group-context';
     }
   }
-
-  // Override Bootstrap version from Radix base theme
-  global $base_url;
-  $base = parse_url($base_url);
-  $url = $base['scheme'] . '://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js';
-  $jquery_ui_library = drupal_get_library('system', 'ui');
-  $jquery_ui_js = reset($jquery_ui_library['js']);
-  drupal_add_js($url, array(
-    'type' => 'external',
-    // We have to put Bootstrap after jQuery, but before jQuery UI.
-    'group' => JS_LIBRARY,
-    'weight' => $jquery_ui_js['weight'] - 1,
-  ));
 }
-
 /**
  * Implements template_preprocess_page().
  */
@@ -242,6 +227,10 @@ function ocha_basic_preprocess_page(&$vars) {
 
   $variables['hr_favorite_spaces'] = _ocha_basic_block_render('hr_bookmarks', 'hr_favorite_spaces');
 
+  // Bootstrap CDN.
+  drupal_add_js('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', 'external');
+
+  drupal_add_css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', 'external');
 }
 
 /**
