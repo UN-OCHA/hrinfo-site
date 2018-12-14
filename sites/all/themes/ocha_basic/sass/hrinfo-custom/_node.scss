@@ -549,6 +549,14 @@
     text-transform: uppercase;
     text-align: left;
     position: relative;
+    background: $pb-btn-color;
+
+    &:hover,
+    &:focus {
+      background: darken($pb-btn-color, 10%);
+      color: $cd-white;
+    }
+
     i {
       position: absolute;
       right: 10px;

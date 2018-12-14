@@ -8,8 +8,8 @@
 
     .pane-title {
       font-size: 13px;
-      color: $pane-title;
-      border-bottom: 1px dotted $pane-title;
+      color: $cd-default-text-color;
+      border-bottom: 1px dotted $cd-default-text-color;
       text-transform: uppercase;
       font-weight: bold;
       padding-bottom: 7px;
@@ -52,10 +52,10 @@
 }
 
 .hr-highlighted {
-  background-color: #F9F9F9;
+  background-color: $cd-white;
   padding: 7px;
-  border: 1px solid #FFF;
-  //@include box-shadow(rgba(black, 0.2) 1px 2px 2px);
+  border: 1px solid $cd-border-color;
+  box-shadow: rgba(black, 0.2) 1px 2px 2px;
   margin: 20px 0px;
 
   .panel-pane {
@@ -73,7 +73,7 @@
       margin-bottom: 10px;
       border-bottom: 1px dotted #dedede;
       margin-top: 2px;
-    color: $pane-title;
+      color: $cd-mid-grey;
       &:after {
         font-family: FontAwesome;
         float: right;
@@ -85,7 +85,7 @@
 
           ul {
             padding-left: 14px;
-            color: $cd-dark-grey;
+            color: $cd-default-text-color;
               li {
                 margin-left: 0px;
               }

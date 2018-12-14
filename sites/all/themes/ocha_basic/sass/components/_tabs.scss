@@ -31,7 +31,6 @@
     border: none;
     text-decoration: none;
     border-bottom: 2px solid $cd-site-bg-color;
-    color: $hrinfo-red;
 
     @media (min-width:768px) {
       min-width: 110px;
@@ -42,7 +41,6 @@
       border: none !important;
       border-bottom: 2px solid $cd-site-bg-color !important;
       background-color: $cd-site-bg-color;
-      color: $hrinfo-red;
     }
 
     &:focus {

@@ -16,11 +16,11 @@ div.region-top div.block {
 		font-size: 12px;
 
 		a {
-			color: #767676;
+			color: $cd-default-text-color;
 			padding: 2px 14px;
 
 			&.active {
-				color: #bc2e3b;
+				color: $cd-black;
 			}
 
 			.caret {

@@ -66,33 +66,17 @@ $cd-highlight-red: #EB5C6D;
 $cd-white: #FFFFFF;
 $cd-black: #000000;
 
-// Custom colour palette
+// This shade of red has been selected based on WCAG AAA requirements for contrast.
+$cd-contrast-red: #E00000;
+
+
+// Custom palette
 $hrinfo-red: #A02837;
 $hrinfo-dark-red: darken(#A02837, 5%);
 $hrinfo-higlight-red: #F15156; // To be used on white background.
 $hrinfo-light: #FFC7C9; // To be used on red background.
 $hrinfo-higlight-blue: #67AAF9; //
-// Get rid of this eventually
-$p-main: $hrinfo-red;
-$p-comp: $cd-ocha-blue;
-$pane-title: $cd-ocha-blue;
 
-$p-contacts: #a494d8;
-$p-documents: #27b298;
-$p-visuals: #60b75a;
-$p-assessments: #a8b761;
-$p-activities: #ffd247;
-$p-events: #ffb347;
-
-$p-meetings: #266ed9;
-$p-trainings: #8254c8;
-$p-workshops: #cf4cb2;
-$p-conferences: #cf3661;
-
-
-
-// This shade of red has been selected based on WCAG AAA requirements for contrast.
-$cd-contrast-red: #E00000;
 
 // Background colours
 $cd-site-bg-color: $cd-mid-bluey-grey;
@@ -117,6 +101,32 @@ $cd-dark-text-color: #000;
 $cd-blue-text-color: $cd-ocha-blue;
 $cd-bright-blue-text-color: $cd-bright-blue;
 
+
+// Custom colour palette from radix? panels? Lisa to find out
+$p-contacts: #a494d8;
+$p-documents: #27b298;
+$p-visuals: #60b75a;
+$p-assessments: #a8b761;
+$p-activities: #ffd247;
+$p-events: #ffb347;
+
+$p-meetings: #266ed9;
+$p-trainings: #8254c8;
+$p-workshops: #cf4cb2;
+$p-conferences: #cf3661;
+
+// Get rid of this eventually
+$p-main: $hrinfo-red;
+$p-comp: $cd-ocha-blue;
+// Powered by colours
+$pb-heading-text: #1977d4;
+$pb-sub-heading-text: #666;
+$pb-text: #3d3d3f;
+$pb-link-text: #1565b5;
+$pb-grey-bg: #e6e6e6;
+$pb-border: #ccc;
+$pb-btn-color: $pb-link-text;
+$pb-type-bf: #e5edf5;
 
 //——————————————————————————————————————————————————————————————————————————————
 // Fonts
@@ -149,3 +159,6 @@ $zindex: (
   dropdown: 200,
   skip-link: 1000
 );
+
+
+
