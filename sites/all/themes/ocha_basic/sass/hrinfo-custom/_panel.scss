@@ -1,6 +1,12 @@
 //
 // Styles for panels and panes.
 // --------------------------------------------------
+.panel-pane ul {
+  list-style-type: disc;
+  margin: 1rem 0;
+  padding-left: 1rem;
+}
+
 
 .front {
   .panel-pane {
@@ -17,7 +23,7 @@
     }
     .pane-content {
       a {
-        color: $p-main;
+        color: $hrinfo-red;
       }
     }
 
@@ -407,7 +413,7 @@
 
   .tab-content,
   .tab-pane {
-    background-color: $cd-light-grey;
+    background-color: $cd-site-bg-color;
     height: 300px;
   }
 
@@ -447,7 +453,7 @@
 //Homepage blocks styling.
 
 .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents, .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system, .panel-pane.pane-block.pane-hr-operations-operations-dropdown {
-  background-color: #F9F9F9;
+  background-color: #f9f9f9;
   padding: 7px;
   border: 1px solid #FFF;
   -webkit-box-shadow: rgba(0,0,0,0.2) 1px 2px 2px;

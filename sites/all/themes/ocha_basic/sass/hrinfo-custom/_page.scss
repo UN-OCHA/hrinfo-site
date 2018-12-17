@@ -36,30 +36,30 @@
   height: 104px;
 }
 
-//#root {
-//  padding: 0;
-//}
-//
-//a {
-//  color: $p-main;
-//  word-wrap: break-word;
-//
-//  &:hover {
-//    color: darken($p-main, 10%);
-//  }
-//
-//  .region-content & {
-//    color: $p-comp;
-//    font-weight: bold;
-//  }
-//
-//  &.btn {
-//    color: white;
-//    &.btn-default {
-//      color: #333;
-//    }
-//  }
-//}
+#root {
+  padding: 0;
+}
+
+a {
+  color: $p-main;
+  word-wrap: break-word;
+
+  &:hover {
+    color: darken($p-main, 10%);
+  }
+
+  .region-content & {
+    color: $p-comp;
+    font-weight: bold;
+  }
+
+  &.btn {
+    color: white;
+    &.btn-default {
+      color: #333;
+    }
+  }
+}
 
 p {
   margin: 0 0 20px;
@@ -73,27 +73,27 @@ p {
   height: 22px;
 }
 
-body div.messages {
-  border: 0;
-  padding: 11px 15px;
-  background-image: none;
-  border-radius: 4px;
-  color: white;
-  text-shadow: rgba(black, 0.4) 0px 1px 0;
-  font-weight: bold;
-
-  &.status {
-    background: $p-visuals;
-  }
-
-  &.warning {
-    background: $p-events;
-  }
-
-  &.error {
-    background: $p-main;
-  }
-}
+//body div.messages {
+//  border: 0;
+//  padding: 11px 15px;
+//  background-image: none;
+//  border-radius: 4px;
+//  color: white;
+//  text-shadow: rgba(black, 0.4) 0px 1px 0;
+//  font-weight: bold;
+//
+//  &.status {
+//    background: $p-visuals;
+//  }
+//
+//  &.warning {
+//    background: $p-events;
+//  }
+//
+//  &.error {
+//    background: $p-main;
+//  }
+//}
 
 #messages {
   margin-top: 10px;

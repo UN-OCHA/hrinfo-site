@@ -38,7 +38,7 @@
 .page-node.node-type-hr-toolbox-item,
 .page-node-ar-assessments,
 .page-user {
-  #page-header .title {
+  #page-header .page-heading {
     display: none;
   }
 }
@@ -62,7 +62,7 @@
   padding-bottom: 10px;
 
   .container-fluid {
-    background-color: #F9F9F9;
+    background-color: #f9f9f9;
     border: 1px solid #FFF;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
     border-right: 5px solid $p-comp;
@@ -213,7 +213,7 @@
 
 .view-mode-search-result {
 
-  background-color: #F9F9F9;
+  background-color: #f9f9f9;
   border: 1px solid #FFF;
   margin: 1%;
   padding: 0;
@@ -461,7 +461,7 @@
       }
     }
     border-radius: 10px;
-    background-color: #bbd9e1;
+    background-color: $cd-site-bg-color;
     color: $p-comp;
     padding: 10px;
     hr {
@@ -549,11 +549,12 @@
     text-transform: uppercase;
     text-align: left;
     position: relative;
-    background: $pb-btn-color;
+    background: $cd-ocha-blue;
+    border-color: $cd-dark-blue;
 
     &:hover,
     &:focus {
-      background: darken($pb-btn-color, 10%);
+      background: $cd-dark-blue;
       color: $cd-white;
     }
 
@@ -596,7 +597,7 @@
       font-family: Exo;
       font-size: 1.1em;
       &.archived {
-        background-color: $p-main;
+        background-color: $hrinfo-red;
       }
       i {
         display: block;

@@ -12,7 +12,7 @@ div.region-top div.block {
 
 	.block {
 		padding: 15px;
-		background-color: #dfdfdf;
+		background-color: #f9f9f9;
 		font-size: 12px;
 
 		a {
@@ -30,12 +30,16 @@ div.region-top div.block {
 
 		li ul {
 			list-style-type: disc;
-			color: #A7A7A7;
+			color: $cd-default-text-color;
 
 			a {
 				padding: 2px;
 			}
 		}
+
+    .btn-primary {
+      color: $cd-white;
+    }
 	}
 
 
