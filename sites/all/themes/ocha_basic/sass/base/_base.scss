@@ -19,6 +19,7 @@ html, input {
 body {
   font-family: $cd-font;
   @include font-size($cd-font-size-base);
+  font-size: 13px;
   color: $cd-dark-grey;
   line-height: 1.5;
 
