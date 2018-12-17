@@ -44,7 +44,7 @@ a {
 
   &:hover, &:focus {
     color: $cd-ocha-blue;
-    text-decoration: none;
+    //text-decoration: none;
   }
 }
 
@@ -65,9 +65,9 @@ ol {
 //  margin-bottom: $cd-base-unit/4;
 //}
 
-strong {
-  font-weight: 400;
-}
+//strong {
+//  font-weight: 400;
+//}
 
 em {
   font-style: italic;
@@ -87,7 +87,7 @@ dd {
 }
 
 
-ol, ul {
+ul {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -102,9 +102,9 @@ ol, ul {
   //  @include font-size($cd-font-size-base);
   //}
 
-  ol, dl {
-    @include font-size($cd-font-size-base);
-  }
+  //ol, dl {
+  //  @include font-size($cd-font-size-base);
+  //}
 
   //li {
   //  margin-bottom: $cd-base-unit/2;
