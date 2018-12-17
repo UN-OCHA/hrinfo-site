@@ -81,6 +81,7 @@ $hrinfo-higlight-blue: #67AAF9; //
 // Background colours
 $cd-site-bg-color: $cd-mid-bluey-grey;
 $cd-site-bg-color--dark: darken($cd-site-bg-color, 5%);
+$cd-site-bg-color--light: lighten($cd-site-bg-color, 5%);
 $cd-white-bg-color: $cd-white;
 $cd-primary-bg-color: $hrinfo-red;
 $cd-dark-primary-bg-color: $hrinfo-dark-red;
@@ -118,6 +119,7 @@ $p-conferences: #cf3661;
 // Get rid of this eventually
 $p-main: $hrinfo-red;
 $p-comp: $cd-ocha-blue;
+
 // Powered by colours
 $pb-heading-text: #1977d4;
 $pb-sub-heading-text: #666;
@@ -133,6 +135,12 @@ $pb-type-bf: #e5edf5;
 //——————————————————————————————————————————————————————————————————————————————
 
 $cd-font: helvetica, arial, sans-serif;
+
+@import url(https://fonts.googleapis.com/css?family=Exo:100,200,300,400,500,600,700);
+
+.fa-at:before {
+  content: "\f1fa";
+}
 
 
 //——————————————————————————————————————————————————————————————————————————————
