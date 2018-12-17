@@ -231,6 +231,8 @@ function ocha_basic_preprocess_page(&$vars) {
   drupal_add_js('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', 'external');
 
   drupal_add_css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', 'external');
+
+  drupal_add_css('https://use.fontawesome.com/releases/v5.6.1/css/all.css', 'external');
 }
 
 /**
