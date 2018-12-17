@@ -34,20 +34,7 @@
 <section class="cd-soft-footer">
   <div class="cd-container cd-soft-footer__inner">
 
-    <div class="col-md-12 footer-logos">
-        <div class="column col-md-1"><a href="http://fts.unocha.org" target="_blank"><div class="footer-logo footer-logo-fts"></div></a></div>
-        <div class="column col-md-1"><a href="https://humanitarian.id" target="_blank"><div class="footer-logo footer-logo-hid"></div></a></div>
-        <div class="column col-md-1"><a href="http://www.gdacs.org" target="_blank"><div class="footer-logo footer-logo-gdacs"></div></a></div>
-        <div class="column col-md-1"><a href="http://www.unocha.org/cerf/" target="_blank"><div class="footer-logo footer-logo-cerf"></div></a></div>
-        <div class="column col-md-1"><a href="http://www.reliefweb.int/" target="_blank"><div class="footer-logo footer-logo-reliefweb"></div></a></div>
-        <div class="column col-md-1"><a href="http://www.insarag.org/" target="_blank"><div class="footer-logo footer-logos-insarag"></div></a></div>
-        <div class="column col-md-1"><a href="https://interagencystandingcommittee.org/" target="_blank"><div class="footer-logo footer-logo-iasc"></div></a></div>
-        <div class="column col-md-1"><a href="http://www.redhum.org" target="_blank"><div class="footer-logo footer-logo-redhum"></div></a></div>
-        <div class="column col-md-1"><a href="http://www.preventionweb.net/" target="_blank"><div class="footer-logo footer-logo-pw"></div></a></div>
-        <div class="column col-md-1"><a href="<?php print variable_get('humdata_base_url', 'https://data.humdata.org'); ?>" target="_blank"><div class="footer-logo footer-logo-hdx"></div></a></div>
-        <div class="column col-md-1"><a href="http://vosocc.unocha.org" target="_blank"><div class="footer-logo footer-logo-vosocc"></div></a></div>
-        <div class="column col-md-1"><a href="http://agendaforhumanity.org/" target="_blank"><div class="footer-logo footer-logo-pact"></div></a></div>
-    </div>
+    <?php print $content; ?>
 
   </div>
 </section>
