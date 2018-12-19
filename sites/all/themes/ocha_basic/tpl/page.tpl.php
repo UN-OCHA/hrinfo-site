@@ -42,9 +42,9 @@
     </div>
   </div>
 
-  <?php if($is_front): ?>
-    <div id="front-banner"></div>
-  <?php endif; ?>
+<!--  --><?php //if($is_front): ?>
+<!--    <div id="front-banner"></div>-->
+<!--  --><?php //endif; ?>
 
 
   <!-- Logo for printed pages -->
