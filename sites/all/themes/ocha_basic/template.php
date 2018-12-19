@@ -37,7 +37,7 @@ function ocha_basic_form_alter(&$form, &$form_state, $form_id) {
   }
 
   // This is for a Views exposed form search block.
-  if ($form_id == 'views_exposed_form') {
+  if ($form['#id'] == 'views-exposed-form-hr-search-page') {
     $form['#attributes']['role'] = 'search';
     $form['#attributes']['class'][] = 'cd-search--inline__form';
     $form['#attributes']['aria-labelledby'][] = 'cd-search-btn';
