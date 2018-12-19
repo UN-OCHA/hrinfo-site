@@ -28,7 +28,7 @@
       }
       salaHumanitariaLogo();
 
-      $(document).ready(function() {
+      //$(document).ready(function() {
 
         //trigger resize
         $(window).resize();
@@ -91,7 +91,7 @@
           document.location.href = $(this).val();
         });
 
-      });
+      //});
 
       // $(window).resize(function() {
       //
