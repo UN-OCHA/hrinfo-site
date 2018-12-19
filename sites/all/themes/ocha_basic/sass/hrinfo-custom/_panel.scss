@@ -61,7 +61,7 @@
   background-color: $cd-white;
   padding: 7px;
   border: 1px solid $cd-border-color;
-  box-shadow: rgba(black, 0.2) 1px 2px 2px;
+  //box-shadow: rgba(black, 0.2) 1px 2px 2px;
   margin: 20px 0px;
 
   .panel-pane {
@@ -413,7 +413,7 @@
 
   .tab-content,
   .tab-pane {
-    background-color: $cd-site-bg-color;
+    background-color: $cd-site-bg-color--light;
     height: 300px;
   }
 
@@ -453,11 +453,11 @@
 //Homepage blocks styling.
 
 .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents, .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system, .panel-pane.pane-block.pane-hr-operations-operations-dropdown {
-  background-color: #f9f9f9;
+  background-color: $cd-site-bg-color--light;
   padding: 7px;
-  border: 1px solid #FFF;
-  -webkit-box-shadow: rgba(0,0,0,0.2) 1px 2px 2px;
-  box-shadow: rgba(0,0,0,0.2) 1px 2px 2px;
+  //border: 1px solid #FFF;
+  //-webkit-box-shadow: rgba(0,0,0,0.2) 1px 2px 2px;
+  //box-shadow: rgba(0,0,0,0.2) 1px 2px 2px;
 
   li {
     margin-bottom: 5px;
