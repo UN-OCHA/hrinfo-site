@@ -5,10 +5,10 @@
  * Template overrides, preprocess, and alter hooks for the OCHA Basic theme.
  */
 
-require_once dirname(__FILE__) . '/includes/structure.inc';
+require_once dirname(__FILE__) . '/includes/form.inc';
 require_once dirname(__FILE__) . '/includes/menu.inc';
-require_once dirname(__FILE__) . '/includes/node.inc';
 require_once dirname(__FILE__) . '/includes/panel.inc';
+require_once dirname(__FILE__) . '/includes/structure.inc';
 require_once dirname(__FILE__) . '/includes/user.inc';
 require_once dirname(__FILE__) . '/includes/view.inc';
 
@@ -110,9 +110,26 @@ function ocha_basic_preprocess_html(&$vars) {
 
   if ($node = menu_get_object()) {
     if (og_is_group('node', $node->nid)) {
-      $variables['classes_array'][] = 'hr-group-context';
+      $vars['classes_array'][] = 'hr-group-context';
     }
   }
+
+  // Add some custom classes for panels pages.
+  if (module_exists('page_manager') && count(page_manager_get_current_page())) {
+    $vars['is_panel'] = TRUE;
+
+    // Get the current panel display and add some classes to body.
+    if ($display = panels_get_current_page_display()) {
+      $vars['classes_array'][] = 'panel-layout-' . $display->layout;
+
+      // Add a custom class for each region that has content.
+      $regions = array_keys($display->panels);
+      foreach ($regions as $region) {
+        $vars['classes_array'][] = 'panel-region-' . $region;
+      }
+    }
+  }
+
 }
 /**
  * Implements template_preprocess_page().
@@ -161,7 +178,7 @@ function ocha_basic_preprocess_page(&$vars) {
 
   global $theme_path;
 
-  $variables['hr_tabs'] = array();
+  $vars['hr_tabs'] = array();
   $header_img_path = $theme_path.'/img/headers/general.png';
   if (module_exists('og_context')) {
     $gid = og_context_determine_context('node');
@@ -171,7 +188,7 @@ function ocha_basic_preprocess_page(&$vars) {
       if ($og_group->type == 'hr_operation') {
         // Salahumanitaria logo
         if ($og_group->nid == 77) { // Nid of the Colombia operation
-          $variables['logo'] = '/sites/all/themes/ocha_basic/img/logos/salahumanitaria_logo.png';
+          $vars['logo'] = '/sites/all/themes/ocha_basic/img/logos/salahumanitaria_logo.png';
         }
         if (!empty($og_group->field_operation_type) && !empty($og_group->field_operation_region) && $og_group->field_operation_type[LANGUAGE_NONE][0]['value'] == 'country') {
           // Determine the region of the operation
@@ -182,7 +199,7 @@ function ocha_basic_preprocess_page(&$vars) {
           switch ($region_status) {
             case 'active':
               // Add the region to the tabs
-              $variables['hr_tabs'][] = l($region->title, $region_uri['path'], $region_uri['options']);
+              $vars['hr_tabs'][] = l($region->title, $region_uri['path'], $region_uri['options']);
               break;
             case 'inactive':
               break;
@@ -194,7 +211,7 @@ function ocha_basic_preprocess_page(&$vars) {
       elseif ($og_group->type == 'hr_disaster') {
         $glide = $og_group->field_glide_number[LANGUAGE_NONE][0]['value'];
         if ($glide == 'EP-2014-000041-GIN') {
-          $variables['logo'] = '/sites/all/themes/ocha_basic/img/logos/unmeer_logo.png';
+          $vars['logo'] = '/sites/all/themes/ocha_basic/img/logos/unmeer_logo.png';
         }
       }
       elseif ($og_group->type == 'hr_bundle') {
@@ -203,15 +220,15 @@ function ocha_basic_preprocess_page(&$vars) {
         if (!empty($op_gid)) {
           $operation = entity_load_single('node', $op_gid);
           $op_uri = entity_uri('node', $operation);
-          $variables['hr_tabs'][] = l($operation->title, $op_uri['path'], $op_uri['options']);
+          $vars['hr_tabs'][] = l($operation->title, $op_uri['path'], $op_uri['options']);
         }
       }
       $uri = entity_uri('node', $og_group);
       if ($og_group->status) { // Group is published
-        $variables['hr_tabs'][] = l($og_group->title, $uri['path'], $uri['options']);
+        $vars['hr_tabs'][] = l($og_group->title, $uri['path'], $uri['options']);
       }
       else {
-        $variables['hr_tabs'][] = '<a href="#">'.$og_group->title.'</a>';
+        $vars['hr_tabs'][] = '<a href="#">'.$og_group->title.'</a>';
       }
       $group_img_path = '/img/headers/'.$og_group->type.'/'.strtolower(str_replace(array(' ','/'), '-', $og_group->title)).'.png';
       if (file_exists(dirname(__FILE__).$group_img_path)) {
@@ -220,12 +237,12 @@ function ocha_basic_preprocess_page(&$vars) {
     }
   }
 
-  $variables['og_group_header_image'] = theme('image', array(
+  $vars['og_group_header_image'] = theme('image', array(
     'path' => $header_img_path,
     'alt' => 'Header image',
   ));
 
-  $variables['hr_favorite_spaces'] = _ocha_basic_block_render('hr_bookmarks', 'hr_favorite_spaces');
+  $vars['hr_favorite_spaces'] = _ocha_basic_block_render('hr_bookmarks', 'hr_favorite_spaces');
 
   // Bootstrap CDN.
   drupal_add_js('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', 'external');
@@ -233,6 +250,27 @@ function ocha_basic_preprocess_page(&$vars) {
   drupal_add_css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', 'external');
 
   drupal_add_css('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', 'external');
+
+
+  // Determine if the page is rendered using panels.
+  $vars['is_panel'] = FALSE;
+  if (module_exists('page_manager') && count(page_manager_get_current_page())) {
+    $vars['is_panel'] = TRUE;
+  }
+
+  // Make sure tabs is empty.
+  if (empty($vars['tabs']['#primary']) && empty($vars['tabs']['#secondary'])) {
+    $vars['tabs'] = '';
+  }
+
+  // Theme action links as buttons.
+  if (!empty($vars['action_links'])) {
+    foreach (element_children($vars['action_links']) as $key) {
+      $vars['action_links'][$key]['#link']['localized_options']['attributes'] = array(
+        'class' => array('btn', 'btn-primary', 'btn-sm'),
+      );
+    }
+  }
 }
 
 /**
