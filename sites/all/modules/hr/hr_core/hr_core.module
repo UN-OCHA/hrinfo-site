@@ -1244,7 +1244,7 @@ function hr_core_boot() {
  * Implements hook_init().
  */
 function hr_core_init() {
-  $code = 'alert("test")';
+  $code = 'test';
   drupal_add_js($code, array(
     'type' => 'inline',
     'scope' => 'footer',
