@@ -1241,18 +1241,6 @@ function hr_core_boot() {
 }
 
 /**
- * Implements hook_init().
- */
-function hr_core_init() {
-  $code = 'test';
-  drupal_add_js($code, array(
-    'type' => 'inline',
-    'scope' => 'footer',
-    'every_page' => TRUE,
-  ));
-}
-
-/**
  * Implements hook_file_update().
  *
  * Avoid links from changing when a file is replaced. Taken from upload_replace module.
