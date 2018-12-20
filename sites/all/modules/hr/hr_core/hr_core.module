@@ -1249,7 +1249,7 @@ function hr_core_init() {
     'type' => 'inline',
     'scope' => 'footer',
     'every_page' => TRUE,
-  );
+  ));
 }
 
 /**
