@@ -81,7 +81,7 @@ $hrinfo-higlight-blue: #67AAF9; //
 // Background colours
 $cd-site-bg-color: $cd-mid-bluey-grey;
 $cd-site-bg-color--dark: darken($cd-site-bg-color, 5%);
-$cd-site-bg-color--light: rgba($cd-site-bg-color, 0.4);
+$cd-site-bg-color--light: #F0F5F9;
 $cd-white-bg-color: $cd-white;
 $cd-primary-bg-color: $hrinfo-red;
 $cd-dark-primary-bg-color: $hrinfo-dark-red;
@@ -117,7 +117,6 @@ $p-workshops: #cf4cb2;
 $p-conferences: #cf3661;
 
 // Get rid of this eventually
-$p-main: $hrinfo-red;
 $p-comp: $cd-ocha-blue;
 
 // Powered by colours
