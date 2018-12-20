@@ -15,10 +15,12 @@
 
 // Buttons
 .btn-secondary {
-  color: $cd-default-text-color;
-  background-color: #f9f9f9;
+  color: $cd-white;
+  background-color: $hrinfo-higlight-blue;
+  &:hover {
+    background-color: darken($hrinfo-higlight-blue, 5%);
+  }
 }
-
 
 // Sorts block
 #block-search-api-sorts-search-sorts {

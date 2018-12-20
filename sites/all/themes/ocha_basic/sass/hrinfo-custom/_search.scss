@@ -63,9 +63,9 @@
             }
 
             &.redactive {
-              color: $p-main;
+              color: $hrinfo-red;
               > a {
-                color: $p-main;
+                color: $hrinfo-red;
                 width: 11px;
                 height: 14px;
                 background-image: url('../img/icons/checks/check_on.png');
@@ -106,7 +106,7 @@
 
         .items {
           font-weight: bold;
-          color: $p-main;
+          color: $hrinfo-red;
         }
       }
 
@@ -134,7 +134,7 @@
       .current-reset-filter {
         height: 33px;
         line-height: 36px;
-        color: $p-main;
+        color: $hrinfo-red;
 
         a {
           height: 28px;
@@ -148,10 +148,10 @@
       .reset-all-filters {
         height: 33px;
         line-height: 36px;
-        color: $p-main;
+        color: $hrinfo-red;
 
         a {
-          color: $p-main;
+          color: $hrinfo-red;
           width: 19px;
           background: url(../img/cross.png) no-repeat left bottom rgba(0, 0, 0, 0);
           padding-left: 25px;
@@ -189,7 +189,7 @@
           font-weight: normal;
           .facetapi-active {
             font-weight: bold;
-            color: $p-main;
+            color: $hrinfo-red;
           }
         }
       }

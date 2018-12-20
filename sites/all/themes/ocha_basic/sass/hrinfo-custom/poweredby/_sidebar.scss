@@ -48,7 +48,7 @@
     padding-bottom: 4px;
 
     strong {
-      color: $p-main;
+      color: $hrinfo-red;
     }
 
     &:before {
@@ -95,11 +95,11 @@
 
       &:hover, &:focus {
         &:before, &:after {
-          background: $p-main;
+          background: $hrinfo-red;
         }
 
         & + span {
-          color: $p-main;
+          color: $hrinfo-red;
         }
       }
     }
@@ -124,7 +124,7 @@
 
         &:hover, &:focus {
           text-decoration: none;
-          color: $p-main;
+          color: $hrinfo-red;
         }
       }
     }

@@ -266,7 +266,7 @@
   li.open {
     a,
     a:hover {
-      color: $p-main;
+      color: $hrinfo-red;
       background-image: linear-gradient(#fcfcfc, #F6F6F6);
     }
     ul {
@@ -293,7 +293,7 @@
           padding: 2px 11px;
           background: none;
           a:hover {
-            color: $p-main;
+            color: $hrinfo-red;
             background: none;
           }
         }

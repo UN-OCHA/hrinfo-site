@@ -62,7 +62,7 @@
   padding-bottom: 10px;
 
   .container-fluid {
-    background-color: $cd-site-bg-color--light;
+    background-color: $cd-light-grey;
     //border: 1px solid #FFF;
     //box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
     border-right: 5px solid $p-comp;
@@ -82,10 +82,10 @@
     h2 {
       font-size: 18px;
       font-weight: bold;
-      //@include node-sprite(generic);
       color: $p-comp;
       padding: 20px 20px 20px 79px;
       max-height: 55px;
+      background: url('../img/node-type-icon-sprite.png') no-repeat 0 0;
     }
   }
 
@@ -118,7 +118,7 @@
   margin-bottom: -99999px;
   padding: 0;
   padding-bottom: 99999px;
-  background-color: #F1F1F1;
+  background-color: $cd-site-bg-color--light;
 
   .panel-pane {
     padding-bottom: 2em;
@@ -126,7 +126,7 @@
 
     .field-label,
     .pane-title {
-      color: #8f8f8f;
+      color: $cd-default-text-color;
       font-weight: normal;
       font-size: 12px;
     }
@@ -135,7 +135,7 @@
     .pane-content {
       padding-left: 10px;
       font-size: 12px;
-      color: #555555;
+      color: $cd-default-text-color;
       font-weight: bold;
       a {
         color: #55B1C8;
@@ -143,78 +143,78 @@
     }
 
     &.pane-node-og-group-ref {
-      background-color: #E0E0E0;
+      background-color: $cd-site-bg-color;
     }
   }
       }
     }
   }
 
-  //&.node-hr-news .container-fluid {
-  //  .row .radix-layouts-content .pane-node-title h2 {
-  //    @include node-sprite(blog);
-  //  }
-  //}
-  //
-  //&.node-hr-document .container-fluid {
-  //  border-right: 5px solid $p-documents;
-  //  .row .radix-layouts-content .pane-node-title h2 {
-  //    @include node-sprite(document);
-  //    color: $p-documents;
-  //  }
-  //}
-  //
-  //&.node-hr-infographic .container-fluid {
-  //  border-right: 5px solid $p-visuals;
-  //  .row .radix-layouts-content .pane-node-title h2 {
-  //    @include node-sprite(visual);
-  //    color: $p-visuals;
-  //  }
-  //}
-  //
-  //&.node-hr-event .container-fluid {
-  //  border-right: 5px solid $p-events;
-  //  .row .radix-layouts-content .pane-node-title h2 {
-  //    @include node-sprite(event);
-  //    color: $p-events;
-  //  }
-  //}
-  //
-  //&.node-hr-contact .container-fluid {
-  //  border-right: 5px solid $p-contacts;
-  //  .row .radix-layouts-content .pane-node-title h2 {
-  //    @include node-sprite(contact);
-  //    color: $p-contacts;
-  //  }
-  //}
-  //
-  //&.node-hr-assessment .container-fluid {
-  //  border-right: 5px solid $p-assessments;
-  //  .row .radix-layouts-content .pane-node-title h2 {
-  //    @include node-sprite(assessment);
-  //    color: $p-assessments;
-  //  }
-  //}
-  //
-  //&.node-hr-office .container-fluid {
-  //  .row .radix-layouts-content .pane-node-title h2 {
-  //    @include node-sprite(office);
-  //  }
-  //}
-  //
-  //&.node-hr-dataset .container-fluid {
-  //  .row .radix-layouts-content .pane-node-title h2 {
-  //    @include node-sprite(dataset);
-  //  }
-  //}
+  &.node-hr-news .container-fluid {
+    .row .radix-layouts-content .pane-node-title h2 {
+      background-position: 0 -110px;
+    }
+  }
+
+  &.node-hr-document .container-fluid {
+    border-right: 5px solid $p-documents;
+    .row .radix-layouts-content .pane-node-title h2 {
+      background-position: 0 -275px;
+      color: $p-documents;
+    }
+  }
+
+  &.node-hr-infographic .container-fluid {
+    border-right: 5px solid $p-visuals;
+    .row .radix-layouts-content .pane-node-title h2 {
+      background-position: 0 -550px;
+      color: $p-visuals;
+    }
+  }
+
+  &.node-hr-event .container-fluid {
+    border-right: 5px solid $p-events;
+    .row .radix-layouts-content .pane-node-title h2 {
+      background-position: 0 -330px;
+      color: $p-events;
+    }
+  }
+
+  &.node-hr-contact .container-fluid {
+    border-right: 5px solid $p-contacts;
+    .row .radix-layouts-content .pane-node-title h2 {
+      background-position: 0 -165px;
+      color: $p-contacts;
+    }
+  }
+
+  &.node-hr-assessment .container-fluid {
+    border-right: 5px solid $p-assessments;
+    .row .radix-layouts-content .pane-node-title h2 {
+      background-position: 0 -55px;
+      color: $p-assessments;
+    }
+  }
+
+  &.node-hr-office .container-fluid {
+    .row .radix-layouts-content .pane-node-title h2 {
+      background-position: 0 -440px;
+    }
+  }
+
+  &.node-hr-dataset .container-fluid {
+    .row .radix-layouts-content .pane-node-title h2 {
+      background-position: 0 -220px;
+    }
+  }
 }
 
 // Search results
 
 .view-mode-search-result {
 
-  background-color: $cd-site-bg-color--light;
-  //border: 1px solid #FFF;
+  background-color: $cd-light-grey;
+  border: 1px solid #FFF;
   margin: 1%;
   padding: 0;
   //box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
@@ -236,12 +236,12 @@
   > h2 {
     font-size: 16px;
     font-weight: bold;
-    //@include node-sprite(generic);
     padding: 20px 20px 20px 79px;
     max-height: 55px;
     margin-left: 18px;
     margin-top: 16px;
     min-height: 55px;
+    background: url('../img/node-type-icon-sprite.png') no-repeat 0 0;
 
     @media screen and (max-width : sm) {
       font-size: 14px;
@@ -255,13 +255,13 @@
 
   &.node-hr-news {
     h2 {
-      //@include node-sprite(blog);
+      background-position: 0 -110px;
     }
   }
 
   &.node-hr-document {
     h2 {
-      //@include node-sprite(document);
+      background-position: 0 -275px;
       a {
         color: $p-documents;
       }
@@ -272,7 +272,7 @@
   }
   &.node-hr-event {
     h2 {
-      //@include node-sprite(event);
+      background-position: 0 -330px;
       a {
         color: $p-events;
       }
@@ -283,7 +283,7 @@
   }
   &.node-hr-infographic {
     h2 {
-      //@include node-sprite(visual);
+      background-position: 0 -550px;
       a {
         color: $p-visuals;
       }
@@ -294,7 +294,7 @@
   }
   &.node-hr-contact {
     h2 {
-      //@include node-sprite(contact);
+      background-position: 0 -165px;
       a {
         color: $p-contacts;
       }
@@ -306,7 +306,7 @@
 
   &.node-hr-assessment {
     h2 {
-      //@include node-sprite(assessment);
+      background-position: 0 -55px;
       a {
         color: $p-assessments;
       }
@@ -318,13 +318,13 @@
 
   &.node-hr-office {
     h2 {
-      //@include node-sprite(office);
+      background-position: 0 -440px;
     }
   }
 
   &.node-hr-dataset {
     h2 {
-      //@include node-sprite(dataset);
+      background-position: 0 -220px;
     }
   }
 
@@ -409,9 +409,12 @@
           float: right;
 
           .dropdown-menu {
+            margin: 0;
             margin-top: -16px;
             margin-left: 6px;
             font-size: 11px;
+            list-style-type: none;
+            padding: 0;
           }
         }
 

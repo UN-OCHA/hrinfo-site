@@ -41,12 +41,12 @@
 }
 
 a {
-  color: $p-main;
+  //color: $hrinfo-red;
   word-wrap: break-word;
 
-  &:hover {
-    color: darken($p-main, 10%);
-  }
+  //&:hover {
+  //  color: darken($hrinfo-red, 10%);
+  //}
 
   .region-content & {
     color: $p-comp;
@@ -91,7 +91,7 @@ p {
 //  }
 //
 //  &.error {
-//    background: $p-main;
+//    background: $hrinfo-red;
 //  }
 //}
 
@@ -105,16 +105,16 @@ p {
 .pagination > .active > span,
 .pagination > .active > span:hover,
 .pagination > .active > span:focus {
-  background-color: $p-main;
-  border-color: $p-main;
+  background-color: $hrinfo-red;
+  border-color: $hrinfo-red;
 }
 
 .pagination > li > a, .pagination > li > span {
-  color: $p-main;
+  color: $hrinfo-red;
 }
 
 .pagination > li > a:hover {
-  color: darken($p-main, 10%);
+  color: darken($hrinfo-red, 10%);
 }
 
 .item-list ul.pagination > li a,
@@ -323,7 +323,7 @@ h1 {
 //      }
 //
 //      &:focus {
-//        border-color: $p-main;
+//        border-color: $hrinfo-red;
 //        //outline: 0 none;
 //        //box-shadow: 0;
 //      }
