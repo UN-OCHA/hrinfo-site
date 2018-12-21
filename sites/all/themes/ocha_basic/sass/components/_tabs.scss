@@ -3,7 +3,7 @@
 //——————————————————————————————————————————————————————————————————————————————
 
 .tabs {
-  background: $cd-site-bg-color--light;
+  //background: $cd-site-bg-color--light;
   margin: 18px 0 0;
   padding: 0;
   display: block;
@@ -38,12 +38,16 @@
     &.active,
     &:hover {
       border: none !important;
-      background-color: $cd-site-bg-color;
+      background-color: $cd-site-bg-color--light;
       color: $hrinfo-red;
     }
 
+    &:hover {
+      background-color: $cd-site-bg-color;
+    }
+
     &:focus {
-      background: $cd-site-bg-color;
+      background: $cd-site-bg-color--light;
       //outline: 1px dotted $hrinfo-red;
     }
   }
@@ -51,6 +55,6 @@
   > li.active > a,
   > li.active > a:hover,
   > li.active > a:focus {
-    background-color: $cd-site-bg-color;
+    background-color: $cd-site-bg-color--light;
   }
 }

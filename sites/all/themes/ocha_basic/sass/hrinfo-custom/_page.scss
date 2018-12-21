@@ -49,7 +49,7 @@ a {
   //}
 
   .region-content & {
-    color: $p-comp;
+    color: $cd-ocha-blue;
     font-weight: bold;
   }
 
@@ -142,7 +142,7 @@ body table, body .table {
       th, .ui-widget-header {
         border: 0;
         color: white;
-        background-color: $p-comp;
+        background-color: $cd-ocha-blue;
         background-image: none;
         padding: 8px;
       }
@@ -221,7 +221,7 @@ body table, body .table {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: $p-comp;
+  color: $cd-ocha-blue;
   font-weight: bold;
 }
 

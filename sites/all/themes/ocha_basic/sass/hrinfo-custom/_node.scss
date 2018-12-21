@@ -62,90 +62,95 @@
   padding-bottom: 10px;
 
   .container-fluid {
-    background-color: $cd-light-grey;
+    background-color: $cd-site-bg-color--light;
     //border: 1px solid #FFF;
     //box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
-    border-right: 5px solid $p-comp;
+    border-right: 5px solid $hrinfo-higlight-blue;
 
     .row {
       overflow: hidden;
+      // So column spans the entire height of the main area.
+      display: flex;
 
       .radix-layouts-content {
-      min-height: 400px;
-      .panel-separator {
-        display: inline-block;
-      }
+        min-height: 400px;
 
-  .pane-node-title {
-    border-bottom: 1px dotted #8f8f8f;
+        .panel-separator {
+          display: inline-block;
+        }
 
-    h2 {
-      font-size: 18px;
-      font-weight: bold;
-      color: $p-comp;
-      padding: 20px 20px 20px 79px;
-      max-height: 55px;
-      background: url('../img/node-type-icon-sprite.png') no-repeat 0 0;
-    }
-  }
+        .pane-node-title {
+          border-bottom: 1px dotted $cd-border-color;
 
-  .pane-user-name {
-    border-bottom: 1px dotted #8f8f8f;
+          h2 {
+            font-size: 18px;
+            font-weight: bold;
+            color: $cd-ocha-blue;
+            padding: 20px 20px 20px 79px;
+            max-height: 55px;
+            background: url('../img/node-type-icon-sprite.png') no-repeat 0 0;
+          }
+        }
 
-    .pane-content {
-      font-size: 18px;
-      font-weight: bold;
-      //@include node-sprite(user);
-      color: $p-comp;
-      padding: 20px 20px 20px 79px;
-      max-height: 55px;
-    }
-  }
+        .pane-user-name {
+          border-bottom: 1px dotted #8f8f8f;
+
+          .pane-content {
+            font-size: 18px;
+            font-weight: bold;
+            //@include node-sprite(user);
+            color: $cd-ocha-blue;
+            padding: 20px 20px 20px 79px;
+            max-height: 55px;
+          }
+        }
 
 
-  .pane-node-hr-core-share-button,
-  .pane-node-field-files-collection,
-  .pane-node-hr-core-files-download-button {
-    display: inline-block;
-  }
+        .pane-node-hr-core-share-button,
+        .pane-node-field-files-collection,
+        .pane-node-hr-core-files-download-button {
+          display: inline-block;
+        }
 
-  .field-name-field-users-ref .content {
-    min-height: 0;
-  }
+        .field-name-field-users-ref .content {
+          min-height: 0;
+        }
       }
 
       .radix-layouts-sidebar {
-  margin-bottom: -99999px;
-  padding: 0;
-  padding-bottom: 99999px;
-  background-color: $cd-site-bg-color--light;
+        //margin-bottom: -99999px;
+        padding: 0;
+        //padding-bottom: 99999px;
+        background-color: $cd-site-bg-color--light;
+        border-left: 3px solid $cd-white;
 
-  .panel-pane {
-    padding-bottom: 2em;
-    border-bottom: 1px dotted #8f8f8f;
+        .panel-pane {
+          padding-bottom: 2em;
+          border-bottom: 1px solid $cd-white;
 
-    .field-label,
-    .pane-title {
-      color: $cd-default-text-color;
-      font-weight: normal;
-      font-size: 12px;
-    }
+          &:last-child {
+            border-bottom: 0 none;
+          }
 
-    .field-item,
-    .pane-content {
-      padding-left: 10px;
-      font-size: 12px;
-      color: $cd-default-text-color;
-      font-weight: bold;
-      a {
-        color: #55B1C8;
-      }
-    }
+          .field-label,
+          .pane-title {
+            color: $cd-default-text-color;
+            font-weight: normal;
+            font-size: 12px;
+          }
 
-    &.pane-node-og-group-ref {
-      background-color: $cd-site-bg-color;
-    }
-  }
+          .field-item,
+          .pane-content {
+            padding-left: 10px;
+            font-size: 12px;
+            color: $cd-default-text-color;
+            font-weight: bold;
+          }
+
+          &.pane-node-og-group-ref {
+            background-color: $cd-site-bg-color;
+          }
+        }
       }
     }
   }
@@ -213,7 +218,7 @@
 
 .view-mode-search-result {
 
-  background-color: $cd-light-grey;
+  background-color: $cd-site-bg-color--light;
   border: 1px solid #FFF;
   margin: 1%;
   padding: 0;
@@ -223,7 +228,7 @@
 
   &:after {
     content: '';
-    background-color: $p-comp;
+    background-color: $hrinfo-higlight-blue;
     display: block;
     width: 5px;
     height: 10px;
@@ -249,7 +254,7 @@
     }
 
     a {
-      color: $p-comp;
+      color: $cd-ocha-blue;
     }
   }
 
@@ -425,7 +430,7 @@
 
         .field {
           .field-label {
-            color: #8f8f8f;
+            color: $cd-mid-grey;
             font-weight: normal;
             width: 130px;
             display: inline-block;
@@ -433,7 +438,7 @@
             *zoom: 1;
           }
           .field-items {
-            color: #606060;
+            color: $cd-default-text-color;
           }
         }
 
@@ -465,7 +470,7 @@
     }
     border-radius: 10px;
     background-color: $cd-site-bg-color;
-    color: $p-comp;
+    color: $cd-ocha-blue;
     padding: 10px;
     hr {
       border-top: 1px dotted white;
@@ -486,7 +491,7 @@
     }
     .manager {
       font-size: 1.1em;
-      color:$p-comp;
+      color:$cd-ocha-blue;
       text-align: center;
     }
     .space-follow {
@@ -579,7 +584,7 @@
         }
       }
       th.views-field.active a{
-        color: $p-comp;
+        color: $cd-ocha-blue;
       }
     }
   }
@@ -664,7 +669,7 @@
 .view-mode-full.node-acc-incident .container-fluid .row .radix-layouts-sidebar,
 .view-mode-full.node-hr-toolbox-item .container-fluid .row .radix-layouts-sidebar,
 .user-full .container-fluid .row .radix-layouts-sidebar {
-  margin-bottom: auto;
+  //margin-bottom: auto;
   padding: 0;
-  padding-bottom: auto;
+  //padding-bottom: auto;
 }

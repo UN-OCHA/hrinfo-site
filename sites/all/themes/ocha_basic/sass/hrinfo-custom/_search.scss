@@ -5,8 +5,8 @@
   .block {
     &.block-facetapi {
       padding: 0;
-      border-top: 1px solid #FEFEFE;
-      border-bottom: 1px solid #d8d8d8;
+      border-top: 1px solid $cd-border-color;
+      border-bottom: 1px solid $cd-border-color;
 
       h4 {
         color: black;
@@ -40,7 +40,7 @@
               padding-left: 6px;
               display: block;
               &:hover {
-                background-color: rgba(0, 0, 0, 0.1);
+                background-color: $cd-site-bg-color--light;
               }
 
               &.facetapi-active {
@@ -49,11 +49,12 @@
               }
 
               &.facetapi-inactive {
-                //@include checks-sprite(check_off);
+                background-image: url('../img/icons/checks/check_off.png');
+                background-repeat: no-repeat;
 
                 display: inline-block;
                 padding-left: 14px;
-                max-height: 11px;
+                //max-height: 11px;
               }
 
               &.facetapi-inactive:hover {
@@ -75,7 +76,8 @@
               }
 
               > a:hover {
-                //@include checks-sprite(check_off);
+                background-image: url('../img/icons/checks/check_off.png');
+                background-repeat: no-repeat;
               }
             }
           }
@@ -162,7 +164,7 @@
         margin-top: 10px;
         margin-bottom: -8px;
         .current-selected-item {
-          color: #BC2E3C;
+          color: $hrinfo-red;
           list-style: none outside none;
           li {
             margin-left: 0;
@@ -197,7 +199,7 @@
 
     a {
       padding-left: 0;
-      color: #BC2E3C;
+      color: $hrinfo-red;
       padding-right: 2px;
     }
 
@@ -215,8 +217,8 @@
 
   .block__content {
     border-radius: 10px;
-    background-color: #bbd9e1;
-    color: $p-comp;
+    background-color: $cd-site-bg-color;
+    color: $cd-ocha-blue;
     padding: 10px;
   }
 

@@ -5,6 +5,12 @@
   list-style-type: disc;
   margin: 1rem 0;
   padding-left: 1rem;
+
+  &.dropdown-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .front {
