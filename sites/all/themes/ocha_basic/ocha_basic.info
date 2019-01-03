@@ -11,6 +11,7 @@ engine = phptemplate
 ; Remove Drupal core stylesheets
 ; ========================================
 stylesheets[all][] = unset/system.menus.css
+stylesheets[all][] = unset/system.theme.css
 
 ; ========================================
 ; Stylesheets
