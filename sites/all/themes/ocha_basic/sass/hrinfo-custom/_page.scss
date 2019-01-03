@@ -61,6 +61,10 @@ a {
   }
 }
 
+.region-content > .contacts-list-no-access-wrapper {
+  margin-top: 18px;
+}
+
 p {
   margin: 0 0 20px;
 }
@@ -109,6 +113,11 @@ p {
   border-color: $hrinfo-red;
 }
 
+.pagination.pager > li {
+  padding: 0.5em;
+  display: inline-block;
+}
+
 .pagination > li > a, .pagination > li > span {
   color: $hrinfo-red;
 }
@@ -118,8 +127,13 @@ p {
 }
 
 .item-list ul.pagination > li a,
-.item-list ul.pagination > li span {
+.item-list ul.pagination > li span,
+.item-list ul.pagination > .pager-ellipsis {
   border-radius: 4px;
+}
+
+.pagination .pager-ellipsis {
+  color: #337ab7;
 }
 
 //table

@@ -80,7 +80,7 @@
         }
 
         .pane-node-title {
-          border-bottom: 1px dotted $cd-border-color;
+          border-bottom: 1px solid $cd-white;
 
           h2 {
             font-size: 18px;
@@ -110,6 +110,7 @@
         .pane-node-field-files-collection,
         .pane-node-hr-core-files-download-button {
           display: inline-block;
+          margin-top: 15px;
         }
 
         .field-name-field-users-ref .content {

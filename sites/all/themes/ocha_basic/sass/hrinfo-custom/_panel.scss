@@ -17,6 +17,10 @@
   .panel-pane {
     margin-bottom: 30px;
 
+    @include desktop {
+      min-height: calc(295px + 14px); //height and padding
+    }
+
     .pane-title {
       font-size: 13px;
       color: $cd-default-text-color;
@@ -71,11 +75,21 @@
 
   .panel-pane {
     &.pane-hr-infographics-panes-list {
-      .pane-title { &:after {  content: "\f041"; } } // map-marker
+      .pane-title {
+        &:after {
+          content: "\f041";
+        }
+      } // map-marker
     }
+
     &.pane-hr-documents-panes-list {
-      .pane-title { &:after {  content: "\f016"; } } // file-o
+      .pane-title {
+        &:after {
+          content: "\f016";
+        }
+      } // file-o
     }
+
     .pane-title {
       font-size: 13px;
       text-transform: uppercase;
@@ -91,17 +105,23 @@
       }
     }
 
-    .pane-content {
-          padding: 0 7px;
+  .pane-content {
+    padding: 0 7px;
 
-          ul {
-            padding-left: 14px;
-            color: $cd-default-text-color;
-              li {
-                margin-left: 0px;
-              }
-            }
-          }
+    ul {
+      padding-left: 14px;
+      color: $cd-default-text-color;
+        li {
+          margin-left: 0px;
+        }
+      }
+    }
+
+    > img {
+      // Create even space around image.
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
   }
 
   .field-name-field-infographics.field-type-entityreference {
@@ -418,7 +438,7 @@
 
   .tab-content,
   .tab-pane {
-    background-color: $cd-site-bg-color--light;
+    background-color: $cd-site-bg-color;
     height: 300px;
   }
 
@@ -457,7 +477,9 @@
 
 //Homepage blocks styling.
 
-.panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents, .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system, .panel-pane.pane-block.pane-hr-operations-operations-dropdown {
+.panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents,
+.panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system,
+.panel-pane.pane-block.pane-hr-operations-operations-dropdown {
   background-color: $cd-site-bg-color--light;
   padding: 7px;
   //border: 1px solid #FFF;
@@ -503,6 +525,9 @@
     margin-left: -15px;
   }
 }
+
+.front .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents { margin-bottom: 30px; }
+.front .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system { margin-bottom: 30px; }
 
 
 /** New panel styles **/
