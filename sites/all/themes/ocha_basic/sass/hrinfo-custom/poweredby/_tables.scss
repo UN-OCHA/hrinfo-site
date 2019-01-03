@@ -9,6 +9,7 @@ table.pb-table, .reliefweb--data table {
 		position: relative;
 		vertical-align: middle;
 		padding: 8px 12px;
+    background: $cd-site-bg-color;
 
 		&:before {
 			content: "";
@@ -19,7 +20,6 @@ table.pb-table, .reliefweb--data table {
 			width: 100%;
 			width: calc(100% - 2px);
 			height: 100%;
-			background: $pb-grey-bg;
 			z-index: -1;
 		}
 
