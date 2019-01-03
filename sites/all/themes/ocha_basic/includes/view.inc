@@ -143,6 +143,12 @@ function ocha_basic_preprocess_date_views_pager(&$vars) {
       $vars['next_url'] = '';
     }
   }
+
+  // Render pagers controls as buttons.
+  $vars['prev_options']['attributes']['class'][] = 'btn';
+  $vars['prev_options']['attributes']['class'][] = 'btn-default';
+  $vars['next_options']['attributes']['class'][] = 'btn';
+  $vars['next_options']['attributes']['class'][] = 'btn-default';
 }
 
 /**
