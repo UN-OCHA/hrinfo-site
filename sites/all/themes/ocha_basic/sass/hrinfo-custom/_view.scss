@@ -613,7 +613,7 @@ a.fc-event, .fc-event-draggable {
 .calendar-calendar {
    background-color: transparent;
    border: none;
-   float:left;
+   //float:left;
    width: 100%;
 
     .month-view {
@@ -1020,65 +1020,64 @@ a.fc-event, .fc-event-draggable {
 }
 
 .view-header {
-    float: left;
-    width: 100%;
+  float: left;
+  width: 100%;
 
-        .title-nav {
-	       display:block;
-	       float:left;
-           overflow: hidden;
-	       text-align: center;
+  .title-nav {
+    display:block;
+    float:left;
+    overflow: hidden;
+    text-align: center;
 
-            h3 {
-             margin-top: 8px;
-             display: inline-block;
-            }
-        }
+    h3 {
+      margin-top: 8px;
+      display: inline-block;
+    }
+  }
 
-	    .prev {
-	      float:left;
+  .prev {
+    float:left;
 
-           .btn-default:before {
-			    font-family: 'FontAwesome';
-				content: '\f053';
-				padding-left: 5px;
-				position: relative;
-			    font-size: 145%;
-	        }
-        }
+    .btn-default:before {
+      font-family: 'FontAwesome';
+      content: '\f053';
+      padding-left: 5px;
+      position: relative;
+      font-size: 145%;
+    }
+  }
 
-		.next {
-		  float:left;
+  .next {
+    float:left;
 
-		   .btn-default:before {
-				font-family: 'FontAwesome';
-				content: '\f054';
-				padding-left: 5px;
-				position: relative;
-				font-size: 145%;
-			}
-        }
+     .btn-default:before {
+      font-family: 'FontAwesome';
+      content: '\f054';
+      padding-left: 5px;
+      position: relative;
+      font-size: 145%;
+    }
+  }
 
-		.date-nav-wrapper .date-next a {
-		   margin-right: 10px;
-		   font-weight: bold;
-		   font-size: 90%;
-		}
+  .date-nav-wrapper .date-next a {
+     margin-right: 10px;
+     font-weight: bold;
+     font-size: 90%;
+  }
 
-		.group-nav {
-		   position: relative;
-		   display: inline-block;
-		   vertical-align: middle;
-		   clear: both;
-		   width: 100%;
-		}
+  .group-nav {
+     position: relative;
+     display: inline-block;
+     vertical-align: middle;
+     clear: both;
+     width: 100%;
+  }
 
-       .btn.btn-default {
-          border: none;
-          background-color:transparent;
-          padding-left: 2px;
-        }
-
+ .btn.btn-default {
+    border: none;
+    background-color:transparent;
+    padding-left: 2px;
+  }
 }
 
 
@@ -1095,7 +1094,6 @@ a.fc-event, .fc-event-draggable {
         line-height: 1.0em;
         margin-right: -0.8em;
       }
-
     }
 
     .chosen-container {

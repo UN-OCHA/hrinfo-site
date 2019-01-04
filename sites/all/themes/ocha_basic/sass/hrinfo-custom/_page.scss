@@ -103,38 +103,6 @@ p {
   margin-top: 10px;
 }
 
-//pager
-
-.pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus,
-.pagination > .active > span,
-.pagination > .active > span:hover,
-.pagination > .active > span:focus {
-  background-color: $hrinfo-red;
-  border-color: $hrinfo-red;
-}
-
-.pagination.pager > li {
-  padding: 0.5em;
-  display: inline-block;
-}
-
-.pagination > li > a, .pagination > li > span {
-  color: $hrinfo-red;
-}
-
-.pagination > li > a:hover {
-  color: darken($hrinfo-red, 10%);
-}
-
-.item-list ul.pagination > li a,
-.item-list ul.pagination > li span,
-.item-list ul.pagination > .pager-ellipsis {
-  border-radius: 4px;
-}
-
-.pagination .pager-ellipsis {
-  color: #337ab7;
-}
 
 //table
 
@@ -230,7 +198,7 @@ body table, body .table {
 }
 
 .page-heading {
-  margin-top: 15px;
+  margin: 15px 0 18px;
   color: $hrinfo-red;
 }
 
@@ -345,6 +313,39 @@ h1 {
 //  }
 //
 //}
+
+//pager
+
+.pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus,
+.pagination > .active > span,
+.pagination > .active > span:hover,
+.pagination > .active > span:focus {
+  background-color: $hrinfo-red;
+  border-color: $hrinfo-red;
+}
+
+.pagination.pager > li {
+  padding: 0.5em;
+  display: inline-block;
+}
+
+.pagination > li > a, .pagination > li > span {
+  color: $hrinfo-red;
+}
+
+.pagination > li > a:hover {
+  color: darken($hrinfo-red, 10%);
+}
+
+.item-list ul.pagination > li a,
+.item-list ul.pagination > li span,
+.item-list ul.pagination > .pager-ellipsis {
+  border-radius: 4px;
+}
+
+.pagination .pager-ellipsis {
+  color: #337ab7;
+}
 
 //openlayer map
 .openlayers-tooltip-name {

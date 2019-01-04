@@ -133,8 +133,11 @@
 }
 
 .nav-tabs {
-  background-color: $cd-site-bg-color--light;
   border-bottom: 0 none;
+
+  &:not(.primary) {
+    background-color: $cd-site-bg-color--light;
+  }
 
   > li > a {
     padding: 4px 15px;
@@ -147,11 +150,11 @@
     font-size: 14px;
     border-radius: 0;
     margin: 0;
-    border: none;
+    border-color: transparent;
 
     &.active,
     &:hover {
-      border: none;
+      border-color: transparent;
       color: $hrinfo-red;
       background-color: $cd-site-bg-color;
     }
