@@ -994,25 +994,25 @@ a.fc-event, .fc-event-draggable {
 		background: transparent;
 	}
 
-    th.days {
-       background-color: #7dc2d2;
-	   padding-top: 5px;
-       padding-bottom: 5px;
-       color: #FFFFFF;
+  th.days {
+    background-color: $hrinfo-higlight-blue;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: #FFFFFF;
+    border:none;
+    height: 30px;
+   }
+
+  tr.sp_bottom {
+     background-color: transparent;
+
+    td.sp {
        border:none;
        height: 30px;
-     }
-
-    tr.sp_bottom {
+       display:block;
        background-color: transparent;
-
-	    td.sp {
-	       border:none;
-	       height: 30px;
-	       display:block;
-	       background-color: transparent;
-	    }
-	}
+    }
+  }
 
 	.table-responsive {
 		overflow-x: inherit;
@@ -1090,70 +1090,78 @@ a.fc-event, .fc-event-draggable {
 		padding: 0em 1em 0.6em 0.5em;
 		margin-top: 10px;
 
-			.form-submit {
-				margin-bottom: -2.2em;
-				line-height: 1.0em;
-				margin-right: -0.8em;
-	        }
+      .form-submit {
+        margin-bottom: -2.2em;
+        line-height: 1.0em;
+        margin-right: -0.8em;
+      }
+
     }
 
     .chosen-container {
-
-        .chosen-drop{
-         border: none;
-        }
+      .chosen-drop{
+        border: none;
+      }
     }
 
    .chosen-with-drop {
-
-        .chosen-single {
-           border: none;
-           background-color:#f9f9f9;
-           background: linear-gradient(to right,#f9f9f9,#fdfdfd);
-           box-shadow: 0px 1px 0px #FFF inset;
-        }
+      .chosen-single {
+         border: none;
+         background-color: $cd-site-bg-color--light;
+         background: linear-gradient(to right, $cd-site-bg-color--light, $cd-site-bg-color);
+         //box-shadow: 0px 1px 0px #FFF inset;
+      }
     }
 
 	.chosen-single {
-        background-color:#ff9f9f9;
-        border-radius: 0px;
-        height:25px;
-        background: linear-gradient(to right,#f9f9f9,#fdfdfd);
-        border:none;
-        box-shadow:none;
-     }
+    border-radius: 0px;
+    height:25px;
+    background-color: $cd-site-bg-color--light;
+    background: linear-gradient(to right, $cd-site-bg-color--light, $cd-site-bg-color);
+    border:none;
+    box-shadow:none;
+   }
 
-    .chosen-single div {
-        padding-top:2px;
-    }
+  .chosen-single div {
+    padding-top:2px;
+  }
 
 	.views-exposed-widgets  {
 		display:inline-block;
 		float:right;
 	}
 
-    .time_area{
+  .time_area{
 		float:left;
 		width:100%;
 		display: inline-block;
 
-			.text-right {
-				text-align: right;
-				display: inline-block;
-				float: right;
-			}
+    .text-right {
+      text-align: right;
+      display: inline-block;
+      float: right;
+    }
 	}
 
 	.btn {
-		border:none;
-		border-radius: 0px;
+    border-radius: 4px;
+    background-color: $cd-ocha-blue;
+    text-decoration: none;
+    font-weight: bold;
+    color: $cd-white;
+    transition: background 0.3s ease;
+    &:hover,
+    &:focus {
+      background-color: $cd-dark-blue;
+      color: $cd-white;
+    }
 	}
 }
 
 // Filters for organization view
 .view-hr-organizations .view-filters .views-exposed-widgets {
-    display: block;
-    float: none;
+  display: block;
+  float: none;
 }
 
 .badge-rrule {
