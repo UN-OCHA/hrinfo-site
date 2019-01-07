@@ -37,12 +37,12 @@ function ocha_basic_form_alter(&$form, &$form_state, $form_id) {
   }
 
   // This is for a Views exposed form search block.
-  if ($form['#id'] == 'views-exposed-form-hr-search-page' || $form['#id'] == 'views-exposed-form-hr-news-page') {
-    $form['#attributes']['role'] = 'search';
-    $form['#attributes']['class'][] = 'cd-search--inline__form';
-    $form['#attributes']['aria-labelledby'][] = 'cd-search-btn';
-    $form['#info']['filter-search_api_views_fulltext']['label'] = t('What are you looking for?');
-  }
+//  if ($form['#id'] == 'views-exposed-form-hr-search-page' || $form['#id'] == 'views-exposed-form-hr-news-page') {
+//    $form['#attributes']['role'] = 'search';
+//    $form['#attributes']['class'][] = 'cd-search--inline__form';
+//    $form['#attributes']['aria-labelledby'][] = 'cd-search-btn';
+//    $form['#info']['filter-search_api_views_fulltext']['label'] = t('What are you looking for ');
+//  }
 }
 
 /**
@@ -368,4 +368,24 @@ function ocha_basic_preprocess_fieldable_panels_pane(&$variables) {
   if (isset($variables['content']['title'])) {
     unset($variables['content']['title']);
   }
+}
+
+
+function ocha_basic_menu_local_tasks(&$variables) {
+  $output = '';
+
+  if (!empty($variables['primary'])) {
+    $variables['primary']['#prefix'] = '<h2 class="element-invisible">' . t('Primary tabs') . '</h2>';
+    $variables['primary']['#prefix'] .= '<ul class="nav nav-tabs primary">';
+    $variables['primary']['#suffix'] = '</ul>';
+    $output .= drupal_render($variables['primary']);
+  }
+  if (!empty($variables['secondary'])) {
+    $variables['secondary']['#prefix'] = '<h2 class="element-invisible">' . t('Secondary tabs') . '</h2>';
+    $variables['secondary']['#prefix'] .= '<ul class="nav nav-pills secondary">';
+    $variables['secondary']['#suffix'] = '</ul>';
+    $output .= drupal_render($variables['secondary']);
+  }
+
+  return $output;
 }
