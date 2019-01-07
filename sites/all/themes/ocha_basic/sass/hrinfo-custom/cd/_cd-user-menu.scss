@@ -83,6 +83,12 @@
         font-weight: 700;
       }
     }
+
+    &.create-link-new {
+      background-color: $hrinfo-dark-red;
+      padding-left: 4px !important;
+      padding-right: 4px !important;
+    }
   }
 
   .cd-user-menu__label {

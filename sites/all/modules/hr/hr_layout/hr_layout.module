@@ -529,7 +529,7 @@ function hr_layout_create_links() {
 
     if (in_array($gid, variable_get('hr_layout_show_new_button', array('65')))) {
       $link = url('node/' . $gid . '/add-content');
-      $button = '<div class="btn-group"><a style="color: #fff;" class="btn btn-default dropdown-toggle" href="' . $link . '"><i class="fa fa-plus-square"></i></a></div>';
+      $button = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--add"><use xlink:href="#add"></use></svg></button>';
     }
     else {
       $extra_fields = array();
@@ -570,11 +570,7 @@ function hr_layout_create_links() {
           }
         }
         if (!empty($button)) {
-          $button = '<div class="btn-group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-plus-square"></i>
-          </button>
-          <ul class="dropdown-menu" role="menu">'.$button.'</ul></div>';
+          $button = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--add"><use xlink:href="#add"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">'.$button.'</ul>';
         }
       }
     }
