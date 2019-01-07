@@ -139,7 +139,7 @@ function hr_search_context_default_contexts() {
         'views--exp-hr_search-space' => array(
           'module' => 'views',
           'delta' => '-exp-hr_search-space',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'current_search-hr_current_search' => array(

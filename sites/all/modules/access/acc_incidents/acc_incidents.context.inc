@@ -174,7 +174,7 @@ function acc_incidents_context_default_contexts() {
         'views--exp-acc_incidents-map' => array(
           'module' => 'views',
           'delta' => '-exp-acc_incidents-map',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
       ),
@@ -206,7 +206,7 @@ function acc_incidents_context_default_contexts() {
         'views--exp-acc_incidents-table' => array(
           'module' => 'views',
           'delta' => '-exp-acc_incidents-table',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
       ),

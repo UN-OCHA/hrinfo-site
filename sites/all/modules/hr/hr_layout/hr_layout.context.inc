@@ -52,7 +52,7 @@ function hr_layout_context_default_contexts() {
         'views--exp-hr_search-space' => array(
           'module' => 'views',
           'delta' => '-exp-hr_search-space',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
       ),
@@ -172,7 +172,7 @@ function hr_layout_context_default_contexts() {
         'views--exp-hr_search-space' => array(
           'module' => 'views',
           'delta' => '-exp-hr_search-space',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'og_menu-og_single_menu_block' => array(
@@ -209,7 +209,7 @@ function hr_layout_context_default_contexts() {
         'views--exp-hr_search-page' => array(
           'module' => 'views',
           'delta' => '-exp-hr_search-page',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'system-main-menu' => array(

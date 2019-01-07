@@ -29,7 +29,7 @@ function hr_assessments_context_default_contexts() {
         '9a75ed90e2d48b07ad8545d51a9af9d5' => array(
           'module' => 'views',
           'delta' => '9a75ed90e2d48b07ad8545d51a9af9d5',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'system-main-menu' => array(
@@ -138,7 +138,7 @@ function hr_assessments_context_default_contexts() {
         '88e7fc1471098ac2a8ab3ab9920623e2' => array(
           'module' => 'views',
           'delta' => '88e7fc1471098ac2a8ab3ab9920623e2',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'system-main-menu' => array(
@@ -247,7 +247,7 @@ function hr_assessments_context_default_contexts() {
         'views--exp-hr_assessments-master' => array(
           'module' => 'views',
           'delta' => '-exp-hr_assessments-master',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'current_search-hr_current_search' => array(
@@ -339,7 +339,7 @@ function hr_assessments_context_default_contexts() {
         'views--exp-hr_assessments-map' => array(
           'module' => 'views',
           'delta' => '-exp-hr_assessments-map',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'current_search-hr_current_search' => array(
@@ -431,7 +431,7 @@ function hr_assessments_context_default_contexts() {
         'views--exp-hr_assessments-table' => array(
           'module' => 'views',
           'delta' => '-exp-hr_assessments-table',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'current_search-hr_current_search' => array(

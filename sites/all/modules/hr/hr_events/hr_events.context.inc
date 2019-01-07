@@ -29,7 +29,7 @@ function hr_events_context_default_contexts() {
         'views--exp-hr_events-global_master' => array(
           'module' => 'views',
           'delta' => '-exp-hr_events-global_master',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'system-main-menu' => array(
@@ -133,7 +133,7 @@ function hr_events_context_default_contexts() {
         'views--exp-hr_events-list' => array(
           'module' => 'views',
           'delta' => '-exp-hr_events-list',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'current_search-hr_current_search' => array(

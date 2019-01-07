@@ -30,7 +30,7 @@ function hr_infographics_context_default_contexts() {
         '35099122474bc9c43a02271db18a15f9' => array(
           'module' => 'views',
           'delta' => '35099122474bc9c43a02271db18a15f9',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'system-main-menu' => array(
@@ -152,7 +152,7 @@ function hr_infographics_context_default_contexts() {
         'ade7fd0a639142c5d84fcf2915cf5990' => array(
           'module' => 'views',
           'delta' => 'ade7fd0a639142c5d84fcf2915cf5990',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'system-main-menu' => array(
@@ -269,7 +269,7 @@ function hr_infographics_context_default_contexts() {
         'views--exp-hr_infographics-master' => array(
           'module' => 'views',
           'delta' => '-exp-hr_infographics-master',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'search_api_sorts-search-sorts' => array(
@@ -374,7 +374,7 @@ function hr_infographics_context_default_contexts() {
         'views--exp-hr_infographics-table' => array(
           'module' => 'views',
           'delta' => '-exp-hr_infographics-table',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'current_search-hr_current_search' => array(

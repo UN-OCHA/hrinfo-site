@@ -29,7 +29,7 @@ function hid_profiles_context_default_contexts() {
         'hid_profiles-hid_profiles_search' => array(
           'module' => 'hid_profiles',
           'delta' => 'hid_profiles_search',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'hid_profiles-hid_profiles_sidebar' => array(

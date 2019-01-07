@@ -29,7 +29,7 @@ function hr_datasets_context_default_contexts() {
         'views--exp-hr_datasets-master' => array(
           'module' => 'views',
           'delta' => '-exp-hr_datasets-master',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'views-hr_datasets-dataset_locations' => array(
@@ -79,7 +79,7 @@ function hr_datasets_context_default_contexts() {
         'views--exp-hr_datasets-master' => array(
           'module' => 'views',
           'delta' => '-exp-hr_datasets-master',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'current_search-hr_current_search' => array(
@@ -147,7 +147,7 @@ function hr_datasets_context_default_contexts() {
         'views--exp-hr_datasets-table' => array(
           'module' => 'views',
           'delta' => '-exp-hr_datasets-table',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'current_search-hr_current_search' => array(

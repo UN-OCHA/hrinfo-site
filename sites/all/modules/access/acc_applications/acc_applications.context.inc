@@ -191,7 +191,7 @@ function acc_applications_context_default_contexts() {
         'views--exp-acc_applications-map' => array(
           'module' => 'views',
           'delta' => '-exp-acc_applications-map',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
       ),
@@ -292,7 +292,7 @@ function acc_applications_context_default_contexts() {
         'views--exp-acc_applications-table' => array(
           'module' => 'views',
           'delta' => '-exp-acc_applications-table',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
       ),
