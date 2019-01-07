@@ -1,0 +1,6 @@
+// Due to the width constraint on the body element, the left value needs to be set explicitly, otherwise IPE doesn't
+// span full width of viewport
+
+div#panels-ipe-control-container {
+  left: 0;
+}
