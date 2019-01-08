@@ -70,10 +70,11 @@
 
         //Recherche Espace
         if($('#views-exposed-form-hr-search-space').length > 0) {
+          console.log('this');
           var inputsearch = $('#views-exposed-form-hr-search-space #edit-search-api-views-fulltext');
           var html = '';
-          html+= '<div class="search-select-wrapper"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>';
-          html+= '<ul class="dropdown-menu changeSearch"><li rel-action="' + $('#views-exposed-form-hr-search-space').attr('action') + '" class="active"><a href="#">' + inputsearch.attr('placeholder') + '</a></li><li rel-action="/' + $('#block-locale-language .dropdown-toggle').text().trim().toLowerCase() + '/search" class=""><a href="#">' + Drupal.t('Search HR.info') + '</a></li></ul></div>';
+          html+= '<button type="button" class="cd-search--inline__dropdown-btn" data-toggle="dropdown" aria-expanded="false"><svg class="icon icon--arrow-down"><use xlink:href="#arrow-down"></use></svg></button>';
+          html+= '<ul class="dropdown-menu changeSearch"><li rel-action="' + $('#views-exposed-form-hr-search-space').attr('action') + '" class="active"><a href="#">' + inputsearch.attr('placeholder') + '</a></li><li rel-action="/' + $('.cd-language-switcher button').text().trim().toLowerCase() + '/search" class=""><a href="#">' + Drupal.t('Search HR.info') + '</a></li></ul>';
 
           $("#edit-search-wrapper").prepend(html);
 
