@@ -21,22 +21,27 @@
 ?>
 <?php if (!empty($q)): ?>
   <?php
-    // This ensures that, if clean URLs are off, the 'q' is added first so that
-    // it shows up first in the URL.
-    print $q;
+  // This ensures that, if clean URLs are off, the 'q' is added first so that
+  // it shows up first in the URL.
+  print $q;
   ?>
 <?php endif; ?>
 <div class="views-exposed-form">
   <div class="views-exposed-widgets clearfix">
     <?php if (in_array('filter-search_api_views_fulltext', array_keys($widgets))) { ?>
       <?php $widget = $widgets['filter-search_api_views_fulltext']; ?>
-      <div id="<?php print $widget->id; ?>-wrapper" class="views-exposed-widget views-widget-filter-search_api_views_fulltext form-group">
-        <div class="input-group">
-          <input class="form-control form-text" id="edit-search-api-views-fulltext" name="search" value="" size="30" maxlength="128" type="text" placeholder="<?php print $widget->label; ?>" />
-          <span class="input-group-btn">
-            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-          </span>
-        </div>
+      <div id="<?php print $widget->id; ?>-wrapper" class="cd-search--inline__form-inner">
+        <label for="cd-search" class="element-invisible"><?php print $widget->label; ?></label>
+        <input type="search" placeholder="<?php print $widget->label; ?>" name="search" id="edit-search-api-views-fulltext" class="cd-search--inline__input" autocomplete="off">
+
+        <button type="submit" class="cd-search--inline__submit">
+
+          <svg class="icon icon--search">
+            <use xlink:href="#search"></use>
+          </svg>
+          <span class="element-invisible">Search</span>
+        </button>
+
       </div>
     <?php } else { ?>
       <?php foreach ($widgets as $id => $widget): ?>
