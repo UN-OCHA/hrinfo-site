@@ -38,12 +38,45 @@
   }
 }
 
+
+// Inline search with dropdown.
+.cd-search--inline {
+  .icon--arrow-down {
+    fill: $cd-default-text-color;
+  }
+
+  .cd-search--inline__dropdown-btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: calc(#{$cd-site-header-height} - 16px); // Minus padding.
+    right: 60px;
+  }
+
+  .dropdown-menu {
+    right: 60px; // Width of button.
+    left: unset;
+    top: calc(100% - 8px); // Minus bottom padding.
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    border: 0 none;
+  }
+
+  .dropdown-menu > .active > a,
+  .dropdown-menu > .active > a:focus,
+  .dropdown-menu > .active > a:hover {
+    color: $cd-white;
+    background-color: $hrinfo-higlight-blue;
+  }
+}
+
 // Start inline search for desktop only.
 @include desktop {
 
   .cd-search--inline__form-inner.js-has-focus {
     &::before {
-     background: $hrinfo-higlight-blue;
+      background: $hrinfo-higlight-blue;
     }
   }
 
@@ -60,6 +93,40 @@
       svg {
         fill: $hrinfo-higlight-blue;
       }
+    }
+  }
+
+  // Inline search with dropdown.
+  .cd-search--inline {
+    position: relative;
+
+    .icon--arrow-down {
+      fill: $cd-default-text-color;
+    }
+
+    .cd-search--inline__dropdown-btn {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      height: $cd-site-header-height;
+      right: 60px;
+    }
+
+    .dropdown-menu {
+      top: calc(100% + 3px); // Minus site header bottom border.
+      right: 0;
+      left: unset;
+      margin: 0;
+      padding: 0;
+      border-radius: 0;
+      border: 0 none;
+    }
+
+    .dropdown-menu > .active > a,
+    .dropdown-menu > .active > a:focus,
+    .dropdown-menu > .active > a:hover {
+      color: $cd-white;
+      background-color: $hrinfo-higlight-blue;
     }
   }
 }
