@@ -254,8 +254,8 @@ function hid_profiles_local_contacts_no_access($reason) {
     $message = theme('hid_profiles_local_contacts_hid_login',
       array(
         'logo_image' => '/' . $img_path . '/message.png',
-        'login_button' => l('<img src="/' . $img_path . '/log-in-button.png" />', 'connect/oauthconnector_hid_oauth', array('query' => drupal_get_destination(), 'html' => TRUE)),
-        'register_button' => l('<img src="/' . $img_path . '/register-button.png" />', '//app.humanitarian.id/#register', array('html' => TRUE)),
+        'login_button' => l('<img src="/' . $img_path . '/log-in-button.png" />', '/login', array('query' => drupal_get_destination(), 'html' => TRUE)),
+        'register_button' => l('<img src="/' . $img_path . '/register-button.png" />', '//humanitarian.id/#register', array('html' => TRUE)),
       )
     );
   }
@@ -264,7 +264,7 @@ function hid_profiles_local_contacts_no_access($reason) {
     $message = '<p>' .
       t('This contact list has been set as private by our field-level administrators. Only "verified" Humanitarian ID users can access the contact list. For information about "verified" users, please see our <a href="@faq-link">FAQs</a> or contact us at <a href="@mail-hrinfo">info@humanitarian.id</a>.',
         array(
-          '@faq-link' => 'http://humanitarian.id/faqs',
+          '@faq-link' => 'https://about.humanitarian.id/faqs',
           '@mail-hrinfo' => 'mailto:info@humanitarian.id',
         ))
       . '</p>';
