@@ -25,7 +25,7 @@ function hr_bookmarks_block_view($delta = '') {
           $context_gid = $context['gid'];
         }
         $flags = flag_get_user_flags('node');
-          $block['content'] = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--info"><use xlink:href="#info"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">';
+          $block['content'] = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--bookmark"><use xlink:href="#bookmark"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">';
         if (isset($flags['hr_favorite_space'])) {
           foreach ($flags['hr_favorite_space'] as $gid => $space) {
             //debug($space);
