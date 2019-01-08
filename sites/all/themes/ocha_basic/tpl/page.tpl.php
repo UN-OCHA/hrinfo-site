@@ -20,7 +20,7 @@
   <?php endif; ?>
 
   <?php if ($hr_tabs): ?>
-    <div class="container">
+    <div class="cd-container">
       <div class="col-sm-12">
         <ul class="breadcrumbs">
           <li class="breadcrumbs-item">
