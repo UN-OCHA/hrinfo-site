@@ -36,13 +36,21 @@ function ocha_basic_form_alter(&$form, &$form_state, $form_id) {
     $form['actions']['submit']['#attributes']['class'][] = 'element-invisible';
   }
 
-  // This is for a Views exposed form search block.
+//  // This is for a Views exposed form search block.
 //  if ($form['#id'] == 'views-exposed-form-hr-search-page' || $form['#id'] == 'views-exposed-form-hr-news-page') {
 //    $form['#attributes']['role'] = 'search';
 //    $form['#attributes']['class'][] = 'cd-search--inline__form';
 //    $form['#attributes']['aria-labelledby'][] = 'cd-search-btn';
 //    $form['#info']['filter-search_api_views_fulltext']['label'] = t('What are you looking for ');
 //  }
+
+  // This is for a Views exposed form search block.
+  if ($form_id == 'views_exposed_form') {
+    $form['#attributes']['role'] = 'search';
+    $form['#attributes']['class'][] = 'cd-search--inline__form';
+    $form['#attributes']['aria-labelledby'][] = 'cd-search-btn';
+    //$form['#info']['filter-search_api_views_fulltext']['label'] = t('What are you looking for?');
+  }
 }
 
 /**
