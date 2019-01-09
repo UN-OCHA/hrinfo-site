@@ -159,6 +159,16 @@
   &.node-hr-news .container-fluid {
     .row .radix-layouts-content .pane-node-title h2 {
       background-position: 0 -110px;
+      
+      a {
+        color: $cd-ocha-blue;
+        text-decoration: underline;
+        &:hover,
+        &:focus {
+          text-decoration: none;
+          color: $cd-dark-blue;
+        }
+      }
     }
   }
 
@@ -166,7 +176,7 @@
     border-right: 5px solid $p-documents;
     .row .radix-layouts-content .pane-node-title h2 {
       background-position: 0 -275px;
-      color: $p-documents;
+      //color: $p-documents;
     }
   }
 
@@ -174,7 +184,7 @@
     border-right: 5px solid $p-visuals;
     .row .radix-layouts-content .pane-node-title h2 {
       background-position: 0 -550px;
-      color: $p-visuals;
+      //color: $p-visuals;
     }
   }
 
@@ -182,7 +192,7 @@
     border-right: 5px solid $p-events;
     .row .radix-layouts-content .pane-node-title h2 {
       background-position: 0 -330px;
-      color: $p-events;
+      //color: $p-events;
     }
   }
 
@@ -190,7 +200,7 @@
     border-right: 5px solid $p-contacts;
     .row .radix-layouts-content .pane-node-title h2 {
       background-position: 0 -165px;
-      color: $p-contacts;
+      //color: $p-contacts;
     }
   }
 
@@ -198,7 +208,7 @@
     border-right: 5px solid $p-assessments;
     .row .radix-layouts-content .pane-node-title h2 {
       background-position: 0 -55px;
-      color: $p-assessments;
+      //color: $p-assessments;
     }
   }
 
@@ -256,6 +266,12 @@
 
     a {
       color: $cd-ocha-blue;
+      text-decoration: underline;
+      &:hover,
+      &:focus {
+        text-decoration: none;
+        color: $cd-dark-blue;
+      }
     }
   }
 
@@ -269,7 +285,7 @@
     h2 {
       background-position: 0 -275px;
       a {
-        color: $p-documents;
+        //color: $p-documents;
       }
     }
     &:after {
@@ -280,7 +296,7 @@
     h2 {
       background-position: 0 -330px;
       a {
-        color: $p-events;
+        //color: $p-events;
       }
     }
     &:after {
@@ -291,7 +307,7 @@
     h2 {
       background-position: 0 -550px;
       a {
-        color: $p-visuals;
+        //color: $p-visuals;
       }
     }
     &:after {
@@ -302,7 +318,7 @@
     h2 {
       background-position: 0 -165px;
       a {
-        color: $p-contacts;
+        //color: $p-contacts;
       }
     }
     &:after {
@@ -314,7 +330,7 @@
     h2 {
       background-position: 0 -55px;
       a {
-        color: $p-assessments;
+        //color: $p-assessments;
       }
     }
     &:after {

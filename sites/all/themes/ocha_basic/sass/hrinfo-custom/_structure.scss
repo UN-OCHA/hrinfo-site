@@ -16,9 +16,10 @@
 // Buttons
 .btn-secondary {
   color: $cd-white;
-  background-color: $hrinfo-higlight-blue;
+  background-color: $cd-ocha-blue;
   &:hover {
-    background-color: darken($hrinfo-higlight-blue, 5%);
+    background-color: darken($cd-ocha-blue, 5%);
+    color: $cd-white;
   }
 }
 
