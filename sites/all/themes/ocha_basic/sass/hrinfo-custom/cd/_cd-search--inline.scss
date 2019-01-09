@@ -41,6 +41,11 @@
 
 // Inline search with dropdown.
 .cd-search--inline {
+
+  .cd-search--inline__input[type="search"] {
+    padding-left: 32px;
+  }
+
   .icon--arrow-down {
     fill: $cd-default-text-color;
   }
@@ -51,11 +56,12 @@
     align-items: center;
     height: calc(#{$cd-site-header-height} - 16px); // Minus padding.
     right: 60px;
+    left: 16px;
   }
 
   .dropdown-menu {
     right: 60px; // Width of button.
-    left: unset;
+    left: 12px;
     top: calc(100% - 8px); // Minus bottom padding.
     margin: 0;
     padding: 0;
@@ -103,19 +109,19 @@
     .icon--arrow-down {
       fill: $cd-default-text-color;
     }
-
     .cd-search--inline__dropdown-btn {
       position: absolute;
       display: flex;
       align-items: center;
       height: $cd-site-header-height;
       right: 60px;
+      left: 8px;
     }
 
     .dropdown-menu {
       top: calc(100% + 3px); // Minus site header bottom border.
       right: 0;
-      left: unset;
+      left: 0;
       margin: 0;
       padding: 0;
       border-radius: 0;
