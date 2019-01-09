@@ -70,7 +70,6 @@
 
         //Recherche Espace
         if($('#views-exposed-form-hr-search-space').length > 0) {
-          console.log('this');
           var inputsearch = $('#views-exposed-form-hr-search-space #edit-search-api-views-fulltext');
           var html = '';
           html+= '<button type="button" class="cd-search--inline__dropdown-btn" data-toggle="dropdown" aria-expanded="false"><svg class="icon icon--arrow-down"><use xlink:href="#arrow-down"></use></svg></button>';

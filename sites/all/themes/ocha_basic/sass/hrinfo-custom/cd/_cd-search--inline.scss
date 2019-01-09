@@ -18,7 +18,7 @@
     }
   }
 
-  .open & {
+  .js-open & {
     color: $hrinfo-higlight-blue;
 
     svg {
@@ -41,6 +41,11 @@
 
 // Inline search with dropdown.
 .cd-search--inline {
+
+  .cd-search--inline__input[type="search"] {
+   padding-left: 32px;
+  }
+
   .icon--arrow-down {
     fill: $cd-default-text-color;
   }
@@ -50,12 +55,13 @@
     display: flex;
     align-items: center;
     height: calc(#{$cd-site-header-height} - 16px); // Minus padding.
-    right: 60px;
+    left: 16px;
   }
 
   .dropdown-menu {
+    //display: none;
+    left: 12px;
     right: 60px; // Width of button.
-    left: unset;
     top: calc(100% - 8px); // Minus bottom padding.
     margin: 0;
     padding: 0;
@@ -100,33 +106,19 @@
   .cd-search--inline {
     position: relative;
 
-    .icon--arrow-down {
-      fill: $cd-default-text-color;
+    .cd-search--inline__input[type="search"] {
+      padding-left: 32px;
     }
 
     .cd-search--inline__dropdown-btn {
-      position: absolute;
-      display: flex;
-      align-items: center;
       height: $cd-site-header-height;
-      right: 60px;
+      left: 8px;
     }
 
     .dropdown-menu {
       top: calc(100% + 3px); // Minus site header bottom border.
       right: 0;
-      left: unset;
-      margin: 0;
-      padding: 0;
-      border-radius: 0;
-      border: 0 none;
-    }
-
-    .dropdown-menu > .active > a,
-    .dropdown-menu > .active > a:focus,
-    .dropdown-menu > .active > a:hover {
-      color: $cd-white;
-      background-color: $hrinfo-higlight-blue;
+      left: 0;
     }
   }
 }
