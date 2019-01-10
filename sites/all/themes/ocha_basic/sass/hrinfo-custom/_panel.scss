@@ -337,8 +337,8 @@
     &.active,
     &.active:hover,
     &.active:focus {
-      color: $cd-dark-text-color;
-      background-image: linear-gradient(to bottom right, #ffffff, #e7e7e7);
+      color: $hrinfo-red;
+      background-image: linear-gradient(to bottom right, $cd-white, $cd-site-bg-color--light);
       border-radius: 0;
     }
   }

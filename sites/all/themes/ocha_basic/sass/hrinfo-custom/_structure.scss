@@ -17,7 +17,8 @@
 .btn-secondary {
   color: $cd-white;
   background-color: $cd-ocha-blue;
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: darken($cd-ocha-blue, 5%);
     color: $cd-white;
   }

@@ -40,7 +40,11 @@ div.region-top div.block {
     .btn-primary {
       color: $cd-white;
     }
-	}
+
+    &.block-current-search {
+      padding: 15px 0;
+    }
+  }
 }
 
 

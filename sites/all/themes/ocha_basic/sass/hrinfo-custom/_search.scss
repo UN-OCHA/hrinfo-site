@@ -87,33 +87,20 @@
 
       }
     }
-
   }
 
   .current-search-filter {
-    background: url(../img/currentfilter.png) no-repeat right 12% transparent;
-    height: 37px;
+    border-bottom: 3px solid $cd-black;
+    padding-bottom: 10px;
 
-      // Workaround to complete the image above.
-      &:before {
-        background-color: #FFF;
-        width: 1px;
-        display: block;
-        content: '';
-        height: 33px;
-        position: absolute;
+    p {
+      margin: 0;
+
+      .items {
+        font-weight: bold;
+        color: $hrinfo-red;
       }
-
-      p {
-        line-height: 37px;
-        margin-left: 10px;
-
-        .items {
-          font-weight: bold;
-          color: $hrinfo-red;
-        }
-      }
-
+    }
   }
 
   .text-search {
