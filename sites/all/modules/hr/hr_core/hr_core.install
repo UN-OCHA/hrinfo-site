@@ -512,3 +512,16 @@ function hr_core_update_7031() {
     ))
     ->execute();
  }
+
+/**
+ * Enable custom ocha_basic theme and revert sitewide context.
+ */
+function hr_core_update_7033() {
+    variable_set('theme_default', 'ocha_basic');
+
+    features_revert(array(
+        'hr_layout' => array(
+            'context',
+        ),
+    ));
+}
