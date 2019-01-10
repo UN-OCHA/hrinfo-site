@@ -514,10 +514,13 @@ function hr_core_update_7031() {
  }
 
 /**
- * Enable custom ocha_basic theme and revert sitewide context.
+ * Enable custom ocha_basic theme, install modernizr, revert sitewide context.
  */
 function hr_core_update_7033() {
     variable_set('theme_default', 'ocha_basic');
+
+    $modules = array('modernizr');
+    module_enable($modules);
 
     features_revert(array(
         'hr_layout' => array(
