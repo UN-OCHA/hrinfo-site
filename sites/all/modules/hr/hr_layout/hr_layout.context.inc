@@ -240,29 +240,35 @@ function hr_layout_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'hr_bookmarks-hr_favorite_spaces' => array(
+          'module' => 'hr_bookmarks',
+          'delta' => 'hr_favorite_spaces',
+          'region' => 'header_top',
+          'weight' => '-10',
+        ),
         'hr_layout-hr_layout_login' => array(
           'module' => 'hr_layout',
           'delta' => 'hr_layout_login',
-          'region' => 'top',
+          'region' => 'header_top',
           'weight' => '-8',
         ),
         'system-user-menu' => array(
           'module' => 'system',
           'delta' => 'user-menu',
-          'region' => 'top',
+          'region' => 'header_top',
           'weight' => '-7',
         ),
         'hr_help-hr_help' => array(
           'module' => 'hr_help',
           'delta' => 'hr_help',
-          'region' => 'top',
-          'weight' => '-5',
+          'region' => 'header_top',
+          'weight' => '-9',
         ),
-        'locale-language' => array(
-          'module' => 'locale',
-          'delta' => 'language',
-          'region' => 'top',
-          'weight' => 10,
+        'system-main-menu' => array(
+          'module' => 'system',
+          'delta' => 'main-menu',
+          'region' => 'header_navigation',
+          'weight' => '-10',
         ),
       ),
     ),
