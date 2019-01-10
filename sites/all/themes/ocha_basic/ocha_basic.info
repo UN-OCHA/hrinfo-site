@@ -1,5 +1,5 @@
-name = OCHA Basic Starterkit
-description = OCHA Basic theme. Use as a starterkit and apply customizations directly your copy.
+name = HRinfo ocha_basic
+description = Based on ocha_basic theme. Customise directly.
 screenshot = screenshot.png
 core = "7.x"
 engine = phptemplate
@@ -58,6 +58,7 @@ modernizr[tests][] = setclasses
 ; Advanced Theme Settings
 ; ========================================
 settings[ocha_basic_debug] = 0
+settings[jquery_update_jquery_version] = 1.9
 
 
 ; Panels
