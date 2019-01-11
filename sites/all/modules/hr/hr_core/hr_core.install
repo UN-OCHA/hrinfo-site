@@ -525,34 +525,35 @@ function hr_core_update_7033() {
 
   features_revert(array(
     'hr_layout' => array(
-        'context',
+      'context',
+      'menu_custom'
     ),
     'hr_infographics' => array(
-        'context',
+      'context',
     ),
     'hr_assessments' => array(
-        'context',
+      'context',
     ),
     'hr_indicators' => array(
-        'context',
+      'context',
     ),
     'hr_reliefweb' => array(
-        'context',
+      'context',
     ),
     'hr_documents' => array(
-        'context',
+      'context',
     ),
     'hr_search' => array(
-        'context',
+      'context',
     ),
     'hr_datasets' => array(
-        'context',
+      'context',
     ),
     'hr_news' => array(
-        'context',
+      'context',
     ),
     'hr_events' => array(
-        'context',
+      'context',
     ),
   ));
 }
