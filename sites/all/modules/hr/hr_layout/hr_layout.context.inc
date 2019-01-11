@@ -246,23 +246,23 @@ function hr_layout_context_default_contexts() {
           'region' => 'header_top',
           'weight' => '-10',
         ),
+        'system-user-menu' => array(
+          'module' => 'system',
+          'delta' => 'user-menu',
+          'region' => 'header_top',
+          'weight' => '-9',
+        ),
         'hr_layout-hr_layout_login' => array(
           'module' => 'hr_layout',
           'delta' => 'hr_layout_login',
           'region' => 'header_top',
           'weight' => '-8',
         ),
-        'system-user-menu' => array(
-          'module' => 'system',
-          'delta' => 'user-menu',
-          'region' => 'header_top',
-          'weight' => '-7',
-        ),
         'hr_help-hr_help' => array(
           'module' => 'hr_help',
           'delta' => 'hr_help',
           'region' => 'header_top',
-          'weight' => '-9',
+          'weight' => '-7',
         ),
         'system-main-menu' => array(
           'module' => 'system',
