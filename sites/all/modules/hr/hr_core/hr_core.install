@@ -524,9 +524,6 @@ function hr_core_update_7033() {
   module_enable($modules);
 
   features_revert(array(
-    'hr_core' => array(
-        'strongarm',
-    ),
     'hr_layout' => array(
         'context',
     ),
