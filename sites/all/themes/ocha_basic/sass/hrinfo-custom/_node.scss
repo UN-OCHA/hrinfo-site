@@ -69,8 +69,12 @@
 
     .row {
       overflow: hidden;
-      // So column spans the entire height of the main area.
-      display: flex;
+
+      @media (min-width: 992px) {
+        // Match bootstrap layout media query for 2 columns.
+        // Flex column spans the entire height of the main area.
+        display: flex;
+      }
 
       .radix-layouts-content {
         min-height: 400px;
