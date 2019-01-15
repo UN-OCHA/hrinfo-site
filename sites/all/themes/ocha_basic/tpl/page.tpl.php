@@ -48,11 +48,11 @@
 
 
   <!-- Logo for printed pages -->
-<!--  <div class="visible-print-block pull-right">-->
-<!--    --><?php //if ($logo): ?>
-<!--      <img src="--><?php //print $logo; ?><!--" alt="Humanitarianresponse Logo" />-->
-<!--    --><?php //endif; ?>
-<!--  </div>-->
+  <div class="visible-print-block pull-right">
+    <?php if ($logo): ?>
+      <img src="<?php print drupal_get_path('theme',$GLOBALS['theme'])?>/img/logos/print-logo.png" alt="Humanitarianresponse Logo" />
+    <?php endif; ?>
+  </div>
 
   <div class="cd-container" id="main-content">
     <?php if (!empty($page['sidebar_first'])): ?>
