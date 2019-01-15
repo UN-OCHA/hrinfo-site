@@ -218,6 +218,7 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
       foreach ($values as $value) {
         $node = node_load($value);
         $tmp = new \stdClass();
+        $tmp->id = $node->nid;
         $tmp->glide = $node->field_glide_number[LANGUAGE_NONE][0]['value'];
         $tmp->label = $node->title;
         if (!empty($node->field_reliefweb_id)) {
