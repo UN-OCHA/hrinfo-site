@@ -26,3 +26,7 @@ button, input[type="submit"] {
     color: $cd-white;
   }
 }
+
+.btn + .btn {
+  margin-left: 8px;
+}
