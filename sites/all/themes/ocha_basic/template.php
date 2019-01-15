@@ -44,20 +44,14 @@ function ocha_basic_form_alter(&$form, &$form_state, $form_id) {
     'views-exposed-form-hr-events-calendar-year',
   ];
 
-  // If not in array above, add search--inline attributes.
-  if (! in_array($form['#id'], $eventsView)) {
-    $form['#attributes']['role'] = 'search';
-    $form['#attributes']['class'][] = 'cd-search--inline__form';
-    $form['#attributes']['aria-labelledby'][] = 'cd-search-btn';
+  if ($form_id == 'views_exposed_form') {
+    // If not in array above, add search--inline attributes.
+    if (!in_array($form['#id'], $eventsView)) {
+      $form['#attributes']['role'] = 'search';
+      $form['#attributes']['class'][] = 'cd-search--inline__form';
+      $form['#attributes']['aria-labelledby'][] = 'cd-search-btn';
+    }
   }
-
-//// This is for a Views exposed form search block.
-//  if ($form_id == 'views_exposed_form') {
-//    $form['#attributes']['role'] = 'search';
-//    $form['#attributes']['class'][] = 'cd-search--inline__form';
-//    $form['#attributes']['aria-labelledby'][] = 'cd-search-btn';
-//    //$form['#info']['filter-search_api_views_fulltext']['label'] = t('What are you looking for?');
-//  }
 }
 
 /**
