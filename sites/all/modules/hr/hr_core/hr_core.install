@@ -520,13 +520,12 @@ function hr_core_update_7031() {
 function hr_core_update_7033() {
   variable_set('theme_default', 'ocha_basic');
 
-  $modules = array('modernizr');
+  $modules = array('modernizr', 'footer_menu');
   module_enable($modules);
 
   features_revert(array(
     'hr_layout' => array(
       'context',
-      'menu_custom'
     ),
     'hr_infographics' => array(
       'context',
