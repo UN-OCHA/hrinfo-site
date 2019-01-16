@@ -515,7 +515,8 @@ function hr_core_update_7031() {
 
 /**
  * Enable custom ocha_basic theme, install modernizr, revert sitewide context
- * and search-related views exposed filters block contexts.
+ * and search-related views exposed filters block contexts, enable footer_menu
+ * feature
  */
 function hr_core_update_7033() {
   variable_set('theme_default', 'ocha_basic');
