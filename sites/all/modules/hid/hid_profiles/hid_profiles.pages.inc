@@ -254,7 +254,7 @@ function hid_profiles_local_contacts_no_access($reason) {
     $message = theme('hid_profiles_local_contacts_hid_login',
       array(
         'logo_image' => '/' . $img_path . '/message.png',
-        'login_button' => l('<img src="/' . $img_path . '/log-in-button.png" />', '/login', array('query' => drupal_get_destination(), 'html' => TRUE)),
+        'login_button' => l('<img src="/' . $img_path . '/log-in-button.png" />', '//www.humanitarianresponse.info/login', array('query' => drupal_get_destination(), 'html' => TRUE)),
         'register_button' => l('<img src="/' . $img_path . '/register-button.png" />', '//humanitarian.id/#register', array('html' => TRUE)),
       )
     );
