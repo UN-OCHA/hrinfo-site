@@ -1241,18 +1241,6 @@ function hr_core_boot() {
 }
 
 /**
- * Implements hook_init().
- */
-function hr_core_init() {
-  $code = '(function(t,e,s,o){var n,a,c;t.SMCX=t.SMCX||[],e.getElementById(o)||(n=e.getElementsByTagName(s),a=n[n.length-1],c=e.createElement(s),c.type="text/javascript",c.async=!0,c.id=o,c.src=["https:"===location.protocol?"https://":"http://","widget.surveymonkey.com/collect/website/js/tRaiETqnLgj758hTBazgd8P4EzKNKJvTyW0UQzEr0xI05BAB44IiM9pgwou1iVqA.js"].join(""),a.parentNode.insertBefore(c,a))})(window,document,"script","smcx-sdk");';
-  drupal_add_js($code, array(
-    'type' => 'inline',
-    'scope' => 'footer',
-    'every_page' => TRUE,
-  ));
-}
-
-/**
  * Implements hook_file_update().
  *
  * Avoid links from changing when a file is replaced. Taken from upload_replace module.
