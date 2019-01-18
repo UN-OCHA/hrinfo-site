@@ -180,7 +180,7 @@ function chr_curl_http_request($url, array $options = array()) {
   _chr_curl_set_options($options, $ch);
 
   // Make request.
-  $result->data = trim(curl_exec($ch));
+  $result->data = ltrim(curl_exec($ch));
 
   // Check for errors.
   $result->errno = curl_errno($ch);
