@@ -4,3 +4,11 @@
 div#panels-ipe-control-container {
   left: 0;
 }
+
+div#modalContent {
+  max-height: calc(100% - 100px);
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
+}
