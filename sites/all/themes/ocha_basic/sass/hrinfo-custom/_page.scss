@@ -131,6 +131,10 @@ body table, body .table {
         a {
           color: white;
         }
+
+        &.active a {
+          color: $cd-ocha-blue;
+        }
       }
     }
   }
