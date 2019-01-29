@@ -66,19 +66,22 @@ $cd-highlight-red: #EB5C6D;
 $cd-white: #FFFFFF;
 $cd-black: #000000;
 
-// Custom colour palette
-$hrinfo-red: #bc2e3c;
-$hrinfo-dark-red: #9a2d3b;
-// Get rid of this eventually
-$p-main: $hrinfo-red;
-
-
-
 // This shade of red has been selected based on WCAG AAA requirements for contrast.
 $cd-contrast-red: #E00000;
 
+
+// Custom palette
+$hrinfo-red: #A02837;
+$hrinfo-dark-red: darken(#A02837, 5%);
+$hrinfo-higlight-red: #F15156; // To be used on white background.
+$hrinfo-light: #FFC7C9; // To be used on red background.
+$hrinfo-higlight-blue: #67AAF9; //
+
+
 // Background colours
 $cd-site-bg-color: $cd-mid-bluey-grey;
+$cd-site-bg-color--dark: darken($cd-site-bg-color, 5%);
+$cd-site-bg-color--light: #F0F5F9;
 $cd-white-bg-color: $cd-white;
 $cd-primary-bg-color: $hrinfo-red;
 $cd-dark-primary-bg-color: $hrinfo-dark-red;
@@ -100,11 +103,40 @@ $cd-blue-text-color: $cd-ocha-blue;
 $cd-bright-blue-text-color: $cd-bright-blue;
 
 
+// Custom colour palette from radix? panels? Lisa to find out
+$p-contacts: #a494d8;
+$p-documents: #27b298;
+$p-visuals: #60b75a;
+$p-assessments: #a8b761;
+$p-activities: #ffd247;
+$p-events: #ffb347;
+
+$p-meetings: #266ed9;
+$p-trainings: #8254c8;
+$p-workshops: #cf4cb2;
+$p-conferences: #cf3661;
+
+// Powered by colours
+$pb-heading-text: #1977d4;
+$pb-sub-heading-text: #666;
+$pb-text: #3d3d3f;
+$pb-link-text: #1565b5;
+$pb-grey-bg: #e6e6e6;
+$pb-border: #ccc;
+$pb-btn-color: $pb-link-text;
+$pb-type-bf: #e5edf5;
+
 //——————————————————————————————————————————————————————————————————————————————
 // Fonts
 //——————————————————————————————————————————————————————————————————————————————
 
 $cd-font: helvetica, arial, sans-serif;
+
+@import url(https://fonts.googleapis.com/css?family=Exo:100,200,300,400,500,600,700);
+
+.fa-at:before {
+  content: "\f1fa";
+}
 
 
 //——————————————————————————————————————————————————————————————————————————————
@@ -131,3 +163,6 @@ $zindex: (
   dropdown: 200,
   skip-link: 1000
 );
+
+
+

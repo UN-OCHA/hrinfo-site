@@ -32,7 +32,8 @@
       display: block;
     }
 
-    a, button {
+    a,
+    button {
       display: block;
       padding: $cd-base-unit*1.5;
       text-decoration: none;
@@ -41,8 +42,8 @@
       transition: background 0.3s ease;
 
       &:hover, &:focus {
-        background: $hrinfo-red;
-        color: $cd-white;
+        color: $cd-dark-grey;
+        background-color: #f5f5f5;
       }
     }
   }

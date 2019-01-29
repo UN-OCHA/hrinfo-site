@@ -1,0 +1,167 @@
+#fullcalendar {
+
+	table {
+		display: table;
+	}
+
+	thead {
+		display: table-header-group;
+
+		tr {
+			position: relative;
+			top: auto;
+			left: auto;
+		}
+	}
+
+	tbody {
+		display: table-row-group;
+	}
+
+	tr {
+		display: table-row;
+	}
+
+	th, td {
+		display: table-cell;
+	}
+
+	td {
+		padding-left: 0!important;
+
+		&.fc-limited {
+			display: none;
+		}
+
+		&.fc-list-item-marker {
+			padding-right: 4px;
+		}
+	}
+}
+
+.fc-view-container {
+	background: white;
+}
+
+a.fc-event, .fc-event {
+	border-radius: 0!important;
+	box-shadow: none;
+	font-weight: normal;
+	color: $pb-link-text;
+}
+
+a.fc-event {
+	&:hover, &:focus {
+		color: $cd-ocha-blue;
+		text-decoration: underline;
+	}
+}
+
+.fc-day-grid-event,
+.fc-time-grid-event {
+	margin: 1px 2px 0;
+  padding: 2px 0 0 0;
+}
+
+.fc-day-grid-event .fc-content,
+.fc-time-grid-event .fc-content {
+	background: $gray-lighter;
+	border: 1px solid $gray-lighter;
+	border-top: none;
+	padding: 4px;
+  height: 100%;
+  white-space: normal;
+}
+
+.fc-toolbar {
+	.fc-left, .fc-right {
+		float: none;
+		overflow: auto;
+		margin-bottom: 8px;
+	}
+
+}
+
+.fc-day-grid-event .fc-location,
+.fc-day-grid-event .fc-location-details,
+.fc-time-grid-event .fc-location,
+.fc-time-grid-event .fc-location-details {
+	display: block;
+  background: #fff;
+  padding: 4px;
+  margin: 4px -4px -4px -4px;
+  height: 100%;
+}
+
+.hr-highlighted {
+
+	.fc-header-toolbar {
+		text-align: left;
+		margin-bottom: 8px;
+
+		h2 {
+			font-size: 13px;
+			color: $text-color;
+		}
+	}
+
+	.fc-view-container {
+		background: none;
+	}
+
+	.fc-scroller {
+		height: auto!important; //override inline height
+		max-height: 274px;
+	}
+
+	.fc-list-view {
+		border: none;
+	}
+
+	.fc-list-heading {
+		td {
+			background: none;
+		}
+	}
+
+	.fc-list-table {
+
+		&+.fc-list-table {
+			margin-top: 8px;
+		}
+
+		td {
+			border: none;
+			padding: 0 8px 8px 0;
+		}
+	}
+
+	.fc-list-item-marker {
+		padding-right: 4px;
+	}
+}
+
+@media (min-width: 768px) {
+
+	.fc-toolbar {
+		.fc-left {
+			float: left;
+		}
+
+		.fc-right {
+			float: right;
+		}
+	}
+
+}
+
+
+@media (min-width: 1024px) {
+
+	#fullcalendar {
+		td.fc-limited {
+			display: table-cell;
+		}
+	}
+
+}

@@ -1,5 +1,10 @@
 /**
  * Common Design Search form in header.
+
+ * ATTENTION: This has been customised
+ to accommodate a dropdown in the inline search.
+ Do not bulk overwrite with ocha_basic updates
+
  */
 
 .cd-search--inline {
@@ -47,7 +52,7 @@
     }
   }
 
-  .open & {
+  .js-open & {
     color: $cd-highlight-red;
     position: relative;
 
@@ -81,7 +86,7 @@
   text-transform: uppercase;
   display: none;
 
-  .open & {
+  .js-open & {
     color: $cd-highlight-red;
   }
 }
@@ -95,7 +100,7 @@
   right: 0;
   z-index: map-get($zindex, sidebar);
 
-  .open & {
+  .js-open & {
     display: block;
   }
 }
@@ -116,7 +121,8 @@
   padding: 0 45px 0 25px;
   width: 100%;
 
-  &:focus {
+  &:focus,
+  .js-has-focus & {
     outline: 0;
     box-shadow: 0 0 4px rgba($cd-mid-grey,  0.7);
   }
@@ -185,7 +191,7 @@
   .cd-search--inline {
     float: left;
     border-left: 1px solid $cd-border-color;
-    border-right: 1px solid $cd-border-color;
+    //border-right: 1px solid $cd-border-color;
     flex: 0 1 400px;
     margin-left: 30px;
   }
@@ -230,7 +236,8 @@
     width: 100%;
     min-width: 230px;
 
-    &:focus {
+    &:focus,
+    .js-has-focus & {
       outline: 0;
       box-shadow: none;
     }
@@ -275,8 +282,8 @@
 
     svg {
       box-sizing: content-box;
-      width: 26px;
-      height: 26px;
+      width: 22px;
+      height: 22px;
       fill: $cd-mid-grey;
       padding: 0 16px;
     }

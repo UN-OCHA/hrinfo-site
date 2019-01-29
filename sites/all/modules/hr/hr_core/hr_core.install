@@ -512,3 +512,48 @@ function hr_core_update_7031() {
     ))
     ->execute();
  }
+
+/**
+ * Enable custom ocha_basic theme, install modernizr, revert sitewide context
+ * and search-related views exposed filters block contexts, enable footer_menu
+ * feature
+ */
+function hr_core_update_7033() {
+  variable_set('theme_default', 'ocha_basic');
+
+  $modules = array('modernizr', 'footer_menu');
+  module_enable($modules);
+
+  features_revert(array(
+    'hr_layout' => array(
+      'context',
+    ),
+    'hr_infographics' => array(
+      'context',
+    ),
+    'hr_assessments' => array(
+      'context',
+    ),
+    'hr_indicators' => array(
+      'context',
+    ),
+    'hr_reliefweb' => array(
+      'context',
+    ),
+    'hr_documents' => array(
+      'context',
+    ),
+    'hr_search' => array(
+      'context',
+    ),
+    'hr_datasets' => array(
+      'context',
+    ),
+    'hr_news' => array(
+      'context',
+    ),
+    'hr_events' => array(
+      'context',
+    ),
+  ));
+}

@@ -12,18 +12,21 @@ button, input[type="submit"] {
   font-family: $cd-font;
 }
 
-.btn-primary, .form-actions input[type="submit"] {
+.btn-primary,
+.form-actions input[type="submit"] {
   border-radius: 4px;
-  background: $hrinfo-red;
-  text-transform: uppercase;
+  background-color: $cd-ocha-blue;
   text-decoration: none;
+  font-weight: bold;
   color: $cd-white;
-  padding: $cd-base-unit*1.5;
   transition: background 0.3s ease;
-
   &:hover,
   &:focus {
-    background: darken($hrinfo-red, 10%);
+    background-color: $cd-dark-blue;
     color: $cd-white;
   }
+}
+
+.btn + .btn {
+  margin-left: 8px;
 }

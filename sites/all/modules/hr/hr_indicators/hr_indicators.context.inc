@@ -30,7 +30,7 @@ function hr_indicators_context_default_contexts() {
         'views--exp-hr_indicators-table' => array(
           'module' => 'views',
           'delta' => '-exp-hr_indicators-table',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
         'current_search-hr_current_search' => array(

@@ -46,7 +46,7 @@
       $('#operations_map').highcharts('Map', {
         colors: ['#BC2E3B'],
         chart : {
-          backgroundColor : '#E0ECED',
+          backgroundColor : '#E6ECF1',
           borderRadius: 0
         },
         title : {

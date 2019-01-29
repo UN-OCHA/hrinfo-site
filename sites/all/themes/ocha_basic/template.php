@@ -5,6 +5,13 @@
  * Template overrides, preprocess, and alter hooks for the OCHA Basic theme.
  */
 
+require_once dirname(__FILE__) . '/includes/form.inc';
+require_once dirname(__FILE__) . '/includes/menu.inc';
+require_once dirname(__FILE__) . '/includes/panel.inc';
+require_once dirname(__FILE__) . '/includes/structure.inc';
+require_once dirname(__FILE__) . '/includes/user.inc';
+require_once dirname(__FILE__) . '/includes/view.inc';
+
 /**
  * Implements hook_form_alter().
  */
@@ -29,12 +36,21 @@ function ocha_basic_form_alter(&$form, &$form_state, $form_id) {
     $form['actions']['submit']['#attributes']['class'][] = 'element-invisible';
   }
 
-  // This is for a Views exposed form search block.
+  // HR Events Calendar view.
+  $eventsView = [
+    'views-exposed-form-hr-events-calendar-master',
+    'views-exposed-form-hr-events-calendar-week',
+    'views-exposed-form-hr-events-calendar-day',
+    'views-exposed-form-hr-events-calendar-year',
+  ];
+
   if ($form_id == 'views_exposed_form') {
-    $form['#attributes']['role'] = 'search';
-    $form['#attributes']['class'][] = 'cd-search--inline__form';
-    $form['#attributes']['aria-labelledby'][] = 'cd-search-btn';
-    $form['#info']['filter-search_api_views_fulltext']['label'] = t('What are you looking for?');
+    // If not in array above, add search--inline attributes.
+    if (!in_array($form['#id'], $eventsView)) {
+      $form['#attributes']['role'] = 'search';
+      $form['#attributes']['class'][] = 'cd-search--inline__form';
+      $form['#attributes']['aria-labelledby'][] = 'cd-search-btn';
+    }
   }
 }
 
@@ -100,8 +116,30 @@ function ocha_basic_preprocess_html(&$vars) {
   drupal_add_html_head($fav_32, 'favicon-32x32');
   drupal_add_html_head($fav_16, 'favicon-16x16');
   drupal_add_html_head($safari_pinned_tab, 'safari_pinned_tab');
-}
 
+  if ($node = menu_get_object()) {
+    if (og_is_group('node', $node->nid)) {
+      $vars['classes_array'][] = 'hr-group-context';
+    }
+  }
+
+  // Add some custom classes for panels pages.
+  if (module_exists('page_manager') && count(page_manager_get_current_page())) {
+    $vars['is_panel'] = TRUE;
+
+    // Get the current panel display and add some classes to body.
+    if ($display = panels_get_current_page_display()) {
+      $vars['classes_array'][] = 'panel-layout-' . $display->layout;
+
+      // Add a custom class for each region that has content.
+      $regions = array_keys($display->panels);
+      foreach ($regions as $region) {
+        $vars['classes_array'][] = 'panel-region-' . $region;
+      }
+    }
+  }
+
+}
 /**
  * Implements template_preprocess_page().
  */
@@ -147,13 +185,101 @@ function ocha_basic_preprocess_page(&$vars) {
   $vars['page']['language_switcher'] = $output;
 
 
-//  // Set variable based on path alias to include inline-search.
-//  $path = drupal_get_path_alias();
-//  if ($path == 'inline-search') {
-//    $inline_search = TRUE;
-//    $vars['inline_search'] = $inline_search;
-//  }
+  global $theme_path;
 
+  $vars['hr_tabs'] = array();
+  $header_img_path = $theme_path.'/img/headers/general.png';
+  if (module_exists('og_context')) {
+    $gid = og_context_determine_context('node');
+    if (!empty($gid)) {
+      $og_group = entity_load('node', array($gid));
+      $og_group = $og_group[$gid];
+      if ($og_group->type == 'hr_operation') {
+        // Salahumanitaria logo
+        if ($og_group->nid == 77) { // Nid of the Colombia operation
+          $vars['logo'] = '/sites/all/themes/ocha_basic/img/logos/salahumanitaria_logo.png';
+        }
+        if (!empty($og_group->field_operation_type) && !empty($og_group->field_operation_region) && $og_group->field_operation_type[LANGUAGE_NONE][0]['value'] == 'country') {
+          // Determine the region of the operation
+          $region_id = $og_group->field_operation_region[LANGUAGE_NONE][0]['target_id'];
+          $region = entity_load_single('node', $region_id);
+          $region_uri = entity_uri('node', $region);
+          $region_status = $region->field_operation_status[LANGUAGE_NONE][0]['value'];
+          switch ($region_status) {
+            case 'active':
+              // Add the region to the tabs
+              $vars['hr_tabs'][] = l($region->title, $region_uri['path'], $region_uri['options']);
+              break;
+            case 'inactive':
+              break;
+            case 'archived':
+              break;
+          }
+        }
+      }
+      elseif ($og_group->type == 'hr_disaster') {
+        $glide = $og_group->field_glide_number[LANGUAGE_NONE][0]['value'];
+        if ($glide == 'EP-2014-000041-GIN') {
+          $vars['logo'] = '/sites/all/themes/ocha_basic/img/logos/unmeer_logo.png';
+        }
+      }
+      elseif ($og_group->type == 'hr_bundle') {
+        // Get operation from bundle
+        $op_gid = _hr_bundles_get_operation($og_group->nid);
+        if (!empty($op_gid)) {
+          $operation = entity_load_single('node', $op_gid);
+          $op_uri = entity_uri('node', $operation);
+          $vars['hr_tabs'][] = l($operation->title, $op_uri['path'], $op_uri['options']);
+        }
+      }
+      $uri = entity_uri('node', $og_group);
+      if ($og_group->status) { // Group is published
+        $vars['hr_tabs'][] = l($og_group->title, $uri['path'], $uri['options']);
+      }
+      else {
+        $vars['hr_tabs'][] = '<a href="#">'.$og_group->title.'</a>';
+      }
+      $group_img_path = '/img/headers/'.$og_group->type.'/'.strtolower(str_replace(array(' ','/'), '-', $og_group->title)).'.png';
+      if (file_exists(dirname(__FILE__).$group_img_path)) {
+        $header_img_path = $theme_path.$group_img_path;
+      }
+    }
+  }
+
+  $vars['og_group_header_image'] = theme('image', array(
+    'path' => $header_img_path,
+    'alt' => 'Header image',
+  ));
+
+  $vars['hr_favorite_spaces'] = _ocha_basic_block_render('hr_bookmarks', 'hr_favorite_spaces');
+
+  // Bootstrap CDN.
+  drupal_add_js('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', 'external');
+
+  drupal_add_css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', 'external');
+
+  drupal_add_css('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', 'external');
+
+
+  // Determine if the page is rendered using panels.
+  $vars['is_panel'] = FALSE;
+  if (module_exists('page_manager') && count(page_manager_get_current_page())) {
+    $vars['is_panel'] = TRUE;
+  }
+
+  // Make sure tabs is empty.
+  if (empty($vars['tabs']['#primary']) && empty($vars['tabs']['#secondary'])) {
+    $vars['tabs'] = '';
+  }
+
+  // Theme action links as buttons.
+  if (!empty($vars['action_links'])) {
+    foreach (element_children($vars['action_links']) as $key) {
+      $vars['action_links'][$key]['#link']['localized_options']['attributes'] = array(
+        'class' => array('btn', 'btn-primary', 'btn-sm'),
+      );
+    }
+  }
 }
 
 /**
@@ -185,7 +311,7 @@ function ocha_basic_pwa_manifest_alter(&$manifest) {
 // Bootstrap Dropdown menu.
 // from https://github.com/drupalprojects/bootstrap/blob/7.x-3.x/templates/menu/menu-link.func.php.
 // See https://www.drupalgeeks.com/drupal-blog/how-render-bootstrap-sub-menus for second level dropdown.
-function ocha_basic_menu_link(array $variables) {
+function ocha_basic_menu_link__main_menu(array $variables) {
   $element = $variables['element'];
   $sub_menu = '';
   $options = !empty($element['#localized_options']) ? $element['#localized_options'] : array();
@@ -229,4 +355,46 @@ function ocha_basic_menu_tree__user_menu(&$variables) {
   $before .= '</span><svg class="icon icon--arrow-down"><use xlink:href="#arrow-down"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown" role="menu">';
   $after = '</ul>';
   return $before.$variables['tree'].$after;
+}
+
+
+/**
+ * Custom function to render a block so I can manually position it in the markup
+ */
+function _ocha_basic_block_render($module, $block_id) {
+  $block = block_load($module, $block_id);
+  $block_content = _block_render_blocks(array($block));
+  $build = _block_get_renderable_array($block_content);
+  $block_rendered = drupal_render($build);
+  return $block_rendered;
+}
+
+/**
+ * Implements hook_preprocess_fieldable_panels_pane()
+ * Fixes title appearing 2 times in fieldable panels panes
+ */
+function ocha_basic_preprocess_fieldable_panels_pane(&$variables) {
+  if (isset($variables['content']['title'])) {
+    unset($variables['content']['title']);
+  }
+}
+
+
+function ocha_basic_menu_local_tasks(&$variables) {
+  $output = '';
+
+  if (!empty($variables['primary'])) {
+    $variables['primary']['#prefix'] = '<h2 class="element-invisible">' . t('Primary tabs') . '</h2>';
+    $variables['primary']['#prefix'] .= '<ul class="nav nav-tabs primary">';
+    $variables['primary']['#suffix'] = '</ul>';
+    $output .= drupal_render($variables['primary']);
+  }
+  if (!empty($variables['secondary'])) {
+    $variables['secondary']['#prefix'] = '<h2 class="element-invisible">' . t('Secondary tabs') . '</h2>';
+    $variables['secondary']['#prefix'] .= '<ul class="nav nav-pills secondary">';
+    $variables['secondary']['#suffix'] = '</ul>';
+    $output .= drupal_render($variables['secondary']);
+  }
+
+  return $output;
 }

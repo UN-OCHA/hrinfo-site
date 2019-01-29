@@ -1,0 +1,230 @@
+// Styles for search sidebars and results.
+
+#sidebar-first {
+
+  .block {
+    &.block-facetapi {
+      padding: 0;
+      border-top: 1px solid $cd-border-color;
+      border-bottom: 1px solid $cd-border-color;
+
+      h4 {
+        color: black;
+        cursor: pointer;
+        background: url(../img/facet-down.png) no-repeat right center transparent;
+        font-weight: normal;
+        font-size: 15px;
+
+        &.opened {
+          background-image: url(../img/facet-up.png);
+        }
+      }
+
+      .block__content {
+
+        display: none;
+
+        ul {
+          list-style: none;
+          list-style-type: none;
+          list-style-image: none;
+          margin: 0 0 0.75em 0;
+
+          li {
+            list-style: none;
+            list-style-type: none;
+            list-style-image: none;
+            position: relative;
+            margin: 0 0 0.25em 1.5em;
+
+            a {
+              color: black;
+              padding-left: 6px;
+              display: block;
+              &:hover {
+                background-color: $cd-site-bg-color--light;
+              }
+
+              &.facetapi-active {
+                display: inline;
+                padding-right: 6px;
+              }
+
+              &.facetapi-inactive {
+                background-image: url('../img/icons/checks/check_off.png');
+                background-repeat: no-repeat;
+
+                display: inline-block;
+                padding-left: 14px;
+                //max-height: 11px;
+              }
+
+              &.facetapi-inactive:hover {
+                background-image: url('../img/icons/checks/check_on.png');
+                background-repeat: no-repeat;
+              }
+            }
+
+            &.redactive {
+              color: $hrinfo-red;
+              > a {
+                color: $hrinfo-red;
+                width: 11px;
+                height: 14px;
+                background-image: url('../img/icons/checks/check_on.png');
+                background-repeat: no-repeat;
+                display: inline-block;
+                text-indent: -9999px;
+              }
+
+              > a:hover {
+                background-image: url('../img/icons/checks/check_off.png');
+                background-repeat: no-repeat;
+              }
+            }
+          }
+        }
+
+      }
+    }
+  }
+
+  .current-search-filter {
+    border-bottom: 3px solid $cd-black;
+    padding-bottom: 10px;
+
+    p {
+      margin: 0;
+
+      .items {
+        font-weight: bold;
+        color: $hrinfo-red;
+      }
+    }
+  }
+
+  .text-search {
+
+    margin-top: 20px;
+
+    .input-group {
+      width: 100%;
+    }
+
+    input {
+      &[type="text"] {
+        width: 100%;
+        height: 36px;
+      }
+    }
+
+  }
+
+  .block-current-search {
+
+      .current-reset-filter {
+        height: 33px;
+        line-height: 36px;
+        color: $hrinfo-red;
+
+        a {
+          height: 28px;
+          width: 19px;
+          background: url(../img/cross.png) no-repeat center bottom rgba(0, 0, 0, 0);
+          float: left;
+          margin-right: 5px
+        }
+      }
+
+      .reset-all-filters {
+        height: 33px;
+        line-height: 36px;
+        color: $hrinfo-red;
+
+        a {
+          color: $hrinfo-red;
+          width: 19px;
+          background: url(../img/cross.png) no-repeat left bottom rgba(0, 0, 0, 0);
+          padding-left: 25px;
+        }
+      }
+
+      .current-search-item-active {
+        margin-top: 10px;
+        margin-bottom: -8px;
+        .current-selected-item {
+          color: $hrinfo-red;
+          list-style: none outside none;
+          li {
+            margin-left: 0;
+            line-height: 22px;
+            color: black;
+            //font-size: 0.8em;
+            a {
+              margin-right: 6px;
+              display: inline-block;
+              *display: inline;
+              *zoom: 1;
+              width: 18px;
+              height: 18px;
+              font-size: 0;
+              background: url(../img/bgfilteractive.png) no-repeat center center transparent
+            }
+          }
+        }
+      }
+
+      .current-search-item-results {
+        .current-search-filter {
+          line-height: 20px;
+          font-weight: normal;
+          .facetapi-active {
+            font-weight: bold;
+            color: $hrinfo-red;
+          }
+        }
+      }
+    }
+
+    a {
+      padding-left: 0;
+      color: $hrinfo-red;
+      padding-right: 2px;
+    }
+
+}
+
+#block-current-search-hr-current-search {
+
+  h4 {
+    display: none;
+  }
+
+}
+
+#block-hr-layout-hr-layout-search-rss {
+
+  .block__content {
+    border-radius: 10px;
+    background-color: $cd-site-bg-color;
+    color: $cd-ocha-blue;
+    padding: 10px;
+  }
+
+  a.btn {
+    color:white;
+    display: block;
+    margin: 6px 27px;
+    font-size: 0.95em;
+    text-transform: uppercase;
+    text-align: left;
+    position: relative;
+    i {
+      position: absolute;
+      right: 10px;
+      float: right;
+      font-size: 1.4em;
+    }
+  }
+
+}

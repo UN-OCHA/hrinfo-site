@@ -1,0 +1,726 @@
+//
+// Styles for panels and panes.
+// --------------------------------------------------
+.panel-pane ul {
+  list-style-type: disc;
+  margin: 1rem 0;
+  padding-left: 1rem;
+
+  &.dropdown-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.front {
+  .panel-pane {
+    margin-bottom: 30px;
+
+    @include desktop {
+      min-height: calc(295px + 14px); //height and padding
+    }
+
+    .pane-title {
+      font-size: 13px;
+      color: $cd-default-text-color;
+      border-bottom: 1px dotted $cd-default-text-color;
+      text-transform: uppercase;
+      font-weight: bold;
+      padding-bottom: 7px;
+      margin-bottom: 20px;
+    }
+    .pane-content {
+      a {
+        color: $hrinfo-red;
+      }
+    }
+
+    @include max-width(md) {
+      .row {
+        width: 50%;
+        float: left;
+        margin: 0;
+        .col-sm-6.text-center {
+          text-align: left;
+          width: 100px;
+        }
+      }
+      br {
+        display: none;
+      }
+    }
+
+    ul {
+      padding-left: 0;
+    }
+
+    li {
+      list-style-type: none;
+    }
+  }
+
+  .pane-1 {
+    min-height: 100px;
+  }
+
+}
+
+.hr-highlighted {
+  background-color: $cd-white;
+  padding: 7px;
+  border: 1px solid $cd-border-color;
+  //box-shadow: rgba(black, 0.2) 1px 2px 2px;
+  margin: 20px 0px;
+
+  .panel-pane {
+    &.pane-hr-infographics-panes-list {
+      .pane-title {
+        &:after {
+          content: "\f041";
+        }
+      } // map-marker
+    }
+
+    &.pane-hr-documents-panes-list {
+      .pane-title {
+        &:after {
+          content: "\f016";
+        }
+      } // file-o
+    }
+
+    .pane-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      font-weight: bold;
+      padding-bottom: 7px;
+      margin-bottom: 10px;
+      border-bottom: 1px dotted #dedede;
+      margin-top: 2px;
+      color: $cd-mid-grey;
+      &:after {
+        font-family: FontAwesome;
+        float: right;
+      }
+    }
+
+  .pane-content {
+    padding: 0 7px;
+
+    ul {
+      padding-left: 14px;
+      color: $cd-default-text-color;
+        li {
+          margin-left: 0px;
+        }
+      }
+    }
+
+    > img {
+      // Create even space around image.
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
+  }
+
+  .field-name-field-infographics.field-type-entityreference {
+
+    .field-item .node {
+      margin-bottom: 1em;
+    }
+  }
+
+  .field-name-field-documents.field-type-entityreference {
+
+    .field-item .node {
+      margin-bottom: 1em;
+    }
+  }
+}
+
+/* Linkit and media fix */
+.linkit-wrapper,
+.media-wrapper {
+  z-index: 5000;
+}
+
+/* Featured documents and maps */
+.fieldable-panels-pane .view-mode-teaser.node-hr-infographic .container-fluid,
+.fieldable-panels-pane .view-mode-teaser.node-hr-document .container-fluid {
+  background-image: url('../img/backgrounds/BG_beige_grey.jpg');
+  background-repeat: no-repeat;
+  padding-right: 0;
+  padding-left: 0;
+
+  .pane-hr-infographics-panes-thumbnail,
+  .pane-hr-documents-panes-thumbnail {
+    height: 120px;
+  }
+
+  .pane-node-title {
+    background-color: #67A3AB;
+    min-height: 50px;
+    opacity: 0.8;
+    text-align: center;
+    padding-top: 1em;
+
+    a {
+      color: white;
+      font-weight: bold;
+    }
+  }
+}
+
+.fieldable-panels-pane .view-mode-teaser.node-hr-contact .container-fluid {
+  .pane-node-title {
+    margin-top: 1em;
+  }
+
+  .pane-node-field-organizations,
+  .pane-node-field-job-title-other,
+  .pane-node-field-email,
+  .pane-node-field-phones {
+    padding-left: 10px;
+  }
+}
+
+/* Philippines */
+.og-context-node-84 {
+  .fieldable-panels-pane .view-mode-teaser.node-hr-infographic .container-fluid,
+  .fieldable-panels-pane .view-mode-teaser.node-hr-document .container-fluid {
+    background-image: url('../img/backgrounds/BG_green_2.jpg');
+  }
+}
+
+/*Toolbox page*/
+
+.pane-hr-toolbox-panes-items {
+
+  .views-field-title {
+    color: #525252;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: inline-block;
+  }
+
+  .views-field-field-files li,
+  .views-field-field-links li {
+    color: $cd-ocha-blue;
+  }
+
+  img.file-icon {
+    display: none;
+  }
+
+  .hr-toolbox-tools {
+    .views-field-field-files {
+      ul {
+        list-style-type: none;
+      }
+
+      span.file{
+        display: inline-block;
+        background-image: url('../img/icons/38/Applications/APP_tools.png');
+        background-repeat: no-repeat;
+        padding-left: 50px;
+        padding-top: 10px;
+        height:40px;
+        font-weight: bold;
+        margin-left: -18px;
+        margin-top: 15px;
+      }
+    }
+  }
+
+  a{
+    color:$cd-ocha-blue;
+  }
+
+}
+
+/* Carousel */
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+  margin: auto;
+  width: 100%;
+}
+
+/* Toolbox slideshow */
+.page-node-22 .carousel {
+
+  .carousel-indicators {
+    text-align: right;
+    left: 0;
+    width: 100%;
+    text-align: right;
+    margin-left: 0;
+    bottom: 0;
+  }
+
+  .carousel-caption {
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: rgba(85, 177, 200, 0.6);
+    bottom: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+
+    h3 {
+      color: white;
+      text-align: left;
+    }
+  }
+
+  .carousel-control {
+    span {
+      padding-top: 80px;
+    }
+  }
+}
+
+/* Toolbox homepage - Bottom text headers */
+
+.hr-toolbox-homepage-bottom-text-header h4{
+  color: $cd-dark-grey;
+}
+
+/* Add existing content add button */
+.panels-section-column {
+
+.panel-default {
+
+ > .panel-heading {
+      display: block;
+      clear: both;
+      float: left;
+    }
+  }
+}
+
+/* HR layout standard block */
+.hr-layout-operation-standard {
+
+  .nav-tabs {
+    margin-bottom: 0;
+  }
+
+  .tab-content,
+  .tab-pane {
+    background-color: $cd-site-bg-color;
+    height: 300px;
+  }
+
+  .hr-thumbnail {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+  }
+
+  img {
+    max-height: 250px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  a.hr-layout-see-more {
+    display: block;
+    text-align: center;
+    margin-top: 1em;
+  }
+
+  a.list-group-item {
+    border: none;
+    background-color: transparent;
+    color: $cd-default-text-color;
+
+    &.active,
+    &.active:hover,
+    &.active:focus {
+      color: $hrinfo-red;
+      background-image: linear-gradient(to bottom right, $cd-white, $cd-site-bg-color--light);
+      border-radius: 0;
+    }
+  }
+
+}
+
+//Homepage blocks styling.
+
+.panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents,
+.panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system,
+.panel-pane.pane-block.pane-hr-operations-operations-dropdown {
+  background-color: $cd-site-bg-color--light;
+  padding: 7px;
+  //border: 1px solid #FFF;
+  //-webkit-box-shadow: rgba(0,0,0,0.2) 1px 2px 2px;
+  //box-shadow: rgba(0,0,0,0.2) 1px 2px 2px;
+
+  li {
+    margin-bottom: 5px;
+  }
+  p {
+    margin: 0;
+    margin-bottom: 5px;
+  }
+  h4 {
+    background-repeat: no-repeat;
+    height: 40px;
+    padding-left: 50px;
+    padding-top: 13px;
+  }
+}
+.panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents {
+  margin-bottom: 54px;
+  h4 {
+    background-image:url('../img/icons/38/Homepage/DocumentsIcon38x38.png');
+  }
+}
+
+.panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system {
+  margin-bottom: 54px;
+  h4 {
+    background-image:url('../img/icons/38/Homepage/CoordinationIcon38x38.png');
+  }
+  .chosen-container {
+    margin-top: -5px;
+  }
+}
+
+.panel-pane.pane-block.pane-hr-operations-operations-dropdown {
+  h4 {
+    background-image:url('../img/icons/38/Homepage/OperationsIcon38x38.png');
+  }
+  p {
+    margin-left: -15px;
+  }
+}
+
+.front .panel-pane.pane-block.pane-hr-layout-hr-layout-key-documents { margin-bottom: 30px; }
+.front .panel-pane.pane-block.pane-hr-layout-hr-layout-hum-system { margin-bottom: 30px; }
+
+
+/** New panel styles **/
+
+.powered-by {
+  .hr-highlighted {
+    margin: 0 0 50px 0;
+    position: relative;
+    background: none;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+
+    .pane-title {
+      border-bottom: 1px solid $cd-border-color;
+      font-weight: normal;
+      font-size: 14px;
+      padding: 0 80px 6px 5px;
+      margin: 0;
+      text-transform: uppercase;
+      color: $cd-mid-grey;
+
+      &:after {
+        content: none;
+      }
+    }
+
+    .pane-content {
+
+      ul, p:last-of-type {
+        margin-bottom: 0;
+      }
+
+      ul:not(.nav) {
+        list-style: initial;
+        padding: 0;
+        margin: 0 0 0 16px;
+
+        & + p {
+          margin-top: 20px;
+        }
+      }
+
+      li {
+        margin: 0 0 8px 0;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .pane-title + .pane-content {
+      border-bottom: 1px solid $cd-border-color;
+      padding: 25px 5px;
+    }
+
+    a {
+      color: $cd-ocha-blue;
+      font-weight: normal
+    }
+
+    .more-link {
+      position: absolute;
+      top: 0;
+      right: 5px;
+    }
+
+    .nav-tabs {
+      background: none;
+
+      li {
+        height: 32px;
+        margin: 0;
+
+        a {
+          font-weight: normal;
+          border: none;
+          height: 100%;
+          padding: 6px 10px;
+          color: $cd-mid-grey;
+
+          &:hover, &:focus {
+            border: none;
+          }
+        }
+      }
+    }
+
+    .tab-content {
+      background: white;
+
+      .tab-pane {
+        background: white;
+      }
+    }
+
+    .pane-hr-reliefweb-featured-document {
+
+      .pane-title {
+        border: none;
+      }
+
+      .pane-title + .pane-content {
+        background: white;
+        padding: 15px;
+        border-bottom: none;
+      }
+
+      .table-responsive {
+        border: 0!important;
+        margin-bottom: 0!important;
+      }
+
+      table {
+        border: none;
+        margin: 0;
+
+        tr:nth-of-type(odd), tr:nth-of-type(even) {
+          background: white;
+        }
+
+        td {
+          display: table-cell!important;
+          padding-left: 0!important;
+        }
+      }
+
+      .reliefweb--doc-type--download {
+        width: 100px;
+        padding: 0;
+
+        img {
+          max-width: 100%;
+          border: 1px solid $cd-border-color;
+        }
+      }
+
+      td.reliefweb--doc-type--title {
+        padding: 0 0 0 15px!important;
+      }
+
+    }
+
+    .pane-hr-events-panes-upcoming {
+
+      .views-row {
+        margin-bottom: 8px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .pane-hr-layout-standard {
+
+      .pane-content {
+        border: none;
+        padding: 0 5px;
+      }
+
+    }
+
+    .pane-hr-reliefweb-ocha-products {
+      .pane-title {
+        display: none;
+      }
+
+      .pane-title + .pane-content {
+        padding: 0;
+      }
+
+      .pane-content {
+        height: auto;
+        overflow: auto;
+
+        ul {
+          padding: 0;
+        }
+
+        .tab-content {
+          height: auto;
+        }
+
+        .tab-pane {
+          height: auto;
+
+          .col-xs-4 {
+            display: none;
+          }
+
+          .col-xs-8 {
+            width: 100%;
+          }
+        }
+
+        @media (min-width: 768px) {
+
+          .tab-content {
+            min-height: 235px;
+          }
+
+          .tab-pane {
+            padding: 0 15px;
+
+            .col-xs-4 {
+              display: block;
+              width: 33.33333%
+            }
+
+            .col-xs-8 {
+              width: 66.66666667%
+            }
+
+            >.col-xs-4 {
+
+              padding-left: 0;
+            }
+          }
+
+        }
+
+        @media (min-width: 1200px) {
+          .tab-pane {
+            >.col-xs-4 {
+              max-width: 175px;
+            }
+            .col-xs-8 {
+              width: 590px;
+            }
+
+            .row .col-xs-4 {
+              max-width: 190px;
+            }
+          }
+        }
+
+        .hr-thumbnail {
+          padding: 15px 0;
+
+          .hr-thumbnail-image, .hr-thumbnail-no-image, .hr-thumbnail-no-download {
+            display: block;
+            position: relative;
+            width: 160px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid $cd-border-color;
+
+            img {
+              max-width: 100%;
+              max-height: none;
+            }
+          }
+
+          .hr-thumbnail-no-image {
+            background: url('../img/icons/download-icon.svg') 8px center no-repeat;
+            background-size: 16px;
+            text-align: left;
+            padding: 10px 10px 10px 34px;
+          }
+
+          .hr-thumbnail-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            opacity: 0;
+
+            &:before {
+              content: '';
+              background: url('../img/icons/download-icon.svg') center no-repeat;
+              background-size: 16px;
+              width: 16px;
+              height: 16px;
+              margin: -4px 5px 0 0;
+            }
+          }
+
+          &:hover, &:focus {
+            .hr-thumbnail-text {
+              opacity: 1;
+            }
+          }
+        }
+
+        .list-group {
+          margin: 15px 0;
+        }
+
+        a.list-group-item {
+          border-bottom: 1px solid $cd-border-color;
+
+          &.active {
+            background: $cd-light-bg-color;
+            color: $cd-ocha-blue;
+          }
+
+          &:last-child {
+            border-radius: 0;
+          }
+        }
+      }
+    }
+
+  }
+
+
+}
+
+.modal-body {
+  overflow-y: scroll;
+}
+
+div#modalContent {
+  overflow: visible !important;
+}

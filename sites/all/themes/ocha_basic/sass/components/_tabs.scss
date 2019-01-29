@@ -3,7 +3,7 @@
 //——————————————————————————————————————————————————————————————————————————————
 
 .tabs {
-  border-bottom: 2px solid $cd-site-bg-color;
+  //background: $cd-site-bg-color--light;
   margin: 18px 0;
   padding: 0;
   display: block;
@@ -14,7 +14,6 @@
     float: left;
     position: relative;
     display: block;
-    margin-bottom: -2px; // Height of border bottom.
   }
 
   > li > a {
@@ -30,8 +29,7 @@
     margin: 0;
     border: none;
     text-decoration: none;
-    border-bottom: 2px solid $cd-site-bg-color;
-    color: $hrinfo-red;
+    color: $cd-default-text-color;
 
     @media (min-width:768px) {
       min-width: 110px;
@@ -40,19 +38,23 @@
     &.active,
     &:hover {
       border: none !important;
-      border-bottom: 2px solid $cd-site-bg-color !important;
-      background-color: $cd-site-bg-color;
+      background-color: $cd-site-bg-color--light;
       color: $hrinfo-red;
     }
 
+    &:hover {
+      background-color: $cd-site-bg-color;
+    }
+
     &:focus {
-      background: $cd-site-bg-color;
+      background: $cd-site-bg-color--light;
+      //outline: 1px dotted $hrinfo-red;
     }
   }
 
   > li.active > a,
   > li.active > a:hover,
   > li.active > a:focus {
-    background-color: $cd-site-bg-color;
+    background-color: $cd-site-bg-color--light;
   }
 }

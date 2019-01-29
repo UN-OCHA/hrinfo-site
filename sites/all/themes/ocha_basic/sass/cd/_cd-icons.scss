@@ -2,7 +2,7 @@
 // SVG icon styles
 //——————————————————————————————————————————————————————————————————————————————
 
-// SVG sprite palced before end of body in html.tpl.php
+// SVG sprite placed before end of body in html.tpl.php
 svg:not(:root) {
   @extend .element-hidden;
   overflow: hidden;

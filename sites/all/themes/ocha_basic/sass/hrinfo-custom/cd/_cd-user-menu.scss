@@ -1,0 +1,117 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: User Menu
+//
+// Includes user-centered settings and/or actions.
+//
+//——————————————————————————————————————————————————————————————————————————————
+.cd-user-menu__item {
+
+  &:after {
+    color: $hrinfo-light;
+  }
+}
+
+.cd-global-header__user-menu {
+
+  display: flex;
+  justify-content: flex-end;
+
+  .block button {
+    display: flex;
+    align-items: center;
+    box-sizing: content-box;
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+    fill: $cd-white;
+  }
+}
+
+.block {
+
+  .cd-user-menu__dropdown {
+    width: auto;
+    min-width: 200px;
+    max-width: 300px;
+  }
+
+  &.open {
+    position: relative;
+
+    .cd-user-menu__dropdown {
+      right: 0;
+    }
+  }
+
+  .cd-user-menu__item {
+
+    @include tablet {
+      max-width: unset;
+    }
+
+    .icon--user {
+      margin-right: 4px;
+    }
+
+    .icon--arrow-down {
+      margin-left: 4px;
+      width: 9px;
+      height: 9px;
+    }
+  }
+
+  .cd-user-menu__dropdown li {
+    display: block;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+
+    a {
+      display: block;
+      padding: 12px 0;
+      border-bottom: 0 none;
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        color: $hrinfo-light;
+      }
+
+      &.is-active {
+        font-weight: 700;
+      }
+    }
+
+    &.create-link-new {
+      background-color: $hrinfo-dark-red;
+      padding-left: 4px !important;
+      padding-right: 4px !important;
+    }
+  }
+
+  .cd-user-menu__label {
+    display: none;
+    @include tablet {
+      display: block;
+    }
+  }
+}
+
+//——————————————————————————————————————————————————————————————————————————————
+// Drupal selectors
+//——————————————————————————————————————————————————————————————————————————————
+
+.cd-global-header__user-menu .menu {
+  @extend .cd-user-menu;
+}
+
+.cd-global-header__user-menu .menu > li a {
+  @extend .cd-user-menu__item;
+}
+
+// Login/Logout item as last item in user menu
+.cd-global-header__user-menu .menu > li:last-child {
+  @extend .cd-user-menu__icon-login;
+}

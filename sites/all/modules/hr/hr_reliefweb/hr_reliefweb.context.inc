@@ -30,7 +30,7 @@ function hr_reliefweb_context_default_contexts() {
         'hr_reliefweb-hr_reliefweb_search' => array(
           'module' => 'hr_reliefweb',
           'delta' => 'hr_reliefweb_search',
-          'region' => 'branding',
+          'region' => 'header_search',
           'weight' => '-10',
         ),
       ),

@@ -1,0 +1,117 @@
+.grid-item {
+  padding: 1rem 1rem 0;
+  margin-bottom: 2rem;
+
+  @include desktop {
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+    width: 47%;
+    float: left;
+    &:nth-child(odd){
+      margin-right: 1rem;
+      clear:both;
+    }
+  }
+}
+
+.grid-item_article {
+
+  > h3 {
+    text-transform: unset;
+  }
+
+  > h3 > a {
+    text-decoration: none;
+  }
+
+  footer {
+    background-color: $cd-site-bg-color--dark;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding: 1rem;
+  }
+}
+
+@supports (display: flex) {
+
+  @include tablet {
+
+    .grid {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .grid-item {
+      flex: 0 0 48%;
+      display: flex;
+    }
+
+    .grid-item_article {
+      flex: 1 0 100%;
+      display: flex;
+      flex-direction: column;
+
+      // Sticky footer.
+      footer {
+        margin-top: auto;
+      }
+    }
+  }
+
+  @include desktop {
+
+    .grid-item {
+      flex: 0 0 32%;
+
+      // Reset from no support layout.
+      width: unset;
+      float: none;
+      &:nth-child(odd){
+        margin-right: unset;
+        clear: initial;
+      }
+    }
+  }
+}
+
+
+@supports (display: grid) {
+
+  @include tablet {
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(200px, 1fr));
+      grid-gap: 10px;
+    }
+
+  }
+
+  @include desktop {
+
+    .grid {
+      grid-template-columns: repeat(3, minmax(200px, 1fr));
+    }
+
+  }
+}
+
+
+.view-blog .view-content {
+  @extend .grid;
+}
+
+.view-blog .views-row {
+  @extend .grid-item;
+  background-color: $cd-site-bg-color;
+}
+
+
+.view-blog .views-row article {
+  @extend .grid-item_article;
+}
+
+.grid-item .node__content {
+  padding: 0 0 1rem;
+}

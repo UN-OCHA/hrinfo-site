@@ -30,13 +30,11 @@ h1, h2 ,h3 ,h4 ,h5 {
 }
 
 h1.page-heading {
-  padding-bottom: $cd-base-unit*1.5;
-  border-bottom: 1px solid $cd-mid-bluey-grey;
   font-weight: 300;
 }
 
 h2, h3 {
-  text-transform: uppercase;
+  //text-transform: uppercase;
 }
 
 a {
@@ -44,7 +42,7 @@ a {
 
   &:hover, &:focus {
     color: $cd-ocha-blue;
-    text-decoration: none;
+    //text-decoration: none;
   }
 }
 
@@ -65,9 +63,9 @@ ol {
 //  margin-bottom: $cd-base-unit/4;
 //}
 
-strong {
-  font-weight: 400;
-}
+//strong {
+//  font-weight: 400;
+//}
 
 em {
   font-style: italic;
@@ -86,6 +84,13 @@ dd {
   margin-bottom: $cd-base-unit;
 }
 
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 @include min-width(sm) {
   h1 {
     @include font-size($cd-font-size-xlarge);
@@ -95,9 +100,9 @@ dd {
   //  @include font-size($cd-font-size-base);
   //}
 
-  ol, dl {
-    @include font-size($cd-font-size-base);
-  }
+  //ol, dl {
+  //  @include font-size($cd-font-size-base);
+  //}
 
   //li {
   //  margin-bottom: $cd-base-unit/2;

@@ -1,0 +1,120 @@
+//
+// Styles for main layout
+// --------------------------------------------------
+
+div.region-top div.block {
+  display: inline-block;
+}
+
+#sidebar-first {
+
+	padding: 0;
+
+	.block {
+		padding: 15px;
+		background-color: #f9f9f9;
+		font-size: 12px;
+
+		a {
+			color: $cd-default-text-color;
+			padding: 2px 14px;
+
+			&.active {
+				color: $hrinfo-red;
+			}
+
+			.caret {
+				display: none;
+			}
+		}
+
+		li ul {
+			list-style-type: disc;
+			color: $cd-default-text-color;
+
+			a {
+				padding: 2px;
+			}
+		}
+
+    .btn-primary {
+      color: $cd-white;
+    }
+
+    &.block-current-search {
+      padding: 15px 0;
+    }
+  }
+}
+
+
+// Radix layouts
+.radix-bartlett .container,
+.radix-bartlett-flipped .container,
+.radix-boxton .container,
+.radix-brenham .container,
+.radix-brenham-flipped .container,
+.radix-brown .container,
+.radix-bryant .container,
+.radix-bryant-flipped .container,
+.radix-burr .container,
+.radix-burr-flipped .container,
+.radix-geary .container,
+.radix-harris .container,
+.radix-hewston .container,
+.radix-hewston-flipped .container,
+.radix-mccoppin .container,
+.radix-moscone .container,
+.radix-moscone-flipped .container,
+.radix-phelan .container,
+.radix-sanderson .container,
+.radix-sanderson-flipped .container,
+.radix-sutro .container,
+.radix-taylor .container,
+.radix-taylor-flipped .container,
+.radix-whelan .container {
+	width: 100%;
+}
+
+.bartlett .container,
+.bartlett-flipped .container,
+.boxton .container,
+.brenham .container,
+.brenham-flipped .container,
+.brown .container,
+.bryant .container,
+.bryant-flipped .container,
+.burr .container,
+.burr-flipped .container,
+.geary .container,
+.harris .container,
+.hewston .container,
+.hewston-flipped .container,
+.mccoppin .container,
+.moscone .container,
+.moscone-flipped .container,
+.phelan .container,
+.sanderson .container,
+.sanderson-flipped .container,
+.sutro .container,
+.taylor .container,
+.taylor-flipped .container,
+.whelan .container {
+        width: 100%;
+}
+
+//.sidebar-first #main-content {
+//  margin-top: 40px;
+//}
+//
+//.sidebar-first.og-context-node #main-content {
+//  margin-top: 0;
+//}
+//
+//.no-sidebars .region-content {
+//  margin-top: 40px;
+//}
+
+.region-content {
+  margin-bottom: 40px;
+}
