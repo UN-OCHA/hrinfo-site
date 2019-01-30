@@ -1,5 +1,6 @@
 // This overrides the generic :root rule to hide SVG sprite. See cd-icons.scss.
 svg.highcharts-root,
-.visualization-chart-highcharts svg {
+.visualization-chart-highcharts svg,
+.gapi-analytics-data-chart svg {
   display: block;
 }
