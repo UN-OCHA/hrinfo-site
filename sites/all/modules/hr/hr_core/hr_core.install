@@ -557,3 +557,14 @@ function hr_core_update_7033() {
     ),
   ));
 }
+
+/**
+ * Revert sitewide context to include hr_layout_create_links block.
+ */
+function hr_core_update_7034() {
+  features_revert(array(
+    'hr_layout' => array(
+      'context',
+    )
+  ));
+}
