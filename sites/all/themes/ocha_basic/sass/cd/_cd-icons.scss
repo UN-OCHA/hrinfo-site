@@ -3,9 +3,8 @@
 //——————————————————————————————————————————————————————————————————————————————
 
 // SVG sprite placed before end of body in html.tpl.php
-svg:not(:root) {
+svg.icons-sprite {
   @extend .element-hidden;
-  overflow: hidden;
 }
 
 svg.icon {

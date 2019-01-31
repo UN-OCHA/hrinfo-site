@@ -127,6 +127,14 @@ body table, body .table {
         background-color: $cd-ocha-blue;
         background-image: none;
         padding: 8px;
+
+        a {
+          color: white;
+        }
+
+        &.active a {
+          color: $cd-ocha-blue;
+        }
       }
     }
   }

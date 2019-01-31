@@ -11,14 +11,13 @@
   line-height: 1.5;
 
   a {
-    border-bottom: 1px solid transparent;
     color: $cd-white-text-color;
     text-decoration: none;
 
     &:hover,
     &:focus {
       color: $cd-white;
-      border-color: $cd-bright-border-color;
+      text-decoration: underline;
     }
   }
 }
