@@ -713,8 +713,6 @@
     }
 
   }
-
-
 }
 
 .modal-body {
@@ -723,4 +721,18 @@
 
 div#modalContent {
   overflow: visible !important;
+}
+
+.modal-content {
+  border: 0 none;
+  box-shadow: none;
+}
+
+div.ctools-modal-content a.close {
+  color: $cd-default-text-color;
+  opacity: 1;
+  &:hover,
+  &:focus {
+    color: $cd-black;
+  }
 }
