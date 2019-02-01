@@ -17,6 +17,7 @@ stylesheets[all][] = unset/system.theme.css
 ; Stylesheets
 ; ========================================
 stylesheets[all][] = css/styles.css
+stylesheets[print][] = css/print.css
 
 ; ========================================
 ; Scripts
