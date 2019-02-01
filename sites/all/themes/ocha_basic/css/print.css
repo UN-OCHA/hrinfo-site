@@ -1,0 +1,57 @@
+  *, *:before, *:after { background: transparent !important; color: #000 !important; box-shadow: none !important; text-shadow: none !important; }
+  a, a:visited { text-decoration: underline; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  a[href^="#"]:after, a[href^="javascript:"]:after { content: ""; }
+  pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+  .navbar { display: none; }
+  .btn > .caret, .dropup > .btn > .caret { border-top-color: #000 !important; }
+  .label { border: 1px solid #000; }
+  .table { border-collapse: collapse !important; }
+  .table td, .table th { background-color: #fff !important; }
+  .table-bordered th, .table-bordered td { border: 1px solid #ddd !important; }
+ .visible-print { display: block !important; }
+  table.visible-print { display: table !important; }
+  tr.visible-print { display: table-row !important; }
+  th.visible-print, td.visible-print { display: table-cell !important; }
+ .visible-print-block { display: block !important; }
+ .visible-print-inline { display: inline !important; }
+ .visible-print-inline-block { display: inline-block !important; }
+
+.hidden-print, .cd-header, .cd-footer { display: none !important; }
+
+.calendar-export, .calendar-filters { display: none !important; }
+  .calendar-settings h2, .calendar-settings label, .calendar-settings .chosen-container, .calendar-settings select { display: none !important; }
+
+#secondary-navigation, .breadcrumbs { display: none !important; }
+  #content-wrapper, .container { padding-left: 0; padding-right: 0; width: 100% !important; }
+  body { font-family: 'Liberation Sans', sans-serif; }
+  h1.title { text-transform: uppercase; color: #54b1c8 !important; }
+  .table-responsive { overflow: visible !important; }
+  table.table, table { background-color: #F1F1F1 !important; border: 0 !important; }
+  tr { page-break-inside: avoid !important; }
+  table thead tr { border: 0 !important; }
+  table.table td, table.table th, table.table span, table td, table th, table span { background-color: #F1F1F1 !important; border: 0 !important; }
+  table.table thead th, table.table thead span, table thead th, table thead span { background-color: #54b1c8 !important; color: #fff !important; text-transform: uppercase; font-weight: bold !important; border: 0 !important; }
+  table.table.table-striped > tbody > tr:nth-child(odd), table.table-striped > tbody > tr:nth-child(odd) { background-color: #fafafa !important; }
+  table.table.table-striped > tbody > tr:nth-child(odd) td, table.table.table-striped > tbody > tr:nth-child(odd) th, table.table.table-striped > tbody > tr:nth-child(odd) span, table.table-striped > tbody > tr:nth-child(odd) td, table.table-striped > tbody > tr:nth-child(odd) th, table.table-striped > tbody > tr:nth-child(odd) span { background-color: #fafafa !important; }
+  table.table.table-striped > tbody > tr:nth-child(odd) td.badge-rrule, table.table.table-striped > tbody > tr:nth-child(odd) th.badge-rrule, table.table.table-striped > tbody > tr:nth-child(odd) span.badge-rrule, table.table-striped > tbody > tr:nth-child(odd) td.badge-rrule, table.table-striped > tbody > tr:nth-child(odd) th.badge-rrule, table.table-striped > tbody > tr:nth-child(odd) span.badge-rrule { background-color: #0fa4de !important; }
+  table.table tbody th, table.table tbody td, table.table tbody span, table.table tbody div, table tbody th, table tbody td, table tbody span, table tbody div { color: #494949 !important; }
+  .badge-rrule, table tbody span.badge-rrule { background-color: #0fa4de !important; color: white !important; }
+  .avoid { page-break-inside: avoid !important; }
+  .page-node-events-print h1.title .hr-events-location { color: #2a5d81 !important; }
+  .page-node-events-print .view-header, .page-node-events-print h3 { text-transform: uppercase; color: #54b1c8 !important; font-weight: bold; }
+  .page-node-events-print .view-header { margin-bottom: 1em; }
+  .page-node-events-print td.views-field-field-event-date, .page-node-events-print td.views-field-field-event-date-1 { font-weight: bold; }
+  .page-node-events-print .filters, .page-node-events-print .filter { background-color: #2a5d81 !important; color: white !important; text-transform: capitalize; line-height: 2em; }
+  .page-node-events-print .filter { background-color: #54b1c8 !important; margin-left: 5px; padding: 2px; border-radius: 2px; }
+  .view-hr-events-calendar.view-display-id-print_master th.views-field-field-event-date, .view-hr-events-calendar.view-display-id-print_master th.views-field-field-event-date-1 { width: 10%; }
+  .view-hr-events-calendar.view-display-id-print_master th.views-field-title { width: 30%; }
+  .view-hr-events-calendar.view-display-id-print_master th.views-field-field-hid-contact-ref, .view-hr-events-calendar.view-display-id-print_master th.views-field-field-address { width: 25%; }
+  .view-hr-events-calendar.view-display-id-print_week th.views-field-field-event-date, .view-hr-events-calendar.view-display-id-print_week th.views-field-field-event-date-1, .view-hr-events-calendar.view-display-id-print_day th.views-field-field-event-date, .view-hr-events-calendar.view-display-id-print_day th.views-field-field-event-date-1 { width: 10%; }
+  .view-hr-events-calendar.view-display-id-print_week th.views-field-field-event-date-2, .view-hr-events-calendar.view-display-id-print_day th.views-field-field-event-date-2 { width: 5%; }
