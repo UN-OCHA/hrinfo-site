@@ -1,0 +1,12 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Common Design: Layout
+//——————————————————————————————————————————————————————————————————————————————
+
+// Overrides to prevent issues in CKEditor WYSIWYG
+body {
+  display: block;
+}
+
+body.html {
+  display: grid;
+}
