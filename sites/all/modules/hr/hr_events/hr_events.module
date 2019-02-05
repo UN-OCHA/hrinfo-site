@@ -246,7 +246,7 @@ function hr_events_pdf_output($nid) {
 
   // If the current site is protected by basic auth, add the required
   // credentials to the request.
-  $credentials = hr_events_snap__service_credentials();
+  $credentials = hr_events_snap_service_credentials();
   if ($credentials !== FALSE) {
     $params += $credentials;
   }
