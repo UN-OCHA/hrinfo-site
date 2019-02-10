@@ -13,6 +13,23 @@ function hr_events_wkhtmltopdf_url() {
 }
 
 /**
+ * Helper function to fetch PDF service credential parameters.
+ */
+function hr_events_snap_service_credentials() {
+  $user = variable_get('hr_events_site_user', '');
+  $pass = variable_get('hr_events_site_pass', '');
+
+  if (!empty($user) && !empty($pass)) {
+    return array(
+      'user' => $user,
+      'pass' => $pass,
+    );
+  }
+  return FALSE;
+}
+
+
+/**
  * Implements hook_og_features_registry()
  */
 function hr_events_og_features_registry() {
@@ -226,6 +243,13 @@ function hr_events_pdf_output($nid) {
       'footer-spacing' => '2',
     ),
   );
+
+  // If the current site is protected by basic auth, add the required
+  // credentials to the request.
+  $credentials = hr_events_snap_service_credentials();
+  if ($credentials !== FALSE) {
+    $params += $credentials;
+  }
 
   $url = hr_events_wkhtmltopdf_url();
   $url .= '?' . http_build_query($params, NULL, '&');
