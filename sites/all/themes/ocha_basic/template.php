@@ -42,6 +42,7 @@ function ocha_basic_form_alter(&$form, &$form_state, $form_id) {
     'views-exposed-form-hr-events-calendar-week',
     'views-exposed-form-hr-events-calendar-day',
     'views-exposed-form-hr-events-calendar-year',
+    'views-exposed-form-hr-organizations-page-1'
   ];
 
   if ($form_id == 'views_exposed_form') {
