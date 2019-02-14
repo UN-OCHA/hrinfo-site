@@ -50,7 +50,7 @@
   <!-- Logo for printed pages -->
   <div class="cd-container visible-print-block" style="position:relative">
     <?php if ($logo): ?>
-      <img src="/<?php print drupal_get_path('theme',$GLOBALS['theme'])?>/img/logos/print-logo.png" alt="Humanitarianresponse Logo" style="position: absolute; right:40px; top: 20px" />
+      <img src="/<?php print drupal_get_path('theme',$GLOBALS['theme'])?>/img/logos/print-logo.png" alt="Humanitarianresponse Logo" style="position: absolute; right:40px; top: 10px" />
     <?php endif; ?>
   </div>
 
