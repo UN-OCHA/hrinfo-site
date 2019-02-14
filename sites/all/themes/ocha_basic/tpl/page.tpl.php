@@ -48,9 +48,9 @@
 
 
   <!-- Logo for printed pages -->
-  <div class="visible-print-block pull-right">
+  <div class="cd-container visible-print-block" style="position:relative">
     <?php if ($logo): ?>
-      <img src="/<?php print drupal_get_path('theme',$GLOBALS['theme'])?>/img/logos/print-logo.png" alt="Humanitarianresponse Logo" />
+      <img src="/<?php print drupal_get_path('theme',$GLOBALS['theme'])?>/img/logos/print-logo.png" alt="Humanitarianresponse Logo" style="position: absolute; right:40px; top: 20px" />
     <?php endif; ?>
   </div>
 
