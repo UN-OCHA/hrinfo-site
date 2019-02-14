@@ -21,28 +21,28 @@ table {
   }
 }
 
-.table-responsive {
-  th {
-    display: none;
-  }
-
-  td {
-    display: block;
-    width: 100%;
-  }
-
-  td {
-    &:before {
-      content: attr(data-content);
-      font-weight: bold;
-      display: block;
-    }
-
-    &:last-child {
-      margin-bottom: $cd-base-unit;
-    }
-  }
-}
+//.table-responsive {
+//  th {
+//    display: none;
+//  }
+//
+//  td {
+//    display: block;
+//    width: 100%;
+//  }
+//
+//  td {
+//    &:before {
+//      content: attr(data-content);
+//      font-weight: bold;
+//      display: block;
+//    }
+//
+//    &:last-child {
+//      margin-bottom: $cd-base-unit;
+//    }
+//  }
+//}
 
 tr.even {
   background-color: $cd-site-bg-color--light;
