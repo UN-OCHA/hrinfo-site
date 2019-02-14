@@ -229,16 +229,6 @@ a.fc-event, .fc-event-draggable {
 			}
 	}
 
-	.view-filters {
-
-		.views-exposed-form .views-exposed-widget {
-
-				.form-submit {
-					width: 60px;
-				}
-		}
-	}
-
 	.calendar-calendar table,
 	.calendar-calendar tbody,
 	.calendar-calendar thead,
@@ -1084,16 +1074,10 @@ a.fc-event, .fc-event-draggable {
 .view-filters {
 
    .views-exposed-form .views-exposed-widget {
-		float: left;
-		margin-bottom: 15px;
-		padding: 0em 1em 0.6em 0.5em;
-		margin-top: 10px;
-
-      .form-submit {
-        margin-bottom: -2.2em;
-        line-height: 1.0em;
-        margin-right: -0.8em;
-      }
+      float: left;
+      margin-bottom: 15px;
+      padding: 0em 1em 0.6em 0.5em;
+      margin-top: 10px;
     }
 
     .chosen-container {
