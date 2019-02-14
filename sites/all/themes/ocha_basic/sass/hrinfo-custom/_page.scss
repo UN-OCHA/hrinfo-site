@@ -591,7 +591,7 @@ h1 {
   }
 }
 
-@media screen and (max-width: sm) {
+@include max-width(md) {
   /* Force table to not be like tables anymore */
   table,
   thead,
