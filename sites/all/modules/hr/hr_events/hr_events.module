@@ -294,15 +294,13 @@ PDF_FOOTER;
   // @see https://github.com/UN-OCHA/tools-snap-service#api
   $params = array(
     'url' => $html_url,
-    'params' => array(
-      'service' => 'hrinfo',
-      'media' => 'print',
-      'output' => 'pdf',
-      'pdfFormat' => 'A4',
-      'pdfLandscape' => 'true',
-      'pdfBackground' => 'true',
-      'pdfFooter' => urlencode($pdf_footer),
-    ),
+    'service' => 'hrinfo',
+    'media' => 'print',
+    'output' => 'pdf',
+    'pdfFormat' => 'A4',
+    'pdfLandscape' => 'true',
+    'pdfBackground' => 'true',
+    'pdfFooter' => urlencode($pdf_footer),
   );
 
   // If the current site is protected by basic auth, add the required
