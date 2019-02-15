@@ -300,6 +300,7 @@ PDF_FOOTER;
     'pdfFormat' => 'A4',
     'pdfLandscape' => 'true',
     'pdfBackground' => 'true',
+    'pdfHeader' => ' ', // suppress default by sending space character.
     'pdfFooter' => $pdf_footer,
     'pdfMarginTop' => '24',
     'pdfMarginUnit' => 'px',
