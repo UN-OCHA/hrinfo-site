@@ -301,6 +301,8 @@ PDF_FOOTER;
     'pdfLandscape' => 'true',
     'pdfBackground' => 'true',
     'pdfFooter' => $pdf_footer,
+    'pdfMarginTop' => '24',
+    'pdfMarginUnit' => 'px',
   );
 
   // If the current site is protected by basic auth, add the required
