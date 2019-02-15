@@ -300,7 +300,7 @@ PDF_FOOTER;
     'pdfFormat' => 'A4',
     'pdfLandscape' => 'true',
     'pdfBackground' => 'true',
-    'pdfFooter' => urlencode($pdf_footer),
+    'pdfFooter' => $pdf_footer,
   );
 
   // If the current site is protected by basic auth, add the required
