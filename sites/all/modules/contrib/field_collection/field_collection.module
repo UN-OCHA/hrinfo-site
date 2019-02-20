@@ -40,7 +40,7 @@ function field_collection_form_alter(&$form, &$form_state) {
  */
 function field_collection_form_field_ui_field_overview_form_alter(&$form, &$form_state) {
   if (count($form['#fields'])) {
-    foreach($form['fields'] as $fieldname => $field) {
+    foreach ($form['fields'] as $fieldname => $field) {
       if (!isset($field['type']['#title'])) {
         continue;
       }
@@ -87,7 +87,7 @@ function field_collection_entity_info() {
       'full' => array(
         'label' => t('Full content'),
         'custom settings' => FALSE,
-       ),
+      ),
     ),
     'access callback' => 'field_collection_item_access',
     'deletion callback' => 'field_collection_item_delete',
@@ -145,7 +145,7 @@ function field_collection_entity_info() {
  * @param $entity_type
  * @param $entity
  *
- * @return
+ * @return string
  *   A language code
  */
 function field_collection_entity_language($entity_type, $entity) {
@@ -172,7 +172,7 @@ function field_collection_field_name_load($arg) {
 /**
  * Loads a field collection item.
  *
- * @return field_collection_item
+ * @return
  *   The field collection item entity or FALSE.
  */
 function field_collection_item_load($item_id, $reset = FALSE) {
@@ -322,7 +322,7 @@ function field_collection_admin_paths() {
  */
 function field_collection_permission() {
   return array(
-    'administer field collections' =>  array(
+    'administer field collections' => array(
       'title' => t('Administer field collections'),
       'description' => t('Create and delete fields on field collections.'),
     ),
@@ -558,7 +558,7 @@ function field_collection_field_update($host_entity_type, $host_entity, $field, 
           if (!isset($cleared_host_entity_cache)) {
             list($entity_id) = entity_extract_ids($host_entity_type, $host_entity);
             entity_get_controller($host_entity_type)->resetCache(array($entity_id));
-            $cleared_host_entity_cache = true;
+            $cleared_host_entity_cache = TRUE;
           }
           $is_default = entity_revision_is_default($host_entity_type, $host_entity);
           // If an entity type does not support saving non-default entities,
@@ -761,7 +761,7 @@ function field_collection_field_formatter_info() {
     'field_collection_list' => array(
       'label' => t('Links to field collection items'),
       'field types' => array('field_collection'),
-      'settings' =>  array(
+      'settings' => array(
         'edit' => t('Edit'),
         'translate' => t('Translate'),
         'delete' => t('Delete'),
@@ -772,8 +772,9 @@ function field_collection_field_formatter_info() {
     'field_collection_view' => array(
       'label' => t('Field collection items'),
       'field types' => array('field_collection'),
-      'settings' =>  array(
+      'settings' => array(
         'edit' => t('Edit'),
+        'translate' => t('Translate'),
         'delete' => t('Delete'),
         'add' => t('Add'),
         'description' => TRUE,
@@ -783,7 +784,7 @@ function field_collection_field_formatter_info() {
     'field_collection_fields' => array(
       'label' => t('Fields only'),
       'field types' => array('field_collection'),
-      'settings' =>  array(
+      'settings' => array(
         'view_mode' => 'full',
       ),
     ),
@@ -814,7 +815,7 @@ function field_collection_field_formatter_settings_form($field, $instance, $view
     $elements['translate'] = array(
       '#type' => 'textfield',
       '#title' => t('Translate link title'),
-      '#default_value' => $settings['translate'],
+      '#default_value' => isset($settings['translate']) ? $settings['translate'] : '',
       '#description' => t('Leave the title empty, to hide the link.'),
       '#access' => field_collection_item_is_translatable(),
     );
@@ -874,7 +875,7 @@ function field_collection_field_formatter_settings_summary($field, $instance, $v
   if ($display['type'] !== 'field_collection_list') {
     $entity_type = entity_get_info('field_collection_item');
     if (!empty($entity_type['view modes'][$settings['view_mode']]['label'])) {
-      $output[] =  t('View mode: @mode', array('@mode' => $entity_type['view modes'][$settings['view_mode']]['label']));
+      $output[] = t('View mode: @mode', array('@mode' => $entity_type['view modes'][$settings['view_mode']]['label']));
     }
   }
 
@@ -915,7 +916,7 @@ function field_collection_field_formatter_view($entity_type, $entity, $field, $i
       $view_mode = !empty($display['settings']['view_mode']) ? $display['settings']['view_mode'] : 'full';
       foreach ($items as $delta => $item) {
         if ($field_collection = field_collection_field_get_entity($item)) {
-          $element[$delta]['entity'] = $field_collection->view($view_mode);
+          $element[$delta]['entity'] = $field_collection->view($view_mode, $langcode);
           $element[$delta]['#theme_wrappers'] = array('field_collection_view');
           $element[$delta]['#attributes']['class'][] = 'field-collection-view';
           $element[$delta]['#attributes']['class'][] = 'clearfix';
@@ -948,7 +949,7 @@ function field_collection_field_formatter_view($entity_type, $entity, $field, $i
       $view_mode = !empty($display['settings']['view_mode']) ? $display['settings']['view_mode'] : 'full';
       foreach ($items as $delta => $item) {
         if ($field_collection = field_collection_field_get_entity($item)) {
-          $element[$delta]['entity'] = $field_collection->view($view_mode);
+          $element[$delta]['entity'] = $field_collection->view($view_mode, $langcode);
         }
       }
       break;
@@ -997,7 +998,7 @@ function field_collection_field_formatter_links(&$element, $entity_type, $entity
       $path = field_collection_field_get_path($field);
       list($id) = entity_extract_ids($entity_type, $entity);
       $element['#suffix'] = '';
-      if (!empty($settings['description'])) {
+      if (!empty($settings['description']) && $entity_type != 'node') {
         $element['#suffix'] .= '<div class="description field-collection-description">' . field_filter_xss($instance['description']) . '</div>';
       }
       $title = entity_i18n_string("field:{$field['field_name']}:{$instance['bundle']}:setting_add", $settings['add']);
@@ -1177,6 +1178,7 @@ function field_collection_field_widget_form(&$form, &$form_state, $field, $insta
           '#value' => t('Remove'),
           '#validate' => array(),
           '#submit' => array('field_collection_remove_submit'),
+          '#attributes' => array('class' => array('remove-button')),
           '#limit_validation_errors' => array(),
           '#ajax' => array(
             // 'wrapper' is filled in field_collection_field_attach_form().
@@ -1430,7 +1432,7 @@ function field_collection_remove_submit($form, &$form_state) {
  *   The entity object or FALSE.
  */
 function field_collection_field_get_entity(&$item, $field_name = NULL) {
-  if (isset($item['entity'])) {
+  if (isset($item['entity']) && ($item['entity']->entityType() == 'field_collection_item')) {
     return $item['entity'];
   }
   elseif (isset($item['value'])) {
@@ -1530,7 +1532,8 @@ function field_collection_field_widget_embed_validate($element, &$form_state, $c
 
       // Copied from _form_validate().
       if (isset($elements['#needs_validation'])) {
-        $is_empty_multiple = (!count($elements['#value']));
+        $is_countable = is_array($elements['#value']) || $elements['#value'] instanceof Countable;
+        $is_empty_multiple = $is_countable && (!count($elements['#value']));
         $is_empty_string = (is_string($elements['#value']) && drupal_strlen(trim($elements['#value'])) == 0);
         $is_empty_value = ($elements['#value'] === 0);
         $is_empty_option = (isset($elements['#options']['_none']) && $elements['#value'] == '_none');
@@ -1945,288 +1948,3 @@ function field_collection_entity_translation_insert($entity_type, $entity, $tran
     }
   }
 }
-
-
-/**
- * Implements hook_feeds_processor_targets_alter()
- */
-function field_collection_feeds_processor_targets_alter(&$targets, $entity_type, $bundle_name) {
-
-  // Load up.
-  $loaded = &drupal_static(__FUNCTION__, FALSE);
-
-  if (!$loaded) {
-    $loaded = TRUE;
-    $path = drupal_get_path('module', 'feeds') . '/mappers';
-    $files = drupal_system_listing('/.*\.inc$/', $path, 'name', 0);
-    foreach ($files as $file) {
-      if (strstr($file->uri, '/mappers/')) {
-        require_once (DRUPAL_ROOT . '/' . $file->uri);
-      }
-    }
-  }
-
-  foreach (field_info_instances($entity_type, $bundle_name) as $name => $instance) {
-    $info = field_info_field($name);
-    if ($info['type'] == 'field_collection') {
-
-      $sub_type = 'field_collection_item';
-      $new_targets = module_invoke_all('feeds_processor_targets', $sub_type, $info['field_name']);
-      drupal_alter('feeds_processor_targets', $new_targets, $sub_type, $info['field_name']);
-
-      foreach ($new_targets as $sub_name => $target) {
-        $new_name = t($info['field_name']) . ':' . t($sub_name);
-        $targets[$new_name] = $target;
-        if (isset($target['name'])) {
-          $targets[$new_name]['name'] = $instance['label'] . ':' . $target['name'];
-        }
-        // We override callback for now and retrieve original later.
-        $targets[$new_name]['callback'] = 'field_collection_feeds_set_target';
-      }
-    }
-  }
-
-}
-
-
-/**
- * Process Field Collection items.
- *
- * @param  [type] $source       [description]
- * @param  [type] $entity       [description]
- * @param  [type] $target       [description]
- * @param  [type] $value        [description]
- * @param  [type] $main_mapping [description]
- * @return [type]               [description]
- */
-function field_collection_feeds_set_target($source, $entity, $target, $value, $main_mapping) {
-  $sub_targets = &drupal_static(__FUNCTION__, array());
-
-  $args = explode(':', $target);
-  $target = array_shift($args);
-  $sub_target = implode(':', $args);
-
-  $sub_type = 'field_collection_item';
-  $new_targets = module_invoke_all('feeds_processor_targets', $sub_type, $target);
-  drupal_alter('feeds_processor_targets', $new_targets, $sub_type, $target);
-
-  // Now we retrieve old callbacks and keep then on a static cache.
-  if (!isset($sub_targets[$target])) {
-    $sub_targets[$target] = array();
-    drupal_alter('feeds_processor_targets', $sub_targets[$target], $sub_type, $target);
-  }
-
-  $_sub_targets = $new_targets;
-
-  $value = is_array($value) ? $value : array($value);
-  $info = field_info_field($target);
-
-  // Iterate over all values.
-  $delta = 0;
-  $field = isset($entity->$target) ? $entity->$target : array();
-  try {
-
-    // $delta = which FC instance.
-    // We iterate by subfield, not by FC.
-    while (isset($value[$delta])) {
-
-      // Zero out.
-      $field_collection_item = null;
-
-      // FC is already set on host entity.
-      if (isset($field['und'][$delta]['entity'])) {
-        $field_collection_item = $field['und'][$delta]['entity'];
-      }
-      // FC is on host entity, we have FC item_id, but FC is not loaded.
-      elseif (isset($field['und'][$delta]['value'])) {
-        $field_collection_item = field_collection_item_load($field['und'][$delta]['value']);
-
-        // Zero out field so that we don't just keep accumulating values.
-        unset($field_collection_item->{$sub_target}['und'] );
-      }
-
-      // Host entity does not have any attached FCs yet.
-      if (empty($field_collection_item)) {
-        $field_collection_item = entity_create('field_collection_item', array('field_name' => $target));
-        $field_collection_item->setHostEntity($entity->feeds_item->entity_type, $entity);
-      }
-
-      $sub_mapping = array();
-      $config = $source->importer()->getConfig();
-      if (!empty($config['processor']['config']['mappings'])) {
-        foreach ($config['processor']['config']['mappings'] as $mapping) {
-          if ($mapping['target'] == $target . ':' . $sub_target) {
-            $sub_mapping = $mapping;
-            $sub_mapping['target'] = $sub_target;
-            // Needs language or feeds mappers shout php notices.
-            $sub_mapping['language'] = !empty($config['processor']['config']['language']) ? $config['processor']['config']['language'] : LANGUAGE_NONE;
-            break;
-          }
-        }
-      }
-
-      if (isset($_sub_targets[$sub_target]['callback']) && function_exists($_sub_targets[$sub_target]['callback'])) {
-        $callback = $_sub_targets[$sub_target]['callback'];
-
-        // Normalize
-        if (!is_array($value[$delta])) {
-          $value[$delta] = array($value[$delta]);
-        }
-
-        // Check for a limit and force that limit.
-        if ($info["cardinality"] !== "-1") {
-          $value[$delta] = array_slice($value[$delta], 0, $info["cardinality"]);
-        }
-
-        // HiJack the file callback so we can make it work.
-        if ($callback == "file_feeds_set_target") {
-          $callback = "field_collection_file_feeds_set_target";
-        }
-
-        // Allow altering with many parameters. Cannot use drupal_alter here.
-        $implements = module_implements("sub_target_pre_callback_parse");
-        foreach ($implements as $module_name) {
-          $hook = $module_name . "_" . "sub_target_pre_callback_parse";
-          $hook($target, $sub_target, $entity, $field, $field_collection_item, $value[$delta]);
-        }
-
-        $callback($source, $field_collection_item, $sub_target, $value[$delta], $sub_mapping);
-      }
-
-      // No need to save the field collection here. Just wait until the node is saved.
-      // If we save the FC here we get a huge performance degregation.
-      $field['und'][$delta]['entity'] = $field_collection_item;
-
-      // Break when only hitting the max delta.
-      if ($info['cardinality'] == $delta) {
-        break;
-      }
-
-      $delta++;
-    }
-
-  }
-  catch (Exception $e) {
-    drupal_set_message($e->getMessage(), 'error');
-    watchdog_exception('field_collection', $e, $e->getMessage());
-    throw $e;
-  }
-
-  $entity->{$target} = $field;
-}
-
-/**
- * Wrapper function for file_feeds_set_target as it doesn't do the nested stuff.
- */
-function field_collection_file_feeds_set_target($source, $entity, $target, $value) {
-
-  if (empty($value)) {
-    return;
-  }
-  module_load_include('inc', 'file');
-
-  // Make sure $value is an array of objects of type FeedsEnclosure.
-  if (!is_array($value)) {
-    $value = array($value);
-  }
-  foreach ($value as $k => $v) {
-    if (!($v instanceof FeedsEnclosure)) {
-      if (is_string($v)) {
-        $value[$k] = new FeedsEnclosure($v, file_get_mimetype($v));
-      }
-      else {
-        unset($value[$k]);
-      }
-    }
-  }
-  if (empty($value)) {
-    return;
-  }
-
-  $entity_type = "field_collection_item";
-  $bundle = $entity->field_name;
-
-  // Determine file destination.
-  // @todo This needs review and debugging.
-  $instance_info = field_info_instance($entity_type, $target, $bundle);
-  $info = field_info_field($target);
-  $data = array();
-  if (!empty($entity->uid)) {
-    $data[$entity_type] = $entity;
-  }
-  $destination = file_field_widget_uri($info, $instance_info, $data);
-
-  // Populate entity.
-  $i = 0;
-  $field = isset($entity->$target) ? $entity->$target : array();
-  foreach ($value as $v) {
-    $file = FALSE;
-    try {
-      $v->setAllowedExtensions($instance_info['settings']['file_extensions']);
-      $file = $v->getFile($destination);
-    }
-    catch (Exception $e) {
-      watchdog('feeds', check_plain($e->getMessage()));
-    }
-    if ($file) {
-      $field['und'][$i] = (array)$file;
-      $field['und'][$i]['display'] = 1; // @todo: Figure out how to properly populate this field.
-      if ($info['cardinality'] == 1) {
-        break;
-      }
-      $i++;
-    }
-  }
-  $entity->{$target} = $field;
-
-}
-
-
-/**
- * Implementation of hook_feeds_presave().
- * Invoked before a feed item is saved.
- *
- * @param FeedsSource $source
- *   FeedsSource object that describes the source that is being imported.
- * @param $entity
- *   The entity object.
- * @param array $item
- *   The parser result for this entity.
- * @param int|null $entity_id
- *   The id of the current item which is going to be updated. If this is a new
- *   item, then NULL is passed.
- */
-function field_collection_feeds_presave(FeedsSource $source, $entity, $item, $entity_id) {
-  $mappings = $source->importer()->getConfig()['processor']['config']['mappings'];
-
-  // Only hook in when updating the entity.
-  if (empty($entity_id)) {
-
-    // Go through $mappings and find the FC fields.
-    foreach ($mappings as $mapping) {
-
-      if (strpos($mapping['target'], ':') !== FALSE) {
-        $parts = explode(':', $mapping['target']);
-        $fc_name = array_shift($parts);
-        $info = field_info_field($fc_name);
-
-        // If the field is not a field collection, skip it.
-        if ($info['type'] != 'field_collection') {
-          continue;
-        }
-
-        if (isset($entity->{$fc_name})) {
-          foreach ($entity->{$fc_name}['und'] as $delta => $fc_unloaded) {
-
-            // If an FC is not loaded, we don't want it. Unset it so it won't save.
-            if (!isset($entity->{$fc_name}['und'][$delta]['entity'])) {
-              unset($entity->{$fc_name}['und'][$delta]);
-            }
-          }
-
-        }
-      }
-    }
-  }
-}
-
