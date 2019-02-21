@@ -6,7 +6,7 @@
 
 include_once 'hr_events.features.inc';
 
-define('HR_EVENTS_WKHTMLTOPDF', 'http://localhost:8441/htmltopdf');
+define('HR_EVENTS_WKHTMLTOPDF', 'http://localhost:8442/snap');
 
 function hr_events_wkhtmltopdf_url() {
   return variable_get('hr_events_wkhtmltopdf_url', HR_EVENTS_WKHTMLTOPDF);
@@ -230,18 +230,80 @@ function hr_events_pdf_output($nid) {
       $date = date('Y-m-d');
     }
   }
-  // Print PDF using wkhtmltopdf service
+
+  // Print PDF using Snap service
+  //
+  // @see https://github.com/UN-OCHA/tools-snap-service
   $html_url = url($html_path, array('absolute' => TRUE, 'query' => $current_params));
+
+  // Since Drupal's string translations are set up with this existing string, we
+  // allow localization to occur first before doing string substitution to work
+  // with the Snap Service.
+  $pdf_pagination = t('Page [page] of [topage]');
+  $pdf_pagination = str_replace('[page]', '<span class="pageNumber"></span>', $pdf_pagination);
+  $pdf_pagination = str_replace('[topage]', '<span class="totalPages"></span>', $pdf_pagination);
+
+  // PDF Footer message
+  $pdf_date = date('j M Y', time());
+  $pdf_message = t('Powered by HUMANITARIAN RESPONSE. Date of creation: [date]');
+  $pdf_message = str_replace('[date]', $pdf_date, $pdf_message);
+
+  // Construct our PDF footer.
+  //
+  // Note: you CANNOT use remote references such as image URLs or stylesheets,
+  // nor can JS be executed in this context. Inline HTML/CSS only!
+  $pdf_footer = <<<PDF_FOOTER
+<footer class="pdf-footer">
+  <div class="pdf-footer__left">
+    $pdf_pagination
+  </div>
+  <div class="pdf-footer__right">
+    $pdf_message<br>
+    https://www.humanitarianresponse.info
+  </div>
+</footer>
+<style type="text/css">
+  *, *:before, *:after {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+  }
+  .pdf-footer {
+    display: table;
+    width: 100%;
+    margin: 0 5mm;
+    white-space: nowrap;
+
+    font-family: Roboto, serif;
+    font-weight: 400;
+    font-size: 9px;
+  }
+  .pdf-footer__left,
+  .pdf-footer__right {
+    display: table-cell;
+    vertical-align: bottom;
+    width: 49%;
+  }
+  .pdf-footer__right {
+    text-align: right;
+  }
+</style>
+PDF_FOOTER;
+
+  // Parameters can be found on Snap Service README.
+  //
+  // @see https://github.com/UN-OCHA/tools-snap-service#api
   $params = array(
     'url' => $html_url,
-    'params' => array(
-      'print-media-type' => 'true',
-      'footer-left' => t('Page [page] of [topage]'),
-      'footer-right' => t('Powered by HUMANITARIAN RESPONSE. Date of creation: [date]')."\nhttp://www.humanitarianresponse.info",
-      'footer-font-name' => 'Exo 2',
-      'footer-font-size' => '8',
-      'footer-spacing' => '2',
-    ),
+    'service' => 'hrinfo',
+    'media' => 'print',
+    'output' => 'pdf',
+    'pdfFormat' => 'A4',
+    'pdfLandscape' => 'true',
+    'pdfBackground' => 'true',
+    'pdfHeader' => ' ', // suppress default by sending space character.
+    'pdfFooter' => $pdf_footer,
+    'pdfMarginTop' => '24',
+    'pdfMarginUnit' => 'px',
   );
 
   // If the current site is protected by basic auth, add the required
@@ -328,4 +390,3 @@ function hr_events_clone_node_alter(&$node, $context) {
   unset($node->field_event_agenda);
   unset($node->field_related_content);
 }
-
