@@ -35,12 +35,18 @@ Drupal.behaviors.hidProfilesContacts = {
         }
       },
       getLocationName: function() {
-        var ops = this.get('operations');
-        var names = [];
-        _.each(ops, function (operation) {
-          names.push(operation.name);
-        });
-        return names.join(", ");
+        var ops = this.get('location');
+        var name = '';
+        if (location.locality) {
+          name += location.locality;
+        }
+        if (location.region) {
+          name += ', ' + location.region.name;
+        }
+        if (location.country) {
+          name += ', ' + location.country.name;
+        }
+        return name;
       },
 
       getBundles: function() {
