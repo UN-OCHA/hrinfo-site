@@ -316,6 +316,9 @@ PDF_FOOTER;
   $url = hr_events_wkhtmltopdf_url();
   $url .= '?' . http_build_query($params, NULL, '&');
   $req_params = array(
+    'headers' => array(
+      'X-Forwarded-For' => ip_address(),
+    ),
     'method' => 'POST',
   );
   drupal_add_http_header('Content-Type', 'application/pdf; charset=utf-8');
