@@ -255,9 +255,9 @@ function ocha_basic_preprocess_page(&$vars) {
   $vars['hr_favorite_spaces'] = _ocha_basic_block_render('hr_bookmarks', 'hr_favorite_spaces');
 
   // Bootstrap CDN.
-  drupal_add_js('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', 'external');
+  drupal_add_js('https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js', 'external');
 
-  drupal_add_css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', 'external');
+  drupal_add_css('https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css', 'external');
 
   drupal_add_css('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', 'external');
 
