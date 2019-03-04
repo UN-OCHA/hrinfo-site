@@ -37,16 +37,16 @@ Drupal.behaviors.hidProfilesContacts = {
       getLocationName: function() {
         var location = this.get('location');
         var name = '';
-        if (location.locality) {
+        if (location && location.locality) {
           name += location.locality;
         }
-        if (location.region) {
+        if (location && location.region) {
           if (name !== '') {
             name += ', ';
           }
           name += location.region.name;
         }
-        if (location.country) {
+        if (location && location.country) {
           if (name !== '') {
             name += ', ';
           }
