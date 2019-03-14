@@ -12,8 +12,10 @@
  */
 class shs_handler_filter_entityreference extends views_handler_filter_numeric {
 
-  // Define filter options.
-  function option_definition() {
+  /**
+   * Define filter options.
+   */
+  public function option_definition() {
     $options = parent::option_definition();
 
     $options['shs_enabled'] = array('default' => FALSE);
@@ -30,7 +32,7 @@ class shs_handler_filter_entityreference extends views_handler_filter_numeric {
    * @param array $form_state
    *   Current form state.
    */
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
 
     $form['shs_enabled'] = array(
@@ -58,9 +60,9 @@ class shs_handler_filter_entityreference extends views_handler_filter_numeric {
   }
 
   /**
-   * Provide a simple textfield for equality
+   * Provide a simple textfield for equality.
    */
-  function value_form(&$form, &$form_state) {
+  public function value_form(&$form, &$form_state) {
     global $language;
 
     parent::value_form($form, $form_state);
@@ -74,7 +76,15 @@ class shs_handler_filter_entityreference extends views_handler_filter_numeric {
     $field = field_info_field($this->definition['field_name']);
     $handler = entityreference_get_selection_handler($field);
     $referencable_entities = $handler->getReferencableEntities();
-    $vocabulary_names = empty($field['settings']['handler_settings']['target_bundles']) ? array() : $field['settings']['handler_settings']['target_bundles'];
+    $vocabulary_names = array();
+    if ('views' === $field['settings']['handler']) {
+      $view_settings = $field['settings']['handler_settings']['view'];
+      // Try to load vocabularies from view filter.
+      $vocabulary_names = _shs_entityreference_views_get_vocabularies($view_settings['view_name'], $view_settings['display_name']);
+    }
+    else {
+      $vocabulary_names = empty($field['settings']['handler_settings']['target_bundles']) ? array() : $field['settings']['handler_settings']['target_bundles'];
+    }
     $vocabularies = array();
     foreach ($vocabulary_names as $vocabulary_name) {
       if (($vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_name)) !== FALSE) {
@@ -85,7 +95,7 @@ class shs_handler_filter_entityreference extends views_handler_filter_numeric {
     if (empty($form_state['input'][$identifier])) {
       $form_state['input'][$identifier] = 'All';
     }
-    $default_value = $form_state['input'][$identifier];
+    $default_value = check_plain($form_state['input'][$identifier]);
     if (!is_array($default_value) && $multiple) {
       $default_value = explode('+', $default_value);
       foreach ($default_value as $delta => $value) {
@@ -127,6 +137,18 @@ class shs_handler_filter_entityreference extends views_handler_filter_numeric {
     if (!empty($this->options['exposed']) && !empty($this->options['expose']['required'])) {
       $element_settings['required'] = TRUE;
     }
+    // Allowing other modules to add settings for shs.
+    if (!empty($this->options['expose']['shs'])) {
+      $element_settings = array_merge($element_settings, $this->options['expose']['shs']);
+    }
+
+    $vocabulary_identifier = array(
+      'field_name' => $field['field_name'],
+    );
+    if (count($vocabularies) == 1) {
+      // Get ID from first (and only) vocabulary.
+      $vocabulary_identifier = $vocabularies[0]->vid;
+    }
 
     // Generate a random hash to avoid merging of settings by drupal_add_js.
     // This is necessary until http://drupal.org/node/208611 lands for D7.
@@ -136,9 +158,7 @@ class shs_handler_filter_entityreference extends views_handler_filter_numeric {
       'shs' => array(
         $identifier => array(
           $js_hash => array(
-            'vid' => array(
-              'field_name' => $field['field_name'],
-            ),
+            'vid' => $vocabulary_identifier,
             'settings' => $element_settings,
             'default_value' => $default_value,
             'parents' => $parents,
@@ -189,7 +209,7 @@ class shs_handler_filter_entityreference extends views_handler_filter_numeric {
    * @return string
    *   Short summary explaining the settings.
    */
-  function admin_summary() {
+  public function admin_summary() {
     $summary = parent::admin_summary();
 
     // @todo: add "shs".

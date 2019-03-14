@@ -12,27 +12,26 @@
  */
 class shs_handler_filter_term_node_tid extends views_handler_filter_term_node_tid {
 
-  function option_definition() {
+  /**
+   * {@inheritdoc}
+   */
+  public function option_definition() {
     $options = parent::option_definition();
 
     $options['type'] = array('default' => 'shs');
     $options['use_chosen'] = array('default' => 'never');
-    $options['node_count'] = array('default' => FALSE);
 
     return $options;
   }
 
-  function extra_options_form(&$form, &$form_state) {
+  /**
+   * {@inheritdoc}
+   */
+  public function extra_options_form(&$form, &$form_state) {
     parent::extra_options_form($form, $form_state);
 
     $form['type']['#options'] += array(
       'shs' => t('Simple hierarchical select'),
-    );
-    $form['node_count'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Display number of nodes'),
-      '#description' => t('Display the number of nodes associated with the term.'),
-      '#default_value' => empty($this->options['node_count']) ? FALSE : $this->options['node_count'],
     );
 
     if (module_exists('chosen')) {
@@ -51,7 +50,10 @@ class shs_handler_filter_term_node_tid extends views_handler_filter_term_node_ti
     }
   }
 
-  function value_form(&$form, &$form_state) {
+  /**
+   * {@inheritdoc}
+   */
+  public function value_form(&$form, &$form_state) {
     global $language;
 
     parent::value_form($form, $form_state);
@@ -72,7 +74,7 @@ class shs_handler_filter_term_node_tid extends views_handler_filter_term_node_ti
       $default_value = empty($this->value) ? 0 : $this->value;
 
       if (!empty($form_state['input'][$identifier])) {
-        $default_value = $form_state['input'][$identifier];
+        $default_value = check_plain($form_state['input'][$identifier]);
         if ($multiple && !is_array($default_value)) {
           $default_value = array($default_value);
         }
@@ -90,7 +92,7 @@ class shs_handler_filter_term_node_tid extends views_handler_filter_term_node_ti
             $default_value = $values;
           }
           $parents_multiple = array();
-          foreach ($default_value as $delta => $tid) {
+          foreach ($default_value as $tid) {
             $parents_multiple[] = $tid;
           }
           $parents[] = array('tid' => $parents_multiple);
@@ -122,8 +124,9 @@ class shs_handler_filter_term_node_tid extends views_handler_filter_term_node_ti
       if (!empty($this->options['exposed']) && !empty($this->options['expose']['required'])) {
         $element_settings['required'] = TRUE;
       }
-      if (!empty($this->options['node_count'])) {
-        $element_settings['node_count'] = $this->options['node_count'];
+      // Allowing other modules to add settings for shs.
+      if (!empty($this->options['expose']['shs'])) {
+        $element_settings = array_merge($element_settings, $this->options['expose']['shs']);
       }
 
       // Generate a random hash to avoid merging of settings by drupal_add_js.
@@ -165,7 +168,10 @@ class shs_handler_filter_term_node_tid extends views_handler_filter_term_node_ti
     }
   }
 
-  function admin_summary() {
+  /**
+   * {@inheritdoc}
+   */
+  public function admin_summary() {
     // Set up $this->value_options for the parent summary.
     $this->value_options = array();
 

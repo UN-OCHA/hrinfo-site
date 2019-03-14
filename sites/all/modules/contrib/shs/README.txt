@@ -22,11 +22,6 @@ Taxonomy module (Drupal core) needs to be enabled.
   "Simple hierarchical select" as widget type.
 
 * Field settings
-  - "Display number of nodes"
-    Displays the number of nodes associated to a term next to the term name in
-    the dropdown.
-    WARNING: on sites with a lot of terms and nodes this can be a great
-    performance killer (even if the data is cached).
   - "Allow creating new terms"
     Terms may be created directly from within the dropdowns (user needs to have
     permission to create terms in the vocabulary).
@@ -73,6 +68,16 @@ Taxonomy module (Drupal core) needs to be enabled.
     custom handler to avoid loading of all Drupal functions and speed up
     loading.
 
+* Entity reference (https://www.drupal.org/project/entityreference)
+  - "Simple hierarchical select" works out of the box with simple entity
+    reference fields. In case you use Views as entity selection mode for your
+    field there may be some problems, though.
+    Your reference view needs at least one filter for the vocabulary. Otherwise
+    "Simple hierarchical select" has no chance to retrieve the list of possible
+    options to display.
+    More complex reference views may cause "Simple hierarchical select" to fail,
+    so its best to keep it as simple as possible.
+
 
 -- CONTACT --
 
@@ -83,4 +88,3 @@ This project has been sponsored by:
 * undpaul
   Drupal experts providing professional Drupal development services.
   Visit http://www.undpaul.de for more information.
-

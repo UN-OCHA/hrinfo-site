@@ -3,7 +3,7 @@
  * Custom behaviors for Simple hierarchical select.
  */
 
-(function ($) {
+(function ($, Drupal) {
 
   /**
    * Creates the widget for Simple hierarchical select.
@@ -175,12 +175,18 @@
           });
           // Set default value.
           $element.val(default_value);
+          if (0 === default_value) {
+            $element.val(settings.any_value);
+          }
 
           // Try to convert the element to a "Chosen" element.
           if (!elementConvertToChosen($element, settings)) {
             // Display original dropdown element.
             $element.fadeIn(settings.display.animationSpeed);
             $element.css('display','inline-block');
+          }
+          else {
+            $element.trigger('chosen:updated');
           }
 
           // If there is no data, the field is required and the user is allowed
@@ -222,6 +228,7 @@
       data: {
         callback: 'shs_json_term_add',
         arguments: {
+          token: settings.token,
           vid: term.vid,
           parent: term.parent,
           name: term.name,
@@ -281,6 +288,7 @@
         // Display triggering element.
         $triggering_element.fadeIn(settings.display.animationSpeed);
         $triggering_element.css('display','inline-block');
+        $triggering_element.trigger('change');
       }
     });
   }
@@ -303,20 +311,16 @@
       if (Drupal.settings.chosen) {
         // Remove element created by chosen.
         var elem_id = $(this).attr('id');
-        // Chosen lower than v1
-        $element_chzn = $('#' + elem_id.replace(/-/g, '_') + '_chzn');
-        // Chosen v1+.
-        $('#' + elem_id.replace(/-/g, '_') + '_chosen').remove();
-        if ($element_chzn) {
-          $element_chzn.prev('label').remove();
-          $element_chzn.remove();
+        $element_chosen = $('#' + elem_id.replace(/-/g, '_') + '_chosen');
+        if ($element_chosen) {
+          $element_chosen.prev('label').remove();
+          $element_chosen.remove();
         }
       }
       // Remove element.
       $(this).prev('label').remove();
       $(this).remove();
     });
-    //$triggering_element.nextAll('.chzn-container').remove();
     $triggering_element.nextAll('.shs-term-add-new-wrapper').remove();
     // Create next level (if the value is != 0).
     if ($triggering_element.val() == '_add_new_') {
@@ -325,7 +329,7 @@
       if (Drupal.settings.chosen) {
         // Remove element created by chosen.
         var elem_id = $triggering_element.attr('id');
-        $('#' + elem_id.replace(/-/g, '_') + '_chzn').remove();
+        $('#' + elem_id.replace(/-/g, '_') + '_chosen').remove();
       }
       // Create new container with textfield and buttons ("cancel", "save").
       $container = $('<div>')
@@ -438,10 +442,10 @@
       .addClass('shs-select-level-' + level)
       .bind('change', function() {
         updateElements($(this), base_id, settings, level);
-    })
-    .hide();
+      })
+      .hide();
     if (settings.multiple) {
-      $element.attr('multiple', 'multiple');
+      $element.attr('multiple', 'multiple')
     }
     if (settings.settings.hasOwnProperty('required') && settings.settings.required) {
       $element.addClass('required');
@@ -540,6 +544,16 @@
         }
       }
     }
+    // Notify listeners about the change in the original select.
+    $field_orig.trigger({
+      type: 'change',
+      shs: {
+        triggeringElement: $triggering_element,
+        level: level,
+        settings: settings,
+        value: $triggering_element.val()
+      }
+    });
   }
 
   /**
@@ -549,52 +563,47 @@
    */
   elementConvertToChosen = function($element, settings) {
     // Returns false if chosen is not available or its settings are undefined.
-    if (typeof Drupal.settings.chosen == 'undefined' && typeof $.fn.chosen == 'undefined') {
+    if ($.fn.chosen === void 0 || !Drupal.settings.hasOwnProperty('chosen') || Drupal.settings.chosen === void 0) {
       return false;
     }
 
+    var name = $element.attr('name');
     settings.chosen = settings.chosen || Drupal.settings.chosen;
-    var minOptions,
-        minWidth = settings.chosen.minimum_width;
-        multiple = Drupal.settings.chosen.multiple,
-        maxSelectedOptions = Drupal.settings.chosen.max_selected_options,
-        options = {};
+    var minWidth = settings.chosen.minimum_width;
+    var multiple = Drupal.settings.chosen.multiple;
+    var maxSelectedOptions = Drupal.settings.chosen.max_selected_options;
 
     // Define options.
-    options.inherit_select_classes = true;
+    var options = {
+      inherit_select_classes: true
+    };
 
-    // Get element selector from settings (and remove "visible" option since
-    // our select element is hidden by default).
-    var selector = settings.chosen.selector.replace(/:visible/, '');
-    var name = $element.attr('name');
+    var minimum = multiple && multiple[name] ? settings.chosen.minimum_multiple : settings.chosen.minimum_single;
 
-    minOptions = settings.chosen.minimum_single;;
-
-    if (multiple && multiple[name] != false) {
-      minOptions = settings.chosen.minimum_multiple;
-    }
-
-    if (maxSelectedOptions && maxSelectedOptions[name] != false) {
+    if (maxSelectedOptions && maxSelectedOptions[name]) {
       options.max_selected_options = maxSelectedOptions[name];
     }
 
     // Merges the user defined settings for chosen.
     options = $.extend(options, settings.chosen);
 
-    if ((settings.settings.use_chosen == 'always') || ((settings.settings.use_chosen == 'chosen') && $element.is(selector) && ($element.find('option').size() >= minOptions || minOptions == 'Always Apply'))) {
+    // Get element selector from settings (and remove "visible" option since
+    // our select element is hidden by default).
+    var selector = settings.chosen.selector.replace(/:visible/, '');
+    if ((settings.settings.use_chosen === 'always') || ((settings.settings.use_chosen === 'chosen') && $element.is(selector) && ($element.find('option').size() >= minimum || minimum === 'Always Apply'))) {
       options = $.extend(options, {
         width: (($element.width() < minWidth) ? minWidth : $element.width()) + 'px'
       });
 
-      // Applies chosen.
-      $element.chosen(options);
-
-      return $element;
+      // Apply chosen to the element.
+      return $element.chosen(options);
     }
-    else if ((settings.settings.use_chosen == 'never') && (!$element.hasClass('chosen-disable'))) {
+    else if ((settings.settings.use_chosen === 'never') && (!$element.hasClass('chosen-disable'))) {
       // Tell chosen to not process this element.
       $element.addClass('chosen-disable');
     }
+
+    return false;
   }
 
-})(jQuery);
+})(jQuery, Drupal);
