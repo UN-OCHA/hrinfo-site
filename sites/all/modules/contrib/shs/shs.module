@@ -905,14 +905,14 @@ function shs_term_get_children($identifier, $parent = 0, array $settings = array
         // Get term children (only first level).
         // Only load entities if i18n_taxonomy or entity_translation is
         // installed.
-	$load_entities = module_exists('i18n_taxonomy') || module_exists('entity_translation');
+        $load_entities = module_exists('i18n_taxonomy') || module_exists('entity_translation');
         if ($load_entities) {
-          $terms = taxonomy_get_tree($vid, $parent, 1);
-	  $tree = taxonomy_term_load_multiple(array_keys($terms));
-	}
-	else {
-	  $tree = taxonomy_get_tree($vid, $parent, 1);
-	}
+          $tree_terms = taxonomy_get_tree($vid, $parent, 1);
+          $tree = taxonomy_term_load_multiple(array_keys($tree_terms));
+        }
+        else {
+          $tree = taxonomy_get_tree($vid, $parent, 1);
+        }
         foreach ($tree as $term) {
           $term_name = $term->name;
           if (module_exists('i18n_taxonomy')) {
