@@ -1,0 +1,21 @@
+diff --git a/sites/all/modules/contrib/shs/shs.module b/sites/all/modules/contrib/shs/shs.module
+index c66e5980..cd80e611 100644
+--- a/sites/all/modules/contrib/shs/shs.module
++++ b/sites/all/modules/contrib/shs/shs.module
+@@ -905,8 +905,14 @@ function shs_term_get_children($identifier, $parent = 0, array $settings = array
+         // Get term children (only first level).
+         // Only load entities if i18n_taxonomy or entity_translation is
+         // installed.
+-        $load_entities = module_exists('i18n_taxonomy') || module_exists('entity_translation');
+-        $tree = taxonomy_get_tree($vid, $parent, 1, $load_entities);
++	$load_entities = module_exists('i18n_taxonomy') || module_exists('entity_translation');
++        if ($load_entities) {
++          $terms = taxonomy_get_tree($vid, $parent, 1);
++	  $tree = taxonomy_term_load_multiple(array_keys($terms));
++	}
++	else {
++	  $tree = taxonomy_get_tree($vid, $parent, 1);
++	}
+         foreach ($tree as $term) {
+           $term_name = $term->name;
+           if (module_exists('i18n_taxonomy')) {
