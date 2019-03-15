@@ -908,7 +908,11 @@ function shs_term_get_children($identifier, $parent = 0, array $settings = array
         $load_entities = module_exists('i18n_taxonomy') || module_exists('entity_translation');
         if ($load_entities) {
           $tree_terms = taxonomy_get_tree($vid, $parent, 1);
-          $tree = taxonomy_term_load_multiple(array_keys($tree_terms));
+          $tree_tids = array();
+          foreach ($tree_terms as $tree_term) {
+            $tree_tids[] = $tree_term->tid;
+          }
+          $tree = taxonomy_term_load_multiple(array_keys($tree_tids));
         }
         else {
           $tree = taxonomy_get_tree($vid, $parent, 1);
