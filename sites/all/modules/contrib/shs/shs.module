@@ -430,8 +430,10 @@ function shs_field_widget_form(&$form, &$form_state, $field, $instance, $langcod
   // Get value.
   $element_value = NULL;
   $submitted_value = NULL;
-  if (!empty($form_state['values']) && !empty($element['#parents'])) {
-    $submitted_value = drupal_array_get_nested_value($form_state['values'], $element['#parents']);
+  if (!empty($form_state['values']) && !empty($element['#field_name']) && !empty($element['#language']) && isset($element['#delta'])) {
+    if ($field['type'] == 'entityreference' && isset($form_state['values'][$element['#field_name']][$element['#language']][$element['#delta']])) {
+      $submitted_value = $form_state['values'][$element['#field_name']][$element['#language']][$element['#delta']]['target_id'];
+    }
   }
   if (!empty($items[$delta][$field_column])) {
     // Use saved value from database or cache.
@@ -439,7 +441,7 @@ function shs_field_widget_form(&$form, &$form_state, $field, $instance, $langcod
   }
   elseif (!empty($submitted_value)) {
     // Use value from form_state (for example for fields with cardinality = -1).
-    $element_value = array('tid' => $submitted_value);
+    $element_value = $submitted_value;
   }
 
   // Get vocabulary names from allowed values.
@@ -546,6 +548,7 @@ function shs_field_widget_afterbuild($element, &$form_state) {
   if (!empty($default_value)) {
     // Use value from form_state (for example for fields with cardinality = -1).
     $element['#default_value'] = $default_value;
+    $element['#options'][$default_value] = $default_value;
   }
 
   // Add main Javascript behavior and style only once.
