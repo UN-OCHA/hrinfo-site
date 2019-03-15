@@ -491,12 +491,12 @@ function shs_field_widget_form(&$form, &$form_state, $field, $instance, $langcod
 
   // Prepare the list of options.
   if ($field['type'] == 'entityreference') {
-    // Get current selection handler.
-    $handler = entityreference_get_selection_handler($field, $instance, $element['#entity_type'], $element['#entity']);
-    $referencable_entities = $handler->getReferencableEntities();
     $options = array(
       '_none' => empty($element['#required']) ? t('- None -', array(), array('context' => 'shs')) : t('- Select a value -', array(), array('context' => 'shs')),
     );
+    if (!empty($element_value)) {
+      $options[$element_value] = $element_value;
+    }
     foreach ($referencable_entities as $terms) {
       $options += $terms;
     }
