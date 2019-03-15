@@ -912,7 +912,7 @@ function shs_term_get_children($identifier, $parent = 0, array $settings = array
           foreach ($tree_terms as $tree_term) {
             $tree_tids[] = $tree_term->tid;
           }
-          $tree = taxonomy_term_load_multiple(array_keys($tree_tids));
+          $tree = taxonomy_term_load_multiple($tree_tids);
         }
         else {
           $tree = taxonomy_get_tree($vid, $parent, 1);
