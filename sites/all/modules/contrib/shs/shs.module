@@ -497,8 +497,10 @@ function shs_field_widget_form(&$form, &$form_state, $field, $instance, $langcod
     if (!empty($element_value)) {
       $options[$element_value] = $element_value;
     }
-    foreach ($referencable_entities as $terms) {
-      $options += $terms;
+    if (count($referencable_entities)) {
+      foreach ($referencable_entities as $terms) {
+        $options += $terms;
+      }
     }
   }
   else {
