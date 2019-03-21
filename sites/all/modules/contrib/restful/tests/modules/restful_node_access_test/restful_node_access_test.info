@@ -5,9 +5,8 @@ dependencies[] = restful
 dependencies[] = restful_test
 hidden = TRUE
 
-; Information added by Drupal.org packaging script on 2017-02-15
-version = "7.x-2.16"
+; Information added by Drupal.org packaging script on 2019-03-20
+version = "7.x-2.17"
 core = "7.x"
 project = "restful"
-datestamp = "1487139488"
-
+datestamp = "1553083393"
