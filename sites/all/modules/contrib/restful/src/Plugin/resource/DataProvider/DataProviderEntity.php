@@ -346,6 +346,7 @@ class DataProviderEntity extends DataProvider implements DataProviderEntityInter
    * {@inheritdoc}
    */
   public function entityValidate(\EntityDrupalWrapper $wrapper) {
+    $this->validateFields($wrapper);
     if (!module_exists('entity_validator')) {
       // Entity validator doesn't exist.
       return;
@@ -409,6 +410,23 @@ class DataProviderEntity extends DataProvider implements DataProviderEntityInter
 
     // Throw the exception.
     throw $exception;
+  }
+
+  /**
+   * Validates an entity's fields before they are saved.
+   *
+   * @param \EntityDrupalWrapper $wrapper
+   *   A metadata wrapper for the entity.
+   *
+   * @throws \Drupal\restful\Exception\RestfulException
+   */
+  protected function validateFields($wrapper) {
+    try {
+      field_attach_validate($wrapper->type(), $wrapper->value());
+    }
+    catch (\FieldValidationException $e) {
+      throw new UnprocessableEntityException($e->getMessage());
+    }
   }
 
   /**
@@ -980,7 +998,6 @@ class DataProviderEntity extends DataProvider implements DataProviderEntityInter
     }
     $save = FALSE;
     $original_object = $object;
-    $op = $wrapper->getIdentifier() ? 'edit' : 'create';
     $interpreter = new DataInterpreterEMW($this->getAccount(), $wrapper);
     // Keeps a list of the fields that have been set.
     $processed_fields = array();
@@ -1004,7 +1021,7 @@ class DataProviderEntity extends DataProvider implements DataProviderEntityInter
         continue;
       }
 
-      $entity_property_access = $this::checkPropertyAccess($resource_field, $op, $interpreter);
+      $entity_property_access = $this::checkPropertyAccess($resource_field, 'edit', $interpreter);
       if (!array_key_exists($public_field_name, $object)) {
         // No property to set in the request.
         // Only set this to NULL if this property has not been set to a specific
@@ -1028,7 +1045,7 @@ class DataProviderEntity extends DataProvider implements DataProviderEntityInter
       $resource_field->set($field_value, $interpreter);
       // We check the property access only after setting the values, as the
       // access callback's response might change according to the field value.
-      $entity_property_access = $this::checkPropertyAccess($resource_field, $op, $interpreter);
+      $entity_property_access = $this::checkPropertyAccess($resource_field, 'edit', $interpreter);
       if (!$entity_property_access) {
         throw new BadRequestException(format_string('Property @name cannot be set.', array('@name' => $public_field_name)));
       }

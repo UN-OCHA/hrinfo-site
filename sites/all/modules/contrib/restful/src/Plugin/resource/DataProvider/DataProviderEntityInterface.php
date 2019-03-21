@@ -7,8 +7,6 @@
 
 namespace Drupal\restful\Plugin\resource\DataProvider;
 
-use Drupal\restful\Exception\BadRequestException;
-
 interface DataProviderEntityInterface extends DataProviderInterface {
 
   /**
@@ -25,7 +23,8 @@ interface DataProviderEntityInterface extends DataProviderInterface {
    * @param \EntityDrupalWrapper $wrapper
    *   The wrapped entity.
    *
-   * @throws BadRequestException
+   * @throws \Drupal\restful\Exception\BadRequestException
+   * @throws \Drupal\restful\Exception\UnprocessableEntityException
    */
   public function entityValidate(\EntityDrupalWrapper $wrapper);
 
