@@ -42,6 +42,8 @@ function file_menu() {
     'access arguments' => array('access content'),
     'theme callback' => 'ajax_base_page_theme',
     'type' => MENU_CALLBACK,
+    'file' => 'node.pages.inc',
+    'file path' => drupal_get_path('module', 'node'),
   );
   $items['file/progress'] = array(
     'page callback' => 'file_ajax_progress',
