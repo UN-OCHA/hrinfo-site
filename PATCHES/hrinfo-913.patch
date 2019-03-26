@@ -1,0 +1,14 @@
+diff --git a/sites/all/modules/contrib/date/date.module b/sites/all/modules/contrib/date/date.module
+index e667b5dd..03d9ea88 100644
+--- a/sites/all/modules/contrib/date/date.module
++++ b/sites/all/modules/contrib/date/date.module
+@@ -231,6 +231,9 @@ function date_formatter_process($formatter, $entity_type, $entity, $field, $inst
+     $timezone = date_get_timezone($field['settings']['tz_handling'], $timezone);
+   }
+   $timezone_db = date_get_timezone_db($field['settings']['tz_handling']);
++  if ($field['settings']['tz_handling'] == 'date') {
++    $timezone_db = $timezone;
++  }
+   $db_format = date_type_format($field['type']);
+   $process = date_process_values($field);
+   foreach ($process as $processed) {
