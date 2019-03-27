@@ -85,13 +85,13 @@ function hr_operations_block_view($delta = '') {
 
       $default = '
         <div><div class="col-sm-12"><p><strong><a href="/operations/afghanistan">Afghanistan</a></strong></p></div></div>
-        <div><div class="col-sm-12"><p><strong><a href="/en/operations/bangladesh">Bangladesh</a></strong></p></div></div>
         <div><div class="col-sm-12"><p><strong><a href="/operations/ethiopia">Ethiopia</a></strong></p></div></div>
-        <div><div class="col-sm-12"><p><strong><a href="/operations/iraq">Iraq</a></strong></p></div></div>
+        <div><div class="col-sm-12"><p><strong><a href="/operations/mozambique">Mozambique</a></strong></p></div></div>
         <div><div class="col-sm-12"><p><strong><a href="/fr/operations/democratic-republic-congo">République Démocratique du Congo</a></strong></p></div></div>
         <div><div class="col-sm-12"><p><strong><a href="/en/operations/somalia">Somalia</a></strong></p></div></div>
         <div><div class="col-sm-12"><p><strong><a href="/operations/whole-of-syria">Whole of Syria</a></strong></p></div></div>
         <div><div class="col-sm-12"><p><strong><a href="/operations/yemen">Yemen</a></strong></p></div></div>
+        <div><div class="col-sm-12"><p><strong><a href="/operations/zimbabwe">Zimbabwe</a></strong></p></div></div>
       ';
 
       $block['content'] = variable_get('hr_operations_operations_dropdown', $default);
