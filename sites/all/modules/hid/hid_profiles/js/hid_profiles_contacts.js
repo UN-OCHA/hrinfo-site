@@ -194,7 +194,6 @@ Drupal.behaviors.hidProfilesContacts = {
                   pdf_url = pdf_url + '&access_token=' + settings.hid_profiles.token;
                   var csv_url = pdf_url.replace('user', 'user.csv');
                   pdf_url = pdf_url.replace('user', 'user.pdf');
-                  $('#contacts-list-pdf').attr('href', pdf_url);
                   $('#contacts-list-csv').attr('href', csv_url);
                   $('#contacts-list-table tbody').append(template({contacts: contacts.models}));
                   that.finishedLoading();
@@ -216,6 +215,7 @@ Drupal.behaviors.hidProfilesContacts = {
           'change #locations': 'filterByLocation',
           'change #offices': 'filterByOffice',
           'change #disasters': 'filterByDisaster',
+          'click #contacts-list-pdf': 'exportPDF',
         },
 
         page: function(page) {
@@ -369,6 +369,36 @@ Drupal.behaviors.hidProfilesContacts = {
 
         back: function(event) {
           history.back();
+        },
+
+        getBewit: function (url) {
+          var headers = new Headers();
+          headers.append('Authorization', 'Bearer ' + settings.hid_profiles.token);
+          return fetch(settings.hid_profiles.api_endpoint + '/api/v2/signedRequest', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + settings.hid_profiles.token,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({url: url})
+          })
+          .then(function (response) {
+            return response.json();
+          });
+        },
+
+        exportPDF: function (event) {
+          var pdf_url = this.contactsList.url();
+          pdf_url = pdf_url.replace('limit=' + that.contactsList.limit + '&offset=' + that.contactsList.skip, '');
+          pdf_url = pdf_url.replace('?&', '?');
+          this
+            .getBewit(pdf_url)
+            .then(function (data) {
+              var url = pdf_url;
+              url += '&bewit=' + data.bewit;
+              window.open(url);
+            });
         },
 
     });
