@@ -49,10 +49,14 @@ class OgHRBundlesSelectionHandler extends OgSelectionHandler {
   public function getLabel($entity) {
     $target_type = $this->field['settings']['target_type'];
     $field = $entity->{OG_AUDIENCE_FIELD};
-    $gid = $field[LANGUAGE_NONE][0]['target_id'];
-    $group = entity_load_single('node', $gid);
-
-    return entity_label($target_type, $entity) . ' (' . entity_label('node', $group) . ')';
+    if (isset($field[LANGUAGE_NONE]) && isset($field[LANGUAGE_NONE][0]['target_id'])) {
+      $gid = $field[LANGUAGE_NONE][0]['target_id'];
+      $group = entity_load_single('node', $gid);
+      return entity_label($target_type, $entity) . ' (' . entity_label('node', $group) . ')';
+    }
+    else {
+      return entity_label($target_type, $entity);
+    }
   }
 
 }
