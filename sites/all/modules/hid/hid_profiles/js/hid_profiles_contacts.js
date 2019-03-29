@@ -188,13 +188,6 @@ Drupal.behaviors.hidProfilesContacts = {
               that.contactsList.fetch({
                 success: function (contacts) {
                   var template = _.template($('#contacts_list_table_row').html());
-                  var pdf_url = that.contactsList.url();
-                  pdf_url = pdf_url.replace('limit=' + that.contactsList.limit + '&offset=' + that.contactsList.skip, '');
-                  pdf_url = pdf_url.replace('?&', '?');
-                  pdf_url = pdf_url + '&access_token=' + settings.hid_profiles.token;
-                  var csv_url = pdf_url.replace('user', 'user.csv');
-                  pdf_url = pdf_url.replace('user', 'user.pdf');
-                  $('#contacts-list-csv').attr('href', csv_url);
                   $('#contacts-list-table tbody').append(template({contacts: contacts.models}));
                   that.finishedLoading();
                 },
@@ -216,6 +209,7 @@ Drupal.behaviors.hidProfilesContacts = {
           'change #offices': 'filterByOffice',
           'change #disasters': 'filterByDisaster',
           'click #contacts-list-pdf': 'exportPDF',
+          'click #contacts-list-csv': 'exportCSV',
         },
 
         page: function(page) {
@@ -389,15 +383,40 @@ Drupal.behaviors.hidProfilesContacts = {
         },
 
         exportPDF: function (event) {
+          event.preventDefault();
           var pdf_url = this.contactsList.url();
-          pdf_url = pdf_url.replace('limit=' + that.contactsList.limit + '&offset=' + that.contactsList.skip, '');
+          pdf_url = pdf_url.replace('limit=' + this.contactsList.limit + '&offset=' + this.contactsList.skip, '');
           pdf_url = pdf_url.replace('?&', '?');
+          pdf_url = pdf_url.replace('user', 'user.pdf');
           this
             .getBewit(pdf_url)
             .then(function (data) {
               var url = pdf_url;
               url += '&bewit=' + data.bewit;
-              window.open(url);
+              var win = window.open();
+              win.location = url;
+              win.opener = null;
+              win.blur();
+              window.focus();
+            });
+        },
+
+        exportCSV: function (event) {
+          event.preventDefault();
+          var csv_url = this.contactsList.url();
+          csv_url = csv_url.replace('limit=' + this.contactsList.limit + '&offset=' + this.contactsList.skip, '');
+          csv_url = csv_url.replace('?&', '?');
+          csv_url = csv_url.replace('user', 'user.csv');
+          this
+            .getBewit(csv_url)
+            .then(function (data) {
+              var url = csv_url;
+              url += '&bewit=' + data.bewit;
+              var win = window.open();
+              win.location = url;
+              win.opener = null;
+              win.blur();
+              window.focus();
             });
         },
 
