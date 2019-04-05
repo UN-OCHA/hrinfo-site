@@ -218,4 +218,27 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
     return $output;
   }
 
+  /**
+   * Validates an entity's fields before they are saved.
+   *
+   * @param \EntityDrupalWrapper $wrapper
+   *   A metadata wrapper for the entity.
+   *
+   * @throws \Drupal\restful\Exception\RestfulException
+   */
+  protected function validateFields($wrapper) {
+    try {
+      $entity = $wrapper->value();
+      if (isset($entity->og_group_ref) && user_access('administer group')) {
+        foreach($entity->og_group_ref[LANGUAGE_NONE] as &$item) {
+          $item['field_mode'] = 'admin';
+        }
+      }
+      field_attach_validate($wrapper->type(), $entity);
+    }
+    catch (\FieldValidationException $e) {
+      throw new UnprocessableEntityException($e->getMessage());
+    }
+  }
+
 }
