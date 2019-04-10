@@ -568,3 +568,22 @@ function hr_core_update_7034() {
     )
   ));
 }
+
+/**
+ * HRINFO-918 - Migrate assessment accessibility values to new values
+ */
+function hr_core_update_7035() {
+  db_update('field_data_field_asst_accessibility')
+    ->fields(array(
+      'field_asst_accessibility_value' => 'Available on Request'
+    ))
+    ->condition('field_data_field_asst_accessibility', 'Restricted Distribution')
+    ->execute();
+
+  db_update('field_data_field_asst_accessibility')
+    ->fields(array(
+      'field_asst_accessibility_value' => 'Not Available'
+    ))
+    ->condition('field_data_field_asst_accessibility', 'Not Applicable')
+    ->execute();
+}
