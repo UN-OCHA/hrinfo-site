@@ -68,9 +68,7 @@ function hr_assessments_field_default_field_bases() {
       'allowed_values' => array(
         'Publicly Available' => 'Publicly Available',
         'Available on Request' => 'Available on Request',
-        'Restricted Distribution' => 'Restricted Distribution',
         'Not Available' => 'Not Available',
-        'Not Applicable' => 'Not Applicable',
       ),
       'allowed_values_function' => '',
       'entity_translation_sync' => FALSE,
