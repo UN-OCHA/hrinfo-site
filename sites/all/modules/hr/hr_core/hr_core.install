@@ -577,13 +577,13 @@ function hr_core_update_7035() {
     ->fields(array(
       'field_asst_accessibility_value' => 'Available on Request'
     ))
-    ->condition('field_data_field_asst_accessibility', 'Restricted Distribution')
+    ->condition('field_asst_accessibility_value', 'Restricted Distribution')
     ->execute();
 
   db_update('field_data_field_asst_accessibility')
     ->fields(array(
       'field_asst_accessibility_value' => 'Not Available'
     ))
-    ->condition('field_data_field_asst_accessibility', 'Not Applicable')
+    ->condition('field_asst_accessibility_value', 'Not Applicable')
     ->execute();
 }
