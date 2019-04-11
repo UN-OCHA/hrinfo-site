@@ -72,6 +72,9 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
     if ($values['url']) {
       $wrapper->field_asst_url->set($values['url']);
     }
+    if ($values['instructions']) {
+      $wrapper->field_asst_instructions->set($values['instructions']);
+    }
     $wrapper->save();
   }
 
