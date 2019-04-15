@@ -131,7 +131,8 @@ function hr_layout_block_view($delta = '') {
     case 'hr_layout_login':
       $block['content'] = '';
       if (!user_is_logged_in()) {
-          $block['content'] .= '<ul class="menu"><li>' . l(t('Log in'), $base_url.'/login') . '</li></ul>';
+        $destination = drupal_get_destination();
+        $block['content'] .= '<ul class="menu"><li>' . l(t('Log in'), $base_url.'/login', array('query' => array('hid_redirect' => $destination['destination']))) . '</li></ul>';
       }
       break;
     case 'hr_layout_share_links':

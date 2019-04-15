@@ -29,6 +29,24 @@ class Hybrid_Providers_HumanitarianId extends Hybrid_Provider_Model_OAuth2
   /**
    * {@inheritdoc}
    */
+  function loginBegin() {
+      if (is_array($this->scope)) {
+          $this->scope = implode(" ", $this->scope);
+      }
+      if (isset($this->scope)) {
+          $extra_params['scope'] = $this->scope;
+      }
+      if (!isset($this->state)) {
+          $this->state = hash("sha256",(uniqid(rand(), TRUE)));
+      }
+      $this->saveState($this->state);
+      $extra_params['state'] = $this->state;
+      Hybrid_Auth::redirect($this->api->authorizeUrl($extra_params));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   function loginFinish() {
     // Fix a strange behavior when some provider call back ha endpoint
     // with /index.php?hauth.done={provider}?{args}...
@@ -48,6 +66,9 @@ class Hybrid_Providers_HumanitarianId extends Hybrid_Provider_Model_OAuth2
     if ($error) {
       throw new Exception("Authentication failed! {$this->providerId} returned an error: $error", 5);
     }
+
+    // check that the CSRF state token is the same as the one provided
+    $this->checkState();
 
     // try to authenticate user
     $code = (array_key_exists('code', $request)) ? $request['code'] : "";
@@ -101,5 +122,35 @@ class Hybrid_Providers_HumanitarianId extends Hybrid_Provider_Model_OAuth2
     }
 
     return $this->user->profile;
+  }
+
+  /**
+  * Save the given $state in session.
+  */
+  protected function saveState($state) {
+    $session_var_name = 'state_' . $this->api->client_id;
+    $_SESSION['HybridAuth']['HumanitarianId'][$session_var_name] = $state;
+  }
+
+  /**
+  * Read the state from session.
+  */
+  protected function readState() {
+    $session_var_name = 'state_' . $this->api->client_id;
+    $state = ( isset($_SESSION['HybridAuth']['HumanitarianId'][$session_var_name])
+      ? $_SESSION['HybridAuth']['HumanitarianId'][$session_var_name]
+      : NULL );
+    unset($_SESSION['HybridAuth']['HumanitarianId'][$session_var_name]);
+    return $state;
+  }
+
+  /**
+  * Check the state in the request against the one saved in session.
+  */
+  protected function checkState() {
+    $state = $this->readState();
+    if (!$state || !isset($_REQUEST['state']) || $state != $_REQUEST['state']) {
+      throw new UnexpectedValueException('Authentication failed! CSRF state token does not match the one provided.');
+    }
   }
 }

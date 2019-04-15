@@ -43,17 +43,24 @@ function hr_users_login_redirect() {
     module_load_include('pages.inc', 'user');
     user_logout_current_user();
   }
-  drupal_goto('hybridauth/window/HumanitarianId', array(
-    'destination' => drupal_get_destination(),
-    'destination_error' => '',
-  ));
+  if (isset($_GET['hid_redirect'])) {
+    drupal_session_start();
+    $_SESSION['hid_redirect'] = $_GET['hid_redirect'];
+  }
+  drupal_goto('hybridauth/window/HumanitarianId');
 }
 
 /**
  * Implements hook_hybridauth_destination_options_alter().
  */
 function hr_users_hybridauth_destination_options_alter(&$destination_options) {
-  $destination_options['path'] = 'home';
+  if (isset($_SESSION['hid_redirect'])) {
+    $destination_options['path'] = $_SESSION['hid_redirect'];
+    unset($_SESSION['hid_redirect']);
+  }
+  else {
+    $destination_options['path'] = 'home';
+  }
 }
 
 
