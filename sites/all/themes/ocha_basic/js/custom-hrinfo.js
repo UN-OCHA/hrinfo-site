@@ -34,7 +34,9 @@
         $(window).resize();
 
         //facets
-        $("#sidebar-first .block.block-facetapi h4").on("click", function() {
+        $("#sidebar-first .block.block-facetapi h4").on("click", function(evt) {
+					evt.stopImmediatePropagation();
+					evt.preventDefault();
           $(this).toggleClass('opened').next('.block__content').slideToggle('fast');
         });
         if($("#sidebar-first .block.block-current-search .block__content .current-search-item-reset").length > 0) {
