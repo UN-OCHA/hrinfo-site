@@ -151,9 +151,20 @@ function hr_users_hybridauth_user_login($account, $data) {
       user_save($account);
     }
 
+    $changed = FALSE;
     // Update email if needed
     if ($account->mail != $data['email']) {
       $account->mail = $data['email'];
+      $changed = TRUE;
+    }
+
+    // Update username to match email
+    if ($account->name != $data['email']) {
+      $account->name = $data['email'];
+      $changed = TRUE;
+    }
+
+    if ($changed) {
       user_save($account);
     }
   }
