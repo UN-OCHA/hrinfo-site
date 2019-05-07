@@ -25,7 +25,7 @@ function fts_get_appeals($year = '') {
     $year = date('Y');
   }
 
-  $cache = cache_get('fts_appeals_cache' . $year, 'cache');
+  $cache = cache_get('fts_appeals_cache_' . $year, 'cache');
   if (!$cache) {
     $response = drupal_http_request(_fts_get_api_endpoint() . 'plan/year/' . $year);
     $data = json_decode($response->data);
@@ -36,7 +36,7 @@ function fts_get_appeals($year = '') {
         $appeal->title = $plan->name;
         $appeals[$plan->id] = $appeal;
       }
-      cache_set('fts_appeals_cache' . $year, $appeals, 'cache', REQUEST_TIME + 24 * 60 * 60);
+      cache_set('fts_appeals_cache_' . $year, $appeals, 'cache', REQUEST_TIME + 24 * 60 * 60);
     }
   }
   else {
@@ -55,14 +55,14 @@ function fts_get_appeal($id) {
     return $appeal;
   }
 
-  $cache = cache_get('fts_appeal_by_id_cache' . $id, 'cache');
+  $cache = cache_get('fts_appeal_by_id_cache_' . $id, 'cache');
   if (!$cache) {
     $response = drupal_http_request(_fts_get_api_endpoint() . 'plan/id/' . $id);
     $data = json_decode($response->data);
     if (isset($data->data)) {
       $appeal = $data->data;
       $appeal->title = $appeal->name;
-      cache_set('fts_appeal_by_id_cache' . $id, $appeal, 'cache', REQUEST_TIME + 24 * 60 * 60);
+      cache_set('fts_appeal_by_id_cache_' . $id, $appeal, 'cache', REQUEST_TIME + 24 * 60 * 60);
     }
   }
   else {
@@ -78,7 +78,7 @@ function fts_get_funding($params) {
   $funding = array();
 
   $query = drupal_http_build_query($params);
-  $cache = cache_get('fts_funding::' . md5($query), 'cache');
+  $cache = cache_get('fts_funding_' . md5($query), 'cache');
 
   if (!$cache) {
     $response = drupal_http_request(_fts_get_api_endpoint() . 'fts/flow?' . $query);
@@ -125,7 +125,7 @@ function fts_get_funding($params) {
 
       $funding->raw_data = $data->data;
 
-      cache_set('fts_funding' . md5($query), $funding, 'cache', REQUEST_TIME + 24 * 60 * 60);
+      cache_set('fts_funding_' . md5($query), $funding, 'cache', REQUEST_TIME + 24 * 60 * 60);
     }
     else{
       $funding = $cache->data;
@@ -167,7 +167,7 @@ function fts_get_clusters_by_appeal($id) {
   if (empty($id)) {
     return array();
   }
-  $cache = cache_get('clusters_by_appeal'.$id, 'cache');
+  $cache = cache_get('clusters_by_appeal_'.$id, 'cache');
   if(!$cache){
     $url = FTS_URL . 'fts/flow?planId='.$id.'&groupby=cluster';
     $response = drupal_http_request($url);
@@ -177,7 +177,7 @@ function fts_get_clusters_by_appeal($id) {
       foreach ($data->data->requirements->objects as $cluster) {
         $clusters[] = $cluster;
       }
-      cache_set('clusters_by_appeal'.$id, $clusters, 'cache', REQUEST_TIME + 24*60*60);
+      cache_set('clusters_by_appeal_'.$id, $clusters, 'cache', REQUEST_TIME + 24*60*60);
     }
     return $clusters;
   }
