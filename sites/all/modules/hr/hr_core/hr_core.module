@@ -164,13 +164,11 @@ function hr_core_entity_view($entity, $type, $view_mode, $langcode) {
   if ($type == 'node' && isset($entity->type)) {
     $extra_fields = field_info_extra_fields($type, $entity->type, 'display');
     $field_name = 'hr_core_files_download_button';
-    if(!empty($extra_fields[$field_name]['display'][$view_mode]['visible'])) {
-      $entity->content[$field_name] = array(
-        '#type' => 'item',
-        '#title' => '',
-        '#markup' => _hr_core_files_download_button($entity, $type),
-      );
-    }
+    $entity->content[$field_name] = array(
+      '#type' => 'item',
+      '#title' => '',
+      '#markup' => _hr_core_files_download_button($entity, $type),
+    );
   }
 }
 
