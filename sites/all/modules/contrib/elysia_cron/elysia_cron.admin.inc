@@ -10,6 +10,9 @@
  *
  * @return array
  *   Renderable array.
+ *
+ * @throws Exception
+ *   Exceptions from theme().
  */
 function elysia_cron_admin_page() {
   $aoutput = array();
@@ -444,14 +447,6 @@ EOT
     . '<b>' . t('Channel') . '</b>: ' . t('Specify a channel for the job (create the channel if not exists)') . '<br /><br />',
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
-  );
-
-  $jobchannels = array(
-    '#title' => t('Job channel associations'),
-    '#description' => t('Leave empty for default channel'),
-    '#type' => 'fieldset',
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
   );
 
   foreach ($_elysia_cron_settings_by_channel as $channel => $cconf) {
