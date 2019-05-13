@@ -587,3 +587,13 @@ function hr_core_update_7035() {
     ->condition('field_asst_accessibility_value', 'Not Applicable')
     ->execute();
 }
+
+/**
+ * OPS-4930 - Remove bad node
+ */
+function hr_core_update_7036() {
+  db_delete('node')
+    ->condition('nid', 177189)
+    ->execute();
+}
+
