@@ -88,22 +88,6 @@ function hr_infographics_views_default_views() {
   $handler->display->display_options['fields']['field_files_collection']['display'] = 'view';
   $handler->display->display_options['fields']['field_files_collection']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_files_collection']['bypass_access'] = 0;
-  /* Field: Indexed Node: Data source(s) */
-  $handler->display->display_options['fields']['field_data_sources']['id'] = 'field_data_sources';
-  $handler->display->display_options['fields']['field_data_sources']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['field_data_sources']['field'] = 'field_data_sources';
-  $handler->display->display_options['fields']['field_data_sources']['click_sort_column'] = 'url';
-  $handler->display->display_options['fields']['field_data_sources']['delta_offset'] = '0';
-  /* Field: Indexed Node: Data Source(s) » Text format */
-  $handler->display->display_options['fields']['field_ds_datasources_format']['id'] = 'field_ds_datasources_format';
-  $handler->display->display_options['fields']['field_ds_datasources_format']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['field_ds_datasources_format']['field'] = 'field_ds_datasources_format';
-  $handler->display->display_options['fields']['field_ds_datasources_format']['link_to_entity'] = 0;
-  $handler->display->display_options['fields']['field_ds_datasources_format']['format_name'] = 1;
-  /* Field: Indexed Node: Data source(s) » The URL of the link. */
-  $handler->display->display_options['fields']['field_data_sources_url']['id'] = 'field_data_sources_url';
-  $handler->display->display_options['fields']['field_data_sources_url']['table'] = 'search_api_index_default_node_index';
-  $handler->display->display_options['fields']['field_data_sources_url']['field'] = 'field_data_sources_url';
   /* Contextual filter: Indexed Node: Webspace(s) */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
