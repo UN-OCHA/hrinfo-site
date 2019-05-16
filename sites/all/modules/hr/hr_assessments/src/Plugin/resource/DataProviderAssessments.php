@@ -237,6 +237,11 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
           $item['field_mode'] = 'admin';
         }
       }
+      if (isset($entity->field_bundles) && user_access('administer group')) {
+        foreach ($entity->field_bundles[LANGUAGE_NONE] as &$item) {
+          $item['field_mode'] = 'admin';
+        }
+      }
       field_attach_validate($wrapper->type(), $entity);
     }
     catch (\FieldValidationException $e) {
