@@ -11,6 +11,7 @@ use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
 use Drupal\restful\Http\RequestInterface;
 use Drupal\restful\Exception\ForbiddenException;
+use Drupal\restful\Exception\UnprocessableEntityException;
 
 class DataProviderOptimized  extends DataProviderEntity implements DataProviderInterface {
   /**
