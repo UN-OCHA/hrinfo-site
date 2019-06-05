@@ -97,6 +97,28 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
       throw new ForbiddenException('You do not have access to create a new resource.');
     }
 
+    // Check that user is allowed to post in operation
+    $user = $this->getAccount();
+    $admin = user_role_load_by_name('administrator');
+    $editor = user_role_load_by_name('editor');
+    if (!user_has_role($admin->rid) && !user_has_role($editor->rid)) {
+      foreach ($entity->og_group_ref[LANGUAGE_NONE] as $space) {
+        $roles = og_get_user_roles('node', $space['target_id'], $user->uid);
+        if (in_array('bundle member', $roles)) {
+          $found = FALSE;
+          foreach ($entity->field_bundles[LANGUAGE_NONE] as $bundle) {
+            $bundle_roles = og_get_user_roles('node', $bundle['target_id'], $user->uid);
+            if (in_array('manager', $bundle_roles) || in_array('editor', $bundle_roles) || in_array('contributor', $bundle_roles)) {
+              $found = TRUE;
+            }
+          }
+          if (!$found) {
+            throw new ForbiddenException('You do not have permission to post in this space');
+          }
+        }
+      }
+    }
+
     $report = null;
     if (isset($object['report'])) {
       $report = $object['report'];
