@@ -110,8 +110,9 @@ function hr_infographics_key_infographics_render($subtype, $conf, $panel_args, $
             $entity = entity_load_single('node', $nid);
             $block->content .= '<li>'.l(entity_label('node', $entity), 'node/'.$nid).'</li>';
           }
-          else {
-            $block->content .= drupal_render(node_view($node, $conf['view_mode']));
+	  else {
+            $node_view = node_view($node, $conf['view_mode']);
+            $block->content .= drupal_render($node_view);
           }
         }
       }
