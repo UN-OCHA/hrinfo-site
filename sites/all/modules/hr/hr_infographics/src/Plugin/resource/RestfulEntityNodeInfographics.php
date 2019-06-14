@@ -196,7 +196,8 @@ class RestfulEntityNodeInfographics extends ResourceCustom implements ResourceIn
   public function getUser($value) {
     $valueOut = new \stdClass();
     $valueOut->uid = $value->uid;
-    $identity = reset(_hybridauth_identity_load_by_uid($value->uid));
+    $identities = _hybridauth_identity_load_by_uid($value->uid);
+    $identity = reset($identities);
     if ($identity['provider_identifier']) {
       $valueOut->hid = $identity['provider_identifier'];
     }
