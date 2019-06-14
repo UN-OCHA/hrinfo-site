@@ -114,12 +114,18 @@ function _fts_visualization_get_appeal_data($plan_id, $group_by = NULL, $cluster
     else {
       // Get funding.
       $funding = fts_get_funding($params);
-      $data['financed'] = (int) $funding->funding;
-      $data['data'] = isset($funding->data) ? $funding->data : array();
+      if ($funding) {
+        $data['financed'] = (int) $funding->funding;
+        $data['data'] = isset($funding->data) ? $funding->data : array();
 
-      $data['total'] = (int) $funding->current_requirements;
-      if ($plan_only) {
-        $data['total'] = (int) $appeal->revisedRequirements;
+        $data['total'] = (int) $funding->current_requirements;
+        if ($plan_only) {
+          $data['total'] = (int) $appeal->revisedRequirements;
+        }
+      }
+      else {
+        $data['financed'] = 0;
+	$data['total'] = 0;
       }
     }
 
