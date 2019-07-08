@@ -15,7 +15,7 @@
  */
 function _openlayers_openlayers_layers() {
   global $is_https;
-  $mapquest_host = $is_https ? '-s.mqcdn.com' : '.mqcdn.com';
+  $mapquest_host = 'openstreetmap.org';
 
   $layers = array();
 
@@ -88,10 +88,9 @@ function _openlayers_openlayers_layers() {
     'projection' => array('EPSG:3857', 'EPSG:900913'),
     'layer_type' => 'openlayers_layer_type_xyz',
     'url' => array(
-      '//otile1' . $mapquest_host . '/tiles/1.0.0/osm/${z}/${x}/${y}.png',
-      '//otile2' . $mapquest_host . '/tiles/1.0.0/osm/${z}/${x}/${y}.png',
-      '//otile3' . $mapquest_host . '/tiles/1.0.0/osm/${z}/${x}/${y}.png',
-      '//otile4' . $mapquest_host . '/tiles/1.0.0/osm/${z}/${x}/${y}.png',
+      '//a.tile.' . $mapquest_host . '/${z}/${x}/${y}.png',
+      '//b.tile.' . $mapquest_host . '/${z}/${x}/${y}.png',
+      '//c.tile.' . $mapquest_host . '/${z}/${x}/${y}.png'
     ),
     'wrapDateLine' => TRUE,
     'resolutions' => openlayers_get_resolutions('EPSG:900913', 0, 19)
@@ -110,10 +109,9 @@ function _openlayers_openlayers_layers() {
     'projection' => array('EPSG:3857', 'EPSG:900913'),
     'layer_type' => 'openlayers_layer_type_xyz',
     'url' => array(
-      '//oatile1' . $mapquest_host . '/tiles/1.0.0/sat/${z}/${x}/${y}.png',
-      '//oatile2' . $mapquest_host . '/tiles/1.0.0/sat/${z}/${x}/${y}.png',
-      '//oatile3' . $mapquest_host . '/tiles/1.0.0/sat/${z}/${x}/${y}.png',
-      '//oatile4' . $mapquest_host . '/tiles/1.0.0/sat/${z}/${x}/${y}.png'
+      '//a.tile.' . $mapquest_host . '/${z}/${x}/${y}.png',
+      '//b.tile.' . $mapquest_host . '/${z}/${x}/${y}.png',
+      '//c.tile.' . $mapquest_host . '/${z}/${x}/${y}.png'
     ),
     'wrapDateLine' => TRUE,
   );
