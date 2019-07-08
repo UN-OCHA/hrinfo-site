@@ -27,7 +27,7 @@ Drupal.behaviors.openlayers_ui_styles = {
       // want to keep it lean.
       maps[id] = new OpenLayers.Map(id, { controls: [] });
       var mapquest = new OpenLayers.Layer.OSM(Drupal.t('MapQuest-OSM Tiles'),
-        [(location.protocol === 'https:' ? '//otile1-s' : '//otile1') + '.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png']);
+        [(location.protocol === 'http://a.tile.openstreetmap.org/${z}/${x}/${y}.png']);
       maps[id].addLayer(mapquest);
       var point = new OpenLayers.LonLat(Math.random() * 175, Math.random() * 80).transform(
         new OpenLayers.Projection("EPSG:4326"), maps[id].getProjectionObject()
