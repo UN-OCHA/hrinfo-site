@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @file
+ * Code for the HR_Jobbies feature.
+ */
+
+include_once 'hr_jobbies.features.inc';
