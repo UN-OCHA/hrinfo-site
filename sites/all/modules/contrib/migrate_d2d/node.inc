@@ -190,7 +190,7 @@ abstract class DrupalNodeMigration extends DrupalMigration {
    * @param $migration
    * @return array|bool
    */
-  protected function createStub($migration) {
+  protected function createStub($migration, array $source_key) {
     migrate_instrument_start('DrupalNodeMigration::createStub');
     $node = new stdClass;
     $node->title = t('Stub');
