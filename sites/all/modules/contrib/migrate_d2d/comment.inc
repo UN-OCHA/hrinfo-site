@@ -63,7 +63,8 @@ abstract class DrupalCommentMigration extends DrupalMigration {
                        'alias' => 'c',
                       ),
       ),
-      MigrateDestinationComment::getKeySchema()
+      MigrateDestinationComment::getKeySchema(),
+      $this->mapConnection
     );
 
     /**

@@ -71,6 +71,15 @@ abstract class DrupalMigration extends Migration {
   protected $newOnly = FALSE;
 
   /**
+   * Controls what db connection the MigrateSQLMaps use.
+   *
+   * Pass $arguments['map_connection'] to change this variable.
+   *
+   * @var string
+   */
+  protected $mapConnection = 'default';
+
+  /**
    * Required arguments:
    *
    * source_connection - Connection key for the DatabaseConnection holding the
@@ -156,6 +165,10 @@ abstract class DrupalMigration extends Migration {
 
     if (!empty($this->arguments['new_only'])) {
       $this->newOnly = $this->arguments['new_only'];
+    }
+
+    if (!empty($this->arguments['map_connection'])) {
+      $this->mapConnection = $this->arguments['map_connection'];
     }
   }
 
@@ -328,6 +341,55 @@ abstract class DrupalVersion {
   }
 
   /**
+   * Get any core profile values associated with this user.
+   *
+   * @param $row
+   * @param $entity_id
+   */
+  public function getProfileValues($row, $entity_id) {
+    $query = Database::getConnection('default', $this->arguments['source_connection'])
+      ->select('profile_values', 'v')
+      ->fields('v', array('value'))
+      ->condition('uid', $entity_id)
+      ->condition('value', '', '<>');
+    $query->innerJoin('profile_fields', 'f', 'v.fid=f.fid');
+    $query->fields('f', array('name', 'type'));
+    $result = $query->execute();
+    foreach ($result as $data_row) {
+      switch ($data_row->type) {
+        case 'checkbox':
+          switch (trim(strtolower($data_row->value))) {
+            case 'n':
+              $data_row->value = 0;
+              break;
+
+            case 'y':
+              $data_row->value = 1;
+              break;
+
+            default:
+              break;
+          }
+          break;
+
+        case 'date':
+          // Dates may be serialized arrays or NULLs.
+          if (strpos($data_row->value, 'a:') === 0) {
+            $date_array = unserialize($data_row->value);
+            $data_row->value = $date_array['year'] . '-' . $date_array['month']
+              . '-' . $date_array['day'];
+          }
+          elseif (strpos($data_row->value, 'N;') === 0) {
+            $data_row->value = NULL;
+          }
+          break;
+      }
+      $row->{$data_row->name} = $data_row->value;
+    }
+    return $row;
+  }
+
+/**
    * @abstract
    * Add CCK/core field values to the source row.
    *

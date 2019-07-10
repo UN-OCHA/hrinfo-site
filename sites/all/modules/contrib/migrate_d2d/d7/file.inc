@@ -81,11 +81,23 @@ class DrupalFile7Migration extends DrupalFileMigration {
     }
     else {
       $this->destination->setFileClass('MigrateFileUri');
+      // Default destination_dir to the incoming stream wrapper.
+      if (preg_match('|^([a-z]+://)|i', $row->uri, $matches)) {
+        $row->destination_dir = $matches[1];
+      }
     }
   }
 
+  /**
+   * Remove the standard stream wrappers from the incoming URI.
+   *
+   * @param $uri
+   *
+   * @return string
+   */
   protected function fixUri($uri) {
     $result = str_replace('public://', '', $uri);
+    $result = str_replace('private://', '', $result);
     return $result;
   }
 }

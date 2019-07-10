@@ -31,7 +31,8 @@ abstract class DrupalMenuMigration extends DrupalMigration {
           'alias' => 'm',
         ),
       ),
-      MigrateDestinationMenu::getKeySchema()
+      MigrateDestinationMenu::getKeySchema(),
+      $this->mapConnection
     );
 
     // The mappings are straightforward

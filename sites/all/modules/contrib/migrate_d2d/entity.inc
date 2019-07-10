@@ -73,7 +73,8 @@ abstract class DrupalEntityMigration extends DrupalMigration {
                        'alias' => 'n',
                       ),
       ),
-      MigrateDestinationEntityAPI::getKeySchema($this->entityType)
+      MigrateDestinationEntityAPI::getKeySchema($this->entityType),
+      $this->mapConnection
     );
 
     if (!$this->newOnly) {

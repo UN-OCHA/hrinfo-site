@@ -10,9 +10,9 @@ dependencies[] = migrate_d2d
 files[] = migrate_d2d_example.migrate.inc
 files[] = node.inc
 
-; Information added by Drupal.org packaging script on 2015-02-09
-version = "7.x-2.1"
+; Information added by Drupal.org packaging script on 2015-11-28
+version = "7.x-2.1+8-dev"
 core = "7.x"
 project = "migrate_d2d"
-datestamp = "1423523588"
+datestamp = "1448748841"
 

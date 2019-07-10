@@ -39,7 +39,8 @@ abstract class DrupalRoleMigration extends DrupalMigration {
                        'description' => 'Source role ID',
                       ),
       ),
-      MigrateDestinationRole::getKeySchema()
+      MigrateDestinationRole::getKeySchema(),
+      $this->mapConnection
     );
 
     $this->destination = new MigrateDestinationRole();

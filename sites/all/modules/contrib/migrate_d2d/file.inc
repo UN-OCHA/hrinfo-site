@@ -52,7 +52,8 @@ abstract class DrupalFileMigration extends DrupalMigration {
             'alias' => 'f',
           ),
         ),
-        MigrateDestinationFile::getKeySchema()
+        MigrateDestinationFile::getKeySchema(),
+        $this->mapConnection
       );
     }
     $this->source = new MigrateSourceSQL($this->query(),

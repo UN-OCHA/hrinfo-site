@@ -61,7 +61,8 @@ abstract class DrupalTermMigration extends DrupalMigration {
                        'alias' => 'td',
                       ),
       ),
-      MigrateDestinationTerm::getKeySchema()
+      MigrateDestinationTerm::getKeySchema(),
+      $this->mapConnection
     );
 
     // Mappings are straight-forward

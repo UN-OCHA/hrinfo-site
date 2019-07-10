@@ -90,7 +90,8 @@ abstract class DrupalUserMigration extends DrupalMigration {
                        'alias' => 'u',
                       ),
       ),
-      DrupalDestinationUser::getKeySchema()
+      DrupalDestinationUser::getKeySchema(),
+      $this->mapConnection
     );
 
     // Most mappings are straight-forward

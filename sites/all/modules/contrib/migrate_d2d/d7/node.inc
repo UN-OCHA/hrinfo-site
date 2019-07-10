@@ -63,8 +63,7 @@ class DrupalNode7Migration extends DrupalNodeMigration {
              ->condition('n.type', $this->sourceType)
              ->orderBy($this->newOnly ? 'n.nid' : 'n.changed');
     // Join node_counter for Statistics support
-    if (Database::getConnection('default', $this->sourceConnection)
-        ->schema()->tableExists('node_counter')) {
+    if ($this->moduleExists('statistics')) {
       $query->leftJoin('node_counter', 'nc', 'n.nid=nc.nid');
       $query->addField('nc', 'daycount');
       $query->addField('nc', 'timestamp');

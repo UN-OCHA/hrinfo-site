@@ -305,15 +305,15 @@ class DrupalVersion6 extends DrupalVersion {
                   }
                   // File field subfields need to be pulled from $data.
                   if ($display_name == "$field_name:alt" &&
-                      isset($data['alt'])) {
+                      is_array($data) && isset($data['alt'])) {
                     $row->{$index}[] = $data['alt'];
                   }
                   elseif ($display_name == "$field_name:title" &&
-                          isset($data['title'])) {
+                          is_array($data) && isset($data['title'])) {
                     $row->{$index}[] = $data['title'];
                   }
                   elseif ($display_name == "$field_name:description" &&
-                          isset($data['description'])) {
+                          is_array($data) && isset($data['description'])) {
                     $row->{$index}[] = $data['description'];
                   }
                   elseif (isset($field_row->$column_name)) {
@@ -494,43 +494,7 @@ class DrupalVersion6 extends DrupalVersion {
     if (Database::getConnection('default', $this->arguments['source_connection'])
           ->schema()->tableExists('profile_values')) {
       migrate_instrument_start('DrupalVersion6::getProfileValues');
-      $query = Database::getConnection('default', $this->arguments['source_connection'])
-               ->select('profile_values', 'v')
-               ->fields('v', array('value'))
-               ->condition('uid', $entity_id)
-               ->condition('value', '', '<>');
-      $query->innerJoin('profile_fields', 'f', 'v.fid=f.fid');
-      $query->fields('f', array('name', 'type'));
-      $result = $query->execute();
-      foreach ($result as $data_row) {
-        switch ($data_row->type) {
-          case 'checkbox':
-            switch (trim(strtolower($data_row->value))) {
-              case 'n':
-                $data_row->value = 0;
-                break;
-              case 'y':
-                $data_row->value = 1;
-                break;
-              default:
-                break;
-            }
-            break;
-          case 'date':
-            // Dates may be serialized arrays or NULLs.
-            if (strpos($data_row->value, 'a:') === 0) {
-              $date_array = unserialize($data_row->value);
-              $data_row->value = $date_array['year'] . '-' . $date_array['month']
-                . '-' . $date_array['day'];
-            }
-            elseif (strpos($data_row->value, 'N;') === 0) {
-              $data_row->value = NULL;
-            }
-            break;
-        }
-        $row->{$data_row->name} = $data_row->value;
-      }
-
+      $row = parent::getProfileValues($row, $entity_id);
       migrate_instrument_stop('DrupalVersion6::getProfileValues');
     }
   }

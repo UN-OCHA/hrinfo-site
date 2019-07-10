@@ -76,6 +76,14 @@ abstract class DrupalNodeMigration extends DrupalMigration {
       $this->sourceFields['path'] = t('Path alias');
     }
 
+    if ($this->moduleExists('statistics')) {
+      $this->sourceFields += array(
+        'totalcount' => t('The total number of times the node has been viewed.'),
+        'daycount' => t('The total number of times the node has been viewed today.'),
+        'timestamp' => t('The most recent time the node has been viewed.'),
+      );
+    }
+
     $this->destination = new MigrateDestinationNode($this->destinationType);
 
     $this->map = new MigrateSQLMap($this->machineName,
@@ -87,7 +95,8 @@ abstract class DrupalNodeMigration extends DrupalMigration {
                        'alias' => 'n',
                       ),
       ),
-      MigrateDestinationNode::getKeySchema()
+      MigrateDestinationNode::getKeySchema(),
+      $this->mapConnection
     );
 
     if (!$this->newOnly) {
@@ -149,6 +158,9 @@ abstract class DrupalNodeMigration extends DrupalMigration {
       else {
         $this->addUnmigratedDestinations(array('totalcount', 'daycount', 'timestamp'));
       }
+    }
+    elseif ($this->moduleExists('statistics')) {
+      $this->addUnmigratedSources(array('totalcount', 'daycount', 'timestamp'));
     }
   }
 

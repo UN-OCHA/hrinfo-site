@@ -66,7 +66,8 @@ abstract class DrupalMenuLinksMigration extends DrupalMigration {
           'description' => 'ID of destination link',
         ),
       ),
-      MigrateDestinationMenuLinks::getKeySchema()
+      MigrateDestinationMenuLinks::getKeySchema(),
+      $this->mapConnection
     );
   }
 

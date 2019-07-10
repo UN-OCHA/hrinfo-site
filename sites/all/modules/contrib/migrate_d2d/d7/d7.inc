@@ -71,10 +71,12 @@ class DrupalVersion7 extends DrupalVersion {
   protected function populateSourceFieldInfo($entity_type, $bundle, $include_body = FALSE) {
     if (empty($this->sourceFieldInfo)) {
       migrate_instrument_start('DrupalVersion7::sourceFieldInfo');
-
       $this->entityType = $entity_type;
       $this->bundle = $bundle;
-
+      if ($entity_type == 'user') {
+        // Get core profile fields.
+        $this->profileFields();
+      }
       // Get each field attached to this type.
       if (Database::getConnection('default', $this->arguments['source_connection'])
             ->schema()->tableExists('field_config_instance')) {
@@ -152,35 +154,119 @@ class DrupalVersion7 extends DrupalVersion {
    * @param $include_body
    */
   public function getSourceValues($row, $entity_id) {
+    // Core profile values.
+    if ($this->entityType == 'user') {
+      $this->getProfileValues($row, $entity_id);
+    }
     // Load up field data for dynamically mapped fields
     foreach ($this->sourceFieldInfo as $field_name => $field_info) {
-      // Find the data in field_data_$field_name.
-      $table = "field_data_$field_name";
-      $result = Database::getConnection('default', $this->arguments['source_connection'])
-                ->select($table, 'f')
-                ->fields('f')
-                ->condition('entity_type', $this->entityType)
-                ->condition('bundle', $this->bundle)
-                ->condition('entity_id', $entity_id)
-                ->orderBy('delta')
-                ->execute();
-      foreach ($result as $field_row) {
-        $i = 0;
-        // We assume the first column is the "primary" value of the field, and
-        // assign the field name rather than the column name for it.
-        foreach ($this->sourceFieldInfo[$field_name]['columns'] as $display_name => $column_name) {
-          if ($i++ == 0) {
-            $index = $field_name;
+      // Skip core profile values.
+      if (!isset($field_info['module']) || $field_info['module'] != 'profile') {
+        // Find the data in field_data_$field_name.
+        $table = "field_data_$field_name";
+        $result = Database::getConnection('default', $this->arguments['source_connection'])
+          ->select($table, 'f')
+          ->fields('f')
+          ->condition('entity_type', $this->entityType)
+          ->condition('bundle', $this->bundle)
+          ->condition('entity_id', $entity_id)
+          ->orderBy('delta')
+          ->execute();
+        foreach ($result as $field_row) {
+          $i = 0;
+          // We assume the first column is the "primary" value of the field, and
+          // assign the field name rather than the column name for it.
+          foreach ($this->sourceFieldInfo[$field_name]['columns'] as $display_name => $column_name) {
+            if ($i++ == 0) {
+              $index = $field_name;
+            }
+            else {
+              $index = $display_name;
+            }
+            if (isset($row->$index) && !is_array($row->$index)) {
+              $row->$index = array($row->$index);
+            }
+            $row->{$index}[] = $field_row->$column_name;
           }
-          else {
-            $index = $display_name;
-          }
-          if (isset($row->$index) && !is_array($row->$index)) {
-            $row->$index = array($row->$index);
-          }
-          $row->{$index}[] = $field_row->$column_name;
         }
       }
+    }
+  }
+
+  /**
+   * Retrieve any user profile fields from the core profile module.
+   *
+   * @return array
+   */
+  protected function profileFields() {
+    migrate_instrument_start('DrupalVersion7::profileFields');
+    if (Database::getConnection('default', $this->arguments['source_connection'])
+      ->schema()->tableExists('profile_field')) {
+      $query = Database::getConnection('default', $this->arguments['source_connection'])
+        ->select('profile_field', 'f')
+        ->fields('f', array('title', 'name', 'type'));
+      $result = $query->execute();
+      foreach ($result as $row) {
+        $this->sourceFieldInfo[trim($row->name)] = array(
+          'label' => $row->title,
+          'type' => $row->type,
+          'module' => 'profile',
+        );
+      }
+    }
+    migrate_instrument_stop('DrupalVersion7::profileFields');
+  }
+
+  /**
+   * Get any core profile values associated with this user.
+   *
+   * @param $row
+   * @param $entity_id
+   */
+  public function getProfileValues($row, $entity_id) {
+    if (Database::getConnection('default', $this->arguments['source_connection'])
+      ->schema()->tableExists('profile_value')) {
+      migrate_instrument_start('DrupalVersion7::getProfileValues');
+      $query = Database::getConnection('default', $this->arguments['source_connection'])
+        ->select('profile_value', 'v')
+        ->fields('v', array('value'))
+        ->condition('uid', $entity_id)
+        ->condition('value', '', '<>');
+      $query->innerJoin('profile_field', 'f', 'v.fid=f.fid');
+      $query->fields('f', array('name', 'type'));
+      $result = $query->execute();
+      foreach ($result as $data_row) {
+        switch ($data_row->type) {
+          case 'checkbox':
+            switch (trim(strtolower($data_row->value))) {
+              case 'n':
+                $data_row->value = 0;
+                break;
+
+              case 'y':
+                $data_row->value = 1;
+                break;
+
+              default:
+                break;
+            }
+            break;
+
+          case 'date':
+            // Dates may be serialized arrays or NULLs.
+            if (strpos($data_row->value, 'a:') === 0) {
+              $date_array = unserialize($data_row->value);
+              $data_row->value = $date_array['year'] . '-' . $date_array['month']
+                . '-' . $date_array['day'];
+            }
+            elseif (strpos($data_row->value, 'N;') === 0) {
+              $data_row->value = NULL;
+            }
+            break;
+        }
+        $row->{$data_row->name} = $data_row->value;
+      }
+      migrate_instrument_stop('DrupalVersion7::getProfileValues');
     }
   }
 }
