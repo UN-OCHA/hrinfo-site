@@ -30,6 +30,7 @@ dependencies[] = panelizer
 dependencies[] = radix_layouts
 dependencies[] = strongarm
 dependencies[] = text
+dependencies[] = variable_realm
 dependencies[] = views
 dependencies[] = views_content
 dependencies[] = views_geojson
