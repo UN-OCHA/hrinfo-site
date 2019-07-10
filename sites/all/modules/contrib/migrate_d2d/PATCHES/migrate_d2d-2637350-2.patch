@@ -1,0 +1,22 @@
+diff --git a/node.inc b/node.inc
+index 9405b09..d1e2ead 100644
+--- a/node.inc
++++ b/node.inc
+@@ -187,12 +187,14 @@ abstract class DrupalNodeMigration extends DrupalMigration {
+   /**
+    * Implementation of Migration::createStub().
+    *
+-   * @param $migration
++   * @param object $migration
++   * @param array $source_key
++   *
+    * @return array|bool
+    */
+-  protected function createStub($migration) {
++  protected function createStub($migration, $source_key) {
+     migrate_instrument_start('DrupalNodeMigration::createStub');
+-    $node = new stdClass;
++    $node = new stdClass();
+     $node->title = t('Stub');
+     $node->body = array(LANGUAGE_NONE => array(array("value" => t('Stub body'))));
+     $node->type = $this->destination->getBundle();

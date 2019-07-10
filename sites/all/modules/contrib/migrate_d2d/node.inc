@@ -187,12 +187,14 @@ abstract class DrupalNodeMigration extends DrupalMigration {
   /**
    * Implementation of Migration::createStub().
    *
-   * @param $migration
+   * @param object $migration
+   * @param array $source_key
+   *
    * @return array|bool
    */
   protected function createStub($migration, array $source_key) {
     migrate_instrument_start('DrupalNodeMigration::createStub');
-    $node = new stdClass;
+    $node = new stdClass();
     $node->title = t('Stub');
     $node->body = array(LANGUAGE_NONE => array(array("value" => t('Stub body'))));
     $node->type = $this->destination->getBundle();
