@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_operations.features.inc
@@ -46,5 +47,6 @@ function hr_operations_node_info() {
       'help' => '',
     ),
   );
+  drupal_alter('node_info', $items);
   return $items;
 }
