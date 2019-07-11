@@ -1,7 +1,8 @@
 name = Bookmarks
 description = Bookmark content and spaces
 core = 7.x
-package = Humanitarianresponse
+package = Humanitarian Response
+version = 7.x-3.0
 dependencies[] = features
 dependencies[] = flag
 dependencies[] = hr_core
