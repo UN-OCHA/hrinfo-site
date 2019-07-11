@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_search.features.inc
@@ -37,11 +38,8 @@ function acc_search_default_search_api_index() {
         "field_acc_application_types" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
         "field_acc_date:value" : { "type" : "date" },
         "field_acc_geo_location_dest" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
-        "field_acc_geo_location_dest:field_geofield:geom" : { "type" : "list\\u003Cstring\\u003E" },
         "field_acc_geo_location_dest:field_geofield:lat" : { "type" : "list\\u003Cdecimal\\u003E" },
         "field_acc_geo_location_dest:field_geofield:lon" : { "type" : "list\\u003Cdecimal\\u003E" },
-        "field_acc_impacts:field_acc_impact_type" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
-        "field_acc_impacts:field_acc_impact_value" : { "type" : "list\\u003Cinteger\\u003E" },
         "field_acc_submission_status" : { "type" : "integer", "entity_type" : "taxonomy_term" },
         "field_acc_submitted_by" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
         "field_acc_submitted_by_org_type" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
@@ -52,13 +50,11 @@ function acc_search_default_search_api_index() {
         "field_how_many_days" : { "type" : "integer" },
         "field_if_denied_by_whom_" : { "type" : "integer", "entity_type" : "taxonomy_term" },
         "field_locations" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
-        "field_locations:field_geofield:geom" : { "type" : "list\\u003Cstring\\u003E" },
         "field_locations:field_geofield:lat" : { "type" : "list\\u003Cdecimal\\u003E" },
         "field_locations:field_geofield:lon" : { "type" : "list\\u003Cdecimal\\u003E" },
         "field_nationality" : { "type" : "list\\u003Cstring\\u003E" },
         "field_responsible_actors" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
         "field_responsible_organization_t" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
-        "field_sector" : { "type" : "integer", "entity_type" : "node" },
         "field_submitted_to" : { "type" : "integer", "entity_type" : "taxonomy_term" },
         "field_type_of_affectee" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
         "language" : { "type" : "string" },
@@ -157,7 +153,8 @@ function acc_search_default_search_api_index() {
       }
     },
     "enabled" : "1",
-    "read_only" : "0"
+    "read_only" : "0",
+    "path" : { "pathauto" : "0" }
   }');
   return $items;
 }

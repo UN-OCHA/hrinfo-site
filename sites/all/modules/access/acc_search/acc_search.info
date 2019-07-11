@@ -2,6 +2,7 @@ name = Access Search
 description = Solr Search for Access
 core = 7.x
 package = Humanitarian Access
+version = 7.x-3.0
 dependencies[] = ctools
 dependencies[] = current_search
 dependencies[] = entity
