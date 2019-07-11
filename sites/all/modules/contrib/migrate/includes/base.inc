@@ -235,7 +235,7 @@ abstract class MigrationBase {
    *
    * @var int
    */
-  protected $timeLimit;
+  protected $timeLimit = 0;
 
   /**
    * A time limit in seconds appropriate to be used in a batch
