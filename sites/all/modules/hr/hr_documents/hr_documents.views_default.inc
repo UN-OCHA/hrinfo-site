@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_documents.views_default.inc
@@ -162,8 +163,6 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref']['default_action'] = 'not found';
   $handler->display->display_options['arguments']['og_group_ref']['default_argument_type'] = 'fixed';
   $handler->display->display_options['arguments']['og_group_ref']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['og_group_ref']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['og_group_ref']['not'] = 0;
   /* Filter criterion: Indexed Node: Content type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'search_api_index_default_node_index';
@@ -570,8 +569,6 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref']['default_action'] = 'not found';
   $handler->display->display_options['arguments']['og_group_ref']['default_argument_type'] = 'fixed';
   $handler->display->display_options['arguments']['og_group_ref']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['og_group_ref']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['og_group_ref']['not'] = 0;
   $handler->display->display_options['path'] = 'node/%/documents/feed';
   $handler->display->display_options['displays'] = array(
     'master' => 'master',
@@ -668,8 +665,6 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref']['default_action'] = 'not found';
   $handler->display->display_options['arguments']['og_group_ref']['default_argument_type'] = 'fixed';
   $handler->display->display_options['arguments']['og_group_ref']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['og_group_ref']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['og_group_ref']['not'] = 0;
   $handler->display->display_options['path'] = 'node/%/documents/feedrw';
   $handler->display->display_options['displays'] = array(
     'master' => 'master',
@@ -680,7 +675,6 @@ function hr_documents_views_default_views() {
     'global_list' => 0,
     'global_table' => 0,
   );
-
   $translatables['hr_documents'] = array(
     t('Master'),
     t('Documents'),
@@ -717,7 +711,6 @@ function hr_documents_views_default_views() {
     t('Feed'),
     t('The main body text'),
     t('Feed RW'),
-    t('Global feed RW'),
   );
   $export['hr_documents'] = $view;
 
@@ -832,7 +825,7 @@ function hr_documents_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'hr_document' => 'hr_document',
   );
-  /* Filter criterion: Content: Exclude from Reliefweb (field_exclude_reliefweb) */
+  /* Filter criterion: Content: Do not share with ReliefWeb (field_exclude_reliefweb) */
   $handler->display->display_options['filters']['field_exclude_reliefweb_value']['id'] = 'field_exclude_reliefweb_value';
   $handler->display->display_options['filters']['field_exclude_reliefweb_value']['table'] = 'field_data_field_exclude_reliefweb';
   $handler->display->display_options['filters']['field_exclude_reliefweb_value']['field'] = 'field_exclude_reliefweb_value';
@@ -1100,6 +1093,24 @@ function hr_documents_views_default_views() {
     147444660 => 0,
   );
   $handler->display->display_options['filters']['field_document_type_target_id_entityreference_filter']['reference_display'] = 'hr_document_types:entityreference_1';
+  /* Filter criterion: Content: Language */
+  $handler->display->display_options['filters']['language']['id'] = 'language';
+  $handler->display->display_options['filters']['language']['table'] = 'node';
+  $handler->display->display_options['filters']['language']['field'] = 'language';
+  $handler->display->display_options['filters']['language']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['language']['expose']['operator_id'] = 'language_op';
+  $handler->display->display_options['filters']['language']['expose']['label'] = 'Language';
+  $handler->display->display_options['filters']['language']['expose']['operator'] = 'language_op';
+  $handler->display->display_options['filters']['language']['expose']['identifier'] = 'language';
+  $handler->display->display_options['filters']['language']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    30037204 => 0,
+    200153887 => 0,
+    218860149 => 0,
+    188284353 => 0,
+    235660466 => 0,
+  );
   $handler->display->display_options['pane_title'] = 'Dynamic';
   $handler->display->display_options['pane_category']['name'] = 'Documents';
   $handler->display->display_options['pane_category']['weight'] = '0';
@@ -1432,6 +1443,7 @@ function hr_documents_views_default_views() {
     t('Locations (enter location ID)'),
     t('Themes'),
     t('Document type'),
+    t('Language'),
     t('Dynamic'),
     t('Documents'),
     t('Thumbnail'),
