@@ -203,7 +203,7 @@ abstract class MigrationBase {
    *
    * @var bool
    */
-  protected static $showEncryptionWarning = TRUE;
+  protected static $showEncryptionWarning = FALSE;
 
   /**
    * The fraction of the memory limit at which an operation will be interrupted.
