@@ -1,8 +1,10 @@
 <?php
+
 /**
  * @file
  * hr_jobs.features.inc
  */
+
 /**
  * Implements hook_ctools_plugin_api().
  */
