@@ -504,7 +504,7 @@ function acc_incidents_views_default_views() {
   $handler->display->display_options['sorts']['field_acc_date_value']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['sorts']['field_acc_date_value']['field'] = 'field_acc_date_value';
   $handler->display->display_options['sorts']['field_acc_date_value']['order'] = 'DESC';
-  /* Contextual filter: Indexed Node: Webspace(s) */
+  /* Contextual filter: Indexed Node: Groups audience */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -742,7 +742,7 @@ function acc_incidents_views_default_views() {
   $handler->display->display_options['fields']['field_type_of_affectee']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_type_of_affectee']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_type_of_affectee']['bypass_access'] = 0;
-  /* Field: Indexed Node: Cluster(s)/Sector(s) */
+  /* Field: Indexed Node: Clusters/Sectors */
   $handler->display->display_options['fields']['field_bundles']['id'] = 'field_bundles';
   $handler->display->display_options['fields']['field_bundles']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['field_bundles']['field'] = 'field_bundles';
@@ -918,7 +918,7 @@ function acc_incidents_views_default_views() {
     t('Affected Organization Type'),
     t('Affected Organizations'),
     t('Type of affectee'),
-    t('Cluster(s)/Sector(s)'),
+    t('Clusters/Sectors'),
     t('Impacts'),
     t('Impact Value'),
     t('Description'),

@@ -17,6 +17,24 @@ function acc_incidents_taxonomy_default_vocabularies() {
       'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          0 => 'skos:ConceptScheme',
+        ),
+        'name' => array(
+          'predicates' => array(
+            0 => 'dc:title',
+          ),
+        ),
+        'description' => array(
+          'predicates' => array(
+            0 => 'rdfs:comment',
+          ),
+        ),
+      ),
+      'path' => array(
+        'pathauto' => 0,
+      ),
     ),
     'acc_incident_types' => array(
       'name' => 'Access Type',
@@ -25,6 +43,24 @@ function acc_incidents_taxonomy_default_vocabularies() {
       'hierarchy' => 1,
       'module' => 'taxonomy',
       'weight' => 0,
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          0 => 'skos:ConceptScheme',
+        ),
+        'name' => array(
+          'predicates' => array(
+            0 => 'dc:title',
+          ),
+        ),
+        'description' => array(
+          'predicates' => array(
+            0 => 'rdfs:comment',
+          ),
+        ),
+      ),
+      'path' => array(
+        'pathauto' => 0,
+      ),
     ),
     'acc_responsible_actors' => array(
       'name' => 'Access Responsible Actors',
@@ -33,6 +69,24 @@ function acc_incidents_taxonomy_default_vocabularies() {
       'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          0 => 'skos:ConceptScheme',
+        ),
+        'name' => array(
+          'predicates' => array(
+            0 => 'dc:title',
+          ),
+        ),
+        'description' => array(
+          'predicates' => array(
+            0 => 'rdfs:comment',
+          ),
+        ),
+      ),
+      'path' => array(
+        'pathauto' => 0,
+      ),
     ),
     'acc_type_of_aid_workers' => array(
       'name' => 'Type of affectee',
@@ -41,6 +95,24 @@ function acc_incidents_taxonomy_default_vocabularies() {
       'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,
+      'rdf_mapping' => array(
+        'rdftype' => array(
+          0 => 'skos:ConceptScheme',
+        ),
+        'name' => array(
+          'predicates' => array(
+            0 => 'dc:title',
+          ),
+        ),
+        'description' => array(
+          'predicates' => array(
+            0 => 'rdfs:comment',
+          ),
+        ),
+      ),
+      'path' => array(
+        'pathauto' => 0,
+      ),
     ),
   );
 }

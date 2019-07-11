@@ -1142,7 +1142,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
-  /* Contextual filter: Indexed Node: Webspace(s) */
+  /* Contextual filter: Indexed Node: Groups audience */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -1221,7 +1221,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['url']['alter']['text'] = '<a href="[url]">view</a>';
   $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
-  /* Field: Indexed Node: Webspace(s) */
+  /* Field: Indexed Node: Groups audience */
   $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['fields']['og_group_ref']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
@@ -1409,7 +1409,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['body']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = 'Description';
-  /* Field: Indexed Node: Webspace(s) */
+  /* Field: Indexed Node: Groups audience */
   $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['fields']['og_group_ref']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
@@ -1610,7 +1610,7 @@ function acc_applications_views_default_views() {
     t('Submitted By Organization Type'),
     t('View'),
     t('<a href="[url]">view</a>'),
-    t('Webspace(s)'),
+    t('Groups audience'),
     t('Table'),
     t('view'),
     t('XLS'),
