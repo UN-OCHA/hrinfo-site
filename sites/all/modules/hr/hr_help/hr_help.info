@@ -1,7 +1,8 @@
 name = Help
 description = Help features of Humanitarianresponse 2.x
 core = 7.x
-package = Humanitarianresponse
+package = Humanitarian Response
+version = 7.x-3.0
 dependencies[] = bootstrap_tour
 dependencies[] = ctools
 features[bootstrap_tour][] = adding_content

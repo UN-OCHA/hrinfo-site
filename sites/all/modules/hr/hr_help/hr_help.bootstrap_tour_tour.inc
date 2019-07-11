@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_help.bootstrap_tour_tour.inc
