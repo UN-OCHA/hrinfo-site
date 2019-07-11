@@ -1,6 +1,6 @@
 name = Infographics
 core = 7.x
-package = Humanitarianr Response
+package = Humanitarian Response
 version = 7.x-3.0
 dependencies[] = entity
 dependencies[] = feeds_tamper
