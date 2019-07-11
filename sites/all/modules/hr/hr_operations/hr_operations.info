@@ -13,6 +13,7 @@ dependencies[] = hr_users
 dependencies[] = og_access
 dependencies[] = og_features
 dependencies[] = og_role_delegate
+dependencies[] = og_variables
 dependencies[] = views
 dependencies[] = views_geojson
 features[ctools][] = feeds:feeds_importer_default:1
