@@ -1,12 +1,11 @@
 name = Assessments Registry Integration
 description = Pulls assessments from the assessments registry and displays them on an hrinfo page.
 core = 7.x
-package = Humanitarianresponse
-version = 7.x-1.0
+package = Registries
+version = 7.x-2.0
 dependencies[] = context
 dependencies[] = ctools
 dependencies[] = entity
 dependencies[] = features
-features[context][] = ar_assessments
 features[ctools][] = context:context:3
 features[features_api][] = api:2
