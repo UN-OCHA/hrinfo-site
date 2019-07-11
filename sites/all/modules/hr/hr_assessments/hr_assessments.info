@@ -1,7 +1,7 @@
 name = Assessments
 description = Provides the Assessment content type
 core = 7.x
-package = Humanitarian Response
+package = Registries
 version = 7.x-3.0
 dependencies[] = hid_contact_reference
 dependencies[] = hr_bundles
