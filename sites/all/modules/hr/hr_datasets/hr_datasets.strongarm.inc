@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_datasets.strongarm.inc
@@ -13,29 +14,6 @@ function hr_datasets_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'auto_entitylabel_node_hr_dataset';
-  $strongarm->value = '1';
-  $export['auto_entitylabel_node_hr_dataset'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'auto_entitylabel_pattern_node_hr_dataset';
-  $strongarm->value = '<?php
-return mb_strtoupper(htmlspecialchars_decode("[node:field-locations]", ENT_QUOTES)) . ": " . "[node:field-dataset-categories]";
-?>';
-  $export['auto_entitylabel_pattern_node_hr_dataset'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'auto_entitylabel_php_node_hr_dataset';
-  $strongarm->value = 1;
-  $export['auto_entitylabel_php_node_hr_dataset'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'entity_translation_settings_node__hr_dataset';
   $strongarm->value = array(
     'default_language' => 'xx-et-current',
@@ -45,29 +23,6 @@ return mb_strtoupper(htmlspecialchars_decode("[node:field-locations]", ENT_QUOTE
     'shared_fields_original_only' => 0,
   );
   $export['entity_translation_settings_node__hr_dataset'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'field_bundle_settings_node__hr_dataset';
-  $strongarm->value = array(
-    'view_modes' => array(),
-    'extra_fields' => array(
-      'form' => array(
-        'path' => array(
-          'weight' => '15',
-        ),
-        'redirect' => array(
-          'weight' => '16',
-        ),
-        'language' => array(
-          'weight' => '-10',
-        ),
-      ),
-      'display' => array(),
-    ),
-  );
-  $export['field_bundle_settings_node__hr_dataset'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -100,13 +55,6 @@ return mb_strtoupper(htmlspecialchars_decode("[node:field-locations]", ENT_QUOTE
     2 => 'revision',
   );
   $export['node_options_hr_dataset'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'node_preview_hr_dataset';
-  $strongarm->value = '1';
-  $export['node_preview_hr_dataset'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -184,9 +132,16 @@ return mb_strtoupper(htmlspecialchars_decode("[node:field-locations]", ENT_QUOTE
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_dataset_pattern';
-  $strongarm->value = '[node:og-group-ref:0:url:path]/dataset/[node:title]';
-  $export['pathauto_node_hr_dataset_pattern'] = $strongarm;
+  $strongarm->name = 'pathauto_taxonomy_term_hr_dataset_category_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_hr_dataset_category_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_hr_dataset_type_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_hr_dataset_type_pattern'] = $strongarm;
 
   return $export;
 }
