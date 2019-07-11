@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_events.views_default.inc
@@ -90,6 +91,7 @@ function hr_events_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Events';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'none';
   $handler->display->display_options['cache']['type'] = 'search_api_views_cache';
@@ -111,7 +113,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = 'There are no results';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
-  /* Field: Indexed Node: Date */
+  /* Field: Indexed Node: Date(s) */
   $handler->display->display_options['fields']['field_event_date']['id'] = 'field_event_date';
   $handler->display->display_options['fields']['field_event_date']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_event_date']['field'] = 'field_event_date';
@@ -128,7 +130,7 @@ function hr_events_views_default_views() {
     'show_repeat_rule' => 'hide',
   );
   $handler->display->display_options['fields']['field_event_date']['delta_offset'] = '0';
-  /* Field: Indexed Node: Address */
+  /* Field: Indexed Node: Venue */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
@@ -157,7 +159,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['sorts']['created']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Contextual filter: Indexed Node: Space(s) */
+  /* Contextual filter: Indexed Node: Webspace(s) */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
@@ -242,7 +244,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['defaults']['empty'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Indexed Node: Date */
+  /* Field: Indexed Node: Date(s) */
   $handler->display->display_options['fields']['field_event_date']['id'] = 'field_event_date';
   $handler->display->display_options['fields']['field_event_date']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_event_date']['field'] = 'field_event_date';
@@ -259,7 +261,7 @@ function hr_events_views_default_views() {
     'show_repeat_rule' => 'hide',
   );
   $handler->display->display_options['fields']['field_event_date']['delta_offset'] = '0';
-  /* Field: Indexed Node: Address */
+  /* Field: Indexed Node: Venue */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
@@ -350,7 +352,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['defaults']['empty'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Indexed Node: Date */
+  /* Field: Indexed Node: Date(s) */
   $handler->display->display_options['fields']['field_event_date']['id'] = 'field_event_date';
   $handler->display->display_options['fields']['field_event_date']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_event_date']['field'] = 'field_event_date';
@@ -367,7 +369,7 @@ function hr_events_views_default_views() {
     'show_repeat_rule' => 'hide',
   );
   $handler->display->display_options['fields']['field_event_date']['delta_offset'] = '0';
-  /* Field: Indexed Node: Address */
+  /* Field: Indexed Node: Venue */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
@@ -434,15 +436,13 @@ function hr_events_views_default_views() {
   $handler->display->display_options['sorts']['changed']['field'] = 'changed';
   $handler->display->display_options['sorts']['changed']['order'] = 'DESC';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Indexed Node: Space(s) */
+  /* Contextual filter: Indexed Node: Webspace(s) */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['default_action'] = 'not found';
   $handler->display->display_options['arguments']['og_group_ref']['default_argument_type'] = 'fixed';
   $handler->display->display_options['arguments']['og_group_ref']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['og_group_ref']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['og_group_ref']['not'] = 0;
   $handler->display->display_options['path'] = 'node/%/events/feed';
   $handler->display->display_options['displays'] = array(
     'list' => 'list',
@@ -451,6 +451,7 @@ function hr_events_views_default_views() {
   );
   $translatables['hr_events'] = array(
     t('Master'),
+    t('Events'),
     t('more'),
     t('Apply'),
     t('Reset'),
@@ -517,7 +518,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
-  /* Field: Content: Date */
+  /* Field: Content: Date(s) */
   $handler->display->display_options['fields']['field_event_date']['id'] = 'field_event_date';
   $handler->display->display_options['fields']['field_event_date']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['fields']['field_event_date']['field'] = 'field_event_date';
@@ -534,7 +535,7 @@ function hr_events_views_default_views() {
   );
   $handler->display->display_options['fields']['field_event_date']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_event_date']['delta_offset'] = '0';
-  /* Field: Content: Address */
+  /* Field: Content: Venue */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
@@ -547,11 +548,11 @@ function hr_events_views_default_views() {
       'address' => 'address',
     ),
   );
-  /* Sort criterion: Content: Date -  start date (field_event_date) */
+  /* Sort criterion: Content: Date(s) -  start date (field_event_date) */
   $handler->display->display_options['sorts']['field_event_date_value']['id'] = 'field_event_date_value';
   $handler->display->display_options['sorts']['field_event_date_value']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['sorts']['field_event_date_value']['field'] = 'field_event_date_value';
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -575,7 +576,7 @@ function hr_events_views_default_views() {
     'hr_event' => 'hr_event',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filter criterion: Content: Coordination hubs (field_coordination_hubs) (reference filter) */
+  /* Filter criterion: Content: Coordination hub(s) (field_coordination_hubs) (reference filter) */
   $handler->display->display_options['filters']['field_coordination_hubs_target_id_entityreference_filter']['id'] = 'field_coordination_hubs_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_coordination_hubs_target_id_entityreference_filter']['table'] = 'field_data_field_coordination_hubs';
   $handler->display->display_options['filters']['field_coordination_hubs_target_id_entityreference_filter']['field'] = 'field_coordination_hubs_target_id_entityreference_filter';
@@ -613,7 +614,7 @@ function hr_events_views_default_views() {
   );
   $handler->display->display_options['filters']['field_location_target_id_entityreference_filter']['reference_display'] = 'hr_locations:admin1';
   $handler->display->display_options['filters']['field_location_target_id_entityreference_filter']['reference_arguments'] = '!3';
-  /* Filter criterion: Content: Clusters/Sectors (field_bundles) (reference filter) */
+  /* Filter criterion: Content: Cluster(s)/Sector(s) (field_bundles) (reference filter) */
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['id'] = 'field_bundles_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['table'] = 'og_membership';
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['field'] = 'field_bundles_target_id_entityreference_filter';
@@ -679,7 +680,7 @@ function hr_events_views_default_views() {
   $handler->display->display_options['row_options']['colors']['legend'] = 'type';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -746,7 +747,7 @@ return 0;';
   $handler->display->display_options['row_options']['colors']['legend'] = 'type';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -794,7 +795,7 @@ return 0;';
   $handler->display->display_options['row_plugin'] = 'calendar_entity';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -841,7 +842,7 @@ return 0;';
   $handler->display->display_options['row_plugin'] = 'calendar_entity';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -896,7 +897,7 @@ return 0;';
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
-  /* Field: Content: Date */
+  /* Field: Content: Date(s) */
   $handler->display->display_options['fields']['field_event_date']['id'] = 'field_event_date';
   $handler->display->display_options['fields']['field_event_date']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['fields']['field_event_date']['field'] = 'field_event_date';
@@ -914,7 +915,7 @@ return 0;';
   $handler->display->display_options['fields']['field_event_date']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_event_date']['delta_offset'] = '0';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -944,6 +945,8 @@ return 0;';
   /* Display: iCal */
   $handler = $view->new_display('feed', 'iCal', 'ical');
   $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '99';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'date_ical';
   $handler->display->display_options['row_plugin'] = 'date_ical';
   $handler->display->display_options['row_options']['date_field'] = 'field_data_field_event_date.field_event_date_value';
@@ -1097,7 +1100,7 @@ return 0;';
   $handler->display->display_options['header']['area']['format'] = 'full_html';
   $handler->display->display_options['header']['area']['tokenize'] = TRUE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Date */
+  /* Field: Content: Date(s) */
   $handler->display->display_options['fields']['field_event_date']['id'] = 'field_event_date';
   $handler->display->display_options['fields']['field_event_date']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['fields']['field_event_date']['field'] = 'field_event_date';
@@ -1105,16 +1108,18 @@ return 0;';
   $handler->display->display_options['fields']['field_event_date']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_event_date']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['field_event_date']['settings'] = array(
-    'format_type' => 'hr_1',
+    'format_type' => 'custom',
+    'custom_date_format' => 'l, d M Y',
     'fromto' => 'value',
     'multiple_number' => '',
     'multiple_from' => '',
     'multiple_to' => '',
+    'show_remaining_days' => 0,
     'show_repeat_rule' => 'hide',
   );
   $handler->display->display_options['fields']['field_event_date']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_event_date']['delta_offset'] = '0';
-  /* Field: Content: Date */
+  /* Field: Content: Date(s) */
   $handler->display->display_options['fields']['field_event_date_1']['id'] = 'field_event_date_1';
   $handler->display->display_options['fields']['field_event_date_1']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['fields']['field_event_date_1']['field'] = 'field_event_date';
@@ -1141,14 +1146,14 @@ return 0;';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Field: Content: Address */
+  /* Field: Content: Venue */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['label'] = 'Location';
   $handler->display->display_options['fields']['field_address']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['field_address']['alter']['text'] = '[field_address-thoroughfare] [field_address-premise] - [field_address-locality]';
-  $handler->display->display_options['fields']['field_address']['element_label_class'] = 'col-sm-5';
+  $handler->display->display_options['fields']['field_address']['element_label_class'] = 'col-sm-2';
   $handler->display->display_options['fields']['field_address']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_address']['click_sort_column'] = 'country';
   $handler->display->display_options['fields']['field_address']['settings'] = array(
@@ -1157,8 +1162,22 @@ return 0;';
       'address' => 'address',
     ),
   );
+  /* Field: Content: Contact(s) */
+  $handler->display->display_options['fields']['field_hid_contact_ref']['id'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['table'] = 'field_data_field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['field'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['label'] = 'Contacts';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['element_label_class'] = 'col-sm-3';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['settings'] = array(
+    'show_name' => 1,
+    'show_organization' => 0,
+    'show_job_title' => 0,
+    'show_email' => 1,
+    'show_phone_number' => 1,
+  );
+  $handler->display->display_options['fields']['field_hid_contact_ref']['delta_offset'] = '0';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1262,23 +1281,25 @@ return 0;';
 </div>';
   $handler->display->display_options['footer']['area']['format'] = 'full_html';
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Date */
+  /* Field: Content: Date(s) */
   $handler->display->display_options['fields']['field_event_date']['id'] = 'field_event_date';
   $handler->display->display_options['fields']['field_event_date']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['fields']['field_event_date']['field'] = 'field_event_date';
   $handler->display->display_options['fields']['field_event_date']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_event_date']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['field_event_date']['settings'] = array(
-    'format_type' => 'hr_1',
+    'format_type' => 'custom',
+    'custom_date_format' => 'l, d M Y',
     'fromto' => 'value',
     'multiple_number' => '',
     'multiple_from' => '',
     'multiple_to' => '',
+    'show_remaining_days' => 0,
     'show_repeat_rule' => 'hide',
   );
   $handler->display->display_options['fields']['field_event_date']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_event_date']['delta_offset'] = '0';
-  /* Field: Content: Date */
+  /* Field: Content: Date(s) */
   $handler->display->display_options['fields']['field_event_date_2']['id'] = 'field_event_date_2';
   $handler->display->display_options['fields']['field_event_date_2']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['fields']['field_event_date_2']['field'] = 'field_event_date';
@@ -1295,7 +1316,7 @@ return 0;';
   );
   $handler->display->display_options['fields']['field_event_date_2']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_event_date_2']['delta_offset'] = '0';
-  /* Field: Content: Date */
+  /* Field: Content: Date(s) */
   $handler->display->display_options['fields']['field_event_date_1']['id'] = 'field_event_date_1';
   $handler->display->display_options['fields']['field_event_date_1']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['fields']['field_event_date_1']['field'] = 'field_event_date';
@@ -1320,7 +1341,7 @@ return 0;';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Field: Content: Address */
+  /* Field: Content: Venue */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
@@ -1335,8 +1356,21 @@ return 0;';
       'address' => 'address',
     ),
   );
+  /* Field: Content: Contact(s) */
+  $handler->display->display_options['fields']['field_hid_contact_ref']['id'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['table'] = 'field_data_field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['field'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['label'] = 'Contacts';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['settings'] = array(
+    'show_name' => 1,
+    'show_organization' => 0,
+    'show_job_title' => 0,
+    'show_email' => 1,
+    'show_phone_number' => 1,
+  );
+  $handler->display->display_options['fields']['field_hid_contact_ref']['delta_offset'] = '0';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1420,7 +1454,7 @@ return 0;';
 </div>';
   $handler->display->display_options['footer']['area']['format'] = 'full_html';
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Date */
+  /* Field: Content: Date(s) */
   $handler->display->display_options['fields']['field_event_date_2']['id'] = 'field_event_date_2';
   $handler->display->display_options['fields']['field_event_date_2']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['fields']['field_event_date_2']['field'] = 'field_event_date';
@@ -1437,7 +1471,7 @@ return 0;';
   );
   $handler->display->display_options['fields']['field_event_date_2']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_event_date_2']['delta_offset'] = '0';
-  /* Field: Content: Date */
+  /* Field: Content: Date(s) */
   $handler->display->display_options['fields']['field_event_date_1']['id'] = 'field_event_date_1';
   $handler->display->display_options['fields']['field_event_date_1']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['fields']['field_event_date_1']['field'] = 'field_event_date';
@@ -1462,7 +1496,7 @@ return 0;';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-  /* Field: Content: Address */
+  /* Field: Content: Venue */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
@@ -1477,8 +1511,21 @@ return 0;';
       'address' => 'address',
     ),
   );
+  /* Field: Content: Contact(s) */
+  $handler->display->display_options['fields']['field_hid_contact_ref']['id'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['table'] = 'field_data_field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['field'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['label'] = 'Contacts';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['settings'] = array(
+    'show_name' => 1,
+    'show_organization' => 0,
+    'show_job_title' => 0,
+    'show_email' => 1,
+    'show_phone_number' => 1,
+  );
+  $handler->display->display_options['fields']['field_hid_contact_ref']['delta_offset'] = '0';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1534,10 +1581,11 @@ return 0;';
     t('Block'),
     t('Print Master'),
     t('%2'),
-    t('Date'),
+    t('Date(s)'),
     t('Time'),
     t('Name of the meeting'),
     t('[field_address-thoroughfare] [field_address-premise] - [field_address-locality]'),
+    t('Contacts'),
     t('Calendar <span class="hr-events-location">%1</span>'),
     t('Print Week'),
     t('<div class="pull-left">
@@ -1580,7 +1628,7 @@ return 0;';
   $handler->display->display_options['fields']['title']['label'] = '';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Content: Date */
+  /* Field: Content: Date(s) */
   $handler->display->display_options['fields']['field_event_date']['id'] = 'field_event_date';
   $handler->display->display_options['fields']['field_event_date']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['fields']['field_event_date']['field'] = 'field_event_date';
@@ -1596,11 +1644,11 @@ return 0;';
   );
   $handler->display->display_options['fields']['field_event_date']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_event_date']['delta_offset'] = '0';
-  /* Sort criterion: Content: Date -  start date (field_event_date) */
+  /* Sort criterion: Content: Date(s) -  start date (field_event_date) */
   $handler->display->display_options['sorts']['field_event_date_value']['id'] = 'field_event_date_value';
   $handler->display->display_options['sorts']['field_event_date_value']['table'] = 'field_data_field_event_date';
   $handler->display->display_options['sorts']['field_event_date_value']['field'] = 'field_event_date_value';
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1647,7 +1695,7 @@ return 0;';
     'hr_event' => 'hr_event',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filter criterion: Content: Space(s) (og_group_ref) */
+  /* Filter criterion: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['filters']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['filters']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['filters']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1663,7 +1711,7 @@ return 0;';
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Clusters/Sectors (field_bundles) (reference filter) */
+  /* Filter criterion: Content: Cluster(s)/Sector(s) (field_bundles) (reference filter) */
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['id'] = 'field_bundles_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['table'] = 'og_membership';
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['field'] = 'field_bundles_target_id_entityreference_filter';
@@ -1682,7 +1730,7 @@ return 0;';
     30037204 => 0,
   );
   $handler->display->display_options['filters']['field_bundles_target_id_entityreference_filter']['reference_display'] = 'hr_bundles:entityreference_1';
-  /* Filter criterion: Content: Coordination hubs (field_coordination_hubs) */
+  /* Filter criterion: Content: Coordination hub(s) (field_coordination_hubs) */
   $handler->display->display_options['filters']['field_coordination_hubs_target_id']['id'] = 'field_coordination_hubs_target_id';
   $handler->display->display_options['filters']['field_coordination_hubs_target_id']['table'] = 'field_data_field_coordination_hubs';
   $handler->display->display_options['filters']['field_coordination_hubs_target_id']['field'] = 'field_coordination_hubs_target_id';
@@ -1697,7 +1745,7 @@ return 0;';
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Disasters (field_disasters) */
+  /* Filter criterion: Content: Disaster(s)/Emergency (field_disasters) */
   $handler->display->display_options['filters']['field_disasters_target_id']['id'] = 'field_disasters_target_id';
   $handler->display->display_options['filters']['field_disasters_target_id']['table'] = 'field_data_field_disasters';
   $handler->display->display_options['filters']['field_disasters_target_id']['field'] = 'field_disasters_target_id';
@@ -1712,7 +1760,7 @@ return 0;';
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Locations (field_locations) */
+  /* Filter criterion: Content: Location(s) (field_locations) */
   $handler->display->display_options['filters']['field_locations_target_id']['id'] = 'field_locations_target_id';
   $handler->display->display_options['filters']['field_locations_target_id']['table'] = 'field_data_field_locations';
   $handler->display->display_options['filters']['field_locations_target_id']['field'] = 'field_locations_target_id';
@@ -1727,7 +1775,7 @@ return 0;';
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Themes (field_themes) (reference filter) */
+  /* Filter criterion: Content: Theme(s) (field_themes) (reference filter) */
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['id'] = 'field_themes_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['table'] = 'field_data_field_themes';
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['field'] = 'field_themes_target_id_entityreference_filter';
@@ -1775,6 +1823,7 @@ return 0;';
   $handler->display->display_options['filters']['date_filter']['field'] = 'date_filter';
   $handler->display->display_options['filters']['date_filter']['operator'] = '>=';
   $handler->display->display_options['filters']['date_filter']['group'] = 1;
+  $handler->display->display_options['filters']['date_filter']['granularity'] = 'minute';
   $handler->display->display_options['filters']['date_filter']['default_date'] = 'now';
   $handler->display->display_options['filters']['date_filter']['date_fields'] = array(
     'field_data_field_event_date.field_event_date_value' => 'field_data_field_event_date.field_event_date_value',
@@ -1805,7 +1854,7 @@ return 0;';
   /* Display: Upcoming from context */
   $handler = $view->new_display('panel_pane', 'Upcoming from context', 'upcoming_from_context');
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -1814,7 +1863,7 @@ return 0;';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary_options']['items_per_page'] = '25';
-  /* Contextual filter: Content: Clusters/Sectors (field_bundles) */
+  /* Contextual filter: Content: Cluster(s)/Sector(s) (field_bundles) */
   $handler->display->display_options['arguments']['field_bundles_target_id']['id'] = 'field_bundles_target_id';
   $handler->display->display_options['arguments']['field_bundles_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['field_bundles_target_id']['field'] = 'field_bundles_target_id';
@@ -1846,6 +1895,7 @@ return 0;';
   $handler->display->display_options['filters']['date_filter']['field'] = 'date_filter';
   $handler->display->display_options['filters']['date_filter']['operator'] = '>=';
   $handler->display->display_options['filters']['date_filter']['group'] = 1;
+  $handler->display->display_options['filters']['date_filter']['granularity'] = 'minute';
   $handler->display->display_options['filters']['date_filter']['default_date'] = 'now';
   $handler->display->display_options['filters']['date_filter']['date_fields'] = array(
     'field_data_field_event_date.field_event_date_value' => 'field_data_field_event_date.field_event_date_value',
