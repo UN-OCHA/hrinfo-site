@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_users.views_default.inc
@@ -95,7 +96,7 @@ function hr_users_views_default_views() {
   $handler->display->display_options['fields']['status']['type_custom_true'] = 'Published';
   $handler->display->display_options['fields']['status']['type_custom_false'] = 'Draft';
   $handler->display->display_options['fields']['status']['not'] = 0;
-  /* Field: Content: Space(s) */
+  /* Field: Content: Webspace(s) */
   $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['fields']['og_group_ref']['table'] = 'og_membership';
   $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
@@ -305,7 +306,7 @@ function hr_users_views_default_views() {
     t('‹ previous'),
     t('next ›'),
     t('last »'),
-    t('You have not checked in to any operation yet.'),
+    t('You are not a member of any Humanitarianresponse space.'),
     t('Group node from OG membership'),
     t('user from OG membership'),
     t('Space'),
@@ -361,7 +362,7 @@ function hr_users_views_default_views() {
   $handler->display->display_options['fields']['name']['label'] = '';
   $handler->display->display_options['fields']['name']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['name']['alter']['ellipsis'] = FALSE;
-  /* Field: Field: Job Title */
+  /* Field: Profile: Job Title */
   $handler->display->display_options['fields']['field_job_title_other']['id'] = 'field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['table'] = 'field_data_field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['field'] = 'field_job_title_other';
@@ -378,7 +379,7 @@ function hr_users_views_default_views() {
   $handler->display->display_options['fields']['field_location']['settings'] = array(
     'link' => 0,
   );
-  /* Sort criterion: Field: Last name (field_last_name) */
+  /* Sort criterion: Profile: Last name (field_last_name) */
   $handler->display->display_options['sorts']['field_last_name_value']['id'] = 'field_last_name_value';
   $handler->display->display_options['sorts']['field_last_name_value']['table'] = 'field_data_field_last_name';
   $handler->display->display_options['sorts']['field_last_name_value']['field'] = 'field_last_name_value';
@@ -424,7 +425,7 @@ function hr_users_views_default_views() {
   $handler->display->display_options['fields']['name']['label'] = '';
   $handler->display->display_options['fields']['name']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['name']['alter']['ellipsis'] = FALSE;
-  /* Field: Field: Job Title */
+  /* Field: Profile: Job Title */
   $handler->display->display_options['fields']['field_job_title_other']['id'] = 'field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['table'] = 'field_data_field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['field'] = 'field_job_title_other';
@@ -463,7 +464,7 @@ function hr_users_views_default_views() {
   $handler->display->display_options['fields']['name']['label'] = '';
   $handler->display->display_options['fields']['name']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['name']['alter']['ellipsis'] = FALSE;
-  /* Field: Field: Job Title */
+  /* Field: Profile: Job Title */
   $handler->display->display_options['fields']['field_job_title_other']['id'] = 'field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['table'] = 'field_data_field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['field'] = 'field_job_title_other';
@@ -554,7 +555,7 @@ function hr_users_views_default_views() {
   $handler->display->display_options['fields']['name_1']['field'] = 'name';
   $handler->display->display_options['fields']['name_1']['label'] = '';
   $handler->display->display_options['fields']['name_1']['element_label_colon'] = FALSE;
-  /* Field: Field: Job Title */
+  /* Field: Profile: Job Title */
   $handler->display->display_options['fields']['field_job_title_other']['id'] = 'field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['table'] = 'field_data_field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['field'] = 'field_job_title_other';
@@ -707,12 +708,12 @@ function hr_users_views_default_views() {
   $handler->display->display_options['fields']['og_roles']['field'] = 'og_roles';
   $handler->display->display_options['fields']['og_roles']['relationship'] = 'og_membership_rel';
   $handler->display->display_options['fields']['og_roles']['label'] = 'Roles';
-  /* Field: Field: Job Title */
+  /* Field: Profile: Job Title */
   $handler->display->display_options['fields']['field_job_title_other']['id'] = 'field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['table'] = 'field_data_field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['field'] = 'field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['relationship'] = 'profile';
-  /* Field: Field: Organization */
+  /* Field: Field: Organization(s) */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'field_data_field_organizations';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -894,12 +895,12 @@ function hr_users_views_default_views() {
   $handler->display->display_options['fields']['og_roles']['field'] = 'og_roles';
   $handler->display->display_options['fields']['og_roles']['relationship'] = 'og_membership_rel';
   $handler->display->display_options['fields']['og_roles']['label'] = 'Roles';
-  /* Field: Field: Job Title */
+  /* Field: Profile: Job Title */
   $handler->display->display_options['fields']['field_job_title_other']['id'] = 'field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['table'] = 'field_data_field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['field'] = 'field_job_title_other';
   $handler->display->display_options['fields']['field_job_title_other']['relationship'] = 'profile';
-  /* Field: Field: Organization */
+  /* Field: Field: Organization(s) */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'field_data_field_organizations';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -1024,7 +1025,7 @@ function hr_users_views_default_views() {
     t('Operations & Clusters'),
     t('Roles'),
     t('Job Title'),
-    t('Organization'),
+    t('Organization(s)'),
     t('Created date'),
     t('Content Type'),
     t('Entity id'),
@@ -1032,210 +1033,6 @@ function hr_users_views_default_views() {
     t('User groups csv'),
   );
   $export['hr_users'] = $view;
-
-  $view = new view();
-  $view->name = 'inactive_users';
-  $view->description = '';
-  $view->tag = 'default';
-  $view->base_table = 'users';
-  $view->human_name = 'Inactive users';
-  $view->core = 7;
-  $view->api_version = '3.0';
-  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-
-  /* Display: Master */
-  $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Inactive users';
-  $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'role';
-  $handler->display->display_options['access']['role'] = array(
-    30037204 => '30037204',
-  );
-  $handler->display->display_options['cache']['type'] = 'none';
-  $handler->display->display_options['query']['type'] = 'views_query';
-  $handler->display->display_options['query']['options']['distinct'] = TRUE;
-  $handler->display->display_options['query']['options']['pure_distinct'] = TRUE;
-  $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '25';
-  $handler->display->display_options['style_plugin'] = 'table';
-  /* Relationship: OG membership: OG membership from User */
-  $handler->display->display_options['relationships']['og_membership_rel']['id'] = 'og_membership_rel';
-  $handler->display->display_options['relationships']['og_membership_rel']['table'] = 'users';
-  $handler->display->display_options['relationships']['og_membership_rel']['field'] = 'og_membership_rel';
-  /* Relationship: OG membership: Group Node from OG membership */
-  $handler->display->display_options['relationships']['og_membership_related_node_group']['id'] = 'og_membership_related_node_group';
-  $handler->display->display_options['relationships']['og_membership_related_node_group']['table'] = 'og_membership';
-  $handler->display->display_options['relationships']['og_membership_related_node_group']['field'] = 'og_membership_related_node_group';
-  $handler->display->display_options['relationships']['og_membership_related_node_group']['relationship'] = 'og_membership_rel';
-  /* Relationship: OG membership: OG Roles from membership */
-  $handler->display->display_options['relationships']['og_users_roles']['id'] = 'og_users_roles';
-  $handler->display->display_options['relationships']['og_users_roles']['table'] = 'og_membership';
-  $handler->display->display_options['relationships']['og_users_roles']['field'] = 'og_users_roles';
-  $handler->display->display_options['relationships']['og_users_roles']['relationship'] = 'og_membership_rel';
-  /* Relationship: User: Profile */
-  $handler->display->display_options['relationships']['profile']['id'] = 'profile';
-  $handler->display->display_options['relationships']['profile']['table'] = 'users';
-  $handler->display->display_options['relationships']['profile']['field'] = 'profile';
-  /* Field: Bulk operations: User */
-  $handler->display->display_options['fields']['views_bulk_operations']['id'] = 'views_bulk_operations';
-  $handler->display->display_options['fields']['views_bulk_operations']['table'] = 'users';
-  $handler->display->display_options['fields']['views_bulk_operations']['field'] = 'views_bulk_operations';
-  $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['display_type'] = '1';
-  $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['enable_select_all_pages'] = 1;
-  $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['row_clickable'] = 1;
-  $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['force_single'] = 0;
-  $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['entity_load_capacity'] = '10';
-  $handler->display->display_options['fields']['views_bulk_operations']['vbo_operations'] = array(
-    'action::hr_users_remove_og_roles' => array(
-      'selected' => 1,
-      'postpone_processing' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-    ),
-  );
-  /* Field: User: Uid */
-  $handler->display->display_options['fields']['uid']['id'] = 'uid';
-  $handler->display->display_options['fields']['uid']['table'] = 'users';
-  $handler->display->display_options['fields']['uid']['field'] = 'uid';
-  /* Field: User: Name */
-  $handler->display->display_options['fields']['name']['id'] = 'name';
-  $handler->display->display_options['fields']['name']['table'] = 'users';
-  $handler->display->display_options['fields']['name']['field'] = 'name';
-  $handler->display->display_options['fields']['name']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['name']['alter']['ellipsis'] = FALSE;
-  /* Field: User: E-mail */
-  $handler->display->display_options['fields']['mail']['id'] = 'mail';
-  $handler->display->display_options['fields']['mail']['table'] = 'users';
-  $handler->display->display_options['fields']['mail']['field'] = 'mail';
-  /* Field: Field: First name */
-  $handler->display->display_options['fields']['field_first_name']['id'] = 'field_first_name';
-  $handler->display->display_options['fields']['field_first_name']['table'] = 'field_data_field_first_name';
-  $handler->display->display_options['fields']['field_first_name']['field'] = 'field_first_name';
-  $handler->display->display_options['fields']['field_first_name']['relationship'] = 'profile';
-  /* Field: Field: Last name */
-  $handler->display->display_options['fields']['field_last_name']['id'] = 'field_last_name';
-  $handler->display->display_options['fields']['field_last_name']['table'] = 'field_data_field_last_name';
-  $handler->display->display_options['fields']['field_last_name']['field'] = 'field_last_name';
-  $handler->display->display_options['fields']['field_last_name']['relationship'] = 'profile';
-  /* Field: User: Last login */
-  $handler->display->display_options['fields']['login']['id'] = 'login';
-  $handler->display->display_options['fields']['login']['table'] = 'users';
-  $handler->display->display_options['fields']['login']['field'] = 'login';
-  $handler->display->display_options['fields']['login']['date_format'] = 'time ago';
-  $handler->display->display_options['fields']['login']['second_date_format'] = 'search_api_facetapi_YEAR';
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['relationship'] = 'og_membership_related_node_group';
-  /* Field: OG membership: OG user roles in group */
-  $handler->display->display_options['fields']['og_roles']['id'] = 'og_roles';
-  $handler->display->display_options['fields']['og_roles']['table'] = 'og_membership';
-  $handler->display->display_options['fields']['og_roles']['field'] = 'og_roles';
-  $handler->display->display_options['fields']['og_roles']['relationship'] = 'og_membership_rel';
-  /* Field: Content: Nid */
-  $handler->display->display_options['fields']['nid']['id'] = 'nid';
-  $handler->display->display_options['fields']['nid']['table'] = 'node';
-  $handler->display->display_options['fields']['nid']['field'] = 'nid';
-  $handler->display->display_options['fields']['nid']['relationship'] = 'og_membership_related_node_group';
-  $handler->display->display_options['fields']['nid']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['nid']['alter']['text'] = 'https://www.humanitarianresponse.info/en/node/[nid]';
-  /* Sort criterion: User: Last login */
-  $handler->display->display_options['sorts']['login']['id'] = 'login';
-  $handler->display->display_options['sorts']['login']['table'] = 'users';
-  $handler->display->display_options['sorts']['login']['field'] = 'login';
-  $handler->display->display_options['sorts']['login']['order'] = 'DESC';
-  /* Filter criterion: User: Active */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'users';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = '1';
-  $handler->display->display_options['filters']['status']['group'] = 1;
-  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: User: Last login */
-  $handler->display->display_options['filters']['login']['id'] = 'login';
-  $handler->display->display_options['filters']['login']['table'] = 'users';
-  $handler->display->display_options['filters']['login']['field'] = 'login';
-  $handler->display->display_options['filters']['login']['operator'] = '<';
-  $handler->display->display_options['filters']['login']['value']['value'] = '-180 days';
-  /* Filter criterion: OG user roles: Role Name */
-  $handler->display->display_options['filters']['name']['id'] = 'name';
-  $handler->display->display_options['filters']['name']['table'] = 'og_role';
-  $handler->display->display_options['filters']['name']['field'] = 'name';
-  $handler->display->display_options['filters']['name']['relationship'] = 'og_users_roles';
-  $handler->display->display_options['filters']['name']['operator'] = 'not empty';
-  $handler->display->display_options['filters']['name']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['name']['expose']['operator_id'] = 'name_op';
-  $handler->display->display_options['filters']['name']['expose']['label'] = 'Role Name';
-  $handler->display->display_options['filters']['name']['expose']['use_operator'] = TRUE;
-  $handler->display->display_options['filters']['name']['expose']['operator'] = 'name_op';
-  $handler->display->display_options['filters']['name']['expose']['identifier'] = 'name';
-  $handler->display->display_options['filters']['name']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    30037204 => 0,
-    200153887 => 0,
-    218860149 => 0,
-    188284353 => 0,
-    235660466 => 0,
-  );
-
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page');
-  $handler->display->display_options['path'] = 'admin/inactive-users';
-
-  /* Display: Data export */
-  $handler = $view->new_display('views_data_export', 'Data export', 'views_data_export_1');
-  $handler->display->display_options['pager']['type'] = 'none';
-  $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['style_plugin'] = 'views_data_export_csv';
-  $handler->display->display_options['path'] = 'admin/inactive-users.csv';
-  $handler->display->display_options['displays'] = array(
-    'page' => 'page',
-    'default' => 0,
-  );
-  $handler->display->display_options['use_batch'] = 'batch';
-  $handler->display->display_options['segment_size'] = '25';
-  $translatables['inactive_users'] = array(
-    t('Master'),
-    t('Inactive users'),
-    t('more'),
-    t('Apply'),
-    t('Reset'),
-    t('Sort by'),
-    t('Asc'),
-    t('Desc'),
-    t('Items per page'),
-    t('- All -'),
-    t('Offset'),
-    t('« first'),
-    t('‹ previous'),
-    t('next ›'),
-    t('last »'),
-    t('OG membership from user'),
-    t('Group node from OG membership'),
-    t('OG Roles from OG membership'),
-    t('Profile'),
-    t('User'),
-    t('- Choose an operation -'),
-    t('Uid'),
-    t('Name'),
-    t('E-mail'),
-    t('First name'),
-    t('Last name'),
-    t('Last login'),
-    t('Title'),
-    t('OG user roles in group'),
-    t('Nid'),
-    t('https://www.humanitarianresponse.info/en/node/[nid]'),
-    t('Role Name'),
-    t('Page'),
-    t('Data export'),
-  );
-
-  $export['inactive_users'] = $view;
 
   return $export;
 }
