@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_incidents.features.og_features_permission.inc
@@ -88,53 +89,32 @@ function acc_incidents_og_features_default_permissions() {
 
   // Exported og permission: 'node:hr_operation:create acc_incident content'
   $permissions['node:hr_operation:create acc_incident content'] = array(
-    'roles' => array(
-      'access-editor' => 'access-editor',
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_operation:delete any acc_incident content'
   $permissions['node:hr_operation:delete any acc_incident content'] = array(
-    'roles' => array(
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_operation:delete own acc_incident content'
   $permissions['node:hr_operation:delete own acc_incident content'] = array(
-    'roles' => array(
-      'access-editor' => 'access-editor',
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_operation:update any acc_incident content'
   $permissions['node:hr_operation:update any acc_incident content'] = array(
-    'roles' => array(
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_operation:update own acc_incident content'
   $permissions['node:hr_operation:update own acc_incident content'] = array(
-    'roles' => array(
-      'access-editor' => 'access-editor',
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_operation:view any unpublished acc_incident content'
   $permissions['node:hr_operation:view any unpublished acc_incident content'] = array(
-    'roles' => array(
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_sector:access authoring options of acc_incident content'
