@@ -18,7 +18,7 @@ function hr_core_drush_command() {
   $items = array();
 
   $items['hr-core-average-file-size'] = array(
-    'description' => "Display the average file size of the files",
+    'description' => "Display the average file size and median of the files",
     'drupal dependencies' => array(),
     'aliases' => array(),
   );
@@ -32,6 +32,11 @@ function hr_core_drush_command() {
 function drush_hr_core_average_file_size() {
 
   $result = db_query('SELECT AVG(filesize) FROM drupal.file_managed');
+  foreach ($result as $record) {
+    print_r($record);
+  }
+
+  $result = db_query('SELECT percentile_disc(0.5) within group (order by filesize) FROM drupal.file_managed;');
   foreach ($result as $record) {
     print_r($record);
   }
