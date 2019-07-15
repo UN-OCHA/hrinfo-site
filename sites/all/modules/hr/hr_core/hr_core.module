@@ -1459,6 +1459,6 @@ function hr_core_validate_organization($form, &$form_state) {
   $vid = $form_state['values']['vid'];
   $tid = $form_state['values']['tid'];
   if ($vid == 1 && !$tid && $language->language != 'en') {
-    form_set_error($form['name']['#name'], t('This term must have an English translation'));
+    form_set_error($form['name']['#name'], t('This organization must have an English translation'));
   }
 }
