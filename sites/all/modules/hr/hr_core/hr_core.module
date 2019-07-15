@@ -1416,3 +1416,49 @@ function hr_core_entity_property_info_alter(&$entity_info) {
     'schema field' => 'changed',
   );
 }
+
+/**
+ * Implements hook_node_validate()
+ * Makes sure clusters, operations and offices have an English translation
+ */
+function hr_core_node_validate($node, $form, &$form_state) {
+  $node_types = array('hr_bundle', 'hr_operation', 'hr_office');
+  if (in_array($node->type, $node_types) && $node->language !== 'en') {
+    // Make sure the node has an English translation
+    $tnid = $node->tnid;
+    if ($tnid) {
+      $translations = translation_node_get_translations($tnid);
+      $languages = array_keys($translations);
+      if (!in_array('en', $languages)) {
+        form_set_error($form['language']['#name'], t('This node must have an English translation'));
+      }
+    }
+    else {
+      form_set_error($form['language']['#name'], t('This node must have an English translation'));
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for taxonomy_form_term().
+ * Makes sure organizations have an English translation
+ */
+function hr_core_form_taxonomy_form_term_alter(&$form, &$form_state, $form_id) {
+
+  if ((!isset($form_state['input']['op']) || $form_state['input']['op'] != 'Delete')) {
+    $form['#validate'][] = 'hr_core_validate_organization';
+  }
+}
+
+/**
+ * Implements _form_validate() for taxonomy_form_term().
+ * Makes sure an organization can not be added without an English translation.
+ */
+function hr_core_validate_organization($form, &$form_state) {
+  global $language;
+  $vid = $form_state['values']['vid'];
+  $tid = $form_state['values']['tid'];
+  if ($vid == 1 && !$tid && $language->language != 'en') {
+    form_set_error($form['name']['#name'], t('This term must have an English translation'));
+  }
+}
