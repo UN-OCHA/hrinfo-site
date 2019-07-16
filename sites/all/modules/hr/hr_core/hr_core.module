@@ -1423,6 +1423,11 @@ function hr_core_entity_property_info_alter(&$entity_info) {
  */
 function hr_core_node_validate($node, $form, &$form_state) {
   $node_types = array('hr_bundle', 'hr_operation', 'hr_office');
+  $node_labels = array(
+    'hr_bundle' => t('Cluster'),
+    'hr_operation' => t('Operation'),
+    'hr_office' => t('Office')
+  );
   if (in_array($node->type, $node_types) && $node->language !== 'en') {
     // Make sure the node has an English translation
     $tnid = $node->tnid;
@@ -1430,11 +1435,15 @@ function hr_core_node_validate($node, $form, &$form_state) {
       $translations = translation_node_get_translations($tnid);
       $languages = array_keys($translations);
       if (!in_array('en', $languages)) {
-        form_set_error($form['language']['#name'], t('This node must have an English translation'));
+        form_set_error($form['language']['#name'], t('This @label must have an English translation', array(
+          '@label' => $node_labels[$node->type]
+        )));
       }
     }
     else {
-      form_set_error($form['language']['#name'], t('This node must have an English translation'));
+      form_set_error($form['language']['#name'], t('This @label must have an English translation', array(
+        '@label' => $node_labels[$node->type]
+      )));
     }
   }
 }
