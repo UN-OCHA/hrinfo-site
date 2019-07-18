@@ -9,8 +9,9 @@ const svgSprite = require('gulp-svg-sprite');
 
 
 // Development Tools
-const bs = require('browser-sync');
-const reload = bs.reload;
+const browserSync = require('browser-sync');
+const reload = browserSync.reload;
+const notify = browserSync.notify;
 const rename = require('gulp-rename');
 const sass = require('gulp-sass');
 const cssnano = require('cssnano');
@@ -20,9 +21,9 @@ const sourcemaps = require('gulp-sourcemaps');
 const jshint = require('gulp-jshint');
 const stylish = require('jshint-stylish');
 const uglify = require('gulp-uglify');
-const taskListing = require('gulp-task-listing');
 const changed = require('gulp-changed');
 const concat = require('gulp-concat');
+const sassLint = require('gulp-sass-lint');
 
 
 //——————————————————————————————————————————————————————————————————————————————
@@ -53,20 +54,21 @@ if (process.env.NODE_ENV === 'production') {
 //——————————————————————————————————————————————————————————————————————————————
 // BrowserSync
 //——————————————————————————————————————————————————————————————————————————————
-gulp.task('dev:bs', () => {
-  bs({
+function bsTask() {
+  browserSync({
     proxy: localConfig.drupalUrl,
     open: false,
     port: '3000',
   });
-});
+};
+exports.bs = bsTask;
 
 
 //——————————————————————————————————————————————————————————————————————————————
 // Sass
 //——————————————————————————————————————————————————————————————————————————————
-gulp.task('dev:sass', () => {
-  bs.notify(`Compiling Sass...`);
+function sassCompileTask() {
+  browserSync.notify(`Compiling Sass...`);
 
   return gulp.src(['sass/styles.scss'])
     .pipe(plumber())
@@ -82,14 +84,33 @@ gulp.task('dev:sass', () => {
     .pipe(gulpif(process.env.NODE_ENV !== 'production', sourcemaps.write('./')))
     .pipe(gulp.dest('css/'))
     .pipe(reload({stream: true}));
-});
+};
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Sass Linting
+//——————————————————————————————————————————————————————————————————————————————
+function sassLintTask() {
+  return gulp.src('sass/**/*.s+(a|c)ss')
+    .pipe(sassLint())
+    .pipe(sassLint.format())
+    .pipe(sassLint.failOnError());
+};
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Sass
+//——————————————————————————————————————————————————————————————————————————————
+const sassTask = gulp.series(/*sassLintTask,*/ sassCompileTask);
+exports.sass = sassTask;
+
 
 //——————————————————————————————————————————————————————————————————————————————
 // SVG Sprite generation
 //——————————————————————————————————————————————————————————————————————————————
 
 // SVG Config
-var SVGconfig = {
+const SVGconfig = {
   mode: {
     symbol: { // symbol mode to build the SVG
       dest: 'img/icons', // destination folder
@@ -99,75 +120,74 @@ var SVGconfig = {
   },
   svg: {
     xmlDeclaration: false, // strip out the XML attribute
-    doctypeDeclaration: false // don't include the !DOCTYPE declaration
+    doctypeDeclaration: false, // don't include the !DOCTYPE declaration
+    rootAttributes: { "class": "icons-sprite" }
   }
 };
 
-gulp.task('sprite-page', function() {
+function buildSvgSprite() {
   return gulp.src('img/icons/*.svg')
     .pipe(svgSprite(SVGconfig))
     .pipe(gulp.dest('.'));
-});
+};
+exports.sprites = buildSvgSprite;
 
-gulp.task('sprites', ['sprite-page']);
 
 //——————————————————————————————————————————————————————————————————————————————
 // JS Linting
 //——————————————————————————————————————————————————————————————————————————————
-// gulp.task('dev:js-lint', () => {
-//   return gulp.src('js/*.js')
-//     .pipe(jshint())
-//     .pipe(jshint.reporter(stylish));
-// });
+function jsLintTask() {
+  return gulp.src('js/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish));
+};
 
 
 //——————————————————————————————————————————————————————————————————————————————
 // JS Bundling
 //——————————————————————————————————————————————————————————————————————————————
-// gulp.task('dev:js-bundle', () => {
-//   return gulp.src([
-//       'js/*.js',
-//     ])
-//     .pipe(concat('ocha_bundle.js'))
-//     .pipe(gulpif(process.env.NODE_ENV === 'production', uglify()))
-//     .pipe(gulp.dest('js'))
-//     .pipe(reload({stream: true}));
-// });
+function jsBundleTask() {
+  return gulp.src([
+      'js/*.js',
+    ])
+    .pipe(concat('ocha_bundle.js'))
+    .pipe(gulpif(process.env.NODE_ENV === 'production', uglify()))
+    .pipe(gulp.dest('js'))
+    .pipe(reload({stream: true}));
+};
+
 
 //——————————————————————————————————————————————————————————————————————————————
 // JS Lint + Bundle
 //——————————————————————————————————————————————————————————————————————————————
-// gulp.task('dev:js', ['dev:js-lint', 'dev:js-bundle']);
-
-
-//——————————————————————————————————————————————————————————————————————————————
-// Build assets and start Browser-Sync
-//——————————————————————————————————————————————————————————————————————————————
-gulp.task('dev', ['dev:sass', /*'dev:js',*/ 'dev:bs', 'watch']);
+const jsTask = gulp.series(jsLintTask, jsBundleTask);
+exports.js = jsTask;
 
 
 //——————————————————————————————————————————————————————————————————————————————
 // Watch Files For Changes
 //——————————————————————————————————————————————————————————————————————————————
-gulp.task('watch', () => {
-  // gulp.watch(['js/*.js'], ['dev:js']);
-  gulp.watch(['sass/**/*.scss'], ['dev:sass']);
-});
+function watchTask() {
+  // gulp.watch([
+  //     'js/*.js'
+  // ], ['dev:js']);
+  gulp.watch([
+      'sass/**/*.scss'
+  ], sassTask);
+};
+exports.watch = watchTask;
+
+
+//——————————————————————————————————————————————————————————————————————————————
+// Build assets and start Browser-Sync
+//——————————————————————————————————————————————————————————————————————————————
+const defaultTask = gulp.parallel(gulp.series(sassTask, /*jsTask,*/ bsTask), watchTask);
+exports.dev = defaultTask;
+exports.default = defaultTask;
 
 
 //——————————————————————————————————————————————————————————————————————————————
 // Build all assets in the theme
 //——————————————————————————————————————————————————————————————————————————————
-gulp.task('build', ['dev:sass', /*'dev:js'*/]);
-
-
-//——————————————————————————————————————————————————————————————————————————————
-// Offer help on command line
-//——————————————————————————————————————————————————————————————————————————————
-gulp.task('help', taskListing);
-
-
-//——————————————————————————————————————————————————————————————————————————————
-// Help task is default
-//——————————————————————————————————————————————————————————————————————————————
-gulp.task('default', ['help']);
+const buildTask = gulp.parallel(sassTask/*, jsTask*/);
+exports.build = buildTask;
