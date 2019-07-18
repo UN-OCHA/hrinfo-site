@@ -13,7 +13,7 @@ html, input {
   // 16px = 100%
   // 18px = 112.5%
   // See http://pxtoem.com/ for conversion chart
-  font-size: ($cd-font-size-base / 16 * 100) + %;
+  font-size: ($cd-font-size-base / 16 * 100) + unquote('%');
 }
 
 body {
