@@ -247,7 +247,7 @@ function hr_core_node_view($node, $view_mode, $langcode) {
         'html' => TRUE
       )
     ),
-    '#suffix' => '<script type="text/javascript">if (typeof a2a_config !== "undefined") { a2a_config.linkname = "' . $node->title . '";a2a_config.linkurl = "' . $url . '";a2a.init("page");}</script>',
+    '#suffix' => '<script type="text/javascript">a2a_config.linkname = "' . $node->title . '";a2a_config.linkurl = "' . $url . '";a2a.init("page");</script>',
     '#attached' => array('js' => array('https://static.addtoany.com/menu/page.js')),
   );
 
@@ -1469,27 +1469,5 @@ function hr_core_validate_organization($form, &$form_state) {
   $tid = $form_state['values']['tid'];
   if ($vid == 1 && !$tid && $language->language != 'en') {
     form_set_error($form['name']['#name'], t('This organization must have an English translation'));
-  }
-}
-
-/**
- * Implements hook_schema_alter().
- */
-function hr_core_schema_alter(&$schema) {
-  // Force field_geofield_geom to LONGBLOB.
-  if (isset($schema['field_data_field_geofield'])) {
-    $schema['field_data_field_geofield']['fields']['field_geofield_geom']['type'] = 'blob';
-    $schema['field_data_field_geofield']['fields']['field_geofield_geom']['size'] = 'big';
-  }
-
-  // Force field_geofield_geom to LONGBLOB.
-  if (isset($schema['field_revision_field_geofield'])) {
-    $schema['field_revision_field_geofield']['fields']['field_geofield_geom']['type'] = 'blob';
-    $schema['field_revision_field_geofield']['fields']['field_geofield_geom']['size'] = 'big';
-  }
-
-  // User name length 254.
-  if (isset($schema['users'])) {
-    $schema['users']['fields']['name']['length'] = 254;
   }
 }
