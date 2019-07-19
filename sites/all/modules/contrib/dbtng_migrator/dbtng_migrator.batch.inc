@@ -51,9 +51,11 @@ function dbtng_migrator_batch_install_schema($origin, $destination) {
 
     foreach ($original_schema_table_list as $name) {
       $table = $schema[$name];
-      		if (strpos($name, 'field_deleted') === 0) {
-			continue;
-		}
+      // Skip deleted tables;
+      if (strpos($name, 'field_deleted') === 0) {
+        continue;
+      }
+
       db_set_active($destination);
       db_create_table($name, $table);
       $success = db_table_exists($name);
@@ -110,10 +112,8 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
   $schema = drupal_get_schema($table);
 
   // Set a default sort as range queries must have sorts.
-  // $order_by = key($schema['fields']);
   $order_by = array_keys($schema['fields']);
   if (isset($schema['primary key'])) {
-    // $order_by = current($schema['primary key']);
     $order_by = $schema['primary key'];
   }
 
@@ -130,14 +130,13 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
     $total = db_select($table)->countQuery()->execute()->fetchField();
     $count = 0;
     $limit = 500;
-drush_log($table . ':: total = ' . $total);
+
+    drush_log($table . ':: total = ' . $total);
     while ($count < $total) {
       db_set_active($origin);
       $query = db_select($table, 't')
-                ->fields('t', array_keys($schema['fields']))
-//                ->orderBy($order_by)
-                ->range($count, $limit);
-//                ->execute()->fetchAll();
+        ->fields('t', array_keys($schema['fields']))
+        ->range($count, $limit);
 
       foreach ($order_by as $order_by_field) {
         $query->orderBy($order_by_field);
@@ -145,8 +144,8 @@ drush_log($table . ':: total = ' . $total);
 
       $rows = $query->execute()->fetchAll();
       if (!is_array($rows)) {
-		  drush_print_r($rows);
-	  }
+  		  drush_print_r($rows);
+	    }
 
       // No need to generate insert queries that don't insert anything.
       if (!count($rows)) {
@@ -158,10 +157,18 @@ drush_log($table . ':: total = ' . $total);
       foreach ($rows as $row) {
         $insert->values((array) $row);
       }
-      $insert->execute();
+
+      try {
+        $insert->execute();
+    	}
+    	catch(Exception $e) {
+        drupal_set_message($e->getMessage(), 'error');
+        drush_log($table . ' --- ' . $count . ' --- ' . $e->getMessage());
+    	}
+
       $count += $limit;
     }
-drush_log($table . ':: done = ' . $count);
+    drush_log($table . ':: done = ' . $count);
   }
   catch(Exception $e) {
     db_set_active('default');
