@@ -2113,3 +2113,12 @@ function entity_translation_field_attach_prepare_translation_alter(&$entity, $co
   $handler = entity_translation_get_handler('node', $entity);
   $handler->setActiveLanguage($context['langcode']);
 }
+
+/**
+ * Implements hook_schema_alter().
+ */
+function entity_translation_schema_alter(&$schema) {
+  if (!variable_get('entity_translation_revision_enabled', FALSE)) {
+    $schema['entity_translation']['fields']['revision_id']['not null'] = FALSE;
+  }
+}
