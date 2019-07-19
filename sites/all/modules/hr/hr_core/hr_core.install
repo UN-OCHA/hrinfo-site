@@ -601,5 +601,13 @@ function hr_core_update_7036() {
  * Rename user.
  */
 function hr_core_update_7037() {
-  db_query("UPDATE drupal.users SET name = 'caroline.teyssier - INVALID' WHERE uid = 273;");
+  db_query("UPDATE {users} SET name = 'chakowa - INVALID' WHERE uid = 2087;");
+  db_query("UPDATE {users} SET name = 'caroline.teyssier - INVALID' WHERE uid = 273;");
+}
+
+/**
+ * Rename file.
+ */
+function hr_core_update_7038() {
+  db_query("UPDATE {file_managed} SET uri = 'public://Hesper Scale Presentation - INVALID' WHERE fid = 2206;");
 }
