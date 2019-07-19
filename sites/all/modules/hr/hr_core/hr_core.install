@@ -611,3 +611,10 @@ function hr_core_update_7037() {
 function hr_core_update_7038() {
   db_query("UPDATE {file_managed} SET uri = 'public://Hesper Scale Presentation - INVALID' WHERE fid = 2206;");
 }
+
+/**
+ * Enable migrate module.
+ */
+function hr_core_update_7039() {
+  module_enable(array('dbtng_migrator'));
+}
