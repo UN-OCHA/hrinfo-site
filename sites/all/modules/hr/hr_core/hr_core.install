@@ -597,3 +597,9 @@ function hr_core_update_7036() {
     ->execute();
 }
 
+/**
+ * Rename user.
+ */
+function hr_core_update_7037() {
+  db_query("UPDATE drupal.users SET name = 'caroline.teyssier - INVALID' WHERE uid = 273;");
+}
