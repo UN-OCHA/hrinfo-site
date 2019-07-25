@@ -33,7 +33,7 @@ function fts_get_appeals($year = '') {
     if (isset($data->data)) {
       foreach ($data->data as $plan) {
         $appeal = (object) $plan;
-        $appeal->title = $plan->name;
+        $appeal->title = $plan->planVersion->name;
         $appeals[$plan->id] = $appeal;
       }
       cache_set('fts_appeals_cache_' . $year, $appeals, 'cache', REQUEST_TIME + 24 * 60 * 60);
@@ -61,7 +61,7 @@ function fts_get_appeal($id) {
     $data = json_decode($response->data);
     if (isset($data->data)) {
       $appeal = $data->data;
-      $appeal->title = $appeal->name;
+      $appeal->title = $appeal->planVersion->name;
       cache_set('fts_appeal_by_id_cache_' . $id, $appeal, 'cache', REQUEST_TIME + 24 * 60 * 60);
     }
   }
