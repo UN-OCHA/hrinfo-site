@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Humanitarian ID Auth Integration feature.
@@ -62,16 +63,16 @@ function hid_auth_drupal_goto_alter(&$path, $options, $http_response_code) {
   if (!empty($GLOBALS['hid_auth_user_logout'])) {
     $path = hid_auth_get_base_url() . '/logout?redirect=' . url('<front>', array('absolute' => TRUE));
   }
-  // Fixes conflict with language url
+  // Fixes conflict with language url.
   $oauth_url = '%2Foauth%2Fauthorized2%2F1';
-  if (strpos($path, '%2Fen'.$oauth_url) !== FALSE) {
-    $path = str_replace('%2Fen'.$oauth_url, $oauth_url, $path);
+  if (strpos($path, '%2Fen' . $oauth_url) !== FALSE) {
+    $path = str_replace('%2Fen' . $oauth_url, $oauth_url, $path);
   }
-  if (strpos($path, '%2Ffr'.$oauth_url) !== FALSE) {
-    $path = str_replace('%2Ffr'.$oauth_url, $oauth_url, $path);
+  if (strpos($path, '%2Ffr' . $oauth_url) !== FALSE) {
+    $path = str_replace('%2Ffr' . $oauth_url, $oauth_url, $path);
   }
-  if (strpos($path, '%2Fes'.$oauth_url) !== FALSE) {
-    $path = str_replace('%2Fes'.$oauth_url, $oauth_url, $path);
+  if (strpos($path, '%2Fes' . $oauth_url) !== FALSE) {
+    $path = str_replace('%2Fes' . $oauth_url, $oauth_url, $path);
   }
 }
 
@@ -92,14 +93,14 @@ function hid_auth_form_user_profile_form_alter(&$form, &$form_state) {
   $uid = !empty($form['#user']->uid) ? $form['#user']->uid : FALSE;
   $authname = $uid ? db_query("SELECT authname FROM {authmap} WHERE module = 'connector' AND uid = :uid", array(':uid' => $uid))->fetchField() : FALSE;
   if ($authname) {
-    // Make the email field readonly
+    // Make the email field readonly.
     $form['account']['mail']['#disabled'] = TRUE;
     $form['account']['mail']['#weight'] = -4;
 
-    // Hide and disable the username field
+    // Hide and disable the username field.
     $form['account']['name']['#type'] = 'value';
 
-    // Hide and disable password fields
+    // Hide and disable password fields.
     $form['account']['current_pass']['#type'] = 'value';
     $form['account']['pass']['#type'] = 'value';
 
@@ -107,6 +108,7 @@ function hid_auth_form_user_profile_form_alter(&$form, &$form_state) {
     $form['account']['auth_link'] = array(
       '#type' => 'item',
       '#title' => t('Change your password'),
+      // @codingStandardsIgnoreLine
       '#markup' => t('!Click here to update your password for Humanitarian ID Sign In applications.', array('!Click here to update your password' => l(t('Click here to update your password'), hid_auth_get_base_url() . '/account', array('query' => array('redirect_uri' => url(current_path(), array('absolute' => TRUE))))))),
       '#weight' => -5,
     );
@@ -147,8 +149,9 @@ function hid_auth_get_user_id($account = NULL) {
 }
 
 /**
- * Helper function to retrieve a signed-in user's account data from the
- * authentication service.
+ * Helper function to retrieve account data.
+ *
+ * Fetches sign-in user's data from the authentication service.
  */
 function hid_auth_get_user_data($cid = NULL) {
   // Get account ID and provider data.
@@ -163,7 +166,7 @@ function hid_auth_get_user_data($cid = NULL) {
     $url = url($provider->mapping['fields']['uid']['resource'], array('query' => array('access_token' => $token->key)));
     $res = drupal_http_request($url);
 
-    // Handle response
+    // Handle response.
     if (empty($res->error) && !empty($res->code) && floor(intval($res->code) / 100) == 2 && !empty($res->data)) {
       return drupal_json_decode($res->data);
     }
@@ -175,8 +178,9 @@ function hid_auth_get_user_data($cid = NULL) {
 }
 
 /**
- * Helper function to register a user with a given email address, and optional
- * first and last name.
+ * Helper function to register a user.
+ *
+ * Registers them with a given email address, optional first and last name.
  */
 function hid_auth_register_user($email, $name_first = '', $name_last = '') {
   $data = array(
@@ -189,10 +193,12 @@ function hid_auth_register_user($email, $name_first = '', $name_last = '') {
     $response_data = drupal_json_decode($response->data);
     if (!empty($response_data['status']) && $response_data['status'] == 'ok') {
       if (!empty($response_data['data']['user_id']) && isset($response_data['data']['is_new'])) {
+        // @codingStandardsIgnoreLine
         watchdog('hid_auth', 'User %user_id registered with email %email (@nameFirst @nameLast)', array('%user_id' => $response_data['response']['data']['user_id'], '%email' => $email, '@nameFirst' => $name_first, '@nameLast' => $name_last));
         return $response_data['data'];
       }
     }
+    // @codingStandardsIgnoreLine
     watchdog('hid_auth', 'API error when attempting to register user with email %email (@nameFirst @nameLast)', array('%email' => $email, '@nameFirst' => $name_first, '@nameLast' => $name_last));
     return FALSE;
   }
@@ -221,7 +227,7 @@ function hid_auth_api_post($resource_path, $data = array()) {
   $values_string = NULL;
 
   $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($data));
-  foreach($it as $v) {
+  foreach ($it as $v) {
     $values_string .= $v;
   }
 
@@ -237,9 +243,10 @@ function hid_auth_api_post($resource_path, $data = array()) {
 }
 
 /**
- * Access callback function to replace user_is_anonymous(). If logins are
- * disabled, deny the user automatically. Otherwise, continue on to the
- * original user_is_anonymous() callback.
+ * Access callback function to replace user_is_anonymous().
+ *
+ * If logins are disabled, deny the user automatically.
+ * Otherwise, continue on to the original user_is_anonymous() callback.
  */
 function hid_auth_user_is_anonymous() {
   $login_enabled = variable_get('hid_auth_login_enabled', FALSE);
@@ -250,9 +257,11 @@ function hid_auth_user_is_anonymous() {
 }
 
 /**
- * Access callback function to replace user_register_access(). If logins are not
- * permitted and the user is not logged in, deny the user access. If the user is
- * logged in, use the default user_register_access() callback.
+ * Access callback function to replace user_register_access().
+ *
+ * If logins are not permitted and the user is not logged in, deny the
+ * user access. If the user is logged in, use the default
+ * user_register_access() callback.
  */
 function hid_auth_user_register_access() {
   $login_enabled = variable_get('hid_auth_login_enabled', FALSE);
@@ -263,23 +272,27 @@ function hid_auth_user_register_access() {
 }
 
 /**
- * Callback function to replace user_page(). If logins are not permitted and
- * the user is not logged in, deny the user access. If the user is logged in,
- * display their user page.
+ * Callback function to replace user_page().
+ *
+ * If logins are not permitted and the user is not logged in, deny the
+ * user access. If the user is logged in, display their user page.
  */
 function hid_auth_user_page() {
   global $user;
   $login_enabled = variable_get('hid_auth_login_enabled', FALSE);
 
-  if ($user->uid || $login_enabled) { // the order is important here
+  // The order is important here.
+  if ($user->uid || $login_enabled) {
     return user_page();
   }
   drupal_access_denied();
 }
 
 /**
- * Callback function to replace user_pass(). If logins are not permitted and
- * the user is not logged in, deny the user access.
+ * Callback function to replace user_pass().
+ *
+ * If logins are not permitted and the user is not logged in, deny the
+ * user access.
  */
 function hid_auth_user_pass($form_id) {
   $login_enabled = variable_get('hid_auth_login_enabled', FALSE);
@@ -298,7 +311,7 @@ function hid_auth_user_pass($form_id) {
  */
 function hid_auth_oauthconnector_presets_alter(&$presets) {
   // Define presets for the production Humanitarian.ID environment.
-  $hid_auth_prod = new stdClass;
+  $hid_auth_prod = new stdClass();
   $hid_auth_prod->name = 'hid_oauth';
   $hid_auth_prod->title = 'Humanitarian.ID (production)';
   $hid_auth_prod->url = 'https://auth.humanitarian.id';

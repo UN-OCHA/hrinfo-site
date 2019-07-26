@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * HID profiles pages.
+ */
+
+/**
  * Admin form for managing the system variables associated with this module.
  */
 function hid_profiles_settings_form($form, &$form_state) {
@@ -59,23 +64,23 @@ function hid_profiles_settings_form($form, &$form_state) {
  * Helper function to return the results in json with the right CORS config.
  *
  * @param array $matches
- *  Array of results
+ *   Array of results.
  */
-function _hid_profiles_json_helper($matches) {
+function _hid_profiles_json_helper(array $matches) {
   drupal_add_http_header('Access-Control-Allow-Origin', '*');
   drupal_add_http_header('Access-Control-Allow-Methods', 'GET');
   drupal_json_output($matches);
 }
 
 /**
- * Callback function to return an autocomplete JSON object of matching
- * Organizations.
+ * Autocomplete callback function.
+ *
+ * Return an autocomplete JSON object of matching Organizations.
  *
  * @param string $org_names
- *  A keyword for searching Organization names.
- *
- * @param boolean $extended
- *  Option to return extended information about organizations.
+ *   A keyword for searching Organization names.
+ * @param bool $extended
+ *   Option to return extended information about organizations.
  *
  * @TODO: Convert this to an endpoint for HID.
  */
@@ -87,7 +92,7 @@ function hid_organizations_autocomplete($org_names, $extended = FALSE) {
 
   // Determine the max number of Organizations to return per request.
   $limit = variable_get('hid_organizations_autocomplete_limit', 30);
-  // Limit the query to "starts with" or "contains"
+  // Limit the query to "starts with" or "contains".
   $operator = variable_get('hid_organizations_autocomplete_true', TRUE) ? 'CONTAINS' : 'STARTS_WITH';
 
   // Query the terms by name.
@@ -159,11 +164,11 @@ function hid_organizations_autocomplete($org_names, $extended = FALSE) {
 }
 
 /**
- * Callback function to return an autocomplete JSON object of matching
- * Locations.
+ * Autocmplete callback fucntion.
  *
- * @return
- *  JSON output of all countries for Locations.
+ * Return an autocomplete JSON object of matching Locations.
+ *
+ * Generates JSON output of all countries for Locations.
  */
 function hid_locations_countries() {
   $countries = array();
@@ -182,11 +187,11 @@ function hid_locations_countries() {
 }
 
 /**
- * Callback function to return an autocomplete JSON object of matching
- * Locations.
+ * Callback function.
  *
- * @return
- *  JSON output of all countries for Locations.
+ * Return an autocomplete JSON object of matching Locations.
+ *
+ * Return JSON output of all countries for Locations.
  */
 function hid_location_country($country) {
   // country.country_id
@@ -194,7 +199,7 @@ function hid_location_country($country) {
   // country.regions
   // country.regions.region_id.name
   // country.regions.region_id.cities
-  // country.regions.region_id.cities.city_id
+  // country.regions.region_id.cities.city_id.
   $countries = array(
     'country_id'  => $country->tid,
     'name'        => $country->name,
@@ -230,8 +235,11 @@ function hid_location_country($country) {
   _hid_profiles_json_helper($countries);
 }
 
+/**
+ * HID template loader.
+ */
 function hid_profiles_load_template($file, $id) {
-  $template =  DRUPAL_ROOT . '/' . drupal_get_path('module', 'hid_profiles') . '/templates/'.$file.'.html';
+  $template = DRUPAL_ROOT . '/' . drupal_get_path('module', 'hid_profiles') . '/templates/' . $file . '.html';
   $template = file_get_contents($template);
   $template_elt = array(
     '#tag' => 'script',
@@ -241,9 +249,12 @@ function hid_profiles_load_template($file, $id) {
     ),
     '#value' => $template,
   );
-  drupal_add_html_head($template_elt, 'hid_profiles_'.$file);
+  drupal_add_html_head($template_elt, 'hid_profiles_' . $file);
 }
 
+/**
+ * Access denied helper.
+ */
 function hid_profiles_local_contacts_no_access($reason) {
   context_set('context', 'hid_contacts', FALSE);
 
@@ -285,10 +296,11 @@ function hid_profiles_local_contacts_no_access($reason) {
 /**
  * Callback function to display the list of local contacts for a node.
  *
- * @param node
- *  Operation or Cluster node.
+ * @param object $node
+ *   Operation or Cluster node.
  *
  * @return string
+ *   A themed markup blob.
  */
 function hid_profiles_local_contacts($node) {
   context_set('context', 'hr_space_menu', FALSE);
@@ -331,7 +343,7 @@ function hid_profiles_local_contacts($node) {
         'js' => array(
           '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js' => array('type' => 'external'),
           '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js' => array('type' => 'external'),
-          drupal_get_path('module', 'hid_profiles') . '/js/hid_profiles_contacts.js',
+          drupal_get_path('module', 'hid_profiles') . '/js/hid_profiles_contacts.js' => array('type' => 'file'),
           array(
             'data' => array('hid_profiles' => $settings),
             'type' => 'setting'

@@ -2,13 +2,13 @@
 
 /**
  * @file
- * hid_auth module Drush integration.
+ * Hid_auth module Drush integration.
  */
 
 /**
  * Implements hook_drush_command().
  *
- * @return
+ * @return array
  *   An associative array describing your command(s).
  *
  * @see drush_parse_command()
@@ -31,7 +31,7 @@ function drush_hid_auth_migrate_users() {
   // Load all active users who are not linked to an HID auth account.
   $result = db_query("SELECT u.uid, u.mail FROM users u LEFT JOIN authmap am ON u.uid = am.uid WHERE u.status = 1 AND (am.aid IS NULL OR SUBSTRING(am.authname, 0, 26) = 'oauthconnector_hid_oauth__') ORDER BY u.uid");
   foreach ($result as $rec) {
-    // Load profile
+    // Load profile.
     $profile = profile2_load_by_user($rec->uid, 'main');
     $name_first = !empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) ? trim($profile->field_first_name[LANGUAGE_NONE][0]['value']) : '';
     $name_last = !empty($profile->field_last_name[LANGUAGE_NONE][0]['value']) ? trim($profile->field_last_name[LANGUAGE_NONE][0]['value']) : '';

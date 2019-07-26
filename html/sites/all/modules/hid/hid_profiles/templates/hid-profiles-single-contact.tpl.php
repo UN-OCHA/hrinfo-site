@@ -1,7 +1,9 @@
 <?php
-  /**
-   * @file: template for displaying contact information from HID.
-   */
+
+/**
+ * @file
+ * Template for displaying contact information from HID.
+ */
 ?>
 
 <article class="hid-contact" itemscope itemtype="https://schema.org/Person">
