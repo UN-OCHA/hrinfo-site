@@ -1,10 +1,13 @@
 <?php
+
 /**
- * @file ar_assessments.module
+ * @file
+ * ar_assessments.module
+ *
  * The main module file for Assessments integration.
  */
 
- include_once 'ar_assessments.features.inc';
+include_once 'ar_assessments.features.inc';
 
 /**
  * Implements hook_menu().
@@ -53,7 +56,6 @@ function ar_assessments_og_features_registry() {
   return $registry;
 }
 
-
 /**
  * Implements hook_block_info().
  */
@@ -92,7 +94,7 @@ function ar_assessments_block_view($delta = '') {
       <h2>Current search</h2>
 
     <div class="content">
-      <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter"><p>Filter: <span class="facetapi-active">216 items</span> displayed</p></div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/'.drupal_get_path_alias(current_path()).'"><i class="reset"></i></a> <span>Reset all filters</span></div></div>  </div>
+      <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter"><p>Filter: <span class="facetapi-active">216 items</span> displayed</p></div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/' . drupal_get_path_alias(current_path()) . '"><i class="reset"></i></a> <span>Reset all filters</span></div></div>  </div>
   </div>';
         $block['content'] .= '<section class="text-search">
           <div class="input-group">
@@ -110,9 +112,11 @@ function ar_assessments_block_view($delta = '') {
         $block['content'] .= ar_assessments_disaster_select($operation);
       }
       break;
+
     case 'ar_assessments_sidebar':
       $block['content'] = '<button class="btn btn-primary btn-lg btn-block" id="back"><i class="fa fa-arrow-circle-left"></i> Back</button>';
       break;
+
     case 'ar_assessments_powered_by':
       $block['content'] = '<div class="poweredby-logo"><p class="">Powered by</p><a href="https://assessments.hpc.tools"><img src="/sites/all/themes/humanitarianresponse/assets/images/ar_logo.svg" alt="Assessments Registry logo" width="250" /></a></div>';
       break;
@@ -120,6 +124,9 @@ function ar_assessments_block_view($delta = '') {
   return $block;
 }
 
+/**
+ * Function that selects published bundles for an audience.
+ */
 function ar_assessments_bundles_select($operation) {
   $query = new EntityFieldQuery();
   $entities = $query->entityCondition('entity_type', 'node')
@@ -133,22 +140,31 @@ function ar_assessments_bundles_select($operation) {
   $html .= '<option value=""></option>';
   foreach ($nodes as $nid => $node) {
     $label = entity_label('node', $node);
-    $html .= '<option value="'.$nid.'">'.$label.'</option>';
+    $html .= '<option value="' . $nid . '">' . $label . '</option>';
   }
   $html .= '</select></div>';
   return $html;
 }
 
+/**
+ * Autocomplete helper.
+ */
 function ar_assessments_organization_autocomplete() {
   $html = '<div id="block-hid-profiles-filters-organization" class="block"><input type="text" id="organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Leading Organization" /></div>';
   return $html;
 }
 
+/**
+ * Autocomplete helper.
+ */
 function ar_assessments_part_organization_autocomplete() {
   $html = '<div id="block-hid-profiles-filters-organization" class="block"><input type="text" id="part_organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Participating Organizations" /></div>';
   return $html;
 }
 
+/**
+ * Location select helper.
+ */
 function ar_assessments_location_select($operation) {
   $loc_vocabulary = taxonomy_vocabulary_machine_name_load('hr_location');
   $parent = $operation->field_country[LANGUAGE_NONE][0]['target_id'];
@@ -156,12 +172,15 @@ function ar_assessments_location_select($operation) {
   $html = '<div id="block-hid-profiles-filters-locations" class="block"><select id="locations" class="form-control form-select" tabindex="1" data-placeholder="Filter by Location">';
   $html .= '<option value=""></option>';
   foreach ($tree as $term) {
-    $html .= '<option value="'.$term->tid.'">'.$term->name.'</option>';
+    $html .= '<option value="' . $term->tid . '">' . $term->name . '</option>';
   }
   $html .= '</select></div>';
   return $html;
 }
 
+/**
+ * Assessments status select helper.
+ */
 function ar_assessments_status_select() {
   $html = '<div id="block-hid-profiles-filters-status" class="block"><select id="status" class="form-control form-select" tabindex="1" data-placeholder="Filter by Status">';
   $html .= '<option value=""></option>';
@@ -174,18 +193,24 @@ function ar_assessments_status_select() {
   return $html;
 }
 
+/**
+ * Assessments population types select helper.
+ */
 function ar_assessments_population_types_select() {
   $loc_vocabulary = taxonomy_vocabulary_machine_name_load('hr_population_type');
   $tree = taxonomy_get_tree($loc_vocabulary->vid, 0, 1);
   $html = '<div id="block-hid-profiles-filters-population-types" class="block"><select id="population-types" class="form-control form-select" tabindex="1" data-placeholder="Filter by Population Type">';
   $html .= '<option value=""></option>';
   foreach ($tree as $term) {
-    $html .= '<option value="'.$term->tid.'">'.$term->name.'</option>';
+    $html .= '<option value="' . $term->tid . '">' . $term->name . '</option>';
   }
   $html .= '</select></div>';
   return $html;
 }
 
+/**
+ * Assessments disaster select helper.
+ */
 function ar_assessments_disaster_select($operation) {
   $output = '';
   $query = new EntityFieldQuery();
@@ -208,6 +233,9 @@ function ar_assessments_disaster_select($operation) {
   return $output;
 }
 
+/**
+ * Assessments entities dropdown helper.
+ */
 function ar_assessments_get_entities_dropdown($type) {
   $output = array();
   $query = new EntityFieldQuery();
@@ -228,6 +256,9 @@ function ar_assessments_get_entities_dropdown($type) {
   return $output;
 }
 
+/**
+ * Assessments filter list helper.
+ */
 function ar_assessments_get_list_of_filters() {
   $dropdowns = array();
   $operations = ar_assessments_get_entities_dropdown('hr_operation');
@@ -238,13 +269,16 @@ function ar_assessments_get_list_of_filters() {
   return $dropdowns;
 }
 
+/**
+ * Assessments fetch helper.
+ */
 function ar_assessments_fetch_assessments($filters, $limit = 5) {
   $url = 'https://assessments.hpc.tools/api/v1.1/assessments';
   if (!empty($filters)) {
-    $url .= '?range='.$limit.'&';
+    $url .= '?range=' . $limit . '&';
     foreach ($filters as $name => $val) {
       if ($val) {
-        $url .= 'filter['.$name.'][value]='.$val.'&';
+        $url .= 'filter[' . $name . '][value]=' . $val . '&';
       }
     }
   }
