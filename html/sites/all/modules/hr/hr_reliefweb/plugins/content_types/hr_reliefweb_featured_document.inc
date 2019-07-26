@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Featured document plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('Featured document'),
@@ -14,7 +19,7 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
 function hr_reliefweb_featured_document_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
@@ -43,11 +48,12 @@ function hr_reliefweb_featured_document_edit_form_submit($form, &$form_state) {
 }
 
 /**
- * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
+ * Run-time rendering of the body of the block (content type).
+ *
+ * @See ctools_plugin_examples for more advanced info.
  */
 function hr_reliefweb_featured_document_render($subtype, $conf, $panel_args, $context = NULL) {
-  // initial content is blank
+  // Initial content is blank.
   $block = new stdClass();
   $block->title = 'Featured reliefweb documents';
   $block->content = '';
@@ -71,10 +77,10 @@ function hr_reliefweb_featured_document_render($subtype, $conf, $panel_args, $co
         // Only show first file.
         $file = reset($value['files']);
         if (isset($file['preview']) && !empty($file['preview'])) {
-          $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
+          $downloads[] = '<a target="reliefweb" title="' . $file['description'] . '" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
         }
         else {
-          $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
+          $downloads[] = '<a target="reliefweb" title="' . $file['description'] . '" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
         }
       }
       $rows[] = array(
@@ -83,7 +89,7 @@ function hr_reliefweb_featured_document_render($subtype, $conf, $panel_args, $co
           'class' => 'reliefweb--doc-type--download',
         ),
         array(
-          'data' => '<a target="reliefweb" href = ' . $value['url'] . '> '. $value['title'] . '</a>',
+          'data' => '<a target="reliefweb" href = ' . $value['url'] . '> ' . $value['title'] . '</a>',
           'class' => 'reliefweb--doc-type--title',
         ),
       );

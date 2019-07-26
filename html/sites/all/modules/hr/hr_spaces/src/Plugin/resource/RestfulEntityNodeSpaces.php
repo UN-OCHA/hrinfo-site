@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_spaces\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityNodeSpaces
+ * Class RestfulEntityNodeSpaces.
+ *
  * @package Drupal\hr_spaces\Plugin\resource
  *
  * @Resource(
@@ -29,9 +31,11 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityNodeSpaces extends ResourceCustom implements ResourceInterface {
 
+  /**
+   * Get public fields.
+   */
   public function publicFields() {
     $public_fields = parent::publicFields();
 

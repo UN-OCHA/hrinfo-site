@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Reliefweb API plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('ReliefWeb API'),
@@ -17,10 +22,9 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
-
-function hr_layout_reliefweb_edit_form($form, &$form_state){
+function hr_layout_reliefweb_edit_form($form, &$form_state) {
   $options = range(1, 50);
   $countries_list = country_get_list();
   $countries = array();
@@ -45,7 +49,8 @@ function hr_layout_reliefweb_edit_form($form, &$form_state){
   $form['api_path_advanced'] = array(
     '#type' => 'textfield',
     '#title' => 'ReliefWeb API path(Advanced Users)',
-    '#description' => t('Enter the full ReliefWeb API path. Please note that this is for advanced users for cases where they might want to explore more options not provided by the settings above. For more advanced usage of the ReliefWeb API, kindly see ' .l('ReliefWeb API', 'http://reliefweb.int/help/api/advanced', array('external' => TRUE))) .'. Kindly also ensure that you DO NOT include the "limit" and "offset" parameters. For more help on this, please contact ' .l('help@humanitarianresponse.info', 'mailto:help@humanitarianresponse.info', array('absolute' => TRUE)) .'.',
+    // @codingStandardsIgnoreLine
+    '#description' => t('Enter the full ReliefWeb API path. Please note that this is for advanced users for cases where they might want to explore more options not provided by the settings above. For more advanced usage of the ReliefWeb API, kindly see ' . l(t('ReliefWeb API'), 'http://reliefweb.int/help/api/advanced', array('external' => TRUE))) . '. Kindly also ensure that you DO NOT include the "limit" and "offset" parameters. For more help on this, please contact ' . l(t('help@humanitarianresponse.info'), 'mailto:help@humanitarianresponse.info', array('absolute' => TRUE)) . '.',
     '#default_value' => $conf['api_path_advanced'],
   );
   $form['no_of_items'] = array(
@@ -62,7 +67,6 @@ function hr_layout_reliefweb_edit_form($form, &$form_state){
 /**
  * Edit form submit handler.
  */
-
 function hr_layout_reliefweb_edit_form_submit($form, &$form_state) {
   foreach (element_children($form) as $key) {
     if (!empty($form_state['values'][$key])) {
@@ -72,26 +76,26 @@ function hr_layout_reliefweb_edit_form_submit($form, &$form_state) {
 }
 
 /**
- * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
+ * Run-time rendering of the body of the block (content type).
+ *
+ * See ctools_plugin_examples for more advanced info.
  */
-
-function hr_layout_reliefweb_render($subtype, $conf, $panel_args, $context = NULL){
+function hr_layout_reliefweb_render($subtype, $conf, $panel_args, $context = NULL) {
   $block = new stdClass();
   $block->title = t('ReliefWeb');
   $country = $conf['country'];
   $api_path = $conf['api_path'];
   $api_path_advanced = $conf['api_path_advanced'];
-  $no_of_items  = $conf['no_of_items'];
+  $no_of_items = $conf['no_of_items'];
   $jobs = FALSE;
   if (substr($api_path, -5) == '/jobs') {
     $jobs = TRUE;
   }
 
   $path = '';
-  if(!empty($api_path_advanced)){
+  if (!empty($api_path_advanced)) {
     $string = '?';
-    if(strpos($api_path_advanced, $string) !== false){
+    if (strpos($api_path_advanced, $string) !== FALSE) {
       $api_path_advanced .= '&fields[include][]=url';
       $path = $api_path_advanced;
     }
@@ -125,7 +129,7 @@ function hr_layout_reliefweb_render($subtype, $conf, $panel_args, $context = NUL
   $api_data = hr_layout_reliefweb_content($path);
 
   if (isset($no_of_items)) {
-    $result = array_slice($api_data, 0, $no_of_items + 1, true);
+    $result = array_slice($api_data, 0, $no_of_items + 1, TRUE);
   }
   else {
     $result = $api_data;
@@ -142,7 +146,7 @@ function hr_layout_reliefweb_render($subtype, $conf, $panel_args, $context = NUL
     $rows = array();
     foreach ($result as $key => $value) {
       $rows[] = array(
-        '<a href = ' . $value['url'] . '> '. $value['title'] . '</a>',
+        '<a href = ' . $value['url'] . '> ' . $value['title'] . '</a>',
         isset($value['closing_date']) ? format_date(strtotime($value['closing_date']), 'search_api_facetapi_DAY') : '',
         $value['source'],
       );
@@ -159,7 +163,7 @@ function hr_layout_reliefweb_render($subtype, $conf, $panel_args, $context = NUL
     $content = '';
     $content .= '<ul>';
     foreach ($result as $key => $value) {
-      $content .= '<li><a href = ' . $value['url'] . '> '. $value['title'] . '</a></li>';
+      $content .= '<li><a href = ' . $value['url'] . '> ' . $value['title'] . '</a></li>';
     }
     $content .= '</ul>';
     $block->content = $content;
@@ -169,9 +173,8 @@ function hr_layout_reliefweb_render($subtype, $conf, $panel_args, $context = NUL
 }
 
 /**
-*  Function to return ReliefWeb Api paths.
-*/
-
+ * Function to return ReliefWeb Api paths.
+ */
 function hr_layout_reliefweb_api_path() {
   $source_url = 'http://api.reliefweb.int/v1';
   $api_endpoints = array();
@@ -186,15 +189,14 @@ function hr_layout_reliefweb_api_path() {
     }
     return $api_endpoints;
   }
-  else{
+  else {
     drupal_set_message("Could not return ReliefWeb API Paths. Please consult the site administrator");
   }
 }
 
 /**
-*  Function to return content given an api path.
-*/
-
+ * Function to return content given an api path.
+ */
 function hr_layout_reliefweb_content($path) {
   $request = drupal_http_request($path);
   if (isset($request->data)) {
@@ -213,7 +215,7 @@ function hr_layout_reliefweb_content($path) {
     }
     return $data_array;
   }
-  else{
+  else {
     drupal_set_message('Could not fetch content for the given API path, please consult your site administrator');
   }
 }

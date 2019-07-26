@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the API feature.
@@ -6,6 +7,9 @@
 
 include_once 'hr_api.features.inc';
 
+/**
+ * Convert a bundle to a RESTful plugin.
+ */
 function hr_api_bundle_to_restful_plugin($bundle, $type) {
   $resource = '';
   $plugins = restful()->getResourceManager()->getPlugins();
@@ -52,19 +56,22 @@ function hr_api_entity_delete($entity, $type) {
   }
 }
 
+/**
+ * API Entity hook.
+ */
 function hr_api_entity_hook($event, $entity, $type) {
   if ($type == 'node' || $type == 'taxonomy_term') {
     global $language;
     global $conf;
     $user = user_load(1);
-    $call_webhook = false;
+    $call_webhook = FALSE;
     list($id) = entity_extract_ids($type, $entity);
     entity_get_controller($type)->resetCache(array($id));
     $wrapper = entity_metadata_wrapper($type, $id);
     $bundle = $wrapper->getBundle();
     foreach ($conf['hr_api_webhooks'] as $webhook) {
       if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
-        $call_webhook = true;
+        $call_webhook = TRUE;
       }
     }
     if ($call_webhook) {
@@ -87,22 +94,28 @@ function hr_api_entity_hook($event, $entity, $type) {
   }
 }
 
+/**
+ * API Webhook callback.
+ */
 function hr_api_should_call_webhook($webhook, $type, $bundle) {
   $types = array_keys($webhook['types']);
   if (in_array($type, $types)) {
     $bundles = $webhook['types'][$type];
     if (in_array($bundle, $bundles)) {
-      return true;
+      return TRUE;
     }
     else {
-      return false;
+      return FALSE;
     }
   }
   else {
-    return false;
+    return FALSE;
   }
 }
 
+/**
+ * API Webhook callback.
+ */
 function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $entity) {
   $definition = $resource->getPluginDefinition();
   $url = $webhook['url'];
@@ -121,16 +134,16 @@ function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translatio
 
   $ch = curl_init();
 
-  // set URL and other appropriate options
+  // Set URL and other appropriate options.
   curl_setopt($ch, CURLOPT_URL, $url);
   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
   curl_setopt($ch, CURLOPT_POST, 1);
   curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($json));
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 
-  // grab URL and pass it to the browser
+  // Grab URL and pass it to the browser.
   curl_exec($ch);
 
-  // close cURL resource, and free up system resources
+  // Close cURL resource, and free up system resources.
   curl_close($ch);
 }

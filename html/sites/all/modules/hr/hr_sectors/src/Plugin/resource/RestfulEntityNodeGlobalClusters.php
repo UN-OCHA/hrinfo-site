@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_sectors\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityNodeGlobalClusters
+ * Class RestfulEntityNodeGlobalClusters.
+ *
  * @package Drupal\hr_sectors\Plugin\resource
  *
  * @Resource(
@@ -29,9 +31,11 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityNodeGlobalClusters extends ResourceCustom implements ResourceInterface {
 
+  /**
+   * Get public fields.
+   */
   public function publicFields() {
     $public_fields = parent::publicFields();
 

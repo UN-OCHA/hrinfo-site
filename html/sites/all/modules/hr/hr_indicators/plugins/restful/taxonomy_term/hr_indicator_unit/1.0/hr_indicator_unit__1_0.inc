@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Indicator units plugin.
+ */
+
 $plugin = array(
   'label' => t('Indicator units'),
   'resource' => 'indicator_units',

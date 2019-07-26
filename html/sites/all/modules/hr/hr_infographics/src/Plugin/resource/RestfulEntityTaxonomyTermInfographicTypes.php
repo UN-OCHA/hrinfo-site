@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_infographics\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityTaxonoyTermInfographicTypes
+ * Class RestfulEntityTaxonoyTermInfographicTypes.
+ *
  * @package Drupal\hr_infographics\Plugin\resource
  *
  * @Resource(
@@ -28,7 +30,6 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityTaxonomyTermInfographicTypes extends ResourceCustom implements ResourceInterface {
 
   /**
@@ -64,4 +65,5 @@ class RestfulEntityTaxonomyTermInfographicTypes extends ResourceCustom implement
   protected function dataProviderClassName() {
     return '\Drupal\hr_api\Plugin\resource\DataProviderTermWithParent';
   }
+
 }

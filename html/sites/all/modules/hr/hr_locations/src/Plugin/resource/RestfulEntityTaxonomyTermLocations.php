@@ -1,13 +1,15 @@
 <?php
 
 namespace Drupal\hr_locations\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterEMW;
 
 /**
- * Class RestfulEntityTaxonomyTermLocations
+ * Class RestfulEntityTaxonomyTermLocations.
+ *
  * @package Drupal\hr_locations\Plugin\resource
  *
  * @Resource(
@@ -79,6 +81,9 @@ class RestfulEntityTaxonomyTermLocations extends ResourceCustom implements Resou
     return $public_fields;
   }
 
+  /**
+   * Get parents.
+   */
   public function getParents(DataInterpreterInterface $di) {
     global $user;
     $wrapper = $di->getWrapper();
@@ -90,6 +95,9 @@ class RestfulEntityTaxonomyTermLocations extends ResourceCustom implements Resou
     return $labels;
   }
 
+  /**
+   * Get geolocation.
+   */
   public function getGeolocation(DataInterpreterInterface $di) {
     $wrapper = $di->getWrapper();
     $geofield = $wrapper->field_geofield->value();
@@ -102,4 +110,5 @@ class RestfulEntityTaxonomyTermLocations extends ResourceCustom implements Resou
   protected function dataProviderClassName() {
     return '\Drupal\hr_api\Plugin\resource\DataProviderTermWithParent';
   }
+
 }

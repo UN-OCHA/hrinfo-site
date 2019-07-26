@@ -1,8 +1,16 @@
 <?php
 
-function hr_jobs_reliefweb_jobs($operation){
+/**
+ * @file
+ * Reliefweb jobs.
+ */
+
+/**
+ * Outputs html.
+ */
+function hr_jobs_reliefweb_jobs($operation) {
   $templates = array(
-  	'jobs_list_view',
+    'jobs_list_view',
   );
   drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js', array('type' => 'external'));
   drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js', array('type' => 'external'));
@@ -38,10 +46,11 @@ function hr_jobs_reliefweb_jobs($operation){
   return $html;
 }
 
-// adopted from the hid_profiles module(github.com/humanitarianresponse/hid_profiles).
-
+/**
+ * Adopted from the hid_profiles module(github.com/humanitarianresponse/hid_profiles).
+ */
 function hr_jobs_load_template($file, $id) {
-  $template =  DRUPAL_ROOT . '/' . drupal_get_path('module', 'hr_jobs') . '/templates/'.$file.'.html';
+  $template = DRUPAL_ROOT . '/' . drupal_get_path('module', 'hr_jobs') . '/templates/' . $file . '.html';
   $template = file_get_contents($template);
   $template_elt = array(
     '#tag' => 'script',
@@ -51,5 +60,5 @@ function hr_jobs_load_template($file, $id) {
     ),
     '#value' => $template,
   );
-  drupal_add_html_head($template_elt, 'hr_jobs_'.$file);
+  drupal_add_html_head($template_elt, 'hr_jobs_' . $file);
 }

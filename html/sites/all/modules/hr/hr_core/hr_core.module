@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Core feature.
@@ -46,7 +47,7 @@ function hr_core_entity_info_alter(&$entity_info) {
 /**
  * Implements hook_form_alter().
  *
- * Hides fields if they are empty
+ * Hides fields if they are empty.
  */
 function hr_core_form_alter(&$form, &$form_state, $form_id) {
   // Disable private groups and group content.
@@ -77,6 +78,7 @@ function hr_core_form_alter(&$form, &$form_state, $form_id) {
             }
           }
           break;
+
         case 'select':
           if (empty($item['#options'])) {
             $item['#type'] = 'hidden';
@@ -108,7 +110,7 @@ function hr_core_path_insert($path) {
     }
     else {
       $path['language'] = LANGUAGE_NONE;
-      // Resave path
+      // Resave path.
       path_save($path);
     }
   }
@@ -117,7 +119,7 @@ function hr_core_path_insert($path) {
 /**
  * Implements hook_entity_presave()
  *
- * Makes sure pathauto is not used when no path is set
+ * Makes sure pathauto is not used when no path is set.
  */
 function hr_core_entity_presave($node, $type) {
   if (!isset($node->path['pathauto'])) {
@@ -211,7 +213,7 @@ function _hr_core_files_download_button($entity, $type) {
     $file_url = file_create_url($file['uri']);
 
     $output .= '<li>' . l($file_title . ' ' . $file_language, $file_url, array(
-      'attributes' => array('target'=>'_blank')
+      'attributes' => array('target' => '_blank')
     )) . '</li>';
   }
 
@@ -225,7 +227,7 @@ function _hr_core_files_download_button($entity, $type) {
 /**
  * Implements hook_node_view().
  *
- * Adds share button
+ * Adds share button.
  */
 function hr_core_node_view($node, $view_mode, $langcode) {
   $url = url('node/' . $node->nid, array('absolute' => TRUE));
@@ -286,6 +288,9 @@ function hr_core_og_context_negotiation_info() {
   return $providers;
 }
 
+/**
+ * Context handler callback.
+ */
 function hr_core_og_context_handler($node = NULL) {
   $context = NULL;
   if ($node == NULL) {
@@ -332,6 +337,9 @@ function hr_core_tokens($type, $tokens, array $data = array(), array $options = 
   return $replacements;
 }
 
+/**
+ * Return a button with a label.
+ */
 function _hr_core_draft_button($label) {
   return array(
     '#type' => 'submit',
@@ -385,7 +393,7 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
 
     if (empty($groups)) {
       $group = og_context();
-      if (!empty($group) ) {
+      if (!empty($group)) {
         $groups = array($group['gid']);
       }
     }
@@ -451,7 +459,7 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
       $form['actions']['submit']['#value'] = t('Publish');
       $form['actions']['draft'] = _hr_core_draft_button('Save As Draft');
     }
-    else if (!isset($node->nid)) {
+    elseif (!isset($node->nid)) {
       $form['actions']['submit']['#value'] = t('Save As Draft');
     }
   }
@@ -460,7 +468,7 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
 }
 
 /**
- * Handles save draft form validation
+ * Handles save draft form validation.
  */
 function hr_core_save_draft_validate($form, &$form_state) {
   // Set the node to be published or unpublished depending on which button was
@@ -534,7 +542,6 @@ function hr_core_publishcontent_publish_access($node, $account) {
 
 /**
  * Implements hook_publishcontent_unpublish_access().
- *
  */
 function hr_core_publishcontent_unpublish_access($node, $account) {
   if (!isset($node->nid) && isset($node->{HR_CORE_OG_AUDIENCE_FIELD})) {
@@ -590,7 +597,7 @@ function hr_core_publishcontent_unpublish_access($node, $account) {
 }
 
 /**
- * Returns true if a menu item for a given path exists, false otherwise
+ * Returns true if a menu item for a given path exists, false otherwise.
  */
 function hr_core_menu_link_exists($path, $menu_name) {
   $links = db_select('menu_links', 'ml')
@@ -606,8 +613,9 @@ function hr_core_menu_link_exists($path, $menu_name) {
 
 /**
  * Implements hook_addressfield_default_values_alter()
+ *
  * Sets default country to the country of the space
- * See https://atrium.humanitarianresponse.info/humanitarian_response/node/4329
+ * See https://atrium.humanitarianresponse.info/humanitarian_response/node/4329.
  */
 function hr_core_addressfield_default_values_alter(&$default_values, $context) {
   if (empty($default_values['country'])) {
@@ -617,7 +625,8 @@ function hr_core_addressfield_default_values_alter(&$default_values, $context) {
 
 /**
  * Implements hook_languagefield_options_alter()
- * Added Dari as a language. See https://atrium.humanitarianresponse.info/humanitarian_response/node/4367
+ *
+ * Added Dari as a language. See https://atrium.humanitarianresponse.info/humanitarian_response/node/4367.
  */
 function hr_core_languagefield_options_alter(&$languages, $subsets, $langcode) {
   if (!isset($languages['prs'])) {
@@ -633,15 +642,17 @@ function hr_core_languagefield_options_alter(&$languages, $subsets, $langcode) {
 
 /**
  * Implements hook_panels_new_pane_alter($pane)
- * Set default panel style to hr_highlighted
+ *
+ * Set default panel style to hr_highlighted.
  */
 function hr_core_panels_new_pane_alter(&$pane) {
   $pane->style['style'] = 'hr_highlighted';
 }
 
 /**
- * Redirect user to operation page after deletion of content
- * See http://atrium.humanitarianresponse.info/humanitarian_response/node/3992
+ * Redirect user to operation page after deletion of content.
+ *
+ * @see http://atrium.humanitarianresponse.info/humanitarian_response/node/3992
  */
 function hr_core_node_delete($node) {
   if (isset($node->{OG_AUDIENCE_FIELD}) && isset($node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'])) {
@@ -658,6 +669,8 @@ function hr_core_form_panels_ipe_edit_control_form_alter(&$form, &$form_state) {
 }
 
 /**
+ * Form callback handler.
+ *
  * Additional form callback that ensures that the panelizer page cache is
  * cleared.
  */
@@ -738,7 +751,6 @@ function hr_core_file_feeds_set_target(FeedsSource $source, $entity, $target, ar
 
   $destination = file_field_widget_uri($info, $instance_info, $data);
 
-
   // Populate entity.
   $field = isset($entity->$field_name) ? $entity->$field_name : array(LANGUAGE_NONE => array());
   $delta = 0;
@@ -750,7 +762,6 @@ function hr_core_file_feeds_set_target(FeedsSource $source, $entity, $target, ar
     if (!isset($field[LANGUAGE_NONE][$delta])) {
       $field[LANGUAGE_NONE][$delta] = array();
     }
-
 
     if ($v) {
       try {
@@ -769,7 +780,6 @@ function hr_core_file_feeds_set_target(FeedsSource $source, $entity, $target, ar
 
   $entity->$field_name = $field;
 }
-
 
 /**
  * Implements hook_module_implements_alter().
@@ -899,6 +909,7 @@ function _hr_core_display_cache_content($minutes = 'none', $margin = 5) {
 /**
  * Set caching of panel display.
  */
+// @codingStandardsIgnoreLine
 function _hr_core_display_cache_content_defaults($minutes = 'none', $margin = 5, $content_type) {
   $sql = "SELECT * FROM {panels_display} WHERE storage_id LIKE 'node:$content_type%'";
   $result = db_query($sql);
@@ -1339,7 +1350,7 @@ function hr_core_file_update($new_file) {
 
       if ($is_blocked) {
 
-        // Move the older file from temp to the new _X location
+        // Move the older file from temp to the new _X location.
         if (!file_unmanaged_move($tmp_destination, $old_destination)) {
           drupal_set_message(t($t_message, array('%old' => $tmp_destination, '%new' => $old_destination)), 'error');
           return;
@@ -1386,7 +1397,8 @@ function hr_core_file_delete($file) {
 
 /**
  * Implements hook_query_TAG_alter()
- * Allows filter by parent in the API
+ *
+ * Allows filter by parent in the API.
  */
 function hr_core_query_hr_core_filter_parent_alter($query) {
   $conditions = &$query->conditions();
@@ -1419,7 +1431,8 @@ function hr_core_entity_property_info_alter(&$entity_info) {
 
 /**
  * Implements hook_node_validate()
- * Makes sure clusters, operations and offices have an English translation
+ *
+ * Makes sure clusters, operations and offices have an English translation.
  */
 function hr_core_node_validate($node, $form, &$form_state) {
   $node_types = array('hr_bundle', 'hr_operation', 'hr_office');
@@ -1429,7 +1442,7 @@ function hr_core_node_validate($node, $form, &$form_state) {
     'hr_office' => t('Office')
   );
   if (in_array($node->type, $node_types) && $node->language !== 'en') {
-    // Make sure the node has an English translation
+    // Make sure the node has an English translation.
     $tnid = $node->tnid;
     if ($tnid) {
       $translations = translation_node_get_translations($tnid);
@@ -1450,7 +1463,8 @@ function hr_core_node_validate($node, $form, &$form_state) {
 
 /**
  * Implements hook_form_FORM_ID_alter() for taxonomy_form_term().
- * Makes sure organizations have an English translation
+ *
+ * Makes sure organizations have an English translation.
  */
 function hr_core_form_taxonomy_form_term_alter(&$form, &$form_state, $form_id) {
 
@@ -1461,6 +1475,7 @@ function hr_core_form_taxonomy_form_term_alter(&$form, &$form_state, $form_id) {
 
 /**
  * Implements _form_validate() for taxonomy_form_term().
+ *
  * Makes sure an organization can not be added without an English translation.
  */
 function hr_core_validate_organization($form, &$form_state) {

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_api\Plugin\resource\DataProvider\DataProviderEntity.
- */
-
 namespace Drupal\hr_api\Plugin\resource\DataProvider;
 
 use Drupal\restful\Exception\ForbiddenException;
@@ -56,4 +51,5 @@ class DataProviderOgMemberships extends DataProviderEntity {
 
     return $output;
   }
+
 }

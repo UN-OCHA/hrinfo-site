@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_api\Plugin\resource\DataProvider\DataProviderHRInfoFile.
- */
-
 namespace Drupal\hr_api\Plugin\resource\DataProvider;
 
 use Drupal\restful\Exception\BadRequestException;
@@ -218,7 +213,7 @@ class DataProviderHRInfoFile extends DataProviderFile {
         file_prepare_directory($destination, FILE_CREATE_DIRECTORY);
         $replace = empty($options['replace']) ? NULL : $options['replace'];
 
-        $file = system_retrieve_file($object['link'], $destination, true, $replace);
+        $file = system_retrieve_file($object['link'], $destination, TRUE, $replace);
         file_usage_add($file, 'restful', 'files', $file->fid);
 
         $ids[] = $file->fid;

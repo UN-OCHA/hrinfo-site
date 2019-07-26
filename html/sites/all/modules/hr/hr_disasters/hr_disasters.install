@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Install/Update for the Disasters feature.
@@ -14,10 +15,7 @@ function hr_disasters_update_7001() {
   );
   field_create_field($field);
 
-
-/**
-   * Bind field to a entity bundle.
-   */
+  // Bind field to a entity bundle.
   $instance = array(
     'field_name' => $field['field_name'],
     'entity_type' => 'node',

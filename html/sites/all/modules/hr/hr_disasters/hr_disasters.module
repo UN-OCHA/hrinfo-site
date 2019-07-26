@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Disasters feature.
@@ -28,7 +29,8 @@ function hr_disasters_og_features_registry() {
 
 /**
  * Implements hook_cron()
- * Updates the disasters from Reliefweb
+ *
+ * Updates the disasters from Reliefweb.
  */
 function hr_disasters_cron() {
   $original_user = $GLOBALS['user'];
@@ -64,7 +66,7 @@ function hr_disasters_cron() {
 }
 
 /**
- * Updates one single disaster from Reliefweb
+ * Updates one single disaster from Reliefweb.
  */
 function _hr_disasters_reliefweb_disaster($disaster) {
   $fields = $disaster->fields;
@@ -89,9 +91,9 @@ function _hr_disasters_reliefweb_disaster($disaster) {
       $nid = reset($nids);
       $node = node_load($nid);
       $wrapper = entity_metadata_wrapper('node', $nid);
-      if(isset($wrapper->field_hr_disaster_sync_disaster)) {
+      if (isset($wrapper->field_hr_disaster_sync_disaster)) {
         $field_sync_disaster = $wrapper->field_hr_disaster_sync_disaster->value();
-        if(empty($field_sync_disaster)) {
+        if (empty($field_sync_disaster)) {
           if (_hr_disasters_reliefweb_disaster_map($node, $disaster)) {
             node_save($node);
           }
@@ -114,7 +116,7 @@ function _hr_disasters_reliefweb_disaster($disaster) {
 }
 
 /**
- * Helper function: maps disaster fields from Reliefweb API to hr_disaster nodes
+ * Helper function: maps disaster fields from Reliefweb API to hr_disaster nodes.
  */
 function _hr_disasters_reliefweb_disaster_map(&$node, $disaster) {
   $fields = $disaster->fields;
@@ -191,7 +193,7 @@ function _hr_disasters_reliefweb_disaster_map(&$node, $disaster) {
   }
 
   foreach ($fields->country as $country) {
-    // Make sure country exists as an operation
+    // Make sure country exists as an operation.
     $nid = _hr_disasters_get_operation_by_name($country->name);
     if (!empty($nid)) {
       if (!in_array($nid, $current_locations)) {
@@ -205,7 +207,7 @@ function _hr_disasters_reliefweb_disaster_map(&$node, $disaster) {
 }
 
 /**
- * Helper function: retrieves an operation by name
+ * Helper function: retrieves an operation by name.
  */
 function _hr_disasters_get_operation_by_name($name) {
   $query = new EntityFieldQuery();

@@ -5,7 +5,11 @@
  * Contains \RestfulEntityTaxonomyTermIndicatorDomains.
  */
 
+/**
+ * Class definition.
+ */
 class RestfulEntityTaxonomyTermIndicatorDomains extends \RestfulEntityBaseTaxonomyTerm {
+
   /**
    * Overrides \RestfulEntityBase::publicFieldsInfo().
    */

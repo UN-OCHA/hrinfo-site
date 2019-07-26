@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Indicator types plugin.
+ */
+
 $plugin = array(
   'label' => t('Indicator types'),
   'resource' => 'indicator_types',

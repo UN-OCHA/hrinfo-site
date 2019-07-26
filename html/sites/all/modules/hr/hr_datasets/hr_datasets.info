@@ -1,4 +1,5 @@
 name = Datasets
+description = Datasets feature.
 core = 7.x
 package = Humanitarianresponse
 dependencies[] = context

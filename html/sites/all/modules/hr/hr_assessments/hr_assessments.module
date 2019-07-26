@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Assessments feature.
@@ -28,7 +29,7 @@ function hr_assessments_og_features_registry() {
  * Implementation of hook_entity_info_alter().
  */
 function hr_assessments_entity_info_alter(&$entity_info) {
-  // Quick links
+  // Quick links.
   $entity_info['fieldable_panels_pane']['bundles']['hr_assessments'] = array(
     'label' => t('Assessments'),
     'pane category' => t('Assessments'),
@@ -45,7 +46,7 @@ function hr_assessments_entity_info_alter(&$entity_info) {
 /**
  * Implements hook_search_api_views_query_alter().
  *
- * Makes the assessments view available for disasters
+ * Makes the assessments view available for disasters.
  */
 function hr_assessments_search_api_views_query_alter(&$view, &$query) {
   if ($view->name == 'hr_assessments') {

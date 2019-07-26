@@ -1,19 +1,15 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_api\Plugin\authentication\TokenAuthentication
- */
-
 namespace Drupal\hr_api\Plugin\authentication;
 
 use Drupal\restful\Http\RequestInterface;
 use Drupal\restful\Plugin\authentication\Authentication;
 use Drupal\restful_token_auth\Plugin\authentication\TokenAuthentication;
-use \Firebase\JWT\JWT;
+use Firebase\JWT\JWT;
 
 /**
- * Class HidTokenAuthentication
+ * Class HidTokenAuthentication.
+ *
  * @package Drupal\hr_api\Plugin\authentication
  *
  * @Authentication(
@@ -31,7 +27,7 @@ class HidTokenAuthentication extends TokenAuthentication {
    * {@inheritdoc}
    */
   public function authenticate(RequestInterface $request) {
-    // Allow OPTIONS requests by default
+    // Allow OPTIONS requests by default.
     if ($request->getMethod() == 'OPTIONS') {
       return user_load(1);
     }
@@ -41,7 +37,7 @@ class HidTokenAuthentication extends TokenAuthentication {
     }
 
     // If OAuth token, verify access token
-    // If JWT, extract it and try to match it
+    // If JWT, extract it and try to match it.
     $publicKey = '-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr9cnnM+7iRihKJ+6w3f5
 10b7Bj5SJQ/zmisMktIOLzNpKnFatt4rkBSe3RdWcWCercPoblkuSC0EfIjFWFIu
@@ -70,28 +66,28 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
     }
   }
 
-    /**
-     * Extract the token from the request.
-     *
-     * @param RequestInterface $request
-     *   The request.
-     *
-     * @return string
-     *   The extracted token.
-     */
-    protected function extractToken(RequestInterface $request) {
-      // Allow OPTIONS requests by default
-      if ($request->getMethod() == 'OPTIONS') {
-        return true;
-      }
-      $plugin_definition = $this->getPluginDefinition();
-      $authorization = $request->getHeaders()->get('Authorization')->getValueString();
-      if (!empty($authorization)) {
-        return str_replace('Bearer ', '', $authorization);
-      }
-      else {
-        return FALSE;
-      }
+  /**
+   * Extract the token from the request.
+   *
+   * @param \Drupal\restful\Http\RequestInterface $request
+   *   The request.
+   *
+   * @return string
+   *   The extracted token.
+   */
+  protected function extractToken(RequestInterface $request) {
+    // Allow OPTIONS requests by default.
+    if ($request->getMethod() == 'OPTIONS') {
+      return TRUE;
     }
+    $plugin_definition = $this->getPluginDefinition();
+    $authorization = $request->getHeaders()->get('Authorization')->getValueString();
+    if (!empty($authorization)) {
+      return str_replace('Bearer ', '', $authorization);
+    }
+    else {
+      return FALSE;
+    }
+  }
 
 }

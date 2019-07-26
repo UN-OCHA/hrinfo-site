@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Datasets plugin.
+ */
+
 $plugin = array(
   'label' => t('Datasets'),
   'resource' => 'datasets',

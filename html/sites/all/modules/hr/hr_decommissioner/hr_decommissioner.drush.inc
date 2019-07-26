@@ -2,16 +2,16 @@
 
 /**
  * @file
- * hr_decommissioner module drush integration.
+ * Hr_decommissioner module drush integration.
  *
- * KEPT FOR REFERENCE ONLY !! THIS CODE SHOULD NOT BE USED ANYMORE
+ * KEPT FOR REFERENCE ONLY !! THIS CODE SHOULD NOT BE USED ANYMORE.
  */
 
 /**
  * Implements hook_drush_command().
  *
  * @return array
- *  An associative array describing your command(s).
+ *   An associative array describing your command(s).
  *
  * @see drush_parse_command()
  */
@@ -19,15 +19,15 @@ function hr_decommissioner_drush_command() {
   $items = array();
 
   /*$items['hr-decommissioner-export-additional-contacts'] = array(
-    'description' => "Export additional contacts in hrinfo",
-    'drupal dependencies' => array(),
-    'aliases' => array(),
+  'description' => "Export additional contacts in hrinfo",
+  'drupal dependencies' => array(),
+  'aliases' => array(),
   );
 
   $items['hr-decommissioner-remove-contact-menus'] = array(
-    'description' => "Remove the contact menus from all groups",
-    'drupal dependencies' => array(),
-    'aliases' => array(),
+  'description' => "Remove the contact menus from all groups",
+  'drupal dependencies' => array(),
+  'aliases' => array(),
   );*/
 
   return $items;
@@ -66,6 +66,7 @@ function drush_hr_decommissioner_export_additional_contacts() {
   batch_set($batch);
   drush_backend_batch_process();
 }
+
 /**
  * Generates a listing of additional contacts.
  */
@@ -148,7 +149,13 @@ function drush_hr_decommissioner_get_contacts($contacts, &$context) {
 function drush_hr_decommissioner_remove_contact_menus() {
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', array('hr_operation', 'hr_bundle', 'hr_disaster', 'hr_sector', 'hr_space'), 'IN');
+    ->entityCondition('bundle', array(
+      'hr_operation',
+      'hr_bundle',
+      'hr_disaster',
+      'hr_sector',
+      'hr_space'
+    ), 'IN');
   $result = $query->execute();
 
   if (empty($result['node'])) {
@@ -201,7 +208,7 @@ function drush_hr_decommissioner_remove_contact_menus_callback($node_ids, $regis
       TRUE
     );
     $nodes = node_load_multiple($node_info);
-    foreach($nodes as $node) {
+    foreach ($nodes as $node) {
       $disabled_features = isset($node->features_disabled) ? $node->features_disabled : array();
       $enabled_features = drupal_map_assoc(array_keys(array_diff_key($registry, $disabled_features)));
 
@@ -214,7 +221,7 @@ function drush_hr_decommissioner_remove_contact_menus_callback($node_ids, $regis
         $mlid = og_menu_single_get_link_mlid('node', $node->nid);
         // Create the hid contacts menu.
         $menu_link = array(
-          'link_path' => 'node/'.$node->nid.'/hid_contacts',
+          'link_path' => 'node/' . $node->nid . '/hid_contacts',
           'link_title' => 'Contacts',
           'menu_name' => OG_MENU_SINGLE_MENU_NAME,
           'weight' => 2,

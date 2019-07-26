@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 namespace Firebase\JWT;
 use \DomainException;
 use \InvalidArgumentException;

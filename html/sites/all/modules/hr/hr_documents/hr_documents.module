@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Documents feature.
@@ -150,7 +151,7 @@ function hr_documents_entity_info_alter(&$entity_info) {
 /**
  * Implements hook_search_api_views_query_alter().
  *
- * Makes the documents view available for disasters
+ * Makes the documents view available for disasters.
  */
 function hr_documents_search_api_views_query_alter(&$view, &$query) {
   if ($view->name == 'hr_documents') {
@@ -160,7 +161,7 @@ function hr_documents_search_api_views_query_alter(&$view, &$query) {
     ));
     $existing = $query->getSort();
     if (empty($existing) && !isset($params['sort']) && !isset($params['order'])) {
-      // Sort by publication date
+      // Sort by publication date.
       $query->sort('field_publication_date', 'desc');
     }
     foreach ($query->where as &$condition_group) {

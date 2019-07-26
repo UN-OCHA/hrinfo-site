@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_bundles\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityNodeBundles
+ * Class RestfulEntityNodeBundles.
+ *
  * @package Drupal\hr_bundles\Plugin\resource
  *
  * @Resource(
@@ -29,7 +31,6 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterface {
 
   /**
@@ -62,7 +63,6 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
       'class' => '\Drupal\hr_api\Plugin\resource\Field\ResourceFieldEntityTextCustom',
       'process_callbacks' => array(array($this, 'getBodyRaw')),
     );
-
 
     $public_fields['global_cluster'] = array(
       'property' => 'field_sector',
@@ -159,6 +159,9 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
     return $public_fields;
   }
 
+  /**
+   * Get raw body.
+   */
   public function getBodyRaw($value) {
     return strip_tags($value);
   }

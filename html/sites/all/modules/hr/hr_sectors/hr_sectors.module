@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Sectors feature.
@@ -7,11 +8,11 @@
 include_once 'hr_sectors.features.inc';
 
 /**
- * Helper function. Hides sectors field if adding content in an operation
+ * Helper function. Hides sectors field if adding content in an operation.
  */
 function hr_sectors_hide_sectors(&$form, $form_state) {
   if (isset($form['field_sectors']) && isset($form_state['entityreference_prepopulate'])) {
-    // Get operation gid
+    // Get operation gid.
     $type = $form_state['node']->type;
     $gid = $form_state['entityreference_prepopulate']['node'][$type][OG_AUDIENCE_FIELD][0];
     if (!empty($gid)) {

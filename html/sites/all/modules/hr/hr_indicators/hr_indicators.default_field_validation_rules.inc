@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_indicators.default_field_validation_rules.inc

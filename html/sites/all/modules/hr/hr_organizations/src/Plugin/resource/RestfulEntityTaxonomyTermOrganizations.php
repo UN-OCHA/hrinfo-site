@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_organizations\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityTaxonoyTermOrganizations
+ * Class RestfulEntityTaxonoyTermOrganizations.
+ *
  * @package Drupal\hr_organizations\Plugin\resource
  *
  * @Resource(
@@ -29,8 +31,8 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityTaxonomyTermOrganizations extends ResourceCustom implements ResourceInterface {
+
   /**
    * Overrides publicFields().
    */

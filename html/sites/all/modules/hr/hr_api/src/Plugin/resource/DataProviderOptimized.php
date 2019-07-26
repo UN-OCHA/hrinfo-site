@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_api\Plugin\resource\DataProviderOptimized.
- */
-
 namespace Drupal\hr_api\Plugin\resource;
 
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
@@ -13,7 +8,11 @@ use Drupal\restful\Http\RequestInterface;
 use Drupal\restful\Exception\ForbiddenException;
 use Drupal\restful\Exception\UnprocessableEntityException;
 
-class DataProviderOptimized  extends DataProviderEntity implements DataProviderInterface {
+/**
+ * Class definition.
+ */
+class DataProviderOptimized extends DataProviderEntity implements DataProviderInterface {
+
   /**
    * Overrides DataProviderEntity::getQueryForList().
    *
@@ -87,7 +86,7 @@ class DataProviderOptimized  extends DataProviderEntity implements DataProviderI
       throw new ForbiddenException('You do not have access to create a new resource.');
     }
 
-    // Check that user is allowed to post in operation
+    // Check that user is allowed to post in operation.
     $user = $this->getAccount();
     $admin = user_role_load_by_name('administrator');
     $editor = user_role_load_by_name('editor');
@@ -130,7 +129,7 @@ class DataProviderOptimized  extends DataProviderEntity implements DataProviderI
 
     /* @var \EntityDrupalWrapper $wrapper */
     $wrapper = entity_metadata_wrapper($this->entityType, $entity_id);
-    $handler  = entity_translation_get_handler($this->entityType, $wrapper->value());
+    $handler = entity_translation_get_handler($this->entityType, $wrapper->value());
     $translations = $handler->getTranslations();
     $languages = array_keys($translations->data);
     if (!in_array($language->language, $languages)) {
@@ -172,11 +171,11 @@ class DataProviderOptimized  extends DataProviderEntity implements DataProviderI
    *
    * @throws \Drupal\restful\Exception\RestfulException
    */
-  protected function validateFields($wrapper) {
+  protected function validateFields(\EntityDrupalWrapper $wrapper) {
     try {
       $entity = $wrapper->value();
       if (isset($entity->og_group_ref) && user_access('administer group')) {
-        foreach($entity->og_group_ref[LANGUAGE_NONE] as &$item) {
+        foreach ($entity->og_group_ref[LANGUAGE_NONE] as &$item) {
           $item['field_mode'] = 'admin';
         }
       }
@@ -191,4 +190,5 @@ class DataProviderOptimized  extends DataProviderEntity implements DataProviderI
       throw new UnprocessableEntityException($e->getMessage());
     }
   }
+
 }

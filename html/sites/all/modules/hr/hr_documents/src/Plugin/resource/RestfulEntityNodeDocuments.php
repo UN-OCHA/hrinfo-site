@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_documents\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityTaxonoyTermDocuments
+ * Class RestfulEntityTaxonoyTermDocuments.
+ *
  * @package Drupal\hr_documents\Plugin\resource
  *
  * @Resource(
@@ -28,7 +30,6 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInterface {
 
   /**
@@ -189,6 +190,9 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
     return $public_fields;
   }
 
+  /**
+   * Get a user.
+   */
   public function getUser($value) {
     $valueOut = new \stdClass();
     $valueOut->uid = $value->uid;
@@ -200,10 +204,16 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
     return $valueOut;
   }
 
+  /**
+   * Format a timestamp.
+   */
   public function formatTimestamp($value) {
     return strftime('%F', $value);
   }
 
+  /**
+   * Get disasters.
+   */
   public function getDisasters($values) {
     $return = array();
     if (!empty($values)) {
@@ -214,7 +224,7 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
         $tmp->glide = $node->field_glide_number[LANGUAGE_NONE][0]['value'];
         $tmp->label = $node->title;
         if (!empty($node->field_reliefweb_id)) {
-          $tmp->self = 'http://api.reliefweb.int/v1/disasters/'.$value->field_reliefweb_id[LANGUAGE_NONE][0]['value'];
+          $tmp->self = 'http://api.reliefweb.int/v1/disasters/' . $value->field_reliefweb_id[LANGUAGE_NONE][0]['value'];
         }
         $return[] = $tmp;
       }
@@ -222,10 +232,16 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
     return $return;
   }
 
+  /**
+   * Get raw body.
+   */
   public function getBodyRaw($value) {
     return strip_tags($value);
   }
 
+  /**
+   * Get files.
+   */
   public function getFiles($values) {
     $return = array();
     if (!empty($values)) {

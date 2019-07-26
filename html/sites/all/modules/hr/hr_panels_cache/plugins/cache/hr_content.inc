@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Provides a content-based caching option for panel panes.
@@ -217,7 +218,7 @@ function hr_panels_cache_get_cid($conf, $display, $args, $contexts, $pane) {
         if (array_intersect($users_roles, $conf['granularity_roles_as_anon'])) {
           $cid[] = 'anon';
         }
-         // The user has more than one role and none of them are marked as
+        // The user has more than one role and none of them are marked as
         // 'anonymous'.
         else {
           // Optionally index against the first role.
@@ -323,9 +324,13 @@ function hr_panels_cache_get_base_cid($display, $pane = NULL) {
   return $cid;
 }
 
+/**
+ * Settings form callback.
+ */
 function hr_panels_cache_settings_form($conf, $display, $pid) {
   ctools_include('dependent');
 
+  // @codingStandardsIgnoreLine
   $options = array('none' => 'none') + drupal_map_assoc(array(15, 30, 60, 120, 180, 240, 300, 600, 900, 1200, 1800, 3600, 7200, 14400, 28800, 43200, 86400, 172800, 259200, 345600, 604800), 'format_interval');
   $form['lifetime'] = array(
     '#title' => t('Lifetime'),
@@ -402,7 +407,7 @@ function hr_panels_cache_settings_form($conf, $display, $pid) {
     '#type' => 'checkbox',
     '#title' => t('Include full query string?'),
     '#default_value' => !empty($conf['granularity_url_query']) ? $conf['granularity_url_query'] : FALSE,
-    // '#description' => t(''),
+    // '#description' => t(''),.
     '#dependency' => array(
       'edit-settings-granularity-url' => array(1),
     ),
@@ -439,10 +444,12 @@ function hr_panels_cache_settings_form($conf, $display, $pid) {
 }
 
 /**
- * A copy hr_panels_cache_of options_array_flatten() that doesn't rely on the Options module,
- * adjusted to properly handle objects and avoid collisions in nested arrays.
+ * A copy hr_panels_cache_of options_array_flatten().
  *
- * @param array @array
+ * This doesn't rely on the Options module, adjusted to properly handle
+ * objects and avoid collisions in nested arrays.
+ *
+ * @param array $array
  *   The array to be flattened.
  * @param string $namespace
  *   Optional prefix used to avoid array elements being overridden, thus avoid
@@ -451,7 +458,7 @@ function hr_panels_cache_settings_form($conf, $display, $pid) {
  * @return array
  *   The argument flattened into a single level.
  */
-function _hr_panels_cache_array_flatten($array, $namespace = NULL) {
+function _hr_panels_cache_array_flatten(array $array, $namespace = NULL) {
   // Each dimension of an array will be prefixed by the parent's value.
   if (isset($namespace)) {
     $namespace .= '_';

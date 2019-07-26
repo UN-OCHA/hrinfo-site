@@ -2,13 +2,13 @@
 
 /**
  * @file
- * hr_users module drush integration.
+ * Hr_users module drush integration.
  */
 
 /**
  * Implements hook_drush_command().
  *
- * @return
+ * @return array
  *   An associative array describing your command(s).
  *
  * @see drush_parse_command()
@@ -18,10 +18,8 @@ function hr_users_drush_command() {
 
   $items['hr-users-og-remove'] = array(
     'description' => "Remove group members that do not have roles",
-    'arguments' => array(
-    ),
-    'options' => array(
-    ),
+    'arguments' => array(),
+    'options' => array(),
     'drupal dependencies' => array(),
     'aliases' => array(),
   );

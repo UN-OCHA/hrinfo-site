@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Indicator standards plugin.
+ */
+
 $plugin = array(
   'label' => t('Indicator standards'),
   'resource' => 'indicator_standards',

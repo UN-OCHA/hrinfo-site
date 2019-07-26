@@ -1,17 +1,15 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_organizations\Plugin\resource\DataProviderOrganizations.
- */
-
 namespace Drupal\hr_organizations\Plugin\resource;
 
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderTaxonomyTerm;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
 use Drupal\restful\Http\RequestInterface;
 
-class DataProviderOrganizations  extends DataProviderTaxonomyTerm implements DataProviderInterface {
+/**
+ * Class definition.
+ */
+class DataProviderOrganizations extends DataProviderTaxonomyTerm implements DataProviderInterface {
 
   /**
    * {@inheritdoc}
@@ -26,7 +24,7 @@ class DataProviderOrganizations  extends DataProviderTaxonomyTerm implements Dat
    * @param \EntityFieldQuery $query
    *   The query to enhance.
    */
-  protected function addExtraInfoToQuery($query) {
+  protected function addExtraInfoToQuery(\EntityFieldQuery $query) {
     parent::addExtraInfoToQuery($query);
     $query->addTag('hr_organizations_acronym');
   }
@@ -42,7 +40,7 @@ class DataProviderOrganizations  extends DataProviderTaxonomyTerm implements Dat
 
     /* @var \EntityDrupalWrapper $wrapper */
     $wrapper = entity_metadata_wrapper($this->entityType, $entity_id);
-    $handler  = entity_translation_get_handler($this->entityType, $wrapper->value());
+    $handler = entity_translation_get_handler($this->entityType, $wrapper->value());
     $translations = $handler->getTranslations();
     $languages = array_keys($translations->data);
     if (!in_array($language->language, $languages)) {

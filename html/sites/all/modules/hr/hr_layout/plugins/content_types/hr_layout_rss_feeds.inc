@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * RSS Feeds plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('Rss Feeds'),
@@ -15,9 +20,8 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
-
 function hr_layout_rss_feeds_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
   $options = range(1, 50);
@@ -43,7 +47,6 @@ function hr_layout_rss_feeds_edit_form($form, &$form_state) {
 /**
  * Edit form submit handler.
  */
-
 function hr_layout_rss_feeds_edit_form_submit($form, &$form_state) {
   foreach (element_children($form) as $key) {
     if (!empty($form_state['values'][$key])) {
@@ -54,9 +57,9 @@ function hr_layout_rss_feeds_edit_form_submit($form, &$form_state) {
 
 /**
  * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
+ *
+ * @See ctools_plugin_examples for more advanced info.
  */
-
 function hr_layout_rss_feeds_render($subtype, $conf, $panel_args, $context = NULL) {
   $block = new stdClass();
   $block->title = 'RSS Feeds';
@@ -64,11 +67,11 @@ function hr_layout_rss_feeds_render($subtype, $conf, $panel_args, $context = NUL
   $no_of_items = $conf['no_of_items'];
   $feeds = hr_layout_rss_feeds_load($feed_url);
   $content = '';
-  if(isset($no_of_items)){
-    $items_to_display = array_slice($feeds, 0, intval($no_of_items + 1), true);
+  if (isset($no_of_items)) {
+    $items_to_display = array_slice($feeds, 0, intval($no_of_items + 1), TRUE);
     $content .= '<ul>';
     foreach ($items_to_display as $key => $value) {
-      $content .= '<li><a href = ' .$value. '> ' .$key. '</a></li>';
+      $content .= '<li><a href = ' . $value . '> ' . $key . '</a></li>';
     }
     $content .= '</ul>';
   }
@@ -77,17 +80,19 @@ function hr_layout_rss_feeds_render($subtype, $conf, $panel_args, $context = NUL
 }
 
 /**
-*  This function returns an array containing the feed titles and urls.
-*  @return array().
-*/
-function hr_layout_rss_feeds_load($url){
-  if(module_exists('feeds')){
+ * This function returns an array containing the feed titles and urls.
+ *
+ * @return array
+ *   An array containing the feed titles and urls.
+ */
+function hr_layout_rss_feeds_load($url) {
+  if (module_exists('feeds')) {
     feeds_include_simplepie();
 
     $feed = new SimplePie();
     $feed->set_feed_url($url);
-    $feed->set_cache_location(cacheDirectory());
-    $feed->set_cache_duration(24*60*60);
+    $feed->set_cache_location(hr_layout_cache_directory());
+    $feed->set_cache_duration(24 * 60 * 60);
     $feed->init();
     $feed->handle_content_type();
     $feeds = array();
@@ -99,16 +104,17 @@ function hr_layout_rss_feeds_load($url){
 
     return $feeds;
   }
-  else{
+  else {
     drupal_set_message("could not load the Feeds module, please consult the site administrator");
   }
 }
 
 /**
- * Returns cache directory. Creates it if it doesn't exist.
+ * Returns cache directory.
+ *
+ * Creates it if it doesn't exist.
  */
-
-function cacheDirectory() {
+function hr_layout_cache_directory() {
   $directory = 'public://simplepie';
   file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
   return $directory;
