@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file Menu callbacks for the Humanitarian Events.
+ * @file
+ * Menu callbacks for the Humanitarian Events.
  */
 
 /**

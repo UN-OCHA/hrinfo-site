@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for Events import.
@@ -103,7 +104,7 @@ function ev_import_process_row_from_hrinfo($row) {
 
   // Category.
   if (isset($row['category'])) {
-    // Make it plural
+    // Make it plural.
     $row['category'] .= 's';
 
     if ($category = ev_import_get_term($row['category'], 'hr_event_category')) {
