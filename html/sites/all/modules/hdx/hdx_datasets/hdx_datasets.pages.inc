@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @file Menu callbacks for the hdx datasets module.
+ * @file
+ * Menu callbacks for the hdx datasets module.
  */
-
 
 /**
  * Callback that renders the HDX datasets.
@@ -68,7 +68,7 @@ function hdx_datasets_list_callback($node) {
       'js' => array(
         '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js' => array('type' => 'external'),
         '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js' => array('type' => 'external'),
-        drupal_get_path('module', 'hdx_datasets') . '/js/hdx_datasets.js',
+        drupal_get_path('module', 'hdx_datasets') . '/js/hdx_datasets.js' => array('type' => 'file'),
         array(
           'data' => array('hdx_datasets' => $settings),
           'type' => 'setting'

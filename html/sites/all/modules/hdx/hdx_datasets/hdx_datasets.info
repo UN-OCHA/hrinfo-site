@@ -1,4 +1,5 @@
 name = HDX Datasets
+description = HDX datasets integration.
 core = 7.x
 package = Humanitarianresponse (hdx)
 dependencies[] = context
