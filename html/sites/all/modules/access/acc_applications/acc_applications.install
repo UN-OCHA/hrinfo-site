@@ -2,13 +2,12 @@
 
 /**
  * @file
- * Install file for acc_applications
+ * Install file for acc_applications.
  */
 
 /**
  * Enable view_pivot module.
  */
-
 function acc_applications_update_7005() {
   module_enable(array('views_pivot'));
 }
