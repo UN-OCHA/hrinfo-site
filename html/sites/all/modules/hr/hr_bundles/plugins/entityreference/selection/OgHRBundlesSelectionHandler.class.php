@@ -1,11 +1,13 @@
 <?php
 
-
 /**
  * @file
  * OG HR Bundles selection handler.
  */
 
+/**
+ * Class definition.
+ */
 class OgHRBundlesSelectionHandler extends OgSelectionHandler {
 
   /**

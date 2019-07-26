@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Infographics feature.
@@ -24,6 +25,9 @@ function hr_infographics_og_features_registry() {
   return $registry;
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function hr_infographics_form_hr_infographic_node_form_alter(&$form, &$form_state) {
   _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
   hr_sectors_hide_sectors($form, $form_state);
@@ -78,7 +82,7 @@ function hr_infographics_form_hr_infographic_node_form_alter(&$form, &$form_stat
  */
 function hr_infographics_entity_info_alter(&$entity_info) {
 
-  // Quick links
+  // Quick links.
   $entity_info['fieldable_panels_pane']['bundles']['hr_infographics'] = array(
     'label' => t('Maps/Infographics'),
     'pane category' => t('Infographics'),
@@ -95,19 +99,19 @@ function hr_infographics_entity_info_alter(&$entity_info) {
 /**
  * Implements hook_search_api_views_query_alter()
  *
- * Makes the infographics view available for disasters
+ * Makes the infographics view available for disasters.
  */
 function hr_infographics_search_api_views_query_alter(&$view, &$query) {
   if ($view->name == 'hr_infographics') {
 
-    // Case 4369 - Sort by default by publication date
+    // Case 4369 - Sort by default by publication date.
     $params = drupal_get_query_parameters($_GET, array(
       'q',
       'page'
     ));
     $existing = $query->getSort();
     if (empty($existing) && !isset($params['sort']) && !isset($params['order'])) {
-      // Sort by publication date
+      // Sort by publication date.
       $query->sort('field_publication_date', 'desc');
     }
 

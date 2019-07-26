@@ -45,10 +45,11 @@ function hr_decommissioner_install() {
 }
 
 /**
- * Uninstall migrate features and modules
+ * Uninstall migrate features and modules.
  */
 function hr_decommissioner_update_7001() {
   // They are already disabled, we need to remove the data.
+  // @codingStandardsIgnoreLine
   drupal_uninstall_modules(array('migrate', 'migrate_ui', 'migrate_extras', 'migrate_d2d'));
 }
 

@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file Menu callbacks for the reliefweb.
+ * @file
+ * Menu callbacks for the reliefweb.
  */
 
 /**
@@ -70,7 +71,7 @@ function hr_reliefweb_document_list($node) {
         $filters[] = array(
           'field' => $args[$i],
           'value' => array(
-            'from' => $from_to[0]. 'T00:00:00+00:00',
+            'from' => $from_to[0] . 'T00:00:00+00:00',
             'to' => $from_to[1] . 'T23:59:59+00:00',
           ),
           'operator' => 'AND',
@@ -131,10 +132,10 @@ function hr_reliefweb_document_list($node) {
     if (isset($value['files'])) {
       foreach ($value['files'] as $file) {
         if (isset($file['preview']) && !empty($file['preview'])) {
-          $downloads[] = '<a target="reliefweb" class="reliefweb-tb-link" style="background-image: url(' . $file['preview'] . ')" title="' . $file['description'] .'" href = ' . $file['url'] . '><span class="sr-only">' . t('Download !file', array('!file' => $file['filename'])) . '</span></a>';
+          $downloads[] = '<a target="reliefweb" class="reliefweb-tb-link" style="background-image: url(' . $file['preview'] . ')" title="' . $file['description'] . '" href = ' . $file['url'] . '><span class="sr-only">' . t('Download !file', array('!file' => $file['filename'])) . '</span></a>';
         }
         else {
-          $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
+          $downloads[] = '<a target="reliefweb" title="' . $file['description'] . '" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
         }
       }
     }
@@ -148,7 +149,7 @@ function hr_reliefweb_document_list($node) {
         'class' => isset($value['format']) ? drupal_html_class('reliefweb--doc-type--' . $value['format']) : '',
       ),
       array(
-        'data' => '<a target="reliefweb" href = ' . $value['url'] . '> '. $value['title'] . '</a>',
+        'data' => '<a target="reliefweb" href = ' . $value['url'] . '> ' . $value['title'] . '</a>',
         'class' => 'reliefweb--doc-type--title',
       ),
       array(
@@ -269,18 +270,20 @@ function hr_reliefweb_document_list($node) {
         '#type' => 'container',
         'total' => array(
           '#type' => 'markup',
-          '#markup' => l('Reset all filters', $page_url),
+          '#markup' => l(t('Reset all filters'), $page_url),
         ),
         '#access' => count($active_filters) > 0 || !empty($query),
       ),
 
       '#removefacets' => array(
         '#type' => 'container',
+        // @codingStandardsIgnoreLine
         $remove_facets,
       ),
 
       '#facets' => array(
         '#type' => 'container',
+        // @codingStandardsIgnoreLine
         $facets,
       ),
       '#data' => array(
@@ -295,12 +298,12 @@ function hr_reliefweb_document_list($node) {
         '#markup' => $pager_html,
       ),
     ),
-    '#attached' => array (
+    '#attached' => array(
       'library' => array(
         array('chosen', 'drupal.chosen'),
       ),
-      'js' => array (
-        array (
+      'js' => array(
+        array(
           'type' => 'file',
           'data' => drupal_get_path('module', 'hr_reliefweb') . '/js/hr_reliefweb_overview.js',
         ),

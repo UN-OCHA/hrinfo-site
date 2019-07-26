@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_search.current_search.inc

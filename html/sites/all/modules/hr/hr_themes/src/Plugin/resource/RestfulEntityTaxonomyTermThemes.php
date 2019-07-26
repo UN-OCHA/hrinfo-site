@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_themes\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityTaxonoyTermThemes
+ * Class RestfulEntityTaxonoyTermThemes.
+ *
  * @package Drupal\hr_themes\Plugin\resource
  *
  * @Resource(
@@ -29,8 +31,8 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityTaxonomyTermThemes extends ResourceCustom implements ResourceInterface {
+
   /**
    * {@inheritdoc}
    */

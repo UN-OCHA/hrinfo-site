@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_assessments\Plugin\resource\DataProviderAssessments.
- */
-
 namespace Drupal\hr_assessments\Plugin\resource;
 
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
@@ -12,7 +7,11 @@ use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
 use Drupal\restful\Http\RequestInterface;
 use Drupal\restful\Exception\ForbiddenException;
 
-class DataProviderAssessments  extends DataProviderEntity implements DataProviderInterface {
+/**
+ * Class definition.
+ */
+class DataProviderAssessments extends DataProviderEntity implements DataProviderInterface {
+
   /**
    * Overrides DataProviderEntity::getQueryForList().
    *
@@ -62,6 +61,9 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
     }
   }
 
+  /**
+   * Set field collection values.
+   */
   protected function setFieldCollectionValues($wrapper, $values) {
     if ($values['accessibility']) {
       $wrapper->field_asst_accessibility->set($values['accessibility']);
@@ -97,7 +99,7 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
       throw new ForbiddenException('You do not have access to create a new resource.');
     }
 
-    // Check that user is allowed to post in operation
+    // Check that user is allowed to post in operation.
     $user = $this->getAccount();
     $admin = user_role_load_by_name('administrator');
     $editor = user_role_load_by_name('editor');
@@ -119,19 +121,19 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
       }
     }
 
-    $report = null;
+    $report = NULL;
     if (isset($object['report'])) {
       $report = $object['report'];
       unset($object['report']);
     }
 
-    $questionnaire = null;
+    $questionnaire = NULL;
     if (isset($object['questionnaire'])) {
       $questionnaire = $object['questionnaire'];
       unset($object['questionnaire']);
     }
 
-    $adata = null;
+    $adata = NULL;
     if (isset($object['data'])) {
       $adata = $object['data'];
       unset($object['data']);
@@ -188,19 +190,19 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
     /* @var \EntityDrupalWrapper $wrapper */
     $wrapper = entity_metadata_wrapper($this->entityType, $entity_id);
 
-    $report = null;
+    $report = NULL;
     if (isset($object['report'])) {
       $report = $object['report'];
       unset($object['report']);
     }
 
-    $questionnaire = null;
+    $questionnaire = NULL;
     if (isset($object['questionnaire'])) {
       $questionnaire = $object['questionnaire'];
       unset($object['questionnaire']);
     }
 
-    $adata = null;
+    $adata = NULL;
     if (isset($object['data'])) {
       $adata = $object['data'];
       unset($object['data']);
@@ -251,11 +253,11 @@ class DataProviderAssessments  extends DataProviderEntity implements DataProvide
    *
    * @throws \Drupal\restful\Exception\RestfulException
    */
-  protected function validateFields($wrapper) {
+  protected function validateFields(\EntityDrupalWrapper $wrapper) {
     try {
       $entity = $wrapper->value();
       if (isset($entity->og_group_ref) && user_access('administer group')) {
-        foreach($entity->og_group_ref[LANGUAGE_NONE] as &$item) {
+        foreach ($entity->og_group_ref[LANGUAGE_NONE] as &$item) {
           $item['field_mode'] = 'admin';
         }
       }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the News feature.
@@ -27,7 +28,7 @@ function hr_news_og_features_registry() {
 /**
  * Implements hook_search_api_views_query_alter()
  *
- * Makes the news view available for disasters
+ * Makes the news view available for disasters.
  */
 function hr_news_search_api_views_query_alter(&$view, &$query) {
   if ($view->name == 'hr_news') {

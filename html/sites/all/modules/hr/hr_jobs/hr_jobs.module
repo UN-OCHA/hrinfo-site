@@ -1,8 +1,9 @@
 <?php
 
 /**
-*  Code for integrating ReliefWeb jobs in Humanitarianresponse.
-*/
+ * @file
+ * Code for integrating ReliefWeb jobs in Humanitarianresponse.
+ */
 
 /**
  * @file
@@ -14,8 +15,7 @@ include_once 'hr_jobs.features.inc';
 /**
  * Implements hook_menu().
  */
-
-function hr_jobs_menu(){
+function hr_jobs_menu() {
   $items = array();
   $items['node/%node/jobs'] = array(
     'title' => 'ReliefWeb Jobs',
@@ -27,6 +27,9 @@ function hr_jobs_menu(){
   return $items;
 }
 
+/**
+ * Implements hook_block_info().
+ */
 function hr_jobs_block_info() {
   $blocks['hr_jobs_filters'] = array(
     'info' => t('Jobs search'),
@@ -34,19 +37,22 @@ function hr_jobs_block_info() {
   return $blocks;
 }
 
+/**
+ * Implements hook_block_view().
+ */
 function hr_jobs_block_view($delta = '') {
   $block = array();
   switch ($delta) {
-  	case 'hr_jobs_filters':
+    case 'hr_jobs_filters':
       $block['content'] = '<div id="block-current-search-hr-current-search" class="block block-current-search">
 
       <h2>Current search</h2>
       <div class="content">
-        <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter">Filter: <span class="facetapi-active">216 items</span> displayed</div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/'.drupal_get_path_alias(current_path()).'"><i class="reset"></i></a> Reset all filters</div></div>  </div>
+        <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter">Filter: <span class="facetapi-active">216 items</span> displayed</div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/' . drupal_get_path_alias(current_path()) . '"><i class="reset"></i></a> Reset all filters</div></div>  </div>
       </div>';
-  	  $html = '<div id="block-hr-jobs-filters-organization" class="block"><input type="text" id="organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Job Title" /></div>';
-  	  $block['content'] .= $html;
-  	  break;
+      $html = '<div id="block-hr-jobs-filters-organization" class="block"><input type="text" id="organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Job Title" /></div>';
+      $block['content'] .= $html;
+      break;
   }
   return $block;
 }

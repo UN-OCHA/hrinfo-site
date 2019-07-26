@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Pages feature.
@@ -26,7 +27,8 @@ function hr_pages_og_features_registry() {
 
 /**
  * Implements hook_page_alter()
- * Hide the sidebar when "hide vertical menu" is checked
+ *
+ * Hide the sidebar when "hide vertical menu" is checked.
  */
 function hr_pages_page_alter(&$page) {
   $node = menu_get_object();
@@ -34,4 +36,3 @@ function hr_pages_page_alter(&$page) {
     unset($page['sidebar_first']);
   }
 }
-

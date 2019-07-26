@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Tools feature.
@@ -103,6 +104,9 @@ function hr_tools_menu() {
   return $items;
 }
 
+/**
+ * Generate a settings form.
+ */
 function hr_tools_ga_report_settings_form($form, $form_state) {
   $form['hr_tools_analytics_private_key_id'] = array(
     '#title' => 'Private key Id',
@@ -135,6 +139,9 @@ function hr_tools_ga_report_settings_form($form, $form_state) {
   return system_settings_form($form);
 }
 
+/**
+ * Access callback.
+ */
 function hr_tools_ga_report_access($node) {
   if (og_is_group('node', $node)) {
     return user_access('hr_tools_view_google_analytics') || og_user_access('node', $node->nid, 'hr_tools_group_view_google_analytics');
@@ -155,7 +162,7 @@ function hr_tools_og_permission() {
   );
 }
 
-/*
+/**
  * Implements hook_permission().
  */
 function hr_tools_permission() {
@@ -226,7 +233,7 @@ function hr_tools_ga_report($node) {
   $output .= '</ul>';
 
   return array(
-    'analytics' => array (
+    'analytics' => array(
       '#type' => 'markup',
       '#markup' => $output,
       '#attached' => array(
@@ -235,27 +242,29 @@ function hr_tools_ga_report($node) {
         ),
         'js' => array(
           array(
-           'data' => '(function(w,d,s,g,js,fs){g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};js=d.createElement(s);fs=d.getElementsByTagName(s)[0];js.src="https://apis.google.com/js/platform.js";fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load("analytics");};}(window,document,"script"));',
-           'type' => 'inline',
+            'data' => '(function(w,d,s,g,js,fs){g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};js=d.createElement(s);fs=d.getElementsByTagName(s)[0];js.src="https://apis.google.com/js/platform.js";fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load("analytics");};}(window,document,"script"));',
+            'type' => 'inline',
           ),
           drupal_get_path('module', 'hr_tools') . '/js/hr_tools.analytics.js',
           array(
-            'data' => array('hr_tools' => array(
-              'token' => $accessToken,
-              'pathFilter' => $path,
-            )),
+            'data' => array(
+        'hr_tools' => array(
+          'token' => $accessToken,
+          'pathFilter' => $path,
+        )
+),
             'type' => 'setting',
           ),
         ),
       ),
-     ),
+    ),
   );
 }
 
 /**
  * Return performance statistics.
  *
- * Call curl http://0.0.0.0:8088/xyzzy/stats/1 | python -m json.tool
+ * Call curl http://0.0.0.0:8088/xyzzy/stats/1 | python -m json.tool.
  */
 function hr_tools_performace_stats($set, $param) {
   $timers = _hr_tools_performace_stats($set, $param);
@@ -293,7 +302,7 @@ function hr_tools_performace_stats($set, $param) {
 /**
  * Return performance statistics.
  *
- * Call curl http://0.0.0.0:8088/xyzzy/stats/1 | python -m json.tool
+ * Call curl http://0.0.0.0:8088/xyzzy/stats/1 | python -m json.tool.
  */
 function _hr_tools_performace_stats($set, $param) {
   drupal_set_time_limit(300);
@@ -309,7 +318,7 @@ function _hr_tools_performace_stats($set, $param) {
   drupal_page_is_cacheable(FALSE);
 
   global $timers;
-  global $hr_tools_external_calls;
+  global $_hr_tools_external_calls;
 
   switch ($set) {
     case '1':
@@ -341,7 +350,7 @@ function _hr_tools_performace_stats($set, $param) {
       break;
 
     default:
-      # code...
+      // code...
       break;
   }
 
@@ -364,13 +373,16 @@ function _hr_tools_performace_stats($set, $param) {
   return $timers;
 }
 
+/**
+ * Performance stats helper.
+ */
 function _hr_tools_performace_stats_set1() {
   global $timers;
-  global $hr_tools_external_calls;
+  global $_hr_tools_external_calls;
 
   // Time to render a group page.
   $timer = '0011 - Load group 1337 with reset';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     timer_start($timer);
     _hr_tools_queries_start($timer);
@@ -381,11 +393,11 @@ function _hr_tools_performace_stats_set1() {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
   $timer = '0012 - Load group 1337 with cache';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     timer_start($timer);
     _hr_tools_queries_start($timer);
@@ -396,11 +408,11 @@ function _hr_tools_performace_stats_set1() {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
   $timer = '0013 - Node view group 1337';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     timer_start($timer);
     _hr_tools_queries_start($timer);
@@ -412,11 +424,11 @@ function _hr_tools_performace_stats_set1() {
     $timers[$timer]['exception'] = $e->getMessage();
   }
   // Time to render a node.
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
   $timer = '0021 - Load node 1138 with reset';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     timer_start($timer);
     _hr_tools_queries_start($timer);
@@ -427,11 +439,11 @@ function _hr_tools_performace_stats_set1() {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
   $timer = '0022 - Load node 1138 with cache';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     timer_start($timer);
     _hr_tools_queries_start($timer);
@@ -442,11 +454,11 @@ function _hr_tools_performace_stats_set1() {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
   $timer = '0023 - Node view 1138';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     timer_start($timer);
     _hr_tools_queries_start($timer);
@@ -457,11 +469,11 @@ function _hr_tools_performace_stats_set1() {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
   $timer = '0022 - Save node 1138';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     $node = node_load(1138, NULL, FALSE);
     timer_start($timer);
@@ -473,12 +485,12 @@ function _hr_tools_performace_stats_set1() {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
   // Time to render empty page.
   $timer = '0031 - Render empty page';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     timer_start($timer);
     _hr_tools_queries_start($timer);
@@ -489,17 +501,20 @@ function _hr_tools_performace_stats_set1() {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 }
 
+/**
+ * Performance stats helper.
+ */
 function _hr_tools_performace_stats_set2() {
   global $timers;
-  global $hr_tools_external_calls;
+  global $_hr_tools_external_calls;
 
   // Time to query database.
   $timer = '0041 - Query database: first node record';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     timer_start($timer);
     _hr_tools_queries_start($timer);
@@ -510,11 +525,11 @@ function _hr_tools_performace_stats_set2() {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
   $timer = '0042 - Query database: first document record';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     timer_start($timer);
     _hr_tools_queries_start($timer);
@@ -525,11 +540,11 @@ function _hr_tools_performace_stats_set2() {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
   $timer = '0042 - Query database: first document record ordered';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     timer_start($timer);
     _hr_tools_queries_start($timer);
@@ -540,11 +555,11 @@ function _hr_tools_performace_stats_set2() {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
   $timer = '0042 - Query database: first document record ordered reversed';
-  $hr_tools_external_calls = array();
+  $_hr_tools_external_calls = array();
   try {
     timer_start($timer);
     _hr_tools_queries_start($timer);
@@ -555,13 +570,16 @@ function _hr_tools_performace_stats_set2() {
   catch (Exception $e) {
     $timers[$timer]['exception'] = $e->getMessage();
   }
-  $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 }
 
+/**
+ * Performance stats helper.
+ */
 function _hr_tools_performace_stats_node_rendering($content_types) {
   global $timers;
-  global $hr_tools_external_calls;
+  global $_hr_tools_external_calls;
 
   // Random nodes rendering.
   $content_types = node_type_get_names();
@@ -570,7 +588,7 @@ function _hr_tools_performace_stats_node_rendering($content_types) {
     $counter++;
     $prefix = '01' . str_pad($counter, 2, '0', STR_PAD_LEFT);
     $timer = $prefix . '1 - Query database: get 5 random nodes of type ' . $name;
-    $hr_tools_external_calls = array();
+    $_hr_tools_external_calls = array();
     try {
       timer_start($timer);
       _hr_tools_queries_start($timer);
@@ -583,36 +601,36 @@ function _hr_tools_performace_stats_node_rendering($content_types) {
 
       foreach ($results as $result) {
         $timer = $prefix . '2 - Load node ' . $result->nid;
-        $hr_tools_external_calls = array();
+        $_hr_tools_external_calls = array();
         timer_start($timer);
         _hr_tools_queries_start($timer);
         $timers[$timer]['type'] = 'Load node';
         $timers[$timer]['node_type'] = $name;
         $node = node_load($result->nid);
         timer_stop($timer);
-        $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+        $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
         $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
         $timer = $prefix . '3 - Render node ' . $result->nid;
-        $hr_tools_external_calls = array();
+        $_hr_tools_external_calls = array();
         timer_start($timer);
         _hr_tools_queries_start($timer);
         $timers[$timer]['type'] = 'View node';
         $timers[$timer]['node_type'] = $name;
         $output = node_view($node);
         timer_stop($timer);
-        $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+        $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
         $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
         $timer = $prefix . '4 - View node ' . $result->nid;
-        $hr_tools_external_calls = array();
+        $_hr_tools_external_calls = array();
         timer_start($timer);
         _hr_tools_queries_start($timer);
         $timers[$timer]['type'] = 'View node page';
         $timers[$timer]['node_type'] = $name;
         $output = node_page_view($node);
         timer_stop($timer);
-        $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+        $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
         $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 
       }
@@ -623,45 +641,60 @@ function _hr_tools_performace_stats_node_rendering($content_types) {
   }
 }
 
+/**
+ * Performance stats helper.
+ */
 function _hr_tools_performace_stats_set3() {
   global $timers;
-  global $hr_tools_external_calls;
+  global $_hr_tools_external_calls;
 
   $content_types = node_type_get_names();
   $subset = array_slice($content_types, 0, 7);
   _hr_tools_performace_stats_node_rendering($subset);
 }
 
+/**
+ * Performance stats helper.
+ */
 function _hr_tools_performace_stats_set4() {
   global $timers;
-  global $hr_tools_external_calls;
+  global $_hr_tools_external_calls;
 
   $content_types = node_type_get_names();
   $subset = array_slice($content_types, 7, 7);
   _hr_tools_performace_stats_node_rendering($subset);
 }
 
+/**
+ * Performance stats helper.
+ */
 function _hr_tools_performace_stats_set5() {
   global $timers;
-  global $hr_tools_external_calls;
+  global $_hr_tools_external_calls;
 
   $content_types = node_type_get_names();
   $subset = array_slice($content_types, 14, 7);
   _hr_tools_performace_stats_node_rendering($subset);
 }
 
+/**
+ * Performance stats helper.
+ */
 function _hr_tools_performace_stats_set6() {
   global $timers;
-  global $hr_tools_external_calls;
+  global $_hr_tools_external_calls;
 
   $content_types = node_type_get_names();
   $subset = array_slice($content_types, 21, 7);
   _hr_tools_performace_stats_node_rendering($subset);
 }
 
+/**
+ * Performance stats helper.
+ */
 function _hr_tools_performace_stats_set7() {
   global $timers;
-  global $hr_tools_external_calls;
+  global $_hr_tools_external_calls;
 
   // Edit and save multiple nodes.
   $nids = array(
@@ -714,7 +747,7 @@ function _hr_tools_performace_stats_set7() {
 
   foreach ($nids as $nid => $info) {
     $timer = $info['timer'];
-    $hr_tools_external_calls = array();
+    $_hr_tools_external_calls = array();
     try {
       $node = node_load($nid, NULL, FALSE);
       if (!$node) {
@@ -732,15 +765,21 @@ function _hr_tools_performace_stats_set7() {
     catch (Exception $e) {
       $timers[$timer]['exception'] = $e->getMessage();
     }
-    $timers[$timer]['external_calls'] = $hr_tools_external_calls;
+    $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
     $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
   }
 }
 
+/**
+ * Start queries.
+ */
 function _hr_tools_queries_start($name = 'hr_tools') {
   Database::startLog($name);
 }
 
+/**
+ * Get queries.
+ */
 function _hr_tools_queries_get($name = 'hr_tools') {
   $output = array();
   $queries = Database::getLog($name);
@@ -780,11 +819,14 @@ function _hr_tools_queries_get($name = 'hr_tools') {
   return $output;
 }
 
+/**
+ * Custom drupal_http_request wrapper.
+ */
 function hr_tools_drupal_http_request($url, array $options = array()) {
-  global $hr_tools_external_calls;
+  global $_hr_tools_external_calls;
   $caller = debug_backtrace();
 
-  $hr_tools_external_calls[] = array(
+  $_hr_tools_external_calls[] = array(
     'url' => $url,
     'options' => $options,
     'caller' => $caller[2]['function'],
@@ -1059,18 +1101,31 @@ function hr_tools_drupal_http_request($url, array $options = array()) {
   $result->code = $code;
 
   switch ($code) {
-    case 200: // OK
-    case 201: // Created
-    case 202: // Accepted
-    case 203: // Non-Authoritative Information
-    case 204: // No Content
-    case 205: // Reset Content
-    case 206: // Partial Content
-    case 304: // Not modified
+    // OK.
+    case 200:
+      // Created.
+    case 201:
+      // Accepted.
+    case 202:
+      // Non-Authoritative Information.
+    case 203:
+      // No Content.
+    case 204:
+      // Reset Content.
+    case 205:
+      // Partial Content.
+    case 206:
+      // Not modified.
+    case 304:
       break;
-    case 301: // Moved permanently
-    case 302: // Moved temporarily
-    case 307: // Moved temporarily
+
+    // Moved permanently.
+
+    case 301:
+      // Moved temporarily.
+    case 302:
+      // Moved temporarily.
+    case 307:
       $location = $result->headers['location'];
       $options['timeout'] -= timer_read(__FUNCTION__) / 1000;
       if ($options['timeout'] <= 0) {
@@ -1087,13 +1142,14 @@ function hr_tools_drupal_http_request($url, array $options = array()) {
         $result->redirect_url = $location;
       }
       break;
+
     default:
       $result->error = $result->status_message;
   }
 
-  $last = array_pop($hr_tools_external_calls);
+  $last = array_pop($_hr_tools_external_calls);
   $last['timing'] = timer_stop(__FUNCTION__);
-  $hr_tools_external_calls[] = $last;
+  $_hr_tools_external_calls[] = $last;
 
   return $result;
 }
@@ -1116,11 +1172,11 @@ function hr_tools_token_info() {
 }
 
 /**
-* Implements hook_tokens().
-*/
+ * Implements hook_tokens().
+ */
 function hr_tools_tokens($type, $tokens, array $data = array(), array $options = array()) {
- $replacements = array();
- if ($type == 'node' && !empty($data['node'])) {
+  $replacements = array();
+  if ($type == 'node' && !empty($data['node'])) {
     $node = $data['node'];
     $wrapper = entity_metadata_wrapper('node', $node);
     foreach ($tokens as $name => $original) {
@@ -1138,6 +1194,7 @@ function hr_tools_tokens($type, $tokens, array $data = array(), array $options =
             $replacements[$original] = $node->nid;
           }
           break;
+
         case 'bundles':
           $replacements[$original] = '';
           if (isset($wrapper->field_bundles)) {

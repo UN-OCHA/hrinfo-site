@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Key document plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('Reliefweb documents'),
@@ -21,7 +26,7 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
 function hr_reliefweb_key_documents_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
@@ -65,11 +70,12 @@ function hr_reliefweb_key_documents_edit_form_submit($form, &$form_state) {
 }
 
 /**
- * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
+ * Run-time rendering of the body of the block (content type).
+ *
+ * @See ctools_plugin_examples for more advanced info.
  */
 function hr_reliefweb_key_documents_render($subtype, $conf, $panel_args, $context = NULL) {
-  // initial content is blank
+  // Initial content is blank.
   $block = new stdClass();
   $block->title = 'Reliefweb documents';
   $block->content = '';

@@ -1,10 +1,15 @@
 <?php
 
 namespace Drupal\hr_api\Plugin\resource;
+
 use Drupal\restful\Plugin\resource\ResourceEntity;
 use Drupal\restful\Http\HttpHeader;
 
+/**
+ * Class definition.
+ */
 abstract class ResourceCustom extends ResourceEntity {
+
   /**
    * Adds the Allowed-Origin headers.
    *

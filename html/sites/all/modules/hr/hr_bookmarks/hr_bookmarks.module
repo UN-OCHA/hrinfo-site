@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Bookmarks feature.
@@ -6,6 +7,9 @@
 
 include_once 'hr_bookmarks.features.inc';
 
+/**
+ * Implements hook_block_info().
+ */
 function hr_bookmarks_block_info() {
   $blocks['hr_favorite_spaces'] = array(
     'info' => t('Favorite spaces'),
@@ -13,6 +17,9 @@ function hr_bookmarks_block_info() {
   return $blocks;
 }
 
+/**
+ * Implements hook_block_view().
+ */
 function hr_bookmarks_block_view($delta = '') {
   global $user;
   $block = array();
@@ -25,16 +32,16 @@ function hr_bookmarks_block_view($delta = '') {
           $context_gid = $context['gid'];
         }
         $flags = flag_get_user_flags('node');
-          $block['content'] = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--bookmark"><use xlink:href="#bookmark"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">';
+        $block['content'] = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--bookmark"><use xlink:href="#bookmark"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">';
         if (isset($flags['hr_favorite_space'])) {
           foreach ($flags['hr_favorite_space'] as $gid => $space) {
-            //debug($space);
+            // debug($space);
             $node = node_load($gid);
-            $block['content'] .= '<li>'.l($node->title, 'node/'.$gid).'</li>';
+            $block['content'] .= '<li>' . l($node->title, 'node/' . $gid) . '</li>';
           }
         }
         if ($context_gid != NULL) {
-          $block['content'] .= '<li>'.flag_create_link('hr_favorite_space', $context_gid, array('after_flagging' => FALSE)).'</li>';
+          $block['content'] .= '<li>' . flag_create_link('hr_favorite_space', $context_gid, array('after_flagging' => FALSE)) . '</li>';
         }
         $block['content'] .= '</ul>';
       }
@@ -42,4 +49,3 @@ function hr_bookmarks_block_view($delta = '') {
   }
   return $block;
 }
-

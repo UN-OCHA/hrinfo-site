@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Reliefweb integration.
@@ -117,8 +118,11 @@ function hr_reliefweb_menu() {
   return $items;
 }
 
+/**
+ * Implements hook_url_outbound_alter().
+ */
 function hr_reliefweb_url_outbound_alter(&$path, &$options, $original_path) {
-  if (strpos($path, 'autocomplete') !== false && strpos($path, 'reliefweb') !== false) {
+  if (strpos($path, 'autocomplete') !== FALSE && strpos($path, 'reliefweb') !== FALSE) {
     $options['script'] = '';
   }
 }
@@ -196,6 +200,9 @@ function hr_reliefweb_autocomplete_orp($string) {
   hr_reliefweb_autocomplete_hno($string);
 }
 
+/**
+ * Get reports.
+ */
 function hr_reliefweb_get_ocha_reports() {
   return array(
     'sitrep' => array(
@@ -222,6 +229,9 @@ function hr_reliefweb_get_ocha_reports() {
 
 }
 
+/**
+ * Get a document.
+ */
 function hr_reliefweb_get_document_by_id($id) {
   $filters = array();
 
@@ -239,6 +249,9 @@ function hr_reliefweb_get_document_by_id($id) {
   return FALSE;
 }
 
+/**
+ * Get the latest document.
+ */
 function hr_reliefweb_get_latest_document_by_key($key, $country) {
   $filters = array();
   $ocha_reports = hr_reliefweb_get_ocha_reports();
@@ -284,7 +297,7 @@ function hr_reliefweb_theme($existing, $type, $theme, $path) {
       'data' => NULL,
       'pager' => NULL,
     ),
-   );
+  );
 
   return $theme;
 }
@@ -447,8 +460,8 @@ function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filter
 }
 
 /**
-*  Function to return content given an api path.
-*/
+ * Function to return content given an api path.
+ */
 function hr_reliefweb_content($path) {
   $data_array = array();
   $total_count = 0;
@@ -714,7 +727,7 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
     $global_cluster = $node->field_sector['und'][0]['target_id'];
   }
 
-  switch($global_cluster) {
+  switch ($global_cluster) {
     case 'Agriculture':
       $filters[] = array(
         'field' => 'theme.name',
@@ -723,7 +736,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       );
       break;
 
-    case 3: // Education
+    // Education.
+    case 3:
       $filters[] = array(
         'field' => 'source.name',
         'value' => 'Education Cluster',
@@ -736,7 +750,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       );
       break;
 
-    case 4: // Emergency Shelter and NFI
+    // Emergency Shelter and NFI.
+    case 4:
       $filters[] = array(
         'field' => 'source.name',
         'value' => 'Shelter Cluster',
@@ -749,7 +764,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       );
       break;
 
-    case 6: // Food Security
+    // Food Security.
+    case 6:
       $filters[] = array(
         'field' => 'source.name',
         'value' => 'Food Security Cluster',
@@ -762,7 +778,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       );
       break;
 
-    case 7: // Health
+    // Health.
+    case 7:
       $filters[] = array(
         'field' => 'source.name',
         'value' => 'Health Cluster',
@@ -775,7 +792,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       );
       break;
 
-    case 1: // Camp Coordination / Management
+    // Camp Coordination / Management.
+    case 1:
       $filters[] = array(
         'field' => 'theme.name',
         'value' => 'Coordination',
@@ -783,7 +801,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       );
       break;
 
-    case 8: // Logistics
+    // Logistics.
+    case 8:
       $filters[] = array(
         'field' => 'source.name',
         'value' => 'Logistics Cluster',
@@ -796,7 +815,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       );
       break;
 
-    case 9: // Nutrition
+    // Nutrition.
+    case 9:
       $filters[] = array(
         'field' => 'source.name',
         'value' => 'Nutrition Cluster',
@@ -809,7 +829,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       );
       break;
 
-    case 10: // Protection
+    // Protection.
+    case 10:
       $filters[] = array(
         'field' => 'source.name',
         'value' => 'Protection Cluster',
@@ -822,8 +843,10 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       );
       break;
 
-    case 5404: // Gender Based Violence
-    case 5403: // Child Protection
+    // Gender Based Violence.
+    case 5404:
+      // Child Protection.
+    case 5403:
       $filters[] = array(
         'field' => 'source.name',
         'value' => 'Protection Cluster',
@@ -841,7 +864,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       );
       break;
 
-    case 11: // Water Sanitation Hygiene
+    // Water Sanitation Hygiene.
+    case 11:
       $filters[] = array(
         'field' => 'source.name',
         'value' => 'WASH Cluster',
@@ -854,11 +878,16 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       );
       break;
 
-    case 5405: // Housing, Land and Property
-    case 5406: // Mine Action
-    case 70192: // Information Management
-    case 5: // Emergency Telecommunications
-    case 2: // Early Recovery
+    // Housing, Land and Property.
+    case 5405:
+      // Mine Action.
+    case 5406:
+      // Information Management.
+    case 70192:
+      // Emergency Telecommunications.
+    case 5:
+      // Early Recovery.
+    case 2:
       break;
 
     default:

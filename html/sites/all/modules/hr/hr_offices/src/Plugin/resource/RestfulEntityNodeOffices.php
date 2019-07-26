@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_offices\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityNodeOffices
+ * Class RestfulEntityNodeOffices.
+ *
  * @package Drupal\hr_offices\Plugin\resource
  *
  * @Resource(
@@ -29,7 +31,6 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityNodeOffices extends ResourceCustom implements ResourceInterface {
 
   /**

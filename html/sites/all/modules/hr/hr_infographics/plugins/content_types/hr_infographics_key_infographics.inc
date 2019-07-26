@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Static plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('Static'),
@@ -14,7 +19,7 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
 function hr_infographics_key_infographics_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
@@ -23,7 +28,7 @@ function hr_infographics_key_infographics_edit_form($form, &$form_state) {
     $infographics_count = $form_state['infographics_count'];
   }
   else {
-      $infographics_count = count($conf['infographics']);
+    $infographics_count = count($conf['infographics']);
   }
 
   // Add a wrapper for the infographics and more button.
@@ -88,15 +93,16 @@ function hr_infographics_key_infographics_edit_form_submit($form, &$form_state) 
 }
 
 /**
- * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
+ * Run-time rendering of the body of the block (content type).
+ *
+ * @See ctools_plugin_examples for more advanced info.
  */
 function hr_infographics_key_infographics_render($subtype, $conf, $panel_args, $context = NULL) {
   $block = new stdClass();
 
   $infographics = $conf['infographics'];
 
-  // initial content is blank
+  // Initial content is blank.
   $block->title = '';
   $block->content = '';
   if (!empty($infographics)) {
@@ -108,9 +114,9 @@ function hr_infographics_key_infographics_render($subtype, $conf, $panel_args, $
         if ($node != FALSE) {
           if ($conf['view_mode'] == 'link') {
             $entity = entity_load_single('node', $nid);
-            $block->content .= '<li>'.l(entity_label('node', $entity), 'node/'.$nid).'</li>';
+            $block->content .= '<li>' . l(entity_label('node', $entity), 'node/' . $nid) . '</li>';
           }
-	  else {
+          else {
             $node_view = node_view($node, $conf['view_mode']);
             $block->content .= drupal_render($node_view);
           }
@@ -119,14 +125,13 @@ function hr_infographics_key_infographics_render($subtype, $conf, $panel_args, $
     }
 
     if ($conf['view_mode'] == 'link') {
-      $block->content = '<ul>'.$block->content.'</ul>';
+      $block->content = '<ul>' . $block->content . '</ul>';
     }
 
     if (!empty($block->content)) {
-      $block->content = '<div class="fieldable-panels-pane">'.$block->content.'</div>';
+      $block->content = '<div class="fieldable-panels-pane">' . $block->content . '</div>';
     }
   }
 
   return $block;
 }
-

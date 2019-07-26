@@ -81,7 +81,7 @@ function hr_locations_update_7001() {
  */
 function hr_locations_update_7002(&$sandbox) {
   if (!isset($sandbox['progress'])) {
-    $sandbox['progress'] = (float)0;
+    $sandbox['progress'] = (float) 0;
     $sandbox['max'] = 100;
   }
 
@@ -132,7 +132,7 @@ function hr_locations_update_7002(&$sandbox) {
  * Used to be admin level 4.
  */
 function hr_locations_update_7003(&$sandbox) {
-  // Empty
+  // Empty.
 }
 
 /**
@@ -141,7 +141,7 @@ function hr_locations_update_7003(&$sandbox) {
 function hr_locations_update_7004(&$sandbox) {
   watchdog('hr location', 'Deleting location terms, please stand by');
   if (!isset($sandbox['progress'])) {
-    $sandbox['progress'] = (float)0;
+    $sandbox['progress'] = (float) 0;
     $sandbox['max'] = 100;
   }
 
@@ -206,7 +206,7 @@ function hr_locations_update_7006(&$sandbox) {
 function hr_locations_update_7007(&$sandbox) {
   watchdog('hr location', 'Deleting location terms, please stand by');
   if (!isset($sandbox['progress'])) {
-    $sandbox['progress'] = (float)0;
+    $sandbox['progress'] = (float) 0;
     $sandbox['max'] = 100;
   }
 

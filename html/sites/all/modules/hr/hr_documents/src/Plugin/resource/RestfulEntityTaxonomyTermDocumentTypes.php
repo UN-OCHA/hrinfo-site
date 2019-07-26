@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_documents\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityTaxonoyTermDocumentTypes
+ * Class RestfulEntityTaxonoyTermDocumentTypes.
+ *
  * @package Drupal\hr_documents\Plugin\resource
  *
  * @Resource(
@@ -28,7 +30,6 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*",
  * )
  */
-
 class RestfulEntityTaxonomyTermDocumentTypes extends ResourceCustom implements ResourceInterface {
 
   /**

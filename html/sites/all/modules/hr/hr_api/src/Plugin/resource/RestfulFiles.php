@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_api\Plugin\resource\RestfulFiles
- */
-
 namespace Drupal\hr_api\Plugin\resource;
 
 use Drupal\restful\Exception\UnauthorizedException;
@@ -13,7 +8,8 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
 use Drupal\restful\Http\RequestInterface;
 
 /**
- * Class RestfulFiles
+ * Class RestfulFiles.
+ *
  * @package Drupal\hr_api\Plugin\Resource
  *
  * @Resource(
@@ -56,12 +52,18 @@ class RestfulFiles extends ResourceCustom implements ResourceInterface {
     return $public_fields;
   }
 
+  /**
+   * Get a file uri.
+   */
   public function getFileUri($di) {
     $wrapper = $di->getWrapper();
     $id = $wrapper->getIdentifier();
     return file_create_url(file_load($id)->uri);
   }
 
+  /**
+   * Get a PDF preview.
+   */
   public function getPreview($di) {
     $wrapper = $di->getWrapper();
     $id = $wrapper->getIdentifier();
@@ -78,7 +80,7 @@ class RestfulFiles extends ResourceCustom implements ResourceInterface {
    */
   public function access() {
     if ($this->getRequest()->getMethod() == RequestInterface::METHOD_OPTIONS) {
-      return true;
+      return TRUE;
     }
     // The getAccount method may return an UnauthorizedException when an
     // authenticated user cannot be found. Since this is called from the access

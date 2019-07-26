@@ -1,4 +1,5 @@
 <?php
+
   /**
    * @file
    * Initial template for the reliefweb documents.
@@ -32,7 +33,7 @@
     <div class="reliefweb--intro">
       <?php print render($contents); ?>
     </div>
-     <?php endif ?>
+    <?php endif ?>
     <div class="reliefweb--data">
       <?php print render($data); ?>
     </div>

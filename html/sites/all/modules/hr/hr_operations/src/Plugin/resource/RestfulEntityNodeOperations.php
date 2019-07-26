@@ -1,12 +1,14 @@
 <?php
 
 namespace Drupal\hr_operations\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 
 /**
- * Class RestfulEntityNodeOperations
+ * Class RestfulEntityNodeOperations.
+ *
  * @package Drupal\hr_operations\Plugin\resource
  *
  * @Resource(
@@ -30,7 +32,6 @@ use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInterface {
 
   /**
@@ -139,6 +140,9 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
     return $public_fields;
   }
 
+  /**
+   * Get contacts.
+   */
   public function getContacts(DataInterpreterInterface $di) {
     $cids = array();
     $wrapper = $di->getWrapper();
@@ -152,10 +156,13 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
     return $cids;
   }
 
+  /**
+   * Get timezone.
+   */
   public function getTimezone(DataInterpreterInterface $di) {
     $wrapper = $di->getWrapper();
     $nid = $wrapper->getIdentifier();
-    $store = variable_store('og', 'node_'.$nid);
+    $store = variable_store('og', 'node_' . $nid);
     return $store['date_default_timezone'] ? $store['date_default_timezone'] : variable_get('date_default_timezone');
   }
 

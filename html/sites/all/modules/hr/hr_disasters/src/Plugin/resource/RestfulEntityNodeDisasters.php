@@ -1,12 +1,14 @@
 <?php
 
 namespace Drupal\hr_disasters\Plugin\resource;
+
 use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityNodeDisasters
+ * Class RestfulEntityNodeDisasters.
+ *
  * @package Drupal\hr_disasters\Plugin\resource
  *
  * @Resource(
@@ -29,7 +31,6 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityNodeDisasters extends ResourceCustom implements ResourceInterface {
 
   /**
@@ -91,15 +92,24 @@ class RestfulEntityNodeDisasters extends ResourceCustom implements ResourceInter
     return $public_fields;
   }
 
+  /**
+   * Get the primary type.
+   */
   public function getPrimaryType($value) {
     $term = taxonomy_term_load($value);
     return $term->name;
   }
 
+  /**
+   * Get raw body.
+   */
   public function getBodyRaw($value) {
     return strip_tags($value);
   }
 
+  /**
+   * Get a disaster URL.
+   */
   public function getDisasterUrl(DataInterpreterInterface $di) {
     $wrapper = $di->getWrapper();
     $rid = $wrapper->field_reliefweb_id->value();
@@ -107,7 +117,7 @@ class RestfulEntityNodeDisasters extends ResourceCustom implements ResourceInter
       return $this->versionedUrl($wrapper->getIdentifier());
     }
     else {
-      return 'http://api.reliefweb.int/v1/disasters/'.$rid;
+      return 'http://api.reliefweb.int/v1/disasters/' . $rid;
     }
   }
 

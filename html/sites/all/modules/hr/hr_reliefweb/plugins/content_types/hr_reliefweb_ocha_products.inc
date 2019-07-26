@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * OCHA products plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('OCHA products'),
@@ -26,7 +31,7 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
 function hr_reliefweb_ocha_products_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
@@ -130,11 +135,12 @@ function hr_reliefweb_ocha_products_edit_form_submit($form, &$form_state) {
 }
 
 /**
- * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
+ * Run-time rendering of the body of the block (content type).
+ *
+ * @See ctools_plugin_examples for more advanced info.
  */
 function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $context = NULL) {
-  // initial content is blank
+  // Initial content is blank.
   $block = new stdClass();
   $block->title = 'OCHA products';
   $block->content = '';
@@ -267,17 +273,17 @@ function hr_reliefweb_ocha_products_render($subtype, $conf, $panel_args, $contex
 }
 
 /**
- * Creates the full list-item by calling the helper functions
+ * Creates the full list-item by calling the helper functions.
  */
 function _hr_reliefweb_get_list_item($value, $label, $prefix, $initial_state = 'hidden', $see_more_link = '', $see_more_title = '') {
   $out = array();
 
   $file = reset($value['files']);
   if (isset($file['preview']) && !empty($file['preview'])) {
-    $img_link = '<a class="hr-thumbnail-image" target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '<span class="hr-thumbnail-text">' .t('Download') . '</span></a>';
+    $img_link = '<a class="hr-thumbnail-image" target="reliefweb" title="' . $file['description'] . '" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '<span class="hr-thumbnail-text">' . t('Download') . '</span></a>';
   }
   elseif (!empty($file['url'])) {
-    $img_link = '<a class="hr-thumbnail-no-image" target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
+    $img_link = '<a class="hr-thumbnail-no-image" target="reliefweb" title="' . $file['description'] . '" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
   }
   else {
     $img_link = '<div class="hr-thumbnail-no-download">No download available</div>';
@@ -291,7 +297,7 @@ function _hr_reliefweb_get_list_item($value, $label, $prefix, $initial_state = '
   $date_string = '';
   if (!empty($node->field_publication_date)) {
     $date = new DateObject($node->field_publication_date[LANGUAGE_NONE][0]['value'], $node->field_publication_date[LANGUAGE_NONE][0]['timezone_db']);
-    $date_string = ' - '.date_format_date($date, 'custom', 'd M Y');
+    $date_string = ' - ' . date_format_date($date, 'custom', 'd M Y');
     $out['date'] = $node->field_publication_date[LANGUAGE_NONE][0]['value'];
   }
   $active_link = '';
@@ -306,7 +312,7 @@ function _hr_reliefweb_get_list_item($value, $label, $prefix, $initial_state = '
 }
 
 /**
- * Helper function to sort docs by date
+ * Helper function to sort docs by date.
  */
 function _hr_reliefweb_sort_hpc($a, $b) {
   $atime = strtotime($a['date_changed']);

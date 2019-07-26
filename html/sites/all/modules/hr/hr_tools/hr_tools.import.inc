@@ -162,6 +162,9 @@ function hr_tools_import_locations_line($data, &$context) {
   $context['results']['succes'][$data['admin3_pcode']] = 'Imported row ' . $data['admin3_pcode'];
 }
 
+/**
+ * Finish handler.
+ */
 function hr_tools_import_locations_finished($success, $results, $operations) {
   if ($success) {
     if (!isset($results['succes'])) {
@@ -502,7 +505,7 @@ function hr_tools_import_nodes_tag_line($data, $strategy, &$context) {
 
   // Check if new pcode is different location.
   $original_locations = array();
-  foreach($node->{$location_field_name}['und'] as $loc_id) {
+  foreach ($node->{$location_field_name}['und'] as $loc_id) {
     $original_locations[] = $loc_id['target_id'];
   }
 
@@ -539,6 +542,9 @@ function hr_tools_import_nodes_tag_line($data, $strategy, &$context) {
   $context['results']['succes'][$data['nid']] = 'Imported row ' . $data['nid'];
 }
 
+/**
+ * Fished handler.
+ */
 function hr_tools_import_nodes_tag_finished($success, $results, $operations) {
   if ($success) {
     if (!isset($results['succes'])) {

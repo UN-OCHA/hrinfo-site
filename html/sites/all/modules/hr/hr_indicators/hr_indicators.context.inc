@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_indicators.context.inc

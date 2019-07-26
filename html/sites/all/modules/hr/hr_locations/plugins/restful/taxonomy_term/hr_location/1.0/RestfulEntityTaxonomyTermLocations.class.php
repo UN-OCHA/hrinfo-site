@@ -5,12 +5,15 @@
  * Contains \RestfulEntityTaxonomyTermLocations.
  */
 
+/**
+ * Class definition.
+ */
 class RestfulEntityTaxonomyTermLocations extends \RestfulEntityBaseTaxonomyTerm {
 
   /**
    * Overrides RestfulEntityBaseNode::addExtraInfoToQuery()
-   * 
-   * Adds proper query tags
+   *
+   * Adds proper query tags.
    */
   protected function addExtraInfoToQuery($query) {
     parent::addExtraInfoToQuery($query);
@@ -73,6 +76,9 @@ class RestfulEntityTaxonomyTermLocations extends \RestfulEntityBaseTaxonomyTerm 
     return $public_fields;
   }
 
+  /**
+   * Get entity.
+   */
   protected function getEntity($wrapper) {
     $single = FALSE;
     foreach ($wrapper as $id => &$item) {
@@ -85,19 +91,22 @@ class RestfulEntityTaxonomyTermLocations extends \RestfulEntityBaseTaxonomyTerm 
         }
       }
       else {
-        $array_item = (array)$item;
+        $array_item = (array) $item;
         $properties = array_keys($array_item);
         foreach ($properties as $property) {
           if (!in_array($property, array('id', 'label', 'self'))) {
             unset($array_item[$property]);
           }
         }
-        $item = (object)$array_item;
+        $item = (object) $array_item;
       }
     }
     return $wrapper;
   }
 
+  /**
+   * Get parents.
+   */
   protected function getParents($wrapper) {
     $labels = array();
     foreach ($wrapper->parents_all->getIterator() as $delta => $term_wrapper) {
@@ -106,6 +115,9 @@ class RestfulEntityTaxonomyTermLocations extends \RestfulEntityBaseTaxonomyTerm 
     return $labels;
   }
 
+  /**
+   * Get admin level.
+   */
   protected function getAdminLevel($wrapper) {
     $count = 0;
     foreach ($wrapper->parents_all->getIterator() as $delta => $term_wrapper) {
@@ -114,8 +126,12 @@ class RestfulEntityTaxonomyTermLocations extends \RestfulEntityBaseTaxonomyTerm 
     return $count - 1;
   }
 
+  /**
+   * Get geolocation.
+   */
   protected function getGeolocation($wrapper) {
     $geofield = $wrapper->field_geofield->value();
     return array('lat' => $geofield['lat'], 'lon' => $geofield['lon']);
   }
+
 }

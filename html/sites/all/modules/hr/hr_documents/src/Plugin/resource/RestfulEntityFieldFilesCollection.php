@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_documents\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityFieldFilesCollection
+ * Class RestfulEntityFieldFilesCollection.
+ *
  * @package Drupal\hr_documents\Plugin\resource
  *
  * @Resource(
@@ -28,7 +30,6 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*",
  * )
  */
-
 class RestfulEntityFieldFilesCollection extends ResourceCustom implements ResourceInterface {
 
   /**
@@ -60,6 +61,9 @@ class RestfulEntityFieldFilesCollection extends ResourceCustom implements Resour
     return '\Drupal\hr_documents\Plugin\resource\DataProviderFieldFilesCollection';
   }
 
+  /**
+   * Get a host entity.
+   */
   public function getHostEntity($value) {
     $tmp = new \stdClass();
     $tmp->id = $value->nid;

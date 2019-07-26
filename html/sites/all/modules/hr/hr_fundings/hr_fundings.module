@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Fundings feature.
@@ -8,12 +9,13 @@ include_once 'hr_fundings.features.inc';
 
 /**
  * Implements hook_cron()
- * Synchronizes the appeals with the FTS
+ *
+ * Synchronizes the appeals with the FTS.
  */
 function hr_fundings_cron() {
   $years = array();
   $current = date('Y');
-  for($i = 2010; $i <= $current; $i++) {
+  for ($i = 2010; $i <= $current; $i++) {
     $appeals = fts_get_appeals($i);
     foreach ($appeals as $appeal) {
       if ($appeal->type != 'NON-CAP' && $appeal->type != 'n/a') {
@@ -26,7 +28,7 @@ function hr_fundings_cron() {
         if (!isset($results['node'])) {
           $type = _hr_fundings_map_fts_appeal_type($appeal->type);
           if ($type != NULL) {
-            // Create appeal
+            // Create appeal.
             $node = new stdClass();
             $node->type = 'hr_funding';
             $node->language = 'en';
@@ -50,6 +52,9 @@ function hr_fundings_cron() {
   }
 }
 
+/**
+ * Map FTS appeal types to taxonomy terms.
+ */
 function _hr_fundings_map_fts_appeal_type($type) {
   $term_name = '';
   $mapping = variable_get('hr_fundings_mapping', array(
@@ -64,7 +69,7 @@ function _hr_fundings_map_fts_appeal_type($type) {
     'SRP' => 'Strategic Response Plan',
     'RRP Detail' => 'Regional Response Plan (RRP)',
   ));
-  
+
   if (isset($mapping[$type])) {
     $term_name = $mapping[$type];
   }
@@ -77,25 +82,31 @@ function _hr_fundings_map_fts_appeal_type($type) {
   }
 }
 
+/**
+ * Map FTS countries to HR countries.
+ */
 function _hr_fundings_map_fts_country($country) {
   $hr_country = $country;
   switch ($country) {
     case 'Congo, Democratic Republic of the':
       $hr_country = 'Democratic Republic of Congo';
       break;
+
     case 'Palestinian territory, occupied':
       $hr_country = 'occupied Palestinian Territory';
       break;
+
     case 'Congo, Republic of':
       $hr_country = 'Congo';
       break;
+
     case 'Syrian Arab Republic':
       $hr_country = 'Syria';
       break;
+
     case "Cote d'Ivoire":
       $hr_country = 'Ivory Coast';
       break;
   }
   return $hr_country;
 }
-

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Primary hook implementations.
@@ -49,18 +50,23 @@ function hr_panels_cache_workbench_moderation_transition($node, $previous_state,
 }
 
 /**
+ * Clear cache callback.
+ *
  * This function is called from hook_node_*() and invalidates the panel cache
  * when a node is updated and it matches the criteria chosen in the caching of
  * any panels.
  *
- * @param $node
+ * @param object $node
  *   The node object for the current node being saved.
  */
 function hr_panels_cache_node_clear_cache($node) {
-  // drupal_register_shutdown_function('_hr_panels_cache_node_clear_cache', $node);
+  // drupal_register_shutdown_function('_hr_panels_cache_node_clear_cache', $node);.
   _hr_panels_cache_node_clear_cache($node);
 }
 
+/**
+ * Clear the node cache.
+ */
 function _hr_panels_cache_node_clear_cache($node) {
   // If the node is a group, clear the display of the group.
   if (og_is_group('node', $node)) {
@@ -100,6 +106,9 @@ function _hr_panels_cache_node_clear_cache($node) {
   }
 }
 
+/**
+ * Clear a cache entry by cid.
+ */
 function _hr_panels_cache_node_clear_cache_by_cid($cids) {
   $cid = implode(':', $cids);
   cache_clear_all($cid, 'cache_panels', TRUE);

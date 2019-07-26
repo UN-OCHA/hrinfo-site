@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Standard products plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('Standard Products'),
@@ -22,7 +27,7 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
 function hr_layout_standard_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
@@ -125,38 +130,41 @@ function hr_layout_standard_edit_form_submit($form, &$form_state) {
 }
 
 /**
- * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
+ * Run-time rendering of the body of the block (content type).
+ *
+ * @See ctools_plugin_examples for more advanced info.
  */
 function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL) {
   $block = new stdClass();
 
   $gid = $conf['gid']['entity_id'];
 
-  // Get OCHA tid
+  // Get OCHA tid.
   $ocha_org = array_keys(taxonomy_get_term_by_name('United Nations Office for the Coordination of Humanitarian Affairs', 'hr_organization'));
   $ocha_org_id = reset($ocha_org);
 
+  // @codingStandardsIgnoreStart
   $ocha_desc = array(
-    'sitrep' => array('term' => 'Situation Report', 'type' => 'hr_document', 'see_more' => 'node/'.$gid.'/documents/document-type/situation-report'),
-    'humbul' => array('term' => 'Humanitarian Bulletin', 'type' => 'hr_document', 'see_more' => 'node/'.$gid.'/documents/document-type/humanitarian-bulletin'),
-    'humsnap' => array('term' => 'Humanitarian Snapshot', 'type' => 'hr_infographic', 'see_more' => 'node/'.$gid.'/infographics/infographic-type/humanitarian-snapshot'),
-    'humdash' => array('term' => 'Humanitarian Dashboard', 'type' => 'hr_infographic', 'see_more' => 'node/'.$gid.'/infographics/infographic-type/humanitarian-dashboard'),
+    'sitrep' => array('term' => 'Situation Report', 'type' => 'hr_document', 'see_more' => 'node/' . $gid . '/documents/document-type/situation-report'),
+    'humbul' => array('term' => 'Humanitarian Bulletin', 'type' => 'hr_document', 'see_more' => 'node/' . $gid . '/documents/document-type/humanitarian-bulletin'),
+    'humsnap' => array('term' => 'Humanitarian Snapshot', 'type' => 'hr_infographic', 'see_more' => 'node/' . $gid . '/infographics/infographic-type/humanitarian-snapshot'),
+    'humdash' => array('term' => 'Humanitarian Dashboard', 'type' => 'hr_infographic', 'see_more' => 'node/' . $gid . '/infographics/infographic-type/humanitarian-dashboard'),
   );
+  // @codingStandardsIgnoreEnd
 
   $ocha_products = array();
   $ocha_images = '';
   $ocha_links = '';
   $i = 0;
   foreach ($ocha_desc as $key => $value) {
-    if (isset($conf['show_'.$key]) && $conf['show_'.$key] == TRUE || !isset($conf['show_'.$key])) {
+    if (isset($conf['show_' . $key]) && $conf['show_' . $key] == TRUE || !isset($conf['show_' . $key])) {
       $initial_state = 'hidden';
       if ($i == 0) {
         $initial_state = 'show';
       }
       $node = _hr_layout_get_latest($gid, $value['term'], $value['type'], $ocha_org_id);
       if ($node) {
-        $ocha_products[$key] = _hr_layout_get_list_item($node, $value['term'], $value['type'], $key, $initial_state, $value['see_more'], t('See more @term', array('@term' => $value['term'].'s')));
+        $ocha_products[$key] = _hr_layout_get_list_item($node, $value['term'], $value['type'], $key, $initial_state, $value['see_more'], t('See more @term', array('@term' => $value['term'] . 's')));
         if (isset($ocha_products[$key]['image'])) {
           $ocha_images .= $ocha_products[$key]['image'];
         }
@@ -169,11 +177,11 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
   }
 
   $hpc_keys = array(
-    'hno' => array('term' => 'Humanitarian Needs Overview', 'see_more' => 'node/'.$gid.'/documents/document-type/humanitarian-programme-cycle'),
-    'srp' => array('term' => 'Strategic Response Plan', 'see_more' => 'node/'.$gid.'/documents/document-type/humanitarian-programme-cycle'),
-    'monr' => array('term' => 'Periodic Monitoring Report', 'see_more' => 'node/'.$gid.'/documents/document-type/humanitarian-programme-cycle'),
-    'opr' => array('term' => 'Operational Peer Review Summary', 'see_more' => 'node/'.$gid.'/documents/document-type/humanitarian-programme-cycle'),
-    'orp' => array('term' => 'Other Response Plan', 'see_more' => 'node/'.$gid.'/documents/document-type/other-response-plans'),
+    'hno' => array('term' => 'Humanitarian Needs Overview', 'see_more' => 'node/' . $gid . '/documents/document-type/humanitarian-programme-cycle'),
+    'srp' => array('term' => 'Strategic Response Plan', 'see_more' => 'node/' . $gid . '/documents/document-type/humanitarian-programme-cycle'),
+    'monr' => array('term' => 'Periodic Monitoring Report', 'see_more' => 'node/' . $gid . '/documents/document-type/humanitarian-programme-cycle'),
+    'opr' => array('term' => 'Operational Peer Review Summary', 'see_more' => 'node/' . $gid . '/documents/document-type/humanitarian-programme-cycle'),
+    'orp' => array('term' => 'Other Response Plan', 'see_more' => 'node/' . $gid . '/documents/document-type/other-response-plans'),
   );
 
   $nodes = array();
@@ -211,21 +219,20 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
     }
   }
 
-
-  // initial content is blank
+  // Initial content is blank.
   $block->title = '';
   $block->content = '';
 
   $block->content = '<div class="clearfix hr-layout-operation-standard">
   <ul class="nav nav-tabs" role="tablist">';
   if (!empty($hpc)) {
-    $block->content .= '<li class="active"><a href="#hpc" role="tab" data-toggle="tab">'.t('Response Planning').'</a></li>';
+    $block->content .= '<li class="active"><a href="#hpc" role="tab" data-toggle="tab">' . t('Response Planning') . '</a></li>';
     $block->content .= '<li>';
   }
   else {
     $block->content .= '<li class="active">';
   }
-  $block->content .= '<a href="#ocha" role="tab" data-toggle="tab">'.t('OCHA Products').'</a></li>
+  $block->content .= '<a href="#ocha" role="tab" data-toggle="tab">' . t('OCHA Products') . '</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -233,9 +240,9 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
   if (!empty($hpc)) {
     $block->content .= '<div class="tab-pane active" id="hpc">
       <div class="row">
-        <div class="col-xs-4">'.$hpc_images.'</div>
+        <div class="col-xs-4">' . $hpc_images . '</div>
         <div class="col-xs-8 hr-layout-operation-standard-links">
-          <div class="list-group">'.$hpc_links.'</div>
+          <div class="list-group">' . $hpc_links . '</div>
         </div>
       </div>
     </div>
@@ -244,9 +251,9 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
   else {
     $block->content .= '<div class="tab-pane active" id="ocha">';
   }
-  $block->content .= '<div class="col-xs-4">'.$ocha_images.'</div>
+  $block->content .= '<div class="col-xs-4">' . $ocha_images . '</div>
       <div class="col-xs-8 hr-layout-operation-standard-links">
-        <div class="list-group">'.$ocha_links.'</div>
+        <div class="list-group">' . $ocha_links . '</div>
       </div>
     </div>
   </div>
@@ -272,8 +279,9 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
 }
 
 /**
- * Helper function to sort hpc docs by date
- * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4541
+ * Helper function to sort hpc docs by date.
+ *
+ * @see http://atrium.humanitarianresponse.info/humanitarian_response/node/4541
  */
 function _hr_layout_sort_hpc($a, $b) {
   $atime = strtotime($a->field_publication_date[LANGUAGE_NONE][0]['value']);
@@ -284,13 +292,12 @@ function _hr_layout_sort_hpc($a, $b) {
   return ($atime < $btime) ? 1 : -1;
 }
 
-
 /**
- * Helper function to retrieve latest document/infographic of a specific doc type
+ * Helper function to retrieve latest document/infographic of a specific doc type.
  */
 function _hr_layout_get_latest($gid, $term, $type, $org_id = NULL) {
-  // Get term ID
-  $terms = taxonomy_get_term_by_name($term, $type.'_type');
+  // Get term ID.
+  $terms = taxonomy_get_term_by_name($term, $type . '_type');
   $term = reset($terms);
   if ($term) {
     $field_type = 'field_document_type';
@@ -318,7 +325,7 @@ function _hr_layout_get_latest($gid, $term, $type, $org_id = NULL) {
 }
 
 /**
- * Retrieves link to the file image based on the node object
+ * Retrieves link to the file image based on the node object.
  */
 function _hr_layout_get_pdfpreview($node) {
   $fcid = $node->field_files_collection[LANGUAGE_NONE][0]['value'];
@@ -336,30 +343,31 @@ function _hr_layout_get_pdfpreview($node) {
 }
 
 /**
- * Creates the full list-item by calling the helper functions
+ * Creates the full list-item by calling the helper functions.
  */
 function _hr_layout_get_list_item($node, $term, $type, $prefix, $initial_state = 'hidden', $see_more_link = '', $see_more_title = '') {
   $out = array();
   $file = _hr_layout_get_pdfpreview($node);
   if ($file) {
+    // @codingStandardsIgnoreLine
     $image = theme_image_style(array('style_name' => 'medium', 'path' => $file, 'alt' => $node->title, 'title' => $node->title, 'attributes' => array('class' => array('img-responsive')), 'width' => NULL, 'height' => NULL));
-    $img_link = l($image, 'node/'.$node->nid, array('html' => TRUE));
+    $img_link = l($image, 'node/' . $node->nid, array('html' => TRUE));
     $more_link = '';
     if (!empty($see_more_link)) {
       $more_link = l($see_more_title, $see_more_link, array('attributes' => array('class' => 'hr-layout-see-more')));
     }
-    $img_link = '<div id="'.$prefix.'-thumbnail" class="hr-thumbnail '.$initial_state.'">'.$img_link.$more_link.'</div>';
+    $img_link = '<div id="' . $prefix . '-thumbnail" class="hr-thumbnail ' . $initial_state . '">' . $img_link . $more_link . '</div>';
     $date_string = '';
     if (!empty($node->field_publication_date)) {
       $date = new DateObject($node->field_publication_date[LANGUAGE_NONE][0]['value'], $node->field_publication_date[LANGUAGE_NONE][0]['timezone_db']);
-      $date_string = ' - '.date_format_date($date, 'custom', 'd M Y');
+      $date_string = ' - ' . date_format_date($date, 'custom', 'd M Y');
       $out['date'] = $node->field_publication_date[LANGUAGE_NONE][0]['value'];
     }
     $active_link = '';
     if ($initial_state == 'show') {
       $active_link = 'active';
     }
-    $link = '<a class="list-group-item '.$active_link.'" id="'.$prefix.'">'.t($term).$date_string.'</a>';
+    $link = '<a class="list-group-item ' . $active_link . '" id="' . $prefix . '">' . t($term) . $date_string . '</a>';
     $out['image'] = $img_link;
     $out['link'] = $link;
   }

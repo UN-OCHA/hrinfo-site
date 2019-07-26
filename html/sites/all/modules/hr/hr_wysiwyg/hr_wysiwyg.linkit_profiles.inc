@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_wysiwyg.linkit_profiles.inc

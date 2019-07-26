@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_core.openlayers_styles.inc
