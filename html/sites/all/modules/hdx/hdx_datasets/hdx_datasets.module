@@ -1,11 +1,12 @@
 <?php
+
 /**
  * @file
  * HDX integration for datasets.
  */
 
 /**
- *  Implements hook_menu().
+ * Implements hook_menu().
  */
 function hdx_datasets_menu() {
   $items = array();
@@ -37,10 +38,8 @@ function hdx_datasets_redirect_api_datasets() {
   drupal_goto(variable_get('humdata_base_url', 'https://data.humdata.org') . '/faq#body-faq-HDX_API');
 }
 
-
-
 /**
- *  Implements hook_block_info().
+ * Implements hook_block_info().
  */
 function hdx_datasets_block_info() {
   $blocks['hdx_datasets_filter'] = array(
@@ -63,6 +62,7 @@ function hdx_datasets_block_view($delta = '') {
       $variables['reset_filter_link'] = '/' . drupal_get_path_alias(current_path());
       $block['content'] = theme('hdx_datasets_sidebar', $variables);
       break;
+
     case 'hdx_datasets_powered_by':
       $variables = array();
       $variables['powered_by'] = t('Powered by');
@@ -95,7 +95,7 @@ function hdx_datasets_load_template($file, $id) {
  * Get a copy of iso2/iso3 country codes from country.io.
  *
  * @return array
- *  Array of the country codes.
+ *   Array of the country codes.
  *
  * @TODO We would be probably better off with a local copy of this instead of
  * relying on country.io.
