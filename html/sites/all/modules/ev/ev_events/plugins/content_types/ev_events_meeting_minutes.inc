@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Meeting minutes plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('Meeting minutes'),
@@ -15,10 +20,9 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
-
-function ev_events_meeting_minutes_edit_form($form, &$form_state){
+function ev_events_meeting_minutes_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
 
   $form['country'] = array(
@@ -44,7 +48,6 @@ function ev_events_meeting_minutes_edit_form($form, &$form_state){
 /**
  * Edit form submit handler.
  */
-
 function ev_events_meeting_minutes_edit_form_submit($form, &$form_state) {
   foreach (element_children($form) as $key) {
     if (isset($form_state['values'][$key])) {
@@ -151,8 +154,8 @@ function ev_events_meeting_minutes_render_event($event) {
 }
 
 /**
-*  Function to return ReliefWeb Api paths.
-*/
+ * Function to return ReliefWeb Api paths.
+ */
 function ev_events_meeting_minutes_api_path() {
   $source_url = 'http://api.reliefweb.int/v1';
   $api_endpoints = array();
@@ -167,15 +170,14 @@ function ev_events_meeting_minutes_api_path() {
     }
     return $api_endpoints;
   }
-  else{
+  else {
     drupal_set_message("Could not return ReliefWeb API Paths. Please consult the site administrator");
   }
 }
 
 /**
-*  Function to return content given an api path.
-*/
-
+ * Function to return content given an api path.
+ */
 function ev_events_meeting_minutes_content($path) {
   $request = drupal_http_request($path);
   if (isset($request->data)) {
@@ -194,7 +196,7 @@ function ev_events_meeting_minutes_content($path) {
     }
     return $data_array;
   }
-  else{
+  else {
     drupal_set_message('Could not fetch content for the given API path, please consult your site administrator');
   }
 }

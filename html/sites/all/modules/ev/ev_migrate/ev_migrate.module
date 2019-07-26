@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for Events migration API.
@@ -27,6 +28,9 @@ function ev_migrate_menu() {
   return $items;
 }
 
+/**
+ * Fetch event.
+ */
 function ev_migrate_fetch_event($nid, $timestamp = 0, $hash = '') {
   $shared_secret = variable_get('ev_migrate_shared_secret', 'ThisIsMySecret');
   if (md5($shared_secret . '_' . $timestamp) != $hash) {
@@ -39,6 +43,9 @@ function ev_migrate_fetch_event($nid, $timestamp = 0, $hash = '') {
   ev_migrate_json_output($data);
 }
 
+/**
+ * Fetch multiple events.
+ */
 function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '', $highwater_mark = 0) {
   $page_size = 20;
 
@@ -82,6 +89,9 @@ function ev_migrate_fetch_events($page = 0, $timestamp = 0, $hash = '', $highwat
   ev_migrate_json_output($data);
 }
 
+/**
+ * Data builder.
+ */
 function ev_migrate_build_data($event) {
   $e = entity_metadata_wrapper('node', $event);
 
