@@ -1,5 +1,11 @@
 <?php
-  // @TODO: Make the stuff translatable.
+
+/**
+ * @file
+ * Template file.
+ *
+ * @TODO: Make the stuff translatable.
+ */
 ?>
 <h2 class="pb-header">Contacts</h2>
 <div class="pb-export-button-holder">

@@ -1,15 +1,11 @@
 <?php
+
 /**
  * @file
  * Code for the Humanitarian ID Profiles Integration feature.
  */
 
 include_once 'hid_profiles.features.inc';
-
-/**
- * @file hid_profiles.module
- * The main module file for Humanitarian ID Profile API integration.
- */
 
 /**
  * Implements hook_menu().
@@ -40,7 +36,7 @@ function hid_profiles_menu() {
     'access arguments' => array('access content'),
   );
 
-  // Provide callback for JSON objects of Organization names
+  // Provide callback for JSON objects of Organization names.
   $items['hid/organizations/autocomplete'] = array(
     'page callback' => 'hid_organizations_autocomplete',
     'access arguments' => array('access content'),
@@ -48,7 +44,7 @@ function hid_profiles_menu() {
     'file' => 'hid_profiles.pages.inc',
   );
 
-  // Provide callback for JSON objects of Organization extended data
+  // Provide callback for JSON objects of Organization extended data.
   $items['hid/organizations/extended/autocomplete'] = array(
     'page callback' => 'hid_organizations_autocomplete',
     'page arguments' => array(4, TRUE),
@@ -57,7 +53,7 @@ function hid_profiles_menu() {
     'file' => 'hid_profiles.pages.inc',
   );
 
-  // Provide callback for JSON objects of Locations
+  // Provide callback for JSON objects of Locations.
   $items['hid/locations/countries'] = array(
     'page callback' => 'hid_locations_countries',
     'access arguments' => array('access content'),
@@ -81,7 +77,6 @@ function hid_profiles_menu() {
     'page callback' => 'hid_profiles_autocomplete_callback',
     'access arguments' => array('access content'),
   );
-
 
   return $items;
 }
@@ -142,11 +137,11 @@ function hid_profiles_proxy() {
     if (isset($variables['query']['export'])) {
       if ($variables['query']['export'] == 'pdf') {
         drupal_add_http_header('Content-Type', 'application/pdf; charset=utf-8');
-        drupal_add_http_header('Content-Disposition', 'attachment;filename="'.t('contacts').'.pdf"');
+        drupal_add_http_header('Content-Disposition', 'attachment;filename="' . t('contacts') . '.pdf"');
       }
       elseif ($variables['query']['export'] == 'csv') {
         drupal_add_http_header('Content-Type', 'text/csv; charset=utf-8');
-        drupal_add_http_header('Content-Disposition', 'attachment;filename="'.t('contacts').'.csv"');
+        drupal_add_http_header('Content-Disposition', 'attachment;filename="' . t('contacts') . '.csv"');
       }
     }
     echo $response->data;
@@ -158,7 +153,7 @@ function hid_profiles_proxy() {
  * Access request to the HID proxy.
  *
  * @return bool
- *  whether the request can be granted.
+ *   whether the request can be granted.
  */
 function hid_profiles_access_proxy() {
   $query = $_GET;
@@ -210,9 +205,9 @@ function hid_profiles_og_features_registry() {
 /**
  * Callback function for autocomplete.
  *
- * @param $type string
- *  Type of the autocomplete, 'all' for both global and local profiles, 'local'
- *  for only local profiles (checked in).
+ * @param string $type
+ *   Type of the autocomplete, 'all' for both global and local profiles, 'local'
+ *   for only local profiles (checked in).
  */
 function hid_profiles_autocomplete_callback($type, $string = '') {
   $variables['query'] = array(
@@ -222,7 +217,7 @@ function hid_profiles_autocomplete_callback($type, $string = '') {
     'authOnly' => 'false'
   );
   $variables['headers'] = array(
-    'Authorization' => 'Bearer '.variable_get('hid_profiles_v2_api_key', NULL)
+    'Authorization' => 'Bearer ' . variable_get('hid_profiles_v2_api_key', NULL)
   );
   $response = hid_profiles_restclient_get('api/v2/user', $variables);
   if ($response->code == '200') {
@@ -240,17 +235,18 @@ function hid_profiles_autocomplete_callback($type, $string = '') {
 /**
  * Helper function to transform the results into name and location.
  *
- * @param $data
- *  Array of results.
+ * @param array $data
+ *   Array of results.
  *
  * @return array
+ *   Array of transformed results.
  */
-function hid_profiles_autocomplete_helper($data) {
+function hid_profiles_autocomplete_helper(array $data) {
   $return = array();
   if ($data->count > 0) {
     foreach ($data->contacts as $contact) {
       $location = !empty($contact->location) ? $contact->location : t('Global profile');
-      $label  = "$contact->nameGiven $contact->nameFamily ($location)";
+      $label = "$contact->nameGiven $contact->nameFamily ($location)";
       $return["$label [id: $contact->_id]"] = $label;
     }
   }
@@ -293,7 +289,9 @@ function hid_profiles_ajax_operations() {
 }
 
 /**
- * Helper function to get the active profiles for the current or specified user.
+ * Helper function.
+ *
+ * Get the active profiles for the current or specified user.
  */
 function hid_profiles_get_user_data($uid = NULL, $reset = FALSE) {
   // If uid is not specified, use the current user.
@@ -313,6 +311,9 @@ function hid_profiles_get_user_data($uid = NULL, $reset = FALSE) {
   return $user_data[$uid];
 }
 
+/**
+ * Helper to fetch a user.
+ */
 function _hid_profiles_get_user_by_cid($cid) {
   $static = &drupal_static(__FUNCTION__);
   if (empty($cid)) {
@@ -352,8 +353,10 @@ function hid_profiles_get_active_global($uid = NULL) {
 }
 
 /**
- * Helper function to generate an associative array with all active operations,
- * grouped by their respective country or region.
+ * Helper function get operations.
+ *
+ * Generates an associative array with all active operations, grouped
+ * by their respective country or region.
  */
 function hid_profiles_get_operations() {
   // Load all active hr_operation nodes.
@@ -380,7 +383,7 @@ function hid_profiles_get_operations() {
         $op_place = !empty($op_place_tid) ? taxonomy_term_load($op_place_tid) : FALSE;
         $op_place_name = !empty($op_place->name) ? $op_place->name : FALSE;
       }
-      else if ($op_type === 'region') {
+      elseif ($op_type === 'region') {
         $op_place_nids = field_get_items('node', $op, 'field_operation_region');
         $op_place_nid = !empty($op_place_nids[0]['target_id']) ? $op_place_nids[0]['target_id'] : FALSE;
         $op_place = !empty($op_place_nid) ? node_load($op_place_nid) : FALSE;
@@ -415,18 +418,19 @@ function hid_profiles_get_operations() {
 }
 
 /**
- * Load data from the Humanitarian ID Profile API (optionally, filtered by
- * search terms).
+ * Load data from the Humanitarian ID Profile API.
  *
- * @param string $cid
- *   The value of the userid for the Humanitarian ID Profile API.
+ * Optionally, filtered by search terms.
+ *
+ * @param array $terms
+ *   An array of search terms to filter contacts by.
  *
  * @return array
  *   An array of profile values for the user from the Humanitarian ID Profile
  *   API. If the user does not yet exist, and hence has no CID, this function
  *   should return an empty array.
  */
-function _hid_profiles_get_contacts($terms = NULL) {
+function _hid_profiles_get_contacts(array $terms = array()) {
   if (empty($terms)) {
     $terms = array();
   }
@@ -441,18 +445,21 @@ function _hid_profiles_get_contacts($terms = NULL) {
   return $contacts;
 }
 
+/**
+ * Compatability wrapper.
+ */
 function hid_profiles_get_contact($id) {
   return hid_profiles_v2_get_contact(array('_id' => $id));
 }
 
 /**
- * Get a contact from HID v2
+ * Get a contact from HID v2.
  */
 function hid_profiles_v2_get_contact($params) {
   $req = hid_profiles_restclient_get('api/v2/user', array(
     'query' => $params,
     'headers' => array(
-      'Authorization' => 'Bearer '.variable_get('hid_profiles_v2_api_key', NULL)
+      'Authorization' => 'Bearer ' . variable_get('hid_profiles_v2_api_key', NULL)
     )
   ));
   $contacts = json_decode($req->data);
@@ -465,14 +472,13 @@ function hid_profiles_v2_get_contact($params) {
 }
 
 /**
- * Get the Humanitarian ID Profile API CID (userid) from the Drupal user ID
- * lookup table.
+ * Get the Humanitarian ID Profile API CID (userid) for a Drupal user.
  *
  * @param int $uid
- *    The Drupal user ID.
+ *   The Drupal user ID.
  *
  * @return string
- *    The Humanitarian ID Profile API CID (userid).
+ *   The Humanitarian ID Profile API CID (userid).
  */
 function _hid_profiles_get_cid_by_uid($uid) {
   static $uid_cid = array();
@@ -485,14 +491,13 @@ function _hid_profiles_get_cid_by_uid($uid) {
 }
 
 /**
- * Get the Humanitarian ID Profile API HID from the Drupal user ID
- * lookup table.
+ * Get the Humanitarian ID Profile API HID for a Drupal user.
  *
  * @param int $uid
- *    The Drupal user ID.
+ *   The Drupal user ID.
  *
  * @return string
- *    The Humanitarian ID Profile API HID.
+ *   The Humanitarian ID Profile API HID.
  */
 function _hid_profiles_get_hid_by_uid($uid) {
   static $uid_cid = array();
@@ -505,21 +510,22 @@ function _hid_profiles_get_hid_by_uid($uid) {
 }
 
 /**
- * Get the Drupal uid from the Humanitarian ID HID
- * lookup table.
+ * Get the Drupal uid from the Humanitarian ID HID lookup table.
  *
  * @param int $hid
- *    The Drupal HID.
+ *   The Drupal HID.
  *
  * @return string
- *    The Drupal uid.
+ *   The Drupal uid.
  */
 function hid_profiles_get_uid_by_hid($hid) {
   return db_query("SELECT uid FROM {hid_profiles} WHERE hid = :hid", array(':hid' => $hid))->fetchField();
 }
 
 /**
- * Helper function for making a GET request to the Humanitarian ID Profiles API.
+ * Helper function for making a GET request.
+ *
+ * GETs from the Humanitarian ID Profiles API.
  */
 function hid_profiles_restclient_get($resource_path, $variables = array(), $version = 0) {
   if ($version == 0) {
@@ -548,8 +554,9 @@ function hid_profiles_restclient_get($resource_path, $variables = array(), $vers
 }
 
 /**
- * Helper function for making a POST request to the Humanitarian ID Profiles
- * API.
+ * Helper function for making a POST request.
+ *
+ * POSTs to the Humanitarian ID Profiles API.
  */
 function hid_profiles_restclient_post($resource_path, $variables = array()) {
   $variables['endpoint'] = variable_get('hid_profiles_api_endpoint', NULL);
@@ -564,7 +571,7 @@ function hid_profiles_restclient_post($resource_path, $variables = array()) {
   $values_string = NULL;
 
   $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($variables['query']));
-  foreach($it as $v) {
+  foreach ($it as $v) {
     $values_string .= $v;
   }
 
@@ -577,6 +584,9 @@ function hid_profiles_restclient_post($resource_path, $variables = array()) {
   return restclient_post($resource_path, $variables);
 }
 
+/**
+ * Token helper.
+ */
 function hid_profiles_get_token() {
   global $user;
   $session = _hybridauth_session_load_by_uid($user->uid);
@@ -624,6 +634,7 @@ function hid_profiles_block_view($delta = '') {
       </div>
 </div>  </div>';
       break;
+
     case 'hid_profiles_filters':
       $nid = arg(1);
       if (is_numeric($nid)) {
@@ -640,7 +651,7 @@ function hid_profiles_block_view($delta = '') {
       <h2>Current search</h2>
 
     <div class="content">
-      <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter"><p>Filter: <span class="facetapi-active">216 items</span> displayed</p></div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/'.drupal_get_path_alias(current_path()).'"><i class="reset"></i></a> <span>Reset all filters</span></div></div>  </div>
+      <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter"><p>Filter: <span class="facetapi-active">216 items</span> displayed</p></div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/' . drupal_get_path_alias(current_path()) . '"><i class="reset"></i></a> <span>Reset all filters</span></div></div>  </div>
   </div>';
         $block['content'] .= hid_profiles_protected_roles_select();
         if ($node->type == 'hr_operation') {
@@ -654,9 +665,11 @@ function hid_profiles_block_view($delta = '') {
         $block['content'] .= '<div class="block block-hid-verified"><span class="verified-icon" title="Verified"></span> <label>Verified User <input type="checkbox" id="verified" name="verified" /></label></div>';
       }
       break;
+
     case 'hid_profiles_sidebar':
       $block['content'] = '<button class="btn btn-primary btn-lg btn-block" id="back"><i class="fa fa-arrow-circle-left"></i> Back</button>';
       break;
+
     case 'hid_profiles_powered_by':
       $block['content'] = '<div class="poweredby-logo"><p>Powered by</p><a href="http://www.humanitarian.id"><img src="/sites/all/themes/humanitarianresponse/assets/images/hid_logo.png" alt="HID logo" /></a></div>';
       break;
@@ -664,42 +677,54 @@ function hid_profiles_block_view($delta = '') {
   return $block;
 }
 
+/**
+ * List fetch helper.
+ */
 function hid_v2_get_lists($params) {
   $token = hid_profiles_get_token();
   $req = hid_profiles_restclient_get('api/v2/list', array(
     'query' => $params,
     'headers' => array(
-      'Authorization' => 'Bearer '.$token
+      'Authorization' => 'Bearer ' . $token
     )
   ));
   $lists = json_decode($req->data);
   return $lists;
 }
 
+/**
+ * Select helper.
+ */
 function hid_profiles_protected_roles_select() {
   $html = '';
   $lists = hid_v2_get_lists(array('type' => 'functional_role'));
   $html = '<div id="block-hid-profiles-filters-roles" class="block"><select id="protectedRoles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Role">';
   $html .= '<option value=""></option>';
   foreach ($lists as $list) {
-    $html .= '<option value="'.$list->_id.'">'.$list->name.'</option>';
+    $html .= '<option value="' . $list->_id . '">' . $list->name . '</option>';
   }
   $html .= '</select></div>';
   return $html;
 }
 
+/**
+ * Select helper.
+ */
 function hid_profiles_bundles_select($operation) {
   $html = '';
   $lists = hid_v2_get_lists(array('type' => 'bundle', 'metadata.operation.id' => $operation->nid));
   $html = '<div id="block-hid-profiles-filters-bundles" class="block"><select id="bundles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Cluster/Sector">';
   $html .= '<option value=""></option>';
   foreach ($lists as $list) {
-    $html .= '<option value="'.$list->_id.'">'.$list->name.'</option>';
+    $html .= '<option value="' . $list->_id . '">' . $list->name . '</option>';
   }
   $html .= '</select></div>';
   return $html;
 }
 
+/**
+ * Select helper.
+ */
 function hid_profiles_country_select() {
   $query = new EntityFieldQuery();
   $entities = $query->entityCondition('entity_type', 'taxonomy_term')
@@ -712,15 +737,17 @@ function hid_profiles_country_select() {
   $html .= '<option value=""></option>';
   foreach ($terms as $term) {
     $label = entity_label('taxonomy_term', $term);
-    $html .= '<option value="hrinfo_loc_'.$term->tid.'">'.$label.'</option>';
+    $html .= '<option value="hrinfo_loc_' . $term->tid . '">' . $label . '</option>';
   }
   $html .= '</select></div>';
   return $html;
 }
 
 /**
- * Returns a location filter for HID contacts
- * @param $operation Operation node for which locations should be returned
+ * Returns a location filter for HID contacts.
+ *
+ * @param object $operation
+ *   Operation node for which locations should be returned.
  */
 function hid_profiles_location_select($operation) {
   $loc_vocabulary = taxonomy_vocabulary_machine_name_load('hr_location');
@@ -729,37 +756,46 @@ function hid_profiles_location_select($operation) {
   $html = '<div id="block-hid-profiles-filters-locations" class="block"><select id="locations" class="form-control form-select" tabindex="1" data-placeholder="Filter by Location">';
   $html .= '<option value=""></option>';
   foreach ($tree as $term) {
-    $html .= '<option value="'.$term->name.'">'.$term->name.'</option>';
+    $html .= '<option value="' . $term->name . '">' . $term->name . '</option>';
   }
   $html .= '</select></div>';
   return $html;
 }
 
+/**
+ * Select helper.
+ */
 function hid_profiles_office_select($operation) {
   $html = '';
   $lists = hid_v2_get_lists(array('type' => 'office', 'metadata.operation.id' => $operation->nid));
   $html = '<div id="block-hid-profiles-filters-offices" class="block"><select id="offices" class="form-control form-select" tabindex="1" data-placeholder="Filter by Coordination Hub">';
   $html .= '<option value=""></option>';
   foreach ($lists as $list) {
-    $html .= '<option value="'.$list->_id.'">'.$list->name.'</option>';
+    $html .= '<option value="' . $list->_id . '">' . $list->name . '</option>';
   }
   $html .= '</select></div>';
   return $html;
 }
 
+/**
+ * Select helper.
+ */
 function hid_profiles_disaster_select($operation) {
   $output = '';
   $lists = hid_v2_get_lists(array('type' => 'disaster', 'metadata.operation.id' => $operation->nid));
   $output .= '<div id="block-hid-profiles-filters-disasters" class="block"><select id="disasters" class="form-control form-select" tabindex="1" data-placeholder="Filter by Disaster">';
   $output .= '<option value=""></option>';
   foreach ($lists as $list) {
-    $output .= '<option value="'.$list->_id.'">'.$list->name.'</option>';
+    $output .= '<option value="' . $list->_id . '">' . $list->name . '</option>';
   }
   $output .= '</select></div>';
 
   return $output;
 }
 
+/**
+ * Autocomplete helper.
+ */
 function hid_profiles_organization_autocomplete() {
   $html = '<div id="block-hid-profiles-filters-organization" class="block"><input type="text" id="organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Organization" /></div>';
   return $html;

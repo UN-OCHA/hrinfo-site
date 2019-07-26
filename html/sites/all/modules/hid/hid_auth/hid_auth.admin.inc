@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file
+ * hid_auth.admin.inc
+ */
+
+/**
+ * Config page callback.
+ */
 function hid_auth_configpage($form, &$form_state) {
   $form['hid_auth_login_enabled'] = array(
     '#type'           => 'checkbox',
