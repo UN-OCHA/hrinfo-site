@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_news.features.field_instance.inc
@@ -10,7 +11,7 @@
 function hr_news_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-hr_news-body'
+  // Exported field_instance: 'node-hr_news-body'.
   $field_instances['node-hr_news-body'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
@@ -61,7 +62,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_bundles'
+  // Exported field_instance: 'node-hr_news-field_bundles'.
   $field_instances['node-hr_news-field_bundles'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
@@ -73,6 +74,7 @@ function hr_news_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -127,7 +129,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_coordination_hubs'
+  // Exported field_instance: 'node-hr_news-field_coordination_hubs'.
   $field_instances['node-hr_news-field_coordination_hubs'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
@@ -139,6 +141,7 @@ function hr_news_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -181,7 +184,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_disasters'
+  // Exported field_instance: 'node-hr_news-field_disasters'.
   $field_instances['node-hr_news-field_disasters'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
@@ -193,6 +196,7 @@ function hr_news_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -235,61 +239,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_fundings'
-  $field_instances['node-hr_news-field_fundings'] = array(
-    'bundle' => 'hr_news',
-    'default_value' => NULL,
-    'default_value_function' => '',
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 15,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_fundings',
-    'label' => 'Fundings',
-    'required' => 0,
-    'settings' => array(
-      'behaviors' => array(
-        'prepopulate' => array(
-          'status' => 0,
-        ),
-      ),
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'apply_chosen' => 1,
-      ),
-      'type' => 'options_select',
-      'weight' => 9,
-    ),
-  );
-
-  // Exported field_instance: 'node-hr_news-field_image'
+  // Exported field_instance: 'node-hr_news-field_image'.
   $field_instances['node-hr_news-field_image'] = array(
     'bundle' => 'hr_news',
     'deleted' => 0,
@@ -326,6 +276,7 @@ function hr_news_field_default_field_instances() {
       'alt_field' => 0,
       'default_image' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => 'news/images',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -364,7 +315,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_locations'
+  // Exported field_instance: 'node-hr_news-field_locations'.
   $field_instances['node-hr_news-field_locations'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
@@ -376,6 +327,7 @@ function hr_news_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -427,7 +379,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_organizations'
+  // Exported field_instance: 'node-hr_news-field_organizations'.
   $field_instances['node-hr_news-field_organizations'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
@@ -439,6 +391,7 @@ function hr_news_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -478,6 +431,7 @@ function hr_news_field_default_field_instances() {
       'module' => 'entityreference',
       'settings' => array(
         'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete_tags',
@@ -485,7 +439,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_related_content'
+  // Exported field_instance: 'node-hr_news-field_related_content'.
   $field_instances['node-hr_news-field_related_content'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
@@ -536,6 +490,7 @@ function hr_news_field_default_field_instances() {
       ),
       'rel_remove' => 'default',
       'title' => 'optional',
+      'title_label_use_field_label' => FALSE,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -551,7 +506,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_sectors'
+  // Exported field_instance: 'node-hr_news-field_sectors'.
   $field_instances['node-hr_news-field_sectors'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
@@ -563,6 +518,7 @@ function hr_news_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -605,7 +561,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_themes'
+  // Exported field_instance: 'node-hr_news-field_themes'.
   $field_instances['node-hr_news-field_themes'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
@@ -617,6 +573,7 @@ function hr_news_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -662,7 +619,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-group_content_access'
+  // Exported field_instance: 'node-hr_news-group_content_access'.
   $field_instances['node-hr_news-group_content_access'] = array(
     'bundle' => 'hr_news',
     'default_value' => array(
@@ -722,7 +679,7 @@ function hr_news_field_default_field_instances() {
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_news-og_group_ref'
+  // Exported field_instance: 'node-hr_news-og_group_ref'.
   $field_instances['node-hr_news-og_group_ref'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
@@ -799,7 +756,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-title_field'
+  // Exported field_instance: 'node-hr_news-title_field'.
   $field_instances['node-hr_news-title_field'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
@@ -854,7 +811,6 @@ function hr_news_field_default_field_instances() {
   t('Clusters/Sectors');
   t('Coordination hubs');
   t('Disasters');
-  t('Fundings');
   t('Global Clusters');
   t('Group content visibility');
   t('Image');

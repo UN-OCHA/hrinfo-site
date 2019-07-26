@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_notifications.rules_defaults.inc

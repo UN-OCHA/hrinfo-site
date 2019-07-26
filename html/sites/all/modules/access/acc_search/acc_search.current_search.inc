@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_search.current_search.inc

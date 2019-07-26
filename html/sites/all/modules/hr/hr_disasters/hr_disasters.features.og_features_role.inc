@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_disasters.features.og_features_role.inc
@@ -15,6 +16,22 @@ function hr_disasters_og_features_default_roles() {
     'gid' => 0,
     'group_type' => 'node',
     'group_bundle' => 'hr_disaster',
+    'name' => 'manager',
+  );
+
+  // Exported OG Role: 'node:hr_operation:editor'.
+  $roles['node:hr_operation:editor'] = array(
+    'gid' => 0,
+    'group_type' => 'node',
+    'group_bundle' => 'hr_operation',
+    'name' => 'editor',
+  );
+
+  // Exported OG Role: 'node:hr_operation:manager'.
+  $roles['node:hr_operation:manager'] = array(
+    'gid' => 0,
+    'group_type' => 'node',
+    'group_bundle' => 'hr_operation',
     'name' => 'manager',
   );
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_incidents.features.field_base.inc
@@ -10,7 +11,7 @@
 function acc_incidents_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_acc_attach_file'
+  // Exported field_base: 'field_acc_attach_file'.
   $field_bases['field_acc_attach_file'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -19,14 +20,6 @@ function acc_incidents_field_default_field_bases() {
     'field_name' => 'field_acc_attach_file',
     'field_permissions' => array(
       'type' => 0,
-    ),
-    'foreign keys' => array(
-      'fid' => array(
-        'columns' => array(
-          'fid' => 'fid',
-        ),
-        'table' => 'file_managed',
-      ),
     ),
     'indexes' => array(
       'fid' => array(
@@ -48,7 +41,7 @@ function acc_incidents_field_default_field_bases() {
     'type' => 'file',
   );
 
-  // Exported field_base: 'field_acc_date'
+  // Exported field_base: 'field_acc_date'.
   $field_bases['field_acc_date'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -58,7 +51,6 @@ function acc_incidents_field_default_field_bases() {
     'field_permissions' => array(
       'type' => 0,
     ),
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'date',
@@ -84,7 +76,7 @@ function acc_incidents_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_acc_impact_type'
+  // Exported field_base: 'field_acc_impact_type'.
   $field_bases['field_acc_impact_type'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -93,14 +85,6 @@ function acc_incidents_field_default_field_bases() {
     'field_name' => 'field_acc_impact_type',
     'field_permissions' => array(
       'type' => 0,
-    ),
-    'foreign keys' => array(
-      'taxonomy_term_data' => array(
-        'columns' => array(
-          'target_id' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
     ),
     'indexes' => array(
       'target_id' => array(
@@ -132,7 +116,7 @@ function acc_incidents_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_acc_impact_value'
+  // Exported field_base: 'field_acc_impact_value'.
   $field_bases['field_acc_impact_value'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -142,7 +126,6 @@ function acc_incidents_field_default_field_bases() {
     'field_permissions' => array(
       'type' => 0,
     ),
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -154,7 +137,7 @@ function acc_incidents_field_default_field_bases() {
     'type' => 'number_integer',
   );
 
-  // Exported field_base: 'field_acc_impacts'
+  // Exported field_base: 'field_acc_impacts'.
   $field_bases['field_acc_impacts'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -164,10 +147,12 @@ function acc_incidents_field_default_field_bases() {
     'field_permissions' => array(
       'type' => 0,
     ),
-    'foreign keys' => array(),
     'indexes' => array(
       'revision_id' => array(
         0 => 'revision_id',
+      ),
+      'value' => array(
+        0 => 'value',
       ),
     ),
     'locked' => 0,
@@ -175,6 +160,7 @@ function acc_incidents_field_default_field_bases() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'hide_blank_items' => 1,
+      'hide_initial_item' => FALSE,
       'path' => '',
       'profile2_private' => FALSE,
     ),
@@ -182,7 +168,7 @@ function acc_incidents_field_default_field_bases() {
     'type' => 'field_collection',
   );
 
-  // Exported field_base: 'field_acc_type'
+  // Exported field_base: 'field_acc_type'.
   $field_bases['field_acc_type'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -191,14 +177,6 @@ function acc_incidents_field_default_field_bases() {
     'field_name' => 'field_acc_type',
     'field_permissions' => array(
       'type' => 0,
-    ),
-    'foreign keys' => array(
-      'taxonomy_term_data' => array(
-        'columns' => array(
-          'target_id' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
     ),
     'indexes' => array(
       'target_id' => array(
@@ -230,7 +208,7 @@ function acc_incidents_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_affected_organization_type'
+  // Exported field_base: 'field_affected_organization_type'.
   $field_bases['field_affected_organization_type'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -239,14 +217,6 @@ function acc_incidents_field_default_field_bases() {
     'field_name' => 'field_affected_organization_type',
     'field_permissions' => array(
       'type' => 0,
-    ),
-    'foreign keys' => array(
-      'taxonomy_term_data' => array(
-        'columns' => array(
-          'target_id' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
     ),
     'indexes' => array(
       'target_id' => array(
@@ -278,7 +248,7 @@ function acc_incidents_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_affected_organizations'
+  // Exported field_base: 'field_affected_organizations'.
   $field_bases['field_affected_organizations'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -287,14 +257,6 @@ function acc_incidents_field_default_field_bases() {
     'field_name' => 'field_affected_organizations',
     'field_permissions' => array(
       'type' => 0,
-    ),
-    'foreign keys' => array(
-      'taxonomy_term_data' => array(
-        'columns' => array(
-          'target_id' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
     ),
     'indexes' => array(
       'target_id' => array(
@@ -326,7 +288,7 @@ function acc_incidents_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_responsible_actors'
+  // Exported field_base: 'field_responsible_actors'.
   $field_bases['field_responsible_actors'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -335,14 +297,6 @@ function acc_incidents_field_default_field_bases() {
     'field_name' => 'field_responsible_actors',
     'field_permissions' => array(
       'type' => 0,
-    ),
-    'foreign keys' => array(
-      'taxonomy_term_data' => array(
-        'columns' => array(
-          'target_id' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
     ),
     'indexes' => array(
       'target_id' => array(
@@ -375,7 +329,7 @@ function acc_incidents_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_responsible_organization_t'
+  // Exported field_base: 'field_responsible_organization_t'.
   $field_bases['field_responsible_organization_t'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -384,14 +338,6 @@ function acc_incidents_field_default_field_bases() {
     'field_name' => 'field_responsible_organization_t',
     'field_permissions' => array(
       'type' => 0,
-    ),
-    'foreign keys' => array(
-      'taxonomy_term_data' => array(
-        'columns' => array(
-          'target_id' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
     ),
     'indexes' => array(
       'target_id' => array(
@@ -423,7 +369,7 @@ function acc_incidents_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_type_of_affectee'
+  // Exported field_base: 'field_type_of_affectee'.
   $field_bases['field_type_of_affectee'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -432,14 +378,6 @@ function acc_incidents_field_default_field_bases() {
     'field_name' => 'field_type_of_affectee',
     'field_permissions' => array(
       'type' => 0,
-    ),
-    'foreign keys' => array(
-      'taxonomy_term_data' => array(
-        'columns' => array(
-          'target_id' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
     ),
     'indexes' => array(
       'target_id' => array(

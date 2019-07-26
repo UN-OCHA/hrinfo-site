@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_wysiwyg.features.user_permission.inc

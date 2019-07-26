@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_applications.features.taxonomy.inc
@@ -16,6 +17,9 @@ function acc_applications_taxonomy_default_vocabularies() {
       'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,
+      'path' => array(
+        'pathauto' => 0,
+      ),
     ),
     'acc_application_types' => array(
       'name' => 'Access Application Types',
@@ -24,6 +28,9 @@ function acc_applications_taxonomy_default_vocabularies() {
       'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,
+      'path' => array(
+        'pathauto' => 0,
+      ),
     ),
   );
 }

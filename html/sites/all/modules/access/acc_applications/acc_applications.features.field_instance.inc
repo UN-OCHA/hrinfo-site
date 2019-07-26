@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_applications.features.field_instance.inc
@@ -10,7 +11,7 @@
 function acc_applications_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-acc_application-body'
+  // Exported field_instance: 'node-acc_application-body'.
   $field_instances['node-acc_application-body'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -61,7 +62,8 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_acc_application_types'
+  // Exported field_instance:
+  // 'node-acc_application-field_acc_application_types'.
   $field_instances['node-acc_application-field_acc_application_types'] = array(
     'bundle' => 'acc_application',
     'default_value' => array(),
@@ -72,6 +74,7 @@ function acc_applications_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -114,7 +117,7 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_acc_attach_file'
+  // Exported field_instance: 'node-acc_application-field_acc_attach_file'.
   $field_instances['node-acc_application-field_acc_attach_file'] = array(
     'bundle' => 'acc_application',
     'deleted' => 0,
@@ -147,6 +150,7 @@ function acc_applications_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => '',
       'file_extensions' => 'txt',
       'max_filesize' => '',
@@ -163,7 +167,7 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_acc_date'
+  // Exported field_instance: 'node-acc_application-field_acc_date'.
   $field_instances['node-acc_application-field_acc_date'] = array(
     'bundle' => 'acc_application',
     'deleted' => 0,
@@ -178,6 +182,7 @@ function acc_applications_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
           'show_repeat_rule' => 'show',
         ),
         'type' => 'date_default',
@@ -226,7 +231,8 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_acc_geo_location_dest'
+  // Exported field_instance:
+  // 'node-acc_application-field_acc_geo_location_dest'.
   $field_instances['node-acc_application-field_acc_geo_location_dest'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -238,6 +244,7 @@ function acc_applications_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -289,7 +296,7 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_acc_impacts'
+  // Exported field_instance: 'node-acc_application-field_acc_impacts'.
   $field_instances['node-acc_application-field_acc_impacts'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -304,6 +311,7 @@ function acc_applications_field_default_field_instances() {
           'delete' => 'Delete',
           'description' => TRUE,
           'edit' => 'Edit',
+          'translate' => 'Translate',
           'view_mode' => 'full',
         ),
         'type' => 'field_collection_view',
@@ -339,7 +347,8 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_acc_submission_status'
+  // Exported field_instance:
+  // 'node-acc_application-field_acc_submission_status'.
   $field_instances['node-acc_application-field_acc_submission_status'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -351,6 +360,7 @@ function acc_applications_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -396,7 +406,7 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_acc_submitted_by'
+  // Exported field_instance: 'node-acc_application-field_acc_submitted_by'.
   $field_instances['node-acc_application-field_acc_submitted_by'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -408,6 +418,7 @@ function acc_applications_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -454,7 +465,7 @@ function acc_applications_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'node-acc_application-field_acc_submitted_by_org_type'
+  // 'node-acc_application-field_acc_submitted_by_org_type'.
   $field_instances['node-acc_application-field_acc_submitted_by_org_type'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -466,6 +477,7 @@ function acc_applications_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -511,7 +523,7 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_bundles'
+  // Exported field_instance: 'node-acc_application-field_bundles'.
   $field_instances['node-acc_application-field_bundles'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -523,6 +535,7 @@ function acc_applications_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -573,7 +586,7 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_how_many_days'
+  // Exported field_instance: 'node-acc_application-field_how_many_days'.
   $field_instances['node-acc_application-field_how_many_days'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -626,7 +639,7 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_if_denied_by_whom_'
+  // Exported field_instance: 'node-acc_application-field_if_denied_by_whom_'.
   $field_instances['node-acc_application-field_if_denied_by_whom_'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -638,6 +651,7 @@ function acc_applications_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -683,7 +697,7 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_locations'
+  // Exported field_instance: 'node-acc_application-field_locations'.
   $field_instances['node-acc_application-field_locations'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -695,6 +709,7 @@ function acc_applications_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -746,7 +761,7 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_nationality'
+  // Exported field_instance: 'node-acc_application-field_nationality'.
   $field_instances['node-acc_application-field_nationality'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -792,7 +807,7 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-field_submitted_to'
+  // Exported field_instance: 'node-acc_application-field_submitted_to'.
   $field_instances['node-acc_application-field_submitted_to'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,
@@ -804,6 +819,7 @@ function acc_applications_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -849,7 +865,7 @@ function acc_applications_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_application-og_group_ref'
+  // Exported field_instance: 'node-acc_application-og_group_ref'.
   $field_instances['node-acc_application-og_group_ref'] = array(
     'bundle' => 'acc_application',
     'default_value' => NULL,

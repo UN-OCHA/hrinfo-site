@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_incidents.features.taxonomy.inc
@@ -16,14 +17,20 @@ function acc_incidents_taxonomy_default_vocabularies() {
       'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,
+      'path' => array(
+        'pathauto' => 0,
+      ),
     ),
     'acc_incident_types' => array(
       'name' => 'Access Type',
       'machine_name' => 'acc_incident_types',
       'description' => '',
-      'hierarchy' => 0,
+      'hierarchy' => 1,
       'module' => 'taxonomy',
       'weight' => 0,
+      'path' => array(
+        'pathauto' => 0,
+      ),
     ),
     'acc_responsible_actors' => array(
       'name' => 'Access Responsible Actors',
@@ -32,6 +39,9 @@ function acc_incidents_taxonomy_default_vocabularies() {
       'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,
+      'path' => array(
+        'pathauto' => 0,
+      ),
     ),
     'acc_type_of_aid_workers' => array(
       'name' => 'Type of affectee',
@@ -40,6 +50,9 @@ function acc_incidents_taxonomy_default_vocabularies() {
       'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,
+      'path' => array(
+        'pathauto' => 0,
+      ),
     ),
   );
 }

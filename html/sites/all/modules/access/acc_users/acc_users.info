@@ -1,10 +1,10 @@
 name = Access Users
-description = Provide OG Roles under Operations Group and Drupal Roles 
+description = Provide OG Roles under Operations Group and Drupal Roles
 core = 7.x
 package = Humanitarian Access
 project = acc_users
 dependencies[] = features
-dependencies[] = role_export
+dependencies[] = og
 dependencies[] = og_access
 dependencies[] = og_features
 dependencies[] = og_role_delegate

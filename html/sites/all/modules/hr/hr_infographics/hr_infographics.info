@@ -1,6 +1,7 @@
 name = Infographics
 core = 7.x
 package = Humanitarianresponse
+dependencies[] = entity
 dependencies[] = feeds_tamper
 dependencies[] = field_collection
 dependencies[] = hr_core
@@ -9,6 +10,7 @@ dependencies[] = js
 dependencies[] = og_moderation
 dependencies[] = og_ui
 dependencies[] = shs
+dependencies[] = views_content
 features[context][] = hr_infographics_global
 features[context][] = hr_infographics_global_table
 features[context][] = hr_infographics_space

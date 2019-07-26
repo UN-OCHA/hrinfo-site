@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_applications.views_default.inc
@@ -1132,20 +1133,21 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '20';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '50';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
   $handler->display->display_options['style_plugin'] = 'table';
   /* Field: Indexed Node: Node ID */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
-  /* Contextual filter: Indexed Node: Space(s) */
+  /* Contextual filter: Indexed Node: Groups audience */
   $handler->display->display_options['arguments']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['arguments']['og_group_ref']['field'] = 'og_group_ref';
   $handler->display->display_options['arguments']['og_group_ref']['default_argument_type'] = 'fixed';
   $handler->display->display_options['arguments']['og_group_ref']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['og_group_ref']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['og_group_ref']['not'] = 0;
   /* Filter criterion: Search: Fulltext search */
   $handler->display->display_options['filters']['search_api_views_fulltext']['id'] = 'search_api_views_fulltext';
   $handler->display->display_options['filters']['search_api_views_fulltext']['table'] = 'search_api_index_acc_search';
@@ -1214,10 +1216,19 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['url']['id'] = 'url';
   $handler->display->display_options['fields']['url']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['url']['field'] = 'url';
-  $handler->display->display_options['fields']['url']['label'] = 'view';
+  $handler->display->display_options['fields']['url']['label'] = 'View';
   $handler->display->display_options['fields']['url']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['url']['alter']['text'] = '<a href="[url]">view</a>';
+  $handler->display->display_options['fields']['url']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['url']['link_to_entity'] = 0;
+  /* Field: Indexed Node: Groups audience */
+  $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
+  $handler->display->display_options['fields']['og_group_ref']['table'] = 'search_api_index_acc_search';
+  $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
+  $handler->display->display_options['fields']['og_group_ref']['label'] = 'Webspace(s)';
+  $handler->display->display_options['fields']['og_group_ref']['link_to_entity'] = 1;
+  $handler->display->display_options['fields']['og_group_ref']['view_mode'] = 'full';
+  $handler->display->display_options['fields']['og_group_ref']['bypass_access'] = 0;
   $handler->display->display_options['path'] = 'node/%/access/applications';
 
   /* Display: Table */
@@ -1293,7 +1304,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['field_acc_application_types']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_acc_application_types']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_acc_application_types']['bypass_access'] = 0;
-  /* Field: Indexed Node: Report Date » Start date */
+  /* Field: Indexed Node: Assessment Date(s) » Start date */
   $handler->display->display_options['fields']['field_asst_date_value']['id'] = 'field_asst_date_value';
   $handler->display->display_options['fields']['field_asst_date_value']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['field_asst_date_value']['field'] = 'field_asst_date_value';
@@ -1301,7 +1312,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['field_asst_date_value']['date_format'] = 'short';
   $handler->display->display_options['fields']['field_asst_date_value']['second_date_format'] = 'long';
   $handler->display->display_options['fields']['field_asst_date_value']['link_to_entity'] = 0;
-  /* Field: Indexed Node: Report Date » End date */
+  /* Field: Indexed Node: Assessment Date(s) » End date */
   $handler->display->display_options['fields']['field_asst_date_value2']['id'] = 'field_asst_date_value2';
   $handler->display->display_options['fields']['field_asst_date_value2']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['field_asst_date_value2']['field'] = 'field_asst_date_value2';
@@ -1330,7 +1341,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['field_submitted_to']['link_to_entity'] = 0;
   $handler->display->display_options['fields']['field_submitted_to']['view_mode'] = 'full';
   $handler->display->display_options['fields']['field_submitted_to']['bypass_access'] = 0;
-  /* Field: Indexed Node: Locations */
+  /* Field: Indexed Node: Location(s) */
   $handler->display->display_options['fields']['field_locations']['id'] = 'field_locations';
   $handler->display->display_options['fields']['field_locations']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['field_locations']['field'] = 'field_locations';
@@ -1399,7 +1410,7 @@ function acc_applications_views_default_views() {
   $handler->display->display_options['fields']['body']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = 'Description';
-  /* Field: Indexed Node: Space(s) */
+  /* Field: Indexed Node: Groups audience */
   $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['fields']['og_group_ref']['table'] = 'search_api_index_acc_search';
   $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
@@ -1598,16 +1609,18 @@ function acc_applications_views_default_views() {
     t('Date'),
     t('Submission Status'),
     t('Submitted By Organization Type'),
-    t('view'),
+    t('View'),
     t('<a href="[url]">view</a>'),
+    t('Webspace(s)'),
     t('Table'),
+    t('view'),
     t('XLS'),
     t('Title'),
     t('Start date'),
     t('End date'),
     t('Submitted By'),
     t('Submitted To'),
-    t('Locations'),
+    t('Location(s)'),
     t('Geographical Location (Destination)'),
     t('How many days to get an answer?'),
     t('Nationality'),
@@ -1617,7 +1630,7 @@ function acc_applications_views_default_views() {
     t('Impact Value'),
     t('Attach file'),
     t('Description'),
-    t('Space(s)'),
+    t('Groups audience'),
     t('Data Overlay'),
     t('Latitude'),
     t('Longitude'),

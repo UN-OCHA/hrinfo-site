@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_bundles.features.og_features_permission.inc
@@ -126,23 +127,6 @@ function hr_bundles_og_features_default_permissions() {
   $permissions['node:hr_operation:update own hr_bundle content'] = array(
     'roles' => array(),
   );
-
-  // Exported og permission: 'node:hr_bundle:publish any content'
-  $permissions['node:hr_bundle:publish any content'] = array(
-    'roles' => array(
-      'manager' => 'manager',
-      'editor' => 'editor',
-    ),
-  );
-
-  // Exported og permission: 'node:hr_bundle:unpublish any content'
-  $permissions['node:hr_bundle:unpublish any content'] = array(
-    'roles' => array(
-      'manager' => 'manager',
-      'editor' => 'editor',
-    ),
-  );
-
 
   return $permissions;
 }

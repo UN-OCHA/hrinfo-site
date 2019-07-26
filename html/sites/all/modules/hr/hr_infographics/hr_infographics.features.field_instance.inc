@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_infographics.features.field_instance.inc
@@ -1139,7 +1140,7 @@ function hr_infographics_field_default_field_instances() {
   t('Data source(s)');
   t('Description or Summary of content');
   t('Disaster(s)/Emergency');
-  t('Exclude from Reliefweb');
+  t('Do not share with Reliefweb');
   t('File(s)');
   t('Global Cluster(s)');
   t('Indicate the Global Cluster(s) the map/infographic refers to');

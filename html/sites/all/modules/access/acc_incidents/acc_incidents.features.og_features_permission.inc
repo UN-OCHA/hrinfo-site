@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_incidents.features.og_features_permission.inc

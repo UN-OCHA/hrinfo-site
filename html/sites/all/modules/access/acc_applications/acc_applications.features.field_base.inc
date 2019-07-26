@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_applications.features.field_base.inc
@@ -10,7 +11,7 @@
 function acc_applications_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_acc_application_types'
+  // Exported field_base: 'field_acc_application_types'.
   $field_bases['field_acc_application_types'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -50,7 +51,7 @@ function acc_applications_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_acc_geo_location_dest'
+  // Exported field_base: 'field_acc_geo_location_dest'.
   $field_bases['field_acc_geo_location_dest'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -90,7 +91,7 @@ function acc_applications_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_acc_submission_status'
+  // Exported field_base: 'field_acc_submission_status'.
   $field_bases['field_acc_submission_status'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -130,7 +131,7 @@ function acc_applications_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_acc_submitted_by'
+  // Exported field_base: 'field_acc_submitted_by'.
   $field_bases['field_acc_submitted_by'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -170,7 +171,7 @@ function acc_applications_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_acc_submitted_by_org_type'
+  // Exported field_base: 'field_acc_submitted_by_org_type'.
   $field_bases['field_acc_submitted_by_org_type'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -210,7 +211,7 @@ function acc_applications_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_how_many_days'
+  // Exported field_base: 'field_how_many_days'.
   $field_bases['field_how_many_days'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -231,7 +232,7 @@ function acc_applications_field_default_field_bases() {
     'type' => 'number_integer',
   );
 
-  // Exported field_base: 'field_if_denied_by_whom_'
+  // Exported field_base: 'field_if_denied_by_whom_'.
   $field_bases['field_if_denied_by_whom_'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -271,7 +272,7 @@ function acc_applications_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_nationality'
+  // Exported field_base: 'field_nationality'.
   $field_bases['field_nationality'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -500,7 +501,7 @@ function acc_applications_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_submitted_to'
+  // Exported field_base: 'field_submitted_to'.
   $field_bases['field_submitted_to'] = array(
     'active' => 1,
     'cardinality' => 1,

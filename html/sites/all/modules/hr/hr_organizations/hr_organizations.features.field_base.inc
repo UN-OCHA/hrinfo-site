@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_organizations.features.field_base.inc
@@ -10,7 +11,34 @@
 function hr_organizations_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_organization_fts'
+  // Exported field_base: 'field_org_type_access'.
+  $field_bases['field_org_type_access'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_org_type_access',
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        0 => 'No',
+        1 => 'Yes',
+      ),
+      'allowed_values_function' => '',
+      'entity_translation_sync' => FALSE,
+      'profile2_private' => FALSE,
+    ),
+    'translatable' => 0,
+    'type' => 'list_boolean',
+  );
+
+  // Exported field_base: 'field_organization_fts'.
   $field_bases['field_organization_fts'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -28,7 +56,7 @@ function hr_organizations_field_default_field_bases() {
     'type' => 'number_integer',
   );
 
-  // Exported field_base: 'field_organization_type'
+  // Exported field_base: 'field_organization_type'.
   $field_bases['field_organization_type'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -64,13 +92,16 @@ function hr_organizations_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_organizations'
+  // Exported field_base: 'field_organizations'.
   $field_bases['field_organizations'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_organizations',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -100,7 +131,7 @@ function hr_organizations_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_organizations_other'
+  // Exported field_base: 'field_organizations_other'.
   $field_bases['field_organizations_other'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -121,33 +152,6 @@ function hr_organizations_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'text',
-  );
-
-  // Exported field_base: 'field_org_type_access'
-  $field_bases['field_org_type_access'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_org_type_access',
-    'indexes' => array(
-      'value' => array(
-        0 => 'value',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'list',
-    'settings' => array(
-      'allowed_values' => array(
-        0 => 'No',
-        1 => 'Yes',
-      ),
-      'allowed_values_function' => '',
-      'entity_translation_sync' => FALSE,
-      'profile2_private' => FALSE,
-    ),
-    'translatable' => 0,
-    'type' => 'list_boolean',
   );
 
   return $field_bases;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_operations.features.field_instance.inc
@@ -9,6 +10,53 @@
  */
 function hr_operations_field_default_field_instances() {
   $field_instances = array();
+
+  // Exported field_instance: 'node-hr_operation-body'.
+  $field_instances['node-hr_operation-body'] = array(
+    'bundle' => 'hr_operation',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 1,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 1,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'body',
+    'label' => 'Body',
+    'required' => FALSE,
+    'settings' => array(
+      'display_summary' => TRUE,
+      'entity_translation_sync' => FALSE,
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 20,
+        'summary_rows' => 5,
+      ),
+      'type' => 'text_textarea_with_summary',
+      'weight' => 8,
+    ),
+  );
 
   // Exported field_instance: 'node-hr_operation-field_cluster_configuration'.
   $field_instances['node-hr_operation-field_cluster_configuration'] = array(
@@ -208,6 +256,50 @@ function hr_operations_field_default_field_instances() {
       'settings' => array(),
       'type' => 'options_buttons',
       'weight' => 16,
+    ),
+  );
+
+  // Exported field_instance: 'node-hr_operation-field_hid_contact_ref'.
+  $field_instances['node-hr_operation-field_hid_contact_ref'] = array(
+    'bundle' => 'hr_operation',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'hid_contact_reference',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 17,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_hid_contact_ref',
+    'label' => 'Focal points',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'hid_contact_reference',
+      'settings' => array(),
+      'type' => 'hid_contact_reference_autocomplete',
+      'weight' => 14,
     ),
   );
 
@@ -523,50 +615,6 @@ function hr_operations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_operation-field_hid_contact_ref'
-  $field_instances['node-hr_operation-field_hid_contact_ref'] = array(
-    'bundle' => 'hr_operation',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'hid_contact_reference',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 17,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_hid_contact_ref',
-    'label' => 'Focal points',
-    'required' => 0,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'hid_contact_reference',
-      'settings' => array(),
-      'type' => 'hid_contact_reference_autocomplete',
-      'weight' => 14,
-    ),
-  );
-
   // Exported field_instance: 'node-hr_operation-field_website'.
   $field_instances['node-hr_operation-field_website'] = array(
     'bundle' => 'hr_operation',
@@ -806,7 +854,7 @@ function hr_operations_field_default_field_instances() {
   t('Country');
   t('Determine if this is an OG group.');
   t('Email');
-  t('Focal Points');
+  t('Focal points');
   t('Group');
   t('Launch date');
   t('Managed by');

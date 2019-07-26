@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_offices.features.field_instance.inc
@@ -10,7 +11,7 @@
 function hr_offices_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-hr_office-field_address'
+  // Exported field_instance: 'node-hr_office-field_address'.
   $field_instances['node-hr_office-field_address'] = array(
     'bundle' => 'hr_office',
     'default_value' => array(
@@ -77,7 +78,7 @@ function hr_offices_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_office-field_email'
+  // Exported field_instance: 'node-hr_office-field_email'.
   $field_instances['node-hr_office-field_email'] = array(
     'bundle' => 'hr_office',
     'default_value' => NULL,
@@ -123,7 +124,7 @@ function hr_offices_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_office-field_is_coordination_hub'
+  // Exported field_instance: 'node-hr_office-field_is_coordination_hub'.
   $field_instances['node-hr_office-field_is_coordination_hub'] = array(
     'bundle' => 'hr_office',
     'default_value' => array(
@@ -173,7 +174,7 @@ function hr_offices_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_office-field_location'
+  // Exported field_instance: 'node-hr_office-field_location'.
   $field_instances['node-hr_office-field_location'] = array(
     'bundle' => 'hr_office',
     'default_value' => NULL,
@@ -185,6 +186,7 @@ function hr_offices_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -236,7 +238,7 @@ function hr_offices_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_office-field_organizations'
+  // Exported field_instance: 'node-hr_office-field_organizations'.
   $field_instances['node-hr_office-field_organizations'] = array(
     'bundle' => 'hr_office',
     'default_value' => array(),
@@ -248,6 +250,7 @@ function hr_offices_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -295,7 +298,7 @@ function hr_offices_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_office-field_phones'
+  // Exported field_instance: 'node-hr_office-field_phones'.
   $field_instances['node-hr_office-field_phones'] = array(
     'bundle' => 'hr_office',
     'default_value' => NULL,
@@ -622,7 +625,7 @@ function hr_offices_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_office-og_group_ref'
+  // Exported field_instance: 'node-hr_office-og_group_ref'.
   $field_instances['node-hr_office-og_group_ref'] = array(
     'bundle' => 'hr_office',
     'default_value' => NULL,
@@ -699,7 +702,7 @@ function hr_offices_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_office-title_field'
+  // Exported field_instance: 'node-hr_office-title_field'.
   $field_instances['node-hr_office-title_field'] = array(
     'bundle' => 'hr_office',
     'default_value' => NULL,

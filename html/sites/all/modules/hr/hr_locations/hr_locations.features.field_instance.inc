@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_locations.features.field_instance.inc
@@ -10,7 +11,7 @@
 function hr_locations_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'taxonomy_term-hr_location-description_field'
+  // Exported field_instance: 'taxonomy_term-hr_location-description_field'.
   $field_instances['taxonomy_term-hr_location-description_field'] = array(
     'bundle' => 'hr_location',
     'default_value' => NULL,
@@ -49,7 +50,7 @@ function hr_locations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_location-field_geofield'
+  // Exported field_instance: 'taxonomy_term-hr_location-field_geofield'.
   $field_instances['taxonomy_term-hr_location-field_geofield'] = array(
     'bundle' => 'hr_location',
     'default_value' => NULL,
@@ -84,7 +85,7 @@ function hr_locations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_location-field_iso3'
+  // Exported field_instance: 'taxonomy_term-hr_location-field_iso3'.
   $field_instances['taxonomy_term-hr_location-field_iso3'] = array(
     'bundle' => 'hr_location',
     'default_value' => NULL,
@@ -123,7 +124,7 @@ function hr_locations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_location-field_loc_admin_level'
+  // Exported field_instance: 'taxonomy_term-hr_location-field_loc_admin_level'.
   $field_instances['taxonomy_term-hr_location-field_loc_admin_level'] = array(
     'bundle' => 'hr_location',
     'default_value' => NULL,
@@ -164,7 +165,7 @@ function hr_locations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_location-field_local_pcode'
+  // Exported field_instance: 'taxonomy_term-hr_location-field_local_pcode'.
   $field_instances['taxonomy_term-hr_location-field_local_pcode'] = array(
     'bundle' => 'hr_location',
     'default_value' => NULL,
@@ -199,7 +200,7 @@ function hr_locations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_location-field_pcode'
+  // Exported field_instance: 'taxonomy_term-hr_location-field_pcode'.
   $field_instances['taxonomy_term-hr_location-field_pcode'] = array(
     'bundle' => 'hr_location',
     'default_value' => NULL,
@@ -234,7 +235,7 @@ function hr_locations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_location-name_field'
+  // Exported field_instance: 'taxonomy_term-hr_location-name_field'.
   $field_instances['taxonomy_term-hr_location-name_field'] = array(
     'bundle' => 'hr_location',
     'default_value' => NULL,

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_api.features.inc
@@ -12,4 +13,3 @@ function hr_api_ctools_plugin_api($module = NULL, $api = NULL) {
     return array("version" => "1");
   }
 }
-

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_indicators.strongarm.inc
@@ -179,6 +180,34 @@ function hr_indicators_strongarm() {
   $strongarm->name = 'pathauto_node_hr_indicator_pattern';
   $strongarm->value = '[node:og-group-ref:0:url:path]/indicator/[node:field_ind_code]';
   $export['pathauto_node_hr_indicator_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_hr_indicator_domain_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_hr_indicator_domain_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_hr_indicator_standard_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_hr_indicator_standard_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_hr_indicator_type_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_hr_indicator_type_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_hr_indicator_unit_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_hr_indicator_unit_pattern'] = $strongarm;
 
   return $export;
 }

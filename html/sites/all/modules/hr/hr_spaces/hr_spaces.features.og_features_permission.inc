@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_spaces.features.og_features_permission.inc

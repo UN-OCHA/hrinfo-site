@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_themes.features.field_base.inc
@@ -10,20 +11,15 @@
 function hr_themes_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_themes'
+  // Exported field_base: 'field_themes'.
   $field_bases['field_themes'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_themes',
-    'foreign keys' => array(
-      'taxonomy_term_data' => array(
-        'columns' => array(
-          'target_id' => 'tid',
-        ),
-        'table' => 'taxonomy_term_data',
-      ),
+    'field_permissions' => array(
+      'type' => 0,
     ),
     'indexes' => array(
       'target_id' => array(

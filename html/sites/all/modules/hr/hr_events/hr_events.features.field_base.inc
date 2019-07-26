@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_events.features.field_base.inc
@@ -10,13 +11,16 @@
 function hr_events_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_event_agenda'
+  // Exported field_base: 'field_event_agenda'.
   $field_bases['field_event_agenda'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_event_agenda',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -47,13 +51,16 @@ function hr_events_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_event_category'
+  // Exported field_base: 'field_event_category'.
   $field_bases['field_event_category'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_event_category',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -84,7 +91,7 @@ function hr_events_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_event_date'
+  // Exported field_base: 'field_event_date'.
   $field_bases['field_event_date'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -150,7 +157,7 @@ function hr_events_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_event_meeting_minutes'
+  // Exported field_base: 'field_event_meeting_minutes'.
   $field_bases['field_event_meeting_minutes'] = array(
     'active' => 1,
     'cardinality' => -1,

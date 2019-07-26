@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_core.strongarm.inc
@@ -21,21 +22,21 @@ function hr_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'chosen_minimum_multiple';
-  $strongarm->value = 'Always Apply';
+  $strongarm->value = '0';
   $export['chosen_minimum_multiple'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'chosen_minimum_single';
-  $strongarm->value = 'Always Apply';
+  $strongarm->value = '0';
   $export['chosen_minimum_single'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'date_default_timezone';
-  $strongarm->value = 'Europe/Zurich';
+  $strongarm->value = 'UTC';
   $export['date_default_timezone'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -91,14 +92,14 @@ function hr_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'file_private_path';
-  $strongarm->value = 'sites/default/files/private';
+  $strongarm->value = 'sites/www.humanitarianresponse.info/private/files';
   $export['file_private_path'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'imagemagick_convert';
-  $strongarm->value = 'convert';
+  $strongarm->value = '/usr/bin/convert';
   $export['imagemagick_convert'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -218,7 +219,7 @@ function hr_core_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'theme_default';
-  $strongarm->value = 'humanitarianresponse';
+  $strongarm->value = 'ocha_basic';
   $export['theme_default'] = $strongarm;
 
   $strongarm = new stdClass();

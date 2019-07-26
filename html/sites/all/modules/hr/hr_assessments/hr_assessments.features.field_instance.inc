@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_assessments.features.field_instance.inc
@@ -2460,7 +2461,6 @@ function hr_assessments_field_default_field_instances() {
   t('A field replacing fieldable panel pane title.');
   t('Accessibility');
   t('Add a link to content related to the assessment you are publishing.');
-  t('Admin Level');
   t('Assessment Data');
   t('Assessment Date(s)');
   t('Assessment Questionnaire');

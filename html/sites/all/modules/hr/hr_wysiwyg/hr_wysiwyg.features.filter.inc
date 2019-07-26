@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_wysiwyg.features.filter.inc
@@ -227,8 +228,11 @@ iframe[!src|scrolling|frameborder|height|width],
             100 => 'Y*',
             102 => 'Z*',
           ),
+          'rule_bypass_valid_classes' => 0,
           'rule_valid_ids' => array(),
+          'rule_bypass_valid_ids' => 0,
           'rule_style_urls' => array(),
+          'rule_bypass_style_urls' => 0,
         ),
       ),
       'media_filter' => array(
@@ -461,6 +465,7 @@ iframe[!src|scrolling|frameborder|height|width],
             100 => 'Y*',
             102 => 'Z*',
           ),
+          'rule_bypass_valid_classes' => 0,
           'rule_valid_ids' => array(
             0 => 'a*',
             2 => 'b*',
@@ -515,7 +520,9 @@ iframe[!src|scrolling|frameborder|height|width],
             100 => 'Y*',
             102 => 'Z*',
           ),
+          'rule_bypass_valid_ids' => 0,
           'rule_style_urls' => array(),
+          'rule_bypass_style_urls' => 0,
         ),
       ),
       'media_filter' => array(
@@ -729,8 +736,11 @@ img[!src|title|alt|style|width|height|class|hspace|vspace],
             100 => 'Y*',
             102 => 'Z*',
           ),
+          'rule_bypass_valid_classes' => 0,
           'rule_valid_ids' => array(),
+          'rule_bypass_valid_ids' => 0,
           'rule_style_urls' => array(),
+          'rule_bypass_style_urls' => 0,
         ),
       ),
       'media_filter' => array(

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_pages.features.field_instance.inc
@@ -10,7 +11,7 @@
 function hr_pages_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-hr_page-body'
+  // Exported field_instance: 'node-hr_page-body'.
   $field_instances['node-hr_page-body'] = array(
     'bundle' => 'hr_page',
     'default_value' => NULL,
@@ -61,7 +62,7 @@ function hr_pages_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_page-field_bundles'
+  // Exported field_instance: 'node-hr_page-field_bundles'.
   $field_instances['node-hr_page-field_bundles'] = array(
     'bundle' => 'hr_page',
     'default_value' => NULL,
@@ -73,6 +74,7 @@ function hr_pages_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -127,7 +129,7 @@ function hr_pages_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_page-field_page_menu'
+  // Exported field_instance: 'node-hr_page-field_page_menu'.
   $field_instances['node-hr_page-field_page_menu'] = array(
     'bundle' => 'hr_page',
     'default_value' => array(
@@ -177,7 +179,7 @@ function hr_pages_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_page-group_content_access'
+  // Exported field_instance: 'node-hr_page-group_content_access'.
   $field_instances['node-hr_page-group_content_access'] = array(
     'bundle' => 'hr_page',
     'default_value' => array(
@@ -237,7 +239,7 @@ function hr_pages_field_default_field_instances() {
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_page-og_group_ref'
+  // Exported field_instance: 'node-hr_page-og_group_ref'.
   $field_instances['node-hr_page-og_group_ref'] = array(
     'bundle' => 'hr_page',
     'default_value' => NULL,
@@ -317,7 +319,7 @@ function hr_pages_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_page-title_field'
+  // Exported field_instance: 'node-hr_page-title_field'.
   $field_instances['node-hr_page-title_field'] = array(
     'bundle' => 'hr_page',
     'default_value' => NULL,

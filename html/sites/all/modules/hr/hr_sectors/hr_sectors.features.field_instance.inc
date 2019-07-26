@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_sectors.features.field_instance.inc
@@ -10,7 +11,7 @@
 function hr_sectors_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-hr_sector-body'
+  // Exported field_instance: 'node-hr_sector-body'.
   $field_instances['node-hr_sector-body'] = array(
     'bundle' => 'hr_sector',
     'default_value' => NULL,
@@ -61,7 +62,7 @@ function hr_sectors_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_sector-field_acronym'
+  // Exported field_instance: 'node-hr_sector-field_acronym'.
   $field_instances['node-hr_sector-field_acronym'] = array(
     'bundle' => 'hr_sector',
     'default_value' => NULL,
@@ -112,7 +113,7 @@ function hr_sectors_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_sector-field_email'
+  // Exported field_instance: 'node-hr_sector-field_email'.
   $field_instances['node-hr_sector-field_email'] = array(
     'bundle' => 'hr_sector',
     'default_value' => NULL,
@@ -158,7 +159,7 @@ function hr_sectors_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_sector-field_image'
+  // Exported field_instance: 'node-hr_sector-field_image'.
   $field_instances['node-hr_sector-field_image'] = array(
     'bundle' => 'hr_sector',
     'deleted' => 0,
@@ -195,6 +196,7 @@ function hr_sectors_field_default_field_instances() {
       'alt_field' => 0,
       'default_image' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => 'sector/icons',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -228,7 +230,103 @@ function hr_sectors_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_sector-field_sector_type'
+  // Exported field_instance: 'node-hr_sector-field_mailchimp_api_key'.
+  $field_instances['node-hr_sector-field_mailchimp_api_key'] = array(
+    'bundle' => 'hr_sector',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 7,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mailchimp_api_key',
+    'label' => 'Mailchimp API key',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'linkit' => array(
+        'button_text' => 'Search',
+        'enable' => 0,
+        'profile' => '',
+      ),
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 11,
+    ),
+  );
+
+  // Exported field_instance: 'node-hr_sector-field_mailchimp_list'.
+  $field_instances['node-hr_sector-field_mailchimp_list'] = array(
+    'bundle' => 'hr_sector',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 8,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mailchimp_list',
+    'label' => 'Mailchimp List',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'apply_chosen' => 1,
+      ),
+      'type' => 'options_select',
+      'weight' => 12,
+    ),
+  );
+
+  // Exported field_instance: 'node-hr_sector-field_sector_type'.
   $field_instances['node-hr_sector-field_sector_type'] = array(
     'bundle' => 'hr_sector',
     'default_value' => NULL,
@@ -274,7 +372,7 @@ function hr_sectors_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_sector-field_social_media'
+  // Exported field_instance: 'node-hr_sector-field_social_media'.
   $field_instances['node-hr_sector-field_social_media'] = array(
     'bundle' => 'hr_sector',
     'default_value' => NULL,
@@ -341,7 +439,7 @@ function hr_sectors_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_sector-field_website'
+  // Exported field_instance: 'node-hr_sector-field_website'.
   $field_instances['node-hr_sector-field_website'] = array(
     'bundle' => 'hr_sector',
     'default_value' => NULL,
@@ -404,7 +502,7 @@ function hr_sectors_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_sector-group_access'
+  // Exported field_instance: 'node-hr_sector-group_access'.
   $field_instances['node-hr_sector-group_access'] = array(
     'bundle' => 'hr_sector',
     'default_value' => array(
@@ -462,7 +560,7 @@ function hr_sectors_field_default_field_instances() {
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_sector-group_group'
+  // Exported field_instance: 'node-hr_sector-group_group'.
   $field_instances['node-hr_sector-group_group'] = array(
     'bundle' => 'hr_sector',
     'default_value' => array(
@@ -528,7 +626,7 @@ function hr_sectors_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_sector-title_field'
+  // Exported field_instance: 'node-hr_sector-title_field'.
   $field_instances['node-hr_sector-title_field'] = array(
     'bundle' => 'hr_sector',
     'default_value' => NULL,

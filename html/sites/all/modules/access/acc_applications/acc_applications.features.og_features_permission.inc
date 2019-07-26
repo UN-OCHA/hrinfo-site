@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_applications.features.og_features_permission.inc

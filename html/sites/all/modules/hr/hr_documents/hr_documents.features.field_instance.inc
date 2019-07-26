@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_documents.features.field_instance.inc
@@ -1218,9 +1219,9 @@ function hr_documents_field_default_field_instances() {
   t('Description');
   t('Description or Summary of content');
   t('Disaster(s)/Emergency');
+  t('Do not share with Reliefweb');
   t('Document type');
   t('Documents');
-  t('Exclude from Reliefweb');
   t('File');
   t('File(s)');
   t('Global Cluster(s)');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_themes.features.field_instance.inc
@@ -10,7 +11,7 @@
 function hr_themes_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'taxonomy_term-hr_theme-description_field'
+  // Exported field_instance: 'taxonomy_term-hr_theme-description_field'.
   $field_instances['taxonomy_term-hr_theme-description_field'] = array(
     'bundle' => 'hr_theme',
     'default_value' => NULL,
@@ -49,7 +50,7 @@ function hr_themes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_theme-field_acronym'
+  // Exported field_instance: 'taxonomy_term-hr_theme-field_acronym'.
   $field_instances['taxonomy_term-hr_theme-field_acronym'] = array(
     'bundle' => 'hr_theme',
     'default_value' => NULL,
@@ -88,7 +89,7 @@ function hr_themes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_theme-name_field'
+  // Exported field_instance: 'taxonomy_term-hr_theme-name_field'.
   $field_instances['taxonomy_term-hr_theme-name_field'] = array(
     'bundle' => 'hr_theme',
     'default_value' => NULL,

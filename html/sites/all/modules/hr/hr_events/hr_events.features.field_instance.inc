@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_events.features.field_instance.inc
@@ -10,7 +11,7 @@
 function hr_events_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-hr_event-body'
+  // Exported field_instance: 'node-hr_event-body'.
   $field_instances['node-hr_event-body'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -62,7 +63,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_address'
+  // Exported field_instance: 'node-hr_event-field_address'.
   $field_instances['node-hr_event-field_address'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -128,7 +129,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_bundles'
+  // Exported field_instance: 'node-hr_event-field_bundles'.
   $field_instances['node-hr_event-field_bundles'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -140,6 +141,7 @@ function hr_events_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -194,7 +196,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_coordination_hubs'
+  // Exported field_instance: 'node-hr_event-field_coordination_hubs'.
   $field_instances['node-hr_event-field_coordination_hubs'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -206,6 +208,7 @@ function hr_events_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -248,7 +251,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_disasters'
+  // Exported field_instance: 'node-hr_event-field_disasters'.
   $field_instances['node-hr_event-field_disasters'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -260,6 +263,7 @@ function hr_events_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -302,7 +306,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_event_agenda'
+  // Exported field_instance: 'node-hr_event-field_event_agenda'.
   $field_instances['node-hr_event-field_event_agenda'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -314,6 +318,7 @@ function hr_events_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -358,7 +363,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_event_category'
+  // Exported field_instance: 'node-hr_event-field_event_category'.
   $field_instances['node-hr_event-field_event_category'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -370,6 +375,7 @@ function hr_events_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -379,6 +385,7 @@ function hr_events_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -418,7 +425,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_event_date'
+  // Exported field_instance: 'node-hr_event-field_event_date'.
   $field_instances['node-hr_event-field_event_date'] = array(
     'bundle' => 'hr_event',
     'deleted' => 0,
@@ -433,6 +440,7 @@ function hr_events_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
           'show_repeat_rule' => 'show',
         ),
         'type' => 'date_default',
@@ -447,6 +455,7 @@ function hr_events_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
           'show_repeat_rule' => 'show',
         ),
         'type' => 'date_default',
@@ -489,7 +498,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_event_meeting_minutes'
+  // Exported field_instance: 'node-hr_event-field_event_meeting_minutes'.
   $field_instances['node-hr_event-field_event_meeting_minutes'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -501,6 +510,7 @@ function hr_events_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -545,7 +555,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_hid_contact_ref'
+  // Exported field_instance: 'node-hr_event-field_hid_contact_ref'.
   $field_instances['node-hr_event-field_hid_contact_ref'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -555,7 +565,13 @@ function hr_events_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'hid_contact_reference',
-        'settings' => array(),
+        'settings' => array(
+          'show_email' => FALSE,
+          'show_job_title' => FALSE,
+          'show_name' => TRUE,
+          'show_organization' => FALSE,
+          'show_phone_number' => FALSE,
+        ),
         'type' => 'hid_contact_reference_full',
         'weight' => 24,
       ),
@@ -589,7 +605,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_location'
+  // Exported field_instance: 'node-hr_event-field_location'.
   $field_instances['node-hr_event-field_location'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -601,6 +617,7 @@ function hr_events_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -652,7 +669,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_organizations'
+  // Exported field_instance: 'node-hr_event-field_organizations'.
   $field_instances['node-hr_event-field_organizations'] = array(
     'bundle' => 'hr_event',
     'default_value' => array(),
@@ -664,6 +681,7 @@ function hr_events_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -711,7 +729,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_related_content'
+  // Exported field_instance: 'node-hr_event-field_related_content'.
   $field_instances['node-hr_event-field_related_content'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -778,7 +796,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_sectors'
+  // Exported field_instance: 'node-hr_event-field_sectors'.
   $field_instances['node-hr_event-field_sectors'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -790,6 +808,7 @@ function hr_events_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -832,7 +851,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_themes'
+  // Exported field_instance: 'node-hr_event-field_themes'.
   $field_instances['node-hr_event-field_themes'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -844,6 +863,7 @@ function hr_events_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -889,7 +909,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-group_content_access'
+  // Exported field_instance: 'node-hr_event-group_content_access'.
   $field_instances['node-hr_event-group_content_access'] = array(
     'bundle' => 'hr_event',
     'default_value' => array(
@@ -949,7 +969,7 @@ function hr_events_field_default_field_instances() {
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_event-og_group_ref'
+  // Exported field_instance: 'node-hr_event-og_group_ref'.
   $field_instances['node-hr_event-og_group_ref'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -1027,7 +1047,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-title_field'
+  // Exported field_instance: 'node-hr_event-title_field'.
   $field_instances['node-hr_event-title_field'] = array(
     'bundle' => 'hr_event',
     'default_value' => NULL,
@@ -1076,7 +1096,7 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_event_category-name_field'
+  // Exported field_instance: 'taxonomy_term-hr_event_category-name_field'.
   $field_instances['taxonomy_term-hr_event_category-name_field'] = array(
     'bundle' => 'hr_event_category',
     'default_value' => NULL,

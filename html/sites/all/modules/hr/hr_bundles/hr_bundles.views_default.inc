@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_bundles.views_default.inc
@@ -123,8 +124,10 @@ function hr_bundles_views_default_views() {
   $handler->display->display_options['cache']['output_lifespan'] = '21600';
   $handler->display->display_options['cache']['output_lifespan_custom'] = '0';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   /* Relationship: OG membership: Group Node from OG membership */
@@ -225,18 +228,12 @@ Co-leads: [field_partners]';
   $handler->display->display_options['fields']['field_activation_document']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Cluster coordinators */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_cluster_coordinators']['id'] = 'field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['table'] = 'field_data_field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['field'] = 'field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['label'] = '';
   $handler->display->display_options['fields']['field_cluster_coordinators']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_cluster_coordinators']['type'] = 'field_collection_fields';
-  $handler->display->display_options['fields']['field_cluster_coordinators']['settings'] = array(
-    'view_mode' => 'full',
-  );
-  $handler->display->display_options['fields']['field_cluster_coordinators']['delta_offset'] = '0';
-  $handler->display->display_options['fields']['field_cluster_coordinators']['multi_type'] = 'ul';
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
@@ -302,8 +299,10 @@ Co-leads: [field_partners]';
   $handler->display->display_options['cache']['output_lifespan'] = '21600';
   $handler->display->display_options['cache']['output_lifespan_custom'] = '0';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   /* Relationship: OG membership: Group Node from OG membership */
@@ -404,18 +403,12 @@ Co-leads: [field_partners]';
   $handler->display->display_options['fields']['field_activation_document']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Cluster coordinators */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_cluster_coordinators']['id'] = 'field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['table'] = 'field_data_field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['field'] = 'field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['label'] = '';
   $handler->display->display_options['fields']['field_cluster_coordinators']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_cluster_coordinators']['type'] = 'field_collection_fields';
-  $handler->display->display_options['fields']['field_cluster_coordinators']['settings'] = array(
-    'view_mode' => 'full',
-  );
-  $handler->display->display_options['fields']['field_cluster_coordinators']['delta_offset'] = '0';
-  $handler->display->display_options['fields']['field_cluster_coordinators']['multi_type'] = 'ul';
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
