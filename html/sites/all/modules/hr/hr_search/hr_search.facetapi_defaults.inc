@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_search.facetapi_defaults.inc
@@ -654,10 +655,11 @@ function hr_search_facetapi_default_facet_settings() {
     'default_true' => '1',
     'facet_search_ids' => array(),
     'exclude' => 0,
-    'show_expanded' => 0,
     'pretty_paths_alias' => 'location',
     'pretty_paths_taxonomy_pathauto' => 1,
     'pretty_paths_taxonomy_pathauto_vocabulary' => 'hr_location',
+    'individual_parent' => '0',
+    'limit_active_items' => 0,
   );
   $export['search_api@default_node_index::field_location'] = $facet;
 
@@ -671,11 +673,15 @@ function hr_search_facetapi_default_facet_settings() {
   $facet->enabled = FALSE;
   $facet->settings = array(
     'operator' => 'or',
-    'hard_limit' => -1,
+    'hard_limit' => '-1',
     'dependencies' => array(
       'bundle' => 'none',
       'bundle_selected' => array(),
       'roles' => array(),
+      'facets' => array(),
+      'reverse_dependency' => FALSE,
+      'force_deactivation' => TRUE,
+      'regex' => FALSE,
     ),
     'facet_mincount' => '1',
     'facet_missing' => '0',
@@ -684,10 +690,11 @@ function hr_search_facetapi_default_facet_settings() {
     'default_true' => '1',
     'facet_search_ids' => array(),
     'exclude' => 0,
-    'show_expanded' => 0,
     'pretty_paths_alias' => 'locations',
     'pretty_paths_taxonomy_pathauto' => 1,
     'pretty_paths_taxonomy_pathauto_vocabulary' => 'hr_location',
+    'individual_parent' => '0',
+    'limit_active_items' => 0,
   );
   $export['search_api@default_node_index::field_locations'] = $facet;
 
@@ -717,6 +724,8 @@ function hr_search_facetapi_default_facet_settings() {
     'pretty_paths_alias' => 'organizations',
     'pretty_paths_taxonomy_pathauto' => 1,
     'pretty_paths_taxonomy_pathauto_vocabulary' => 'hr_organization',
+    'individual_parent' => '0',
+    'limit_active_items' => 0,
   );
   $export['search_api@default_node_index::field_organizations'] = $facet;
 
@@ -900,7 +909,7 @@ function hr_search_facetapi_default_facet_settings() {
   $facet->enabled = FALSE;
   $facet->settings = array(
     'operator' => 'and',
-    'hard_limit' => '50',
+    'hard_limit' => '-1',
     'dependencies' => array(
       'bundle' => 'none',
       'bundle_selected' => array(),
@@ -914,6 +923,8 @@ function hr_search_facetapi_default_facet_settings() {
     'facet_search_ids' => array(),
     'exclude' => 0,
     'pretty_paths_alias' => 'space',
+    'individual_parent' => 0,
+    'limit_active_items' => 0,
   );
   $export['search_api@default_node_index::og_group_ref'] = $facet;
 
@@ -1042,7 +1053,40 @@ function hr_search_facetapi_default_facet_settings() {
   $facet->settings = array(
     'weight' => 0,
     'widget' => 'facetapi_links',
-    'filters' => array(),
+    'filters' => array(
+      'active_items' => array(
+        'status' => 0,
+        'weight' => '-50',
+      ),
+      'exclude_items' => array(
+        'status' => 0,
+        'weight' => '-49',
+      ),
+      'rewrite_items' => array(
+        'status' => 0,
+        'weight' => '-48',
+      ),
+      'narrow_results' => array(
+        'status' => 1,
+        'weight' => '-47',
+      ),
+      'show_if_minimum_items' => array(
+        'status' => 0,
+        'weight' => '-46',
+      ),
+      'deepest_level_items' => array(
+        'status' => 0,
+        'weight' => '-45',
+      ),
+      'filter_depth' => array(
+        'status' => 0,
+        'weight' => '-44',
+      ),
+      'hide_if_selected' => array(
+        'status' => 0,
+        'weight' => '-43',
+      ),
+    ),
     'active_sorts' => array(
       'active' => 'active',
       'count' => 'count',
@@ -1072,6 +1116,12 @@ function hr_search_facetapi_default_facet_settings() {
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
     'facet_fewer_text' => 'Show fewer',
+    'exclude' => '',
+    'regex' => 0,
+    'invert' => 0,
+    'show_minimum_items' => 2,
+    'depth' => 0,
+    'parents' => 0,
   );
   $export['search_api@default_node_index:block:field_bundles'] = $facet;
 
@@ -1169,7 +1219,7 @@ function hr_search_facetapi_default_facet_settings() {
   $facet->searcher = 'search_api@default_node_index';
   $facet->realm = 'block';
   $facet->facet = 'field_dataset_categories';
-  $facet->enabled = TRUE;
+  $facet->enabled = FALSE;
   $facet->settings = array(
     'weight' => 0,
     'widget' => 'facetapi_links',
@@ -1213,7 +1263,7 @@ function hr_search_facetapi_default_facet_settings() {
   $facet->searcher = 'search_api@default_node_index';
   $facet->realm = 'block';
   $facet->facet = 'field_dataset_types';
-  $facet->enabled = TRUE;
+  $facet->enabled = FALSE;
   $facet->settings = array(
     'weight' => 0,
     'widget' => 'facetapi_links',
@@ -1561,7 +1611,7 @@ function hr_search_facetapi_default_facet_settings() {
   $facet->searcher = 'search_api@default_node_index';
   $facet->realm = 'block';
   $facet->facet = 'field_fundings';
-  $facet->enabled = TRUE;
+  $facet->enabled = FALSE;
   $facet->settings = array(
     'weight' => 0,
     'widget' => 'facetapi_links',
@@ -1965,7 +2015,7 @@ function hr_search_facetapi_default_facet_settings() {
   $facet->searcher = 'search_api@default_node_index';
   $facet->realm = 'block';
   $facet->facet = 'field_languages:safe_value';
-  $facet->enabled = TRUE;
+  $facet->enabled = FALSE;
   $facet->settings = array(
     'weight' => 0,
     'widget' => 'facetapi_links',
@@ -2015,16 +2065,16 @@ function hr_search_facetapi_default_facet_settings() {
     'widget' => 'facetapi_links',
     'filters' => array(),
     'active_sorts' => array(
+      'display' => 'display',
       'active' => 'active',
       'count' => 'count',
-      'display' => 'display',
       'indexed' => 0,
     ),
     'sort_weight' => array(
-      'active' => '-50',
-      'count' => '-49',
-      'display' => '-48',
-      'indexed' => '0',
+      'active' => '-49',
+      'count' => '-48',
+      'display' => '-50',
+      'indexed' => '-47',
     ),
     'sort_order' => array(
       'active' => '3',
@@ -2415,16 +2465,16 @@ function hr_search_facetapi_default_facet_settings() {
     'widget' => 'facetapi_links',
     'filters' => array(),
     'active_sorts' => array(
-      'active' => 'active',
-      'count' => 'count',
       'display' => 'display',
+      'count' => 'count',
+      'active' => 'active',
       'indexed' => 0,
     ),
     'sort_weight' => array(
-      'active' => '-50',
+      'active' => '-48',
       'count' => '-49',
-      'display' => '-48',
-      'indexed' => '0',
+      'display' => '-50',
+      'indexed' => '-47',
     ),
     'sort_order' => array(
       'active' => '3',
@@ -2433,7 +2483,7 @@ function hr_search_facetapi_default_facet_settings() {
       'indexed' => '4',
     ),
     'empty_behavior' => 'none',
-    'soft_limit' => '20',
+    'soft_limit' => '0',
     'nofollow' => 1,
     'show_expanded' => 0,
     'empty_text' => array(
