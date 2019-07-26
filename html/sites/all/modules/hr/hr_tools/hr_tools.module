@@ -6,6 +6,27 @@
 
 include_once 'hr_tools.features.inc';
 
+/**
+ * Implements hook_libraries_info().
+ */
+function hr_tools_libraries_info() {
+  $libraries['google-api-php-client'] = array(
+    'name' => 'Goolgle API Client',
+    'vendor url' => 'https://github.com/googleapis/google-api-php-client',
+    'download url' => 'https://github.com/googleapis/google-api-php-client',
+    'version arguments' => array(
+      'file' => 'src/Google/Client.php',
+      'pattern' => '/const LIBVER = "(\d+)"/',
+      'lines' => 42,
+    ),
+    'files' => array(
+      'php' => array('vendor/autoload.php'),
+    ),
+
+  );
+
+  return $libraries;
+}
 
 /**
  * Implements hook_menu().
@@ -169,7 +190,7 @@ function hr_tools_ga_report($node) {
   // Strip analytics.
   $path = str_replace('/analytics', '', $path);
 
-  module_load_include('php', 'hr_tools', 'google-api-php-client/vendor/autoload');
+  libraries_load('google-api-php-client');
   $client = new Google_Client();
   $client->setApplicationName('Google Analytics Reporting');
   $client->setAuthConfig(array(
