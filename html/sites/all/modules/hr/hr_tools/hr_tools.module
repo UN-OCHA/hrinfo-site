@@ -15,8 +15,8 @@ function hr_tools_menu() {
 
   $items['xyzzy/stats/%/%'] = array(
     'title' => 'Performance stats',
-    'page callback' => 'hr_tools_performace_stats',
-    'page arguments' => array(2, 3),
+    'page callback' => 'hr_tools_performance_stats',
+    'page arguments' => array(2, 3, 4),
     'access callback' => TRUE,
     'description' => 'Performance statistics',
   );
@@ -236,8 +236,18 @@ function hr_tools_ga_report($node) {
  *
  * Call curl http://0.0.0.0:8088/xyzzy/stats/1 | python -m json.tool
  */
-function hr_tools_performace_stats($set, $param) {
-  $timers = _hr_tools_performace_stats($set, $param);
+function hr_tools_performance_stats($set, $param, $db = 'default') {
+
+  // Switch to the database we're testing.
+  db_set_active($db);
+
+  // Run the performance tests.
+  $timers = _hr_tools_performance_stats($set, $param);
+
+  // Switch back to the default database.
+  db_set_active('default');
+
+  // Assemble output.
   $output = array();
 
   foreach ($timers as $label => $timer) {
@@ -274,7 +284,7 @@ function hr_tools_performace_stats($set, $param) {
  *
  * Call curl http://0.0.0.0:8088/xyzzy/stats/1 | python -m json.tool
  */
-function _hr_tools_performace_stats($set, $param) {
+function _hr_tools_performance_stats($set, $param) {
   drupal_set_time_limit(300);
 
   // Log all queries.
@@ -292,31 +302,31 @@ function _hr_tools_performace_stats($set, $param) {
 
   switch ($set) {
     case '1':
-      _hr_tools_performace_stats_set1();
+      _hr_tools_performance_stats_set1();
       break;
 
     case '2':
-      _hr_tools_performace_stats_set2();
+      _hr_tools_performance_stats_set2();
       break;
 
     case '3':
-      _hr_tools_performace_stats_set3();
+      _hr_tools_performance_stats_set3();
       break;
 
     case '4':
-      _hr_tools_performace_stats_set4();
+      _hr_tools_performance_stats_set4();
       break;
 
     case '5':
-      _hr_tools_performace_stats_set5();
+      _hr_tools_performance_stats_set5();
       break;
 
     case '6':
-      _hr_tools_performace_stats_set6();
+      _hr_tools_performance_stats_set6();
       break;
 
     case '7':
-      _hr_tools_performace_stats_set7();
+      _hr_tools_performance_stats_set7();
       break;
 
     default:
@@ -343,7 +353,7 @@ function _hr_tools_performace_stats($set, $param) {
   return $timers;
 }
 
-function _hr_tools_performace_stats_set1() {
+function _hr_tools_performance_stats_set1() {
   global $timers;
   global $hr_tools_external_calls;
 
@@ -472,7 +482,7 @@ function _hr_tools_performace_stats_set1() {
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 }
 
-function _hr_tools_performace_stats_set2() {
+function _hr_tools_performance_stats_set2() {
   global $timers;
   global $hr_tools_external_calls;
 
@@ -538,7 +548,7 @@ function _hr_tools_performace_stats_set2() {
   $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
 }
 
-function _hr_tools_performace_stats_node_rendering($content_types) {
+function _hr_tools_performance_stats_node_rendering($content_types) {
   global $timers;
   global $hr_tools_external_calls;
 
@@ -602,43 +612,43 @@ function _hr_tools_performace_stats_node_rendering($content_types) {
   }
 }
 
-function _hr_tools_performace_stats_set3() {
+function _hr_tools_performance_stats_set3() {
   global $timers;
   global $hr_tools_external_calls;
 
   $content_types = node_type_get_names();
   $subset = array_slice($content_types, 0, 7);
-  _hr_tools_performace_stats_node_rendering($subset);
+  _hr_tools_performance_stats_node_rendering($subset);
 }
 
-function _hr_tools_performace_stats_set4() {
+function _hr_tools_performance_stats_set4() {
   global $timers;
   global $hr_tools_external_calls;
 
   $content_types = node_type_get_names();
   $subset = array_slice($content_types, 7, 7);
-  _hr_tools_performace_stats_node_rendering($subset);
+  _hr_tools_performance_stats_node_rendering($subset);
 }
 
-function _hr_tools_performace_stats_set5() {
+function _hr_tools_performance_stats_set5() {
   global $timers;
   global $hr_tools_external_calls;
 
   $content_types = node_type_get_names();
   $subset = array_slice($content_types, 14, 7);
-  _hr_tools_performace_stats_node_rendering($subset);
+  _hr_tools_performance_stats_node_rendering($subset);
 }
 
-function _hr_tools_performace_stats_set6() {
+function _hr_tools_performance_stats_set6() {
   global $timers;
   global $hr_tools_external_calls;
 
   $content_types = node_type_get_names();
   $subset = array_slice($content_types, 21, 7);
-  _hr_tools_performace_stats_node_rendering($subset);
+  _hr_tools_performance_stats_node_rendering($subset);
 }
 
-function _hr_tools_performace_stats_set7() {
+function _hr_tools_performance_stats_set7() {
   global $timers;
   global $hr_tools_external_calls;
 
