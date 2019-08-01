@@ -28,6 +28,12 @@ function hr_tools_drush_command() {
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
     'aliases' => array('hrnar'),
   );
+  $items['hr-tools-truncate-cache-tables'] = array(
+    'description' => 'Truncate all database cache tables',
+    'callback' => 'drush_hr_tools_truncate_cache_tables',
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
+    'aliases' => array('hrtct'),
+  );
 
   return $items;
 }
@@ -110,4 +116,60 @@ function _drush_hr_tools__node_access_rebuild_batch_finished($success, $results,
     drush_log(t('The content access permissions have not been properly rebuilt.'), 'error');
   }
   cache_clear_all();
+}
+
+function drush_hr_tools_truncate_cache_tables() {
+  if (!drush_bootstrap_to_phase(DRUSH_BOOTSTRAP_DRUPAL_DATABASE)) {
+    return drush_set_error('DRUPAL_SITE_NOT_FOUND', dt('You need to specify an alias or run this command within a drupal site.'));
+  }
+
+  $tables = array(
+    'cache',
+    'cache_advagg_aggregates',
+    'cache_advagg_info',
+    'cache_block',
+    'cache_bootstrap',
+    'cache_entity_comment',
+    'cache_entity_fieldable_panels_pane',
+    'cache_entity_file',
+    'cache_entity_node',
+    'cache_entity_og_membership',
+    'cache_entity_og_membership_type',
+    'cache_entity_restful_token_auth',
+    'cache_entity_taxonomy_term',
+    'cache_entity_taxonomy_vocabulary',
+    'cache_entity_user',
+    'cache_features',
+    'cache_feeds_http',
+    'cache_field',
+    'cache_filter',
+    'cache_form',
+    'cache_image',
+    'cache_libraries',
+    'cache_menu',
+    'cache_page',
+    'cache_panels',
+    'cache_path',
+    'cache_restclient',
+    'cache_restful',
+    'cache_rules',
+    'cache_search_api_solr',
+    'cache_token',
+    'cache_update',
+    'cache_variable',
+    'cache_views',
+    'cache_views_data',
+    'ctools_css_cache',
+    'ctools_object_cache',
+    'restful_cache_fragment',
+    'views_content_cache',
+    'views_data_export_object_cache'
+  );
+
+  foreach ($tables as $table) {
+    db_truncate($table)->execute();
+    drush_log(t('Truncated table @table.', array('@table' => $table)));
+  }
+
+  return;
 }
