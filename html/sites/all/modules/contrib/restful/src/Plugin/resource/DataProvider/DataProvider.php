@@ -444,7 +444,7 @@ abstract class DataProvider implements DataProviderInterface {
    * @param \EntityFieldQuery|\SelectQuery $query
    *   The query to enhance.
    */
-  protected function addExtraInfoToQuery($query) {
+  protected function addExtraInfoToQuery(\EntityFieldQuery $query) {
     // Add a generic tags to the query.
     $query->addTag('restful');
     $query->addMetaData('account', $this->getAccount());
