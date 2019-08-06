@@ -420,7 +420,7 @@ class DataProviderEntity extends DataProvider implements DataProviderEntityInter
    *
    * @throws \Drupal\restful\Exception\RestfulException
    */
-  protected function validateFields($wrapper) {
+  protected function validateFields(\EntityDrupalWrapper $wrapper) {
     try {
       field_attach_validate($wrapper->type(), $wrapper->value());
     }
@@ -586,7 +586,7 @@ class DataProviderEntity extends DataProvider implements DataProviderEntityInter
    * @param \EntityFieldQuery $query
    *   The query to enhance.
    */
-  protected function addExtraInfoToQuery($query) {
+  protected function addExtraInfoToQuery(\EntityFieldQuery $query) {
     parent::addExtraInfoToQuery($query);
     // The only time you need to add the access tags to a EFQ is when you don't
     // have fieldConditions.
