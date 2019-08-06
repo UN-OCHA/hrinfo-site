@@ -17,8 +17,8 @@ function hr_tools_libraries_info() {
     'download url' => 'https://github.com/googleapis/google-api-php-client',
     'version arguments' => array(
       'file' => 'src/Google/Client.php',
-      'pattern' => '/const LIBVER = "(\d+)"/',
-      'lines' => 42,
+      'pattern' => '/const LIBVER = "(.*)"/',
+      'lines' => 45,
     ),
     'files' => array(
       'php' => array('vendor/autoload.php'),
