@@ -12,7 +12,7 @@
  * work on disabled fields. As a workaround, this function first activates the
  * fields of the specified type and then deletes them.
  *
- * @param $field_name
+ * @param string $field_name
  *   The name of the field to enable and delete.
  */
 function hr_decomissioner_delete_field($field_name) {
@@ -26,17 +26,18 @@ function hr_decomissioner_delete_field($field_name) {
 }
 
 /**
- * Attempts to directly activate a field that was disabled due to its module
- * being disabled.
+ * Attempts to directly activate a field that was disabled.
+ *
+ * Called when its module is disabled.
  *
  * The normal API function for updating fields, field_update_field(), will not
  * work on disabled fields. As a workaround, this function directly updates the
  * database, but it is up to the caller to clear the cache.
  *
- * @param $field_name
+ * @param string $field_name
  *   The name of the field to activate.
  *
- * @return
+ * @return bool
  *   Boolean indicating whether or not the field was activated.
  */
 function hr_decomissioner_activate_field($field_name) {
@@ -52,13 +53,15 @@ function hr_decomissioner_activate_field($field_name) {
 }
 
 /**
+ * Delete an instance.
+ *
  * Deletes the specified instance and handles field cleanup manually in case the
  * instance is of a disabled field.
  *
- * @param $instance
+ * @param array $instance
  *   The field instance info array to be deleted.
  */
-function hr_decomissioner_delete_instance($instance) {
+function hr_decomissioner_delete_instance(array $instance) {
   // First activate the instance's field if necessary.
   $field_name = $instance['field_name'];
   $activated = hr_decomissioner_activate_field($field_name);

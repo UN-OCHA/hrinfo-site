@@ -2,13 +2,13 @@
 
 /**
  * @file
- * hr_documents module drush integration.
+ * Hr_documents module drush integration.
  */
 
 /**
  * Implements hook_drush_command().
  *
- * @return
+ * @return array
  *   An associative array describing your command(s).
  *
  * @see drush_parse_command()
@@ -18,10 +18,8 @@ function hr_documents_drush_command() {
 
   $items['hr-documents-migrate'] = array(
     'description' => "Migrate document files from private to public",
-    'arguments' => array(
-    ),
-    'options' => array(
-    ),
+    'arguments' => array(),
+    'options' => array(),
     'drupal dependencies' => array(),
     'aliases' => array(),
   );
@@ -29,6 +27,9 @@ function hr_documents_drush_command() {
   return $items;
 }
 
+/**
+ * Move a file.
+ */
 function drush_hr_documents_file_move($fid) {
   $file = file_load($fid);
   if (strpos($file->uri, 'private://') === 0) {
@@ -44,16 +45,18 @@ function drush_hr_documents_file_move($fid) {
   }
 }
 
-
+/**
+ * Migrate documents.
+ */
 function drush_hr_documents_migrate() {
-  // Load all fids of the documents and infographics
+  // Load all fids of the documents and infographics.
   $result = db_select('field_data_field_file', 'f')
     ->fields('f')
     ->execute();
   while ($record = $result->fetchAssoc()) {
-    // Foreach fid, move the file to public
+    // Foreach fid, move the file to public.
     $fid = $record['field_file_fid'];
-    echo $fid."\n";
+    echo $fid . "\n";
     drush_hr_documents_file_move($fid);
   }
 }

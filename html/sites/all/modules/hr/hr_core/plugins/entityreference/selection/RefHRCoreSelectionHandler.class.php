@@ -1,11 +1,13 @@
 <?php
 
-
 /**
  * @file
  * HR Core selection handler without access check.
  */
 
+/**
+ * Class definition.
+ */
 class RefHRCoreSelectionHandler extends EntityReference_SelectionHandler_Generic {
 
   /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Layout feature.
@@ -45,6 +46,9 @@ function hr_layout_menu() {
   return $items;
 }
 
+/**
+ * Clone a node.
+ */
 function hr_layout_clone_new($node) {
   $type = str_replace('-', '_', $node->type);
   $types = array(
@@ -128,13 +132,15 @@ function hr_layout_block_view($delta = '') {
     case 'hr_layout_create_links':
       $block['content'] = hr_layout_create_links();
       break;
+
     case 'hr_layout_login':
       $block['content'] = '';
       if (!user_is_logged_in()) {
         $destination = drupal_get_destination();
-        $block['content'] .= '<ul class="menu"><li>' . l(t('Log in'), $base_url.'/login', array('query' => array('hid_redirect' => $destination['destination']))) . '</li></ul>';
+        $block['content'] .= '<ul class="menu"><li>' . l(t('Log in'), $base_url . '/login', array('query' => array('hid_redirect' => $destination['destination']))) . '</li></ul>';
       }
       break;
+
     case 'hr_layout_share_links':
       $block['content'] = '';
       $context = og_context();
@@ -146,7 +152,7 @@ function hr_layout_block_view($delta = '') {
         $current_title = drupal_get_title();
         // If the current node ID & context ID are different, then we know we
         // are in a cluster page.
-        if(arg(1) != $context['gid']) {
+        if (arg(1) != $context['gid']) {
           $block['content'] .= '<div class="cluster"><div class="image"></div>' . $current_title . ' Cluster</div>';
           $block['content'] .= '<hr/>';
         }
@@ -166,7 +172,7 @@ function hr_layout_block_view($delta = '') {
               'target' => '_blank'
             ),
           );
-          foreach($node->field_social_media[LANGUAGE_NONE] as $social_media) {
+          foreach ($node->field_social_media[LANGUAGE_NONE] as $social_media) {
             $format = hr_layout_social_media_link($social_media['url']);
             $link_social_options['attributes']['title'] = $format['text'];
             // Render Social Media link.
@@ -176,25 +182,23 @@ function hr_layout_block_view($delta = '') {
           }
         }
 
-
         $block['content'] .= '<hr/>';
 
         if (isset($view['field_organizations'])) {
-          $block['content'] .= '<div class="manager">'.t('Managed by').': <br />';
+          $block['content'] .= '<div class="manager">' . t('Managed by') . ': <br />';
           foreach ($view['field_organizations']['#items'] as $org) {
-            $block['content'] .= '<i>'.entity_label('taxonomy_term', $org['entity']).'</i><br />';
+            $block['content'] .= '<i>' . entity_label('taxonomy_term', $org['entity']) . '</i><br />';
           }
           $block['content'] .= '</div>';
         }
 
         if (isset($view['field_users'])) {
-          $block['content'] .= '<div class="manager">'.t('Focal points').': <br />';
+          $block['content'] .= '<div class="manager">' . t('Focal points') . ': <br />';
           foreach ($view['field_users']['#items'] as $field_user) {
-            $block['content'] .= '<i>'.l(entity_label('user', $field_user['entity']), 'user/'.$field_user['target_id']).'</i><br />';
+            $block['content'] .= '<i>' . l(entity_label('user', $field_user['entity']), 'user/' . $field_user['target_id']) . '</i><br />';
           }
           $block['content'] .= '</div>';
         }
-
 
         if (isset($view['field_email'])) {
           // Render Email link.
@@ -210,12 +214,13 @@ function hr_layout_block_view($delta = '') {
             ),
           );
           $block['content'] .= '<div class="space-email">';
-          $block['content'] .= l(t('Contact') . '<i class="fa fa-at"></i>', 'mailto:'.$view['field_email']['#items'][0]['email'], $link_email_options);
+          $block['content'] .= l(t('Contact') . '<i class="fa fa-at"></i>', 'mailto:' . $view['field_email']['#items'][0]['email'], $link_email_options);
           $block['content'] .= '</div>';
         }
 
       }
       break;
+
     case 'hr_layout_search_rss':
       $gid = NULL;
       $context = og_context();
@@ -224,31 +229,33 @@ function hr_layout_block_view($delta = '') {
       }
       $block['content'] = _hr_layout_rss_icon('search', $gid);
       break;
+
     case 'hr_layout_key_documents':
       drupal_add_library('chosen', 'drupal.chosen');
       $block['subject'] = t('Assessments, Documents, & Maps');
       $block['content'] = '<ul>';
-      $block['content'] .= '<li>'.l(t('3W / 4W'), 'infographics/infographic-type/3w').'</li>';
-      $block['content'] .= '<li>'.l(t('Appeals'), 'documents/document-type/appeal').'</li>';
-      $block['content'] .= '<li>'.l(t('Assessments'), 'assessments').'</li>';
-      $block['content'] .= '<li>'.l(t('Humanitarian Bulletin'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/humanitarian-bulletin').'</li>';
-      $block['content'] .= '<li>'.l(t('Humanitarian Needs Overview - HNO'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/humanitarian-needs-overview').'</li>';
-      $block['content'] .= '<li>'.l(t('Humanitarian Response Plan - HRP'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/strategic-response-plan').'</li>';
-      $block['content'] .= '<li>'.l(t('Maps/Infographics'), 'infographics').'</li>';
-      $block['content'] .= '<li>'.l(t('Situation Reports'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/situation-report').'</li>';
+      $block['content'] .= '<li>' . l(t('3W / 4W'), 'infographics/infographic-type/3w') . '</li>';
+      $block['content'] .= '<li>' . l(t('Appeals'), 'documents/document-type/appeal') . '</li>';
+      $block['content'] .= '<li>' . l(t('Assessments'), 'assessments') . '</li>';
+      $block['content'] .= '<li>' . l(t('Humanitarian Bulletin'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/humanitarian-bulletin') . '</li>';
+      $block['content'] .= '<li>' . l(t('Humanitarian Needs Overview - HNO'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/humanitarian-needs-overview') . '</li>';
+      $block['content'] .= '<li>' . l(t('Humanitarian Response Plan - HRP'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/strategic-response-plan') . '</li>';
+      $block['content'] .= '<li>' . l(t('Maps/Infographics'), 'infographics') . '</li>';
+      $block['content'] .= '<li>' . l(t('Situation Reports'), 'documents/organizations/united-nations-office-coordination-humanitarian-affairs/document-type/situation-report') . '</li>';
       $block['content'] .= '</ul>';
-      $block['content'] .= '<div class=view-all-hr-layout-key-documents><p class="text-center">'.l(t('View All Documents'), 'documents').'</p></div>';
+      $block['content'] .= '<div class=view-all-hr-layout-key-documents><p class="text-center">' . l(t('View All Documents'), 'documents') . '</p></div>';
       break;
+
     case 'hr_layout_hum_system':
       $block['subject'] = t('Humanitarian System');
       $block['content'] = '<ul>';
-      $block['content'] .= '<li>'.l(t('Cluster Approach'), 'coordination/clusters').'</li>';
-      $block['content'] .= '<li>'.l(t('Humanitarian Programme Cycle'), 'programme-cycle/space').'</li>';
-      $block['content'] .= '<li>'.l(t('Humanitarian Leadership'), 'coordination/humanitarian-leadership').'</li>';
-      $block['content'] .= '<li>'.l(t('Indicator Registry'), 'applications/ir').'</li>';
-      $block['content'] .= '<li>'.l(t('NGOs'), 'coordination/ngos').'</li>';
-      $block['content'] .= '<li>'.l(t('Policy and Guidance'), 'documents/document-type/policy-and-guidance').'</li>';
-      $block['content'] .= '<li>'.l(t('Training and resource materials'), 'documents/document-type/training-and-resource-materials').'</li>';
+      $block['content'] .= '<li>' . l(t('Cluster Approach'), 'coordination/clusters') . '</li>';
+      $block['content'] .= '<li>' . l(t('Humanitarian Programme Cycle'), 'programme-cycle/space') . '</li>';
+      $block['content'] .= '<li>' . l(t('Humanitarian Leadership'), 'coordination/humanitarian-leadership') . '</li>';
+      $block['content'] .= '<li>' . l(t('Indicator Registry'), 'applications/ir') . '</li>';
+      $block['content'] .= '<li>' . l(t('NGOs'), 'coordination/ngos') . '</li>';
+      $block['content'] .= '<li>' . l(t('Policy and Guidance'), 'documents/document-type/policy-and-guidance') . '</li>';
+      $block['content'] .= '<li>' . l(t('Training and resource materials'), 'documents/document-type/training-and-resource-materials') . '</li>';
       $block['content'] .= '</ul>';
       // Add select option for global clusters available here:
       // http://www.humanitarianresponse.info/en/coordination/clusters/global
@@ -275,11 +282,12 @@ function hr_layout_block_view($delta = '') {
       $block['content'] .= $options;
       $block['content'] .= '</select></p>';
       break;
+
     case 'hr_layout_horz_menu':
       $block['content'] = '';
       $gid = og_context_determine_context('node');
       $current_path = current_path();
-      // Handling special case for Colombia
+      // Handling special case for Colombia.
       if ($current_path == 'j2h/contactos') {
         $gid = 77;
       }
@@ -305,50 +313,59 @@ function hr_layout_block_view($delta = '') {
         $items = array();
         $items[] = array(
           'name' => $og_group->title,
-          'path' => 'node/'.$gid
+          'path' => 'node/' . $gid
         );
         $paths = array();
-        // Fetch the og features registry
+        // Fetch the og features registry.
         $registry = og_features_get_registry();
-        // Iterate all the available features to provide a toggle switch
+        // Iterate all the available features to provide a toggle switch.
         foreach ($registry as $key => $feature) {
-          // Make sure this feature can be toggled by this group
+          // Make sure this feature can be toggled by this group.
           if (!og_features_feature_can_toggle('node', $og_group->bundle_name, $key) || $key == 'hr_pages' || $key == 'hr_webforms') {
             continue;
           }
-          // Check if feature is disabled
+          // Check if feature is disabled.
           if (!og_features_feature_is_disabled($key, $og_group)) {
             $path = str_replace('hr_', '', $key);
-            switch($key) {
+            switch ($key) {
               case 'hid_contacts':
-                if ($gid != 77) { // Special case: Colombia, which is not using Humanitarian ID
+                // Special case: Colombia, which is not using Humanitarian ID.
+                if ($gid != 77) {
                   $path = 'hid_contacts';
                 }
                 else {
                   $path = 'j2h/contactos';
                 }
                 break;
+
               case 'ev_events':
                 $path = 'humanitarian-events';
                 break;
+
               case 'hr_reliefweb_documents':
                 $path = 'reliefweb';
                 break;
+
               case 'hr_reliefweb_meeting_documents':
                 $path = 'meeting-documents';
                 break;
+
               case 'ar_assessments':
                 $path = 'ar_assessments';
                 break;
+
               case 'hdx_datasets':
                 $path = 'hdx-datasets';
                 break;
+
               case 'hr_news':
                 $path = 'blog';
                 break;
+
               case 'acc_applications':
                 $path = 'access/applications';
                 break;
+
               case 'acc_incidents':
                 $path = 'access/incidents';
                 break;
@@ -368,10 +385,10 @@ function hr_layout_block_view($delta = '') {
                 }
                 break;
             }
-            // If not disabled add to menu items
+            // If not disabled add to menu items.
             $paths[$key] = array(
               'name' => $feature->name,
-              'path' => 'node/'.$gid.'/'.$path
+              'path' => 'node/' . $gid . '/' . $path
             );
 
             if ($path == 'j2h/contactos') {
@@ -380,11 +397,11 @@ function hr_layout_block_view($delta = '') {
           }
         }
 
-        // Indicators registry
+        // Indicators registry.
         if ($gid == 24) {
           $items[] = array(
             'name' => 'Indicators',
-            'path' => 'node/'.$gid.'/indicators'
+            'path' => 'node/' . $gid . '/indicators'
           );
         }
 
@@ -396,7 +413,7 @@ function hr_layout_block_view($delta = '') {
         }
 
         foreach ($items as $item) {
-          $block['content'] .= '<li>'.l(t($item['name']), $item['path']).'</li>';
+          $block['content'] .= '<li>' . l(t($item['name']), $item['path']) . '</li>';
         }
         $block['content'] .= '</ul>';
       }
@@ -408,9 +425,11 @@ function hr_layout_block_view($delta = '') {
 /**
  * Provides an RSS icon.
  *
- * @param $mode
+ * @param string $mode
+ *   A mode of some sort.
  *
  * @return string
+ *   Themed markedup.
  */
 function _hr_layout_rss_icon($mode = 'node', $gid = NULL) {
   $link_rss_options = array(
@@ -432,7 +451,7 @@ function _hr_layout_rss_icon($mode = 'node', $gid = NULL) {
 
   if ($mode == 'node') {
     // For nodes we need to include the group id and rely on the feed view.
-    $url = 'node/'. $gid .'/feed';
+    $url = 'node/' . $gid . '/feed';
   }
   elseif ($mode == 'search') {
     // For search mode or operations search features, we inject the feed view
@@ -487,17 +506,24 @@ function hr_layout_social_media_link($url) {
 
   $parsed = parse_url($url);
   $chunks = explode('.', $parsed['host']);
-  if (count($chunks) == 1)
+  if (count($chunks) == 1) {
     $host = $chunks[0];
-  else
-    $host = $chunks[count($chunks)-2] . '.' . $chunks[count($chunks)-1];
+  }
+  else {
+    $host = $chunks[count($chunks) - 2] . '.' . $chunks[count($chunks) - 1];
+  }
 
-  if (isset($services[$host]))
+  if (isset($services[$host])) {
     return $services[$host];
-  else
+  }
+  else {
     return array('icon' => 'fa-globe', 'text' => t('Social Media'));
+  }
 }
 
+/**
+ * Create links.
+ */
 function hr_layout_create_links() {
   global $user;
   $button = '';
@@ -541,16 +567,17 @@ function hr_layout_create_links() {
       if (!empty($content['og_node_create_links']['#items'])) {
         foreach ($content['og_node_create_links']['#items'] as $key => $item) {
           // Unfortunately we have to parse the link path to determine
-          // which node type this is for
+          // which node type this is for.
           $matches = array();
           if (preg_match("/(?<=(node\/add\/)).*(?=\?)/", $item['data'], $matches)) {
             if (isset($matches[0])) {
-              // Reformat the node type
+              // Reformat the node type.
               $type = str_replace('-', '_', $matches[0]);
-              // See if this node type is disabled for this group
+              // See if this node type is disabled for this group.
               if (!og_features_component_is_disabled('node', $type, $group)) {
                 if ($type != 'hr_contact' || ($type == 'hr_contact' && (og_is_member('node', $group->nid) || in_array('editor', $user->roles)))) {
-                  $button .= '<li>'.$item['data'].'</li>';
+                  $button .= '<li>' . $item['data'] . '</li>';
+                  // @codingStandardsIgnoreLine
                   if (in_array($type, array('hr_document', 'hr_infographic', 'hr_event', 'hr_assessment', 'hr_office'))) {
                     $types = array(
                       'hr_document' => 'document',
@@ -563,7 +590,7 @@ function hr_layout_create_links() {
                     if ($type == 'hr_infographic') {
                       $typeName = t('Map/Infographic');
                     }
-                    $button .= '<li class="create-link-new"><a href="https://app.humanitarianresponse.info/' . $types[$type] . 's/new" target="_blank">' . $typeName .' (' . t('Try the new forms') . ')</a></li>';
+                    $button .= '<li class="create-link-new"><a href="https://app.humanitarianresponse.info/' . $types[$type] . 's/new" target="_blank">' . $typeName . ' (' . t('Try the new forms') . ')</a></li>';
                   }
                 }
               }
@@ -571,7 +598,7 @@ function hr_layout_create_links() {
           }
         }
         if (!empty($button)) {
-          $button = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--add"><use xlink:href="#add"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">'.$button.'</ul>';
+          $button = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--add"><use xlink:href="#add"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">' . $button . '</ul>';
         }
       }
     }
@@ -582,13 +609,19 @@ function hr_layout_create_links() {
 
 /**
  * Implements hook_menu_alter()
+ *
  * HACK: fixes a bug that makes ajax calls stop working when adding an FTS
  * Visualization through "Bean Panes" (Panels)
+ *
+ * @TODO: Hack
  */
 function hr_layout_menu_alter(&$items) {
   $items['system/ajax']['page callback'] = 'hr_layout_ajax_form_callback';
 }
 
+/**
+ * Form layout callback handler.
+ */
 function hr_layout_ajax_form_callback() {
   module_load_include('inc', 'bean_pane', 'plugins/content_types/bean_pane');
   return ajax_form_callback();
@@ -598,7 +631,7 @@ function hr_layout_ajax_form_callback() {
  * Implements hook_form_alter().
  *
  * Change default cache for new Panels panes.
- * Sets content cache for views panes and simple cache for custom content and fieldable panels panes
+ * Sets content cache for views panes and simple cache for custom content and fieldable panels panes.
  */
 function hr_layout_form_alter(&$form, &$form_state, $form_id) {
   $panels_add_content_forms = array('ctools_block_content_type_edit_form',
@@ -615,23 +648,27 @@ function hr_layout_form_alter(&$form, &$form_state, $form_id) {
         'method' => 'content',
         'settings' => array('lifetime' => 'none'),
       );
-      switch($form_state['pane']->subtype) {
+      switch ($form_state['pane']->subtype) {
         case 'hr_documents_panes-list':
           $form_state['pane']->cache = $cache;
           $form_state['pane']->cache['settings']['content_types'] = array('hr_document' => 'hr_document');
           break;
+
         case 'hr_contacts_panes-list':
           $form_state['pane']->cache = $cache;
           $form_state['pane']->cache['settings']['content_types'] = array('hr_contact' => 'hr_contact');
           break;
+
         case 'hr_events_panes-upcoming':
           $form_state['pane']->cache = $cache;
           $form_state['pane']->cache['settings']['content_types'] = array('hr_event' => 'hr_event');
           break;
+
         case 'hr_infographics_panes-list':
           $form_state['pane']->cache = $cache;
           $form_state['pane']->cache['settings']['content_types'] = array('hr_infographic' => 'hr_infographic');
           break;
+
         case 'hr_news_panes-list':
           $form_state['pane']->cache = $cache;
           $form_state['pane']->cache['settings']['content_types'] = array('hr_news' => 'hr_news');
@@ -641,18 +678,20 @@ function hr_layout_form_alter(&$form, &$form_state, $form_id) {
     elseif ($form_id == 'ctools_custom_content_type_edit_form') {
       $form_state['pane']->cache = array(
         'method' => 'simple',
-        'settings' => array('lifetime' => '604800', 'granularity' => 'none'), // 1 week
+      // 1 week.
+        'settings' => array('lifetime' => '604800', 'granularity' => 'none'),
       );
     }
     elseif ($form_id == 'ctools_bean_pane_content_type_form') {
       $form_state['pane']->cache = array(
         'method' => 'simple',
-        'settings' => array('lifetime' => '86400', 'granularity' => 'none'), // 1 day
+      // 1 day.
+        'settings' => array('lifetime' => '86400', 'granularity' => 'none'),
       );
     }
     elseif ($form_id == 'fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form') {
       $fpid = str_replace('fpid:', '', $form_state['pane']->subtype);
-      $url = 'admin/structure/fieldable-panels-panes/view/'.$fpid;
+      $url = 'admin/structure/fieldable-panels-panes/view/' . $fpid;
       $form['advanced_settings'] = array(
         '#markup' => l(t('Advanced settings'), $url),
         '#weight' => 1,
@@ -660,11 +699,12 @@ function hr_layout_form_alter(&$form, &$form_state, $form_id) {
     }
 
     $form['uuid'] = array(
-      '#markup' => '<strong>UUID:</strong>'.$form_state['pane']->uuid,
+      '#markup' => '<strong>UUID:</strong>' . $form_state['pane']->uuid,
       '#weight' => 2,
     );
   }
 
+  // @codingStandardsIgnoreLine
   if (in_array($form_id, array('hr_document_node_form', 'hr_infographic_node_form', 'hr_event_node_form', 'hr_assessment_node_form', 'hr_operation_node_form', 'hr_bundle_node_form', 'hr_office_node_form'))) {
     $type = str_replace('_node_form', '', $form_id);
     $nid = $form_state['build_info']['args'][0]->nid;
@@ -681,7 +721,7 @@ function hr_layout_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
- * Helper function for key documents block
+ * Helper function for key documents block.
  */
 function _hr_layout_key_documents() {
   return array(
@@ -708,14 +748,14 @@ function _hr_layout_key_documents() {
  * Finds out whether a menu item is present in a given tree.
  *
  * @param string $path
- *  Path to search for.
+ *   Path to search for.
  * @param array $menu_tree
- *  Menu tree to search the path in.
+ *   Menu tree to search the path in.
  *
  * @return bool
- *  TRUE if found, FALSE if not found.
+ *   TRUE if found, FALSE if not found.
  */
-function _hr_layout_menu_item_in_tree($path, $menu_tree) {
+function _hr_layout_menu_item_in_tree($path, array $menu_tree) {
   foreach ($menu_tree as $menu_item) {
     if ($menu_item['link']['link_path'] == $path) {
       return TRUE;

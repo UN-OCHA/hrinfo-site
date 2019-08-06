@@ -1,7 +1,8 @@
 <?php
+
 /**
  * @file
- * hid_profiles.context.inc
+ * Hid_profiles.context.inc.
  */
 
 /**

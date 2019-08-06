@@ -1,12 +1,14 @@
 <?php
 
 namespace Drupal\hr_events\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 
 /**
- * Class RestfulEntityNodeEvents
+ * Class RestfulEntityNodeEvents.
+ *
  * @package Drupal\hr_events\Plugin\resource
  *
  * @Resource(
@@ -30,9 +32,7 @@ use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterface {
-
 
   /**
    * Overrides \RestfulEntityBase::publicFields().
@@ -204,6 +204,9 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
     return $public_fields;
   }
 
+  /**
+   * Get user.
+   */
   public function getUser($value) {
     $valueOut = new \stdClass();
     $valueOut->uid = $value->uid;
@@ -215,6 +218,9 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
     return $valueOut;
   }
 
+  /**
+   * Get disasters.
+   */
   public function getDisasters($values) {
     $return = array();
     if (!empty($values)) {
@@ -225,7 +231,7 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
         $tmp->glide = $node->field_glide_number[LANGUAGE_NONE][0]['value'];
         $tmp->label = $node->title;
         if (!empty($node->field_reliefweb_id)) {
-          $tmp->self = 'http://api.reliefweb.int/v1/disasters/'.$value->field_reliefweb_id[LANGUAGE_NONE][0]['value'];
+          $tmp->self = 'http://api.reliefweb.int/v1/disasters/' . $value->field_reliefweb_id[LANGUAGE_NONE][0]['value'];
         }
         $return[] = $tmp;
       }
@@ -233,10 +239,16 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
     return $return;
   }
 
+  /**
+   * Get raw body.
+   */
   public function getBodyRaw($value) {
     return strip_tags($value);
   }
 
+  /**
+   * Format a date.
+   */
   public function formatDate($values) {
     foreach ($values as &$value) {
       if (isset($value['date_type'])) {
@@ -246,6 +258,9 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
     return $values;
   }
 
+  /**
+   * Format an address.
+   */
   public function formatAddress($value) {
     unset($value['organisation_name']);
     unset($value['name_line']);

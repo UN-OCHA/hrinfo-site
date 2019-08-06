@@ -1,11 +1,13 @@
 <?php
 
-
 /**
  * @file
  * OG HR Core selection handler without access check.
  */
 
+/**
+ * Class definition.
+ */
 class OgHRCoreSelectionHandler extends OgSelectionHandler {
 
   /**

@@ -2,13 +2,13 @@
 
 /**
  * @file
- * ar_assessments module drush integration.
+ * Ar_assessments module drush integration.
  */
 
 /**
  * Implements hook_drush_command().
  *
- * @return
+ * @return array
  *   An associative array describing your command(s).
  *
  * @see drush_parse_command()
@@ -18,10 +18,8 @@ function ar_assessments_drush_command() {
 
   $items['ar-assessments-redirects'] = array(
     'description' => "Creates the CSV file for redirects",
-    'arguments' => array(
-    ),
-    'options' => array(
-    ),
+    'arguments' => array(),
+    'options' => array(),
     'drupal dependencies' => array(),
     'aliases' => array(),
   );

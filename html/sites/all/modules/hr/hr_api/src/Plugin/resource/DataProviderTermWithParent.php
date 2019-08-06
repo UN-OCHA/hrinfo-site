@@ -1,17 +1,15 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_api\Plugin\resource\DataProviderTermWithParent
- */
-
 namespace Drupal\hr_api\Plugin\resource;
 
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
 use Drupal\restful\Http\RequestInterface;
 
-class DataProviderTermWithParent  extends DataProviderEntity implements DataProviderInterface {
+/**
+ * Class definition.
+ */
+class DataProviderTermWithParent extends DataProviderEntity implements DataProviderInterface {
 
   /**
    * {@inheritdoc}
@@ -26,7 +24,7 @@ class DataProviderTermWithParent  extends DataProviderEntity implements DataProv
    * @param \EntityFieldQuery $query
    *   The query to enhance.
    */
-  protected function addExtraInfoToQuery($query) {
+  protected function addExtraInfoToQuery(\EntityFieldQuery $query) {
     parent::addExtraInfoToQuery($query);
     $filters = $this->parseRequestForListFilter();
     if (!empty($filters)) {

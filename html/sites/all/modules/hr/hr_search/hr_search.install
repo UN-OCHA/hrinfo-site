@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Update file for the Search feature.
@@ -7,7 +8,6 @@
 /**
  * Re enables field_infographic_type field under search api fields.
  */
-
 function hr_search_update_7001() {
   $index = search_api_index_load('default_node_index', TRUE);
 
@@ -31,7 +31,7 @@ function hr_search_update_7002() {
     ->entityCondition('bundle', 'hr_infographic')
     ->propertyCondition('status', 1)
     ->execute();
-  if(!empty($results['node'])) {
+  if (!empty($results['node'])) {
     $nids = array_keys($results['node']);
     // Mark all the infographics as 'dirty', to be reindexed.
     search_api_track_item_change('node', $nids);

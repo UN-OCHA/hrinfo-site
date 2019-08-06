@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Indicator domains plugin v1.0.
+ */
+
 $plugin = array(
   'label' => t('Indicator domains'),
   'resource' => 'indicator_domains',

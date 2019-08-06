@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Help feature.
@@ -8,6 +9,9 @@ define('HR_SANDBOX_GID', 1506);
 
 include_once 'hr_help.features.inc';
 
+/**
+ * Implements hook_block_info().
+ */
 function hr_help_block_info() {
   $blocks['hr_help'] = array(
     'info' => t('Help block'),
@@ -15,6 +19,9 @@ function hr_help_block_info() {
   return $blocks;
 }
 
+/**
+ * Implements hook_block_view().
+ */
 function hr_help_block_view($delta = '') {
   global $user;
   $block = array();
@@ -37,13 +44,13 @@ function hr_help_block_view($delta = '') {
         }
       }
       if (!empty($tours)) {
-          $block['content'] = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--help"><use xlink:href="#help"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">';
+        $block['content'] = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--help"><use xlink:href="#help"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">';
         foreach ($tours as $key => $tour) {
           if (!in_array($key, $manager_tours) || og_is_member('node', HR_SANDBOX_GID)) {
-            $block['content'] .= '<li>'.l(t($tour->title), $tour->steps[0]['path'], array('query' => array('tour' => $key))).'</li>';
+            $block['content'] .= '<li>' . l(t($tour->title), $tour->steps[0]['path'], array('query' => array('tour' => $key))) . '</li>';
           }
         }
-        $block['content'] .= '<li>'.l(t('User Guidelines'), 'help').'</li>';
+        $block['content'] .= '<li>' . l(t('User Guidelines'), 'help') . '</li>';
         $block['content'] .= '</ul>';
       }
       break;
@@ -51,6 +58,9 @@ function hr_help_block_view($delta = '') {
   return $block;
 }
 
+/**
+ * Return a list of tours.
+ */
 function _hr_help_space_manager_tours() {
   return array(
     'adding_content',
@@ -60,4 +70,3 @@ function _hr_help_space_manager_tours() {
     'space_functionalities',
   );
 }
-

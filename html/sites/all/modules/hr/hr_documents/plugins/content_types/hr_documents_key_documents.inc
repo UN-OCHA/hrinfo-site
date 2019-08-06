@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Static plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('Static'),
@@ -14,7 +19,7 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
 function hr_documents_key_documents_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
@@ -88,8 +93,9 @@ function hr_documents_key_documents_edit_form_submit($form, &$form_state) {
 }
 
 /**
- * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
+ * Run-time rendering of the body of the block (content type).
+ *
+ * See ctools_plugin_examples for more advanced info.
  */
 function hr_documents_key_documents_render($subtype, $conf, $panel_args, $context = NULL) {
   $block = new stdClass();
@@ -97,7 +103,7 @@ function hr_documents_key_documents_render($subtype, $conf, $panel_args, $contex
   $documents = $conf['documents'];
   $view_mode = !empty($conf['view_mode']) ? $conf['view_mode'] : 'teaser';
 
-  // initial content is blank
+  // Initial content is blank.
   $block->title = '';
   $block->content = '';
   if (!empty($documents)) {
@@ -109,7 +115,7 @@ function hr_documents_key_documents_render($subtype, $conf, $panel_args, $contex
         if ($node != FALSE) {
           if ($conf['view_mode'] == 'link') {
             $entity = entity_load_single('node', $nid);
-            $block->content .= '<li>'.l(entity_label('node', $entity), 'node/'.$nid).'</li>';
+            $block->content .= '<li>' . l(entity_label('node', $entity), 'node/' . $nid) . '</li>';
           }
           else {
             $node_view = node_view($node, $view_mode);
@@ -120,11 +126,11 @@ function hr_documents_key_documents_render($subtype, $conf, $panel_args, $contex
     }
 
     if ($conf['view_mode'] == 'link') {
-      $block->content = '<ul>'.$block->content.'</ul>';
+      $block->content = '<ul>' . $block->content . '</ul>';
     }
 
     if (!empty($block->content)) {
-      $block->content = '<div class="fieldable-panels-pane">'.$block->content.'</div>';
+      $block->content = '<div class="fieldable-panels-pane">' . $block->content . '</div>';
     }
   }
 

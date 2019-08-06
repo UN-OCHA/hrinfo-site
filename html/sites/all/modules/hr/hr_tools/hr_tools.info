@@ -8,6 +8,7 @@ dependencies[] = features
 dependencies[] = feeds
 dependencies[] = file
 dependencies[] = hr_core
+dependencies[] = libraries
 dependencies[] = link
 dependencies[] = media
 dependencies[] = og

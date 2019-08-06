@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_assessments\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityTaxonoyTermPopulationTypes
+ * Class RestfulEntityTaxonoyTermPopulationTypes.
+ *
  * @package Drupal\hr_assessments\Plugin\resource
  *
  * @Resource(
@@ -29,7 +31,6 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityTaxonomyTermPopulationTypes extends ResourceCustom implements ResourceInterface {
 
   /**

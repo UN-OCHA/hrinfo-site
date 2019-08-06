@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Contact reference field module file.
@@ -25,7 +26,7 @@ function hid_contact_reference_field_info() {
 /**
  * Callback to alter the property info of contact reference fields.
  *
- * @see hid_contact_reference_field_info().
+ * @see hid_contact_reference_field_info()
  */
 function hid_contact_reference_property_info_callback(&$info, $entity_type, $field, $instance, $field_type) {
   $name = $field['field_name'];
@@ -34,7 +35,7 @@ function hid_contact_reference_property_info_callback(&$info, $entity_type, $fie
   $property['type'] = ($field['cardinality'] != 1) ? 'list<hid_contact_reference>' : 'hid_contact_reference';
   $property['getter callback'] = 'entity_metadata_field_verbatim_get';
   $property['setter callback'] = 'entity_metadata_field_verbatim_set';
-  //$property['auto creation'] = 'addressfield_auto_creation';
+  // $property['auto creation'] = 'addressfield_auto_creation';.
   $property['property info']['cid'] = array(
     'type' => 'text',
     'label' => t('Humanitarian ID'),
@@ -101,7 +102,7 @@ function hid_contact_reference_field_widget_form(&$form, &$form_state, $field, $
   if (!empty($items[$delta])) {
     if (variable_get('hid_profiles_v2', FALSE)) {
       $contact = hid_profiles_get_contact($items[$delta]['cid']);
-      $default_value = $contact->name." [id: $contact->_id]";
+      $default_value = $contact->name . " [id: $contact->_id]";
     }
     else {
       if ($contact = hid_profiles_get_contact_by_id($items[$delta]['cid'])) {
@@ -222,7 +223,12 @@ function hid_contact_reference_field_formatter_view($entity_type, $entity, $fiel
             '#contact' => $contact,
             '#settings' => $settings,
             '#cache' => array(
-              'keys' => array('hid_contact', $entity_type, $wrapper->getIdentifier(), $item['cid']),
+              'keys' => array(
+                'hid_contact',
+                $entity_type,
+                $wrapper->getIdentifier(),
+                $item['cid']
+              ),
               'bin' => 'cache',
               'expire' => time() + 3600,
               'granularity' => DRUPAL_CACHE_PER_PAGE,
@@ -246,6 +252,6 @@ function hid_contact_reference_field_update($entity_type, $entity, $field, $inst
     foreach ($items as $delta => $item) {
       cache_clear_all('hid_contact:' . $entity_type . ':' . $wrapper->getIdentifier() . ':' . $item['cid'], 'cache');
     }
-    //cache_clear_all('hid_contact:' . $entity_type . ':' . $wrapper->getIdentifier() . ':', 'cache', TRUE);
+    // cache_clear_all('hid_contact:' . $entity_type . ':' . $wrapper->getIdentifier() . ':', 'cache', TRUE);.
   }
 }

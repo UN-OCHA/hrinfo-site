@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Search feature.
@@ -6,12 +7,15 @@
 
 include_once 'hr_search.features.inc';
 
-function hr_search_form_views_exposed_form_alter (&$form, $form_state) {
+/**
+ * Implements hook_form_alter().
+ */
+function hr_search_form_views_exposed_form_alter(&$form, $form_state) {
   $context = og_context();
   if (isset($context['gid']) && $form['#id'] == 'views-exposed-form-hr-search-space') {
-    $form['#action'] = '/'.drupal_get_path_alias('node/'.$context['gid'].'/search');
+    $form['#action'] = '/' . drupal_get_path_alias('node/' . $context['gid'] . '/search');
     $node = node_load($context['gid']);
-    $form['#info']['filter-search_api_views_fulltext']['label'] = t('Search').' '.$node->title;
+    $form['#info']['filter-search_api_views_fulltext']['label'] = t('Search') . ' ' . $node->title;
   }
 }
 
@@ -34,7 +38,8 @@ function hr_search_facetapi_facet_info_alter(array &$facet_info, array $searcher
 
 /**
  * Implements hook_form_FORM_ID_alter()
- * Adds chosen-disable class to search_api_sorts_widget
+ *
+ * Adds chosen-disable class to search_api_sorts_widget.
  */
 function hr_search_form_search_api_sorts_widget_form_alter(&$form, &$form_state) {
   $form['sort_by']['#attributes'] = array('class' => array('chosen-disable'));
@@ -53,11 +58,12 @@ function hr_search_entity_delete($entity, $type) {
 
 /**
  * Implements hook_views_pre_render()
+ *
  * Display contextual message if keyword entered corresponds to an operation.
  */
 function hr_search_views_pre_render(&$view) {
   if ($view->name == 'hr_search' && $view->current_display == 'page' && isset($_GET['search'])) {
-    // Find out if the search string corresponds to the title of an operation
+    // Find out if the search string corresponds to the title of an operation.
     $query = new EntityFieldQuery();
     $result = $query
       ->entityCondition('entity_type', 'node')
@@ -69,9 +75,11 @@ function hr_search_views_pre_render(&$view) {
       $nodes = entity_load('node', array_keys($result['node']));
       $node = reset($nodes);
       drupal_set_message(t('Looking for the latest information about %operation ? <a href="@operation_link">Click here</a>',
-        array('%operation' => entity_label('node', $node), '@operation_link' => url('node/'.$node->nid))),
-      'status');
+        array(
+          '%operation' => entity_label('node', $node),
+          '@operation_link' => url('node/' . $node->nid),
+        )
+        ), 'status');
     }
   }
 }
-

@@ -1,4 +1,5 @@
 <?php
+
   /**
    * @file
    * Initial template for the ev-events documents.
@@ -32,7 +33,7 @@
     <div class="ev-events--intro">
       <?php print render($contents); ?>
     </div>
-     <?php endif ?>
+    <?php endif ?>
     <div class="ev-events--data">
       <?php print render($data); ?>
     </div>

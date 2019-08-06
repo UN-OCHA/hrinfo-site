@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Upcoming events plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('Upcoming events'),
@@ -15,10 +20,9 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
-
-function ev_events_upcoming_edit_form($form, &$form_state){
+function ev_events_upcoming_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
 
   $form['country'] = array(
@@ -44,7 +48,6 @@ function ev_events_upcoming_edit_form($form, &$form_state){
 /**
  * Edit form submit handler.
  */
-
 function ev_events_upcoming_edit_form_submit($form, &$form_state) {
   foreach (element_children($form) as $key) {
     if (isset($form_state['values'][$key])) {
@@ -154,7 +157,8 @@ function ev_events_upcoming_render_event($event) {
   $output .= '<span class="ev-event-title">' . l($event['title'], $event['url'], array(
     'attributes' => array(
       'target' => '_blank',
-    ))) . '</span><br>';
+    )
+)) . '</span><br>';
   $output .= '<span class="ev-event-date">' . $date . '</span> ';
 
   return $output;

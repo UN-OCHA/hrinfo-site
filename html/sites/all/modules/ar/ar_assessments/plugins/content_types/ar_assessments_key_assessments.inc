@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Dynamic assessments plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('Dynamic Assessments'),
@@ -17,7 +22,7 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
 function ar_assessments_key_assessments_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
@@ -62,10 +67,11 @@ function ar_assessments_key_assessments_edit_form_submit($form, &$form_state) {
 
 /**
  * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
+ *
+ * @See ctools_plugin_examples for more advanced info.
  */
 function ar_assessments_key_assessments_render($subtype, $conf, $panel_args, $context = NULL) {
-  // initial content is blank
+  // Initial content is blank.
   $block = new stdClass();
   $block->title = 'Assessments';
   $block->content = '';

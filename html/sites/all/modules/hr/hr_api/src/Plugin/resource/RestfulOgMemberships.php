@@ -1,17 +1,13 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_api\Plugin\resource\RestfulOgMemberships.
- */
-
 namespace Drupal\hr_api\Plugin\resource;
 
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulOgMemberships
+ * Class RestfulOgMemberships.
+ *
  * @package Drupal\hr_api\Plugin\resource
  *
  * @Resource(
@@ -77,6 +73,9 @@ class RestfulOgMemberships extends ResourceCustom implements ResourceInterface {
     return $public_fields;
   }
 
+  /**
+   * Get roles.
+   */
   public function getRoles($di) {
     $wrapper = $di->getWrapper();
     $uid = $wrapper->entity->getIdentifier();
@@ -84,6 +83,9 @@ class RestfulOgMemberships extends ResourceCustom implements ResourceInterface {
     return array_values(og_get_user_roles('node', $nid, $uid));
   }
 
+  /**
+   * Get user.
+   */
   public function getUser($value) {
     $valueOut = new \stdClass();
     $valueOut->uid = $value->uid;

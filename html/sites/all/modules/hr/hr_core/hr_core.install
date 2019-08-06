@@ -16,9 +16,12 @@ function hr_core_update_7001() {
   $result = $query->execute();
   $base_fields = $result->fetchAllKeyed();
 
-
   $query = db_select('multisite_redirect')
-    ->fields('multisite_redirect', array('source_site', 'source_path', 'redirect'))
+    ->fields('multisite_redirect', array(
+      'source_site',
+      'source_path',
+      'redirect',
+    ))
     ->condition('source_path', '<front>', '<>')
     ->condition('access', '1429351251', '>')
     ->condition('count', 5, '>');
@@ -37,7 +40,7 @@ function hr_core_update_7001() {
       $source = $source = $source_site . '/' . urldecode($redirect->source_path);
     }
 
-    $destination =  _hr_core_install_remove_language_url($languages, urldecode($redirect->redirect));
+    $destination = _hr_core_install_remove_language_url($languages, urldecode($redirect->redirect));
     if ($dest_path = drupal_lookup_path('source', $destination)) {
       $destination = $dest_path;
     }
@@ -63,7 +66,7 @@ function hr_core_update_7001() {
   }
   redirect_page_cache_clear();
 
-  if( module_exists('multisite_redirect')) {
+  if (module_exists('multisite_redirect')) {
     variable_del('multisite_redirect_primary_site');
     variable_del('multisite_redirect_exclusions');
     module_disable(array('multisite_redirect'));
@@ -349,7 +352,7 @@ function hr_core_update_7019() {
     ->execute()
     ->fetchAll();
 
-  foreach($allowed_types as $allowed_type) {
+  foreach ($allowed_types as $allowed_type) {
     if (!isset($allowed[$allowed_type->module])) {
       $allowed[$allowed_type->module] = array();
     }
@@ -475,7 +478,7 @@ function hr_core_update_7029() {
 }
 
 /**
- * Perform the hybridauth migration
+ * Perform the hybridauth migration.
  */
 function hr_core_update_7030() {
   module_enable(array('hybridauth'));
@@ -498,25 +501,37 @@ function hr_core_update_7030() {
  */
 function hr_core_update_7031() {
   user_role_delete('trusted');
-  module_disable(array('hr_translations', 'tmgmt_local', 'tmgmt_entity_ui', 'tmgmt_i18n_string', 'tmgmt_entity', 'tmgmt_language_combination', 'tmgmt_field', 'tmgmt_ui', 'tmgmt'));
+  module_disable(array(
+    'hr_translations',
+    'tmgmt_local',
+    'tmgmt_entity_ui',
+    'tmgmt_i18n_string',
+    'tmgmt_entity',
+    'tmgmt_language_combination',
+    'tmgmt_field',
+    'tmgmt_ui',
+    'tmgmt',
+  ));
   user_role_delete('translator');
 }
 
 /**
- * Set modified = 0 to node_types to allow for translated names
+ * Set modified = 0 to node_types to allow for translated names.
  */
- function hr_core_update_7032() {
-   db_update('node_type')
+function hr_core_update_7032() {
+  db_update('node_type')
     ->fields(array(
-      'modified' => 0
-    ))
+    'modified' => 0
+  ))
     ->execute();
- }
+}
 
 /**
+ * Implements hook_update_N().
+ *
  * Enable custom ocha_basic theme, install modernizr, revert sitewide context
  * and search-related views exposed filters block contexts, enable footer_menu
- * feature
+ * feature.
  */
 function hr_core_update_7033() {
   variable_set('theme_default', 'ocha_basic');
@@ -570,7 +585,7 @@ function hr_core_update_7034() {
 }
 
 /**
- * HRINFO-918 - Migrate assessment accessibility values to new values
+ * HRINFO-918 - Migrate assessment accessibility values to new values.
  */
 function hr_core_update_7035() {
   db_update('field_data_field_asst_accessibility')
@@ -589,7 +604,7 @@ function hr_core_update_7035() {
 }
 
 /**
- * OPS-4930 - Remove bad node
+ * OPS-4930 - Remove bad node.
  */
 function hr_core_update_7036() {
   db_delete('node')

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * HID Contacts plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('HID Contacts'),
@@ -14,7 +19,7 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
 function hid_profiles_list_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
@@ -61,7 +66,7 @@ function _hid_profiles_list_form_contact($conf, $delta) {
   $default_value = '';
   if (!empty($conf['contacts'][$delta])) {
     $contact = hid_profiles_get_contact($conf['contacts'][$delta]);
-    $default_value = $contact->name." [id: $contact->_id]";
+    $default_value = $contact->name . " [id: $contact->_id]";
   }
 
   $elt = array(
@@ -96,8 +101,9 @@ function hid_profiles_list_edit_form_submit($form, &$form_state) {
 }
 
 /**
- * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
+ * Run-time rendering of the body of the block (content type).
+ *
+ * @See ctools_plugin_examples for more advanced info.
  */
 function hid_profiles_list_render($subtype, $conf, $panel_args, $context = NULL) {
   $theme = 'hid_profiles_single_contact_v2';
@@ -106,11 +112,11 @@ function hid_profiles_list_render($subtype, $conf, $panel_args, $context = NULL)
   $block->title = t('Contacts');
   $block->content = array();
   $settings = array(
-    'show_name' => true,
-    'show_organization' => true,
-    'show_job_title' => true,
-    'show_email' => true,
-    'show_phone_number' => true
+    'show_name' => TRUE,
+    'show_organization' => TRUE,
+    'show_job_title' => TRUE,
+    'show_email' => TRUE,
+    'show_phone_number' => TRUE
   );
 
   foreach ($conf['contacts'] as $cid) {

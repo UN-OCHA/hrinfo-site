@@ -1,11 +1,13 @@
 <?php
-  /**
-   * @file: template for displaying contact information from HID.
-   */
+
+/**
+ * @file
+ * Template for displaying contact information from HID.
+ */
 ?>
 
 <article class="hid-contact" itemscope itemtype="https://schema.org/Person">
-  <?php 
+  <?php
     if (!empty($settings['show_name'])) {
   ?>
     <span itemprop="name">
@@ -20,14 +22,14 @@
     <div itemscope itemtype="https://schema.org/Organization">
       <span itemprop="name" > <?php print $contact->organization->name; ?> </span>
     </div>
-  <?php 
+  <?php
     }
     if (!empty($settings['show_job_title']) && $contact->job_title) {
   ?>
   <div itemprop="jobTitle">
     <span><?php print $contact->job_title; ?></span>
   </div>
-  <?php 
+  <?php
     }
     if (!empty($settings['show_email'])) {
   ?>

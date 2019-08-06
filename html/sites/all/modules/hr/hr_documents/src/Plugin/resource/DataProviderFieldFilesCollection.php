@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_documents\Plugin\resource\DataProviderFieldFilesCollection.
- */
-
 namespace Drupal\hr_documents\Plugin\resource;
 
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
@@ -12,7 +7,10 @@ use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
 use Drupal\restful\Http\RequestInterface;
 use Drupal\restful\Exception\ForbiddenException;
 
-class DataProviderFieldFilesCollection  extends DataProviderEntity implements DataProviderInterface {
+/**
+ * Class definition.
+ */
+class DataProviderFieldFilesCollection extends DataProviderEntity implements DataProviderInterface {
 
   /**
    * {@inheritdoc}

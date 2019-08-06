@@ -1,11 +1,13 @@
 <?php
 
 namespace Drupal\hr_assessments\Plugin\resource;
+
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulEntityNodeAssessments
+ * Class RestfulEntityNodeAssessments.
+ *
  * @package Drupal\hr_assessments\Plugin\resource
  *
  * @Resource(
@@ -29,7 +31,6 @@ use Drupal\restful\Plugin\resource\ResourceInterface;
  *   allowOrigin = "*"
  * )
  */
-
 class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInterface {
 
   /**
@@ -208,6 +209,9 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
     return $public_fields;
   }
 
+  /**
+   * Get a user.
+   */
   public function getUser($value) {
     $valueOut = new \stdClass();
     $valueOut->uid = $value->uid;
@@ -219,6 +223,9 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
     return $valueOut;
   }
 
+  /**
+   * Format a date.
+   */
   public function formatDate($value) {
     if (isset($value['date_type'])) {
       unset($value['date_type']);
@@ -226,6 +233,9 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
     return $value;
   }
 
+  /**
+   * Get disasters.
+   */
   public function getDisasters($values) {
     $return = array();
     if (!empty($values)) {
@@ -236,7 +246,7 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
         $tmp->glide = $node->field_glide_number[LANGUAGE_NONE][0]['value'];
         $tmp->label = $node->title;
         if (!empty($node->field_reliefweb_id)) {
-          $tmp->self = 'http://api.reliefweb.int/v1/disasters/'.$value->field_reliefweb_id[LANGUAGE_NONE][0]['value'];
+          $tmp->self = 'http://api.reliefweb.int/v1/disasters/' . $value->field_reliefweb_id[LANGUAGE_NONE][0]['value'];
         }
         $return[] = $tmp;
       }
@@ -244,6 +254,9 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
     return $return;
   }
 
+  /**
+   * Format a field collection.
+   */
   public function formatFieldCollection($value) {
     $tmp = new \stdClass();
     if (!empty($value->field_asst_accessibility)) {

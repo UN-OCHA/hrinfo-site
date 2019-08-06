@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_assessments.openlayers_maps.inc

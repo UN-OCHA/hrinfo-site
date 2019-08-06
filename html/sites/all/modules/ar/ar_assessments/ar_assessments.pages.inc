@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @file
+ * Assessments pages.
+ */
+
+/**
+ * Template load helper.
+ */
 function ar_assessments_load_template($file, $id) {
-  $template =  DRUPAL_ROOT . '/' . drupal_get_path('module', 'ar_assessments') . '/templates/'.$file.'.html';
+  $template = DRUPAL_ROOT . '/' . drupal_get_path('module', 'ar_assessments') . '/templates/' . $file . '.html';
   $template = file_get_contents($template);
   $template_elt = array(
     '#tag' => 'script',
@@ -11,16 +19,17 @@ function ar_assessments_load_template($file, $id) {
     ),
     '#value' => $template,
   );
-  drupal_add_html_head($template_elt, 'ar_assessments_'.$file);
+  drupal_add_html_head($template_elt, 'ar_assessments_' . $file);
 }
 
 /**
  * Callback function to display the list of assessments for a node.
  *
- * @param node
- *  Operation or Cluster node.
+ * @param object $node
+ *   Operation or Cluster node.
  *
  * @return string
+ *   A themed list.
  */
 function ar_assessments_page($node) {
   context_set('context', 'hr_space_menu', FALSE);
@@ -46,7 +55,7 @@ function ar_assessments_page($node) {
       'js' => array(
         '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js' => array('type' => 'external'),
         '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js' => array('type' => 'external'),
-        drupal_get_path('module', 'ar_assessments') . '/js/ar_assessments.js',
+        drupal_get_path('module', 'ar_assessments') . '/js/ar_assessments.js' => array('type' => 'file'),
         array(
           'data' => array('ar_assessments' => $settings),
           'type' => 'setting'

@@ -1,12 +1,13 @@
 <?php
+
 /**
  * @file
  * hr_jobs.context.inc
  */
+
 /**
  * Implements hook_context_default_contexts().
  */
-
 function hr_jobs_context_default_contexts() {
   $export = array();
   $context = new stdClass();

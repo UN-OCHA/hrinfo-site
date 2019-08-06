@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\restful\Plugin\resource\fields\ResourceFieldEntityMinimal.
- */
-
 namespace Drupal\hr_api\Plugin\resource\fields;
 
 use Drupal\restful\Plugin\resource\Field\ResourceFieldEntity;
@@ -21,8 +16,14 @@ use Drupal\restful\Plugin\resource\Field\PublicFieldInfo\PublicFieldInfoEntityIn
 use Drupal\restful\Plugin\resource\Field\PublicFieldInfo\PublicFieldInfoInterface;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
+/**
+ * Class definition.
+ */
 class ResourceFieldEntityMinimal extends ResourceFieldEntity implements ResourceFieldEntityInterface {
 
+  /**
+   * Do something with or to a single value.
+   */
   protected function singleValue(\EntityMetadataWrapper $property_wrapper, \EntityDrupalWrapper $wrapper, $account) {
     if ($resource = $this->getResource()) {
       // TODO: The resource input data in the field definition has changed.

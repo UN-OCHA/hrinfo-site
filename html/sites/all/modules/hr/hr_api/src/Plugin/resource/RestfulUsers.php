@@ -1,17 +1,13 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_api\Plugin\resource\RestfulUsers.
- */
-
 namespace Drupal\hr_api\Plugin\resource;
 
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
- * Class RestfulUsers
+ * Class RestfulUsers.
+ *
  * @package Drupal\hr_api\Plugin\resource
  *
  * @Resource(
@@ -54,6 +50,9 @@ class RestfulUsers extends ResourceCustom implements ResourceInterface {
     return $public_fields;
   }
 
+  /**
+   * Get roles.
+   */
   public function getRoles($di) {
     $wrapper = $di->getWrapper();
     $id = $wrapper->getIdentifier();
@@ -61,6 +60,9 @@ class RestfulUsers extends ResourceCustom implements ResourceInterface {
     return array_values($user->roles);
   }
 
+  /**
+   * Get group based roles.
+   */
   public function getGroupRoles($values) {
     $return = array();
     if (!empty($values)) {
@@ -82,8 +84,9 @@ class RestfulUsers extends ResourceCustom implements ResourceInterface {
   }
 
   /**
-   * Replace any instances of 'me' in the $path with the authenticated user's
-   * UID.
+   * Replace any instances of 'me' in the $path.
+   *
+   * Put the authenticated user's UID in place.
    *
    * See Drupal\restful\Plugin\resource\Resource::view()
    */

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Assessments plugin.
+ */
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('Static Assessments'),
@@ -14,7 +19,7 @@ $plugin = array(
 );
 
 /**
- * 'Edit form' callback for the content type.
+ * Edit form callback for the content type.
  */
 function ar_assessments_featured_assessments_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
@@ -43,10 +48,11 @@ function ar_assessments_featured_assessments_edit_form_submit($form, &$form_stat
 
 /**
  * Run-time rendering of the body of the block (content type)
- * See ctools_plugin_examples for more advanced info
+ *
+ * @See ctools_plugin_examples for more advanced info.
  */
 function ar_assessments_featured_assessments_render($subtype, $conf, $panel_args, $context = NULL) {
-  // initial content is blank
+  // Initial content is blank.
   $block = new stdClass();
   $block->title = 'Featured assessments';
   $block->content = '';
@@ -69,10 +75,10 @@ function ar_assessments_featured_assessments_render($subtype, $conf, $panel_args
       if (isset($value['files'])) {
         foreach ($value['files'] as $file) {
           if (isset($file['preview']) && !empty($file['preview'])) {
-            $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
+            $downloads[] = '<a target="reliefweb" title="' . $file['description'] . '" href = ' . $file['url'] . '>' . theme('image', array('path' => $file['preview'])) . '</a>';
           }
           else {
-            $downloads[] = '<a target="reliefweb" title="' . $file['description'] .'" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
+            $downloads[] = '<a target="reliefweb" title="' . $file['description'] . '" href = ' . $file['url'] . '>' . t('Download !file', array('!file' => $file['filename'])) . '</a>';
           }
         }
       }
@@ -82,7 +88,7 @@ function ar_assessments_featured_assessments_render($subtype, $conf, $panel_args
           'class' => 'reliefweb--doc-type--download',
         ),
         array(
-          'data' => '<a target="reliefweb" href = ' . $value['url'] . '> '. $value['title'] . '</a>',
+          'data' => '<a target="reliefweb" href = ' . $value['url'] . '> ' . $value['title'] . '</a>',
           'class' => 'reliefweb--doc-type--title',
         ),
       );

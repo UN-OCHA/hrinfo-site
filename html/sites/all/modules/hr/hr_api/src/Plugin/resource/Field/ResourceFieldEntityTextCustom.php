@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\hr_api\Plugin\resource\Field\ResourceFieldEntityTextCustom
- */
-
 namespace Drupal\hr_api\Plugin\resource\Field;
 
 use Drupal\restful\Http\RequestInterface;
@@ -12,6 +7,9 @@ use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 use Drupal\restful\Plugin\resource\Field\ResourceFieldEntityText;
 use Drupal\restful\Plugin\resource\Field\ResourceFieldEntityInterface;
 
+/**
+ * Class definition.
+ */
 class ResourceFieldEntityTextCustom extends ResourceFieldEntityText implements ResourceFieldEntityInterface {
 
   /**
