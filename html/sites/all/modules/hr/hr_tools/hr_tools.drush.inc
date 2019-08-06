@@ -133,6 +133,9 @@ function _drush_hr_tools__node_access_rebuild_batch_finished($success, $results,
   cache_clear_all();
 }
 
+/**
+ * Callback that explicitly truncates all cache tables.
+ */
 function drush_hr_tools_truncate_cache_tables() {
   if (!drush_bootstrap_to_phase(DRUSH_BOOTSTRAP_DRUPAL_DATABASE)) {
     return drush_set_error('DRUPAL_SITE_NOT_FOUND', dt('You need to specify an alias or run this command within a drupal site.'));
