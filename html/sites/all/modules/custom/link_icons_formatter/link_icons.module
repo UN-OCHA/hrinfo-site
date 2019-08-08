@@ -1,6 +1,8 @@
 <?php
+
 /**
- * @file link_icons.module
+ * @file
+ * Link Icons field formatter.
  */
 
 /**
@@ -34,7 +36,7 @@ function link_icons_field_formatter_view($entity_type, $entity, $field, $instanc
   if ($display['type'] == 'link_icons') {
     $element = array();
     $path = drupal_get_path('module', 'link_icons');
-    
+
     foreach ($items as $delta => $item) {
       $element[$delta] = array(
         '#markup' => theme('link_icons_link', array('item' => $item, 'field' => $instance)),
@@ -43,7 +45,7 @@ function link_icons_field_formatter_view($entity_type, $entity, $field, $instanc
         ),
       );
     }
-    
+
     return $element;
   }
 }
@@ -56,7 +58,7 @@ function theme_link_icons_link($vars) {
     'html' => TRUE,
     'attributes' => array('title' => $vars['item']['title']),
   );
-  
+
   return l('<i class="' . link_icons_get_icon($vars['item']['url']) . '"></i>', $vars['item']['url'], $link_options);
 }
 
@@ -71,24 +73,22 @@ function link_icons_get_icon($url) {
     'github.com' => 'icon-github-sign',
     'pinterest.com' => 'icon-pinterest-sign',
     'google.com' => 'icon-google-plus-sign',
-    // TODO: Add all icons from Font Awesome More
+    // TODO: Add all icons from Font Awesome More.
   );
-  
+
   $parsed = parse_url($url);
   $chunks = explode('.', $parsed['host']);
-  if (count($chunks) == 1)
+  if (count($chunks) == 1) {
     $host = $chunks[0];
-  else
-    $host = $chunks[count($chunks)-2] . '.' . $chunks[count($chunks)-1];
-  
-  if (isset($services[$host]))
+  }
+  else {
+    $host = $chunks[count($chunks) - 2] . '.' . $chunks[count($chunks) - 1];
+  }
+
+  if (isset($services[$host])) {
     return $services[$host];
-  else
+  }
+  else {
     return 'icon-globe';
+  }
 }
-
-
-
-
-
-

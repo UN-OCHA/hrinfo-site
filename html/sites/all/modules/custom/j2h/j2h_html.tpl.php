@@ -1,4 +1,11 @@
-<?php if (!empty($variables['title_block'])) { ?>
+<?php
+
+/**
+ * @file
+ * HTML template.
+ */
+
+if (!empty($variables['title_block'])) { ?>
 <h1 id="page-title" class="title">
 <?php } ?>
 <?php echo $variables['title_block'] ?>
