@@ -18,7 +18,7 @@ function j2h_menu() {
 
   $items['admin/config/content/j2h'] = array(
     'title' => 'Json 2 Human',
-    'description' => t'Json 2 Human Settings',
+    'description' => 'Json 2 Human Settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('j2h_configuracion'),
     'access arguments' => array('administer site configuration'),
