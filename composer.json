@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": >= "7.2",
+        "php": ">= 7.2",
         "composer/installers": "^1.2",
         "composer/semver": "^1.4",
         "cweagans/composer-patches": "^1.6",
@@ -95,7 +95,6 @@
         "drupal/languagefield": "7.1.*",
         "drupal/libraries": "7.2.*",
         "drupal/link": "7.1.*",
-        "drupal/link_icons_formatter": "unknown",
         "drupal/linkchecker": "7.1.*",
         "drupal/linkit": "7.3.*",
         "drupal/maintenance200": "7.1.*",
@@ -205,13 +204,13 @@
         "preserve-paths": [
             "html/sites/all/libraries",
             "html/sites/all/modules/contrib",
+            "html/sites/all/modules/custom",
             "html/sites/all/modules/access",
             "html/sites/all/modules/ar",
             "html/sites/all/modules/ev",
             "html/sites/all/modules/hdx",
             "html/sites/all/modules/hid",
             "html/sites/all/modules/hr",
-            "html/sites/all/modules/custom",
             "html/sites/all/themes/ocha_basic",
             "html/sites/all/translations",
             "html/sites/default",
