@@ -20,8 +20,8 @@
         "User can create node without permission": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/442.patch",
         "HR.info issue 839": "PATCHES/hrinfo-839.patch"
       },
-      "drupal/og_variables" {
-        "WSOD when group references a deleted node": "https://www.drupal.org/files/issues/2019-05-17/3055299-2.patch"
+      "drupal/og_variables": {
+        "WSOD when group references a deleted node": "https://www.drupal.org/files/issues/2019-08-08/3055299-4.patch"
       },
       "drupal/openlayers": {
         "mqcdn server is down - MapQuest map is not working": "https://www.drupal.org/files/issues/replace_mqcdn_server-2877609-2.patch"
