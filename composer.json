@@ -155,7 +155,7 @@
         "drupal/usermerge": "^2.11",
         "drupal/variable": "^2.5",
         "drupal/varnish": "^1.9",
-        "drupal/views": "3.22",
+        "drupal/views": "^3.23",
         "drupal/views_bulk_operations": "^3.5",
         "drupal/views_content_cache": "^3.0-alpha3",
         "drupal/views_data_export": "^3.1+5-dev",
