@@ -33,6 +33,7 @@ class HidTokenAuthentication extends TokenAuthentication {
     }
     // Access token may be on the request, or in the headers.
     if (!$token = $this->extractToken($request)) {
+      watchdog('hid_authentication', 'No token found');
       return NULL;
     }
 
@@ -53,8 +54,10 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
         'provider' => 'HumanitarianId',
         'identifier' => $decoded->id
       );
+      watchdog('hid_authentication', 'Decoded: ' . $decoded->id);
       $identity = _hybridauth_identity_load($data);
       $uid = $identity['uid'];
+      watchdog('hid_authentication', 'uid found: ' . $uid);
       if (!$uid) {
         return user_load(0);
       }
@@ -62,6 +65,7 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
       return user_load($uid);
     }
     catch (\Exception $err) {
+      watchdog('hid_authentication', 'Unable to decode');
       return user_load(0);
     }
   }
@@ -82,6 +86,7 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
     }
     $plugin_definition = $this->getPluginDefinition();
     $authorization = $request->getHeaders()->get('Authorization')->getValueString();
+    watchdog('hid_authentication', 'Token extracted: ' . $authorization);
     if (!empty($authorization)) {
       return str_replace('Bearer ', '', $authorization);
     }
