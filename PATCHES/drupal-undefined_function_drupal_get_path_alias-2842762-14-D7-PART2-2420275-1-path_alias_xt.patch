@@ -1,8 +1,8 @@
-diff --git a/includes/path.inc b/includes/path.inc
-index 2e35711..b81fcd7 100644
---- a/includes/path.inc
-+++ b/includes/path.inc
-@@ -233,6 +233,10 @@ function drupal_cache_system_paths() {
+diff --git a/redis/redis.path.inc b/redis/redis.path.inc
+index 73ffa091..8d7531ac 100644
+--- a/redis/redis.path.inc
++++ b/redis/redis.path.inc
+@@ -235,6 +235,10 @@ function drupal_cache_system_paths() {
   *   found.
   */
  function drupal_get_path_alias($path = NULL, $path_language = NULL) {

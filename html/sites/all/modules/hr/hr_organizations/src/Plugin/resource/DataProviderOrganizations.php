@@ -20,11 +20,8 @@ class DataProviderOrganizations extends DataProviderTaxonomyTerm implements Data
 
   /**
    * Adds query tags and metadata to the EntityFieldQuery.
-   *
-   * @param \EntityFieldQuery $query
-   *   The query to enhance.
    */
-  protected function addExtraInfoToQuery(\EntityFieldQuery $query) {
+  protected function addExtraInfoToQuery($query) {
     parent::addExtraInfoToQuery($query);
     $query->addTag('hr_organizations_acronym');
   }

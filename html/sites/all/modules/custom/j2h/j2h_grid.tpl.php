@@ -1,11 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Grid template.
+ */
+?>
 <h1 id="page-title" class="title">
 <?php echo $variables['title_block'] ?>
 </h1>
 <form action="" method="GET">
 <div id="j2h_filters">
     <?php
-    // Dropdown filters
-    foreach($variables['filters'] as $filter) { 
+    // Dropdown filters.
+    foreach($variables['filters'] as $filter) {
         $id = $filter['id'];
         $value = $filter['value'];
         ?>
@@ -13,8 +20,8 @@
             <label for="<?php echo $id ?>">
                 <?php echo $filter['label'] ?>
             </label>
-            <?php 
-            switch ($filter['type']) { 
+            <?php
+            switch ($filter['type']) {
                 case 'dropdown':
                     $options = $filter['options'];
                     ?> 
@@ -22,16 +29,17 @@
                     <?php
                         foreach($options as $opt) {
                             $selected = ($value == $opt["value"]) ? 'selected' : '';
-                            echo "<option value=".$opt["value"]." $selected>".$opt['text']."</option>";
+                            echo "<option value=" . $opt["value"] . " $selected>" . $opt['text'] . "</option>";
                         }
                     ?>
                     </select>
                     <?php
-                break;        
+                  break;
+
                 case 'text': ?>
                     <input type="text" id="<?php echo $id ?>" name="<?php echo $id ?>" value="<?php echo $value ?>" />
                 <?php
-            break;
+                  break;
             }
             ?>
         </div>
@@ -49,7 +57,7 @@
 <table>
 <thead>
 <tr>
-    <?php 
+    <?php
     foreach($variables['titles'] as $title) { ?>
         <th><?php echo $title['text']; ?></th>
     <?php
@@ -60,7 +68,7 @@
 <?php
 foreach($variables['rows'] as $rg) { ?>
     <tr>
-    <?php 
+    <?php
     foreach($variables['titles'] as $title) { ?>
         <td><?php echo $rg[$title['index']] ?></td>
     <?php

@@ -1,7 +1,7 @@
-diff --git a/sites/all/modules/contrib/restful/src/Plugin/resource/DataProvider/DataProviderEntity.php b/sites/all/modules/contrib/restful/src/Plugin/resource/DataProvider/DataProviderEntity.php
+diff --git a/src/Plugin/resource/DataProvider/DataProviderEntity.php b/src/Plugin/resource/DataProvider/DataProviderEntity.php
 index 2f01f70..076d7d6 100644
---- a/sites/all/modules/contrib/restful/src/Plugin/resource/DataProvider/DataProviderEntity.php
-+++ b/sites/all/modules/contrib/restful/src/Plugin/resource/DataProvider/DataProviderEntity.php
+--- a/src/Plugin/resource/DataProvider/DataProviderEntity.php
++++ b/src/Plugin/resource/DataProvider/DataProviderEntity.php
 @@ -980,6 +980,7 @@ class DataProviderEntity extends DataProvider implements DataProviderEntityInter
      }
      $save = FALSE;

@@ -20,11 +20,8 @@ class DataProviderTermWithParent extends DataProviderEntity implements DataProvi
 
   /**
    * Adds query tags and metadata to the EntityFieldQuery.
-   *
-   * @param \EntityFieldQuery $query
-   *   The query to enhance.
    */
-  protected function addExtraInfoToQuery(\EntityFieldQuery $query) {
+  protected function addExtraInfoToQuery($query) {
     parent::addExtraInfoToQuery($query);
     $filters = $this->parseRequestForListFilter();
     if (!empty($filters)) {

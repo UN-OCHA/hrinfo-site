@@ -165,13 +165,8 @@ class DataProviderOptimized extends DataProviderEntity implements DataProviderIn
 
   /**
    * Validates an entity's fields before they are saved.
-   *
-   * @param \EntityDrupalWrapper $wrapper
-   *   A metadata wrapper for the entity.
-   *
-   * @throws \Drupal\restful\Exception\RestfulException
    */
-  protected function validateFields(\EntityDrupalWrapper $wrapper) {
+  protected function validateFields($wrapper) {
     try {
       $entity = $wrapper->value();
       if (isset($entity->og_group_ref) && user_access('administer group')) {
