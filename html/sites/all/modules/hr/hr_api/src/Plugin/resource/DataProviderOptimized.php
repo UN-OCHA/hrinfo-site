@@ -171,7 +171,7 @@ class DataProviderOptimized extends DataProviderEntity implements DataProviderIn
    *
    * @throws \Drupal\restful\Exception\RestfulException
    */
-  protected function validateFields(\EntityDrupalWrapper $wrapper) {
+  protected function validateFields($wrapper) {
     try {
       $entity = $wrapper->value();
       if (isset($entity->og_group_ref) && user_access('administer group')) {
