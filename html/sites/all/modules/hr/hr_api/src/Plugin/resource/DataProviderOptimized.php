@@ -165,11 +165,6 @@ class DataProviderOptimized extends DataProviderEntity implements DataProviderIn
 
   /**
    * Validates an entity's fields before they are saved.
-   *
-   * @param \EntityDrupalWrapper $wrapper
-   *   A metadata wrapper for the entity.
-   *
-   * @throws \Drupal\restful\Exception\RestfulException
    */
   protected function validateFields($wrapper) {
     try {
