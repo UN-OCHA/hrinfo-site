@@ -31,6 +31,9 @@
       },
       "drupal/restful": {
         "HR.info issue 754": "PATCHES/restful-754.patch"
+      },
+      "drupal/views": {
+        "view_menu_alter() adding to existing access arguments causes user_access() error": "https://www.drupal.org/files/issues/2019-03-20/views-1771140-views_access_arguments-47.patch"
       }
     }
 }
