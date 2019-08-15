@@ -491,7 +491,7 @@ function views_menu_alter(&$callbacks) {
           // of possible display IDs instead of a single ID.
           $callbacks[$path]['page arguments'][1] = (array) $callbacks[$path]['page arguments'][1];
           $callbacks[$path]['page arguments'][1][] = $display_id;
-          $callbacks[$path]['access arguments'][] = $item['access arguments'][0];
+          $callbacks[$path]['access arguments'] = $item['access arguments'];
           $callbacks[$path]['load arguments'][1] = (array) $callbacks[$path]['load arguments'][1];
           $callbacks[$path]['load arguments'][1][] = $display_id;
         }
