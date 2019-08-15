@@ -278,9 +278,6 @@ class views_handler extends views_object {
       return $title;
     }
     $title = ($short && isset($this->definition['title short'])) ? $this->definition['title short'] : $this->definition['title'];
-    if (empty($this->definition['group'])) {
-      return $title;
-    }
     return t('!group: !title', array('!group' => $this->definition['group'], '!title' => $title));
   }
 
@@ -421,10 +418,8 @@ class views_handler extends views_object {
       '#collapsed' => TRUE,
       '#weight' => 150,
     );
-
     // Allow to alter the default values brought into the form.
-    // Triggers hook_views_handler_options_alter().
-    drupal_alter('views_handler_options', $this->options, $this);
+    drupal_alter('views_handler_options', $this->options, $view);
   }
 
   /**
@@ -1006,8 +1001,7 @@ class views_many_to_one_helper {
 
       // Clone the join for each table:
       $this->handler->table_aliases = array();
-      $values = $this->handler->operator === 'not' ? array($this->handler->value) : $this->handler->value;
-      foreach ($values as $value) {
+      foreach ($this->handler->value as $value) {
         $join = $this->get_join();
         if ($this->handler->operator == 'and') {
           $join->type = 'INNER';
@@ -1020,9 +1014,6 @@ class views_many_to_one_helper {
           'value' => $value,
           'numeric' => !empty($this->handler->definition['numeric']),
         );
-        if (($this->handler->is_a_group() && is_array($value)) || $this->handler->operator === 'not') {
-          $value = serialize($value);
-        }
         // The table alias needs to be unique to this value across the
         // multiple times the filter or argument is called by the view.
         if (!isset($this->handler->view->many_to_one_aliases[$field][$value])) {
@@ -1036,9 +1027,6 @@ class views_many_to_one_helper {
           if (empty($this->handler->table_alias)) {
             $this->handler->table_alias = $alias;
           }
-        }
-        else {
-          $this->handler->table_aliases[$value] = $this->handler->view->many_to_one_aliases[$field][$value];
         }
       }
     }
@@ -1080,12 +1068,7 @@ class views_many_to_one_helper {
       }
       else {
         $value = is_array($value) ? array_pop($value) : $value;
-        if (is_array($value) && count($value) > 1) {
-          $operator = 'IN';
-        }
-        else {
-          $operator = '=';
-        }
+        $operator = '=';
       }
       $add_condition = FALSE;
     }
@@ -1692,18 +1675,15 @@ class views_join {
           }
 
           if (is_array($info['value'])) {
-            $value_placeholders = array();
-
             // With an array of values, we need multiple placeholders and the
             // 'IN' operator is implicit.
             foreach ($info['value'] as $value) {
               $placeholder_i = $view_query->placeholder('views_join_condition_');
-              $value_placeholders[] = $placeholder_i;
               $arguments[$placeholder_i] = $value;
             }
 
             $operator = !empty($info['operator']) ? $info['operator'] : 'IN';
-            $placeholder = '( ' . implode(', ', $value_placeholders) . ' )';
+            $placeholder = '( ' . implode(', ', array_keys($arguments)) . ' )';
           }
           else {
             // With a single value, the '=' operator is implicit.

@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b81c35bb2e8ae10c6016e470309fce7",
+    "content-hash": "5fe6785bbede041578c4f73e720a7620",
     "packages": [
         {
             "name": "composer/installers",
@@ -6094,10 +6094,6 @@
             ],
             "authors": [
                 {
-                    "name": "Robert Ngo",
-                    "homepage": "https://www.drupal.org/user/610230"
-                },
-                {
                     "name": "adriancid",
                     "homepage": "https://www.drupal.org/user/1962106"
                 },
@@ -9711,17 +9707,17 @@
         },
         {
             "name": "drupal/views",
-            "version": "3.23.0",
+            "version": "3.22.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views.git",
-                "reference": "7.x-3.23"
+                "reference": "7.x-3.22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views-7.x-3.23.zip",
-                "reference": "7.x-3.23",
-                "shasum": "fa18ff7c64416053129b689021ddf4f4e6b6094d"
+                "url": "https://ftp.drupal.org/files/projects/views-7.x-3.22.zip",
+                "reference": "7.x-3.22",
+                "shasum": "70fe96de0a3b47ba6c8f82d69fd7e475dda43a5e"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -9733,7 +9729,7 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "7.x-3.23",
+                    "version": "7.x-3.22",
                     "datestamp": "1557505381",
                     "security-coverage": {
                         "status": "covered",

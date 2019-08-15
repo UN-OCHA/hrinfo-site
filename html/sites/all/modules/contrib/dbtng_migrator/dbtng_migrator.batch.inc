@@ -94,9 +94,9 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
         continue;
       }
       foreach ($schema as $table => $info) {
-		  		if (strpos($table, 'field_deleted') === 0) {
-			continue;
-		}
+		  	if (strpos($table, 'field_deleted') === 0) {
+			    continue;
+    		}
         $tables[] = $table;
       }
     }
@@ -131,7 +131,6 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
     $count = 0;
     $limit = 500;
 
-    drush_log($table . ':: total = ' . $total);
     while ($count < $total) {
       db_set_active($origin);
       $query = db_select($table, 't')
@@ -163,17 +162,14 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
     	}
     	catch(Exception $e) {
         drupal_set_message($e->getMessage(), 'error');
-        drush_log($table . ' --- ' . $count . ' --- ' . $e->getMessage());
     	}
 
       $count += $limit;
     }
-    drush_log($table . ':: done = ' . $count);
   }
   catch(Exception $e) {
     db_set_active('default');
     drupal_set_message($e->getMessage(), 'error');
-    drush_log($table . ' --- ' . $count . ' --- ' . $e->getMessage());
     $context['message'] = t("Processing @table failed.", array('@table' => $table));
   }
   $context['results'][] = $table;

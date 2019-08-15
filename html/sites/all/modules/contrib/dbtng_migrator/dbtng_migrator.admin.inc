@@ -61,13 +61,15 @@ function dbtng_migrator_check_form_validate($form, &$form_state) {
       // Iterate over the schema and assert the origin's schema exists
       // on the destination.
       foreach ($schema as $table => $info) {
-		if (strpos($table, 'field_deleted') === 0) {
-			continue;
-		}
+        if (strpos($table, 'field_deleted') === 0) {
+          continue;
+        }
+
         if (!db_table_exists($table)) {
           form_set_error('migrate_destination', t('@table does not existing in @db_key', array('@table' => $table, '@db_key' => $dest)));
           continue;
         }
+
         foreach ($info['fields']  as $name => $column) {
           if (!db_field_exists($table, $name)) {
             form_set_error('migrate_destination', t('@table does not contain field @column in @db_key', array(
@@ -210,9 +212,7 @@ function dbtng_migrator_settings_validate($form, $form_state) {
       continue;
     }
     foreach ($schema as $table => $info) {
-		  drush_log($table);
   		if (strpos($table, 'field_deleted') === 0) {
-	    	drush_log('skipping::' . $table);
 			  continue;
 		  }
 	  	else {

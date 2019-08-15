@@ -41,9 +41,7 @@ class views_handler_field_entity extends views_handler_field {
 
     // Initialize the entity-type used.
     $table_data = views_fetch_data($this->table);
-    if (isset($table_data['table']['entity type'])) {
-      $this->entity_type = $table_data['table']['entity type'];
-    }
+    $this->entity_type = $table_data['table']['entity type'];
   }
 
   /**
