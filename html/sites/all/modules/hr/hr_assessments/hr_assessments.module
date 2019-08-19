@@ -195,7 +195,7 @@ function hr_assessments_clone_node_alter(&$node, $context) {
 }
 
 /**
- * Implements hook_views_post_render();
+ * Implements hook_views_post_render().
  */
 function hr_assessments_views_post_render(&$view, &$output, &$cache) {
   if ($view->name != 'hr_assessments') {
