@@ -51,7 +51,8 @@ function dbtng_migrator_batch_install_schema($origin, $destination) {
 
     foreach ($original_schema_table_list as $name) {
       $table = $schema[$name];
-      // Skip deleted tables;
+
+      // Skip deleted tables.
       if (strpos($name, 'field_deleted') === 0) {
         continue;
       }
@@ -94,9 +95,11 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
         continue;
       }
       foreach ($schema as $table => $info) {
-		  	if (strpos($table, 'field_deleted') === 0) {
-			    continue;
-    		}
+        // Skip deleted tables.
+        if (strpos($name, 'field_deleted') === 0) {
+          continue;
+        }
+
         $tables[] = $table;
       }
     }
@@ -112,11 +115,12 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
   $schema = drupal_get_schema($table);
 
   // Set a default sort as range queries must have sorts.
-  $order_by = array_keys($schema['fields']);
   if (isset($schema['primary key'])) {
     $order_by = $schema['primary key'];
   }
-
+  else {
+    $order_by = array_keys($schema['fields']);
+  }
 
   try {
     // We have to revert to the default database to process a t() function call.
@@ -134,17 +138,14 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
     while ($count < $total) {
       db_set_active($origin);
       $query = db_select($table, 't')
-        ->fields('t', array_keys($schema['fields']))
-        ->range($count, $limit);
+                ->fields('t', array_keys($schema['fields']))
+                ->range($count, $limit);
 
       foreach ($order_by as $order_by_field) {
         $query->orderBy($order_by_field);
       }
 
-      $rows = $query->execute()->fetchAll();
-      if (!is_array($rows)) {
-  		  drush_print_r($rows);
-	    }
+      $rows = $query->execute();
 
       // No need to generate insert queries that don't insert anything.
       if (!count($rows)) {
@@ -156,14 +157,7 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
       foreach ($rows as $row) {
         $insert->values((array) $row);
       }
-
-      try {
-        $insert->execute();
-    	}
-    	catch(Exception $e) {
-        drupal_set_message($e->getMessage(), 'error');
-    	}
-
+      $insert->execute();
       $count += $limit;
     }
   }
