@@ -37,7 +37,8 @@
         "Skip deleted tables": "PATCHES/dbtng_migrator_skip_field_deleted.patch"
       },
       "drupal/shs": {
-        "Disable entity loading": "PATCHES/shs_lazyload.patch"
+        "Disable entity loading": "PATCHES/shs_lazyload.patch",
+        "Disable entity loading 2": "PATCHES/shs_lazyload_2.patch"
       }
     }
 }
