@@ -4,9 +4,8 @@ core = 7.x
 
 configure = admin/config/development/performance
 
-; Information added by Drupal.org packaging script on 2014-03-28
-version = "7.x-1.0-beta1"
+; Information added by Drupal.org packaging script on 2019-08-20
+version = "7.x-1.0"
 core = "7.x"
 project = "autocomplete_limit"
-datestamp = "1395988143"
-
+datestamp = "1566344887"

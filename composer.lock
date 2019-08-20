@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "730a1b3fbeee00f47ea4bdb4eee2d00c",
+    "content-hash": "fca42ecc2e970655c11191e1148f6963",
     "packages": [
         {
             "name": "composer/installers",
@@ -559,17 +559,17 @@
         },
         {
             "name": "drupal/autocomplete_limit",
-            "version": "1.0.0-beta1",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/autocomplete_limit.git",
-                "reference": "7.x-1.0-beta1"
+                "reference": "7.x-1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/autocomplete_limit-7.x-1.0-beta1.zip",
-                "reference": "7.x-1.0-beta1",
-                "shasum": "4e5eeb7b68fc47a9600286f683a94fb79cae8062"
+                "url": "https://ftp.drupal.org/files/projects/autocomplete_limit-7.x-1.0.zip",
+                "reference": "7.x-1.0",
+                "shasum": "704f1645ca41c55f14d42688db7b42848e5719c5"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -580,11 +580,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "7.x-1.0-beta1",
-                    "datestamp": "1395988143",
+                    "version": "7.x-1.0",
+                    "datestamp": "1566344885",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -6145,10 +6145,6 @@
             ],
             "authors": [
                 {
-                    "name": "Robert Ngo",
-                    "homepage": "https://www.drupal.org/user/610230"
-                },
-                {
                     "name": "adriancid",
                     "homepage": "https://www.drupal.org/user/1962106"
                 },
@@ -8753,6 +8749,10 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Disable entity loading": "PATCHES/shs_lazyload.patch",
+                    "Disable entity loading 2": "PATCHES/shs_lazyload_2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -11706,7 +11706,6 @@
     "aliases": [],
     "minimum-stability": "alpha",
     "stability-flags": {
-        "drupal/autocomplete_limit": 10,
         "drupal/conditional_fields": 15,
         "drupal/defaultconfig": 15,
         "drupal/facetapi_bonus": 20,
