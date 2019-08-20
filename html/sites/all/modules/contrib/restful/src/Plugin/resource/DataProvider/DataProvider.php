@@ -440,9 +440,6 @@ abstract class DataProvider implements DataProviderInterface {
 
   /**
    * Adds query tags and metadata to the EntityFieldQuery.
-   *
-   * @param \EntityFieldQuery|\SelectQuery $query
-   *   The query to enhance.
    */
   protected function addExtraInfoToQuery($query) {
     // Add a generic tags to the query.

@@ -611,3 +611,28 @@ function hr_core_update_7036() {
     ->condition('nid', 177189)
     ->execute();
 }
+
+/**
+ * Rename users.
+ */
+function hr_core_update_7037() {
+  db_query("UPDATE {users} SET name = 'chakowa - INVALID' WHERE uid = 2087;");
+  db_query("UPDATE {users} SET name = 'caroline.teyssier - INVALID' WHERE uid = 273;");
+}
+
+/**
+ * Rename files.
+ */
+function hr_core_update_7038() {
+  db_query("UPDATE {file_managed} SET uri = 'public://Hesper Scale Presentation - INVALID' WHERE fid = 2206;");
+  db_query("UPDATE {file_managed} SET uri = 'public://Humanitarian Dashboard - INVALID' WHERE fid = 2208;");
+  db_query("UPDATE {file_managed} SET uri = 'public://20 November Myanmar Humanitarian Dashboard - INVALID' WHERE fid = 2286;");
+  db_query("UPDATE {file_managed} SET uri = 'public://Methodologie Evaluations Rapides - INVALID' WHERE fid = 2249;");
+}
+
+/**
+ * Enable migrate module.
+ */
+function hr_core_update_7039() {
+  module_enable(array('dbtng_migrator'));
+}

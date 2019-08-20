@@ -51,6 +51,12 @@ function dbtng_migrator_batch_install_schema($origin, $destination) {
 
     foreach ($original_schema_table_list as $name) {
       $table = $schema[$name];
+
+      // Skip deleted tables.
+      if (strpos($name, 'field_deleted') === 0) {
+        continue;
+      }
+
       db_set_active($destination);
       db_create_table($name, $table);
       $success = db_table_exists($name);
@@ -89,6 +95,11 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
         continue;
       }
       foreach ($schema as $table => $info) {
+        // Skip deleted tables.
+        if (strpos($name, 'field_deleted') === 0) {
+          continue;
+        }
+
         $tables[] = $table;
       }
     }
@@ -104,11 +115,12 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
   $schema = drupal_get_schema($table);
 
   // Set a default sort as range queries must have sorts.
-  $order_by = key($schema['fields']);
   if (isset($schema['primary key'])) {
-    $order_by = current($schema['primary key']);
+    $order_by = $schema['primary key'];
   }
-
+  else {
+    $order_by = array_keys($schema['fields']);
+  }
 
   try {
     // We have to revert to the default database to process a t() function call.
@@ -125,11 +137,15 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
 
     while ($count < $total) {
       db_set_active($origin);
-      $rows = db_select($table, 't')
+      $query = db_select($table, 't')
                 ->fields('t', array_keys($schema['fields']))
-                ->orderBy($order_by)
-                ->range($count, $limit)
-                ->execute();
+                ->range($count, $limit);
+
+      foreach ($order_by as $order_by_field) {
+        $query->orderBy($order_by_field);
+      }
+
+      $rows = $query->execute();
 
       // No need to generate insert queries that don't insert anything.
       if (!count($rows)) {

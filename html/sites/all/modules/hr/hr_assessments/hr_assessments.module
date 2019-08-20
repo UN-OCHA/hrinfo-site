@@ -193,3 +193,44 @@ function hr_assessments_clone_node_alter(&$node, $context) {
   unset($node->field_asst_data);
   unset($node->field_related_content);
 }
+
+/**
+ * Implements hook_views_post_render().
+ */
+function hr_assessments_views_post_render(&$view, &$output, &$cache) {
+  if ($view->name != 'hr_assessments') {
+    return;
+  }
+
+  if ($view->current_display != 'map_data') {
+    return;
+  }
+
+  // Fetch nids from results.
+  $nids = array();
+  foreach ($view->result as $row) {
+    $nids[] = $row->entity;
+  }
+
+  // Load all nodes.
+  $nodes = node_load_multiple($nids);
+
+  // Build correct output.
+  $output = [];
+  foreach ($nodes as $n) {
+    $node = entity_metadata_wrapper('node', $n);
+    foreach ($node->field_locations as $location) {
+      $geo = $location->field_geofield->value();
+      if (!empty($geo['lat']) && !empty($geo['lon'])) {
+        $output[] = [
+          'projection' => 'EPSG:4326',
+          'wkt' => 'POINT(' . $geo['lon'] . ' ' . $geo['lat'] . ')',
+          'attributes' => array(
+            'title' => l($node->title->value(), 'node/' . $node->getIdentifier()),
+            'name' => l($node->title->value(), 'node/' . $node->getIdentifier()),
+          ),
+        ];
+      }
+    }
+  }
+}

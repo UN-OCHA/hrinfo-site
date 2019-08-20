@@ -1486,3 +1486,25 @@ function hr_core_validate_organization($form, &$form_state) {
     form_set_error($form['name']['#name'], t('This organization must have an English translation'));
   }
 }
+
+/**
+ * Implements hook_schema_alter().
+ */
+function hr_core_schema_alter(&$schema) {
+  // Force field_geofield_geom to LONGBLOB.
+  if (isset($schema['field_data_field_geofield'])) {
+    $schema['field_data_field_geofield']['fields']['field_geofield_geom']['type'] = 'blob';
+    $schema['field_data_field_geofield']['fields']['field_geofield_geom']['size'] = 'big';
+  }
+
+  // Force field_geofield_geom to LONGBLOB.
+  if (isset($schema['field_revision_field_geofield'])) {
+    $schema['field_revision_field_geofield']['fields']['field_geofield_geom']['type'] = 'blob';
+    $schema['field_revision_field_geofield']['fields']['field_geofield_geom']['size'] = 'big';
+  }
+
+  // User name length 254.
+  if (isset($schema['users'])) {
+    $schema['users']['fields']['name']['length'] = 254;
+  }
+}
