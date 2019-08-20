@@ -1,9 +1,9 @@
-diff --git a/html/sites/all/modules/contrib/shs/shs.module b/html/sites/all/modules/contrib/shs/shs.module
+diff --git a/shs.module b/shs.module
 index 8f48742aa..56522fe71 100644
---- a/html/sites/all/modules/contrib/shs/shs.module
-+++ b/html/sites/all/modules/contrib/shs/shs.module
+--- a/shs.module
++++ b/shs.module
 @@ -489,8 +489,7 @@ function shs_field_widget_form(&$form, &$form_state, $field, $instance, $langcod
- 
+
    // Prepare the list of options.
    if ($field['type'] == 'entityreference') {
 -    // Get current selection handler.
@@ -18,7 +18,7 @@ index 8f48742aa..56522fe71 100644
      $element['#default_value'] = $default_value;
 +    $element['#options'][$default_value] = $default_value;
    }
- 
+
    // Add main Javascript behavior and style only once.
 @@ -904,7 +904,19 @@ function shs_term_get_children($identifier, $parent = 0, array $settings = array
          // Only load entities if i18n_taxonomy or entity_translation is
