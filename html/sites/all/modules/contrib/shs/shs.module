@@ -430,10 +430,8 @@ function shs_field_widget_form(&$form, &$form_state, $field, $instance, $langcod
   // Get value.
   $element_value = NULL;
   $submitted_value = NULL;
-  if (!empty($form_state['values']) && !empty($element['#field_name']) && !empty($element['#language']) && isset($element['#delta'])) {
-    if ($field['type'] == 'entityreference' && isset($form_state['values'][$element['#field_name']][$element['#language']][$element['#delta']])) {
-      $submitted_value = $form_state['values'][$element['#field_name']][$element['#language']][$element['#delta']]['target_id'];
-    }
+  if (!empty($form_state['values']) && !empty($element['#parents'])) {
+    $submitted_value = drupal_array_get_nested_value($form_state['values'], $element['#parents']);
   }
   if (!empty($items[$delta][$field_column])) {
     // Use saved value from database or cache.
@@ -441,7 +439,7 @@ function shs_field_widget_form(&$form, &$form_state, $field, $instance, $langcod
   }
   elseif (!empty($submitted_value)) {
     // Use value from form_state (for example for fields with cardinality = -1).
-    $element_value = $submitted_value;
+    $element_value = array('tid' => $submitted_value);
   }
 
   // Get vocabulary names from allowed values.
@@ -491,16 +489,15 @@ function shs_field_widget_form(&$form, &$form_state, $field, $instance, $langcod
 
   // Prepare the list of options.
   if ($field['type'] == 'entityreference') {
+    // Get current selection handler.
+    $handler = entityreference_get_selection_handler($field, $instance, $element['#entity_type'], $element['#entity']);
     $options = array(
       '_none' => empty($element['#required']) ? t('- None -', array(), array('context' => 'shs')) : t('- Select a value -', array(), array('context' => 'shs')),
     );
+
+    // Make sure current element exists if present.
     if (!empty($element_value)) {
       $options[$element_value] = $element_value;
-    }
-    if (count($referencable_entities)) {
-      foreach ($referencable_entities as $terms) {
-        $options += $terms;
-      }
     }
   }
   else {
@@ -550,7 +547,6 @@ function shs_field_widget_afterbuild($element, &$form_state) {
   if (!empty($default_value)) {
     // Use value from form_state (for example for fields with cardinality = -1).
     $element['#default_value'] = $default_value;
-    $element['#options'][$default_value] = $default_value;
   }
 
   // Add main Javascript behavior and style only once.
@@ -908,17 +904,7 @@ function shs_term_get_children($identifier, $parent = 0, array $settings = array
         // Only load entities if i18n_taxonomy or entity_translation is
         // installed.
         $load_entities = module_exists('i18n_taxonomy') || module_exists('entity_translation');
-        if ($load_entities) {
-          $tree_terms = taxonomy_get_tree($vid, $parent, 1);
-          $tree_tids = array();
-          foreach ($tree_terms as $tree_term) {
-            $tree_tids[] = $tree_term->tid;
-          }
-          $tree = taxonomy_term_load_multiple($tree_tids);
-        }
-        else {
-          $tree = taxonomy_get_tree($vid, $parent, 1);
-        }
+        $tree = taxonomy_get_tree($vid, $parent, 1, $load_entities);
         foreach ($tree as $term) {
           $term_name = $term->name;
           if (module_exists('i18n_taxonomy')) {

@@ -48,7 +48,6 @@
             var parent_id = 0;
             // Update class of wrapper element.
             $field.parent('.form-item').not('.shs-wrapper-processed').once('shs-wrapper');
-            $('<div class="ajax-progress" style="display:none;"><div class="throbber"></div></div>').appendTo($field.parent());
             // Create elements for each parent of the current value.
             $.each(fieldSettings.parents, function(index, parent) {
               level++;
@@ -119,7 +118,6 @@
       parent_value = [parent_value];
     }
 
-    $element.siblings('.ajax-progress').fadeIn();
     $.ajax({
       url: Drupal.settings.basePath + '?q=' + Drupal.settings.pathPrefix + 'js/shs/json',
       type: 'POST',
@@ -135,7 +133,6 @@
         }
       },
       success: function(data) {
-        $element.siblings('.ajax-progress').fadeOut();
         if (data.success == true) {
           if ($element.prop) {
             var options = $element.prop('options');
@@ -197,7 +194,6 @@
         }
       },
       error: function(xhr, status, error) {
-        $element.siblings('.ajax-progress').fadeOut();
       }
     });
   }
@@ -219,7 +215,6 @@
    *   Field settings.
    */
   termAddNew = function($triggering_element, $container, term, base_id, level, settings) {
-    $triggering_element.siblings('.ajax-progress').fadeIn();
     $.ajax({
       url: Drupal.settings.basePath + '?q=' + Drupal.settings.pathPrefix + 'js/shs/json',
       type: 'POST',
@@ -236,7 +231,6 @@
         }
       },
       success: function(data) {
-        $triggering_element.siblings('.ajax-progress').fadeOut();
         if (data.success == true && data.data.tid) {
           if ($triggering_element.prop) {
             var options = $triggering_element.prop('options');
@@ -277,7 +271,6 @@
         }
       },
       error: function(xhr, status, error) {
-        $triggering_element.siblings('.ajax-progress').fadeOut();
         // Reset value of triggering element.
         $triggering_element.val(0);
       },
