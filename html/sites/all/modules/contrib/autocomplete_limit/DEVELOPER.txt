@@ -1,0 +1,28 @@
+Developers can specify a per form-element minimum autocomplete length by
+setting the data-limit attribute on the element in question. If found,
+the module will use this value rather than the global value set via the
+admin page.
+
+Here is a simple example for a standard textfield element.
+
+/**
+ * Implements hook_form_alter().
+ */
+function example_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'test-form') {
+    $form['element']['#attributes']['data-limit'] = 7;
+  }
+}
+
+
+Note that not all autocomplete fields have the same form element structure.
+For example, taxonomy term reference fields use a sub-element:
+
+/**
+ * Implements hook_form_alter().
+ */
+function example_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'test-form') {
+    $form['element'][LANGUAGE_NONE]['#attributes']['data-limit'] = 3;
+  }
+}

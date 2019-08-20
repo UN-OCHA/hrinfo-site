@@ -25,6 +25,7 @@
         "drupal/admin_views": "^1.6",
         "drupal/advagg": "^2.33",
         "drupal/auto_entitylabel": "^1.4",
+        "drupal/autocomplete_limit": "^1.0@beta",
         "drupal/bean": "^1.13",
         "drupal/bean_pane": "^1.2",
         "drupal/bootstrap_tour": "^1.0-beta9",
