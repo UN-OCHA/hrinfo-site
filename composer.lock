@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5fe6785bbede041578c4f73e720a7620",
+    "content-hash": "730a1b3fbeee00f47ea4bdb4eee2d00c",
     "packages": [
         {
             "name": "composer/installers",
@@ -555,6 +555,53 @@
             "homepage": "https://www.drupal.org/project/auto_entitylabel",
             "support": {
                 "source": "https://git.drupalcode.org/project/auto_entitylabel"
+            }
+        },
+        {
+            "name": "drupal/autocomplete_limit",
+            "version": "1.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/autocomplete_limit.git",
+                "reference": "7.x-1.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/autocomplete_limit-7.x-1.0-beta1.zip",
+                "reference": "7.x-1.0-beta1",
+                "shasum": "4e5eeb7b68fc47a9600286f683a94fb79cae8062"
+            },
+            "require": {
+                "drupal/drupal": "~7.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "7.x-1.0-beta1",
+                    "datestamp": "1395988143",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/7/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "cafuego",
+                    "homepage": "https://www.drupal.org/user/218525"
+                }
+            ],
+            "description": "Modifies autocomplete callbacks to not fire until the string to complete is of a set length.",
+            "homepage": "https://www.drupal.org/project/autocomplete_limit",
+            "support": {
+                "source": "https://git.drupalcode.org/project/autocomplete_limit"
             }
         },
         {
@@ -1804,6 +1851,10 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "#2757035: Integrity constraint violation errors when migrating from Postgres to MySQL": "https://www.drupal.org/files/issues/integrity-constraint-error-postgres-source-2757035-1-D7.patch",
+                    "Skip deleted tables": "PATCHES/dbtng_migrator_skip_field_deleted.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -6093,6 +6144,10 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "Robert Ngo",
+                    "homepage": "https://www.drupal.org/user/610230"
+                },
                 {
                     "name": "adriancid",
                     "homepage": "https://www.drupal.org/user/1962106"
@@ -11651,6 +11706,7 @@
     "aliases": [],
     "minimum-stability": "alpha",
     "stability-flags": {
+        "drupal/autocomplete_limit": 10,
         "drupal/conditional_fields": 15,
         "drupal/defaultconfig": 15,
         "drupal/facetapi_bonus": 20,

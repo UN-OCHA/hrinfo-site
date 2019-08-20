@@ -636,3 +636,10 @@ function hr_core_update_7038() {
 function hr_core_update_7039() {
   module_enable(array('dbtng_migrator'));
 }
+
+/**
+ * Enable autocomplete_limit module.
+ */
+function hr_core_update_7040() {
+  module_enable(array('autocomplete_limit'));
+}

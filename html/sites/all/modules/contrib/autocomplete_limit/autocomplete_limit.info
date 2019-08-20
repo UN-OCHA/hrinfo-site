@@ -1,0 +1,12 @@
+name = Autocomplete Limit
+description = Modifies autocomplete callbacks to not fire until the string to complete is of a set length.
+core = 7.x
+
+configure = admin/config/development/performance
+
+; Information added by Drupal.org packaging script on 2014-03-28
+version = "7.x-1.0-beta1"
+core = "7.x"
+project = "autocomplete_limit"
+datestamp = "1395988143"
+
