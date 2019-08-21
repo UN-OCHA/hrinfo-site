@@ -20,8 +20,18 @@ function autocomplete_limit_form_system_performance_settings_alter(&$form, $form
     '#size' => 2,
     '#maxlength' => 2,
     '#default_value' => variable_get('autocomplete_limit', 2),
-    '#element_validate' => array('element_validate_integer_positive'),
+    '#element_validate' => array('autocomplete_limit_element_validate_integer_not_negative'),
   );
+}
+
+/**
+ * Validator for the limit.
+ */
+function autocomplete_limit_element_validate_integer_not_negative($element, &$form_state) {
+  $value = $element['#value'];
+  if ($value !== '' && (!is_numeric($value) || intval($value) != $value || $value < 0)) {
+    form_error($element, t('%name must be a positive integer or 0.', array('%name' => $element['#title'])));
+  }
 }
 
 /**
