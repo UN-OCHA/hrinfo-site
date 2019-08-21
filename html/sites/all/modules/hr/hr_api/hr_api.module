@@ -117,8 +117,12 @@ function hr_api_should_call_webhook($webhook, $type, $bundle) {
  * API Webhook callback.
  */
 function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $entity) {
+  watchdog('hr_api_call_webhook', 'Called');
+
   $definition = $resource->getPluginDefinition();
   $url = $webhook['url'];
+  watchdog('hr_api_call_webhook', 'URL: ' . $url);
+
   $json = new \stdClass();
   $json->type = $definition['resource'];
   $json->language = $langcode;
@@ -143,6 +147,7 @@ function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translatio
 
   // Grab URL and pass it to the browser.
   curl_exec($ch);
+  watchdog('hr_api_call_webhook', 'Status: ' . curl_error($ch));
 
   // Close cURL resource, and free up system resources.
   curl_close($ch);
