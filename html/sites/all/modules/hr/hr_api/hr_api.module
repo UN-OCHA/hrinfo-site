@@ -121,7 +121,7 @@ function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translatio
 
   $definition = $resource->getPluginDefinition();
   $url = $webhook['url'];
-  watchdog('hr_api_call_webhook', 'URL: ' . $url);
+  watchdog('hr_api_call_webhook', 'URL: @url', array('@url' => $url));
 
   $json = new \stdClass();
   $json->type = $definition['resource'];
@@ -147,7 +147,7 @@ function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translatio
 
   // Grab URL and pass it to the browser.
   curl_exec($ch);
-  watchdog('hr_api_call_webhook', 'Status: ' . curl_error($ch));
+  watchdog('hr_api_call_webhook', 'Status: @status', array('@status' => curl_error($ch)));
 
   // Close cURL resource, and free up system resources.
   curl_close($ch);
