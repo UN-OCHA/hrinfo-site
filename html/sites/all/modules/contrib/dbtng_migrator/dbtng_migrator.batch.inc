@@ -145,7 +145,7 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
         $query->orderBy($order_by_field);
       }
 
-      $rows = $query->execute();
+      $rows = $query->execute()->fetchAll();
 
       // No need to generate insert queries that don't insert anything.
       if (!count($rows)) {
