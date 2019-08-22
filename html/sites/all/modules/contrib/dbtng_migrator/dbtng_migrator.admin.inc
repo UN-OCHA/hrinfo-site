@@ -143,7 +143,7 @@ function dbtng_migrator_settings($form, &$form_state) {
     '#collapsed' => TRUE,
   );
   $form['how_to']['details'] = array(
-    '#markup' => '<p>' . t('To migrate this Drupal install to another database you\'ll
+    '#markup' => '<p>' . t('To migrate this Drupal install to another database you\'ll 
                     need to add the database connection creditials to your settings.php file. Below is an example:') . '</p>',
   );
   $form['how_to']['example']['#markup'] = '<pre>
