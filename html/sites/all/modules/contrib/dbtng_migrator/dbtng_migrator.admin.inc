@@ -62,7 +62,7 @@ function dbtng_migrator_check_form_validate($form, &$form_state) {
       // on the destination.
       foreach ($schema as $table => $info) {
         // Skip deleted tables.
-        if (strpos($name, 'field_deleted') === 0) {
+        if (strpos($table, 'field_deleted') === 0) {
           continue;
         }
 
@@ -143,7 +143,7 @@ function dbtng_migrator_settings($form, &$form_state) {
     '#collapsed' => TRUE,
   );
   $form['how_to']['details'] = array(
-    '#markup' => '<p>' . t('To migrate this Drupal install to another database you\'ll
+    '#markup' => '<p>' . t('To migrate this Drupal install to another database you\'ll 
                     need to add the database connection creditials to your settings.php file. Below is an example:') . '</p>',
   );
   $form['how_to']['example']['#markup'] = '<pre>
@@ -213,7 +213,7 @@ function dbtng_migrator_settings_validate($form, $form_state) {
     }
     foreach ($schema as $table => $info) {
       // Skip deleted tables.
-      if (strpos($name, 'field_deleted') === 0) {
+      if (strpos($table, 'field_deleted') === 0) {
         continue;
       }
 

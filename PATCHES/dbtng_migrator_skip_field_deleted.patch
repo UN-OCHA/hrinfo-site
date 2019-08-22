@@ -7,28 +7,19 @@ index b0159a1..41f6598 100644
        // on the destination.
        foreach ($schema as $table => $info) {
 +        // Skip deleted tables.
-+        if (strpos($name, 'field_deleted') === 0) {
++        if (strpos($table, 'field_deleted') === 0) {
 +          continue;
 +        }
 +
          if (!db_table_exists($table)) {
            form_set_error('migrate_destination', t('@table does not existing in @db_key', array('@table' => $table, '@db_key' => $dest)));
            continue;
-@@ -144,7 +149,7 @@ function dbtng_migrator_settings($form, &$form_state) {
-     '#collapsed' => TRUE,
-   );
-   $form['how_to']['details'] = array(
--    '#markup' => '<p>' . t('To migrate this Drupal install to another database you\'ll 
-+    '#markup' => '<p>' . t('To migrate this Drupal install to another database you\'ll
-                     need to add the database connection creditials to your settings.php file. Below is an example:') . '</p>',
-   );
-   $form['how_to']['example']['#markup'] = '<pre>
 @@ -218,6 +223,11 @@ function dbtng_migrator_settings_validate($form, $form_state) {
        continue;
      }
      foreach ($schema as $table => $info) {
 +      // Skip deleted tables.
-+      if (strpos($name, 'field_deleted') === 0) {
++      if (strpos($table, 'field_deleted') === 0) {
 +        continue;
 +      }
 +
@@ -40,7 +31,7 @@ index 8defd65..f8a8175 100644
 --- a/dbtng_migrator.batch.inc
 +++ b/dbtng_migrator.batch.inc
 @@ -51,6 +51,12 @@ function dbtng_migrator_batch_install_schema($origin, $destination) {
- 
+
      foreach ($original_schema_table_list as $name) {
        $table = $schema[$name];
 +
@@ -57,7 +48,7 @@ index 8defd65..f8a8175 100644
        }
        foreach ($schema as $table => $info) {
 +        // Skip deleted tables.
-+        if (strpos($name, 'field_deleted') === 0) {
++        if (strpos($table, 'field_deleted') === 0) {
 +          continue;
 +        }
 +
