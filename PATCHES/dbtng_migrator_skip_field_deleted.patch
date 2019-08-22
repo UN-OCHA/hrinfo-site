@@ -7,7 +7,7 @@ index b0159a1..41f6598 100644
        // on the destination.
        foreach ($schema as $table => $info) {
 +        // Skip deleted tables.
-+        if (strpos($name, 'field_deleted') === 0) {
++        if (strpos($table, 'field_deleted') === 0) {
 +          continue;
 +        }
 +
@@ -18,7 +18,7 @@ index b0159a1..41f6598 100644
      '#collapsed' => TRUE,
    );
    $form['how_to']['details'] = array(
--    '#markup' => '<p>' . t('To migrate this Drupal install to another database you\'ll 
+-    '#markup' => '<p>' . t('To migrate this Drupal install to another database you\'ll
 +    '#markup' => '<p>' . t('To migrate this Drupal install to another database you\'ll
                      need to add the database connection creditials to your settings.php file. Below is an example:') . '</p>',
    );
@@ -28,7 +28,7 @@ index b0159a1..41f6598 100644
      }
      foreach ($schema as $table => $info) {
 +      // Skip deleted tables.
-+      if (strpos($name, 'field_deleted') === 0) {
++      if (strpos($table, 'field_deleted') === 0) {
 +        continue;
 +      }
 +
@@ -40,7 +40,7 @@ index 8defd65..f8a8175 100644
 --- a/dbtng_migrator.batch.inc
 +++ b/dbtng_migrator.batch.inc
 @@ -51,6 +51,12 @@ function dbtng_migrator_batch_install_schema($origin, $destination) {
- 
+
      foreach ($original_schema_table_list as $name) {
        $table = $schema[$name];
 +
@@ -57,7 +57,7 @@ index 8defd65..f8a8175 100644
        }
        foreach ($schema as $table => $info) {
 +        // Skip deleted tables.
-+        if (strpos($name, 'field_deleted') === 0) {
++        if (strpos($table, 'field_deleted') === 0) {
 +          continue;
 +        }
 +

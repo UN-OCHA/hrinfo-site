@@ -96,7 +96,7 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
       }
       foreach ($schema as $table => $info) {
         // Skip deleted tables.
-        if (strpos($name, 'field_deleted') === 0) {
+        if (strpos($table, 'field_deleted') === 0) {
           continue;
         }
 

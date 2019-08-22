@@ -62,7 +62,7 @@ function dbtng_migrator_check_form_validate($form, &$form_state) {
       // on the destination.
       foreach ($schema as $table => $info) {
         // Skip deleted tables.
-        if (strpos($name, 'field_deleted') === 0) {
+        if (strpos($table, 'field_deleted') === 0) {
           continue;
         }
 
@@ -213,7 +213,7 @@ function dbtng_migrator_settings_validate($form, $form_state) {
     }
     foreach ($schema as $table => $info) {
       // Skip deleted tables.
-      if (strpos($name, 'field_deleted') === 0) {
+      if (strpos($table, 'field_deleted') === 0) {
         continue;
       }
 
