@@ -1,0 +1,36 @@
+version: "2.1"
+
+services:
+  postgres:
+    extends:
+      file: ${HOME}/.docksal/stacks/services.yml
+      service: pgsql
+    image: unocha/postgis:9.6
+  mail:
+    hostname: mail
+    image: mailhog/mailhog
+    expose:
+      - "80"
+    environment:
+      - MH_API_BIND_ADDR=0.0.0.0:80
+      - MH_UI_BIND_ADDR=0.0.0.0:80
+    labels:
+      - io.docksal.virtual-host=webmail.${VIRTUAL_HOST}
+    user: root
+  solr:
+    extends:
+      file: ${HOME}/.docksal/stacks/services.yml
+      service: solr
+    environment:
+      - XXXSOLR_DEFAULT_CONFIG_SET=7.x-1.14
+    hostname: solr
+    image: docksal/solr:7.5
+    user: solr
+    labels:
+      - io.docksal.virtual-host=solr.${VIRTUAL_HOST}
+  redis:
+    hostname: redis
+    image: redis:3.2.11
+    dns:
+      - ${DOCKSAL_DNS1}
+      - ${DOCKSAL_DNS2}
