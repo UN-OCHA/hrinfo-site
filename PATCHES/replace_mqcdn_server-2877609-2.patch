@@ -1,0 +1,54 @@
+diff --git a/includes/openlayers.layers.inc b/includes/openlayers.layers.inc
+index 5ad57b6..4354223 100644
+--- a/includes/openlayers.layers.inc
++++ b/includes/openlayers.layers.inc
+@@ -15,7 +15,7 @@
+  */
+ function _openlayers_openlayers_layers() {
+   global $is_https;
+-  $mapquest_host = $is_https ? '-s.mqcdn.com' : '.mqcdn.com';
++  $mapquest_host = 'openstreetmap.org';
+ 
+   $layers = array();
+ 
+@@ -88,10 +88,9 @@ function _openlayers_openlayers_layers() {
+     'projection' => array('EPSG:3857', 'EPSG:900913'),
+     'layer_type' => 'openlayers_layer_type_xyz',
+     'url' => array(
+-      '//otile1' . $mapquest_host . '/tiles/1.0.0/osm/${z}/${x}/${y}.png',
+-      '//otile2' . $mapquest_host . '/tiles/1.0.0/osm/${z}/${x}/${y}.png',
+-      '//otile3' . $mapquest_host . '/tiles/1.0.0/osm/${z}/${x}/${y}.png',
+-      '//otile4' . $mapquest_host . '/tiles/1.0.0/osm/${z}/${x}/${y}.png',
++      '//a.tile.' . $mapquest_host . '/${z}/${x}/${y}.png',
++      '//b.tile.' . $mapquest_host . '/${z}/${x}/${y}.png',
++      '//c.tile.' . $mapquest_host . '/${z}/${x}/${y}.png'
+     ),
+     'wrapDateLine' => TRUE,
+     'resolutions' => openlayers_get_resolutions('EPSG:900913', 0, 19)
+@@ -110,10 +109,9 @@ function _openlayers_openlayers_layers() {
+     'projection' => array('EPSG:3857', 'EPSG:900913'),
+     'layer_type' => 'openlayers_layer_type_xyz',
+     'url' => array(
+-      '//oatile1' . $mapquest_host . '/tiles/1.0.0/sat/${z}/${x}/${y}.png',
+-      '//oatile2' . $mapquest_host . '/tiles/1.0.0/sat/${z}/${x}/${y}.png',
+-      '//oatile3' . $mapquest_host . '/tiles/1.0.0/sat/${z}/${x}/${y}.png',
+-      '//oatile4' . $mapquest_host . '/tiles/1.0.0/sat/${z}/${x}/${y}.png'
++      '//a.tile.' . $mapquest_host . '/${z}/${x}/${y}.png',
++      '//b.tile.' . $mapquest_host . '/${z}/${x}/${y}.png',
++      '//c.tile.' . $mapquest_host . '/${z}/${x}/${y}.png'
+     ),
+     'wrapDateLine' => TRUE,
+   );
+diff --git a/modules/openlayers_ui/js/openlayers_ui.styles.js b/modules/openlayers_ui/js/openlayers_ui.styles.js
+index 3fce3d0..a670ab1 100644
+--- a/modules/openlayers_ui/js/openlayers_ui.styles.js
++++ b/modules/openlayers_ui/js/openlayers_ui.styles.js
+@@ -27,7 +27,7 @@ Drupal.behaviors.openlayers_ui_styles = {
+       // want to keep it lean.
+       maps[id] = new OpenLayers.Map(id, { controls: [] });
+       var mapquest = new OpenLayers.Layer.OSM(Drupal.t('MapQuest-OSM Tiles'),
+-        [(location.protocol === 'https:' ? '//otile1-s' : '//otile1') + '.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png']);
++        [(location.protocol === 'http://a.tile.openstreetmap.org/${z}/${x}/${y}.png']);
+       maps[id].addLayer(mapquest);
+       var point = new OpenLayers.LonLat(Math.random() * 175, Math.random() * 80).transform(
+         new OpenLayers.Projection("EPSG:4326"), maps[id].getProjectionObject()
