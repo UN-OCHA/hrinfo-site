@@ -1,0 +1,1238 @@
+<?php
+
+/**
+ * @file
+ * Code for the Tools feature.
+ */
+
+include_once 'hr_tools.features.inc';
+
+/**
+ * Implements hook_libraries_info().
+ */
+function hr_tools_libraries_info() {
+  $libraries['google-api-php-client'] = array(
+    'name' => 'Goolgle API Client',
+    'vendor url' => 'https://github.com/googleapis/google-api-php-client',
+    'download url' => 'https://github.com/googleapis/google-api-php-client',
+    'version arguments' => array(
+      'file' => 'src/Google/Client.php',
+      'pattern' => '/const LIBVER = "(.*)"/',
+      'lines' => 45,
+    ),
+    'files' => array(
+      'php' => array('vendor/autoload.php'),
+    ),
+
+  );
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function hr_tools_menu() {
+  $items = array();
+
+  $items['xyzzy/stats/%/%'] = array(
+    'title' => 'Performance stats',
+    'page callback' => 'hr_tools_performance_stats',
+    'page arguments' => array(2, 3, 4),
+    'access callback' => TRUE,
+    'description' => 'Performance statistics',
+  );
+
+  $items['node/%node/analytics'] = array(
+    'title' => 'Analytics',
+    'page callback' => 'hr_tools_ga_report',
+    'page arguments' => array(1),
+    'access callback' => 'hr_tools_ga_report_access',
+    'access arguments' => array(1),
+    'description' => 'Google Analytics report',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 999,
+  );
+
+  $items['admin/config/system/hr-analytics'] = array(
+    'title' => 'Analytics',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hr_tools_ga_report_settings_form'),
+    'access arguments' => array('hr_tools_manage_google_analytics'),
+    'description' => 'Google Analytics report settings',
+    'weight' => 999,
+  );
+
+  $items['admin/config/hrinfo/hr-import-export'] = array(
+    'title' => 'HR import & export',
+    'description' => 'HR import/export from/to csv files.',
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 50,
+    'file path' => drupal_get_path('module', 'system'),
+    'file' => 'system.admin.inc',
+  );
+
+  $items['admin/config/hrinfo/hr-import-export/import-locations'] = array(
+    'title' => 'Import locations',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hr_tools_import_locations'),
+    'access arguments' => array('access administration pages'),
+    'description' => 'Import locations from csv',
+    'file' => 'hr_tools.import.inc',
+  );
+
+  $items['admin/config/hrinfo/hr-import-export/export-locations'] = array(
+    'title' => 'Export locations',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hr_tools_export_locations'),
+    'access arguments' => array('access administration pages'),
+    'description' => 'Export locations from csv',
+    'file' => 'hr_tools.import.inc',
+  );
+
+  $items['admin/config/hrinfo/hr-import-export/import-nodes'] = array(
+    'title' => 'Import nodes and tag',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hr_tools_import_nodes_tag'),
+    'access arguments' => array('access administration pages'),
+    'description' => 'Import nodes with new pcode and retag',
+    'file' => 'hr_tools.import.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Generate a settings form.
+ */
+function hr_tools_ga_report_settings_form($form, $form_state) {
+  $form['hr_tools_analytics_private_key_id'] = array(
+    '#title' => 'Private key Id',
+    '#type' => 'textfield',
+    '#default_value' => variable_get('hr_tools_analytics_private_key_id', ''),
+    '#required' => TRUE,
+  );
+
+  $form['hr_tools_analytics_private_key'] = array(
+    '#title' => 'Private key',
+    '#type' => 'textarea',
+    '#default_value' => variable_get('hr_tools_analytics_private_key', ''),
+    '#required' => TRUE,
+  );
+
+  $form['hr_tools_analytics_client_email'] = array(
+    '#title' => 'Client email',
+    '#type' => 'textfield',
+    '#default_value' => variable_get('hr_tools_analytics_client_email', ''),
+    '#required' => TRUE,
+  );
+
+  $form['hr_tools_analytics_client_id'] = array(
+    '#title' => 'Client Id',
+    '#type' => 'textfield',
+    '#default_value' => variable_get('hr_tools_analytics_client_id', ''),
+    '#required' => TRUE,
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Access callback.
+ */
+function hr_tools_ga_report_access($node) {
+  if (og_is_group('node', $node)) {
+    return user_access('hr_tools_view_google_analytics') || og_user_access('node', $node->nid, 'hr_tools_group_view_google_analytics');
+  }
+  return FALSE;
+}
+
+/**
+ * Implement hook_og_permission().
+ */
+function hr_tools_og_permission() {
+  return array(
+    'hr_tools_group_view_google_analytics' => array(
+      'title' => t('View google analytics of a group'),
+      'description' => t('View google analytics of a group.'),
+      'default role' => array(OG_ADMINISTRATOR_ROLE),
+    ),
+  );
+}
+
+/**
+ * Implements hook_permission().
+ */
+function hr_tools_permission() {
+  return array(
+    'hr_tools_view_google_analytics' => array(
+      'title' => t('View google analytics'),
+      'description' => t('View google analytics of a group.'),
+    ),
+    'hr_tools_manage_google_analytics' => array(
+      'title' => t('Manage google analytics'),
+      'description' => t('Manage google analytics.'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Return google analytics.
+ */
+function hr_tools_ga_report($node) {
+  if (empty(variable_get('hr_tools_analytics_private_key_id', ''))) {
+    return;
+  }
+
+  $path = request_path();
+
+  // Remove language prefixes.
+  if (strpos($path, 'en/') === 0 || strpos($path, 'fr/') === 0 || strpos($path, 'ru/') === 0 || strpos($path, 'es/') === 0) {
+    $path = substr($path, 3);
+  }
+
+  // Strip analytics.
+  $path = str_replace('/analytics', '', $path);
+
+  libraries_load('google-api-php-client');
+  $client = new Google_Client();
+  $client->setApplicationName('Google Analytics Reporting');
+  $client->setAuthConfig(array(
+    'type' => 'service_account',
+    'project_id' => 'hr-info-analytics',
+    'auth_uri' => 'https://accounts.google.com/o/oauth2/auth',
+    'token_uri' => 'https://accounts.google.com/o/oauth2/token',
+    'auth_provider_x509_cert_url' => 'https://www.googleapis.com/oauth2/v1/certs',
+    'client_x509_cert_url' => 'https://www.googleapis.com/robot/v1/metadata/x509/drupal%40hr-info-analytics.iam.gserviceaccount.com',
+    'private_key_id' => variable_get('hr_tools_analytics_private_key_id', ''),
+    'private_key' => variable_get('hr_tools_analytics_private_key', ''),
+    'client_email' => variable_get('hr_tools_analytics_client_email', ''),
+    'client_id' => variable_get('hr_tools_analytics_client_id', ''),
+  ));
+
+  $client->setScopes(['https://www.googleapis.com/auth/analytics.readonly']);
+  $client->useApplicationDefaultCredentials();
+
+  $tokenArray = $client->fetchAccessTokenWithAssertion();
+  $accessToken = $tokenArray['access_token'];
+
+  $output = '<h1><span id="report--tile">Analytics last 30 days</span></h1>';
+  $output .= '<div><select id="report--start-date"><option value="30">Last 30 days</option><option value="90">Last 3 months</option><option value="365">Last year</option></select></div>';
+  $output .= '<ul id="chart-wrapper" class="hrtools-analytics">';
+  $output .= '<li class="w-small type-counter"><h2># of visitors</h2><div id="chart-num-visitors">Loading data ...</div></li>';
+  $output .= '<li class="w-small type-counter"><h2># of page views</h2><div id="chart-num-hits">Loading data ...</div></li>';
+  $output .= '<li class="w-small type-counter"><h2>% new</h2><div id="chart-num-new">Loading data ...</div></li>';
+  $output .= '<li class="w-small type-counter"><h2>Duration</h2><div id="chart-num-duration">Loading data ...</div></li>';
+  $output .= '<li class="w-large type-chart"><h2>Sessions</h2><div id="chart-sessions">Loading data ...</div></li>';
+  $output .= '<li class="w-medium type-chart"><h2>Top countries</h2><div id="chart-top-countries">Loading data ...</div></li>';
+  $output .= '<li class="w-medium type-chart"><h2>Top languages</h2><div id="chart-top-languages">Loading data ...</div></li>';
+  $output .= '<li class="w-large type-table"><h2>Top pages</h2><div id="table-top-pages">Loading data ...</div></li>';
+  $output .= '</ul>';
+
+  return array(
+    'analytics' => array(
+      '#type' => 'markup',
+      '#markup' => $output,
+      '#attached' => array(
+        'css' => array(
+          drupal_get_path('module', 'hr_tools') . '/css/hr_tools.analytics.css',
+        ),
+        'js' => array(
+          array(
+            'data' => '(function(w,d,s,g,js,fs){g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};js=d.createElement(s);fs=d.getElementsByTagName(s)[0];js.src="https://apis.google.com/js/platform.js";fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load("analytics");};}(window,document,"script"));',
+            'type' => 'inline',
+          ),
+          drupal_get_path('module', 'hr_tools') . '/js/hr_tools.analytics.js',
+          array(
+            'data' => array(
+        'hr_tools' => array(
+          'token' => $accessToken,
+          'pathFilter' => $path,
+        )
+),
+            'type' => 'setting',
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Return performance statistics.
+ *
+ * Call curl http://0.0.0.0:8088/xyzzy/stats/1 | python -m json.tool.
+ */
+function hr_tools_performance_stats($set, $param, $db = 'default') {
+
+  // Switch to the database we're testing.
+  db_set_active($db);
+
+  // Run the performance tests.
+  $timers = _hr_tools_performance_stats($set, $param);
+
+  // Switch back to the default database.
+  db_set_active('default');
+
+  // Assemble output.
+  $output = array();
+
+  foreach ($timers as $label => $timer) {
+    $external_calls = array();
+    if (isset($timer['external_calls'])) {
+      foreach ($timer['external_calls'] as $call) {
+        $external_calls[] = array(
+          'url' => $call['url'],
+          'caller' => $call['caller'],
+          'time' => $call['timing']['time'],
+        );
+      }
+    }
+
+    $output[] = array(
+      'timestamp' => REQUEST_TIME,
+      'label' => $label,
+      'time' => $timer['time'],
+      'type' => $timer['type'],
+      'exception' => isset($timer['exception']) ? $timer['exception'] : '',
+      'external_calls' => $external_calls,
+      'external_calls_debug' => $timer['external_calls'],
+      'queries' => isset($timer['queries']) ? $timer['queries'] : array(),
+      'url' => isset($timer['url']) ? $timer['url'] : '',
+      'node_type' => isset($timer['node_type']) ? $timer['node_type'] : '',
+    );
+  }
+
+  drupal_json_output($output);
+}
+
+/**
+ * Return performance statistics.
+ *
+ * Call curl http://0.0.0.0:8088/xyzzy/stats/1 | python -m json.tool.
+ */
+function _hr_tools_performance_stats($set, $param) {
+  drupal_set_time_limit(300);
+
+  // Log all queries.
+  @include_once DRUPAL_ROOT . '/includes/database/log.inc';
+
+  // Capture external calls.
+  global $conf;
+  $conf['drupal_http_request_function'] = 'hr_tools_drupal_http_request';
+
+  // Disable page caching.
+  drupal_page_is_cacheable(FALSE);
+
+  global $timers;
+  global $_hr_tools_external_calls;
+
+  switch ($set) {
+    case '1':
+      _hr_tools_performance_stats_set1();
+      break;
+
+    case '2':
+      _hr_tools_performance_stats_set2();
+      break;
+
+    case '3':
+      _hr_tools_performance_stats_set3();
+      break;
+
+    case '4':
+      _hr_tools_performance_stats_set4();
+      break;
+
+    case '5':
+      _hr_tools_performance_stats_set5();
+      break;
+
+    case '6':
+      _hr_tools_performance_stats_set6();
+      break;
+
+    case '7':
+      _hr_tools_performance_stats_set7();
+      break;
+
+    default:
+      // code...
+      break;
+  }
+
+  // Stop drupal page timer.
+  timer_stop('page');
+
+  // Remove sensitive data.
+  foreach ($timers as $key => $timer) {
+    foreach ($timers[$key]['external_calls'] as $key2 => $call) {
+      if (isset($timers[$key]['external_calls'][$key2]['options']['headers'])) {
+        unset($timers[$key]['external_calls'][$key2]['options']['headers']);
+      }
+      if (isset($timers[$key]['external_calls'][$key2]['options']['query']['_access_key'])) {
+        unset($timers[$key]['external_calls'][$key2]['options']['query']['_access_key']);
+        $timers[$key]['external_calls'][$key2]['url'] = substr($timers[$key]['external_calls'][$key2]['url'], 0, strpos($timers[$key]['external_calls'][$key2]['url'], '_access_key'));
+      }
+    }
+  }
+
+  return $timers;
+}
+
+/**
+ * Performance stats helper.
+ */
+function _hr_tools_performance_stats_set1() {
+  global $timers;
+  global $_hr_tools_external_calls;
+
+  // Time to render a group page.
+  $timer = '0011 - Load group 1337 with reset';
+  $_hr_tools_external_calls = array();
+  try {
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'Load node reset';
+    $node = node_load(1337, NULL, TRUE);
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+  $timer = '0012 - Load group 1337 with cache';
+  $_hr_tools_external_calls = array();
+  try {
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'Load node';
+    $node = node_load(1337, NULL, FALSE);
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+  $timer = '0013 - Node view group 1337';
+  $_hr_tools_external_calls = array();
+  try {
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'View node';
+    $output = node_view($node);
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  // Time to render a node.
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+  $timer = '0021 - Load node 1138 with reset';
+  $_hr_tools_external_calls = array();
+  try {
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'Load node reset';
+    $node = node_load(1138, NULL, TRUE);
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+  $timer = '0022 - Load node 1138 with cache';
+  $_hr_tools_external_calls = array();
+  try {
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'Load node';
+    $node = node_load(1138, NULL, FALSE);
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+  $timer = '0023 - Node view 1138';
+  $_hr_tools_external_calls = array();
+  try {
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'View node';
+    $output = node_view($node);
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+  $timer = '0022 - Save node 1138';
+  $_hr_tools_external_calls = array();
+  try {
+    $node = node_load(1138, NULL, FALSE);
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'Save node';
+    node_save($node);
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+  // Time to render empty page.
+  $timer = '0031 - Render empty page';
+  $_hr_tools_external_calls = array();
+  try {
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'Render page';
+    $output = drupal_render_page('');
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+}
+
+/**
+ * Performance stats helper.
+ */
+function _hr_tools_performance_stats_set2() {
+  global $timers;
+  global $_hr_tools_external_calls;
+
+  // Time to query database.
+  $timer = '0041 - Query database: first node record';
+  $_hr_tools_external_calls = array();
+  try {
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'Database';
+    db_query('select * from {node} limit 1');
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+  $timer = '0042 - Query database: first document record';
+  $_hr_tools_external_calls = array();
+  try {
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'Database';
+    db_query("select * from {node} where type='hr_document' limit 1");
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+  $timer = '0042 - Query database: first document record ordered';
+  $_hr_tools_external_calls = array();
+  try {
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'Database';
+    db_query("select * from {node} where type='hr_document' order by nid asc limit 1");
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+  $timer = '0042 - Query database: first document record ordered reversed';
+  $_hr_tools_external_calls = array();
+  try {
+    timer_start($timer);
+    _hr_tools_queries_start($timer);
+    $timers[$timer]['type'] = 'Database';
+    db_query("select * from {node} where type='hr_document' order by nid desc limit 1");
+    timer_stop($timer);
+  }
+  catch (Exception $e) {
+    $timers[$timer]['exception'] = $e->getMessage();
+  }
+  $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+  $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+}
+
+/**
+ * Performance stats helper.
+ */
+function _hr_tools_performance_stats_node_rendering($content_types) {
+  global $timers;
+  global $_hr_tools_external_calls;
+
+  // Random nodes rendering.
+  $content_types = node_type_get_names();
+  $counter = 0;
+  foreach ($content_types as $id => $name) {
+    $counter++;
+    $prefix = '01' . str_pad($counter, 2, '0', STR_PAD_LEFT);
+    $timer = $prefix . '1 - Query database: get 5 random nodes of type ' . $name;
+    $_hr_tools_external_calls = array();
+    try {
+      timer_start($timer);
+      _hr_tools_queries_start($timer);
+      $timers[$timer]['type'] = 'Database';
+      $timers[$timer]['node_type'] = $name;
+      $results = db_query("SELECT nid FROM {node} WHERE type = :type AND status = 1 ORDER BY RANDOM() LIMIT 5", array(
+        ':type' => $id,
+      ));
+      timer_stop($timer);
+
+      foreach ($results as $result) {
+        $timer = $prefix . '2 - Load node ' . $result->nid;
+        $_hr_tools_external_calls = array();
+        timer_start($timer);
+        _hr_tools_queries_start($timer);
+        $timers[$timer]['type'] = 'Load node';
+        $timers[$timer]['node_type'] = $name;
+        $node = node_load($result->nid);
+        timer_stop($timer);
+        $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+        $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+        $timer = $prefix . '3 - Render node ' . $result->nid;
+        $_hr_tools_external_calls = array();
+        timer_start($timer);
+        _hr_tools_queries_start($timer);
+        $timers[$timer]['type'] = 'View node';
+        $timers[$timer]['node_type'] = $name;
+        $output = node_view($node);
+        timer_stop($timer);
+        $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+        $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+        $timer = $prefix . '4 - View node ' . $result->nid;
+        $_hr_tools_external_calls = array();
+        timer_start($timer);
+        _hr_tools_queries_start($timer);
+        $timers[$timer]['type'] = 'View node page';
+        $timers[$timer]['node_type'] = $name;
+        $output = node_page_view($node);
+        timer_stop($timer);
+        $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+        $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+
+      }
+    }
+    catch (Exception $e) {
+      $timers[$timer]['exception'] = $e->getMessage();
+    }
+  }
+}
+
+/**
+ * Performance stats helper.
+ */
+function _hr_tools_performance_stats_set3() {
+  global $timers;
+  global $_hr_tools_external_calls;
+
+  $content_types = node_type_get_names();
+  $subset = array_slice($content_types, 0, 7);
+  _hr_tools_performance_stats_node_rendering($subset);
+}
+
+/**
+ * Performance stats helper.
+ */
+function _hr_tools_performance_stats_set4() {
+  global $timers;
+  global $_hr_tools_external_calls;
+
+  $content_types = node_type_get_names();
+  $subset = array_slice($content_types, 7, 7);
+  _hr_tools_performance_stats_node_rendering($subset);
+}
+
+/**
+ * Performance stats helper.
+ */
+function _hr_tools_performance_stats_set5() {
+  global $timers;
+  global $_hr_tools_external_calls;
+
+  $content_types = node_type_get_names();
+  $subset = array_slice($content_types, 14, 7);
+  _hr_tools_performance_stats_node_rendering($subset);
+}
+
+/**
+ * Performance stats helper.
+ */
+function _hr_tools_performance_stats_set6() {
+  global $timers;
+  global $_hr_tools_external_calls;
+
+  $content_types = node_type_get_names();
+  $subset = array_slice($content_types, 21, 7);
+  _hr_tools_performance_stats_node_rendering($subset);
+}
+
+/**
+ * Performance stats helper.
+ */
+function _hr_tools_performance_stats_set7() {
+  global $timers;
+  global $_hr_tools_external_calls;
+
+  // Edit and save multiple nodes.
+  $nids = array(
+    109020 => array(
+      'timer' => '0051 - Save node 109020',
+      'url' => 'https://www.humanitarianresponse.info/en/operations/simulation-training',
+      'node_type' => 'hr-operation',
+    ),
+    109794 => array(
+      'timer' => '0052 - Save node 109794',
+      'url' => 'https://www.humanitarianresponse.info/en/operations/simulation-training/camp-coordination-management',
+      'node_type' => 'hr-bundle',
+    ),
+    109755 => array(
+      'timer' => '0053 - Save node 109755',
+      'url' => 'https://www.humanitarianresponse.info/en/operations/simulation-training/cash-working-group',
+      'node_type' => 'hr-bundle',
+    ),
+    110987 => array(
+      'timer' => '0054 - Save node 110987',
+      'url' => 'https://www.humanitarianresponse.info/en/operations/simulation-training/civil-military-coordination-section-cmcs',
+      'node_type' => 'hr-page',
+    ),
+    121471 => array(
+      'timer' => '0055 - Save node 121471',
+      'url' => 'https://www.humanitarianresponse.info/en/operations/simulation-training/event/education-cluster-meeting',
+      'node_type' => 'hr-event',
+    ),
+    121545 => array(
+      'timer' => '0056 - Save node 121545',
+      'url' => 'https://www.humanitarianresponse.info/en/operations/simulation-training/document/ocha-humanitarian-icons',
+      'node_type' => 'hr-document',
+    ),
+    121210 => array(
+      'timer' => '0057 - Save node 121210',
+      'url' => 'https://www.humanitarianresponse.info/en/operations/simulation-training/infographic/sparkea-affected-regions-march-04-2016',
+      'node_type' => 'hr-infographic',
+    ),
+    121472 => array(
+      'timer' => '0058 - Save node 121472',
+      'url' => 'https://www.humanitarianresponse.info/en/operations/simulation-training/office/education-cluster-coordination-office',
+      'node_type' => 'hr-office',
+    ),
+    112648 => array(
+      'timer' => '0059 - Save node 112648',
+      'url' => 'https://www.humanitarianresponse.info/en/operations/simulation-training/article/simulationtraining-griffon-ndma-priorities-military-tasking',
+      'node_type' => 'hr-news',
+    ),
+  );
+
+  foreach ($nids as $nid => $info) {
+    $timer = $info['timer'];
+    $_hr_tools_external_calls = array();
+    try {
+      $node = node_load($nid, NULL, FALSE);
+      if (!$node) {
+        continue;
+      }
+
+      timer_start($timer);
+      _hr_tools_queries_start($timer);
+      $timers[$timer]['type'] = 'Save node';
+      $timers[$timer]['url'] = $info['url'];
+      $timers[$timer]['node_type'] = $info['node_type'];
+      node_save($node);
+      timer_stop($timer);
+    }
+    catch (Exception $e) {
+      $timers[$timer]['exception'] = $e->getMessage();
+    }
+    $timers[$timer]['external_calls'] = $_hr_tools_external_calls;
+    $timers[$timer]['queries'] = _hr_tools_queries_get($timer);
+  }
+}
+
+/**
+ * Start queries.
+ */
+function _hr_tools_queries_start($name = 'hr_tools') {
+  Database::startLog($name);
+}
+
+/**
+ * Get queries.
+ */
+function _hr_tools_queries_get($name = 'hr_tools') {
+  $output = array();
+  $queries = Database::getLog($name);
+  $connection = Database::getConnection();
+
+  if (!empty($queries)) {
+    // Remove caller args to avoid recursion.
+    foreach ($queries as &$query) {
+      unset($query['caller']['args']);
+
+      $function = !empty($query['caller']['class']) ? $query['caller']['class'] . '::' : '';
+      $function .= $query['caller']['function'];
+
+      $time = round($query['time'] * 1000, 2);
+      if ($time > 100) {
+        $speed = 'Slow query';
+      }
+      else {
+        $speed = 'Fast query';
+      }
+
+      $quoted = array();
+      if (isset($query['args'])) {
+        foreach ($query['args'] as $key => $val) {
+          $quoted[$key] = $connection->quote($val);
+        }
+      }
+      $output[] = array(
+        'sqlraw' => $query['query'],
+        'sql' => strtr($query['query'], $quoted),
+        'speed' => $speed,
+        'caller' => $function,
+        'time' => $time,
+      );
+    }
+  }
+  return $output;
+}
+
+/**
+ * Custom drupal_http_request wrapper.
+ */
+function hr_tools_drupal_http_request($url, array $options = array()) {
+  global $_hr_tools_external_calls;
+  $caller = debug_backtrace();
+
+  $_hr_tools_external_calls[] = array(
+    'url' => $url,
+    'options' => $options,
+    'caller' => $caller[2]['function'],
+  );
+
+  $result = new stdClass();
+
+  // Parse the URL and make sure we can handle the schema.
+  $uri = @parse_url($url);
+
+  if ($uri == FALSE) {
+    $result->error = 'unable to parse URL';
+    $result->code = -1001;
+    return $result;
+  }
+
+  if (!isset($uri['scheme'])) {
+    $result->error = 'missing schema';
+    $result->code = -1002;
+    return $result;
+  }
+
+  timer_start(__FUNCTION__);
+
+  // Merge the default options.
+  $options += array(
+    'headers' => array(),
+    'method' => 'GET',
+    'data' => NULL,
+    'max_redirects' => 3,
+    'timeout' => 30.0,
+    'context' => NULL,
+  );
+
+  // Merge the default headers.
+  $options['headers'] += array(
+    'User-Agent' => 'Drupal (+http://drupal.org/)',
+  );
+
+  // stream_socket_client() requires timeout to be a float.
+  $options['timeout'] = (float) $options['timeout'];
+
+  // Use a proxy if one is defined and the host is not on the excluded list.
+  $proxy_server = variable_get('proxy_server', '');
+  if ($proxy_server && _drupal_http_use_proxy($uri['host'])) {
+    // Set the scheme so we open a socket to the proxy server.
+    $uri['scheme'] = 'proxy';
+    // Set the path to be the full URL.
+    $uri['path'] = $url;
+    // Since the URL is passed as the path, we won't use the parsed query.
+    unset($uri['query']);
+
+    // Add in username and password to Proxy-Authorization header if needed.
+    if ($proxy_username = variable_get('proxy_username', '')) {
+      $proxy_password = variable_get('proxy_password', '');
+      $options['headers']['Proxy-Authorization'] = 'Basic ' . base64_encode($proxy_username . (!empty($proxy_password) ? ":" . $proxy_password : ''));
+    }
+    // Some proxies reject requests with any User-Agent headers, while others
+    // require a specific one.
+    $proxy_user_agent = variable_get('proxy_user_agent', '');
+    // The default value matches neither condition.
+    if ($proxy_user_agent === NULL) {
+      unset($options['headers']['User-Agent']);
+    }
+    elseif ($proxy_user_agent) {
+      $options['headers']['User-Agent'] = $proxy_user_agent;
+    }
+  }
+
+  switch ($uri['scheme']) {
+    case 'proxy':
+      // Make the socket connection to a proxy server.
+      $socket = 'tcp://' . $proxy_server . ':' . variable_get('proxy_port', 8080);
+      // The Host header still needs to match the real request.
+      $options['headers']['Host'] = $uri['host'];
+      $options['headers']['Host'] .= isset($uri['port']) && $uri['port'] != 80 ? ':' . $uri['port'] : '';
+      break;
+
+    case 'http':
+    case 'feed':
+      $port = isset($uri['port']) ? $uri['port'] : 80;
+      $socket = 'tcp://' . $uri['host'] . ':' . $port;
+      // RFC 2616: "non-standard ports MUST, default ports MAY be included".
+      // We don't add the standard port to prevent from breaking rewrite rules
+      // checking the host that do not take into account the port number.
+      $options['headers']['Host'] = $uri['host'] . ($port != 80 ? ':' . $port : '');
+      break;
+
+    case 'https':
+      // Note: Only works when PHP is compiled with OpenSSL support.
+      $port = isset($uri['port']) ? $uri['port'] : 443;
+      $socket = 'ssl://' . $uri['host'] . ':' . $port;
+      $options['headers']['Host'] = $uri['host'] . ($port != 443 ? ':' . $port : '');
+      break;
+
+    default:
+      $result->error = 'invalid schema ' . $uri['scheme'];
+      $result->code = -1003;
+      return $result;
+  }
+
+  if (empty($options['context'])) {
+    $fp = @stream_socket_client($socket, $errno, $errstr, $options['timeout']);
+  }
+  else {
+    // Create a stream with context. Allows verification of a SSL certificate.
+    $fp = @stream_socket_client($socket, $errno, $errstr, $options['timeout'], STREAM_CLIENT_CONNECT, $options['context']);
+  }
+
+  // Make sure the socket opened properly.
+  if (!$fp) {
+    // When a network error occurs, we use a negative number so it does not
+    // clash with the HTTP status codes.
+    $result->code = -$errno;
+    $result->error = trim($errstr) ? trim($errstr) : t('Error opening socket @socket', array('@socket' => $socket));
+
+    // Mark that this request failed. This will trigger a check of the web
+    // server's ability to make outgoing HTTP requests the next time that
+    // requirements checking is performed.
+    // See system_requirements().
+    variable_set('drupal_http_request_fails', TRUE);
+
+    return $result;
+  }
+
+  // Construct the path to act on.
+  $path = isset($uri['path']) ? $uri['path'] : '/';
+  if (isset($uri['query'])) {
+    $path .= '?' . $uri['query'];
+  }
+
+  // Only add Content-Length if we actually have any content or if it is a POST
+  // or PUT request. Some non-standard servers get confused by Content-Length in
+  // at least HEAD/GET requests, and Squid always requires Content-Length in
+  // POST/PUT requests.
+  $content_length = strlen($options['data']);
+  if ($content_length > 0 || $options['method'] == 'POST' || $options['method'] == 'PUT') {
+    $options['headers']['Content-Length'] = $content_length;
+  }
+
+  // If the server URL has a user then attempt to use basic authentication.
+  if (isset($uri['user'])) {
+    $options['headers']['Authorization'] = 'Basic ' . base64_encode($uri['user'] . (isset($uri['pass']) ? ':' . $uri['pass'] : ':'));
+  }
+
+  // If the database prefix is being used by SimpleTest to run the tests in a copied
+  // database then set the user-agent header to the database prefix so that any
+  // calls to other Drupal pages will run the SimpleTest prefixed database. The
+  // user-agent is used to ensure that multiple testing sessions running at the
+  // same time won't interfere with each other as they would if the database
+  // prefix were stored statically in a file or database variable.
+  $test_info = &$GLOBALS['drupal_test_info'];
+  if (!empty($test_info['test_run_id'])) {
+    $options['headers']['User-Agent'] = drupal_generate_test_ua($test_info['test_run_id']);
+  }
+
+  $request = $options['method'] . ' ' . $path . " HTTP/1.0\r\n";
+  foreach ($options['headers'] as $name => $value) {
+    $request .= $name . ': ' . trim($value) . "\r\n";
+  }
+  $request .= "\r\n" . $options['data'];
+  $result->request = $request;
+  // Calculate how much time is left of the original timeout value.
+  $timeout = $options['timeout'] - timer_read(__FUNCTION__) / 1000;
+  if ($timeout > 0) {
+    stream_set_timeout($fp, floor($timeout), floor(1000000 * fmod($timeout, 1)));
+    fwrite($fp, $request);
+  }
+
+  // Fetch response. Due to PHP bugs like http://bugs.php.net/bug.php?id=43782
+  // and http://bugs.php.net/bug.php?id=46049 we can't rely on feof(), but
+  // instead must invoke stream_get_meta_data() each iteration.
+  $info = stream_get_meta_data($fp);
+  $alive = !$info['eof'] && !$info['timed_out'];
+  $response = '';
+
+  while ($alive) {
+    // Calculate how much time is left of the original timeout value.
+    $timeout = $options['timeout'] - timer_read(__FUNCTION__) / 1000;
+    if ($timeout <= 0) {
+      $info['timed_out'] = TRUE;
+      break;
+    }
+    stream_set_timeout($fp, floor($timeout), floor(1000000 * fmod($timeout, 1)));
+    $chunk = fread($fp, 1024);
+    $response .= $chunk;
+    $info = stream_get_meta_data($fp);
+    $alive = !$info['eof'] && !$info['timed_out'] && $chunk;
+  }
+  fclose($fp);
+
+  if ($info['timed_out']) {
+    $result->code = HTTP_REQUEST_TIMEOUT;
+    $result->error = 'request timed out';
+    return $result;
+  }
+  // Parse response headers from the response body.
+  // Be tolerant of malformed HTTP responses that separate header and body with
+  // \n\n or \r\r instead of \r\n\r\n.
+  list($response, $result->data) = preg_split("/\r\n\r\n|\n\n|\r\r/", $response, 2);
+  $response = preg_split("/\r\n|\n|\r/", $response);
+
+  // Parse the response status line.
+  $response_status_array = _drupal_parse_response_status(trim(array_shift($response)));
+  $result->protocol = $response_status_array['http_version'];
+  $result->status_message = $response_status_array['reason_phrase'];
+  $code = $response_status_array['response_code'];
+
+  $result->headers = array();
+
+  // Parse the response headers.
+  while ($line = trim(array_shift($response))) {
+    list($name, $value) = explode(':', $line, 2);
+    $name = strtolower($name);
+    if (isset($result->headers[$name]) && $name == 'set-cookie') {
+      // RFC 2109: the Set-Cookie response header comprises the token Set-
+      // Cookie:, followed by a comma-separated list of one or more cookies.
+      $result->headers[$name] .= ',' . trim($value);
+    }
+    else {
+      $result->headers[$name] = trim($value);
+    }
+  }
+
+  $responses = array(
+    100 => 'Continue',
+    101 => 'Switching Protocols',
+    200 => 'OK',
+    201 => 'Created',
+    202 => 'Accepted',
+    203 => 'Non-Authoritative Information',
+    204 => 'No Content',
+    205 => 'Reset Content',
+    206 => 'Partial Content',
+    300 => 'Multiple Choices',
+    301 => 'Moved Permanently',
+    302 => 'Found',
+    303 => 'See Other',
+    304 => 'Not Modified',
+    305 => 'Use Proxy',
+    307 => 'Temporary Redirect',
+    400 => 'Bad Request',
+    401 => 'Unauthorized',
+    402 => 'Payment Required',
+    403 => 'Forbidden',
+    404 => 'Not Found',
+    405 => 'Method Not Allowed',
+    406 => 'Not Acceptable',
+    407 => 'Proxy Authentication Required',
+    408 => 'Request Time-out',
+    409 => 'Conflict',
+    410 => 'Gone',
+    411 => 'Length Required',
+    412 => 'Precondition Failed',
+    413 => 'Request Entity Too Large',
+    414 => 'Request-URI Too Large',
+    415 => 'Unsupported Media Type',
+    416 => 'Requested range not satisfiable',
+    417 => 'Expectation Failed',
+    500 => 'Internal Server Error',
+    501 => 'Not Implemented',
+    502 => 'Bad Gateway',
+    503 => 'Service Unavailable',
+    504 => 'Gateway Time-out',
+    505 => 'HTTP Version not supported',
+  );
+  // RFC 2616 states that all unknown HTTP codes must be treated the same as the
+  // base code in their class.
+  if (!isset($responses[$code])) {
+    $code = floor($code / 100) * 100;
+  }
+  $result->code = $code;
+
+  switch ($code) {
+    // OK.
+    case 200:
+      // Created.
+    case 201:
+      // Accepted.
+    case 202:
+      // Non-Authoritative Information.
+    case 203:
+      // No Content.
+    case 204:
+      // Reset Content.
+    case 205:
+      // Partial Content.
+    case 206:
+      // Not modified.
+    case 304:
+      break;
+
+    // Moved permanently.
+
+    case 301:
+      // Moved temporarily.
+    case 302:
+      // Moved temporarily.
+    case 307:
+      $location = $result->headers['location'];
+      $options['timeout'] -= timer_read(__FUNCTION__) / 1000;
+      if ($options['timeout'] <= 0) {
+        $result->code = HTTP_REQUEST_TIMEOUT;
+        $result->error = 'request timed out';
+      }
+      elseif ($options['max_redirects']) {
+        // Redirect to the new location.
+        $options['max_redirects']--;
+        $result = drupal_http_request($location, $options);
+        $result->redirect_code = $code;
+      }
+      if (!isset($result->redirect_url)) {
+        $result->redirect_url = $location;
+      }
+      break;
+
+    default:
+      $result->error = $result->status_message;
+  }
+
+  $last = array_pop($_hr_tools_external_calls);
+  $last['timing'] = timer_stop(__FUNCTION__);
+  $_hr_tools_external_calls[] = $last;
+
+  return $result;
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function hr_tools_token_info() {
+  // Analytics tokens.
+  $info['tokens']['node']['spaces'] = array(
+    'name' => t('Spaces'),
+    'description' => t('The spaces the node belongs to'),
+  );
+  $info['tokens']['node']['bundles'] = array(
+    'name' => t('Bundles'),
+    'description' => t('The bundles the node belongs to'),
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function hr_tools_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  if ($type == 'node' && !empty($data['node'])) {
+    $node = $data['node'];
+    $wrapper = entity_metadata_wrapper('node', $node);
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'spaces':
+          $replacements[$original] = '';
+          if (isset($wrapper->{OG_AUDIENCE_FIELD})) {
+            $spaces = array();
+            foreach ($wrapper->{OG_AUDIENCE_FIELD} as $space) {
+              $spaces[] = $space->getIdentifier();
+            }
+            $replacements[$original] = implode(';', $spaces);
+          }
+          elseif (og_is_group('node', $node->nid)) {
+            $replacements[$original] = $node->nid;
+          }
+          break;
+
+        case 'bundles':
+          $replacements[$original] = '';
+          if (isset($wrapper->field_bundles)) {
+            $bundles = array();
+            foreach ($wrapper->field_bundles as $bundle) {
+              $bundles[] = $bundle->getIdentifier();
+            }
+            $replacements[$original] = implode(';', $bundles);
+          }
+          elseif ($node->type == 'hr_bundle') {
+            $replacements[$original] = $node->nid;
+          }
+          break;
+      }
+    }
+  }
+  return $replacements;
+}
+
+/**
+ * Implements hook_url_outbound_alter().
+ */
+function hr_tools_url_outbound_alter(&$path, &$options, $original_path) {
+  $parts = explode('/', $path);
+  if (is_array($parts) && isset($parts[0]) && isset($parts[1]) && $parts[0] === 'system' && $parts[1] === 'files') {
+    $language = new stdClass();
+    $language->language = LANGUAGE_NONE;
+    $language->prefix = '';
+    $options['language'] = $language;
+  }
+}

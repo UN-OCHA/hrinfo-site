@@ -1,0 +1,302 @@
+<?php
+
+/**
+ * @file
+ * Code for Events import.
+ */
+
+/**
+ * Wrapper around log function.
+ */
+function ev_import_log($message) {
+  if (function_exists('drush_log')) {
+    drush_log($message);
+  }
+  else {
+    watchdog('Event import', $message);
+  }
+}
+
+/**
+ * Migrate events.
+ */
+function ev_import_events_from_hrinfo() {
+  $api_url = variable_get('ev_import_api_url_hrinfo', 'https://ocha:dev@events.staging.humanitarianresponse.info/events-to-hrinfo');
+
+  // Get data.
+  $request = drupal_http_request($api_url);
+  if (isset($request->data)) {
+    $data = drupal_json_decode($request->data);
+    if (count($data)) {
+      foreach ($data as $row) {
+        ev_import_process_row_from_hrinfo($row);
+      }
+    }
+  }
+};
+
+/**
+ * Process event data.
+ */
+function ev_import_process_row_from_hrinfo($row) {
+  ev_import_log('Migrating ' . $row['url']);
+
+  // Make sure we have a user.
+  $account = user_load_by_mail($row['author']['email']);
+  if (!$account) {
+    $account = drupal_anonymous_user();
+  }
+
+  // Create a new event.
+  $event = new stdClass();
+  $event->type = 'hr_event';
+  $event->status = 1;
+  node_object_prepare($event);
+
+  $event->language = 'en';
+  $event->uid = $account->uid;
+  $event->status = TRUE;
+  $event->promote = FALSE;
+  $event->comment = FALSE;
+  $event->log = 'Event imported from ' . $row['url'];
+  $event->revision = TRUE;
+
+  $event->title = $row['title'];
+
+  $event->created = $row['created'];
+  $event->changed = $row['changed'];
+
+  $event->ev_import_created = $event->created;
+  $event->ev_import_changed = $event->changed;
+
+  $date_data = array();
+  if (!empty($row['date']['rrule'])) {
+    $field_info = field_info_field('field_event_date');
+    // Double check date format used.
+    if (strpos(date_type_format($field_info['type']), 'T') !== FALSE) {
+      $row['date']['value'] = str_replace(' ', 'T', $row['date']['value']);
+      $row['date']['value2'] = str_replace(' ', 'T', $row['date']['value2']);
+    }
+    else {
+      $row['date']['value'] = str_replace('T', ' ', $row['date']['value']);
+      $row['date']['value2'] = str_replace('T', ' ', $row['date']['value2']);
+    }
+
+    // Build all values.
+    $date_data = date_repeat_build_dates($row['date']['rrule'], NULL, $field_info, $row['date']);
+  }
+  else {
+    $date_data[0] = $row['date'];
+  }
+
+  $event->field_event_date[LANGUAGE_NONE] = $date_data;
+
+  // Set body.
+  if (isset($row['description']['safe_value'])) {
+    $event->body['en'][] = array(
+      'value' => $row['description']['safe_value'],
+      'format' => 'panopoly_wysiwyg_text',
+    );
+  }
+
+  // Set organic group.
+  $event->og_group_ref['und'][0]['target_id'] = variable_get('ev_import_ethiopia_nid', 65);
+
+  // Category.
+  if (isset($row['category'])) {
+    // Make it plural.
+    $row['category'] .= 's';
+
+    if ($category = ev_import_get_term($row['category'], 'hr_event_category')) {
+      $event->field_event_category['und'][0]['target_id'] = $category->tid;
+    }
+  }
+
+  if (isset($row['location']) && $location = ev_import_get_term($row['location'], 'hr_location')) {
+    $event->field_location['und'][0]['target_id'] = $location->tid;
+  }
+
+  if (isset($row['location_details']) && isset($row['location_details'])) {
+    $event->field_address['und'][0]['locality'] = $row['location_details'];
+  }
+
+  if (isset($row['organizations']) && is_array($row['organizations'])) {
+    $event->field_organizations['und'] = array();
+    foreach ($row['organizations'] as $name) {
+      if ($organization = ev_import_get_term($name, 'hr_organization')) {
+        $event->field_organizations['und'][] = array(
+          'target_id' => $organization->tid,
+        );
+      }
+    }
+  }
+
+  if (isset($row['coordination_hubs']) && is_array($row['coordination_hubs'])) {
+    $event->field_coordination_hubs['und'] = array();
+    foreach ($row['coordination_hubs'] as $coordination_hub) {
+      // Remove prefix.
+      $coordination_hub['name'] = str_replace('Ethiopia: ', '', $coordination_hub['name']);
+
+      if ($coordination_hub = ev_import_get_node($coordination_hub['name'], 'hr_office')) {
+        $event->field_coordination_hubs['und'][] = array(
+          'target_id' => $coordination_hub->nid,
+        );
+      }
+    }
+  }
+
+  if (isset($row['bundles']) && is_array($row['bundles'])) {
+    $event->field_bundles['und'] = array();
+    foreach ($row['bundles'] as $bundle) {
+      // Remove prefix.
+      $bundle = str_replace('Ethiopia: ', '', $bundle);
+
+      if ($bundle = ev_import_get_node($bundle, 'hr_bundle')) {
+        $event->field_bundles['und'][] = array(
+          'target_id' => $bundle->nid,
+        );
+      }
+    }
+  }
+
+  if (isset($row['themes']) && is_array($row['themes'])) {
+    $event->field_themes['und'] = array();
+    foreach ($row['themes'] as $theme) {
+      if ($theme == 'Safety and Security') {
+        $theme = 'Safety & Security';
+      }
+
+      if ($theme = ev_import_get_term($theme, 'hr_theme')) {
+        $event->field_themes['und'][] = array(
+          'target_id' => $theme->tid,
+        );
+      }
+    }
+  }
+
+  $event = node_submit($event);
+  node_save($event);
+
+  ev_import_log('Events saved with id ' . $event->nid);
+}
+
+/**
+ * Implements hook_node_presave().
+ */
+function ev_import_node_presave($node) {
+  if (isset($node->ev_import_changed)) {
+    $node->changed = $node->ev_import_changed;
+    $node->timestamp = $node->ev_import_changed;
+  }
+  if (isset($node->ev_import_created)) {
+    $node->created = $node->ev_import_created;
+  }
+}
+
+/**
+ * Load a term.
+ */
+function ev_import_get_term($name, $vocabulary) {
+  // Query by name.
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'taxonomy_term');
+  $query->entityCondition('bundle', $vocabulary, '=');
+  $query->propertyCondition('name', $name, '=');
+  $result = $query->execute();
+
+  // Make sure term exists.
+  if (!isset($result['taxonomy_term'])) {
+    return FALSE;
+  }
+
+  $term_tid = reset($result['taxonomy_term']);
+  $term = taxonomy_term_load($term_tid->tid);
+  return $term;
+}
+
+/**
+ * Load a term.
+ */
+function ev_import_get_node($title, $node_type) {
+  // Query by name.
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node');
+  $query->entityCondition('bundle', $node_type, '=');
+  $query->propertyCondition('title', $title, '=');
+  $result = $query->execute();
+
+  // Make sure node exists.
+  if (!isset($result['node'])) {
+    return FALSE;
+  }
+
+  $node_nid = reset($result['node']);
+  $node = node_load($node_nid->nid);
+  return $node;
+}
+
+/**
+ * Fetch and save a remote file.
+ */
+function ev_import_fetch_and_save_file($filename, $url, $timestamp) {
+  $fid = db_select('file_managed', 'f')
+    ->fields('f', array('fid'))
+    ->condition('filename', $filename)
+    ->range(0, 1)
+    ->execute()->fetchField();
+
+  if (variable_get('ev_import_file_authentication_hrinfo', '')) {
+    $url = str_replace('https://', 'https://' . variable_get('ev_import_file_authentication_hrinfo', '') . '@', $url);
+  }
+
+  if (!$fid) {
+    $field_info = field_info_field('field_document_file');
+    $instance = field_info_instance('multifield', 'field_document_file', 'field_event_documents');
+
+    $destination = file_stream_wrapper_uri_normalize($field_info['settings']['uri_scheme'] . '://' . $instance['settings']['file_directory'] . '/' . format_date($timestamp, 'custom', 'Y-m-d') . '/');
+    file_prepare_directory($destination, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+    $file = _ev_import_system_retrieve_file($url, $destination, TRUE, FILE_EXISTS_RENAME);
+    if ($file) {
+      return $file->fid;
+    }
+    else {
+      ev_import_log('Unable to fetch ' . $url);
+    }
+  }
+  else {
+    return $fid;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Attempts to get a file using drupal_http_request and to store it locally.
+ *
+ * @see system_retrieve_file()
+ */
+function _ev_import_system_retrieve_file($url, $destination = NULL, $managed = FALSE, $replace = FILE_EXISTS_RENAME) {
+  $parsed_url = parse_url($url);
+  if (!isset($destination)) {
+    $path = file_build_uri(drupal_basename($parsed_url['path']));
+  }
+  else {
+    if (is_dir(drupal_realpath($destination))) {
+      // Prevent URIs with triple slashes when glueing parts together.
+      $path = str_replace('///', '//', "$destination/") . drupal_basename($parsed_url['path']);
+    }
+    else {
+      $path = $destination;
+    }
+  }
+  $result = drupal_http_request($url);
+  if ($result->code != 200) {
+    return FALSE;
+  }
+  $local = $managed ? file_save_data($result->data, $path, $replace) : file_unmanaged_save_data($result->data, $path, $replace);
+  if (!$local) {
+    drupal_set_message(t('@remote could not be saved to @path.', array('@remote' => $url, '@path' => $path)), 'error');
+  }
+
+  return $local;
+}

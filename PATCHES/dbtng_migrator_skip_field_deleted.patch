@@ -1,0 +1,57 @@
+diff --git a/dbtng_migrator.admin.inc b/dbtng_migrator.admin.inc
+index b0159a1..41f6598 100644
+--- a/dbtng_migrator.admin.inc
++++ b/dbtng_migrator.admin.inc
+@@ -67,6 +67,11 @@ function dbtng_migrator_check_form_validate($form, &$form_state) {
+       // Iterate over the schema and assert the origin's schema exists
+       // on the destination.
+       foreach ($schema as $table => $info) {
++        // Skip deleted tables.
++        if (strpos($table, 'field_deleted') === 0) {
++          continue;
++        }
++
+         if (!db_table_exists($table)) {
+           form_set_error('migrate_destination', t('@table does not existing in @db_key', array('@table' => $table, '@db_key' => $dest)));
+           continue;
+@@ -218,6 +223,11 @@ function dbtng_migrator_settings_validate($form, $form_state) {
+       continue;
+     }
+     foreach ($schema as $table => $info) {
++      // Skip deleted tables.
++      if (strpos($table, 'field_deleted') === 0) {
++        continue;
++      }
++
+       $tables[] = $table;
+     }
+   }
+diff --git a/dbtng_migrator.batch.inc b/dbtng_migrator.batch.inc
+index 8defd65..f8a8175 100644
+--- a/dbtng_migrator.batch.inc
++++ b/dbtng_migrator.batch.inc
+@@ -51,6 +51,12 @@ function dbtng_migrator_batch_install_schema($origin, $destination) {
+
+     foreach ($original_schema_table_list as $name) {
+       $table = $schema[$name];
++
++      // Skip deleted tables.
++      if (strpos($name, 'field_deleted') === 0) {
++        continue;
++      }
++
+       db_set_active($destination);
+       db_create_table($name, $table);
+       $success = db_table_exists($name);
+@@ -93,6 +99,11 @@ function dbtng_migrator_batch_migrate_table($origin, $destination, &$context) {
+         continue;
+       }
+       foreach ($schema as $table => $info) {
++        // Skip deleted tables.
++        if (strpos($table, 'field_deleted') === 0) {
++          continue;
++        }
++
+         $tables[] = $table;
+       }
+     }

@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ * Code for the Help feature.
+ */
+
+define('HR_SANDBOX_GID', 1506);
+
+include_once 'hr_help.features.inc';
+
+/**
+ * Implements hook_block_info().
+ */
+function hr_help_block_info() {
+  $blocks['hr_help'] = array(
+    'info' => t('Help block'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function hr_help_block_view($delta = '') {
+  global $user;
+  $block = array();
+  switch ($delta) {
+    case 'hr_help':
+      $manager_tours = _hr_help_space_manager_tours();
+      $tours = array();
+      $all_tours = bootstrap_tour_load_all();
+      foreach ($all_tours as $key => $tour) {
+        if (empty($tour->roles)) {
+          $tours[$key] = $tour;
+        }
+        else {
+          $roles = explode(',', $tour->roles);
+          foreach ($roles as $role) {
+            if (in_array($role, array_keys($user->roles))) {
+              $tours[$key] = $tour;
+            }
+          }
+        }
+      }
+      if (!empty($tours)) {
+        $block['content'] = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--help"><use xlink:href="#help"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">';
+        foreach ($tours as $key => $tour) {
+          if (!in_array($key, $manager_tours) || og_is_member('node', HR_SANDBOX_GID)) {
+            $block['content'] .= '<li>' . l(t($tour->title), $tour->steps[0]['path'], array('query' => array('tour' => $key))) . '</li>';
+          }
+        }
+        $block['content'] .= '<li>' . l(t('User Guidelines'), 'help') . '</li>';
+        $block['content'] .= '</ul>';
+      }
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Return a list of tours.
+ */
+function _hr_help_space_manager_tours() {
+  return array(
+    'adding_content',
+    'anatomy_of_a_space',
+    'edit_tab',
+    'managing_a_space',
+    'space_functionalities',
+  );
+}

@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @file
+ * Code for the Job Titles feature.
+ */
+
+include_once 'hr_job_titles.features.inc';

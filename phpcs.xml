@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="drupal_core">
+  <description>Default PHP CodeSniffer configuration for Drupal core.</description>
+  <file>.</file>
+  <arg name="extensions" value="inc,info,install,module,php,profile,test,theme"/>
+
+  <!--Exclude third party code.-->
+  <exclude-pattern>./vendor/*</exclude-pattern>
+  <exclude-pattern>*.css</exclude-pattern>
+  <exclude-pattern>*.js</exclude-pattern>
+  <exclude-pattern>*.txt</exclude-pattern>
+  <exclude-pattern>*\.features\.*</exclude-pattern>
+  <exclude-pattern>*.panelizer.inc</exclude-pattern>
+  <exclude-pattern>*.views_default.inc</exclude-pattern>
+  <exclude-pattern>*.pages_default.inc</exclude-pattern>
+  <exclude-pattern>*.field_group.inc</exclude-pattern>
+  <exclude-pattern>*.strongarm.inc</exclude-pattern>
+  <exclude-pattern>*.facetapi_defaults.inc</exclude-pattern>
+
+  <rule ref="Drupal" />
+  <rule ref="DrupalPractice" />
+</ruleset>

@@ -1,0 +1,7 @@
+name = Administration views test
+description = Administration views test module
+core = 7.x
+package = administration
+hidden = TRUE
+
+dependencies[] admin_views

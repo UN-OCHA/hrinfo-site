@@ -1,0 +1,5 @@
+name = Panels Content Cache
+core = 7.x
+package = "Panels"
+description = A content based caching plugin for panels. Allows panel caches to be expired based on content creation / updates.
+dependencies[] = panels (>=3.4)

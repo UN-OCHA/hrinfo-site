@@ -1,0 +1,293 @@
+<?php
+
+/**
+ * @file
+ * ar_assessments.module
+ *
+ * The main module file for Assessments integration.
+ */
+
+include_once 'ar_assessments.features.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function ar_assessments_menu() {
+  $items = array();
+
+  $items['node/%node/ar_assessments'] = array(
+    'title' => 'Assessments',
+    'page callback' => 'ar_assessments_page',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'file' => 'ar_assessments.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ar_assessments_theme() {
+  return array(
+    'ar_assessments_assessments' => array(
+      'variables' => array(),
+      'template' => 'templates/ar-assessments',
+    ),
+  );
+}
+
+/**
+ * Implements hook_og_features_registry()
+ */
+function ar_assessments_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'ar_assessments';
+  $feature->name = 'Assessment Registry';
+  $feature->description = t('Provide remote assessments to your space.');
+  $feature->components = array(
+    'path' => array(
+      'node/%node/ar_assessments',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function ar_assessments_block_info() {
+  $blocks['ar_assessments_filters'] = array(
+    'info' => t('Assessments filters'),
+  );
+  $blocks['ar_assessments_sidebar'] = array(
+    'info' => t('Assessments back button'),
+  );
+  $blocks['ar_assessments_powered_by'] = array(
+    'info' => t('Assessments powered by'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function ar_assessments_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'ar_assessments_filters':
+      $nid = arg(1);
+      if (is_numeric($nid)) {
+        $node = node_load($nid);
+        $operation = $node;
+        if ($node->type == 'hr_bundle') {
+          $operation_id = _hr_bundles_get_operation($node->nid);
+          if ($operation_id) {
+            $operation = node_load($operation_id);
+          }
+        }
+        $block['content'] = '<div id="block-current-search-hr-current-search" class="block block-current-search">
+
+      <h2>Current search</h2>
+
+    <div class="content">
+      <div class="current-search-item current-search-item-text current-search-item-results"><div class="current-search-filter"><p>Filter: <span class="facetapi-active">216 items</span> displayed</p></div></div><div class="current-search-item current-search-item-text current-search-item-reset"><div class="current-reset-filter"><a href="/' . drupal_get_path_alias(current_path()) . '"><i class="reset"></i></a> <span>Reset all filters</span></div></div>  </div>
+  </div>';
+        $block['content'] .= '<section class="text-search">
+          <div class="input-group">
+            <input id="search" class="search" name="search" value="" maxlength="128" type="text" placeholder="Search by title">
+          </div>
+        </section>';
+        if ($node->type == 'hr_operation') {
+          $block['content'] .= ar_assessments_bundles_select($operation);
+        }
+        $block['content'] .= ar_assessments_organization_autocomplete();
+        $block['content'] .= ar_assessments_part_organization_autocomplete();
+        $block['content'] .= ar_assessments_location_select($operation);
+        $block['content'] .= ar_assessments_status_select();
+        $block['content'] .= ar_assessments_population_types_select();
+        $block['content'] .= ar_assessments_disaster_select($operation);
+      }
+      break;
+
+    case 'ar_assessments_sidebar':
+      $block['content'] = '<button class="btn btn-primary btn-lg btn-block" id="back"><i class="fa fa-arrow-circle-left"></i> Back</button>';
+      break;
+
+    case 'ar_assessments_powered_by':
+      $block['content'] = '<div class="poweredby-logo"><p class="">Powered by</p><a href="https://assessments.hpc.tools"><img src="/sites/all/themes/humanitarianresponse/assets/images/ar_logo.svg" alt="Assessments Registry logo" width="250" /></a></div>';
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Function that selects published bundles for an audience.
+ */
+function ar_assessments_bundles_select($operation) {
+  $query = new EntityFieldQuery();
+  $entities = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'hr_bundle')
+    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
+    ->propertyOrderBy('title')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->execute();
+  $nodes = node_load_multiple(array_keys($entities['node']));
+  $html = '<div id="block-hid-profiles-filters-bundles" class="block"><select id="bundles" class="form-control form-select" tabindex="1" data-placeholder="Filter by Cluster/Sector">';
+  $html .= '<option value=""></option>';
+  foreach ($nodes as $nid => $node) {
+    $label = entity_label('node', $node);
+    $html .= '<option value="' . $nid . '">' . $label . '</option>';
+  }
+  $html .= '</select></div>';
+  return $html;
+}
+
+/**
+ * Autocomplete helper.
+ */
+function ar_assessments_organization_autocomplete() {
+  $html = '<div id="block-hid-profiles-filters-organization" class="block"><input type="text" id="organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Leading Organization" /></div>';
+  return $html;
+}
+
+/**
+ * Autocomplete helper.
+ */
+function ar_assessments_part_organization_autocomplete() {
+  $html = '<div id="block-hid-profiles-filters-organization" class="block"><input type="text" id="part_organizations" class="form-control" name="organization.name" value="" placeholder="Filter by Participating Organizations" /></div>';
+  return $html;
+}
+
+/**
+ * Location select helper.
+ */
+function ar_assessments_location_select($operation) {
+  $loc_vocabulary = taxonomy_vocabulary_machine_name_load('hr_location');
+  $parent = $operation->field_country[LANGUAGE_NONE][0]['target_id'];
+  $tree = taxonomy_get_tree($loc_vocabulary->vid, $parent, 1);
+  $html = '<div id="block-hid-profiles-filters-locations" class="block"><select id="locations" class="form-control form-select" tabindex="1" data-placeholder="Filter by Location">';
+  $html .= '<option value=""></option>';
+  foreach ($tree as $term) {
+    $html .= '<option value="' . $term->tid . '">' . $term->name . '</option>';
+  }
+  $html .= '</select></div>';
+  return $html;
+}
+
+/**
+ * Assessments status select helper.
+ */
+function ar_assessments_status_select() {
+  $html = '<div id="block-hid-profiles-filters-status" class="block"><select id="status" class="form-control form-select" tabindex="1" data-placeholder="Filter by Status">';
+  $html .= '<option value=""></option>';
+  $html .= '<option value="Planned">Planned</option>';
+  $html .= '<option value="Ongoing">Ongoing</option>';
+  $html .= '<option value="Draft">Draft</option>';
+  $html .= '<option value="Field work completed">Field work completed</option>';
+  $html .= '<option value="Report completed">Report completed</option>';
+  $html .= '</select></div>';
+  return $html;
+}
+
+/**
+ * Assessments population types select helper.
+ */
+function ar_assessments_population_types_select() {
+  $loc_vocabulary = taxonomy_vocabulary_machine_name_load('hr_population_type');
+  $tree = taxonomy_get_tree($loc_vocabulary->vid, 0, 1);
+  $html = '<div id="block-hid-profiles-filters-population-types" class="block"><select id="population-types" class="form-control form-select" tabindex="1" data-placeholder="Filter by Population Type">';
+  $html .= '<option value=""></option>';
+  foreach ($tree as $term) {
+    $html .= '<option value="' . $term->tid . '">' . $term->name . '</option>';
+  }
+  $html .= '</select></div>';
+  return $html;
+}
+
+/**
+ * Assessments disaster select helper.
+ */
+function ar_assessments_disaster_select($operation) {
+  $output = '';
+  $query = new EntityFieldQuery();
+  $results = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'hr_disaster')
+    ->fieldCondition(OG_AUDIENCE_FIELD, 'target_id', $operation->nid, '=')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->propertyOrderBy('title')
+    ->execute();
+  if (!empty($results['node'])) {
+    $nodes = node_load_multiple(array_keys($results['node']));
+    $output .= '<div id="block-hid-profiles-filters-disasters" class="block"><select id="disasters" class="form-control form-select" tabindex="1" data-placeholder="Filter by Disaster">';
+    $output .= '<option value=""></option>';
+    foreach ($nodes as $node) {
+      $output .= '<option value="' . $node->nid . '">' . entity_label('node', $node) . '</option>';
+    }
+    $output .= '</select></div>';
+  }
+
+  return $output;
+}
+
+/**
+ * Assessments entities dropdown helper.
+ */
+function ar_assessments_get_entities_dropdown($type) {
+  $output = array();
+  $query = new EntityFieldQuery();
+  $entities = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', $type)
+    ->propertyOrderBy('title')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->execute();
+  $nodes = node_load_multiple(array_keys($entities['node']));
+  foreach ($nodes as $node) {
+    $output[$node->nid] = entity_label('node', $node);
+    if ($type == 'hr_bundle') {
+      $operation = node_load($node->og_group_ref[LANGUAGE_NONE][0]['target_id']);
+      $output[$node->nid] = entity_label('node', $operation) . ': ' . $output[$node->nid];
+    }
+  }
+  asort($output);
+  return $output;
+}
+
+/**
+ * Assessments filter list helper.
+ */
+function ar_assessments_get_list_of_filters() {
+  $dropdowns = array();
+  $operations = ar_assessments_get_entities_dropdown('hr_operation');
+  $bundles = ar_assessments_get_entities_dropdown('hr_bundle');
+
+  $dropdowns['operation'] = $operations;
+  $dropdowns['bundles'] = $bundles;
+  return $dropdowns;
+}
+
+/**
+ * Assessments fetch helper.
+ */
+function ar_assessments_fetch_assessments($filters, $limit = 5) {
+  $url = 'https://assessments.hpc.tools/api/v1.1/assessments';
+  if (!empty($filters)) {
+    $url .= '?range=' . $limit . '&';
+    foreach ($filters as $name => $val) {
+      if ($val) {
+        $url .= 'filter[' . $name . '][value]=' . $val . '&';
+      }
+    }
+  }
+  // Sort by date.
+  $url .= '&sort=-date';
+  $assessments = array();
+  $request = drupal_http_request($url);
+  if (isset($request->data)) {
+    $assessments = drupal_json_decode($request->data);
+  }
+  return $assessments;
+}
