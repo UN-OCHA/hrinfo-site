@@ -1,0 +1,44 @@
+{
+    "patches": {
+      "drupal/drupal": {
+        "Extended Aliases core patch": "https://www.drupal.org/files/issues/2420275-1.patch",
+        "Invalid node_load() parameters fix" : "PATCHES/node_load_fix.patch",
+        "Notice: Undefined index: field_xxx in file_ajax_upload() and Undefined index: #suffix in file_ajax_upload": "https://www.drupal.org/files/undefined_index_file_ajax-1336212-23.patch",
+        "Cannot create references to/from string offsets nor overloaded objects": "https://www.drupal.org/files/issues/cannot_create_references_tofrom_string_offsets_nor_overloaded_objects-2313517-32.patch",
+        "Call to undefined function drupal_get_path_alias() in url()": "https://www.drupal.org/files/issues/2019-02-27/drupal-undefined_function_drupal_get_path_alias-2842762-14-D7.patch"
+      },
+      "drupal/date": {
+        "HR.info issue 913": "PATCHES/hrinfo-913.patch"
+      },
+      "drupal/entity_api": {
+        "Send entire node to node_access on create": "https://www.drupal.org/files/issues/2018-12-04/3017993-send_full_node.patch"
+      },
+      "drupal/facetapi_bonus": {
+        "PHP 7.2: Warning: count(): Parameter must be an array or an object that implements Countable a FacetapiDependencyFacet->getDefaultSettings()": "https://www.drupal.org/files/issues/2018-09-04/non-countable-2938545-5.patch"
+      },
+      "drupal/og": {
+        "User can create node without permission": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/442.patch",
+        "HR.info issue 839": "PATCHES/hrinfo-839.patch"
+      },
+      "drupal/og_variables": {
+        "WSOD when group references a deleted node": "https://www.drupal.org/files/issues/2019-08-08/3055299-4.patch"
+      },
+      "drupal/openlayers": {
+        "mqcdn server is down - MapQuest map is not working": "https://www.drupal.org/files/issues/replace_mqcdn_server-2877609-2.patch"
+      },
+      "drupal/redis": {
+        "Use path_alias_xt when installed": "PATCHES/drupal-undefined_function_drupal_get_path_alias-2842762-14-D7-PART2-2420275-1-path_alias_xt.patch"
+      },
+      "drupal/restful": {
+        "HR.info issue 754": "PATCHES/restful-754.patch"
+      },
+      "drupal/dbtng_migrator": {
+        "#2757035: Integrity constraint violation errors when migrating from Postgres to MySQL": "PATCHES/integrity-constraint-error-postgres-source-2757035-1-D7.patch",
+        "Skip deleted tables": "PATCHES/dbtng_migrator_skip_field_deleted.patch"
+      },
+      "drupal/shs": {
+        "Disable entity loading": "PATCHES/shs_lazyload.patch",
+        "Disable entity loading 2": "PATCHES/shs_lazyload_2.patch"
+      }
+    }
+}

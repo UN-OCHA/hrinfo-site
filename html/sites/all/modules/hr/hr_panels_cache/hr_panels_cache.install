@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Installation, schema and update hooks.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function hr_panels_cache_requirements($phase) {
+  $requirements = array();
+  // Ensure translations don't break during installation.
+  $t = get_t();
+
+  if ($phase == 'runtime') {
+    // The module requires versions of the Panels module that include the cache
+    // table.
+    if (!db_table_exists('cache_panels')) {
+      $requirements['hr_panels_cache'] = array(
+        'severity' => REQUIREMENT_ERROR,
+        'title' => 'Panels Content Cache',
+        'value' => $t('Panels v7.x-3.4 or newer is required'),
+        'description' => $t('The Panels module must be updated to v7.x-3.4 or newer.'),
+      );
+    }
+  }
+
+  return $requirements;
+}

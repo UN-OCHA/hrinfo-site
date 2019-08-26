@@ -1,7 +1,7 @@
-diff --git a/sites/all/modules/contrib/og/includes/views/handlers/og_handler_filter_user_roles.inc b/sites/all/modules/contrib/og/includes/views/handlers/og_handler_filter_user_roles.inc
+diff --git a/includes/views/handlers/og_handler_filter_user_roles.inc b/og/includes/views/handlers/og_handler_filter_user_roles.inc
 index bbba9b0..8495627 100644
---- a/sites/all/modules/contrib/og/includes/views/handlers/og_handler_filter_user_roles.inc
-+++ b/sites/all/modules/contrib/og/includes/views/handlers/og_handler_filter_user_roles.inc
+--- a/includes/views/handlers/og_handler_filter_user_roles.inc
++++ b/includes/views/handlers/og_handler_filter_user_roles.inc
 @@ -10,7 +10,7 @@ class og_handler_filter_user_roles extends views_handler_filter_many_to_one {
      // Get all role names.
      $results = db_select('og_role', 'r')

@@ -1,0 +1,177 @@
+<?php
+
+/**
+ * @file
+ * Json 2 Human Module.
+ */
+
+/**
+ * Hook_menu().
+ */
+function j2h_menu() {
+
+  $items['j2h'] = array(
+    'page callback' => 'j2h_page',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['admin/config/content/j2h'] = array(
+    'title' => 'Json 2 Human',
+    'description' => 'Json 2 Human Settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('j2h_configuracion'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'j2h.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Block var helper.
+ */
+function _j2h_find_block_var($key, $block_vars) {
+
+  foreach (explode("\r\n", $block_vars) as $var) {
+    if (strpos($var, $key) !== FALSE && strpos($var, ':') !== FALSE) {
+      $t = explode(':', $var);
+
+      return $t[1];
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Wrapper for pages around j2h.
+ */
+function j2h_page($mod_api = '') {
+  // Nid of Colombia.
+  $group = entity_load_single('node', 77);
+  og_context('node', $group);
+  return j2h($mod_api);
+}
+
+/**
+ * Callback.
+ */
+function j2h($mod_api = '') {
+
+  $url_api_default = 'http://';
+
+  $use_cache = (empty($_SERVER['QUERY_STRING'])) ? FALSE : TRUE;
+
+  $cache_name = 'j2h_data';
+
+  $url_api = variable_get('j2h_api_url', $url_api_default);
+
+  if ($url_api == $url_api_default) {
+    $msg = t("Please set the API url in the J2H configuration (Configuration->Content->Json 2 Human)");
+    return '<div>' . $msg . '</div>';
+  }
+
+  // Api module.
+  if (empty($mod_api)) {
+
+    $block_vars = variable_get('j2h_block_vars');
+
+    if (drupal_is_front_page()) {
+      $page = 'front';
+    }
+    else {
+      $url = explode('/', $_SERVER['REQUEST_URI']);
+
+      $page = $url[count($url) - 1];
+    }
+
+    $tm = _j2h_find_block_var($page, $block_vars);
+
+    if ($tm === FALSE) {
+      $msg = t('There are not J2H settings for the current page(@page).
+                In the module configuration add a new line like this: @page:mod_api,
+                having mod_api like a module to query api', array('@page' => $page));
+
+      return '<div>' . $msg . '</div>';
+    }
+    else {
+      $mod_api = $tm;
+    }
+
+  }
+
+  $url_api .= '?mod=' . $mod_api;
+
+  // Filters.
+  $parse = parse_url($_SERVER['REQUEST_URI']);
+
+  if (!empty($_SERVER['QUERY_STRING'])) {
+    $url_api .= '&' . $_SERVER['QUERY_STRING'];
+  }
+
+  $cache_id = 'j2h:' . $url_api;
+  $cache = cache_get($cache_id, 'cache');
+  if ($cache && !empty($cache->data)) {
+    $variables = $cache->data;
+  }
+  else {
+    $options = array('timeout' => 120);
+    $json = drupal_http_request($url_api, $options);
+
+    if (!empty($json->error)) {
+      watchdog('j2h', "The API: <a href='$url_api' target='_blank'>$url_api</a> shows this error: @error", array("@error" => $json->error));
+      return "<div></div>";
+    }
+
+    $json_data = drupal_json_decode($json->data);
+    $variables = $json_data;
+
+    // Only cache real data.
+    if ($json_data) {
+      cache_set($cache_id, $variables, 'cache', REQUEST_TIME + 24 * 60 * 60);
+    }
+  }
+
+  return theme('j2h', $variables);
+}
+
+/**
+ * Hook_theme().
+ */
+function j2h_theme() {
+
+  return array(
+    'j2h' => array(
+      'template' => 'j2h',
+    ),
+  );
+}
+
+/**
+ * Hook_block_info().
+ */
+function j2h_block_info() {
+  $blocks['j2h'] = array(
+    'info' => 'Json 2 Human Block',
+  );
+  $blocks['j2h_4w'] = array(
+    'info' => 'Json 2 Human Block 4w',
+  );
+  return $blocks;
+}
+
+/**
+ * Hook_block_view().
+ */
+function j2h_block_view($delta = '') {
+  switch ($delta) {
+    case 'j2h':
+      $block['content'] = j2h();
+      return $block;
+
+    case 'j2h_4w':
+      $block['content'] = j2h('4w');
+      return $block;
+  }
+}

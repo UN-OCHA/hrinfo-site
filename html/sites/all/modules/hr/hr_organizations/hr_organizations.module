@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Code for the Organizations feature.
+ */
+
+include_once 'hr_organizations.features.inc';
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function hr_organizations_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'restful') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Implements hook_query_QUERY_alter().
+ */
+function hr_organizations_query_hr_organizations_acronym_alter($query) {
+  $request = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
+  if (!empty($request)) {
+    $query->leftJoin('field_data_field_acronym', 'field_data_field_acronym', 'taxonomy_term_data.tid = field_data_field_acronym.entity_id');
+    $or = db_or();
+    $prefix = '%' . db_like($request) . '%';
+    $or->condition('name', $prefix, 'LIKE');
+    $or->condition('field_data_field_acronym.field_acronym_value', $prefix, 'LIKE');
+    $query->condition($or);
+  }
+}

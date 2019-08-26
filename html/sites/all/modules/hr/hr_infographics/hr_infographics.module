@@ -1,0 +1,190 @@
+<?php
+
+/**
+ * @file
+ * Code for the Infographics feature.
+ */
+
+include_once 'hr_infographics.features.inc';
+
+/**
+ * Implements hook_og_features_registry()
+ */
+function hr_infographics_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'hr_infographics';
+  $feature->name = 'Maps/Infographics';
+  $feature->description = t('Provide maps and infographics to your space.');
+  $feature->components = array(
+    'node' => array(
+      'hr_infographic',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function hr_infographics_form_hr_infographic_node_form_alter(&$form, &$form_state) {
+  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
+  hr_sectors_hide_sectors($form, $form_state);
+  if (module_exists('hs_taxonomy')) {
+    if (isset($form['field_locations']['und']['#config'])) {
+      $form['field_locations']['und']['#config']['dropbox']['title'] = t('Current selections');
+      $form['field_locations']['und']['#config']['animation_delay'] = 0;
+      $form['field_locations']['und']['#config']['level_labels'] = array(
+        'status' => 1,
+        'labels' => array(
+          0 => t('Country'),
+          1 => t('Admin 1'),
+          2 => t('Admin 2'),
+          3 => t('Admin 3'),
+        ),
+      );
+    }
+  }
+
+  // Show multiple empty ones for locations.
+  if (!isset($form['clone_from_original_nid']) && !isset($form['#node']->nid)) {
+    $items_count = 4;
+    $field_name = 'field_locations';
+    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
+  }
+
+  // Show multiple empty ones for files.
+  if (!isset($form['#node']->nid)) {
+    $items_count = 4;
+    $field_name = 'field_files_collection';
+    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
+  }
+
+  // If it's a clone, validate the title.
+  if (isset($form['clone_from_original_nid'])) {
+    // Add title validation.
+    if (!isset($form['#validate'])) {
+      $form['#validate'] = array();
+    }
+    $form['#validate'][] = '_hr_document_check_clone_title';
+
+    // Disable language changing.
+    if (!isset($form['#after_build'])) {
+      $form['#after_build'] = array();
+    }
+    $form['#after_build'][] = '_hr_document_clone_disable_language';
+  }
+}
+
+/**
+ * Implementation of hook_entity_info_alter()
+ */
+function hr_infographics_entity_info_alter(&$entity_info) {
+
+  // Quick links.
+  $entity_info['fieldable_panels_pane']['bundles']['hr_infographics'] = array(
+    'label' => t('Maps/Infographics'),
+    'pane category' => t('Infographics'),
+    'pane top level' => TRUE,
+    'admin' => array(
+      'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
+      'bundle argument' => 4,
+      'real path' => 'admin/structure/fieldable-panels-panes/manage/hr-infographics',
+      'access arguments' => array('administer fieldable panels panes'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_search_api_views_query_alter()
+ *
+ * Makes the infographics view available for disasters.
+ */
+function hr_infographics_search_api_views_query_alter(&$view, &$query) {
+  if ($view->name == 'hr_infographics') {
+
+    // Case 4369 - Sort by default by publication date.
+    $params = drupal_get_query_parameters($_GET, array(
+      'q',
+      'page'
+    ));
+    $existing = $query->getSort();
+    if (empty($existing) && !isset($params['sort']) && !isset($params['order'])) {
+      // Sort by publication date.
+      $query->sort('field_publication_date', 'desc');
+    }
+
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        if (reset($condition) == 'og_group_ref') {
+          $nid = $condition[1];
+          if (is_numeric($nid)) {
+            $node = node_load($nid);
+            if ($node->type == 'hr_disaster') {
+              $condition = array('field_disasters', $nid, '=');
+            }
+            // Clusters as spaces
+            // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
+            elseif ($node->type == 'hr_bundle') {
+              $condition = array('field_bundles', $nid, '=');
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function hr_infographics_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'restful') {
+    return 'plugins/' . $plugin;
+  }
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function hr_infographics_field_widget_form_alter(&$element, &$form_state, $context) {
+  if (isset($element['#options'])) {
+    if (in_array($element['#field_name'], array('field_infographic_type'))) {
+      foreach ($element['#options'] as $tid => &$option) {
+        if (is_numeric($tid)) {
+          $option_label = array();
+          $parents = taxonomy_get_parents_all($tid);
+          foreach ($parents as $parent_id => $parent) {
+            array_unshift($option_label, entity_label('taxonomy_term', $parent));
+          }
+          $option = implode(' > ', $option_label);
+        }
+      }
+      asort($element['#options']);
+    }
+  }
+}
+
+/**
+ * Implements hook_clone_node_alter.
+ */
+function hr_infographics_clone_node_alter(&$node, $context) {
+  if ($node->type != 'hr_infographic') {
+    return;
+  }
+
+  // Mark title field as clone.
+  if (isset($node->title_field[$node->language][0]['value'])) {
+    $node->title_field[$node->language][0]['value'] .= ' [CLONED]';
+    $node->title_field[$node->language][0]['safe_value'] .= ' [CLONED]';
+  }
+
+  unset($node->field_files_collection);
+  unset($node->field_publication_date);
+  unset($node->body);
+  unset($node->field_related_content);
+}

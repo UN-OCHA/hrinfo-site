@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @file
+ * Code for the Access Search feature.
+ */
+
+include_once 'acc_search.features.inc';

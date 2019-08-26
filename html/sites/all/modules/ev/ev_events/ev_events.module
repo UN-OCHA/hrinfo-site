@@ -1,0 +1,205 @@
+<?php
+
+/**
+ * @file
+ * Code for the external events feature.
+ */
+
+/**
+ * Implements hook_ctools_plugin_directory()
+ */
+function ev_events_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Implements hook_og_features_registry()
+ */
+function ev_events_og_features_registry() {
+  $registry = array();
+  $feature = new stdClass();
+  $feature->id = 'ev_events';
+  $feature->name = 'Humanitarian Events';
+  $feature->description = t('Provide Humanitarian Events to your space.');
+  $feature->components = array(
+    'path' => array(
+      'node/%node/humanitarian-events',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+  return $registry;
+}
+
+/**
+ * Implements hook_variable_group_info().
+ */
+function ev_events_variable_group_info() {
+  $groups['ev_events'] = array(
+    'title' => t('Humanitarian events'),
+    'description' => t('Settings for the Humanitarian events calendar page'),
+  );
+
+  return $groups;
+}
+
+/**
+ * Implements hook_variable_info().
+ */
+function ev_events_variable_info($options) {
+  $variables['ev_events_calendar_country'] = array(
+    'type' => 'select',
+    'title' => t('Country', array(), $options),
+    'default' => '',
+    'description' => t('The country to filter events on.'),
+    'options callback' => 'ev_events_fetch_countries',
+    'group' => 'ev_events',
+  );
+
+  $variables['ev_events_calendar_cluster'] = array(
+    'type' => 'select',
+    'title' => t('Cluster', array(), $options),
+    'default' => '',
+    'description' => t('The cluster to filter events on.'),
+    'options callback' => 'ev_events_fetch_clusters',
+    'group' => 'ev_events',
+  );
+
+  return $variables;
+}
+
+/**
+ * Implements hook_menu()
+ */
+function ev_events_menu() {
+  $items = array();
+
+  $items['node/%node/humanitarian-events'] = array(
+    'title' => 'Humanitarian Events',
+    'page callback' => 'ev_events_calendar',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'file' => 'ev_events.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ev_events_theme($existing, $type, $theme, $path) {
+  $theme = array();
+
+  $theme['ev_events_calendar'] = array(
+    'template' => 'ev-events-calendar',
+    'path' => drupal_get_path('module', 'ev_events') . '/templates',
+    'variables' => array(
+      'contents' => array(),
+      'summary' => NULL,
+      'clearall' => NULL,
+      'removefacets' => NULL,
+      'facets' => NULL,
+      'data' => NULL,
+      'pager' => NULL,
+    ),
+  );
+
+  return $theme;
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function ev_events_js_alter(&$javascript) {
+  // Remove fullcalendar javascript.
+  if (isset($javascript['sites/all/modules/contrib/fullcalendar_api/fullcalendar_calendar.js'])) {
+    unset($javascript['sites/all/modules/contrib/fullcalendar_api/fullcalendar_calendar.js']);
+  }
+}
+
+/**
+ * Fetch clusters.
+ */
+function ev_events_fetch_clusters() {
+  $cache_key = 'ev_events:clusters';
+
+  $cache = cache_get($cache_key);
+  if ($cache && !empty($cache->data)) {
+    return $cache->data;
+  }
+
+  $items = array('' => t('- Select a cluster -'));
+
+  $now = new DateTime();
+  $api_base_url = variable_get('ev_events_api_url', 'https://events.staging.humanitarianresponse.info');
+
+  $api_url = $api_base_url . '/api/v0/clusters';
+  $params = array(
+    'start' => $now->format('Y-m-d'),
+  );
+
+  $url = $api_url . '?' . drupal_http_build_query($params);
+  $request = drupal_http_request($url);
+  if (isset($request->data)) {
+    $clusters = drupal_json_decode($request->data);
+
+    foreach ($clusters as $cluster) {
+      $items[$cluster['tid']] = $cluster['name'];
+    }
+  }
+
+  cache_set($cache_key, $items, REQUEST_TIME + 24 * 60 * 60);
+  return $items;
+}
+
+/**
+ * Fetch countries.
+ */
+function ev_events_fetch_countries() {
+  $cache_key = 'ev_events:countries';
+
+  $cache = cache_get($cache_key);
+  if ($cache && !empty($cache->data)) {
+    return $cache->data;
+  }
+
+  $now = new DateTime();
+  $api_base_url = variable_get('ev_events_api_url', 'https://events.staging.humanitarianresponse.info');
+
+  $api_url = $api_base_url . '/api/v0/countries';
+  $params = array(
+    'start' => $now->format('Y-m-d'),
+  );
+
+  $url = $api_url . '?' . drupal_http_build_query($params);
+  $request = drupal_http_request($url);
+  if (isset($request->data)) {
+    $countries = drupal_json_decode($request->data);
+
+    foreach ($countries as $country) {
+      $items[$country['tid']] = $country['name'];
+    }
+  }
+
+  cache_set($cache_key, $items, REQUEST_TIME + 24 * 60 * 60);
+  return $items;
+}
+
+/**
+ * Order events by date.
+ */
+function ev_events_order_by_date($events) {
+  usort($events, function ($a, $b) {
+    if ($a['start'] == $b['start']) {
+      if ($a['end'] == $b['end']) {
+        return 0;
+      }
+      return ($a['end'] < $b['end']) ? -1 : 1;
+    }
+    return ($a['start'] < $b['start']) ? -1 : 1;
+  });
+
+  return $events;
+}

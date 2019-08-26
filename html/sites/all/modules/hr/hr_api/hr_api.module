@@ -1,0 +1,154 @@
+<?php
+
+/**
+ * @file
+ * Code for the API feature.
+ */
+
+include_once 'hr_api.features.inc';
+
+/**
+ * Convert a bundle to a RESTful plugin.
+ */
+function hr_api_bundle_to_restful_plugin($bundle, $type) {
+  $resource = '';
+  $plugins = restful()->getResourceManager()->getPlugins();
+  foreach ($plugins as $key => $plugin) {
+    $definition = $plugin->getPluginDefinition();
+    if (!empty($definition['dataProvider']['bundles']) && in_array($bundle, $definition['dataProvider']['bundles']) && $definition['dataProvider']['entityType'] == $type) {
+      $resource = $plugin;
+    }
+  }
+  return $resource;
+}
+
+/**
+ * Implements hook_entity_insert()
+ */
+function hr_api_entity_insert($entity, $type) {
+  hr_api_entity_hook('create', $entity, $type);
+}
+
+/**
+ * Implements hook_entity_update()
+ */
+function hr_api_entity_update($entity, $type) {
+  hr_api_entity_hook('update', $entity, $type);
+}
+
+/**
+ * Implements hook_entity_delete()
+ */
+function hr_api_entity_delete($entity, $type) {
+  if ($type == 'node' || $type == 'taxonomy_term') {
+    global $conf;
+    list($id) = entity_extract_ids($type, $entity);
+    $wrapper = entity_metadata_wrapper($type, $entity);
+    $bundle = $wrapper->getBundle();
+    $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
+    $json_entity = new \stdClass();
+    $json_entity->id = $id;
+    foreach ($conf['hr_api_webhooks'] as $webhook) {
+      if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
+        hr_api_call_webhook($webhook, 'delete', $resource, 'en', array(), $json_entity);
+      }
+    }
+  }
+}
+
+/**
+ * API Entity hook.
+ */
+function hr_api_entity_hook($event, $entity, $type) {
+  if ($type == 'node' || $type == 'taxonomy_term') {
+    global $language;
+    global $conf;
+    $user = user_load(1);
+    $call_webhook = FALSE;
+    list($id) = entity_extract_ids($type, $entity);
+    entity_get_controller($type)->resetCache(array($id));
+    $wrapper = entity_metadata_wrapper($type, $id);
+    $bundle = $wrapper->getBundle();
+    foreach ($conf['hr_api_webhooks'] as $webhook) {
+      if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
+        $call_webhook = TRUE;
+      }
+    }
+    if ($call_webhook) {
+      $langcode = $language->language;
+      $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
+      if ($resource) {
+        $resource->setAccount($user);
+        $thandler = entity_translation_get_handler($type, $entity);
+        $translations = $thandler->getTranslations();
+        $translations = array_keys($translations->data);
+        $json_entities = json_decode(restful()->getFormatterManager()->format($resource->doGet($id), 'json'));
+        $json_entity = reset($json_entities->data);
+        foreach ($conf['hr_api_webhooks'] as $webhook) {
+          if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
+            hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $json_entity);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * API Webhook callback.
+ */
+function hr_api_should_call_webhook($webhook, $type, $bundle) {
+  $types = array_keys($webhook['types']);
+  if (in_array($type, $types)) {
+    $bundles = $webhook['types'][$type];
+    if (in_array($bundle, $bundles)) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * API Webhook callback.
+ */
+function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $entity) {
+  watchdog('hr_api_call_webhook', 'Called');
+
+  $definition = $resource->getPluginDefinition();
+  $url = $webhook['url'];
+  watchdog('hr_api_call_webhook', 'URL: @url', array('@url' => $url));
+
+  $json = new \stdClass();
+  $json->type = $definition['resource'];
+  $json->language = $langcode;
+  $json->translations = $translations;
+  $json->entity = $entity;
+
+  $headers = array(
+    'X-HRInfo-Event: ' . $event,
+    'Accept: application/json',
+    'Authorization: ' . $webhook['secret'],
+    'Content-Type: application/json',
+  );
+
+  $ch = curl_init();
+
+  // Set URL and other appropriate options.
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($json));
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+  // Grab URL and pass it to the browser.
+  curl_exec($ch);
+  watchdog('hr_api_call_webhook', 'Status: @status', array('@status' => curl_error($ch)));
+
+  // Close cURL resource, and free up system resources.
+  curl_close($ch);
+}

@@ -1,0 +1,911 @@
+<?php
+
+/**
+ * @file
+ * Code for the Reliefweb integration.
+ */
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function hr_reliefweb_ctools_plugin_directory($module, $plugin) {
+  if ($module == "panels" && in_array($plugin, array('styles'))) {
+    return "plugins/$plugin";
+  }
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Implementation of hook_ctools_plugin_api().
+ */
+function hr_reliefweb_ctools_plugin_api($module, $api) {
+  if ($module == 'context' && ($api == 'plugins' || $api == 'context')) {
+    return array('version' => '3');
+  }
+}
+
+/**
+ * Implements hook_og_features_registry()
+ */
+function hr_reliefweb_og_features_registry() {
+  $registry = array();
+
+  $feature = new stdClass();
+  $feature->id = 'hr_reliefweb_documents';
+  $feature->name = 'Reports and Maps';
+  $feature->description = t('Provide access to Reliefweb reports and maps.');
+  $feature->components = array(
+    'path' => array(
+      'node/%node/reliefweb',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+
+  $feature = new stdClass();
+  $feature->id = 'hr_reliefweb_meeting_documents';
+  $feature->name = 'Meeting Documents';
+  $feature->description = t('Provide access to old meeting documents.');
+  $feature->components = array(
+    'path' => array(
+      'node/%node/meeting-documents',
+    ),
+  );
+  $registry[$feature->id] = $feature;
+
+  return $registry;
+}
+
+/**
+ * Implements hook_menu()
+ */
+function hr_reliefweb_menu() {
+  $items = array();
+
+  $items['node/%node/reliefweb'] = array(
+    'title' => 'Reports and Maps',
+    'page callback' => 'hr_reliefweb_document_list',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'file' => 'hr_reliefweb.pages.inc',
+  );
+
+  $items['reliefweb/autocomplete'] = array(
+    'title' => 'Reliefweb autocomplete',
+    'page callback' => 'hr_reliefweb_autocomplete',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['reliefweb/hno/autocomplete'] = array(
+    'title' => 'Reliefweb autocomplete hno',
+    'page callback' => 'hr_reliefweb_autocomplete_hno',
+    'page arguments' => array(3),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['reliefweb/srp/autocomplete'] = array(
+    'title' => 'Reliefweb autocomplete srp',
+    'page callback' => 'hr_reliefweb_autocomplete_srp',
+    'page arguments' => array(3),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['reliefweb/monr/autocomplete'] = array(
+    'title' => 'Reliefweb autocomplete monr',
+    'page callback' => 'hr_reliefweb_autocomplete_monr',
+    'page arguments' => array(3),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['reliefweb/opr/autocomplete'] = array(
+    'title' => 'Reliefweb autocomplete opr',
+    'page callback' => 'hr_reliefweb_autocomplete_opr',
+    'page arguments' => array(3),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['reliefweb/orp/autocomplete'] = array(
+    'title' => 'Reliefweb autocomplete orp',
+    'page callback' => 'hr_reliefweb_autocomplete_orp',
+    'page arguments' => array(3),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_url_outbound_alter().
+ */
+function hr_reliefweb_url_outbound_alter(&$path, &$options, $original_path) {
+  if (strpos($path, 'autocomplete') !== FALSE && strpos($path, 'reliefweb') !== FALSE) {
+    $options['script'] = '';
+  }
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete($string) {
+  $matches = array();
+  if ($string) {
+    $query = '"' . $string . '"';
+    $data = hr_reliefweb_fetch_documents('', 20, 0, array(), $query, TRUE);
+
+    if (!empty($data['data'])) {
+      foreach ($data['data'] as $key => $value) {
+        $matches[$value['title'] . ' (' . $value['id'] . ')'] = $value['title'];
+      }
+    }
+  }
+
+  drupal_json_output($matches);
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete_hno($string) {
+  $matches = array();
+  if ($string) {
+    $query = array(
+      'value' => $string,
+      'operator' => 'AND',
+      'fields' => array(
+        'title',
+      ),
+    );
+    $data = hr_reliefweb_fetch_documents('', 20, 0, array(), $query, TRUE, FALSE);
+
+    if (!empty($data['data'])) {
+      foreach ($data['data'] as $key => $value) {
+        $matches[$value['title'] . ' (' . $value['id'] . ')'] = $value['title'];
+      }
+    }
+  }
+
+  ksort($matches);
+  drupal_json_output($matches);
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete_srp($string) {
+  hr_reliefweb_autocomplete_hno($string);
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete_monr($string) {
+  hr_reliefweb_autocomplete_hno($string);
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete_opr($string) {
+  hr_reliefweb_autocomplete_hno($string);
+}
+
+/**
+ * Autocomplete callback.
+ */
+function hr_reliefweb_autocomplete_orp($string) {
+  hr_reliefweb_autocomplete_hno($string);
+}
+
+/**
+ * Get reports.
+ */
+function hr_reliefweb_get_ocha_reports() {
+  return array(
+    'sitrep' => array(
+      'label' => t('Situation Report'),
+      'field' => 'ocha_product.name',
+      'value' => 'Situation Report',
+    ),
+    'humbul' => array(
+      'label' => t('Humanitarian Bulletin'),
+      'field' => 'ocha_product.name',
+      'value' => 'Humanitarian Bulletin',
+    ),
+    'humsnap' => array(
+      'label' => t('Humanitarian Snapshot'),
+      'field' => 'ocha_product.name',
+      'value' => 'Humanitarian Snapshot',
+    ),
+    'humdash' => array(
+      'label' => t('Humanitarian Dashboard'),
+      'field' => 'ocha_product.name',
+      'value' => 'Humanitarian Dashboard',
+    ),
+  );
+
+}
+
+/**
+ * Get a document.
+ */
+function hr_reliefweb_get_document_by_id($id) {
+  $filters = array();
+
+  $filters[] = array(
+    'field' => 'id',
+    'value' => $id,
+    'operator' => 'AND',
+  );
+
+  $data = hr_reliefweb_fetch_documents('', 1, 0, $filters, NULL, TRUE, FALSE);
+  if (isset($data['data'])) {
+    $report = array_shift($data['data']);
+    return $report;
+  }
+  return FALSE;
+}
+
+/**
+ * Get the latest document.
+ */
+function hr_reliefweb_get_latest_document_by_key($key, $country) {
+  $filters = array();
+  $ocha_reports = hr_reliefweb_get_ocha_reports();
+
+  if (array_key_exists($key, $ocha_reports)) {
+    $filters[] = array(
+      'field' => $ocha_reports[$key]['field'],
+      'value' => $ocha_reports[$key]['value'],
+      'operator' => 'AND',
+    );
+  }
+  else {
+    $filters[] = array(
+      'field' => 'ocha_product.name',
+      'value' => 'Situation Report',
+      'operator' => 'AND',
+    );
+  }
+
+  $data = hr_reliefweb_fetch_documents($country, 1, 0, $filters, NULL, TRUE);
+  if (isset($data['data'])) {
+    $report = array_shift($data['data']);
+    return $report;
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function hr_reliefweb_theme($existing, $type, $theme, $path) {
+  $theme = array();
+
+  $theme['hr_reliefweb_overview'] = array(
+    'template' => 'hr-reliefweb-overview',
+    'path' => drupal_get_path('module', 'hr_reliefweb') . '/templates',
+    'variables' => array(
+      'contents' => array(),
+      'summary' => NULL,
+      'clearall' => NULL,
+      'removefacets' => NULL,
+      'facets' => NULL,
+      'data' => NULL,
+      'pager' => NULL,
+    ),
+  );
+
+  return $theme;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function hr_reliefweb_block_info() {
+  $blocks['hr_reliefweb_search'] = array(
+    'info' => t('Reliefweb documents search'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function hr_reliefweb_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'hr_reliefweb_search':
+      $block['content'] = '<div><div class="views-exposed-form">
+        <div class="views-exposed-widgets clearfix">
+          <div id="edit-search-wrapper" class="views-exposed-widget form-group">
+          <div class="input-group">
+            <input class="form-control form-text" id="search" name="text" value="" size="30" maxlength="128" type="text" placeholder="' . t('Search RW Documents') . '">
+            <span class="input-group-btn">
+              <button id="search-button" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+            </span>
+          </div>
+        </div>
+      </div></div></div>';
+      break;
+
+  }
+  return $block;
+}
+
+/**
+ * Allowed filters.
+ */
+function hr_reliefweb_get_filters($key = NULL) {
+  $filters = array(
+    'source.name' => t('Organization'),
+    'theme.name' => t('Theme'),
+    'format.name' => t('Format'),
+    'disaster_type' => t('Disaster type'),
+    'vulnerable_groups.name' => t('Vulnerable group'),
+    'language.name' => t('Language'),
+    'date.original' => t('Original publication date'),
+    'date.changed' => t('Posting date'),
+    'disaster.name' => t('Disaster'),
+  );
+
+  if ($key) {
+    if (array_key_exists($key, $filters)) {
+      return $filters[$key];
+    }
+    else {
+      return FALSE;
+    }
+  }
+  else {
+    return $filters;
+  }
+}
+
+/**
+ * Fetch documents from Reliefweb.
+ */
+function hr_reliefweb_fetch_documents($country, $limit = 0, $offset = 0, $filters = array(), $query = NULL, $without_facets = FALSE, $exclude_press = TRUE) {
+  $endpoint = 'https://api.reliefweb.int/v1/reports';
+  $params = array(
+    'appname' => 'hrinfo',
+    'offset' => $offset,
+    'limit' => $limit,
+    'preset' => 'latest',
+
+    'fields[include]' => array(
+      'id',
+      'disaster_type.name',
+      'url',
+      'title',
+      'date.changed',
+      'source.shortname',
+      'country.name',
+      'primary_country.name',
+      'file.url',
+      'file.preview.url-thumb',
+      'file.description',
+      'file.filename',
+      'format.name',
+    ),
+  );
+
+  $params['filter'] = array(
+    'operator' => 'AND',
+    'conditions' => array(),
+  );
+
+  if ($country) {
+    $params['filter']['conditions'][] = array(
+      'field' => 'primary_country.iso3',
+      'value' => $country,
+      'operator' => 'OR',
+    );
+  }
+
+  if ($exclude_press) {
+    $params['filter']['conditions'][] = array(
+      'field' => 'format.name',
+      'value' => 'News and Press Release',
+      'operator' => 'OR',
+      'negate' => TRUE,
+    );
+  }
+
+  if (!empty($query)) {
+    if (is_array($query)) {
+      $params['query'] = $query;
+    }
+    else {
+      $params['query']['value'] = $query;
+    }
+  }
+
+  if (!empty($filters)) {
+    $params['filter']['conditions'] = array_merge($params['filter']['conditions'], $filters);
+  }
+
+  // Remove filters if no condition is present.
+  if (empty($params['filter']['conditions'])) {
+    unset($params['filter']);
+  }
+
+  if (!$without_facets) {
+    $allowed_filters = hr_reliefweb_get_filters();
+    foreach ($allowed_filters as $key => $allowed_filter) {
+      // Date is a special case, needs an interval.
+      if (strpos($key, 'date') !== FALSE) {
+        $params['facets'][] = array(
+          'field' => $key,
+          'interval' => 'month',
+        );
+      }
+      else {
+        $params['facets'][] = array(
+          'field' => $key,
+          'limit' => 2000,
+          'sort' => 'value:asc',
+        );
+      }
+    }
+  }
+
+  $url = $endpoint . '?' . drupal_http_build_query($params);
+
+  return hr_reliefweb_content($url);
+}
+
+/**
+ * Function to return content given an api path.
+ */
+function hr_reliefweb_content($path) {
+  $data_array = array();
+  $total_count = 0;
+  $facets = array();
+
+  $request = drupal_http_request($path);
+  if (isset($request->data)) {
+    $response = drupal_json_decode($request->data);
+    $total_count = $response['totalCount'];
+
+    // Re-order facets.
+    if (isset($response['embedded'])) {
+      $facets = array();
+      $allowed_filters = hr_reliefweb_get_filters();
+      foreach ($allowed_filters as $key => $allowed_filter) {
+        $facets[$key] = $response['embedded']['facets'][$key];
+      }
+    }
+
+    $data = $response['data'];
+    foreach ($data as $value) {
+      $url = $value['fields']['url'];
+      $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
+      $data_array[$title] = array(
+        'id' => $value['fields']['id'],
+        'title' => $title,
+        'url' => $url,
+        'date_changed' => $value['fields']['date']['changed'],
+        'format' => $value['fields']['format'][0]['name'],
+        'primary_country' => $value['fields']['primary_country']['name'],
+      );
+
+      if (isset($value['fields']['source'])) {
+        $sources = array();
+        foreach ($value['fields']['source'] as $source) {
+          $sources[] = $source['shortname'];
+        }
+        $data_array[$title]['sources'] = $sources;
+      }
+
+      if (isset($value['fields']['disaster_type'])) {
+        $disaster_types = array();
+        foreach ($value['fields']['disaster_type'] as $disaster_type) {
+          $disaster_types[] = $disaster_type['name'];
+        }
+        $data_array[$title]['disaster_types'] = $disaster_types;
+      }
+
+      if (isset($value['fields']['country'])) {
+        $countries = array();
+        foreach ($value['fields']['country'] as $country) {
+          $countries[] = $country['name'];
+        }
+        $data_array[$title]['countries'] = $countries;
+      }
+
+      if (isset($value['fields']['file'])) {
+        $files = array();
+        foreach ($value['fields']['file'] as $file) {
+          $files[] = array(
+            'preview' => isset($file['preview']['url-thumb']) ? _hr_reliefweb_fix_url($file['preview']['url-thumb']) : '',
+            'url' => _hr_reliefweb_fix_url($file['url']),
+            'filename' => isset($file['filename']) ? $file['filename'] : '',
+            'description' => isset($file['description']) ? $file['description'] : '',
+          );
+        }
+        $data_array[$title]['files'] = $files;
+      }
+
+    }
+  }
+
+  return array(
+    'data' => $data_array,
+    'facets' => $facets,
+    'total' => $total_count,
+  );
+}
+
+/**
+ * Fetch disasters from Reliefweb.
+ */
+function hr_reliefweb_fetch_disasters($country, $limit = 999, $offset = 0, $filters = array()) {
+  $endpoint = 'https://api.reliefweb.int/v1/disasters';
+  $params = array(
+    'appname' => 'hrinfo',
+    'offset' => $offset,
+    'limit' => $limit,
+    'preset' => 'latest',
+
+    'fields[include]' => array(
+      'id',
+      'name',
+    ),
+  );
+
+  if ($country) {
+    $params['filter'] = array(
+      'operator' => 'AND',
+      'conditions' => array(
+        array(
+          'field' => 'primary_country.iso3',
+          'value' => $country,
+          'operator' => 'OR',
+        ),
+      ),
+    );
+  }
+
+  if (!empty($query)) {
+    $params['query']['value'] = $query;
+  }
+
+  if (!empty($filters)) {
+    $params['filter']['conditions'] = array_merge($params['filter']['conditions'], $filters);
+  }
+
+  $url = $endpoint . '?' . drupal_http_build_query($params);
+
+  $data_array = array();
+  $total_count = 0;
+  $facets = array();
+
+  $request = drupal_http_request($url);
+  if (isset($request->data)) {
+    $response = drupal_json_decode($request->data);
+    $total_count = $response['totalCount'];
+
+    $data = $response['data'];
+    foreach ($data as $value) {
+      $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
+      $data_array[$value['fields']['id']] = $title;
+    }
+  }
+
+  return $data_array;
+}
+
+/**
+ * Fix URL for reliefweb.
+ */
+function _hr_reliefweb_fix_url($url) {
+  $url = str_replace('#', '%23', $url);
+  $url = str_replace(' ', '%20', $url);
+  $url = str_replace('http://', 'https://', $url);
+
+  return $url;
+}
+
+/**
+ * Allowed dropdowns.
+ */
+function hr_reliefweb_get_dropdowns($key = NULL) {
+  $dropdowns = array(
+    'country' => array(
+      'label' => t('Country'),
+      'filter' => 'primary_country',
+    ),
+    'theme' => array(
+      'label' => t('Theme'),
+      'filter' => 'theme',
+    ),
+    'source' => array(
+      'label' => t('Organisation'),
+      'filter' => 'source',
+    ),
+    'format' => array(
+      'label' => t('Document type'),
+      'filter' => 'format',
+    ),
+    'disaster_type' => array(
+      'label' => t('Disaster type'),
+      'filter' => 'disaster_type',
+    ),
+    'language' => array(
+      'label' => t('Language'),
+      'filter' => 'language',
+    ),
+  );
+
+  if ($key) {
+    return $dropdowns[$key]['label'];
+  }
+  else {
+    return $dropdowns;
+  }
+}
+
+/**
+ * Get a list of filters.
+ */
+function hr_reliefweb_get_list_of_filters() {
+  $cache_key = 'hr_reliefweb_get_list_of_filters';
+  $cache = cache_get($cache_key);
+  if ($cache) {
+    return $cache->data;
+  }
+
+  $endpoint = 'https://api.reliefweb.int/v1/reports';
+  $params = array(
+    'appname' => 'hrinfo',
+    'offset' => 0,
+    'limit' => 0,
+    'facets' => array(
+      array(
+        'field' => 'country',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'theme',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'source',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'format',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'disaster_type',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+      array(
+        'field' => 'language',
+        'sort' => 'value:asc',
+        'limit' => 9999,
+      ),
+    ),
+  );
+
+  $url = $endpoint . '?' . drupal_http_build_query($params);
+
+  $request = drupal_http_request($url);
+  if (isset($request->data)) {
+    $response = drupal_json_decode($request->data);
+    foreach ($response['embedded']['facets'] as $key => $facet) {
+      $dropdowns[$key] = array();
+      foreach ($facet['data'] as $term) {
+        $dropdowns[$key][$term['value']] = $term['value'];
+      }
+    }
+    cache_set($cache_key, $dropdowns, 'cache', REQUEST_TIME + 60 * 60);
+  }
+
+  return $dropdowns;
+}
+
+/**
+ * Map HR Info cluster to ReliefWeb filters.
+ */
+function _hr_reliefweb_map_cluster_to_rw_filters($node) {
+  $filters = array();
+
+  $global_cluster = 0;
+  if (isset($node->field_sector['und'][0]['target_id'])) {
+    $global_cluster = $node->field_sector['und'][0]['target_id'];
+  }
+
+  switch ($global_cluster) {
+    case 'Agriculture':
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Agriculture',
+        'operator' => 'OR',
+      );
+      break;
+
+    // Education.
+    case 3:
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Education Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Education',
+        'operator' => 'OR',
+      );
+      break;
+
+    // Emergency Shelter and NFI.
+    case 4:
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Shelter Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Shelter and Non-Food Items',
+        'operator' => 'OR',
+      );
+      break;
+
+    // Food Security.
+    case 6:
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Food Security Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Food and Nutrition',
+        'operator' => 'OR',
+      );
+      break;
+
+    // Health.
+    case 7:
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Health Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Health',
+        'operator' => 'OR',
+      );
+      break;
+
+    // Camp Coordination / Management.
+    case 1:
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Coordination',
+        'operator' => 'OR',
+      );
+      break;
+
+    // Logistics.
+    case 8:
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Logistics Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Logistics and Telecommunications',
+        'operator' => 'OR',
+      );
+      break;
+
+    // Nutrition.
+    case 9:
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Nutrition Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Food and Nutrition',
+        'operator' => 'OR',
+      );
+      break;
+
+    // Protection.
+    case 10:
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Protection Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Protection and Human Rights',
+        'operator' => 'OR',
+      );
+      break;
+
+    // Gender Based Violence.
+    case 5404:
+      // Child Protection.
+    case 5403:
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'Protection Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Protection and Human Rights',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'vulnerable_groups.name',
+        'value' => 'Children; Women',
+        'operator' => 'OR',
+      );
+      break;
+
+    // Water Sanitation Hygiene.
+    case 11:
+      $filters[] = array(
+        'field' => 'source.name',
+        'value' => 'WASH Cluster',
+        'operator' => 'OR',
+      );
+      $filters[] = array(
+        'field' => 'theme.name',
+        'value' => 'Water Sanitation Hygiene',
+        'operator' => 'OR',
+      );
+      break;
+
+    // Housing, Land and Property.
+    case 5405:
+      // Mine Action.
+    case 5406:
+      // Information Management.
+    case 70192:
+      // Emergency Telecommunications.
+    case 5:
+      // Early Recovery.
+    case 2:
+      break;
+
+    default:
+      break;
+  }
+
+  return $filters;
+}
+
+/**
+ * Helper function to get the iso2 code from an operation.
+ */
+function hr_reliefweb_get_country_from_operation($wrapper) {
+  if (isset($wrapper->field_country) && isset($wrapper->field_country->field_pcode)) {
+    $iso2 = $wrapper->field_country->field_pcode->value();
+    $country_codes = hdx_datasets_get_country_codes();
+    return drupal_strtolower($country_codes[$iso2]);
+  }
+
+  return '';
+}

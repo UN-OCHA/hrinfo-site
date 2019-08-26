@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * @file
+ * Code for the Admin tools feature.
+ */
+
+include_once 'hr_admin.features.inc';
+/**
+ * @file
+ * Code for the Admin tools feature.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function hr_admin_menu() {
+  $items = array();
+
+  $items['admin/config/hrinfo'] = array(
+    'title' => 'Humanitarian Response Admin',
+    'description' => 'Admin tools for Humanitarian Response',
+    'position' => 'right',
+    'weight' => -15,
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_init().
+ */
+function hr_admin_init() {
+  // If the current user has administrative privileges, bump the
+  // memory limit, so that they can delete complex content.
+  if (user_access('access administration pages')) {
+    ini_set('memory_limit', '1024M');
+  }
+  else {
+    if (!user_is_anonymous()) {
+      global $user;
+      $query = db_select('og_users_roles', 'ogur');
+      $query->innerJoin('og_role', 'ogr', 'ogur.rid = ogr.rid');
+      $rids = $query
+        ->fields('ogur', array('rid'))
+        ->fields('ogr', array('name'))
+        ->condition('ogur.uid', $user->uid, '=')
+        ->orderBy('rid')
+        ->execute()
+        ->fetchAllkeyed();
+
+      $can_edit = FALSE;
+      foreach ($rids as $rid) {
+        if ($rid == 'manager' || $rid == 'contributor' || $rid == 'editor') {
+          $can_edit = TRUE;
+          break;
+        }
+      }
+
+      if ($can_edit) {
+        ini_set('memory_limit', '1024M');
+      }
+    }
+  }
+}
