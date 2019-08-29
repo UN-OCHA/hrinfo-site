@@ -643,3 +643,50 @@ function hr_core_update_7039() {
 function hr_core_update_7040() {
   module_enable(array('autocomplete_limit'));
 }
+
+/**
+ * Force path auto on location terms.
+ */
+function hr_core_update_7041() {
+  if ($location = taxonomy_vocabulary_machine_name_load('hr_location')) {
+    $sql = "update {pathauto_state} p, {taxonomy_term_data} t set p.pathauto = 1 where p.entity_id = t.tid and t.vid = :vid and p.pathauto = 0 and p.entity_type = 'taxonomy_term'";
+    db_query($sql, array(
+      ':vid' => $location->vid,
+    ));
+  }
+}
+
+/**
+ * Update the path for location terms.
+ */
+function hr_core_update_7042(&$sandbox) {
+  $location = taxonomy_vocabulary_machine_name_load('hr_location');
+  $sandbox['#finished'] = FALSE;
+
+  if (!isset($sandbox['progress'])) {
+    $sandbox['count'] = (float) 0;
+    $sandbox['max'] = 100;
+    $sandbox['current'] = 0;
+  }
+
+  $query = db_select('taxonomy_term_data', 'td');
+  $query->leftJoin('url_alias', 'ua', "CONCAT('taxonomy/term/', td.tid) = ua.source");
+  $query->addField('td', 'tid');
+  $query->isNull('ua.source');
+  $query->condition('td.tid', $sandbox['current'], '>');
+  $query->condition('td.vid', $location->vid);
+  $query->orderBy('td.tid');
+  $query->addTag('pathauto_bulk_update');
+  $query->addMetaData('entity', 'taxonomy_term');
+  $query->range(0, 25);
+  $tids = $query->execute()->fetchCol();
+
+  if (!empty($tids)) {
+    pathauto_taxonomy_term_update_alias_multiple($tids, 'bulkupdate');
+    $sandbox['count'] += count($tids);
+    $sandbox['current'] = max($tids);
+  }
+  else {
+    $sandbox['#finished'] = TRUE;
+  }
+}
