@@ -651,7 +651,7 @@ function hr_core_update_7041() {
   if ($location = taxonomy_vocabulary_machine_name_load('hr_location')) {
     $db_type = Database::getConnection()->databaseType();
     if ($db_type == 'pgsql') {
-      $sql = "update {pathauto_state} p set p.pathauto = 1 from {taxonomy_term_data} t where p.entity_id = t.tid and t.vid = :vid and p.pathauto = 0 and p.entity_type = 'taxonomy_term'";
+      $sql = "update drupal.pathauto_state p set p.pathauto = 1 from drupal.taxonomy_term_data t where p.entity_id = t.tid and t.vid = :vid and p.pathauto = 0 and p.entity_type = 'taxonomy_term'";
     }
     else {
       $sql = "update {pathauto_state} p, {taxonomy_term_data} t set p.pathauto = 1 where p.entity_id = t.tid and t.vid = :vid and p.pathauto = 0 and p.entity_type = 'taxonomy_term'";
