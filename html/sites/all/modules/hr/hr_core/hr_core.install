@@ -643,3 +643,26 @@ function hr_core_update_7039() {
 function hr_core_update_7040() {
   module_enable(array('autocomplete_limit'));
 }
+
+/**
+ * Enable ocha_snap module and migrate settings.
+ */
+function hr_core_update_7041() {
+
+  $variables = array(
+    'hr_events_wkhtmltopdf_url' => 'ocha_snap_url',
+    'hr_events_site_user'       => 'ocha_snap_site_user',
+    'hr_events_site_pass'       => 'ocha_snap_site_pass',
+  );
+
+  // Migrate and delete the old variables.
+  foreach ($variables as $old => $new) {
+    $value = variable_get($old, '');
+    if (!empty($value)) {
+      variable_set($new, $value);
+    }
+    variable_del($old);
+  }
+
+  module_enable(array('ocha_snap'));
+}
