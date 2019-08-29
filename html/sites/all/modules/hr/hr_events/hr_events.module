@@ -294,7 +294,6 @@ PDF_FOOTER;
     'pdfMarginUnit' => 'px',
   );
 
-
   // Use ocha_snap to make the call to the snap service.
   $pdf = ocha_snap($html_url, $params);
 
