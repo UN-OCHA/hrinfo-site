@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fca42ecc2e970655c11191e1148f6963",
+    "content-hash": "0cb63eb306daa0ce72e15c1b4a67e84d",
     "packages": [
         {
             "name": "composer/installers",
@@ -1853,7 +1853,7 @@
                     }
                 },
                 "patches_applied": {
-                    "#2757035: Integrity constraint violation errors when migrating from Postgres to MySQL": "https://www.drupal.org/files/issues/integrity-constraint-error-postgres-source-2757035-1-D7.patch",
+                    "#2757035: Integrity constraint violation errors when migrating from Postgres to MySQL": "PATCHES/integrity-constraint-error-postgres-source-2757035-1-D7.patch",
                     "Skip deleted tables": "PATCHES/dbtng_migrator_skip_field_deleted.patch"
                 }
             },
@@ -10426,6 +10426,30 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/wysiwyg_filter"
             }
+        },
+        {
+            "name": "unocha/ocha_snap",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/UN-OCHA/ocha_snap.git",
+                "reference": "6a2d43cb1f0aabba4342dadf5800beadda3f6a51"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/UN-OCHA/ocha_snap/zipball/6a2d43cb1f0aabba4342dadf5800beadda3f6a51",
+                "reference": "6a2d43cb1f0aabba4342dadf5800beadda3f6a51",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.2"
+            },
+            "type": "drupal-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-only"
+            ],
+            "time": "2019-06-24T07:07:16+00:00"
         }
     ],
     "packages-dev": [

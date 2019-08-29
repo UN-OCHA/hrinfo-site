@@ -1,0 +1,148 @@
+<?php
+/**
+ * @file
+ * OCHA Snap generator module.
+ *
+ * @TODO
+ * - Set sensible default params.
+ * - Add caching and direct asset output in this module without the need
+ *   for print_pdf module.
+ * - Allow footer and header to be configured.
+ */
+
+// A default snap service endpoint.
+define('OCHA_SNAP_URL', 'http://localhost:8442/snap');
+
+/**
+ * Helper to fetch the snap service endpoint.
+ */
+function ocha_snap_url() {
+  return variable_get('ocha_snap_url', OCHA_SNAP_URL);
+}
+
+/**
+ * Helper to fetch site credentials.
+ */
+function ocha_snap_credentials() {
+  $user = variable_get('ocha_snap_site_user', '');
+  $pass = variable_get('ocha_snap_site_pass', '');
+
+  if (!empty($user) && !empty($pass)) {
+    return array(
+      'user' => $user,
+      'pass' => $pass,
+    );
+  }
+  return FALSE;
+}
+
+/**
+ * PDF generator.
+ *
+ * @param string $url
+ *   The URL to generate the PDF or PNG for.
+ * @param array $params
+ *   An array of optional parameters for the Snap Service request.
+ *
+ * @return various
+ *   A binary file data blob or FALSE if an error occurred.
+ */
+function ocha_snap($url, $params = array()) {
+  global $base_url;
+
+  // Since Drupal's string translations are set up with this existing string, we
+  // allow localization to occur first before doing string substitution to work
+  // with the Snap Service.
+  $pdf_pagination = t('Page [page] of [topage]');
+  $pdf_pagination = str_replace('[page]', '<span class="pageNumber"></span>', $pdf_pagination);
+  $pdf_pagination = str_replace('[topage]', '<span class="totalPages"></span>', $pdf_pagination);
+
+  // Construct our PDF footer.
+  //
+  // Note: you CANNOT use remote references such as image URLs or stylesheets,
+  // nor can JS be executed in this context. Inline HTML/CSS only!
+  $pdf_footer = <<<PDF_FOOTER
+<footer class="pdf-footer">
+  <div class="pdf-footer__left">
+    $pdf_pagination
+  </div>
+</footer>
+<style type="text/css">
+  *, *:before, *:after {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+  }
+  .pdf-footer {
+    display: table;
+    width: 100%;
+    margin: 0 5mm;
+    white-space: nowrap;
+
+    font-family: Roboto, serif;
+    font-weight: 400;
+    font-size: 9px;
+  }
+  .pdf-footer__left,
+  .pdf-footer__right {
+    display: table-cell;
+    vertical-align: bottom;
+    width: 49%;
+  }
+  .pdf-footer__right {
+    text-align: right;
+  }
+</style>
+PDF_FOOTER;
+
+  $default_params = array(
+    'url'           => $url,
+    'service'       => variable_get('syslog_identity', 'drupal'),
+    'media'         => 'screen',
+    'output'        => 'pdf',
+    'pdfFormat'     => 'A4',
+    'pdfLandscape'  => 'false',
+    'pdfBackground' => 'true',
+    // Suppress default header by sending space character.
+    'pdfHeader'     => ' ',
+    'pdfFooter'     => $pdf_footer,
+    'pdfMarginTop'  => '24',
+    'pdfMarginUnit' => 'px',
+  );
+
+  // Apply default parameters in case anything was missing.
+  $params += $default_params;
+
+  // If the target site is protected by basic auth, add the required
+  // credentials to the request.
+  $credentials = ocha_snap_credentials();
+  if ($credentials !== FALSE) {
+    $params += $credentials;
+  }
+
+  // Build the API request.
+  $url = ocha_snap_url();
+  $url .= '?' . http_build_query($params, NULL, '&');
+  $req_params = array(
+    'headers' => array(
+      'X-Forwarded-For' => ip_address(),
+      'User-Agent'      => $_SERVER['HTTP_USER_AGENT'],
+    ),
+    'method' => 'POST',
+  );
+
+  // Use CHR if installed, otherwise use Drupal built-in http_request.
+  if (module_exists('chr')) {
+    $output = chr_curl_http_request($url, $req_params);
+  }
+  else {
+    $output = drupal_http_request($url, $req_params);
+  }
+
+  // Basic error checking.
+  if ($output->code != 200) {
+    watchdog('ocha_snap', 'Failed to generate PDF for "%u".', array('%u' => $params['url']), WATCHDOG_ERROR);
+    return FALSE;
+  }
+
+  return $output->data;
+}
