@@ -643,3 +643,13 @@ function hr_core_update_7039() {
 function hr_core_update_7040() {
   module_enable(array('autocomplete_limit'));
 }
+
+/**
+ * Force path auto on location terms.
+ */
+function hr_core_update_7041() {
+  if ($location = taxonomy_vocabulary_machine_name_load('hr_location')) {
+    $sql = "update {pathauto_state} p, {taxonomy_term_data} t set p.pathauto = 1 where p.entity_id = t.tid and t.vid = :vid and p.pathauto = 0 and p.entity_type = 'taxonomy_term'";
+    db_query($sql, array(':vid'=> $location->vid));
+  }
+}
