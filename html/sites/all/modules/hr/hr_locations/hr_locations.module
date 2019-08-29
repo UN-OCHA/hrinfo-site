@@ -18,6 +18,9 @@ function hr_locations_taxonomy_term_presave($term) {
     // Get term parents.
     $parents = taxonomy_get_parents_all($term->tid);
     $term->field_loc_admin_level[LANGUAGE_NONE] = array(array('value' => count($parents) - 1));
+
+    // Force pathauto to be enabled.
+    $term->path['pathauto'] = TRUE;
   }
 }
 
