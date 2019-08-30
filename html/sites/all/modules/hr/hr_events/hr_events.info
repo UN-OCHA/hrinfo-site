@@ -36,6 +36,7 @@ dependencies[] = hr_themes
 dependencies[] = hr_users
 dependencies[] = link
 dependencies[] = list
+dependencies[] = ocha_snap
 dependencies[] = og
 dependencies[] = og_moderation
 dependencies[] = og_ui

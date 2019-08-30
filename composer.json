@@ -166,7 +166,8 @@
         "drupal/views_rss": "^2.0-rc4",
         "drupal/visualization": "^1.0-beta2",
         "drupal/wysiwyg": "^2.2+54-dev",
-        "drupal/wysiwyg_filter": "^1.6-rc9"
+        "drupal/wysiwyg_filter": "^1.6-rc9",
+        "unocha/ocha_snap": "^1.1"
     },
     "require-dev": {
         "hussainweb/drupal-composer-helper": "^1.0-beta3",

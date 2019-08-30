@@ -1,0 +1,14 @@
+<?php
+/**
+ * @file
+ * Install hooks for ocha_snap.module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function ocha_snap_uninstall() {
+  variable_del('ocha_snap_url');
+  variable_del('ocha_snap_site_user');
+  variable_del('ocha_snap_site_pass');
+}
