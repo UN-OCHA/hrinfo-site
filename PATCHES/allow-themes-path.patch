@@ -1,0 +1,20 @@
+diff --git a/html/robots.txt b/html/robots.txt
+index a2ee32ec3..57dbbf254 100644
+--- a/html/robots.txt
++++ b/html/robots.txt
+@@ -54,7 +54,8 @@ Disallow: /misc/
+ Disallow: /modules/
+ Disallow: /profiles/
+ Disallow: /scripts/
+-Disallow: /themes/
++Disallow: /themes/*.php$
++Disallow: /themes/*.info$
+ # Files
+ Disallow: /CHANGELOG.txt
+ Disallow: /cron.php
+@@ -88,3 +89,5 @@ Disallow: /?q=user/password/
+ Disallow: /?q=user/register/
+ Disallow: /?q=user/login/
+ Disallow: /?q=user/logout/
++Disallow: */calendar.ics/*
++Disallow: */events/pdf$
