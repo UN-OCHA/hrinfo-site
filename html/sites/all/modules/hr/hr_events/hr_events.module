@@ -132,7 +132,8 @@ function hr_events_views_pre_render(&$view) {
       'attributes' => array(
         'target' => 'about:blank',
         'data-pdf-link' => 'yes',
-      ), 'query' => $params)) . '</li>';
+      ), 'query' => $params,
+    )) . '</li>';
   }
 }
 
