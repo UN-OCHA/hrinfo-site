@@ -6,10 +6,8 @@
 (function ($, Drupal) {
   Drupal.behaviors.hrEventsPdfLink = {
     attach: function (context, settings) {
-      $('[data-pdf-link="yes"').each(function () {
-        $(this)
-          .attr('href', $(this).attr('href').replace('xyzzy-', ''))
-          .attr('data-pdf-link', 'done');
+      $('button[data-target').on('click', function () {
+        var win = window.open($(this).attr('data-target').replace('xyzzy-', ''), '_blank');
       });
     }
   };
