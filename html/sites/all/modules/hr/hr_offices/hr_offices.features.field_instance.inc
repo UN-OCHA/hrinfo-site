@@ -27,14 +27,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'addressfield',
-        'settings' => array(
-          'format_handlers' => array(
-            0 => 'address',
-          ),
-          'use_widget_handlers' => 1,
-        ),
-        'type' => 'addressfield_default',
+        'type' => 'hidden',
         'weight' => 7,
       ),
       'search_result' => array(
@@ -86,9 +79,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'email',
-        'settings' => array(),
-        'type' => 'email_default',
+        'type' => 'hidden',
         'weight' => 4,
       ),
       'search_result' => array(
@@ -136,9 +127,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 2,
       ),
       'search_result' => array(
@@ -183,11 +172,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'type' => 'hidden',
         'weight' => 5,
       ),
       'search_result' => array(
@@ -246,11 +231,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'type' => 'hidden',
         'weight' => 6,
       ),
       'search_result' => array(
@@ -304,21 +285,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'phone',
-        'settings' => array(
-          'allow_alpha' => FALSE,
-          'as_tel_link' => FALSE,
-          'components' => array(
-            'extension' => 'extension',
-            'numbertype' => FALSE,
-          ),
-          'country_name_position' => 'after',
-          'extension_prefix' => ' ext. ',
-          'full_hcard' => FALSE,
-          'numbertype_position' => 'before',
-          'raw' => FALSE,
-        ),
-        'type' => 'phone_international',
+        'type' => 'hidden',
         'weight' => 3,
       ),
       'search_result' => array(
@@ -632,9 +599,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
-        'settings' => array(),
-        'type' => 'og_list_default',
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'search_result' => array(
