@@ -259,7 +259,6 @@ function hr_core_field_default_field_bases() {
     'locked' => 0,
     'module' => 'phone',
     'settings' => array(
-      'enable_numbertype' => 1,
       'entity_translation_sync' => FALSE,
       'numbertype_allowed_values' => array(
         'cell' => 'cell',
