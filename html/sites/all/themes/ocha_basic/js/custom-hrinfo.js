@@ -4,6 +4,14 @@
 */
 
 (function ($, Drupal) {
+  Drupal.behaviors.hrEventsPdfLink = {
+    attach: function (context, settings) {
+      $('button[data-target').on('click', function () {
+        var win = window.open($(this).attr('data-target').replace('xyzzy-', ''), '_blank');
+      });
+    }
+  };
+
   Drupal.behaviors.customHrinfo = {
     attach: function (context, settings) {
 

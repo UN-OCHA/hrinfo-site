@@ -128,7 +128,13 @@ function hr_events_views_pre_render(&$view) {
         $params[$key] = $param;
       }
     }
-    $view->feed_icon .= '<li>' . l(t('PDF'), str_replace('/events', '/events/pdf', current_path()), array('attributes' => array('target' => 'about:blank'), 'query' => $params)) . '</li>';
+    $link = url(str_replace('/events', '/events/xyzzy-pdf', current_path()), array(
+      'attributes' => array(
+        'target' => 'about:blank',
+        'data-pdf-link' => 'yes',
+      ), 'query' => $params,
+    ));
+    $view->feed_icon .= '<li><button data-target="' . $link . '">' . t('PDF') . '</button></li>';
   }
 }
 

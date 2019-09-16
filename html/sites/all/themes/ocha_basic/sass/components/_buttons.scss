@@ -30,3 +30,10 @@ button, input[type="submit"] {
 .btn + .btn {
   margin-left: 8px;
 }
+
+button[data-target] {
+  font-size: inherit;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+}
