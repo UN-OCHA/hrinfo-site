@@ -943,6 +943,7 @@ function _hr_core_display_cache_content_defaults($minutes = 'none', $margin = 5,
  * Needed to solve problems with entity reference and AJAX.
  */
 function _hr_core_fix_entity_reference_ajax_calls(&$form, &$form_state) {
+  // TODO: check what this is for - it appears to break the add-more function.
   $fields_to_save = array(
     'field_acc_geo_location_dest',
     'field_acc_impact_type',
@@ -950,10 +951,10 @@ function _hr_core_fix_entity_reference_ajax_calls(&$form, &$form_state) {
     'field_coordination_hubs',
     'field_disasters',
     'field_geographic_level',
-    'field_organizations',
+    //'field_organizations',
     'field_organizations2',
     'field_parent_cluster',
-    'og_group_ref',
+    //'og_group_ref',
   );
 
   foreach ($fields_to_save as $field_to_save) {

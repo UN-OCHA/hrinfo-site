@@ -23,7 +23,7 @@ function hr_offices_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => '',
+    'description' => t('Indicate the address of the office.'),
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -73,7 +73,7 @@ function hr_offices_field_default_field_instances() {
         ),
       ),
       'type' => 'addressfield_standard',
-      'weight' => 2,
+      'weight' => -4,
     ),
   );
 
@@ -119,7 +119,7 @@ function hr_offices_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'email_textfield',
-      'weight' => 4,
+      'weight' => -6,
     ),
   );
 
@@ -169,7 +169,7 @@ function hr_offices_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 6,
+      'weight' => 0,
     ),
   );
 
@@ -232,7 +232,7 @@ function hr_offices_field_default_field_instances() {
         ),
       ),
       'type' => 'taxonomy_shs',
-      'weight' => 1,
+      'weight' => -8,
     ),
   );
 
@@ -291,7 +291,7 @@ function hr_offices_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 5,
+      'weight' => 4,
     ),
   );
 
@@ -310,7 +310,7 @@ function hr_offices_field_default_field_instances() {
           'as_tel_link' => FALSE,
           'components' => array(
             'extension' => 'extension',
-            'numbertype' => 'numbertype',
+            'numbertype' => FALSE,
           ),
           'country_name_position' => 'after',
           'extension_prefix' => ' ext. ',
@@ -618,7 +618,7 @@ function hr_offices_field_default_field_instances() {
         'use_tel_input' => 1,
       ),
       'type' => 'phone',
-      'weight' => 3,
+      'weight' => -2,
     ),
   );
 
@@ -695,7 +695,7 @@ function hr_offices_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 7,
+      'weight' => 2,
     ),
   );
 
@@ -744,7 +744,7 @@ function hr_offices_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -5,
+      'weight' => -12,
     ),
   );
 

@@ -28,3 +28,86 @@ form .table-responsive {
   overflow-x: inherit;
 }
 
+.node-hr_office-form {
+
+  thead label {
+    padding-left: 10px;
+  }
+
+  > div > .form-wrapper {
+    margin-top: 20px;
+  }
+
+  .chosen-container {
+    font-size: 14px;
+    margin: 20px 20px 0 0;
+
+    span {
+      font-weight: normal;
+    }
+
+    .chosen-results li.highlighted {
+      background: $hrinfo-red;
+    }
+  }
+
+  .field-name-field-is-coordination-hub {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 10px;
+    width: 100%;
+  }
+
+  @include desktop {
+    > div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .field-name-field-location,
+    .field-name-field-address,
+    .field-name-og-group-ref,
+    .form-item-title {
+      flex-grow: 1;
+      margin-right: 20px;
+      width: 50%;
+    }
+
+    .field-name-field-email,
+    .form-item-language,
+    .field-name-field-phones,
+    .field-name-field-organizations {
+      width: 35%;
+    }
+  }
+
+  @include max-width(md) {
+    .field-multiple-drag {
+      height: 30px;
+    }
+
+    /* Override important setting from _page.scss */
+    td {
+      padding-left: 10px !important;
+    }
+  }
+
+  /* Hiding fields. */
+  .hr-add-button {
+    background: $hrinfo-red;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 40px;
+    line-height: 42px;
+    margin-left: 80%;
+    width: 42px;
+  }
+
+}
+
+.js .hr-add-more {
+  display: none;
+}
+

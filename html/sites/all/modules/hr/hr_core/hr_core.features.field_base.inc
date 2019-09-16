@@ -244,7 +244,7 @@ function hr_core_field_default_field_bases() {
   // Exported field_base: 'field_phones'.
   $field_bases['field_phones'] = array(
     'active' => 1,
-    'cardinality' => -1,
+    'cardinality' => 4,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_phones',
