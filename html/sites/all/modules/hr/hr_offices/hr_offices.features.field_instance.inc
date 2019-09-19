@@ -23,18 +23,11 @@ function hr_offices_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => '',
+    'description' => t('Indicate the address of the office.'),
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'addressfield',
-        'settings' => array(
-          'format_handlers' => array(
-            0 => 'address',
-          ),
-          'use_widget_handlers' => 1,
-        ),
-        'type' => 'addressfield_default',
+        'type' => 'hidden',
         'weight' => 7,
       ),
       'search_result' => array(
@@ -73,7 +66,7 @@ function hr_offices_field_default_field_instances() {
         ),
       ),
       'type' => 'addressfield_standard',
-      'weight' => 2,
+      'weight' => -4,
     ),
   );
 
@@ -86,9 +79,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'email',
-        'settings' => array(),
-        'type' => 'email_default',
+        'type' => 'hidden',
         'weight' => 4,
       ),
       'search_result' => array(
@@ -119,7 +110,7 @@ function hr_offices_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'email_textfield',
-      'weight' => 4,
+      'weight' => -6,
     ),
   );
 
@@ -136,9 +127,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 2,
       ),
       'search_result' => array(
@@ -169,7 +158,7 @@ function hr_offices_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 6,
+      'weight' => 0,
     ),
   );
 
@@ -183,11 +172,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'type' => 'hidden',
         'weight' => 5,
       ),
       'search_result' => array(
@@ -232,7 +217,7 @@ function hr_offices_field_default_field_instances() {
         ),
       ),
       'type' => 'taxonomy_shs',
-      'weight' => 1,
+      'weight' => -8,
     ),
   );
 
@@ -246,11 +231,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'type' => 'hidden',
         'weight' => 6,
       ),
       'search_result' => array(
@@ -291,7 +272,7 @@ function hr_offices_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete',
-      'weight' => 5,
+      'weight' => 4,
     ),
   );
 
@@ -304,21 +285,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'phone',
-        'settings' => array(
-          'allow_alpha' => FALSE,
-          'as_tel_link' => FALSE,
-          'components' => array(
-            'extension' => 'extension',
-            'numbertype' => 'numbertype',
-          ),
-          'country_name_position' => 'after',
-          'extension_prefix' => ' ext. ',
-          'full_hcard' => FALSE,
-          'numbertype_position' => 'before',
-          'raw' => FALSE,
-        ),
-        'type' => 'phone_international',
+        'type' => 'hidden',
         'weight' => 3,
       ),
       'search_result' => array(
@@ -618,7 +585,7 @@ function hr_offices_field_default_field_instances() {
         'use_tel_input' => 1,
       ),
       'type' => 'phone',
-      'weight' => 3,
+      'weight' => -2,
     ),
   );
 
@@ -632,9 +599,7 @@ function hr_offices_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
-        'settings' => array(),
-        'type' => 'og_list_default',
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'search_result' => array(
@@ -695,7 +660,7 @@ function hr_offices_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 7,
+      'weight' => 2,
     ),
   );
 
@@ -744,7 +709,7 @@ function hr_offices_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -5,
+      'weight' => -12,
     ),
   );
 

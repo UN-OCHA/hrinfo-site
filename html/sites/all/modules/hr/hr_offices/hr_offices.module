@@ -24,3 +24,28 @@ function hr_offices_og_features_registry() {
   $registry[$feature->id] = $feature;
   return $registry;
 }
+
+/**
+ * Implements hook_form_alter()
+ */
+function hr_offices_form_hr_office_node_form_alter(&$form, &$form_state, $form_id) {
+
+  unset($form['additional_settings']);
+  unset($form['author']);
+  unset($form['options']);
+  unset($form['redirect']);
+  unset($form['revision_information']);
+  $form['#after_build'][] = 'hr_offices_form_alter_after_build';
+  $form['#attached']['js'][] = drupal_get_path('theme', 'ocha_basic') . '/js/custom-forms.js';
+}
+
+/**
+ * Remove the path settings for hr_office_node_form.
+ *
+ * After_build hook added in hr_offices_form_hr_office_node_form_alter().
+ */
+function hr_offices_form_alter_after_build($form, &$form_state) {
+  unset($form['path']);
+
+  return $form;
+}
