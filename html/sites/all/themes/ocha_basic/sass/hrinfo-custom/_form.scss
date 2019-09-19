@@ -35,7 +35,9 @@ form .table-responsive {
   }
 
   > div > .form-group,
-  > div > .form-wrapper {
+  > div > .form-wrapper,
+  .form-item-title input,
+  .field-type-email input {
     margin-top: 20px;
   }
 
@@ -102,7 +104,7 @@ form .table-responsive {
     color: #fff;
     font-size: 40px;
     line-height: 42px;
-    margin-left: 80%;
+    margin: 10px;
     width: 42px;
   }
 
