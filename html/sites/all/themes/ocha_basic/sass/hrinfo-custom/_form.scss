@@ -55,9 +55,19 @@ form .table-responsive {
     margin-top: 20px;
   }
 
+  .form-type-phone-tel,
+  .form-type-phone .form-item {
+    float: none;
+
+    input {
+      width: 100%;
+    }
+  }
+
   .chosen-container {
     font-size: 14px;
     margin: 20px 20px 0 0;
+    width: 100% !important;
 
     span {
       font-weight: normal;
