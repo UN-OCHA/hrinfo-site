@@ -13,6 +13,17 @@ require_once dirname(__FILE__) . '/includes/user.inc';
 require_once dirname(__FILE__) . '/includes/view.inc';
 
 /**
+ * Implements hook_theme().
+ */
+function ocha_basic_theme($existing, $type, $theme, $path) {
+  $info = array();
+
+  $info += ocha_basic_form_themes($existing, $type, $theme, $path);
+
+  return $info;
+}
+
+/**
  * Implements hook_form_alter().
  */
 function ocha_basic_form_alter(&$form, &$form_state, $form_id) {
@@ -416,7 +427,6 @@ function ocha_basic_field_multiple_value_form($variables) {
   // Check for field.
   $fields = array(
     'field_phones',
-    'field_organizations',
     'og_group_ref',
   );
   if (!in_array($variables['element']['#field_name'], $fields)) {

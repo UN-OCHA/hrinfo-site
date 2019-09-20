@@ -692,7 +692,7 @@ function hr_offices_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'title_field',
-    'label' => 'Title',
+    'label' => 'Name',
     'required' => TRUE,
     'settings' => array(
       'entity_translation_sync' => FALSE,
