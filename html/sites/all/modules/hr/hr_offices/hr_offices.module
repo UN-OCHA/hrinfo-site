@@ -29,13 +29,23 @@ function hr_offices_og_features_registry() {
  * Implements hook_form_alter()
  */
 function hr_offices_form_hr_office_node_form_alter(&$form, &$form_state, $form_id) {
+  // TODO: These two fields are no longer being collected.
+  // Consider how to handle changes for existing fields, or whether to remove
+  // these fields altogether.
+  unset($form['field_location']);
+  unset($form['field_organizations']);
 
+  // These details aren't necessary for offices.
   unset($form['additional_settings']);
   unset($form['author']);
   unset($form['options']);
   unset($form['redirect']);
   unset($form['revision_information']);
+
+  // Necessary to remove path settings.
   $form['#after_build'][] = 'hr_offices_form_alter_after_build';
+
+  // Attach js to handle add-more for phones.
   $form['#attached']['js'][] = drupal_get_path('theme', 'ocha_basic') . '/js/custom-forms.js';
 }
 

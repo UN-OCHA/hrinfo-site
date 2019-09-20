@@ -30,14 +30,28 @@ form .table-responsive {
 
 .node-hr_office-form {
 
+  table thead tr th {
+    background-color: $cd-light-grey;
+
+    label {
+      color: $cd-dark-grey;
+      font-size: 16px;
+      font-weight: normal;
+      text-transform: capitalize;
+    }
+  }
+
   thead label {
     padding-left: 10px;
   }
 
-  > div > .form-group,
-  > div > .form-wrapper,
+  #actions,
+  #edit-field-phones,
+  .contact,
   .form-item-title input,
-  .field-type-email input {
+  .field-type-email input,
+  > div > .form-group,
+  > div > .form-wrapper {
     margin-top: 20px;
   }
 
@@ -50,7 +64,8 @@ form .table-responsive {
     }
 
     .chosen-results li.highlighted {
-      background: $hrinfo-red;
+      background: $cd-light-grey;
+      color: $cd-dark-grey;
     }
   }
 
@@ -58,8 +73,8 @@ form .table-responsive {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
+    height: 80px;
     padding: 10px;
-    width: 100%;
   }
 
   @include desktop {
@@ -69,7 +84,6 @@ form .table-responsive {
       justify-content: space-between;
     }
 
-    .field-name-field-location,
     .field-name-field-address,
     .field-name-og-group-ref,
     .form-item-title {
@@ -78,11 +92,14 @@ form .table-responsive {
       width: 50%;
     }
 
-    .field-name-field-email,
+    .contact,
     .form-item-language,
-    .field-name-field-phones,
-    .field-name-field-organizations {
+    .field-name-field-is-coordination-hub {
       width: 35%;
+    }
+
+    #edit-actions {
+      width: 100%;
     }
   }
 
@@ -99,13 +116,15 @@ form .table-responsive {
 
   /* Hiding fields. */
   .hr-add-button {
-    background: $hrinfo-red;
-    border-radius: 20px;
-    color: #fff;
-    font-size: 40px;
-    line-height: 42px;
-    margin: 10px;
-    width: 42px;
+    background: none;
+    color: $cd-dark-grey;
+    font-size: 16px;
+    margin-top: 10px;
+    &:hover,
+    &:focus {
+      background-color: $cd-mid-light-grey;
+      color: $cd-mid-grey;
+    }
   }
 
 }

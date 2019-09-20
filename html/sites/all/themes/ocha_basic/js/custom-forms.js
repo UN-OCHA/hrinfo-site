@@ -46,8 +46,15 @@
           var body = extra[i].parentElement;
           // We only need one per table.
           if (body.getElementsByClassName('hr-add-button').length === 0) {
-            var add = createButton('add', '+');
-            add.className = 'hr-add-button';
+            var addText = {
+              en: 'Add another item',
+              es: 'Añadir otro elemento',
+              fr: 'Ajouter un autre élément',
+              ru: 'Добавить ещё'
+            };
+            var lang = document.getElementsByTagName('html')[0].getAttribute('lang');
+            var add = createButton('add', addText[lang]);
+            add.className = 'hr-add-button btn';
             add.addEventListener('click', addRow);
             body.appendChild(add);
           }
