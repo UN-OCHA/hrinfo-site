@@ -14,7 +14,7 @@ function hr_offices_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hr_offices';
-  $feature->name = 'Offices';
+  $feature->name = 'Offices / Coordination Hubs';
   $feature->description = t('Provide offices to your space.');
   $feature->components = array(
     'node' => array(
