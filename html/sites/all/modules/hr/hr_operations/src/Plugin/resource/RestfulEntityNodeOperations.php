@@ -163,7 +163,7 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
     $wrapper = $di->getWrapper();
     $nid = $wrapper->getIdentifier();
     $store = variable_store('og', 'node_' . $nid);
-    return $store['date_default_timezone'] ? $store['date_default_timezone'] : variable_get('date_default_timezone');
+    return !empty($store['date_default_timezone']) ? $store['date_default_timezone'] : variable_get('date_default_timezone');
   }
 
   /**

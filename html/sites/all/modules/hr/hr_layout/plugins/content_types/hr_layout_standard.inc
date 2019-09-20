@@ -197,6 +197,7 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
   uasort($nodes, '_hr_layout_sort_hpc');
 
   $i = 0;
+  $hpc = array();
   foreach ($nodes as $key => $node) {
     $initial_state = 'hidden';
     if ($i == 0) {
