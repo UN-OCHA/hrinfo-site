@@ -24,7 +24,7 @@
     </div>
   <?php
     }
-    if (!empty($settings['show_job_title']) && $contact->job_title) {
+    if (!empty($settings['show_job_title']) && !empty($contact->job_title)) {
   ?>
   <div itemprop="jobTitle">
     <span><?php print $contact->job_title; ?></span>
