@@ -17,7 +17,7 @@
     </span>
   <?php
     }
-    if (!empty($settings['show_organization']) && $contact->organization) {
+    if (!empty($settings['show_organization']) && !empty($contact->organization)) {
   ?>
     <div itemscope itemtype="https://schema.org/Organization">
       <span itemprop="name" > <?php print $contact->organization->name; ?> </span>
