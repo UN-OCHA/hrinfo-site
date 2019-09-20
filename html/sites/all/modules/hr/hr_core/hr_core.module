@@ -204,7 +204,7 @@ function _hr_core_files_download_button($entity, $type) {
 
     $language = field_get_items('field_collection_item', $fc, 'field_language');
     $file_language = '';
-    if ($language) {
+    if ($language && isset($language_list[$language['value']])) {
       $language = reset($language);
       $file_language = !empty($language['value']) ? '(' . $language_list[$language['value']]['name_native'] . ')' : '';
     }
