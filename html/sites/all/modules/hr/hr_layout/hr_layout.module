@@ -577,21 +577,6 @@ function hr_layout_create_links() {
               if (!og_features_component_is_disabled('node', $type, $group)) {
                 if ($type != 'hr_contact' || ($type == 'hr_contact' && (og_is_member('node', $group->nid) || in_array('editor', $user->roles)))) {
                   $button .= '<li>' . $item['data'] . '</li>';
-                  // @codingStandardsIgnoreLine
-                  if (in_array($type, array('hr_document', 'hr_infographic', 'hr_event', 'hr_assessment', 'hr_office'))) {
-                    $types = array(
-                      'hr_document' => 'document',
-                      'hr_infographic' => 'infographic',
-                      'hr_event' => 'event',
-                      'hr_assessment' => 'assessment',
-                      'hr_office' => 'office'
-                    );
-                    $typeName = ucfirst(t($types[$type]));
-                    if ($type == 'hr_infographic') {
-                      $typeName = t('Map/Infographic');
-                    }
-                    $button .= '<li class="create-link-new"><a href="' . variable_get('hr_layout_react_app_baseurl', 'https://app.humanitarianresponse.info/') . $types[$type] . 's/new" target="_blank">' . $typeName . ' (' . t('Try the new forms') . ')</a></li>';
-                  }
                 }
               }
             }
@@ -702,27 +687,6 @@ function hr_layout_form_alter(&$form, &$form_state, $form_id) {
       '#markup' => '<strong>UUID:</strong>' . $form_state['pane']->uuid,
       '#weight' => 2,
     );
-  }
-
-  // @codingStandardsIgnoreLine
-  if (in_array($form_id, array('hr_document_node_form', 'hr_infographic_node_form', 'hr_event_node_form', 'hr_assessment_node_form', 'hr_operation_node_form', 'hr_bundle_node_form', 'hr_office_node_form'))) {
-    $nid = FALSE;
-    if (isset($form_state['build_info']['args'][0]->nid)) {
-      $nid = $form_state['build_info']['args'][0]->nid;
-    }
-
-    $type = str_replace('_node_form', '', $form_id);
-    $new_type = str_replace('hr_', '', $type);
-    if ($new_type == 'bundles') {
-      $new_type = 'groups';
-    }
-
-    $link = variable_get('hr_layout_react_app_baseurl', 'https://app.humanitarianresponse.info/') . $new_type . 's/new';
-    if ($nid) {
-      $link = variable_get('hr_layout_react_app_baseurl', 'https://app.humanitarianresponse.info/') . $new_type . 's/' . $nid . '/edit';
-    }
-
-    drupal_set_message('To publish your content, try the new and improved forms ! Click <a href="' . $link . '" target="_blank">here</a> and login with your Humanitarian ID. For feedback send us an email: info@humanitarianresponse.info.');
   }
 }
 
