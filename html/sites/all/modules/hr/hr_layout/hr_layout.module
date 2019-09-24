@@ -577,6 +577,21 @@ function hr_layout_create_links() {
               if (!og_features_component_is_disabled('node', $type, $group)) {
                 if ($type != 'hr_contact' || ($type == 'hr_contact' && (og_is_member('node', $group->nid) || in_array('editor', $user->roles)))) {
                   $button .= '<li>' . $item['data'] . '</li>';
+                  // @codingStandardsIgnoreLine
+                  if (in_array($type, array('hr_document', 'hr_infographic', 'hr_event', 'hr_assessment', 'hr_office'))) {
+                    $types = array(
+                      'hr_document' => 'document',
+                      'hr_infographic' => 'infographic',
+                      'hr_event' => 'event',
+                      'hr_assessment' => 'assessment',
+                      'hr_office' => 'office'
+                    );
+                    $typeName = ucfirst(t($types[$type]));
+                    if ($type == 'hr_infographic') {
+                      $typeName = t('Map/Infographic');
+                    }
+                    $button .= '<li class="create-link-new"><a href="' . variable_get('hr_layout_react_app_baseurl', 'https://app.humanitarianresponse.info/') . $types[$type] . 's/new" target="_blank">' . $typeName . ' (' . t('Try the new forms') . ')</a></li>';
+                  }
                 }
               }
             }
