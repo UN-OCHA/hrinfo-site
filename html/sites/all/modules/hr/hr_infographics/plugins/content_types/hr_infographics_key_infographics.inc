@@ -124,7 +124,7 @@ function hr_infographics_key_infographics_render($subtype, $conf, $panel_args, $
       }
     }
 
-    if ($conf['view_mode'] == 'link') {
+    if (isset($conf['view_mode']) && $conf['view_mode'] == 'link') {
       $block->content = '<ul>' . $block->content . '</ul>';
     }
 

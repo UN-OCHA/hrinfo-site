@@ -364,7 +364,7 @@ function hid_profiles_local_contacts($node) {
     }
 
     // Display a specific message to non verified users.
-    if ($hid_access == 'closed' &&  !$hid->profile->verified) {
+    if (($hid_access == 'closed' && empty($hid->profile->verified)) || !$hid->profile->verified) {
       $reason = 'unverified';
     }
 

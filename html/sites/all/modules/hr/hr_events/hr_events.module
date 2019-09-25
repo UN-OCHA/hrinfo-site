@@ -7,31 +7,6 @@
 
 include_once 'hr_events.features.inc';
 
-define('HR_EVENTS_WKHTMLTOPDF', 'http://localhost:8442/snap');
-
-/**
- * Return the wkhtmltopdf service endpoint.
- */
-function hr_events_wkhtmltopdf_url() {
-  return variable_get('hr_events_wkhtmltopdf_url', HR_EVENTS_WKHTMLTOPDF);
-}
-
-/**
- * Helper function to fetch PDF service credential parameters.
- */
-function hr_events_snap_service_credentials() {
-  $user = variable_get('hr_events_site_user', '');
-  $pass = variable_get('hr_events_site_pass', '');
-
-  if (!empty($user) && !empty($pass)) {
-    return array(
-      'user' => $user,
-      'pass' => $pass,
-    );
-  }
-  return FALSE;
-}
-
 /**
  * Implements hook_og_features_registry()
  */
@@ -153,7 +128,13 @@ function hr_events_views_pre_render(&$view) {
         $params[$key] = $param;
       }
     }
-    $view->feed_icon .= '<li>' . l(t('PDF'), str_replace('/events', '/events/pdf', current_path()), array('attributes' => array('target' => 'about:blank'), 'query' => $params)) . '</li>';
+    $link = url(str_replace('/events', '/events/xyzzy-pdf', current_path()), array(
+      'attributes' => array(
+        'target' => 'about:blank',
+        'data-pdf-link' => 'yes',
+      ), 'query' => $params,
+    ));
+    $view->feed_icon .= '<li><button data-target="' . $link . '">' . t('PDF') . '</button></li>';
   }
 }
 
@@ -306,7 +287,6 @@ PDF_FOOTER;
   //
   // @see https://github.com/UN-OCHA/tools-snap-service#api
   $params = array(
-    'url' => $html_url,
     'service' => 'hrinfo',
     'media' => 'print',
     'output' => 'pdf',
@@ -320,25 +300,18 @@ PDF_FOOTER;
     'pdfMarginUnit' => 'px',
   );
 
-  // If the current site is protected by basic auth, add the required
-  // credentials to the request.
-  $credentials = hr_events_snap_service_credentials();
-  if ($credentials !== FALSE) {
-    $params += $credentials;
+  // Use ocha_snap to make the call to the snap service.
+  $pdf = ocha_snap($html_url, $params);
+
+  // Sorry, no PDF. Show an error.
+  if (empty($pdf)) {
+    return t('Unable to generate a PDF file for download.');
   }
 
-  $url = hr_events_wkhtmltopdf_url();
-  $url .= '?' . http_build_query($params, NULL, '&');
-  $req_params = array(
-    'headers' => array(
-      'X-Forwarded-For' => ip_address(),
-    ),
-    'method' => 'POST',
-  );
+  // Add headers to control content type and filename.
   drupal_add_http_header('Content-Type', 'application/pdf; charset=utf-8');
   drupal_add_http_header('Content-Disposition', 'attachment;filename="' . t('calendar') . '-' . $label . '-' . $period . '-' . $date . '.pdf"');
-  $output = chr_curl_http_request($url, $req_params);
-  echo $output->data;
+  echo $pdf;
   exit;
 }
 
