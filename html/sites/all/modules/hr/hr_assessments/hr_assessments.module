@@ -223,8 +223,15 @@ function hr_assessments_views_post_render(&$view, &$output, &$cache) {
       $geo = $location->field_geofield->value();
       if (!empty($geo['lat']) && !empty($geo['lon'])) {
         // Calculate center of bounding box, since centroid can be wrong.
-        $lon = $geo['left'] + ($geo['right'] - $geo['left']) / 2;
-        $lat = $geo['top'] + ($geo['bottom'] - $geo['top']) / 2;
+        $lon = $geo['lon'];
+        if (isset($geo['left']) && isset($geo['right']) && $geo['right'] != $geo['left']) {
+          $lon = $geo['left'] + ($geo['right'] - $geo['left']) / 2;
+        }
+
+        $lat = $geo['lat'];
+        if (isset($geo['top']) && isset($geo['bottom']) && $geo['bottom'] != $geo['top']) {
+          $lat = $geo['top'] + ($geo['bottom'] - $geo['top']) / 2;
+        }
 
         $output[] = [
           'projection' => 'EPSG:4326',
