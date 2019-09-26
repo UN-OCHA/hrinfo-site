@@ -39,12 +39,13 @@ function hr_search_default_search_api_index() {
     "name" : "Default node index",
     "machine_name" : "default_node_index",
     "description" : "An automatically created search index for indexing node data. Might be configured to specific needs.",
-    "server" : "hr_solr",
+    "server" : "test",
     "item_type" : "node",
     "options" : {
+      "datasource" : { "bundles" : [] },
       "index_directly" : 1,
-      "published_safe" : 0,
       "cron_limit" : "100",
+      "published_safe" : 0,
       "data_alter_callbacks" : {
         "search_api_alter_bundle_filter" : {
           "status" : 0,
@@ -72,6 +73,20 @@ function hr_search_default_search_api_index() {
                 "separator" : "\\n\\n",
                 "fields" : [ "field_ind_code" ],
                 "description" : "A Fulltext aggregation of the following fields: Code."
+              },
+              "search_api_aggregation_3" : {
+                "name" : "locations_lat",
+                "type" : "max",
+                "separator" : "\\n\\n",
+                "fields" : [ "field_locations:field_geofield:lat" ],
+                "description" : "A Maximum aggregation of the following fields: Location(s) \\u00bb Geofield \\u00bb Latitude."
+              },
+              "search_api_aggregation_4" : {
+                "name" : "locations_lon",
+                "type" : "max",
+                "separator" : "\\n\\n",
+                "fields" : [ "field_locations:field_geofield:lon" ],
+                "description" : "A Maximum aggregation of the following fields: Location(s) \\u00bb Geofield \\u00bb Longitude."
               }
             }
           }
@@ -323,9 +338,11 @@ function hr_search_default_search_api_index() {
         "field_level_of_representation" : { "type" : "string" },
         "field_location" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
         "field_location:field_geofield:lat" : { "type" : "list\\u003Cdecimal\\u003E" },
+        "field_location:field_geofield:latlon" : { "type" : "list\\u003Cstring\\u003E" },
         "field_location:field_geofield:lon" : { "type" : "list\\u003Cdecimal\\u003E" },
         "field_locations" : { "type" : "list\\u003Cinteger\\u003E", "entity_type" : "taxonomy_term" },
         "field_locations:field_geofield:lat" : { "type" : "list\\u003Cdecimal\\u003E" },
+        "field_locations:field_geofield:latlon" : { "type" : "list\\u003Cstring\\u003E" },
         "field_locations:field_geofield:lon" : { "type" : "list\\u003Cdecimal\\u003E" },
         "field_locations:parents_all" : {
           "type" : "list\\u003Clist\\u003Cinteger\\u003E\\u003E",
@@ -381,7 +398,7 @@ function hr_search_default_search_api_server() {
       "scheme" : "http",
       "host" : "solr",
       "port" : "8983",
-      "path" : "\\/solr\\/user-owned",
+      "path" : "\\/solr\\/search_api_solr_8.x-2.0",
       "http_user" : "",
       "http_pass" : "",
       "excerpt" : 0,
