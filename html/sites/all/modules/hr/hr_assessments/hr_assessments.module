@@ -195,6 +195,22 @@ function hr_assessments_clone_node_alter(&$node, $context) {
 }
 
 /**
+ * Implements hook_views_pre_execute().
+ */
+function hr_assessments_views_pre_execute(&$view) {
+  if ($view->name != 'hr_assessments') {
+    return;
+  }
+
+  if ($view->current_display != 'map_data') {
+    return;
+  }
+
+  // Force pager so total rows is set.
+  $view->get_total_rows = TRUE;
+}
+
+/**
  * Implements hook_views_post_render().
  */
 function hr_assessments_views_post_render(&$view, &$output, &$cache) {
