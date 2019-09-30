@@ -692,7 +692,7 @@ function hr_offices_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'title_field',
-    'label' => 'Name',
+    'label' => 'Office / Coordination Hub Name',
     'required' => TRUE,
     'settings' => array(
       'entity_translation_sync' => FALSE,
@@ -719,10 +719,10 @@ function hr_offices_field_default_field_instances() {
   t('Email');
   t('Is coordination hub');
   t('Location');
+  t('Office / Coordination Hub Name');
   t('Organizations');
   t('Phones');
   t('Space(s)');
-  t('Title');
 
   return $field_instances;
 }
