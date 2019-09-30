@@ -195,6 +195,22 @@ function hr_assessments_clone_node_alter(&$node, $context) {
 }
 
 /**
+ * Implements hook_views_pre_execute().
+ */
+function hr_assessments_views_pre_execute(&$view) {
+  if ($view->name != 'hr_assessments') {
+    return;
+  }
+
+  if ($view->current_display != 'map_data') {
+    return;
+  }
+
+  // Force pager so total rows is set.
+  $view->get_total_rows = TRUE;
+}
+
+/**
  * Implements hook_views_post_render().
  */
 function hr_assessments_views_post_render(&$view, &$output, &$cache) {
@@ -222,9 +238,20 @@ function hr_assessments_views_post_render(&$view, &$output, &$cache) {
     foreach ($node->field_locations as $location) {
       $geo = $location->field_geofield->value();
       if (!empty($geo['lat']) && !empty($geo['lon'])) {
+        // Calculate center of bounding box, since centroid can be wrong.
+        $lon = $geo['lon'];
+        if (isset($geo['left']) && isset($geo['right']) && $geo['right'] != $geo['left']) {
+          $lon = $geo['left'] + ($geo['right'] - $geo['left']) / 2;
+        }
+
+        $lat = $geo['lat'];
+        if (isset($geo['top']) && isset($geo['bottom']) && $geo['bottom'] != $geo['top']) {
+          $lat = $geo['top'] + ($geo['bottom'] - $geo['top']) / 2;
+        }
+
         $output[] = [
           'projection' => 'EPSG:4326',
-          'wkt' => 'POINT(' . $geo['lon'] . ' ' . $geo['lat'] . ')',
+          'wkt' => 'POINT(' . $lon . ' ' . $lat . ')',
           'attributes' => array(
             'title' => l($node->title->value(), 'node/' . $node->getIdentifier()),
             'name' => l($node->title->value(), 'node/' . $node->getIdentifier()),
