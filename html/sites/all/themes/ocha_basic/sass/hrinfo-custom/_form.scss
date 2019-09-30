@@ -83,8 +83,12 @@ form .table-responsive {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
-    height: 80px;
+    margin-bottom: 20px;
     padding: 10px;
+  }
+
+  .field-add-more-submit {
+    border: 1px solid #ccc;
   }
 
   @include desktop {
@@ -104,7 +108,7 @@ form .table-responsive {
 
     .contact,
     .form-item-language,
-    .field-name-field-is-coordination-hub {
+    .field-name-field-phones {
       width: 35%;
     }
 

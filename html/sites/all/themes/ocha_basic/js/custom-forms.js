@@ -54,7 +54,7 @@
             };
             var lang = document.getElementsByTagName('html')[0].getAttribute('lang');
             var add = createButton('add', addText[lang]);
-            add.className = 'hr-add-button btn';
+            add.className = 'hr-add-button btn btn-default';
             add.addEventListener('click', addRow);
             body.appendChild(add);
           }
