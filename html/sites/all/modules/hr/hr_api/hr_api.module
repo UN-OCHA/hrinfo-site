@@ -140,9 +140,20 @@ function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translatio
   curl_setopt($ch, CURLOPT_POST, 1);
   curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($json));
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
 
   // Grab URL and pass it to the browser.
-  curl_exec($ch);
+  $response = curl_exec($ch);
+
+  // Log errors to watchdog.
+  if ($response === FALSE || curl_errno($ch)) {
+    watchdog('hr_api_call_webhook', 'Curl HTTP code: @code', array(
+      '@code' => curl_getinfo($ch, CURLINFO_HTTP_CODE),
+    ));
+    watchdog('hr_api_call_webhook', 'Curl error: @error', array(
+      '@error' => curl_error($ch),
+    ));
+  }
 
   // Close cURL resource, and free up system resources.
   curl_close($ch);
