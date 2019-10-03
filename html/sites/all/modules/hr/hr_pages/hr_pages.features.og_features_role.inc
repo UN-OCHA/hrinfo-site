@@ -19,6 +19,22 @@ function hr_pages_og_features_default_roles() {
     'name' => 'contributor',
   );
 
+  // Exported OG Role: 'node:hr_bundle:editor'.
+  $roles['node:hr_bundle:editor'] = array(
+    'gid' => 0,
+    'group_type' => 'node',
+    'group_bundle' => 'hr_bundle',
+    'name' => 'editor',
+  );
+
+  // Exported OG Role: 'node:hr_bundle:manager'.
+  $roles['node:hr_bundle:manager'] = array(
+    'gid' => 0,
+    'group_type' => 'node',
+    'group_bundle' => 'hr_bundle',
+    'name' => 'manager',
+  );
+
   // Exported OG Role: 'node:hr_operation:bundle member'.
   $roles['node:hr_operation:bundle member'] = array(
     'gid' => 0,
@@ -35,12 +51,44 @@ function hr_pages_og_features_default_roles() {
     'name' => 'contributor',
   );
 
+  // Exported OG Role: 'node:hr_operation:editor'.
+  $roles['node:hr_operation:editor'] = array(
+    'gid' => 0,
+    'group_type' => 'node',
+    'group_bundle' => 'hr_operation',
+    'name' => 'editor',
+  );
+
+  // Exported OG Role: 'node:hr_operation:manager'.
+  $roles['node:hr_operation:manager'] = array(
+    'gid' => 0,
+    'group_type' => 'node',
+    'group_bundle' => 'hr_operation',
+    'name' => 'manager',
+  );
+
   // Exported OG Role: 'node:hr_sector:contributor'.
   $roles['node:hr_sector:contributor'] = array(
     'gid' => 0,
     'group_type' => 'node',
     'group_bundle' => 'hr_sector',
     'name' => 'contributor',
+  );
+
+  // Exported OG Role: 'node:hr_sector:editor'.
+  $roles['node:hr_sector:editor'] = array(
+    'gid' => 0,
+    'group_type' => 'node',
+    'group_bundle' => 'hr_sector',
+    'name' => 'editor',
+  );
+
+  // Exported OG Role: 'node:hr_sector:manager'.
+  $roles['node:hr_sector:manager'] = array(
+    'gid' => 0,
+    'group_type' => 'node',
+    'group_bundle' => 'hr_sector',
+    'name' => 'manager',
   );
 
   // Exported OG Role: 'node:hr_space:contributor'.

@@ -19,22 +19,6 @@ function hr_assessments_og_features_default_roles() {
     'name' => 'contributor',
   );
 
-  // Exported OG Role: 'node:hr_bundle:editor'.
-  $roles['node:hr_bundle:editor'] = array(
-    'gid' => 0,
-    'group_type' => 'node',
-    'group_bundle' => 'hr_bundle',
-    'name' => 'editor',
-  );
-
-  // Exported OG Role: 'node:hr_bundle:manager'.
-  $roles['node:hr_bundle:manager'] = array(
-    'gid' => 0,
-    'group_type' => 'node',
-    'group_bundle' => 'hr_bundle',
-    'name' => 'manager',
-  );
-
   // Exported OG Role: 'node:hr_operation:bundle member'.
   $roles['node:hr_operation:bundle member'] = array(
     'gid' => 0,
@@ -49,22 +33,6 @@ function hr_assessments_og_features_default_roles() {
     'group_type' => 'node',
     'group_bundle' => 'hr_operation',
     'name' => 'contributor',
-  );
-
-  // Exported OG Role: 'node:hr_operation:editor'.
-  $roles['node:hr_operation:editor'] = array(
-    'gid' => 0,
-    'group_type' => 'node',
-    'group_bundle' => 'hr_operation',
-    'name' => 'editor',
-  );
-
-  // Exported OG Role: 'node:hr_operation:manager'.
-  $roles['node:hr_operation:manager'] = array(
-    'gid' => 0,
-    'group_type' => 'node',
-    'group_bundle' => 'hr_operation',
-    'name' => 'manager',
   );
 
   return $roles;
