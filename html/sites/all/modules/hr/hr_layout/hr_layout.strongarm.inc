@@ -70,27 +70,6 @@ function hr_layout_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'diff_enable_revisions_page_node_hr_bundle';
-  $strongarm->value = 1;
-  $export['diff_enable_revisions_page_node_hr_bundle'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'diff_enable_revisions_page_node_hr_news';
-  $strongarm->value = 1;
-  $export['diff_enable_revisions_page_node_hr_news'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'diff_enable_revisions_page_node_hr_sector';
-  $strongarm->value = 1;
-  $export['diff_enable_revisions_page_node_hr_sector'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'diff_show_preview_changes_node_hr_assessment';
   $strongarm->value = 1;
   $export['diff_show_preview_changes_node_hr_assessment'] = $strongarm;
@@ -98,51 +77,9 @@ function hr_layout_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'diff_show_preview_changes_node_hr_bundle';
-  $strongarm->value = 1;
-  $export['diff_show_preview_changes_node_hr_bundle'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'diff_show_preview_changes_node_hr_news';
-  $strongarm->value = 1;
-  $export['diff_show_preview_changes_node_hr_news'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'diff_show_preview_changes_node_hr_sector';
-  $strongarm->value = 1;
-  $export['diff_show_preview_changes_node_hr_sector'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'diff_view_mode_preview_node_hr_assessment';
   $strongarm->value = 'full';
   $export['diff_view_mode_preview_node_hr_assessment'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'diff_view_mode_preview_node_hr_bundle';
-  $strongarm->value = 'full';
-  $export['diff_view_mode_preview_node_hr_bundle'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'diff_view_mode_preview_node_hr_news';
-  $strongarm->value = 'full';
-  $export['diff_view_mode_preview_node_hr_news'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'diff_view_mode_preview_node_hr_sector';
-  $strongarm->value = 'full';
-  $export['diff_view_mode_preview_node_hr_sector'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -264,34 +201,6 @@ function hr_layout_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_bundle_en_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_bundle_en_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_bundle_es_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_bundle_es_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_bundle_fr_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_bundle_fr_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_bundle_und_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_bundle_und_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'pathauto_node_hr_event_en_pattern';
   $strongarm->value = '';
   $export['pathauto_node_hr_event_en_pattern'] = $strongarm;
@@ -316,181 +225,6 @@ function hr_layout_strongarm() {
   $strongarm->name = 'pathauto_node_hr_event_und_pattern';
   $strongarm->value = '';
   $export['pathauto_node_hr_event_und_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_news_en_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_news_en_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_news_es_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_news_es_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_news_fr_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_news_fr_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_news_und_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_news_und_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_office_en_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_office_en_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_office_es_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_office_es_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_office_fr_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_office_fr_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_office_und_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_office_und_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_operation_en_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_operation_en_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_operation_es_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_operation_es_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_operation_fr_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_operation_fr_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_operation_und_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_operation_und_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_sector_en_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_sector_en_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_sector_es_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_sector_es_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_sector_fr_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_sector_fr_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_sector_und_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_sector_und_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_space_en_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_space_en_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_space_es_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_space_es_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_space_fr_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_space_fr_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_space_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_space_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_space_und_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_space_und_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_toolbox_item_en_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_toolbox_item_en_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_toolbox_item_es_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_toolbox_item_es_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_toolbox_item_fr_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_toolbox_item_fr_pattern'] = $strongarm;
-
-  $strongarm = new stdClass();
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'pathauto_node_hr_toolbox_item_und_pattern';
-  $strongarm->value = '';
-  $export['pathauto_node_hr_toolbox_item_und_pattern'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

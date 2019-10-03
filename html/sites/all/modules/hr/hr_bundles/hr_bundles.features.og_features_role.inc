@@ -35,13 +35,5 @@ function hr_bundles_og_features_default_roles() {
     'name' => 'manager',
   );
 
-  // Exported OG Role: 'node:hr_operation:bundle member'.
-  $roles['node:hr_operation:bundle member'] = array(
-    'gid' => 0,
-    'group_type' => 'node',
-    'group_bundle' => 'hr_operation',
-    'name' => 'bundle member',
-  );
-
   return $roles;
 }
