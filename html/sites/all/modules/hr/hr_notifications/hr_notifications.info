@@ -7,6 +7,7 @@ dependencies[] = ctools
 dependencies[] = entity
 dependencies[] = features
 dependencies[] = list
+dependencies[] = og
 dependencies[] = og_context
 dependencies[] = rules
 dependencies[] = text
