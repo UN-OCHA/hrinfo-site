@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_tools.views_default.inc
@@ -58,7 +59,7 @@ function hr_tools_views_default_views() {
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = '';
   $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
-  /* Field: Content: Files */
+  /* Field: Field: Files */
   $handler->display->display_options['fields']['field_files']['id'] = 'field_files';
   $handler->display->display_options['fields']['field_files']['table'] = 'field_data_field_files';
   $handler->display->display_options['fields']['field_files']['field'] = 'field_files';
@@ -128,7 +129,7 @@ function hr_tools_views_default_views() {
   $handler->display->display_options['fields']['body']['field'] = 'body';
   $handler->display->display_options['fields']['body']['label'] = '';
   $handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
-  /* Field: Content: Icon */
+  /* Field: Content: Image */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -139,7 +140,7 @@ function hr_tools_views_default_views() {
     'image_style' => 'medium',
     'image_link' => '',
   );
-  /* Field: Content: Files */
+  /* Field: Field: Files */
   $handler->display->display_options['fields']['field_files']['id'] = 'field_files';
   $handler->display->display_options['fields']['field_files']['table'] = 'field_data_field_files';
   $handler->display->display_options['fields']['field_files']['field'] = 'field_files';
