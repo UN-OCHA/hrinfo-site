@@ -58,7 +58,7 @@ function hr_spaces_views_default_views() {
   $handler->display->display_options['fields']['field_website']['empty'] = '[path]';
   $handler->display->display_options['fields']['field_website']['click_sort_column'] = 'url';
   $handler->display->display_options['fields']['field_website']['type'] = 'link_plain';
-  /* Field: Content: Image */
+  /* Field: Content: Icon */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
