@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_bundles.features.field_instance.inc
@@ -53,7 +54,7 @@ function hr_bundles_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 18,
+      'weight' => 17,
     ),
   );
 
@@ -154,7 +155,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 15,
+      'weight' => 14,
     ),
   );
 
@@ -244,7 +245,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
         'size' => 60,
       ),
       'type' => 'email_textfield',
-      'weight' => 20,
+      'weight' => 19,
     ),
   );
 
@@ -632,8 +633,9 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'rel_remove' => 'default',
       'title' => 'none',
@@ -649,7 +651,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 21,
+      'weight' => 20,
     ),
   );
 
@@ -711,7 +713,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 19,
+      'weight' => 18,
     ),
   );
 
@@ -768,7 +770,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 16,
+      'weight' => 15,
     ),
     'widget_type' => 'options_select',
   );
@@ -832,7 +834,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
         'og_hide' => 0,
       ),
       'type' => 'options_onoff',
-      'weight' => 13,
+      'weight' => 12,
     ),
   );
 
@@ -902,7 +904,7 @@ Select "Closed" if you want only HID managers to be allowed to add HID users to 
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 17,
+      'weight' => 16,
     ),
   );
 
