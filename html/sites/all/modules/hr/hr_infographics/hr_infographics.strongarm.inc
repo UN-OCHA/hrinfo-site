@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_infographics.strongarm.inc
@@ -49,14 +50,36 @@ function hr_infographics_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__hr_infographic';
   $strongarm->value = array(
-    'view_modes' => array(),
+    'view_modes' => array(
+      'teaser' => array(
+        'custom_settings' => TRUE,
+      ),
+      'search_result' => array(
+        'custom_settings' => TRUE,
+      ),
+      'full' => array(
+        'custom_settings' => FALSE,
+      ),
+      'rss' => array(
+        'custom_settings' => FALSE,
+      ),
+      'ical' => array(
+        'custom_settings' => FALSE,
+      ),
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
+      'token' => array(
+        'custom_settings' => FALSE,
+      ),
+    ),
     'extra_fields' => array(
       'form' => array(
         'path' => array(
-          'weight' => '20',
+          'weight' => '19',
         ),
         'redirect' => array(
-          'weight' => '21',
+          'weight' => '20',
         ),
         'language' => array(
           'weight' => '0',
@@ -65,7 +88,50 @@ function hr_infographics_strongarm() {
           'weight' => '13',
         ),
       ),
-      'display' => array(),
+      'display' => array(
+        'hr_core_share_button' => array(
+          'default' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+          'teaser' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+          'search_result' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+        ),
+        'hr_core_read_more_button' => array(
+          'default' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+          'teaser' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+          'search_result' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+        ),
+        'hr_core_files_download_button' => array(
+          'default' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+          'teaser' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+          'search_result' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+        ),
+      ),
     ),
   );
   $export['field_bundle_settings_node__hr_infographic'] = $strongarm;
