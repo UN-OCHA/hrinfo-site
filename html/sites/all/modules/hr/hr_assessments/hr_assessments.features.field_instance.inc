@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_assessments.features.field_instance.inc
@@ -176,8 +177,9 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -234,8 +236,9 @@ function hr_assessments_field_default_field_instances() {
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'rel_remove' => 'default',
       'title' => 'none',
@@ -296,8 +299,9 @@ function hr_assessments_field_default_field_instances() {
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'rel_remove' => 'default',
       'title' => 'none',
@@ -483,8 +487,9 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -541,8 +546,9 @@ function hr_assessments_field_default_field_instances() {
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'rel_remove' => 'default',
       'title' => 'none',
@@ -603,8 +609,9 @@ function hr_assessments_field_default_field_instances() {
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'rel_remove' => 'default',
       'title' => 'none',
@@ -790,8 +797,9 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -848,8 +856,9 @@ function hr_assessments_field_default_field_instances() {
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'rel_remove' => 'default',
       'title' => 'none',
@@ -910,8 +919,9 @@ function hr_assessments_field_default_field_instances() {
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'rel_remove' => 'default',
       'title' => 'none',
@@ -1271,8 +1281,9 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -1321,8 +1332,9 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -1371,8 +1383,9 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -1507,8 +1520,9 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -1602,8 +1616,9 @@ function hr_assessments_field_default_field_instances() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -1838,9 +1853,8 @@ function hr_assessments_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 28,
       ),
       'search_result' => array(
@@ -1882,6 +1896,7 @@ function hr_assessments_field_default_field_instances() {
     'default_value_function' => '',
     'deleted' => 0,
     'description' => 'Select from the menu the country(ies) the assessment is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your assessment as draft then edit it to add more locations.
+
 ',
     'display' => array(
       'default' => array(
@@ -2149,8 +2164,9 @@ function hr_assessments_field_default_field_instances() {
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'rel_remove' => 'default',
       'title' => 'optional',
@@ -2400,8 +2416,9 @@ function hr_assessments_field_default_field_instances() {
         'page' => 0,
       ),
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -2460,7 +2477,6 @@ function hr_assessments_field_default_field_instances() {
   t('A field replacing fieldable panel pane title.');
   t('Accessibility');
   t('Add a link to content related to the assessment you are publishing.');
-  t('Admin Level');
   t('Assessment Data');
   t('Assessment Date(s)');
   t('Assessment Questionnaire');
@@ -2502,6 +2518,7 @@ function hr_assessments_field_default_field_instances() {
   t('Sample size');
   t('Select at what geographical level the assessment is (has been) conducted.');
   t('Select from the menu the country(ies) the assessment is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your assessment as draft then edit it to add more locations.
+
 ');
   t('Status');
   t('Subject/Objective');

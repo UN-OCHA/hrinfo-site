@@ -43,5 +43,6 @@ features[field_instance][] = taxonomy_term-hr_location-name_field
 features[field_validation_rule][] = hr_locations_pcode_unique
 features[taxonomy][] = hr_location
 features[variable][] = entity_translation_settings_taxonomy_term__hr_location
+features[variable][] = pathauto_taxonomy_term_hr_location_pattern
 features[views_view][] = hr_locations
 registry_autoload[] = PSR-4

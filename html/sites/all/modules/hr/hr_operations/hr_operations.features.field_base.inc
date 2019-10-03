@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_operations.features.field_base.inc
@@ -10,7 +11,7 @@
 function hr_operations_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_cluster_configuration'
+  // Exported field_base: 'field_cluster_configuration'.
   $field_bases['field_cluster_configuration'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -47,7 +48,7 @@ function hr_operations_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_country'
+  // Exported field_base: 'field_country'.
   $field_bases['field_country'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -83,7 +84,7 @@ function hr_operations_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_hid_access'
+  // Exported field_base: 'field_hid_access'.
   $field_bases['field_hid_access'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -93,7 +94,6 @@ function hr_operations_field_default_field_bases() {
     'field_permissions' => array(
       'type' => 0,
     ),
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -115,14 +115,13 @@ function hr_operations_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_launch_date'
+  // Exported field_base: 'field_launch_date'.
   $field_bases['field_launch_date'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_launch_date',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'date',
@@ -148,7 +147,7 @@ function hr_operations_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_operation_region'
+  // Exported field_base: 'field_operation_region'.
   $field_bases['field_operation_region'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -184,14 +183,13 @@ function hr_operations_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_operation_status'
+  // Exported field_base: 'field_operation_status'.
   $field_bases['field_operation_status'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_operation_status',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -213,14 +211,13 @@ function hr_operations_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_operation_type'
+  // Exported field_base: 'field_operation_type'.
   $field_bases['field_operation_type'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_operation_type',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',

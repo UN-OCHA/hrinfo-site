@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_news.strongarm.inc
@@ -9,6 +10,27 @@
  */
 function hr_news_strongarm() {
   $export = array();
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_hr_news';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_hr_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_hr_news';
+  $strongarm->value = 1;
+  $export['diff_show_preview_changes_node_hr_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_hr_news';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_hr_news'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -47,6 +69,9 @@ function hr_news_strongarm() {
       'token' => array(
         'custom_settings' => FALSE,
       ),
+      'ical' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
     'extra_fields' => array(
       'form' => array(
@@ -54,13 +79,13 @@ function hr_news_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '16',
+          'weight' => '15',
         ),
         'redirect' => array(
-          'weight' => '17',
+          'weight' => '16',
         ),
         'language' => array(
-          'weight' => '-10',
+          'weight' => '0',
         ),
       ),
       'display' => array(),
@@ -148,9 +173,37 @@ function hr_news_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_hr_news_en_pattern';
+  $strongarm->value = '';
+  $export['pathauto_node_hr_news_en_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_hr_news_es_pattern';
+  $strongarm->value = '';
+  $export['pathauto_node_hr_news_es_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_hr_news_fr_pattern';
+  $strongarm->value = '';
+  $export['pathauto_node_hr_news_fr_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'pathauto_node_hr_news_pattern';
   $strongarm->value = '[node:og-group-ref:0:url:path]/article/[node:title]';
   $export['pathauto_node_hr_news_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_node_hr_news_und_pattern';
+  $strongarm->value = '';
+  $export['pathauto_node_hr_news_und_pattern'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

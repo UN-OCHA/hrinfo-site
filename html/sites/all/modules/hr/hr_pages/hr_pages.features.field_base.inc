@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_pages.features.field_base.inc
@@ -10,7 +11,7 @@
 function hr_pages_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_page_menu'
+  // Exported field_base: 'field_page_menu'.
   $field_bases['field_page_menu'] = array(
     'active' => 1,
     'cardinality' => 1,

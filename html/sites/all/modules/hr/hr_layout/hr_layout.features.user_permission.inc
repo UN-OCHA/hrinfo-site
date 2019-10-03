@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_layout.features.user_permission.inc
@@ -31,7 +32,9 @@ function hr_layout_user_default_permissions() {
   // Exported permission: 'delete any fts_visualization bean'.
   $permissions['delete any fts_visualization bean'] = array(
     'name' => 'delete any fts_visualization bean',
-    'roles' => array(),
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
     'module' => 'bean',
   );
 

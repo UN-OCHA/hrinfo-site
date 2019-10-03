@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_disasters.features.og_features_permission.inc
@@ -84,10 +85,7 @@ function hr_disasters_og_features_default_permissions() {
 
   // Exported og permission: 'node:hr_operation:view any unpublished hr_disaster content'
   $permissions['node:hr_operation:view any unpublished hr_disaster content'] = array(
-    'roles' => array(
-      'editor' => 'editor',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   return $permissions;

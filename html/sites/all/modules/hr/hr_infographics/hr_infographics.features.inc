@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_infographics.features.inc

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_users.features.inc
@@ -64,7 +65,8 @@ function hr_users_default_profile2_type() {
     "type" : "main",
     "label" : "Main profile",
     "weight" : "0",
-    "data" : { "registration" : 1, "use_page" : 0 }
+    "data" : { "registration" : 1, "use_page" : 0 },
+    "path" : { "pathauto" : "0" }
   }');
   return $items;
 }

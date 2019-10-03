@@ -2,7 +2,5 @@
 
 /**
  * @file
- * Code for the Notifications feature.
+ * Drupal needs this blank file.
  */
-
-include_once 'hr_notifications.features.inc';
