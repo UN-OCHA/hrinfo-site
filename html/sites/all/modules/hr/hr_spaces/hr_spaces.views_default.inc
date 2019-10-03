@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_spaces.views_default.inc
