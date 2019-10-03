@@ -11,12 +11,12 @@
 function acc_incidents_og_features_default_roles() {
   $roles = array();
 
-  // Exported OG Role: 'node:hr_operation:manager'.
-  $roles['node:hr_operation:manager'] = array(
+  // Exported OG Role: 'node:hr_operation:access-manager'.
+  $roles['node:hr_operation:access-manager'] = array(
     'gid' => 0,
     'group_type' => 'node',
     'group_bundle' => 'hr_operation',
-    'name' => 'manager',
+    'name' => 'access-manager',
   );
 
   return $roles;
