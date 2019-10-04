@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_bookmarks.features.user_permission.inc

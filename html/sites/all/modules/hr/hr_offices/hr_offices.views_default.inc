@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_offices.views_default.inc
@@ -37,7 +38,7 @@ function hr_offices_views_default_views() {
   $handler->display->display_options['fields']['title']['label'] = 'Name';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Field: Phones */
+  /* Field: Content: Phones */
   $handler->display->display_options['fields']['field_phones']['id'] = 'field_phones';
   $handler->display->display_options['fields']['field_phones']['table'] = 'field_data_field_phones';
   $handler->display->display_options['fields']['field_phones']['field'] = 'field_phones';
@@ -55,18 +56,18 @@ function hr_offices_views_default_views() {
     'numbertype_position' => 'before',
   );
   $handler->display->display_options['fields']['field_phones']['delta_offset'] = '0';
-  /* Field: Field: Email */
+  /* Field: Content: Email */
   $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['table'] = 'field_data_field_email';
   $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
-  /* Field: Field: Location */
+  /* Field: Content: Location */
   $handler->display->display_options['fields']['field_location']['id'] = 'field_location';
   $handler->display->display_options['fields']['field_location']['table'] = 'field_data_field_location';
   $handler->display->display_options['fields']['field_location']['field'] = 'field_location';
   $handler->display->display_options['fields']['field_location']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Address */
+  /* Field: Content: Venue */
   $handler->display->display_options['fields']['field_address']['id'] = 'field_address';
   $handler->display->display_options['fields']['field_address']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address']['field'] = 'field_address';
@@ -81,7 +82,7 @@ function hr_offices_views_default_views() {
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
   $handler->display->display_options['sorts']['title']['field'] = 'title';
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -131,7 +132,7 @@ function hr_offices_views_default_views() {
   $handler->display->display_options['fields']['title']['label'] = 'Name';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Field: Phones */
+  /* Field: Content: Phones */
   $handler->display->display_options['fields']['field_phones']['id'] = 'field_phones';
   $handler->display->display_options['fields']['field_phones']['table'] = 'field_data_field_phones';
   $handler->display->display_options['fields']['field_phones']['field'] = 'field_phones';
@@ -150,44 +151,44 @@ function hr_offices_views_default_views() {
   );
   $handler->display->display_options['fields']['field_phones']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_phones']['separator'] = ';';
-  /* Field: Field: Email */
+  /* Field: Content: Email */
   $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['table'] = 'field_data_field_email';
   $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['type'] = 'email_plain';
-  /* Field: Field: Location */
+  /* Field: Content: Location */
   $handler->display->display_options['fields']['field_location']['id'] = 'field_location';
   $handler->display->display_options['fields']['field_location']['table'] = 'field_data_field_location';
   $handler->display->display_options['fields']['field_location']['field'] = 'field_location';
   $handler->display->display_options['fields']['field_location']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Address - Thoroughfare (i.e. Street address) */
+  /* Field: Content: Venue - Thoroughfare (i.e. Street address) */
   $handler->display->display_options['fields']['field_address_thoroughfare']['id'] = 'field_address_thoroughfare';
   $handler->display->display_options['fields']['field_address_thoroughfare']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_thoroughfare']['field'] = 'field_address_thoroughfare';
   $handler->display->display_options['fields']['field_address_thoroughfare']['label'] = 'Address 1';
-  /* Field: Content: Address - Premise (i.e. Apartment / Suite number) */
+  /* Field: Content: Venue - Premise (i.e. Apartment / Suite number) */
   $handler->display->display_options['fields']['field_address_premise']['id'] = 'field_address_premise';
   $handler->display->display_options['fields']['field_address_premise']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_premise']['field'] = 'field_address_premise';
   $handler->display->display_options['fields']['field_address_premise']['label'] = 'Address 2';
-  /* Field: Content: Address - Locality (i.e. City) */
+  /* Field: Content: Venue - Locality (i.e. City) */
   $handler->display->display_options['fields']['field_address_locality']['id'] = 'field_address_locality';
   $handler->display->display_options['fields']['field_address_locality']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_locality']['field'] = 'field_address_locality';
   $handler->display->display_options['fields']['field_address_locality']['label'] = 'City';
-  /* Field: Content: Address - Administrative area (i.e. State / Province) */
+  /* Field: Content: Venue - Administrative area (i.e. State / Province) */
   $handler->display->display_options['fields']['field_address_administrative_area']['id'] = 'field_address_administrative_area';
   $handler->display->display_options['fields']['field_address_administrative_area']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_administrative_area']['field'] = 'field_address_administrative_area';
   $handler->display->display_options['fields']['field_address_administrative_area']['label'] = 'State';
-  /* Field: Content: Address - Postal code */
+  /* Field: Content: Venue - Postal code */
   $handler->display->display_options['fields']['field_address_postal_code']['id'] = 'field_address_postal_code';
   $handler->display->display_options['fields']['field_address_postal_code']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_postal_code']['field'] = 'field_address_postal_code';
   $handler->display->display_options['fields']['field_address_postal_code']['label'] = 'Postal code';
-  /* Field: Content: Address - Country */
+  /* Field: Content: Venue - Country */
   $handler->display->display_options['fields']['field_address_country']['id'] = 'field_address_country';
   $handler->display->display_options['fields']['field_address_country']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_country']['field'] = 'field_address_country';
@@ -218,7 +219,7 @@ function hr_offices_views_default_views() {
   $handler->display->display_options['fields']['title']['label'] = 'Name';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Field: Phones */
+  /* Field: Content: Phones */
   $handler->display->display_options['fields']['field_phones']['id'] = 'field_phones';
   $handler->display->display_options['fields']['field_phones']['table'] = 'field_data_field_phones';
   $handler->display->display_options['fields']['field_phones']['field'] = 'field_phones';
@@ -237,44 +238,44 @@ function hr_offices_views_default_views() {
   );
   $handler->display->display_options['fields']['field_phones']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_phones']['separator'] = ';';
-  /* Field: Field: Email */
+  /* Field: Content: Email */
   $handler->display->display_options['fields']['field_email']['id'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['table'] = 'field_data_field_email';
   $handler->display->display_options['fields']['field_email']['field'] = 'field_email';
   $handler->display->display_options['fields']['field_email']['type'] = 'email_plain';
-  /* Field: Field: Location */
+  /* Field: Content: Location */
   $handler->display->display_options['fields']['field_location']['id'] = 'field_location';
   $handler->display->display_options['fields']['field_location']['table'] = 'field_data_field_location';
   $handler->display->display_options['fields']['field_location']['field'] = 'field_location';
   $handler->display->display_options['fields']['field_location']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Address - Thoroughfare (i.e. Street address) */
+  /* Field: Content: Venue - Thoroughfare (i.e. Street address) */
   $handler->display->display_options['fields']['field_address_thoroughfare']['id'] = 'field_address_thoroughfare';
   $handler->display->display_options['fields']['field_address_thoroughfare']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_thoroughfare']['field'] = 'field_address_thoroughfare';
   $handler->display->display_options['fields']['field_address_thoroughfare']['label'] = 'Address 1';
-  /* Field: Content: Address - Premise (i.e. Apartment / Suite number) */
+  /* Field: Content: Venue - Premise (i.e. Apartment / Suite number) */
   $handler->display->display_options['fields']['field_address_premise']['id'] = 'field_address_premise';
   $handler->display->display_options['fields']['field_address_premise']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_premise']['field'] = 'field_address_premise';
   $handler->display->display_options['fields']['field_address_premise']['label'] = 'Address 2';
-  /* Field: Content: Address - Locality (i.e. City) */
+  /* Field: Content: Venue - Locality (i.e. City) */
   $handler->display->display_options['fields']['field_address_locality']['id'] = 'field_address_locality';
   $handler->display->display_options['fields']['field_address_locality']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_locality']['field'] = 'field_address_locality';
   $handler->display->display_options['fields']['field_address_locality']['label'] = 'City';
-  /* Field: Content: Address - Administrative area (i.e. State / Province) */
+  /* Field: Content: Venue - Administrative area (i.e. State / Province) */
   $handler->display->display_options['fields']['field_address_administrative_area']['id'] = 'field_address_administrative_area';
   $handler->display->display_options['fields']['field_address_administrative_area']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_administrative_area']['field'] = 'field_address_administrative_area';
   $handler->display->display_options['fields']['field_address_administrative_area']['label'] = 'State';
-  /* Field: Content: Address - Postal code */
+  /* Field: Content: Venue - Postal code */
   $handler->display->display_options['fields']['field_address_postal_code']['id'] = 'field_address_postal_code';
   $handler->display->display_options['fields']['field_address_postal_code']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_postal_code']['field'] = 'field_address_postal_code';
   $handler->display->display_options['fields']['field_address_postal_code']['label'] = 'Postal code';
-  /* Field: Content: Address - Country */
+  /* Field: Content: Venue - Country */
   $handler->display->display_options['fields']['field_address_country']['id'] = 'field_address_country';
   $handler->display->display_options['fields']['field_address_country']['table'] = 'field_data_field_address';
   $handler->display->display_options['fields']['field_address_country']['field'] = 'field_address_country';
@@ -304,7 +305,7 @@ function hr_offices_views_default_views() {
     t('Phones'),
     t('Email'),
     t('Location'),
-    t('Address'),
+    t('Venue'),
     t('All'),
     t('Page'),
     t('CSV'),
@@ -349,14 +350,17 @@ function hr_offices_views_default_views() {
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
   $handler->display->display_options['sorts']['title']['field'] = 'title';
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
-  $handler->display->display_options['arguments']['og_group_ref_target_id']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['default_argument_type'] = 'og_context';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['specify_validation'] = TRUE;
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['validate']['type'] = 'og';
+  $handler->display->display_options['arguments']['og_group_ref_target_id']['validate']['fail'] = 'ignore';
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_applications.features.og_features_permission.inc
@@ -88,53 +89,32 @@ function acc_applications_og_features_default_permissions() {
 
   // Exported og permission: 'node:hr_operation:create acc_application content'
   $permissions['node:hr_operation:create acc_application content'] = array(
-    'roles' => array(
-      'access-editor' => 'access-editor',
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_operation:delete any acc_application content'
   $permissions['node:hr_operation:delete any acc_application content'] = array(
-    'roles' => array(
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_operation:delete own acc_application content'
   $permissions['node:hr_operation:delete own acc_application content'] = array(
-    'roles' => array(
-      'access-editor' => 'access-editor',
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_operation:update any acc_application content'
   $permissions['node:hr_operation:update any acc_application content'] = array(
-    'roles' => array(
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_operation:update own acc_application content'
   $permissions['node:hr_operation:update own acc_application content'] = array(
-    'roles' => array(
-      'access-editor' => 'access-editor',
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_operation:view any unpublished acc_application content'
   $permissions['node:hr_operation:view any unpublished acc_application content'] = array(
-    'roles' => array(
-      'access-manager' => 'access-manager',
-      'manager' => 'manager',
-    ),
+    'roles' => array(),
   );
 
   // Exported og permission: 'node:hr_sector:access authoring options of acc_application content'

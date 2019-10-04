@@ -127,5 +127,3 @@ features[variable][] = site_default_country
 features[variable][] = theme_default
 features[variable][] = user_admin_role
 features[variable][] = user_default_timezone
-features[variable][] = views_data_export_gc_chunk
-features[variable][] = views_data_export_gc_expires

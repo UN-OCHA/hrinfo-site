@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_organizations.features.field_instance.inc
@@ -10,7 +11,7 @@
 function hr_organizations_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'taxonomy_term-hr_organization-description_field'
+  // Exported field_instance: 'taxonomy_term-hr_organization-description_field'.
   $field_instances['taxonomy_term-hr_organization-description_field'] = array(
     'bundle' => 'hr_organization',
     'default_value' => NULL,
@@ -49,7 +50,7 @@ function hr_organizations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_organization-field_acronym'
+  // Exported field_instance: 'taxonomy_term-hr_organization-field_acronym'.
   $field_instances['taxonomy_term-hr_organization-field_acronym'] = array(
     'bundle' => 'hr_organization',
     'default_value' => NULL,
@@ -85,7 +86,7 @@ function hr_organizations_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'taxonomy_term-hr_organization-field_organization_fts'
+  // 'taxonomy_term-hr_organization-field_organization_fts'.
   $field_instances['taxonomy_term-hr_organization-field_organization_fts'] = array(
     'bundle' => 'hr_organization',
     'default_value' => NULL,
@@ -127,7 +128,7 @@ function hr_organizations_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'taxonomy_term-hr_organization-field_organization_type'
+  // 'taxonomy_term-hr_organization-field_organization_type'.
   $field_instances['taxonomy_term-hr_organization-field_organization_type'] = array(
     'bundle' => 'hr_organization',
     'default_value' => NULL,
@@ -138,6 +139,7 @@ function hr_organizations_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -163,7 +165,7 @@ function hr_organizations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_organization-field_website'
+  // Exported field_instance: 'taxonomy_term-hr_organization-field_website'.
   $field_instances['taxonomy_term-hr_organization-field_website'] = array(
     'bundle' => 'hr_organization',
     'default_value' => NULL,
@@ -186,6 +188,7 @@ function hr_organizations_field_default_field_instances() {
       'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
+        'configurable_class' => 0,
         'configurable_title' => 0,
         'rel' => '',
         'target' => '_blank',
@@ -196,14 +199,19 @@ function hr_organizations_field_default_field_instances() {
       ),
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
+      'linkit' => array(
+        'button_text' => 'Search',
+        'enable' => 0,
+        'profile' => '',
+      ),
       'rel_remove' => 'default',
       'title' => 'none',
-      'title_label_use_field_label' => FALSE,
+      'title_label_use_field_label' => 0,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
       'user_register_form' => FALSE,
-      'validate_url' => 1,
+      'validate_url' => 0,
     ),
     'widget' => array(
       'active' => 0,
@@ -214,7 +222,7 @@ function hr_organizations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_organization-name_field'
+  // Exported field_instance: 'taxonomy_term-hr_organization-name_field'.
   $field_instances['taxonomy_term-hr_organization-name_field'] = array(
     'bundle' => 'hr_organization',
     'default_value' => NULL,
@@ -252,7 +260,7 @@ function hr_organizations_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'taxonomy_term-hr_organization_type-description_field'
+  // 'taxonomy_term-hr_organization_type-description_field'.
   $field_instances['taxonomy_term-hr_organization_type-description_field'] = array(
     'bundle' => 'hr_organization_type',
     'default_value' => NULL,
@@ -291,7 +299,40 @@ function hr_organizations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_organization_type-name_field'
+  // Exported field_instance:
+  // 'taxonomy_term-hr_organization_type-field_org_type_access'.
+  $field_instances['taxonomy_term-hr_organization_type-field_org_type_access'] = array(
+    'bundle' => 'hr_organization_type',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 15,
+      ),
+    ),
+    'entity_type' => 'taxonomy_term',
+    'field_name' => 'field_org_type_access',
+    'label' => 'Humanitarian Access only',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 8,
+    ),
+  );
+
+  // Exported field_instance: 'taxonomy_term-hr_organization_type-name_field'.
   $field_instances['taxonomy_term-hr_organization_type-name_field'] = array(
     'bundle' => 'hr_organization_type',
     'default_value' => NULL,
@@ -328,44 +369,13 @@ function hr_organizations_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_orgnization_type-field_org_type_access'
-  $field_instances['taxonomy_term-hr_organization_type-field_org_type_access'] = array(
-    'bundle' => 'hr_organization_type',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 15,
-      ),
-    ),
-    'entity_type' => 'taxonomy_term',
-    'field_name' => 'field_org_type_access',
-    'label' => 'Humanitarian Access only',
-    'required' => 0,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_buttons',
-      'weight' => 8,
-    ),
-  );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('Acronym');
   t('Acronym of the organization');
   t('Description');
   t('FTS ID');
+  t('Humanitarian Access only');
   t('Name');
   t('Type');
   t('Website');

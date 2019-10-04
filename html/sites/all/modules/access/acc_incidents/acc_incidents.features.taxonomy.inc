@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_incidents.features.taxonomy.inc
@@ -21,7 +22,7 @@ function acc_incidents_taxonomy_default_vocabularies() {
       'name' => 'Access Type',
       'machine_name' => 'acc_incident_types',
       'description' => '',
-      'hierarchy' => 0,
+      'hierarchy' => 1,
       'module' => 'taxonomy',
       'weight' => 0,
     ),

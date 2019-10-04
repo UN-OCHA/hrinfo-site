@@ -11,7 +11,7 @@
 function hr_wysiwyg_default_linkit_profiles() {
   $export = array();
 
-  $linkit_profile = new stdClass();
+  $linkit_profile = new LinkitProfile();
   $linkit_profile->disabled = FALSE; /* Edit this to true to make a default linkit_profile disabled initially */
   $linkit_profile->api_version = 1;
   $linkit_profile->name = 'content_editors';
@@ -197,7 +197,6 @@ function hr_wysiwyg_default_linkit_profiles() {
       'remoteTimeout' => '10000',
     ),
   );
-
   $export['content_editors'] = $linkit_profile;
 
   return $export;

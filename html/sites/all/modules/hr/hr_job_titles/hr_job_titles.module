@@ -2,7 +2,5 @@
 
 /**
  * @file
- * Code for the Job Titles feature.
+ * Drupal needs this blank file.
  */
-
-include_once 'hr_job_titles.features.inc';

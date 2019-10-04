@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_documents.features.field_instance.inc
@@ -466,9 +467,8 @@ function hr_documents_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 18,
       ),
       'search_result' => array(
@@ -486,7 +486,7 @@ function hr_documents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_exclude_reliefweb',
-    'label' => 'Do not share with Reliefweb',
+    'label' => 'Do not share with ReliefWeb',
     'required' => 0,
     'settings' => array(
       'entity_translation_sync' => FALSE,
@@ -766,8 +766,9 @@ function hr_documents_field_default_field_instances() {
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 1,
-        'insert_plugin' => 'raw_url',
+        'profile' => NULL,
       ),
       'rel_remove' => 'default',
       'title' => 'required',
@@ -1069,8 +1070,9 @@ function hr_documents_field_default_field_instances() {
         'page' => 0,
       ),
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -1148,8 +1150,9 @@ function hr_documents_field_default_field_instances() {
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
@@ -1218,9 +1221,9 @@ function hr_documents_field_default_field_instances() {
   t('Description');
   t('Description or Summary of content');
   t('Disaster(s)/Emergency');
+  t('Do not share with ReliefWeb');
   t('Document type');
   t('Documents');
-  t('Exclude from Reliefweb');
   t('File');
   t('File(s)');
   t('Global Cluster(s)');
