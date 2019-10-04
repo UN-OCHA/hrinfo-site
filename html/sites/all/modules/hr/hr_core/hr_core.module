@@ -354,11 +354,14 @@ function _hr_core_draft_button($label) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_BASE_FORM_ID_alter().
  *
  * Alter the node edit forms.
  */
 function hr_core_form_node_form_alter(&$form, &$form_state) {
+  // TODO: this calls for all node forms. Remove the other calls.
+  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
+
   $node = $form['#node'];
   if (isset($_GET[OG_AUDIENCE_FIELD])) {
     $node->{HR_CORE_OG_AUDIENCE_FIELD} = $_GET[OG_AUDIENCE_FIELD];
@@ -464,7 +467,6 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
     }
   }
 
-  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
 }
 
 /**

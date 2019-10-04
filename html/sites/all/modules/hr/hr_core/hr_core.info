@@ -103,6 +103,7 @@ features[user_permission][] = view own private files
 features[user_permission][] = view own unpublished content
 features[user_role][] = administrator
 features[variable][] = admin_theme
+features[variable][] = chosen_jquery_selector
 features[variable][] = chosen_minimum_multiple
 features[variable][] = chosen_minimum_single
 features[variable][] = date_default_timezone

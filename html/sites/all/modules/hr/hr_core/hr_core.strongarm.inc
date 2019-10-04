@@ -20,6 +20,13 @@ function hr_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'chosen_jquery_selector';
+  $strongarm->value = 'select:visible,.page-admin-missing-disaster-terms-on-nodes select,select.form-control,select:not("element-invisible")';
+  $export['chosen_jquery_selector'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'chosen_minimum_multiple';
   $strongarm->value = 'Always Apply';
   $export['chosen_minimum_multiple'] = $strongarm;

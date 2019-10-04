@@ -29,7 +29,6 @@ function hr_documents_og_features_registry() {
  * Implements hook_form_FORM_ID_alter().
  */
 function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
-  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
   hr_sectors_hide_sectors($form, $form_state);
 
   if (module_exists('hs_taxonomy')) {
@@ -129,6 +128,14 @@ function _hr_document_render_multiple_input_lines($field_name, $items_count, &$f
     // Reset theme function.
     $form[$field_name][$field_language]['#theme'] = $form_theme;
   }
+
+  // Attach js to handle add-more-button.
+  $form['#attached']['js'][] = drupal_get_path('theme', 'ocha_basic') . '/js/add-more.js';
+  // Let js know which extra fields to hide.
+  $form['#attached']['js'][] = array(
+    'type' => 'setting',
+    'data' => array('hr_documents' => array('fields' => array($field_name))),
+  );
 }
 
 /**
