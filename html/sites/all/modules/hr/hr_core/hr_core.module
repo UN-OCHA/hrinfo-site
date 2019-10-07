@@ -359,8 +359,8 @@ function _hr_core_draft_button($label) {
  * Alter the node edit forms.
  */
 function hr_core_form_node_form_alter(&$form, &$form_state) {
-  // TODO: this calls for all node forms. Remove the other calls.
-  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
+
+  _hr_core_render_multiple_input_lines($form, $form_state);
 
   $node = $form['#node'];
   if (isset($_GET[OG_AUDIENCE_FIELD])) {
@@ -382,6 +382,7 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
       }
 
     }
+    // TODO: check this is intended to skip all the rest of this function.
     return;
   }
 
@@ -467,6 +468,64 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
     }
   }
 
+}
+
+
+/**
+ * Helper to render multiple inputs for fields.
+ */
+function _hr_core_render_multiple_input_lines(&$form, &$form_state) {
+
+  // Skip if this node already exists, or is a clone.
+  if (isset($form['clone_from_original_nid']) || isset($form['#node']->nid)) {
+    return;
+  }
+
+  $field_names = array(
+    'field_data_sources' => 4,
+    'field_event_agenda' => 2,
+    'field_event_meeting_minutes' => 2,
+    'field_files_collection' => 4,
+    'field_hid_contact_ref' => 2,
+    'field_locations' => 4,
+    'field_phones' => 4,
+    'field_related_content' => 4,
+  );
+
+  foreach ($field_names as $field_name => $items_count) {
+
+    if (!isset($form[$field_name])) {
+      continue;
+    }
+
+    $field_language = $form[$field_name]['#language'];
+    $form_theme = $form[$field_name][$field_language]['#theme'];
+
+    // Remove delete and add more buttons.
+    $form[$field_name][$field_language][0]['remove_button']['#access'] = FALSE;
+    $form[$field_name][$field_language]['add_more']['#access'] = FALSE;
+
+    $items = &$form_state['field'][$field_name][$field_language];
+
+    // Generate required number of fields collection.
+    if ($items_count > 1 and $items['items_count'] != $items_count) {
+      $items['items_count'] = $items_count;
+      $items['field']['cardinality'] = $items_count;
+      $form[$field_name][$field_language] += field_multiple_value_form($items['field'], $items['instance'], $field_language, array(), $form, $form_state);
+      $form[$field_name][$field_language]['#description'] .= t(' Add up to @count values using the "Add another item" button. To add more, save the form as draft then edit it.', array('@count' => $items_count));
+
+      // Reset theme function.
+      $form[$field_name][$field_language]['#theme'] = $form_theme;
+    }
+
+    // Attach js to handle add-more-button.
+    $form['#attached']['js'][] = drupal_get_path('module', 'hr_core') . '/js/hr_core_add_more.js';
+    // Let js know which extra fields to hide.
+    $form['#attached']['js'][] = array(
+      'type' => 'setting',
+      'data' => array('hr_core' => array('fields' => array($field_name))),
+    );
+  }
 }
 
 /**
@@ -936,41 +995,6 @@ function _hr_core_display_cache_content_defaults($minutes = 'none', $margin = 5,
       ->fields(array('cache' => serialize($cache_settings)))
       ->condition('did', $obj->did, '=')
       ->execute();
-  }
-}
-
-/**
- * Store initial form values when rendering for the first time.
- *
- * Needed to solve problems with entity reference and AJAX.
- */
-function _hr_core_fix_entity_reference_ajax_calls(&$form, &$form_state) {
-  $fields_to_save = array(
-    'field_acc_geo_location_dest',
-    'field_acc_impact_type',
-    'field_bundles',
-    'field_coordination_hubs',
-    'field_disasters',
-    'field_geographic_level',
-    'field_organizations',
-    'field_organizations2',
-    'field_parent_cluster',
-    'og_group_ref',
-  );
-
-  foreach ($fields_to_save as $field_to_save) {
-    // Store the options.
-    if (isset($form[$field_to_save])) {
-      if (!isset($form_state['storage'][$field_to_save])) {
-        $form_state['storage'][$field_to_save] = $form[$field_to_save];
-      }
-      // If it is set, re-fill it.
-      else {
-        if (isset($form_state['storage'][$field_to_save]) && empty($form[$field_to_save][LANGUAGE_NONE]['#default_value'])) {
-          $form[$field_to_save] = $form_state['storage'][$field_to_save];
-        }
-      }
-    }
   }
 }
 

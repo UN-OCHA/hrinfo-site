@@ -90,22 +90,21 @@ form .table-responsive {
   .field-add-more-submit {
     border: 1px solid #ccc;
   }
+}
 
-  /* Hiding fields. */
-  .js .hr-add-button {
-    background: none;
-    color: $cd-dark-grey;
-    font-size: 16px;
-    margin: 10px;
-    &:hover,
-    &:focus {
-      background-color: $cd-mid-light-grey;
-      color: $cd-mid-grey;
-    }
-  }
-
-  .js .hr-add-more {
-    display: none;
+/* Hiding fields. */
+.js .hr-add-button {
+  background: none;
+  color: $cd-dark-grey;
+  font-size: 16px;
+  margin: 10px;
+  &:hover,
+  &:focus {
+    background-color: $cd-mid-light-grey;
+    color: $cd-mid-grey;
   }
 }
 
+.js .hr-add-more {
+  display: none;
+}

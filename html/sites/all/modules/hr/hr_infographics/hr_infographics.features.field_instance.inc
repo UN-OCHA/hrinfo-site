@@ -411,7 +411,7 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the map/infographic. It is best to publish one file per record, however you can add up to four. In case you need to upload more than four files save the map/infographic as draft then edit it to add more files. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
+    'description' => 'Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the map/infographic. It is best to publish one file per record. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -516,7 +516,7 @@ function hr_infographics_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select from the menu the country(ies) the map/infographic is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your map/infographic as draft then edit it to add more locations.',
+    'description' => 'Select from the menu the country(ies) the map/infographic is about and indicate more specific locations by selecting multiple layers (region, province, town).',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -999,8 +999,7 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Type the original title of the map/infographic. Try not to use abbreviations.To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.
-',
+    'description' => 'Type the original title of the map/infographic. Try not to use abbreviations.To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1157,14 +1156,13 @@ function hr_infographics_field_default_field_instances() {
   t('Organization(s)');
   t('Original Publication Date');
   t('Related content');
-  t('Select from the menu the country(ies) the map/infographic is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your map/infographic as draft then edit it to add more locations.');
+  t('Select from the menu the country(ies) the map/infographic is about and indicate more specific locations by selecting multiple layers (region, province, town).');
   t('Select the map/infographic type and sub-type that best describe the map/infographic.');
   t('Theme(s)');
   t('Title');
   t('Type in and select the source(s) of the map/infographic. To indicate multiple organizations add a comma after each entry.');
-  t('Type the original title of the map/infographic. Try not to use abbreviations.To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.
-');
-  t('Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the map/infographic. It is best to publish one file per record, however you can add up to four. In case you need to upload more than four files save the map/infographic as draft then edit it to add more files. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
+  t('Type the original title of the map/infographic. Try not to use abbreviations.To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
+  t('Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the map/infographic. It is best to publish one file per record. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
   t('Webspace(s)');
 
   return $field_instances;

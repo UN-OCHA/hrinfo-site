@@ -31,36 +31,6 @@ function hr_documents_og_features_registry() {
 function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
   hr_sectors_hide_sectors($form, $form_state);
 
-  if (module_exists('hs_taxonomy')) {
-    if (isset($form['field_locations']['und']['#config'])) {
-      $form['field_locations']['und']['#config']['dropbox']['title'] = t('Current selections');
-      $form['field_locations']['und']['#config']['animation_delay'] = 0;
-      $form['field_locations']['und']['#config']['level_labels'] = array(
-        'status' => 1,
-        'labels' => array(
-          0 => t('Country'),
-          1 => t('Admin 1'),
-          2 => t('Admin 2'),
-          3 => t('Admin 3'),
-        ),
-      );
-    }
-  }
-
-  // Show multiple empty ones for locations.
-  if (!isset($form['clone_from_original_nid']) && !isset($form['#node']->nid)) {
-    $items_count = 4;
-    $field_name = 'field_locations';
-    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
-  }
-
-  // Show multiple empty ones for files.
-  if (!isset($form['#node']->nid)) {
-    $items_count = 4;
-    $field_name = 'field_files_collection';
-    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
-  }
-
   // If it's a clone, validate the title.
   if (isset($form['clone_from_original_nid'])) {
     // Add title validation.
@@ -101,41 +71,6 @@ function _hr_document_check_clone_title($form, &$form_state) {
       form_set_error('title_field', t('Please adjust the title before saving this @name', array('@name' => $types[$form_state['node']->type]->name)));
     }
   }
-}
-
-/**
- * Helper to render multiple input fields.
- */
-function _hr_document_render_multiple_input_lines($field_name, $items_count, &$form, &$form_state) {
-  if (!isset($form[$field_name])) {
-    return;
-  }
-
-  $field_language = $form[$field_name]['#language'];
-  $form_theme = $form[$field_name][$field_language]['#theme'];
-
-  // Remove delete and add more buttons.
-  $form[$field_name][$field_language][0]['remove_button']['#access'] = FALSE;
-  $form[$field_name][$field_language]['add_more']['#access'] = FALSE;
-
-  $items = &$form_state['field'][$field_name][$field_language];
-
-  // Generate required number of fields collection.
-  if ($items_count > 1 and $items['items_count'] != $items_count) {
-    $items['items_count'] = $items_count;
-    $items['field']['cardinality'] = $items_count;
-    $form[$field_name][$field_language] += field_multiple_value_form($items['field'], $items['instance'], $field_language, array(), $form, $form_state);
-    // Reset theme function.
-    $form[$field_name][$field_language]['#theme'] = $form_theme;
-  }
-
-  // Attach js to handle add-more-button.
-  $form['#attached']['js'][] = drupal_get_path('theme', 'ocha_basic') . '/js/add-more.js';
-  // Let js know which extra fields to hide.
-  $form['#attached']['js'][] = array(
-    'type' => 'setting',
-    'data' => array('hr_documents' => array('fields' => array($field_name))),
-  );
 }
 
 /**

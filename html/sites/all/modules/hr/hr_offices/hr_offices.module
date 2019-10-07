@@ -24,18 +24,3 @@ function hr_offices_og_features_registry() {
   $registry[$feature->id] = $feature;
   return $registry;
 }
-
-/**
- * Implements hook_form_FORM_ID_alter().
- *
- * TODO: move all multiple input line fields to hr_core.
- */
-function hr_offices_form_hr_office_node_form_alter(&$form, &$form_state) {
-  // Show multiple empty ones for phones.
-  if (!isset($form['#node']->nid)) {
-    $items_count = 4;
-    $field_name = 'field_phones';
-    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
-  }
-
-}

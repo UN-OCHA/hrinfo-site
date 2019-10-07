@@ -508,7 +508,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the document. It is best to publish one file per record, however you can add up to four. In case you need to upload more than four files save the document as draft then edit it to add more files. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
+    'description' => 'Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the document. It is best to publish one file per record. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -552,7 +552,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your document as draft then edit it to add more locations.',
+    'description' => 'Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town).',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -902,7 +902,7 @@ function hr_documents_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => 'Choose whether the document will be public, private or will have the same setting (private or public)as the webspace or sub-space (cluster, sector or working group) within which it has been published.',
+    'description' => 'Choose whether the document will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -959,8 +959,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => 'Click on the field and select where to publish the document (operation, regional site or thematic site).
-',
+    'description' => 'Click on the field and select where to publish the document (operation, regional site or thematic site).',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1209,12 +1208,11 @@ function hr_documents_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Acronym');
   t('Add links to content that is related to the document you are publishing (example: language versions of the same document, or the link of the event the meeting minutes refer to) by indicating the title of the content and its url. When using the Search function make sure to search by content title. ');
-  t('Choose whether the document will be public, private or will have the same setting (private or public)as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
+  t('Choose whether the document will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
   t('Click on the field and select all relevant themes. Choose only themes the document substantively refers to.');
   t('Click on the field and select the coordination hub(s) the document refers to (if any).');
   t('Click on the field and select the disaster(s) or emergency the document refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.');
-  t('Click on the field and select where to publish the document (operation, regional site or thematic site).
-');
+  t('Click on the field and select where to publish the document (operation, regional site or thematic site).');
   t('Cluster(s)/Sector(s)');
   t('Content visibility');
   t('Coordination hub(s)');
@@ -1236,14 +1234,14 @@ function hr_documents_field_default_field_instances() {
   t('Organization(s)');
   t('Original Publication Date');
   t('Related content');
-  t('Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town). You can indicate up to four locations right away. If you need to indicate more than four, save your document as draft then edit it to add more locations.');
+  t('Select from the menu the country(ies) the document is about and indicate more specific locations by selecting multiple layers (region, province, town).');
   t('Select the document type and sub-type that best describe the document.');
   t('Theme(s)');
   t('Title');
   t('Try to always include here the text (in full or part of it) of the document (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.');
   t('Type in and select the source(s) of the document. To indicate multiple organizations add a comma after each entry.');
   t('Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
-  t('Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the document. It is best to publish one file per record, however you can add up to four. In case you need to upload more than four files save the document as draft then edit it to add more files. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
+  t('Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the document. It is best to publish one file per record. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
   t('Webspace(s)');
 
   return $field_instances;
