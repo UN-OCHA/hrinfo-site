@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_bundles.views_default.inc
@@ -60,7 +61,7 @@ function hr_bundles_views_default_views() {
   $handler->display->display_options['fields']['field_website']['empty'] = '[path]';
   $handler->display->display_options['fields']['field_website']['click_sort_column'] = 'url';
   $handler->display->display_options['fields']['field_website']['type'] = 'link_absolute';
-  /* Field: Content: Space(s) */
+  /* Field: Content: Webspace(s) */
   $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['fields']['og_group_ref']['table'] = 'og_membership';
   $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
@@ -123,8 +124,10 @@ function hr_bundles_views_default_views() {
   $handler->display->display_options['cache']['output_lifespan'] = '21600';
   $handler->display->display_options['cache']['output_lifespan_custom'] = '0';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   /* Relationship: OG membership: Group Node from OG membership */
@@ -191,7 +194,7 @@ function hr_bundles_views_default_views() {
   $handler->display->display_options['fields']['field_geofield']['settings'] = array(
     'data' => 'full',
   );
-  /* Field: Field: Organization */
+  /* Field: Field: Organization(s) */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'field_data_field_organizations';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -225,18 +228,12 @@ Co-leads: [field_partners]';
   $handler->display->display_options['fields']['field_activation_document']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Cluster coordinators */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_cluster_coordinators']['id'] = 'field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['table'] = 'field_data_field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['field'] = 'field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['label'] = '';
   $handler->display->display_options['fields']['field_cluster_coordinators']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_cluster_coordinators']['type'] = 'field_collection_fields';
-  $handler->display->display_options['fields']['field_cluster_coordinators']['settings'] = array(
-    'view_mode' => 'full',
-  );
-  $handler->display->display_options['fields']['field_cluster_coordinators']['delta_offset'] = '0';
-  $handler->display->display_options['fields']['field_cluster_coordinators']['multi_type'] = 'ul';
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
@@ -302,8 +299,10 @@ Co-leads: [field_partners]';
   $handler->display->display_options['cache']['output_lifespan'] = '21600';
   $handler->display->display_options['cache']['output_lifespan_custom'] = '0';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   /* Relationship: OG membership: Group Node from OG membership */
@@ -370,7 +369,7 @@ Co-leads: [field_partners]';
   $handler->display->display_options['fields']['field_geofield']['settings'] = array(
     'data' => 'full',
   );
-  /* Field: Field: Organization */
+  /* Field: Field: Organization(s) */
   $handler->display->display_options['fields']['field_organizations']['id'] = 'field_organizations';
   $handler->display->display_options['fields']['field_organizations']['table'] = 'field_data_field_organizations';
   $handler->display->display_options['fields']['field_organizations']['field'] = 'field_organizations';
@@ -404,18 +403,12 @@ Co-leads: [field_partners]';
   $handler->display->display_options['fields']['field_activation_document']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Cluster coordinators */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_cluster_coordinators']['id'] = 'field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['table'] = 'field_data_field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['field'] = 'field_cluster_coordinators';
   $handler->display->display_options['fields']['field_cluster_coordinators']['label'] = '';
   $handler->display->display_options['fields']['field_cluster_coordinators']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_cluster_coordinators']['type'] = 'field_collection_fields';
-  $handler->display->display_options['fields']['field_cluster_coordinators']['settings'] = array(
-    'view_mode' => 'full',
-  );
-  $handler->display->display_options['fields']['field_cluster_coordinators']['delta_offset'] = '0';
-  $handler->display->display_options['fields']['field_cluster_coordinators']['multi_type'] = 'ul';
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
@@ -500,7 +493,7 @@ Co-leads: [field_partners]';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['relationships'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Content: Space(s) */
+  /* Field: Content: Webspace(s) */
   $handler->display->display_options['fields']['og_group_ref']['id'] = 'og_group_ref';
   $handler->display->display_options['fields']['og_group_ref']['table'] = 'og_membership';
   $handler->display->display_options['fields']['og_group_ref']['field'] = 'og_group_ref';
@@ -522,7 +515,7 @@ Co-leads: [field_partners]';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
   $handler->display->display_options['defaults']['arguments'] = FALSE;
-  /* Contextual filter: Content: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';

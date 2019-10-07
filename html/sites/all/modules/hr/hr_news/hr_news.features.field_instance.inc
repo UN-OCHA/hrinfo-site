@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_news.features.field_instance.inc
@@ -10,18 +11,17 @@
 function hr_news_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-hr_news-body'
+  // Exported field_instance: 'node-hr_news-body'.
   $field_instances['node-hr_news-body'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Use the “Text” box above to insert the text of the blog.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'text',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 1,
       ),
       'search_result' => array(
@@ -32,25 +32,23 @@ function hr_news_field_default_field_instances() {
       ),
       'teaser' => array(
         'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(
-          'trim_length' => 600,
-        ),
-        'type' => 'text_summary_or_trimmed',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 1,
       ),
     ),
     'entity_type' => 'node',
     'field_name' => 'body',
-    'label' => 'Body',
-    'required' => FALSE,
+    'label' => 'Text',
+    'required' => 1,
     'settings' => array(
-      'display_summary' => TRUE,
+      'display_summary' => 1,
       'entity_translation_sync' => FALSE,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'text',
       'settings' => array(
         'rows' => 20,
@@ -61,21 +59,18 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_bundles'
+  // Exported field_instance: 'node-hr_news-field_bundles'.
   $field_instances['node-hr_news-field_bundles'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the cluster(s)/sector(s) the Blog post refers to.',
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 3,
       ),
       'search_result' => array(
@@ -93,11 +88,12 @@ function hr_news_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_bundles',
-    'label' => 'Clusters/Sectors',
+    'label' => 'Cluster(s)/Sector(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
+          'access_override' => 0,
           'admin' => array(
             'widget_type' => 'options_select',
           ),
@@ -110,7 +106,10 @@ function hr_news_field_default_field_instances() {
           'action' => 'none',
           'action_on_edit' => 0,
           'fallback' => 'none',
-          'og_context' => 0,
+          'providers' => array(
+            'og_context' => 0,
+            'url' => 1,
+          ),
           'skip_perm' => 0,
           'status' => 1,
         ),
@@ -123,25 +122,22 @@ function hr_news_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 4,
+      'weight' => 6,
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_coordination_hubs'
+  // Exported field_instance: 'node-hr_news-field_coordination_hubs'.
   $field_instances['node-hr_news-field_coordination_hubs'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select the coordination hub(s) the blog post refers to (if any).',
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 6,
       ),
       'search_result' => array(
@@ -159,61 +155,7 @@ function hr_news_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_coordination_hubs',
-    'label' => 'Coordination hubs',
-    'required' => 0,
-    'settings' => array(
-      'behaviors' => array(
-        'prepopulate' => array(
-          'status' => 0,
-        ),
-      ),
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'apply_chosen' => 1,
-      ),
-      'type' => 'options_select',
-      'weight' => 7,
-    ),
-  );
-
-  // Exported field_instance: 'node-hr_news-field_disasters'
-  $field_instances['node-hr_news-field_disasters'] = array(
-    'bundle' => 'hr_news',
-    'default_value' => NULL,
-    'default_value_function' => '',
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'inline',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 7,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_disasters',
-    'label' => 'Disasters',
+    'label' => 'Coordination hub(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -235,22 +177,19 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_fundings'
-  $field_instances['node-hr_news-field_fundings'] = array(
+  // Exported field_instance: 'node-hr_news-field_disasters'.
+  $field_instances['node-hr_news-field_disasters'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select the disaster(s) or emergency(ies) the blog post refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations. See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 15,
+        'label' => 'inline',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 7,
       ),
       'search_result' => array(
         'label' => 'above',
@@ -266,8 +205,8 @@ function hr_news_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_fundings',
-    'label' => 'Fundings',
+    'field_name' => 'field_disasters',
+    'label' => 'Disaster(s)/Emergency',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -289,20 +228,16 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_image'
+  // Exported field_instance: 'node-hr_news-field_image'.
   $field_instances['node-hr_news-field_image'] = array(
     'bundle' => 'hr_news',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Add an image to enrich the blog post. Click on "Browse" and follow the instructions in the pop-up window to complete the upload. Once uploaded you will still be able to edit or remove the image.',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'image',
-        'settings' => array(
-          'image_link' => '',
-          'image_style' => 'medium',
-        ),
-        'type' => 'image',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'search_result' => array(
@@ -326,6 +261,7 @@ function hr_news_field_default_field_instances() {
       'alt_field' => 0,
       'default_image' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => 'news/images',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -355,30 +291,25 @@ function hr_news_field_default_field_instances() {
           'media_default--media_browser_my_files' => 0,
           'media_internet' => 0,
           'upload' => 0,
-          'youtube' => 0,
         ),
-        'progress_indicator' => 'throbber',
       ),
       'type' => 'media_generic',
-      'weight' => 1,
+      'weight' => 3,
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_locations'
+  // Exported field_instance: 'node-hr_news-field_locations'.
   $field_instances['node-hr_news-field_locations'] = array(
     'bundle' => 'hr_news',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).',
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 4,
       ),
       'search_result' => array(
@@ -396,7 +327,7 @@ function hr_news_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_locations',
-    'label' => 'Locations',
+    'label' => 'Location(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -411,7 +342,7 @@ function hr_news_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 1,
+      'active' => TRUE,
       'module' => 'shs',
       'settings' => array(
         'shs' => array(
@@ -419,29 +350,26 @@ function hr_news_field_default_field_instances() {
           'create_new_terms' => 0,
           'force_deepest' => 0,
           'node_count' => 0,
-          'use_chosen' => 'always',
+          'use_chosen' => 'chosen',
         ),
       ),
       'type' => 'taxonomy_shs',
-      'weight' => 5,
+      'weight' => 7,
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_organizations'
+  // Exported field_instance: 'node-hr_news-field_organizations'.
   $field_instances['node-hr_news-field_organizations'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Type in and select the organization(s) which the author of the blog post belongs to. To indicate multiple organizations add a comma after each entry.',
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 5,
       ),
       'search_result' => array(
@@ -459,7 +387,7 @@ function hr_news_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_organizations',
-    'label' => 'Organization',
+    'label' => 'Organization(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -478,25 +406,25 @@ function hr_news_field_default_field_instances() {
       'module' => 'entityreference',
       'settings' => array(
         'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
       'type' => 'entityreference_autocomplete_tags',
-      'weight' => 6,
+      'weight' => 4,
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_related_content'
+  // Exported field_instance: 'node-hr_news-field_related_content'.
   $field_instances['node-hr_news-field_related_content'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Add links to content that is related to the blog post you are publishing by indicating the title of the content and its url. When using the Search function make sure to search by content title.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'link',
         'settings' => array(),
-        'type' => 'link_default',
+        'type' => 'hidden',
         'weight' => 12,
       ),
       'search_result' => array(
@@ -520,6 +448,7 @@ function hr_news_field_default_field_instances() {
       'absolute_url' => 1,
       'attributes' => array(
         'class' => '',
+        'configurable_class' => 0,
         'configurable_title' => 0,
         'rel' => '',
         'target' => '_blank',
@@ -531,11 +460,13 @@ function hr_news_field_default_field_instances() {
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 1,
-        'insert_plugin' => 'raw_url',
+        'profile' => NULL,
       ),
       'rel_remove' => 'default',
       'title' => 'optional',
+      'title_label_use_field_label' => 0,
       'title_maxlength' => 128,
       'title_value' => '',
       'url' => 0,
@@ -551,21 +482,18 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_sectors'
+  // Exported field_instance: 'node-hr_news-field_sectors'.
   $field_instances['node-hr_news-field_sectors'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the Global Cluster(s) the Blog post refers to.',
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 2,
       ),
       'search_result' => array(
@@ -583,7 +511,7 @@ function hr_news_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_sectors',
-    'label' => 'Global Clusters',
+    'label' => 'Global Cluster(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -601,25 +529,22 @@ function hr_news_field_default_field_instances() {
         'apply_chosen' => 1,
       ),
       'type' => 'options_select',
-      'weight' => 3,
+      'weight' => 5,
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-field_themes'
+  // Exported field_instance: 'node-hr_news-field_themes'.
   $field_instances['node-hr_news-field_themes'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select all relevant themes. Choose only themes the blog post substantively refers to.',
     'display' => array(
       'default' => array(
         'label' => 'inline',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 9,
       ),
       'search_result' => array(
@@ -637,7 +562,7 @@ function hr_news_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_themes',
-    'label' => 'Themes',
+    'label' => 'Theme(s)',
     'required' => 0,
     'settings' => array(
       'behaviors' => array(
@@ -662,7 +587,7 @@ function hr_news_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-group_content_access'
+  // Exported field_instance: 'node-hr_news-group_content_access'.
   $field_instances['node-hr_news-group_content_access'] = array(
     'bundle' => 'hr_news',
     'default_value' => array(
@@ -671,13 +596,12 @@ function hr_news_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Choose whether the blog post will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 14,
       ),
       'search_result' => array(
@@ -695,8 +619,8 @@ function hr_news_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'group_content_access',
-    'label' => 'Group content visibility',
-    'required' => TRUE,
+    'label' => 'Content visibility',
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
@@ -712,23 +636,24 @@ function hr_news_field_default_field_instances() {
       ),
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'options',
       'settings' => array(
         'apply_chosen' => 0,
       ),
       'type' => 'options_select',
-      'weight' => 13,
+      'weight' => 14,
     ),
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_news-og_group_ref'
+  // Exported field_instance: 'node-hr_news-og_group_ref'.
   $field_instances['node-hr_news-og_group_ref'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Click on the field and select where to publish the blog (operation, regional site or thematic site).',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -751,11 +676,12 @@ function hr_news_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Space(s)',
+    'label' => 'Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
+          'access_override' => 0,
           'admin' => array(
             'widget_type' => 'entityreference_autocomplete',
           ),
@@ -769,6 +695,7 @@ function hr_news_field_default_field_instances() {
           'action_on_edit' => 0,
           'fallback' => 'form_error',
           'providers' => array(
+            'og_context' => 0,
             'url' => 1,
           ),
           'skip_perm' => 'administer modules',
@@ -795,16 +722,16 @@ function hr_news_field_default_field_instances() {
       'module' => 'og',
       'settings' => array(),
       'type' => 'og_complex',
-      'weight' => 14,
+      'weight' => 13,
     ),
   );
 
-  // Exported field_instance: 'node-hr_news-title_field'
+  // Exported field_instance: 'node-hr_news-title_field'.
   $field_instances['node-hr_news-title_field'] = array(
     'bundle' => 'hr_news',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Type the title of the Blog post.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -828,42 +755,60 @@ function hr_news_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'title_field',
     'label' => 'Title',
-    'required' => TRUE,
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'hide_label' => array(
-        'entity' => FALSE,
-        'page' => FALSE,
+        'entity' => 0,
+        'page' => 0,
+      ),
+      'linkit' => array(
+        'button_text' => 'Search',
+        'enable' => 0,
+        'profile' => '',
       ),
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'text',
       'settings' => array(
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 0,
+      'weight' => 1,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Body');
-  t('Clusters/Sectors');
-  t('Coordination hubs');
-  t('Disasters');
-  t('Fundings');
-  t('Global Clusters');
-  t('Group content visibility');
+  t('Add an image to enrich the blog post. Click on "Browse" and follow the instructions in the pop-up window to complete the upload. Once uploaded you will still be able to edit or remove the image.');
+  t('Add links to content that is related to the blog post you are publishing by indicating the title of the content and its url. When using the Search function make sure to search by content title.');
+  t('Choose whether the blog post will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
+  t('Click on the field and select all relevant themes. Choose only themes the blog post substantively refers to.');
+  t('Click on the field and select the coordination hub(s) the blog post refers to (if any).');
+  t('Click on the field and select the disaster(s) or emergency(ies) the blog post refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations. See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.');
+  t('Click on the field and select where to publish the blog (operation, regional site or thematic site).');
+  t('Cluster(s)/Sector(s)');
+  t('Content visibility');
+  t('Coordination hub(s)');
+  t('Disaster(s)/Emergency');
+  t('Global Cluster(s)');
   t('Image');
-  t('Locations');
-  t('Organization');
+  t('Indicate the Global Cluster(s) the Blog post refers to.');
+  t('Indicate the cluster(s)/sector(s) the Blog post refers to.');
+  t('Location(s)');
+  t('Organization(s)');
   t('Related content');
-  t('Space(s)');
-  t('Themes');
+  t('Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).');
+  t('Text');
+  t('Theme(s)');
   t('Title');
+  t('Type in and select the organization(s) which the author of the blog post belongs to. To indicate multiple organizations add a comma after each entry.');
+  t('Type the title of the Blog post.');
+  t('Use the “Text” box above to insert the text of the blog.');
+  t('Webspace(s)');
 
   return $field_instances;
 }

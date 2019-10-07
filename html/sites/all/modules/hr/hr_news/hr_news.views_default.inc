@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_news.views_default.inc
@@ -43,7 +44,7 @@ function hr_news_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = 'There are no results';
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
-  /* Field: Indexed Node: Title */
+  /* Field: Indexed Node: Name */
   $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
   $handler->display->display_options['fields']['title_field']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['title_field']['field'] = 'title_field';
@@ -109,8 +110,6 @@ function hr_news_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref']['default_argument_type'] = 'raw';
   $handler->display->display_options['arguments']['og_group_ref']['default_argument_options']['index'] = '1';
   $handler->display->display_options['arguments']['og_group_ref']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['og_group_ref']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['og_group_ref']['not'] = 0;
   /* Filter criterion: Indexed Node: Content type */
   $handler->display->display_options['filters']['type']['id'] = 'type';
   $handler->display->display_options['filters']['type']['table'] = 'search_api_index_default_node_index';
@@ -199,7 +198,7 @@ function hr_news_views_default_views() {
   );
   $handler->display->display_options['defaults']['empty'] = FALSE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: Indexed Node: Title */
+  /* Field: Indexed Node: Name */
   $handler->display->display_options['fields']['title_field']['id'] = 'title_field';
   $handler->display->display_options['fields']['title_field']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['title_field']['field'] = 'title_field';
@@ -292,7 +291,6 @@ function hr_news_views_default_views() {
     t('Global page'),
     t('Global blog feed'),
   );
-
   $export['hr_news'] = $view;
 
   $view = new view();
@@ -361,7 +359,7 @@ function hr_news_views_default_views() {
   $handler->display->display_options['sorts']['title_field_value']['field'] = 'title_field_value';
   $handler->display->display_options['sorts']['title_field_value']['exposed'] = TRUE;
   $handler->display->display_options['sorts']['title_field_value']['expose']['label'] = 'Title';
-  /* Contextual filter: Field: Space(s) (og_group_ref) */
+  /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -408,7 +406,7 @@ function hr_news_views_default_views() {
     'hr_news' => 'hr_news',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filter criterion: Field: Space(s) (og_group_ref) */
+  /* Filter criterion: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['filters']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
   $handler->display->display_options['filters']['og_group_ref_target_id']['table'] = 'og_membership';
   $handler->display->display_options['filters']['og_group_ref_target_id']['field'] = 'og_group_ref_target_id';
@@ -424,7 +422,7 @@ function hr_news_views_default_views() {
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Clusters/Sectors (field_bundles) */
+  /* Filter criterion: Content: Cluster(s)/Sector(s) (field_bundles) */
   $handler->display->display_options['filters']['field_bundles_target_id']['id'] = 'field_bundles_target_id';
   $handler->display->display_options['filters']['field_bundles_target_id']['table'] = 'og_membership';
   $handler->display->display_options['filters']['field_bundles_target_id']['field'] = 'field_bundles_target_id';
@@ -440,7 +438,7 @@ function hr_news_views_default_views() {
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Coordination hubs (field_coordination_hubs) */
+  /* Filter criterion: Content: Coordination hub(s) (field_coordination_hubs) */
   $handler->display->display_options['filters']['field_coordination_hubs_target_id']['id'] = 'field_coordination_hubs_target_id';
   $handler->display->display_options['filters']['field_coordination_hubs_target_id']['table'] = 'field_data_field_coordination_hubs';
   $handler->display->display_options['filters']['field_coordination_hubs_target_id']['field'] = 'field_coordination_hubs_target_id';
@@ -455,7 +453,7 @@ function hr_news_views_default_views() {
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Disasters (field_disasters) */
+  /* Filter criterion: Content: Disaster(s)/Emergency (field_disasters) */
   $handler->display->display_options['filters']['field_disasters_target_id']['id'] = 'field_disasters_target_id';
   $handler->display->display_options['filters']['field_disasters_target_id']['table'] = 'field_data_field_disasters';
   $handler->display->display_options['filters']['field_disasters_target_id']['field'] = 'field_disasters_target_id';
@@ -470,7 +468,7 @@ function hr_news_views_default_views() {
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Content: Locations (field_locations) */
+  /* Filter criterion: Content: Location(s) (field_locations) */
   $handler->display->display_options['filters']['field_locations_target_id']['id'] = 'field_locations_target_id';
   $handler->display->display_options['filters']['field_locations_target_id']['table'] = 'field_data_field_locations';
   $handler->display->display_options['filters']['field_locations_target_id']['field'] = 'field_locations_target_id';
@@ -485,7 +483,7 @@ function hr_news_views_default_views() {
     1 => 0,
     30037204 => 0,
   );
-  /* Filter criterion: Field: Themes (field_themes) (reference filter) */
+  /* Filter criterion: Content: Theme(s) (field_themes) (reference filter) */
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['id'] = 'field_themes_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['table'] = 'field_data_field_themes';
   $handler->display->display_options['filters']['field_themes_target_id_entityreference_filter']['field'] = 'field_themes_target_id_entityreference_filter';
@@ -540,13 +538,14 @@ function hr_news_views_default_views() {
     t('All'),
     t('List'),
     t('Space'),
+    t('Please select a space OR a cluster, but NOT BOTH. Selecting both a space and a cluster will not work.'),
     t('Clusters/Sectors'),
     t('Coordination hubs'),
     t('Disasters'),
     t('Locations'),
     t('Themes'),
-    t('News per space'),
-    t('News'),
+    t('Dynamic'),
+    t('Blog posts'),
   );
   $export['hr_news_panes'] = $view;
 

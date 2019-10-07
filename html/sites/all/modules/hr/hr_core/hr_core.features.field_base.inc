@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_core.features.field_base.inc
@@ -244,7 +245,7 @@ function hr_core_field_default_field_bases() {
   // Exported field_base: 'field_phones'.
   $field_bases['field_phones'] = array(
     'active' => 1,
-    'cardinality' => 4,
+    'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_phones',
@@ -259,6 +260,7 @@ function hr_core_field_default_field_bases() {
     'locked' => 0,
     'module' => 'phone',
     'settings' => array(
+      'enable_numbertype' => 0,
       'entity_translation_sync' => FALSE,
       'numbertype_allowed_values' => array(
         'cell' => 'cell',

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_organizations.views_default.inc
@@ -24,6 +25,7 @@ function hr_organizations_views_default_views() {
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'administer nodes';
   $handler->display->display_options['cache']['type'] = 'time';
   $handler->display->display_options['cache']['results_lifespan'] = '3600';
   $handler->display->display_options['cache']['results_lifespan_custom'] = '0';
@@ -71,6 +73,8 @@ function hr_organizations_views_default_views() {
   /* Display: Entity Reference */
   $handler = $view->new_display('entityreference', 'Entity Reference', 'entityreference_1');
   $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['defaults']['access'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['defaults']['cache'] = FALSE;
   $handler->display->display_options['cache']['type'] = 'time';
   $handler->display->display_options['cache']['results_lifespan'] = '300';
@@ -131,7 +135,7 @@ function hr_organizations_views_default_views() {
   $handler->display->display_options['header']['area']['id'] = 'area';
   $handler->display->display_options['header']['area']['table'] = 'views';
   $handler->display->display_options['header']['area']['field'] = 'area';
-  $handler->display->display_options['header']['area']['content'] = 'You can\'t find your organization in HumanitarianResposne.info ? Fill in <a href="/help/add-new-organization">this form</a> and we will get back to you!';
+  $handler->display->display_options['header']['area']['content'] = 'You can\'t find your organization in HumanitarianResposne.info ? Fill in <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1" target="_blank">this form</a> and we will get back to you!';
   $handler->display->display_options['header']['area']['format'] = 'panopoly_wysiwyg_text';
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Taxonomy term: Term ID */
@@ -391,7 +395,7 @@ function hr_organizations_views_default_views() {
     t('[[field_acronym]]'),
     t('Entity Reference'),
     t('Page'),
-    t('You can\'t find your organization in HumanitarianResposne.info ? Fill in <a href="/help/add-new-organization">this form</a> and we will get back to you!'),
+    t('You can\'t find your organization in HumanitarianResposne.info ? Fill in <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1" target="_blank">this form</a> and we will get back to you!'),
     t('ID'),
     t('.'),
     t('Name'),

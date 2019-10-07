@@ -30,21 +30,6 @@ form .table-responsive {
 
 .node-hr_office-form {
 
-  table thead tr th {
-    background-color: $cd-light-grey;
-
-    label {
-      color: $cd-dark-grey;
-      font-size: 16px;
-      font-weight: normal;
-      text-transform: capitalize;
-    }
-  }
-
-  thead label {
-    padding-left: 10px;
-  }
-
   #actions,
   #edit-field-phones,
   .contact,
@@ -64,31 +49,12 @@ form .table-responsive {
     }
   }
 
-  .chosen-container {
-    font-size: 14px;
-    margin: 20px 20px 0 0;
-    width: 100% !important;
-
-    span {
-      font-weight: normal;
-    }
-
-    .chosen-results li.highlighted {
-      background: $cd-light-grey;
-      color: $cd-dark-grey;
-    }
-  }
-
   .field-name-field-is-coordination-hub {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
-    margin-bottom: 20px;
+    height: 65px;
     padding: 10px;
-  }
-
-  .field-add-more-submit {
-    border: 1px solid #ccc;
   }
 
   @include desktop {
@@ -108,7 +74,7 @@ form .table-responsive {
 
     .contact,
     .form-item-language,
-    .field-name-field-phones {
+    .field-name-field-is-coordination-hub {
       width: 35%;
     }
 
@@ -116,34 +82,4 @@ form .table-responsive {
       width: 100%;
     }
   }
-
-  @include max-width(md) {
-    .field-multiple-drag {
-      height: 30px;
-    }
-
-    /* Override important setting from _page.scss */
-    td {
-      padding-left: 10px !important;
-    }
-  }
-
-  /* Hiding fields. */
-  .hr-add-button {
-    background: none;
-    color: $cd-dark-grey;
-    font-size: 16px;
-    margin-top: 10px;
-    &:hover,
-    &:focus {
-      background-color: $cd-mid-light-grey;
-      color: $cd-mid-grey;
-    }
-  }
-
 }
-
-.js .hr-add-more {
-  display: none;
-}
-

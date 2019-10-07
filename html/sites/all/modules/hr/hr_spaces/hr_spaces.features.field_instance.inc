@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_spaces.features.field_instance.inc
@@ -10,7 +11,7 @@
 function hr_spaces_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-hr_space-body'
+  // Exported field_instance: 'node-hr_space-body'.
   $field_instances['node-hr_space-body'] = array(
     'bundle' => 'hr_space',
     'default_value' => NULL,
@@ -19,9 +20,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'text',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 1,
       ),
       'search_result' => array(
@@ -32,11 +32,8 @@ function hr_spaces_field_default_field_instances() {
       ),
       'teaser' => array(
         'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(
-          'trim_length' => 600,
-        ),
-        'type' => 'text_summary_or_trimmed',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 1,
       ),
     ),
@@ -61,7 +58,7 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_space-field_email'
+  // Exported field_instance: 'node-hr_space-field_email'.
   $field_instances['node-hr_space-field_email'] = array(
     'bundle' => 'hr_space',
     'default_value' => NULL,
@@ -70,9 +67,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'email',
         'settings' => array(),
-        'type' => 'email_default',
+        'type' => 'hidden',
         'weight' => 7,
       ),
       'search_result' => array(
@@ -107,7 +103,7 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_space-field_image'
+  // Exported field_instance: 'node-hr_space-field_image'.
   $field_instances['node-hr_space-field_image'] = array(
     'bundle' => 'hr_space',
     'deleted' => 0,
@@ -115,12 +111,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'image',
-        'settings' => array(
-          'image_link' => '',
-          'image_style' => '',
-        ),
-        'type' => 'image',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 5,
       ),
       'search_result' => array(
@@ -144,6 +136,7 @@ function hr_spaces_field_default_field_instances() {
       'alt_field' => 0,
       'default_image' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => 'space/icons',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
@@ -177,7 +170,103 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_space-field_organizations'
+  // Exported field_instance: 'node-hr_space-field_mailchimp_api_key'.
+  $field_instances['node-hr_space-field_mailchimp_api_key'] = array(
+    'bundle' => 'hr_space',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 10,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mailchimp_api_key',
+    'label' => 'Mailchimp API key',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'linkit' => array(
+        'button_text' => 'Search',
+        'enable' => 0,
+        'profile' => '',
+      ),
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 14,
+    ),
+  );
+
+  // Exported field_instance: 'node-hr_space-field_mailchimp_list'.
+  $field_instances['node-hr_space-field_mailchimp_list'] = array(
+    'bundle' => 'hr_space',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 11,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_mailchimp_list',
+    'label' => 'Mailchimp List',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'apply_chosen' => 1,
+      ),
+      'type' => 'options_select',
+      'weight' => 15,
+    ),
+  );
+
+  // Exported field_instance: 'node-hr_space-field_organizations'.
   $field_instances['node-hr_space-field_organizations'] = array(
     'bundle' => 'hr_space',
     'default_value' => array(),
@@ -187,11 +276,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 14,
       ),
       'search_result' => array(
@@ -236,7 +322,7 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_space-field_social_media'
+  // Exported field_instance: 'node-hr_space-field_social_media'.
   $field_instances['node-hr_space-field_social_media'] = array(
     'bundle' => 'hr_space',
     'default_value' => NULL,
@@ -245,9 +331,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'link_icons',
         'settings' => array(),
-        'type' => 'link_icons',
+        'type' => 'hidden',
         'weight' => 8,
       ),
       'search_result' => array(
@@ -282,8 +367,9 @@ function hr_spaces_field_default_field_instances() {
       'enable_tokens' => 1,
       'entity_translation_sync' => FALSE,
       'linkit' => array(
+        'button_text' => 'Search',
         'enable' => 0,
-        'insert_plugin' => '',
+        'profile' => '',
       ),
       'rel_remove' => 'default',
       'title' => 'none',
@@ -303,7 +389,7 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_space-field_space_category'
+  // Exported field_instance: 'node-hr_space-field_space_category'.
   $field_instances['node-hr_space-field_space_category'] = array(
     'bundle' => 'hr_space',
     'default_value' => NULL,
@@ -312,11 +398,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 4,
       ),
       'search_result' => array(
@@ -356,7 +439,7 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_space-field_space_type'
+  // Exported field_instance: 'node-hr_space-field_space_type'.
   $field_instances['node-hr_space-field_space_type'] = array(
     'bundle' => 'hr_space',
     'default_value' => NULL,
@@ -365,9 +448,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 3,
       ),
       'search_result' => array(
@@ -402,7 +484,7 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_space-field_users'
+  // Exported field_instance: 'node-hr_space-field_users'.
   $field_instances['node-hr_space-field_users'] = array(
     'bundle' => 'hr_space',
     'default_value' => NULL,
@@ -412,11 +494,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 15,
       ),
       'search_result' => array(
@@ -458,7 +537,7 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_space-field_website'
+  // Exported field_instance: 'node-hr_space-field_website'.
   $field_instances['node-hr_space-field_website'] = array(
     'bundle' => 'hr_space',
     'default_value' => NULL,
@@ -467,9 +546,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'link',
         'settings' => array(),
-        'type' => 'link_default',
+        'type' => 'hidden',
         'weight' => 6,
       ),
       'search_result' => array(
@@ -521,7 +599,7 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_space-group_access'
+  // Exported field_instance: 'node-hr_space-group_access'.
   $field_instances['node-hr_space-group_access'] = array(
     'bundle' => 'hr_space',
     'default_value' => array(
@@ -534,9 +612,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 13,
       ),
       'search_result' => array(
@@ -554,8 +631,8 @@ function hr_spaces_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'group_access',
-    'label' => 'Group visibility',
-    'required' => TRUE,
+    'label' => 'Visibility',
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
@@ -571,6 +648,7 @@ function hr_spaces_field_default_field_instances() {
       ),
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
@@ -579,7 +657,7 @@ function hr_spaces_field_default_field_instances() {
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_space-group_group'
+  // Exported field_instance: 'node-hr_space-group_group'.
   $field_instances['node-hr_space-group_group'] = array(
     'bundle' => 'hr_space',
     'default_value' => array(
@@ -592,11 +670,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
-        'settings' => array(
-          'field_name' => FALSE,
-        ),
-        'type' => 'og_group_subscribe',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'search_result' => array(
@@ -644,7 +719,7 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_space-og_roles_permissions'
+  // Exported field_instance: 'node-hr_space-og_roles_permissions'.
   $field_instances['node-hr_space-og_roles_permissions'] = array(
     'bundle' => 'hr_space',
     'default_value' => array(
@@ -657,9 +732,8 @@ function hr_spaces_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 12,
       ),
       'search_result' => array(
@@ -706,7 +780,7 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_space-title_field'
+  // Exported field_instance: 'node-hr_space-title_field'.
   $field_instances['node-hr_space-title_field'] = array(
     'bundle' => 'hr_space',
     'default_value' => NULL,
@@ -755,7 +829,7 @@ function hr_spaces_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_space_category-name_field'
+  // Exported field_instance: 'taxonomy_term-hr_space_category-name_field'.
   $field_instances['taxonomy_term-hr_space_category-name_field'] = array(
     'bundle' => 'hr_space_category',
     'default_value' => NULL,
@@ -801,7 +875,6 @@ function hr_spaces_field_default_field_instances() {
   t('Focal Points');
   t('Group');
   t('Group roles and permissions');
-  t('Group visibility');
   t('Icon');
   t('Mailchimp API key');
   t('Mailchimp List');
@@ -810,6 +883,7 @@ function hr_spaces_field_default_field_instances() {
   t('Social media');
   t('Title');
   t('Type');
+  t('Visibility');
   t('Website');
 
   return $field_instances;
