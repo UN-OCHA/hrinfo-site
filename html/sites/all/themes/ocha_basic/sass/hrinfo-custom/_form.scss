@@ -34,18 +34,6 @@ form .table-responsive {
     padding: 10px 0;
   }
 
-  // To override hiding table headers in _page.scss.
-  @include max-width(md) {
-    thead tr {
-      position: relative;
-      top: 0;
-      left: 0;
-    }
-    td {
-      padding-left: 10px !important;
-    }
-  }
-
   label {
     font-size: 16px;
   }
@@ -57,7 +45,7 @@ form .table-responsive {
     text-transform: capitalize;
   }
 
-  form thead label {
+  thead label {
     padding-left: 10px;
   }
 
@@ -76,9 +64,16 @@ form .table-responsive {
     }
   }
 
+  // To override hiding table headers in _page.scss.
   @include max-width(md) {
     .field-multiple-drag {
       height: 30px;
+    }
+
+    thead tr {
+      position: relative;
+      top: 0;
+      left: 0;
     }
 
     /* Override !important setting from _page.scss */
