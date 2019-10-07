@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_assessments.strongarm.inc
@@ -28,17 +29,39 @@ function hr_assessments_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__hr_assessment';
   $strongarm->value = array(
-    'view_modes' => array(),
+    'view_modes' => array(
+      'teaser' => array(
+        'custom_settings' => TRUE,
+      ),
+      'search_result' => array(
+        'custom_settings' => TRUE,
+      ),
+      'full' => array(
+        'custom_settings' => FALSE,
+      ),
+      'rss' => array(
+        'custom_settings' => FALSE,
+      ),
+      'ical' => array(
+        'custom_settings' => FALSE,
+      ),
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
+      'token' => array(
+        'custom_settings' => FALSE,
+      ),
+    ),
     'extra_fields' => array(
       'form' => array(
         'title' => array(
           'weight' => '-5',
         ),
         'path' => array(
-          'weight' => '29',
+          'weight' => '28',
         ),
         'redirect' => array(
-          'weight' => '28',
+          'weight' => '27',
         ),
         'language' => array(
           'weight' => '0',
@@ -76,11 +99,7 @@ function hr_assessments_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'node_options_hr_assessment';
-  $strongarm->value = array(
-    0 => 'status',
-    1 => 'promote',
-    2 => 'revision',
-  );
+  $strongarm->value = array();
   $export['node_options_hr_assessment'] = $strongarm;
 
   $strongarm = new stdClass();
@@ -162,6 +181,13 @@ function hr_assessments_strongarm() {
   $strongarm->name = 'pathauto_node_hr_assessment_pattern';
   $strongarm->value = '[node:og-group-ref:0:url:path]/assessment/[node:title]';
   $export['pathauto_node_hr_assessment_pattern'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'pathauto_taxonomy_term_hr_population_type_pattern';
+  $strongarm->value = '';
+  $export['pathauto_taxonomy_term_hr_population_type_pattern'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

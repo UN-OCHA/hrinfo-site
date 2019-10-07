@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_locations.features.taxonomy.inc
@@ -13,9 +14,12 @@ function hr_locations_taxonomy_default_vocabularies() {
       'name' => 'Location',
       'machine_name' => 'hr_location',
       'description' => '',
-      'hierarchy' => 1,
+      'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,
+      'path' => array(
+        'pathauto' => 0,
+      ),
     ),
   );
 }

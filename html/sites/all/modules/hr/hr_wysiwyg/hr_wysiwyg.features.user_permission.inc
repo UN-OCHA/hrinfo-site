@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_wysiwyg.features.user_permission.inc
@@ -15,6 +16,7 @@ function hr_wysiwyg_user_default_permissions() {
     'name' => 'use text format full_html',
     'roles' => array(
       'administrator' => 'administrator',
+      'editor' => 'editor',
     ),
     'module' => 'filter',
   );
@@ -24,6 +26,7 @@ function hr_wysiwyg_user_default_permissions() {
     'name' => 'use text format hr_wysiwyg_trusted',
     'roles' => array(
       'administrator' => 'administrator',
+      'authenticated user' => 'authenticated user',
       'editor' => 'editor',
     ),
     'module' => 'filter',

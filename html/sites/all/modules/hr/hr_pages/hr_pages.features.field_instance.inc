@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_pages.features.field_instance.inc
@@ -10,7 +11,7 @@
 function hr_pages_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-hr_page-body'
+  // Exported field_instance: 'node-hr_page-body'.
   $field_instances['node-hr_page-body'] = array(
     'bundle' => 'hr_page',
     'default_value' => NULL,
@@ -19,9 +20,8 @@ function hr_pages_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'text',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 1,
       ),
       'search_result' => array(
@@ -32,11 +32,8 @@ function hr_pages_field_default_field_instances() {
       ),
       'teaser' => array(
         'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(
-          'trim_length' => 600,
-        ),
-        'type' => 'text_summary_or_trimmed',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 1,
       ),
     ),
@@ -61,7 +58,7 @@ function hr_pages_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_page-field_bundles'
+  // Exported field_instance: 'node-hr_page-field_bundles'.
   $field_instances['node-hr_page-field_bundles'] = array(
     'bundle' => 'hr_page',
     'default_value' => NULL,
@@ -71,11 +68,8 @@ function hr_pages_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 3,
       ),
       'search_result' => array(
@@ -127,7 +121,7 @@ function hr_pages_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_page-field_page_menu'
+  // Exported field_instance: 'node-hr_page-field_page_menu'.
   $field_instances['node-hr_page-field_page_menu'] = array(
     'bundle' => 'hr_page',
     'default_value' => array(
@@ -140,9 +134,8 @@ function hr_pages_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 5,
       ),
       'search_result' => array(
@@ -177,7 +170,7 @@ function hr_pages_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_page-group_content_access'
+  // Exported field_instance: 'node-hr_page-group_content_access'.
   $field_instances['node-hr_page-group_content_access'] = array(
     'bundle' => 'hr_page',
     'default_value' => array(
@@ -190,9 +183,8 @@ function hr_pages_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 4,
       ),
       'search_result' => array(
@@ -210,8 +202,8 @@ function hr_pages_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'group_content_access',
-    'label' => 'Group content visibility',
-    'required' => TRUE,
+    'label' => 'Content visibility',
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
@@ -227,6 +219,7 @@ function hr_pages_field_default_field_instances() {
       ),
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'options',
       'settings' => array(
         'apply_chosen' => 0,
@@ -237,7 +230,7 @@ function hr_pages_field_default_field_instances() {
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_page-og_group_ref'
+  // Exported field_instance: 'node-hr_page-og_group_ref'.
   $field_instances['node-hr_page-og_group_ref'] = array(
     'bundle' => 'hr_page',
     'default_value' => NULL,
@@ -247,9 +240,8 @@ function hr_pages_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
         'settings' => array(),
-        'type' => 'og_list_default',
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'search_result' => array(
@@ -267,7 +259,7 @@ function hr_pages_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Space(s)',
+    'label' => 'Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -317,7 +309,7 @@ function hr_pages_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_page-title_field'
+  // Exported field_instance: 'node-hr_page-title_field'.
   $field_instances['node-hr_page-title_field'] = array(
     'bundle' => 'hr_page',
     'default_value' => NULL,
@@ -370,10 +362,10 @@ function hr_pages_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Body');
   t('Clusters/Sectors');
-  t('Group content visibility');
+  t('Content visibility');
   t('Hide vertical menu');
-  t('Space(s)');
   t('Title');
+  t('Webspace(s)');
 
   return $field_instances;
 }

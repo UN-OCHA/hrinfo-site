@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_documents.strongarm.inc
@@ -78,10 +79,10 @@ function hr_documents_strongarm() {
           'weight' => '-5',
         ),
         'path' => array(
-          'weight' => '19',
+          'weight' => '18',
         ),
         'redirect' => array(
-          'weight' => '20',
+          'weight' => '19',
         ),
         'language' => array(
           'weight' => '0',
@@ -94,21 +95,43 @@ function hr_documents_strongarm() {
         'hr_core_share_button' => array(
           'search_result' => array(
             'weight' => '0',
-            'visible' => TRUE,
+            'visible' => FALSE,
           ),
           'default' => array(
             'weight' => '0',
-            'visible' => TRUE,
+            'visible' => FALSE,
+          ),
+          'teaser' => array(
+            'weight' => '0',
+            'visible' => FALSE,
           ),
         ),
         'hr_core_read_more_button' => array(
           'search_result' => array(
             'weight' => '0',
-            'visible' => TRUE,
+            'visible' => FALSE,
           ),
           'default' => array(
             'weight' => '0',
-            'visible' => TRUE,
+            'visible' => FALSE,
+          ),
+          'teaser' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+        ),
+        'hr_core_files_download_button' => array(
+          'default' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+          'teaser' => array(
+            'weight' => '0',
+            'visible' => FALSE,
+          ),
+          'search_result' => array(
+            'weight' => '0',
+            'visible' => FALSE,
           ),
         ),
       ),

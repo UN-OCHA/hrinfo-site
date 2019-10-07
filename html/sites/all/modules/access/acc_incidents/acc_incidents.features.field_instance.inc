@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_incidents.features.field_instance.inc
@@ -10,7 +11,8 @@
 function acc_incidents_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'field_collection_item-field_acc_impacts-field_acc_impact_type'
+  // Exported field_instance:
+  // 'field_collection_item-field_acc_impacts-field_acc_impact_type'.
   $field_instances['field_collection_item-field_acc_impacts-field_acc_impact_type'] = array(
     'bundle' => 'field_acc_impacts',
     'default_value' => NULL,
@@ -22,9 +24,16 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
+        'weight' => 0,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 0,
       ),
     ),
@@ -52,7 +61,8 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'field_collection_item-field_acc_impacts-field_acc_impact_value'
+  // Exported field_instance:
+  // 'field_collection_item-field_acc_impacts-field_acc_impact_value'.
   $field_instances['field_collection_item-field_acc_impacts-field_acc_impact_value'] = array(
     'bundle' => 'field_acc_impacts',
     'default_value' => NULL,
@@ -70,6 +80,12 @@ function acc_incidents_field_default_field_instances() {
         ),
         'type' => 'number_integer',
         'weight' => 1,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
       ),
     ),
     'entity_type' => 'field_collection_item',
@@ -93,7 +109,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-body'
+  // Exported field_instance: 'node-acc_incident-body'.
   $field_instances['node-acc_incident-body'] = array(
     'bundle' => 'acc_incident',
     'default_value' => NULL,
@@ -141,7 +157,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-field_acc_attach_file'
+  // Exported field_instance: 'node-acc_incident-field_acc_attach_file'.
   $field_instances['node-acc_incident-field_acc_attach_file'] = array(
     'bundle' => 'acc_incident',
     'default_value' => array(),
@@ -175,6 +191,7 @@ function acc_incidents_field_default_field_instances() {
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
+      'file_chooser_field_enabled' => FALSE,
       'file_directory' => '',
       'file_extensions' => 'txt docx doc xls xlsx jpg png pdf',
       'max_filesize' => '',
@@ -206,7 +223,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-field_acc_date'
+  // Exported field_instance: 'node-acc_incident-field_acc_date'.
   $field_instances['node-acc_incident-field_acc_date'] = array(
     'bundle' => 'acc_incident',
     'deleted' => 0,
@@ -221,6 +238,7 @@ function acc_incidents_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
           'show_repeat_rule' => 'show',
         ),
         'type' => 'date_default',
@@ -235,6 +253,7 @@ function acc_incidents_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
           'show_repeat_rule' => 'show',
         ),
         'type' => 'date_default',
@@ -277,7 +296,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-field_acc_impacts'
+  // Exported field_instance: 'node-acc_incident-field_acc_impacts'.
   $field_instances['node-acc_incident-field_acc_impacts'] = array(
     'bundle' => 'acc_incident',
     'default_value' => NULL,
@@ -292,6 +311,7 @@ function acc_incidents_field_default_field_instances() {
           'delete' => 'Delete',
           'description' => TRUE,
           'edit' => 'Edit',
+          'translate' => 'Translate',
           'view_mode' => 'full',
         ),
         'type' => 'field_collection_view',
@@ -327,7 +347,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-field_acc_type'
+  // Exported field_instance: 'node-acc_incident-field_acc_type'.
   $field_instances['node-acc_incident-field_acc_type'] = array(
     'bundle' => 'acc_incident',
     'default_value' => NULL,
@@ -339,6 +359,7 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -348,6 +369,7 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -393,7 +415,8 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-field_affected_organization_type'
+  // Exported field_instance:
+  // 'node-acc_incident-field_affected_organization_type'.
   $field_instances['node-acc_incident-field_affected_organization_type'] = array(
     'bundle' => 'acc_incident',
     'default_value' => NULL,
@@ -405,6 +428,7 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -420,6 +444,7 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -453,7 +478,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-field_affected_organizations'
+  // Exported field_instance: 'node-acc_incident-field_affected_organizations'.
   $field_instances['node-acc_incident-field_affected_organizations'] = array(
     'bundle' => 'acc_incident',
     'default_value' => NULL,
@@ -465,6 +490,7 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -510,18 +536,19 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-field_locations'
+  // Exported field_instance: 'node-acc_incident-field_locations'.
   $field_instances['node-acc_incident-field_locations'] = array(
     'bundle' => 'acc_incident',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).',
     'display' => array(
       'default' => array(
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -531,6 +558,7 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -560,7 +588,7 @@ function acc_incidents_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 1,
+      'active' => TRUE,
       'module' => 'shs',
       'settings' => array(
         'shs' => array(
@@ -576,7 +604,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-field_responsible_actors'
+  // Exported field_instance: 'node-acc_incident-field_responsible_actors'.
   $field_instances['node-acc_incident-field_responsible_actors'] = array(
     'bundle' => 'acc_incident',
     'default_value' => NULL,
@@ -588,6 +616,7 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -633,7 +662,8 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-field_responsible_organization_t'
+  // Exported field_instance:
+  // 'node-acc_incident-field_responsible_organization_t'.
   $field_instances['node-acc_incident-field_responsible_organization_t'] = array(
     'bundle' => 'acc_incident',
     'default_value' => NULL,
@@ -645,6 +675,7 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -660,6 +691,7 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -693,7 +725,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-field_type_of_affectee'
+  // Exported field_instance: 'node-acc_incident-field_type_of_affectee'.
   $field_instances['node-acc_incident-field_type_of_affectee'] = array(
     'bundle' => 'acc_incident',
     'default_value' => NULL,
@@ -705,6 +737,7 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -750,7 +783,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-acc_incident-og_group_ref'
+  // Exported field_instance: 'node-acc_incident-og_group_ref'.
   $field_instances['node-acc_incident-og_group_ref'] = array(
     'bundle' => 'acc_incident',
     'default_value' => NULL,
@@ -780,7 +813,7 @@ function acc_incidents_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Space(s)',
+    'label' => 'Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -830,7 +863,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-acc_impact_types-name_field'
+  // Exported field_instance: 'taxonomy_term-acc_impact_types-name_field'.
   $field_instances['taxonomy_term-acc_impact_types-name_field'] = array(
     'bundle' => 'acc_impact_types',
     'default_value' => NULL,
@@ -867,7 +900,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-acc_incident_types-name_field'
+  // Exported field_instance: 'taxonomy_term-acc_incident_types-name_field'.
   $field_instances['taxonomy_term-acc_incident_types-name_field'] = array(
     'bundle' => 'acc_incident_types',
     'default_value' => NULL,
@@ -904,7 +937,8 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-acc_responsible_actors-field_organization_type'
+  // Exported field_instance:
+  // 'taxonomy_term-acc_responsible_actors-field_organization_type'.
   $field_instances['taxonomy_term-acc_responsible_actors-field_organization_type'] = array(
     'bundle' => 'acc_responsible_actors',
     'default_value' => NULL,
@@ -916,6 +950,7 @@ function acc_incidents_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'bypass_access' => FALSE,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -946,7 +981,7 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-acc_responsible_actors-name_field'
+  // Exported field_instance: 'taxonomy_term-acc_responsible_actors-name_field'.
   $field_instances['taxonomy_term-acc_responsible_actors-name_field'] = array(
     'bundle' => 'acc_responsible_actors',
     'default_value' => NULL,
@@ -983,7 +1018,8 @@ function acc_incidents_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-acc_type_of_aid_workers-name_field'
+  // Exported field_instance:
+  // 'taxonomy_term-acc_type_of_aid_workers-name_field'.
   $field_instances['taxonomy_term-acc_type_of_aid_workers-name_field'] = array(
     'bundle' => 'acc_type_of_aid_workers',
     'default_value' => NULL,
@@ -1032,10 +1068,11 @@ function acc_incidents_field_default_field_instances() {
   t('Name');
   t('Responsible Organization Type');
   t('Responsible actor');
-  t('Space(s)');
+  t('Select from the menu the country(ies) the document is about. You can add more specific locations by selecting multiple layers (region, province, town).');
   t('Type');
   t('Type of affectee');
   t('Value');
+  t('Webspace(s)');
 
   return $field_instances;
 }

@@ -1,7 +1,8 @@
 <?php
+
 /**
  * @file
- * hr_core.features.field_base.inc
+ * hid_profiles.features.field_base.inc
  */
 
 /**
@@ -10,7 +11,7 @@
 function hid_profiles_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_hid_contact_ref'
+  // Exported field_base: 'field_hid_contact_ref'.
   $field_bases['field_hid_contact_ref'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -35,7 +36,6 @@ function hid_profiles_field_default_field_bases() {
     'translatable' => 0,
     'type' => 'hid_contact_reference',
   );
-
 
   return $field_bases;
 }

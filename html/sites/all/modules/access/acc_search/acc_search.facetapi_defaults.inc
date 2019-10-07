@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_search.facetapi_defaults.inc

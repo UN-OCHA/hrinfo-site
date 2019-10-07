@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_sectors.features.og_features_permission.inc

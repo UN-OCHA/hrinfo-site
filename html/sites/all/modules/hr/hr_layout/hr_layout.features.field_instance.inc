@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_layout.features.field_instance.inc
@@ -10,7 +11,8 @@
 function hr_layout_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'fieldable_panels_pane-fieldable_panels_pane-description_field'
+  // Exported field_instance:
+  // 'fieldable_panels_pane-fieldable_panels_pane-description_field'.
   $field_instances['fieldable_panels_pane-fieldable_panels_pane-description_field'] = array(
     'bundle' => 'fieldable_panels_pane',
     'default_value' => NULL,
@@ -68,7 +70,8 @@ function hr_layout_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'fieldable_panels_pane-fieldable_panels_pane-title_field'
+  // Exported field_instance:
+  // 'fieldable_panels_pane-fieldable_panels_pane-title_field'.
   $field_instances['fieldable_panels_pane-fieldable_panels_pane-title_field'] = array(
     'bundle' => 'fieldable_panels_pane',
     'default_value' => NULL,

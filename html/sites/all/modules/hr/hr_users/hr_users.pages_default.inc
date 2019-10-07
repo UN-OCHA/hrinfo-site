@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_users.pages_default.inc
@@ -94,32 +95,34 @@ function hr_users_default_page_manager_pages() {
   $display->cache = array();
   $display->title = '';
   $display->uuid = '83f22f06-0840-485a-be75-cc9bf6bef892';
+  $display->storage_type = 'page_manager';
+  $display->storage_id = 'page_hr_user_check_ins_panel_context';
   $display->content = array();
   $display->panels = array();
-    $pane = new stdClass();
-    $pane->pid = 'new-6a11c7c6-b8d4-4f6d-9ace-a107c2d436f7';
-    $pane->panel = 'contentmain';
-    $pane->type = 'views_panes';
-    $pane->subtype = 'hr_user_memberships-checkins';
-    $pane->shown = TRUE;
-    $pane->access = array();
-    $pane->configuration = array(
-      'context' => array(
-        0 => 'context_user_1',
-      ),
-    );
-    $pane->cache = array();
-    $pane->style = array(
-      'settings' => NULL,
-      'style' => 'hr_highlighted',
-    );
-    $pane->css = array();
-    $pane->extras = array();
-    $pane->position = 1;
-    $pane->locks = array();
-    $pane->uuid = '6a11c7c6-b8d4-4f6d-9ace-a107c2d436f7';
-    $display->content['new-6a11c7c6-b8d4-4f6d-9ace-a107c2d436f7'] = $pane;
-    $display->panels['contentmain'][1] = 'new-6a11c7c6-b8d4-4f6d-9ace-a107c2d436f7';
+  $pane = new stdClass();
+  $pane->pid = 'new-6a11c7c6-b8d4-4f6d-9ace-a107c2d436f7';
+  $pane->panel = 'contentmain';
+  $pane->type = 'views_panes';
+  $pane->subtype = 'hr_user_memberships-checkins';
+  $pane->shown = TRUE;
+  $pane->access = array();
+  $pane->configuration = array(
+    'context' => array(
+      0 => 'context_user_1',
+    ),
+  );
+  $pane->cache = array();
+  $pane->style = array(
+    'settings' => NULL,
+    'style' => 'hr_highlighted',
+  );
+  $pane->css = array();
+  $pane->extras = array();
+  $pane->position = 1;
+  $pane->locks = array();
+  $pane->uuid = '6a11c7c6-b8d4-4f6d-9ace-a107c2d436f7';
+  $display->content['new-6a11c7c6-b8d4-4f6d-9ace-a107c2d436f7'] = $pane;
+  $display->panels['contentmain'][0] = 'new-6a11c7c6-b8d4-4f6d-9ace-a107c2d436f7';
   $display->hide_title = PANELS_TITLE_NONE;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;

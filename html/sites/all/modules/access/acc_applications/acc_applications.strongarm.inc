@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * acc_applications.strongarm.inc
