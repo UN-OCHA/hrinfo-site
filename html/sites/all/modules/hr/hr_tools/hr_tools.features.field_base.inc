@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_tools.features.field_base.inc
@@ -10,14 +11,13 @@
 function hr_tools_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_toolbox_cat_type'
+  // Exported field_base: 'field_toolbox_cat_type'.
   $field_bases['field_toolbox_cat_type'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_toolbox_cat_type',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -38,21 +38,13 @@ function hr_tools_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_toolbox_categories'
+  // Exported field_base: 'field_toolbox_categories'.
   $field_bases['field_toolbox_categories'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_toolbox_categories',
-    'foreign keys' => array(
-      'node' => array(
-        'columns' => array(
-          'target_id' => 'nid',
-        ),
-        'table' => 'node',
-      ),
-    ),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -62,7 +54,7 @@ function hr_tools_field_default_field_bases() {
     'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'handler' => 'base',
+      'handler' => 'ref_hr_core',
       'handler_settings' => array(
         'behaviors' => array(
           'views-select-list' => array(
@@ -83,14 +75,13 @@ function hr_tools_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_toolbox_item_type'
+  // Exported field_base: 'field_toolbox_item_type'.
   $field_bases['field_toolbox_item_type'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_toolbox_item_type',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',

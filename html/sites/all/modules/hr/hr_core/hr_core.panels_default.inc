@@ -42,6 +42,8 @@ function hr_core_default_panels_mini() {
   $display->cache = array();
   $display->title = '';
   $display->uuid = '87e7df65-5d1d-422b-b62d-1ef782415427';
+  $display->storage_type = 'panels_mini';
+  $display->storage_id = 'hr_node_links';
   $display->content = array();
   $display->panels = array();
   $pane = new stdClass();

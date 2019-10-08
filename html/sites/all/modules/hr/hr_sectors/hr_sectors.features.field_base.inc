@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_sectors.features.field_base.inc
@@ -10,7 +11,7 @@
 function hr_sectors_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_sector'
+  // Exported field_base: 'field_sector'.
   $field_bases['field_sector'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -26,7 +27,7 @@ function hr_sectors_field_default_field_bases() {
     'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'handler' => 'base',
+      'handler' => 'ref_hr_core',
       'handler_settings' => array(
         'behaviors' => array(
           'views-select-list' => array(
@@ -47,7 +48,7 @@ function hr_sectors_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_sector_type'
+  // Exported field_base: 'field_sector_type'.
   $field_bases['field_sector_type'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -78,13 +79,16 @@ function hr_sectors_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_sectors'
+  // Exported field_base: 'field_sectors'.
   $field_bases['field_sectors'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_sectors',
+    'field_permissions' => array(
+      'type' => 0,
+    ),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -94,7 +98,7 @@ function hr_sectors_field_default_field_bases() {
     'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'handler' => 'base',
+      'handler' => 'ref_hr_core',
       'handler_settings' => array(
         'behaviors' => array(
           'views-select-list' => array(

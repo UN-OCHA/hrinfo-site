@@ -60,11 +60,8 @@ function hr_search_default_search_api_index() {
                 "name" : "contact_real_name",
                 "type" : "fulltext",
                 "separator" : "\\n\\n",
-                "fields" : [
-                  "author:profile_main:field_first_name",
-                  "author:profile_main:field_last_name"
-                ],
-                "description" : "A Fulltext aggregation of the following fields: Author \\u00bb Main profile profile \\u00bb First name, Author \\u00bb Main profile profile \\u00bb Last name."
+                "fields" : [ "author" ],
+                "description" : "A Fulltext aggregation of the following fields: Author."
               },
               "search_api_aggregation_2" : {
                 "name" : "indicator_code_fulltext",
@@ -72,6 +69,20 @@ function hr_search_default_search_api_index() {
                 "separator" : "\\n\\n",
                 "fields" : [ "field_ind_code" ],
                 "description" : "A Fulltext aggregation of the following fields: Code."
+              },
+              "search_api_aggregation_3" : {
+                "name" : "locations_lat",
+                "type" : "max",
+                "separator" : "\\n\\n",
+                "fields" : [ "field_locations:field_geofield:lat" ],
+                "description" : "A Maximum aggregation of the following fields: Location(s) \\u00bb Geofield \\u00bb Latitude."
+              },
+              "search_api_aggregation_4" : {
+                "name" : "locations_lat",
+                "type" : "max",
+                "separator" : "\\n\\n",
+                "fields" : [ "field_locations:field_geofield:lon" ],
+                "description" : "A Maximum aggregation of the following fields: Location(s) \\u00bb Geofield \\u00bb Longitude."
               }
             }
           }
@@ -86,8 +97,7 @@ function hr_search_default_search_api_index() {
               "field_location:parents_all" : "field_location:parents_all",
               "field_ind_cross_tagging:parents_all" : "field_ind_cross_tagging:parents_all",
               "field_ind_domain:parents_all" : "field_ind_domain:parents_all",
-              "field_infographic_type:parents_all" : "field_infographic_type:parents_all",
-              "field_acc_geo_location_dest:parents_all" : "field_acc_geo_location_dest:parents_all"
+              "field_infographic_type:parents_all" : "field_infographic_type:parents_all"
             }
           }
         },
@@ -255,9 +265,7 @@ function hr_search_default_search_api_index() {
               "field_themes:name" : true,
               "field_themes:field_acronym" : true,
               "field_document_type:name" : true,
-              "field_document_type:field_acronym" : true,
-              "author:profile_main:field_first_name" : true,
-              "author:profile_main:field_last_name" : true
+              "field_document_type:field_acronym" : true
             },
             "exceptions" : "texan=texa"
           }
@@ -278,8 +286,6 @@ function hr_search_default_search_api_index() {
       },
       "fields" : {
         "author" : { "type" : "integer", "entity_type" : "user" },
-        "author:profile_main:field_first_name" : { "type" : "text" },
-        "author:profile_main:field_last_name" : { "type" : "text" },
         "body:value" : { "type" : "text" },
         "changed" : { "type" : "date" },
         "created" : { "type" : "date" },
@@ -381,7 +387,7 @@ function hr_search_default_search_api_server() {
       "scheme" : "http",
       "host" : "solr",
       "port" : "8983",
-      "path" : "\\/solr\\/user-owned",
+      "path" : "\\/solr\\/core0",
       "http_user" : "",
       "http_pass" : "",
       "excerpt" : 0,
@@ -392,7 +398,6 @@ function hr_search_default_search_api_server() {
       "http_method" : "POST",
       "log_query" : 0,
       "log_response" : 0,
-      "commits_disabled" : 0,
       "autocorrect_spell" : 1,
       "autocorrect_suggest_words" : 1
     },

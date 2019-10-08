@@ -1,5 +1,3 @@
 <?php
-/**
- * @file
- * hr_notifications.features.inc
- */
+
+// This file is deprecated and can be removed.

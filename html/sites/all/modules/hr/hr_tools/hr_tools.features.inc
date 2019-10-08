@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_tools.features.inc
@@ -48,5 +49,6 @@ function hr_tools_node_info() {
       'help' => '',
     ),
   );
+  drupal_alter('node_info', $items);
   return $items;
 }

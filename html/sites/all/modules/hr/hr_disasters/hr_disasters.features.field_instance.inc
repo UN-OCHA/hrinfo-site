@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_disasters.features.field_instance.inc
@@ -10,7 +11,7 @@
 function hr_disasters_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-hr_disaster-body'
+  // Exported field_instance: 'node-hr_disaster-body'.
   $field_instances['node-hr_disaster-body'] = array(
     'bundle' => 'hr_disaster',
     'default_value' => NULL,
@@ -19,9 +20,8 @@ function hr_disasters_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'text',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 1,
       ),
       'search_result' => array(
@@ -32,11 +32,8 @@ function hr_disasters_field_default_field_instances() {
       ),
       'teaser' => array(
         'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(
-          'trim_length' => 600,
-        ),
-        'type' => 'text_summary_or_trimmed',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 1,
       ),
     ),
@@ -61,7 +58,7 @@ function hr_disasters_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_disaster-field_disaster_status'
+  // Exported field_instance: 'node-hr_disaster-field_disaster_status'.
   $field_instances['node-hr_disaster-field_disaster_status'] = array(
     'bundle' => 'hr_disaster',
     'default_value' => NULL,
@@ -70,9 +67,8 @@ function hr_disasters_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 5,
       ),
       'search_result' => array(
@@ -107,7 +103,7 @@ function hr_disasters_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_disaster-field_glide_number'
+  // Exported field_instance: 'node-hr_disaster-field_glide_number'.
   $field_instances['node-hr_disaster-field_glide_number'] = array(
     'bundle' => 'hr_disaster',
     'default_value' => NULL,
@@ -116,9 +112,8 @@ function hr_disasters_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'text',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 3,
       ),
       'search_result' => array(
@@ -154,7 +149,7 @@ function hr_disasters_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_disaster-field_glide_type'
+  // Exported field_instance: 'node-hr_disaster-field_glide_type'.
   $field_instances['node-hr_disaster-field_glide_type'] = array(
     'bundle' => 'hr_disaster',
     'default_value' => NULL,
@@ -164,11 +159,8 @@ function hr_disasters_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 4,
       ),
       'search_result' => array(
@@ -211,7 +203,8 @@ function hr_disasters_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_disaster-field_hr_disaster_sync_disaster'
+  // Exported field_instance:
+  // 'node-hr_disaster-field_hr_disaster_sync_disaster'.
   $field_instances['node-hr_disaster-field_hr_disaster_sync_disaster'] = array(
     'bundle' => 'hr_disaster',
     'default_value' => array(
@@ -224,9 +217,8 @@ function hr_disasters_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 9,
       ),
       'search_result' => array(
@@ -261,7 +253,52 @@ function hr_disasters_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_disaster-field_reliefweb_id'
+  // Exported field_instance: 'node-hr_disaster-field_related_glides'.
+  $field_instances['node-hr_disaster-field_related_glides'] = array(
+    'bundle' => 'hr_disaster',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 10,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_related_glides',
+    'label' => 'Related glides',
+    'required' => FALSE,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 14,
+    ),
+  );
+
+  // Exported field_instance: 'node-hr_disaster-field_reliefweb_id'.
   $field_instances['node-hr_disaster-field_reliefweb_id'] = array(
     'bundle' => 'hr_disaster',
     'default_value' => NULL,
@@ -270,14 +307,8 @@ function hr_disasters_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 0,
-          'thousand_separator' => ' ',
-        ),
-        'type' => 'number_integer',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 8,
       ),
       'search_result' => array(
@@ -314,7 +345,7 @@ function hr_disasters_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_disaster-group_access'
+  // Exported field_instance: 'node-hr_disaster-group_access'.
   $field_instances['node-hr_disaster-group_access'] = array(
     'bundle' => 'hr_disaster',
     'default_value' => array(
@@ -327,9 +358,8 @@ function hr_disasters_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'hidden',
         'weight' => 7,
       ),
       'search_result' => array(
@@ -347,8 +377,8 @@ function hr_disasters_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'group_access',
-    'label' => 'Group visibility',
-    'required' => TRUE,
+    'label' => 'Visibility',
+    'required' => 1,
     'settings' => array(
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
@@ -364,6 +394,7 @@ function hr_disasters_field_default_field_instances() {
       ),
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
@@ -372,7 +403,7 @@ function hr_disasters_field_default_field_instances() {
     'widget_type' => 'options_select',
   );
 
-  // Exported field_instance: 'node-hr_disaster-group_group'
+  // Exported field_instance: 'node-hr_disaster-group_group'.
   $field_instances['node-hr_disaster-group_group'] = array(
     'bundle' => 'hr_disaster',
     'default_value' => array(
@@ -385,11 +416,8 @@ function hr_disasters_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
-        'settings' => array(
-          'field_name' => FALSE,
-        ),
-        'type' => 'og_group_subscribe',
+        'settings' => array(),
+        'type' => 'hidden',
         'weight' => 6,
       ),
       'search_result' => array(
@@ -438,7 +466,7 @@ function hr_disasters_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_disaster-og_group_ref'
+  // Exported field_instance: 'node-hr_disaster-og_group_ref'.
   $field_instances['node-hr_disaster-og_group_ref'] = array(
     'bundle' => 'hr_disaster',
     'default_value' => NULL,
@@ -448,9 +476,8 @@ function hr_disasters_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'og_ui',
         'settings' => array(),
-        'type' => 'og_list_default',
+        'type' => 'hidden',
         'weight' => 0,
       ),
       'search_result' => array(
@@ -468,7 +495,7 @@ function hr_disasters_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Space(s)',
+    'label' => 'Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -518,7 +545,7 @@ function hr_disasters_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_disaster-title_field'
+  // Exported field_instance: 'node-hr_disaster-title_field'.
   $field_instances['node-hr_disaster-title_field'] = array(
     'bundle' => 'hr_disaster',
     'default_value' => NULL,
@@ -567,7 +594,7 @@ function hr_disasters_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_glide_type-description_field'
+  // Exported field_instance: 'taxonomy_term-hr_glide_type-description_field'.
   $field_instances['taxonomy_term-hr_glide_type-description_field'] = array(
     'bundle' => 'hr_glide_type',
     'default_value' => NULL,
@@ -606,7 +633,7 @@ function hr_disasters_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_glide_type-field_acronym'
+  // Exported field_instance: 'taxonomy_term-hr_glide_type-field_acronym'.
   $field_instances['taxonomy_term-hr_glide_type-field_acronym'] = array(
     'bundle' => 'hr_glide_type',
     'default_value' => NULL,
@@ -641,7 +668,7 @@ function hr_disasters_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'taxonomy_term-hr_glide_type-name_field'
+  // Exported field_instance: 'taxonomy_term-hr_glide_type-name_field'.
   $field_instances['taxonomy_term-hr_glide_type-name_field'] = array(
     'bundle' => 'hr_glide_type',
     'default_value' => NULL,
@@ -688,13 +715,14 @@ function hr_disasters_field_default_field_instances() {
   t('GLIDE Number');
   t('GLIDE Type');
   t('Group');
-  t('Group visibility');
   t('If checked, this disaster will not be synced with ReliefWeb.');
   t('Name');
+  t('Related glides');
   t('Reliefweb ID');
-  t('Space(s)');
   t('Status');
   t('Title');
+  t('Visibility');
+  t('Webspace(s)');
 
   return $field_instances;
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_locations.features.inc
@@ -20,16 +21,7 @@ function hr_locations_ctools_plugin_api($module = NULL, $api = NULL) {
 }
 
 /**
- * Implements hook_ctools_plugin_directory().
- */
-function hr_locations_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'restful') {
-    return 'plugins/' . $plugin;
-  }
-}
-
-/**
- * Implements hook_views_api()
+ * Implements hook_views_api().
  */
 function hr_locations_views_api($module = NULL, $api = NULL) {
   return array("api" => "3.0");

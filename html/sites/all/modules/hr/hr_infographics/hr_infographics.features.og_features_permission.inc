@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_infographics.features.og_features_permission.inc

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * hr_documents.features.user_permission.inc
