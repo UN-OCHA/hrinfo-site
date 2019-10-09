@@ -666,6 +666,7 @@ function hr_documents_field_default_field_instances() {
   // Exported field_instance: 'node-hr_document-field_publication_date'.
   $field_instances['node-hr_document-field_publication_date'] = array(
     'bundle' => 'hr_document',
+    'default_value' => array(),
     'deleted' => 0,
     'description' => 'Indicate when the document has originally been published.',
     'display' => array(
@@ -693,7 +694,7 @@ function hr_documents_field_default_field_instances() {
     'label' => 'Original Publication Date',
     'required' => 1,
     'settings' => array(
-      'default_value' => 'blank',
+      'default_value' => 'now',
       'default_value2' => 'same',
       'default_value_code' => '',
       'default_value_code2' => '',
@@ -715,7 +716,7 @@ function hr_documents_field_default_field_instances() {
         'text_parts' => array(),
         'year_range' => '-0:-30',
       ),
-      'type' => 'date_select',
+      'type' => 'date_popup',
       'weight' => 3,
     ),
   );
@@ -1038,7 +1039,8 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
+    'description' => 'Enter the original title of the document, with the country the document refers to, its date and language: <b>Country: Orignal Title - DD MMM YYYY [EN/FR]</b><br>
+    Further instructions and examples are available in the <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">standards and naming conventions</a> documentation.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1224,6 +1226,8 @@ function hr_documents_field_default_field_instances() {
   t('Do not share with ReliefWeb');
   t('Document type');
   t('Documents');
+  t('Enter the original title of the document, with the country the document refers to, its date and language: <b>Country: Orignal Title - DD MMM YYYY [EN/FR]</b><br>
+    Further instructions and examples are available in the <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">standards and naming conventions</a> documentation.');
   t('File');
   t('File(s)');
   t('Global Cluster(s)');
@@ -1242,7 +1246,6 @@ function hr_documents_field_default_field_instances() {
   t('Title');
   t('Try to always include here the text (in full or part of it) of the document (example: use the introduction or the executive summary). If no text is available add a description of the file(s) you are publishing.');
   t('Type in and select the source(s) of the document. To indicate multiple organizations add a comma after each entry.');
-  t('Type the original title of the document. Try not to use abbreviations. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
   t('Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the document. It is best to publish one file per record, however you can add up to four. In case you need to upload more than four files save the document as draft then edit it to add more files. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
   t('Webspace(s)');
 

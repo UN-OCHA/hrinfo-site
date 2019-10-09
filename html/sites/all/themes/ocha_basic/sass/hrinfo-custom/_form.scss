@@ -28,3 +28,57 @@ form .table-responsive {
   overflow-x: inherit;
 }
 
+.node-hr_document-form {
+
+  #actions,
+  .details,
+  .field-name-field-sectors,
+  .form-item-title input,
+  > div > .form-group,
+  > div > .form-wrapper {
+    margin-top: 20px;
+  }
+
+  .field-name-field-exclude-reliefweb {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    height: 65px;
+    padding: 10px;
+  }
+
+  @include desktop {
+    > div,
+    .hr-additional > div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .main-inputs,
+    .field-name-field-locations,
+    .form-item-title {
+      flex-grow: 1;
+      margin-right: 20px;
+      width: 50%;
+    }
+
+    .hr-additional {
+      border-bottom: 2px solid $cd-light-grey;
+      border-top: 2px solid $cd-light-grey;
+      margin: 20px 0;
+      padding: 20px 0;
+      width: 100%;
+    }
+
+    .details,
+    .hr-additional-side,
+    .form-item-language {
+      width: 35%;
+    }
+
+    #edit-actions {
+      width: 100%;
+    }
+  }
+}
