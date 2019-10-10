@@ -4,6 +4,9 @@
 */
 
 (function ($, Drupal) {
+
+  'use strict';
+
   Drupal.behaviors.hrCoreAddMore = {
     attach: function (context, settings) {
 
@@ -30,9 +33,7 @@
           this.remove();
         }
         if (next[0] !== undefined) {
-          var select = next[0].getElementsByTagName('select')[0];
           next[0].className = next[0].className.replace('hr-add-more', '');
-          $(select).chosen();
         }
       }
 
@@ -52,7 +53,9 @@
             // This is only applied for new forms, so all but the first element
             // can be hidden, hence j=1.
             for (var j = 1, m = extraRows.length; j < m; j++) {
-              extraRows[j].className = extraRows[j].className + ' hr-add-more';
+              if (extraRows[j].className.indexOf('hr-add-more') === -1) {
+                extraRows[j].className = extraRows[j].className + ' hr-add-more';
+              }
             }
           }
         }
@@ -70,6 +73,7 @@
             var wrapper = extra[i].parentElement.parentElement.parentElement;
             // We only need one per table.
             if (wrapper.getElementsByClassName('hr-add-button').length === 0) {
+              // TODO: get this to work with Drupal.t().
               var addText = {
                 en: 'Add another item',
                 es: 'Añadir otro elemento',
