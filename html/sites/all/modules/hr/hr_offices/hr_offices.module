@@ -44,9 +44,6 @@ function hr_offices_form_hr_office_node_form_alter(&$form, &$form_state, $form_i
 
   // Necessary to remove path settings.
   $form['#after_build'][] = 'hr_offices_form_alter_after_build';
-
-  // Attach js to handle add-more for phones.
-  $form['#attached']['js'][] = drupal_get_path('theme', 'ocha_basic') . '/js/custom-forms.js';
 }
 
 /**
