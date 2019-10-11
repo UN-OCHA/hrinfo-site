@@ -625,7 +625,7 @@ function hr_offices_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Webspace(s)',
+    'label' => 'Operation(s)/ Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -733,7 +733,7 @@ function hr_offices_field_default_field_instances() {
   t('Organizations');
   t('Phones');
   t('Office / Coordination Hub Name');
-  t('Webspace(s)');
+  t('Operation(s)/ Webspace(s)');
 
   return $field_instances;
 }
