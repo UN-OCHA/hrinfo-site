@@ -49,6 +49,9 @@
           for (var i = 0, l = fields.length; i < l; i++) {
             fieldname = fields[i].replace(underscoreRegex, '-');
             table = document.getElementById(fieldname + '-values');
+            if (table.className.indexOf('add-more-processed') !== -1) {
+              continue;
+            }
             extraRows = table.tBodies[0].children;
             // This is only applied for new forms, so all but the first element
             // can be hidden, hence j=1.
@@ -57,6 +60,7 @@
                 extraRows[j].className = extraRows[j].className + ' hr-add-more';
               }
             }
+            table.className = table.className + ' add-more-processed';
           }
         }
       }
