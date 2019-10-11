@@ -46,10 +46,6 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
     $form['#after_build'][] = '_hr_document_clone_disable_language';
   }
 
-  // TODO: Should these two fields be shown?
-  unset($form['group_content_access']);
-  unset($form['field_disasters']);
-
   // These details aren't necessary for offices.
   unset($form['additional_settings']);
   unset($form['author']);

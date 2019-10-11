@@ -15,10 +15,15 @@
 <fieldset class="details">
   <?php print drupal_render($form['field_exclude_reliefweb']); ?>
   <?php print drupal_render($form['field_sectors']); ?>
-  <?php print drupal_render($form['og_group_ref']); ?>
   <?php print drupal_render($form['field_publication_date']); ?>
   <?php print drupal_render($form['field_document_type']); ?>
   <?php print drupal_render($form['field_organizations']); ?>
+  <?php print drupal_render($form['field_disasters']); ?>
+</fieldset>
+<fieldset class="main-inputs">
+  <?php print drupal_render($form['og_group_ref']); ?>
+</fieldset>
+<fieldset class="details">
   <?php print drupal_render($form['field_coordination_hubs']); ?>
 </fieldset>
 
