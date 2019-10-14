@@ -25,6 +25,7 @@
 </fieldset>
 <fieldset class="details">
   <?php print drupal_render($form['field_coordination_hubs']); ?>
+  <?php print drupal_render($form['field_bundles']); ?>
 </fieldset>
 
 <fieldset class="hr-additional">
