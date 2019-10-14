@@ -52,7 +52,6 @@ features[field_instance][] = node-hr_infographic-field_publication_date
 features[field_instance][] = node-hr_infographic-field_related_content
 features[field_instance][] = node-hr_infographic-field_sectors
 features[field_instance][] = node-hr_infographic-field_themes
-features[field_instance][] = node-hr_infographic-group_content_access
 features[field_instance][] = node-hr_infographic-og_group_ref
 features[field_instance][] = node-hr_infographic-title_field
 features[field_instance][] = taxonomy_term-hr_infographic_type-field_acronym
