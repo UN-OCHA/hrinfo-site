@@ -629,6 +629,7 @@ function hr_infographics_field_default_field_instances() {
   // Exported field_instance: 'node-hr_infographic-field_publication_date'.
   $field_instances['node-hr_infographic-field_publication_date'] = array(
     'bundle' => 'hr_infographic',
+    'default_value' => array(),
     'deleted' => 0,
     'description' => 'Indicate when the map/infographic has originally been created.',
     'display' => array(
@@ -677,7 +678,7 @@ function hr_infographics_field_default_field_instances() {
         'text_parts' => array(),
         'year_range' => '-0:-10',
       ),
-      'type' => 'date_select',
+      'type' => 'date_popup',
       'weight' => 3,
     ),
   );
@@ -855,66 +856,6 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_infographic-group_content_access'.
-  $field_instances['node-hr_infographic-group_content_access'] = array(
-    'bundle' => 'hr_infographic',
-    'default_value' => array(
-      0 => array(
-        'value' => 0,
-      ),
-    ),
-    'deleted' => 0,
-    'description' => 'Choose whether the map/infographic will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 15,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'group_content_access',
-    'label' => 'Content visibility',
-    'required' => 1,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'view modes' => array(
-      'full' => array(
-        'label' => 'above',
-        'type' => 'list_default',
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'type' => 'list_default',
-      ),
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(
-        'apply_chosen' => '',
-      ),
-      'type' => 'options_select',
-      'weight' => 18,
-    ),
-    'widget_type' => 'options_select',
-  );
-
   // Exported field_instance: 'node-hr_infographic-og_group_ref'.
   $field_instances['node-hr_infographic-og_group_ref'] = array(
     'bundle' => 'hr_infographic',
@@ -944,7 +885,7 @@ function hr_infographics_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Webspace(s)',
+    'label' => 'Operation(s)/ Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -999,7 +940,7 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Type the original title of the map/infographic. Try not to use abbreviations.To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
+    'description' => 'Enter the original title of the map/infographic, with the country the document refers to, its date and language: <b>Country: Orignal Title - DD MMM YYYY [EN/FR]</b>. Further instructions and examples are available in the <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">standards and naming conventions</a> documentation.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1132,7 +1073,6 @@ function hr_infographics_field_default_field_instances() {
   t(' Try to always include here the text (in full or part of it) of the map/infographic. If no text is available add a description of the file(s) you are publishing.');
   t('Acronym');
   t('Add links to content that is related to the map/infographic you are publishing (example: language versions of the same map/infographic) by indicating the title of the content and its url. When using the Search function make sure to search by content title.');
-  t('Choose whether the map/infographic will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
   t('Click on the field and select all relevant themes. Choose only themes the map/infographic substantively refers to.');
   t('Click on the field and select the coordination hub(s) the map/infographic refers to (if any).');
   t('Click on the field and select the disaster(s) or emergency the map/infographic refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations. See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.');
@@ -1161,9 +1101,9 @@ function hr_infographics_field_default_field_instances() {
   t('Theme(s)');
   t('Title');
   t('Type in and select the source(s) of the map/infographic. To indicate multiple organizations add a comma after each entry.');
-  t('Type the original title of the map/infographic. Try not to use abbreviations.To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
+  t('Enter the original title of the map/infographic, with the country the document refers to, its date and language: <b>Country: Orignal Title - DD MMM YYYY [EN/FR]</b>. Further instructions and examples are available in the <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">standards and naming conventions</a> documentation.');
   t('Upload the file to publish, from your computer or from your Dropbox account, and specify the language of the map/infographic. It is best to publish one file per record. To see Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
-  t('Webspace(s)');
+  t('Operation(s)/ Webspace(s)');
 
   return $field_instances;
 }
