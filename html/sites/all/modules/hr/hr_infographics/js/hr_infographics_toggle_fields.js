@@ -40,7 +40,12 @@
       function toggleFields() {
         var toggle = this.previousElementSibling;
         if (this.value === 'show') {
-          toggle.style.display = 'flex';
+          if (document.documentElement.clientWidth > 1024) {
+            toggle.style.display = 'flex';
+          }
+          else {
+            toggle.style.display = 'block';
+          }
           this.value = 'hide';
           this.innerHTML = toggleTextHide[lang];
         }
