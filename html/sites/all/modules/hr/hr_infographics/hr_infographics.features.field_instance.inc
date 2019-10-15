@@ -119,7 +119,7 @@ function hr_infographics_field_default_field_instances() {
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => 20,
+        'rows' => 12,
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
@@ -617,11 +617,12 @@ function hr_infographics_field_default_field_instances() {
       'active' => 1,
       'module' => 'entityreference',
       'settings' => array(
+        'apply_chosen' => 1,
         'match_operator' => 'CONTAINS',
         'path' => '',
         'size' => 60,
       ),
-      'type' => 'entityreference_autocomplete_tags',
+      'type' => 'options_select',
       'weight' => 4,
     ),
   );
@@ -673,7 +674,7 @@ function hr_infographics_field_default_field_instances() {
         'input_format' => 'd/m/Y - H:i:s',
         'input_format_custom' => '',
         'label_position' => 'above',
-        'no_fieldset' => 0,
+        'no_fieldset' => 1,
         'repeat_collapsed' => 0,
         'text_parts' => array(),
         'year_range' => '-0:-10',

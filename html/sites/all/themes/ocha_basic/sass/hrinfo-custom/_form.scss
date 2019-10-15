@@ -236,6 +236,7 @@ form .table-responsive {
 
     .main-inputs,
     .field-name-field-locations,
+    .field-name-field-data-sources,
     .form-item-title {
       flex-grow: 1;
       margin-right: 20px;
@@ -251,9 +252,18 @@ form .table-responsive {
     }
 
     .details,
-    .hr-additional-side,
+    .field-name-field-themes,
+    .field-name-field-related-content,
     .form-item-language {
       width: 35%;
+    }
+
+    .link-field-subrow {
+      display: flex;
+      flex-direction: column;
+      > .link-field-column {
+        width: 100%;
+      }
     }
 
     #edit-actions {
