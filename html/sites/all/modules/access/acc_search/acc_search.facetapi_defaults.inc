@@ -177,7 +177,7 @@ function acc_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
   );
@@ -437,7 +437,7 @@ function acc_search_facetapi_default_facet_settings() {
     'show_expanded' => 1,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
   );

@@ -20,9 +20,8 @@ function hr_wysiwyg_default_linkit_profiles() {
   $linkit_profile->profile_type = '1';
   $linkit_profile->data = array(
     'text_formats' => array(
-      'panopoly_wysiwyg_text' => 'panopoly_wysiwyg_text',
       'panopoly_html_text' => 'panopoly_html_text',
-      'hr_wysiwyg_trusted' => 'hr_wysiwyg_trusted',
+      'hr_wysiwyg' => 'hr_wysiwyg',
       'full_html' => 0,
       'plain_text' => 0,
       'php_code' => 0,

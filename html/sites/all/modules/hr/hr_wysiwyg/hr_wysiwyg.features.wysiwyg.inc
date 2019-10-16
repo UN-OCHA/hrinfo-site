@@ -11,9 +11,9 @@
 function hr_wysiwyg_wysiwyg_default_profiles() {
   $profiles = array();
 
-  // Exported profile: hr_wysiwyg_trusted
-  $profiles['hr_wysiwyg_trusted'] = array(
-    'format' => 'hr_wysiwyg_trusted',
+  // Exported profile: hr_wysiwyg
+  $profiles['hr_wysiwyg'] = array(
+    'format' => 'hr_wysiwyg',
     'editor' => 'ckeditor',
     'settings' => array(
       'default' => 1,
@@ -23,26 +23,19 @@ function hr_wysiwyg_wysiwyg_default_profiles() {
       'language' => 'en',
       'buttons' => array(
         'default' => array(
-          'Anchor' => 1,
           'Bold' => 1,
           'Italic' => 1,
-          'Underline' => 1,
-          'Strike' => 1,
           'JustifyLeft' => 1,
           'JustifyCenter' => 1,
           'JustifyRight' => 1,
-          'JustifyBlock' => 1,
           'BulletedList' => 1,
           'NumberedList' => 1,
           'Unlink' => 1,
           'Source' => 1,
           'HorizontalRule' => 1,
           'Format' => 1,
-          'Styles' => 1,
+          'FontSize' => 1,
           'Table' => 1,
-          'Find' => 1,
-          'Replace' => 1,
-          'Maximize' => 1,
           'Iframe' => 1,
         ),
         'linkit' => array(
@@ -60,8 +53,8 @@ function hr_wysiwyg_wysiwyg_default_profiles() {
       'acf_allowed_content' => '',
       'css_setting' => 'theme',
       'css_path' => '',
-      'stylesSet' => 'Styled Image (right)=img.pull-right^M
-Styled Image (left)=img.pull-left^M
+      'stylesSet' => 'Styled Image (right)=img.pull-right
+Styled Image (left)=img.pull-left
 Clearfix=p.clearfix',
       'block_formats' => 'p,address,pre,h2,h3,h4,h5,h6,div',
       'advanced__active_tab' => 'edit-basic',
@@ -101,63 +94,6 @@ Clearfix=p.clearfix',
       'css_setting' => 'theme',
       'css_path' => '',
       'css_classes' => '',
-    ),
-  );
-
-  // Exported profile: panopoly_wysiwyg_text
-  $profiles['panopoly_wysiwyg_text'] = array(
-    'format' => 'panopoly_wysiwyg_text',
-    'editor' => 'ckeditor',
-    'settings' => array(
-      'default' => 1,
-      'user_choose' => 0,
-      'show_toggle' => 0,
-      'theme' => '',
-      'language' => 'en',
-      'buttons' => array(
-        'default' => array(
-          'Anchor' => 1,
-          'Bold' => 1,
-          'Italic' => 1,
-          'Underline' => 1,
-          'Strike' => 1,
-          'JustifyLeft' => 1,
-          'JustifyCenter' => 1,
-          'JustifyRight' => 1,
-          'JustifyBlock' => 1,
-          'BulletedList' => 1,
-          'NumberedList' => 1,
-          'Unlink' => 1,
-          'Source' => 1,
-          'HorizontalRule' => 1,
-          'Format' => 1,
-          'Styles' => 1,
-          'Table' => 1,
-          'Find' => 1,
-          'Replace' => 1,
-          'Maximize' => 1,
-        ),
-        'linkit' => array(
-          'linkit' => 1,
-        ),
-        'drupal' => array(
-          'media' => 1,
-        ),
-      ),
-      'toolbarLocation' => 'top',
-      'resize_enabled' => 1,
-      'default_toolbar_grouping' => 0,
-      'simple_source_formatting' => 1,
-      'acf_mode' => 0,
-      'acf_allowed_content' => '',
-      'css_setting' => 'theme',
-      'css_path' => '',
-      'stylesSet' => 'Styled Image (right)=img.pull-right
-Styled Image (left)=img.pull-left
-Clearfix=p.clearfix',
-      'block_formats' => 'p,address,pre,h2,h3,h4,h5,h6,div',
-      'advanced__active_tab' => 'edit-basic',
-      'forcePasteAsPlainText' => 1,
     ),
   );
 

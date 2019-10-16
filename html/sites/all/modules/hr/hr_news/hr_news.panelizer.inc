@@ -594,7 +594,7 @@ function hr_news_panelizer_defaults() {
     'title' => '',
     'body' => '<p>by <strong><a href="%node:author:url">%node:author</a></strong> on %node:created:hr_1</p>
 ',
-    'format' => 'panopoly_wysiwyg_text',
+    'format' => 'hr_wysiwyg',
     'substitute' => 1,
   );
   $pane->cache = array();
