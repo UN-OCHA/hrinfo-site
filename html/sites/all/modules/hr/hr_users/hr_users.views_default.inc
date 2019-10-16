@@ -209,7 +209,7 @@ function hr_users_views_default_views() {
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = 'You are not a member of any Humanitarianresponse space.';
-  $handler->display->display_options['empty']['area']['format'] = 'panopoly_wysiwyg_text';
+  $handler->display->display_options['empty']['area']['format'] = 'hr_wysiwyg';
   /* Relationship: OG membership: Group Node from OG membership */
   $handler->display->display_options['relationships']['og_membership_related_node_group']['id'] = 'og_membership_related_node_group';
   $handler->display->display_options['relationships']['og_membership_related_node_group']['table'] = 'og_membership';

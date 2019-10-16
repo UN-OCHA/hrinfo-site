@@ -394,7 +394,7 @@ function hr_layout_default_page_manager_pages() {
     'admin_title' => '',
     'title' => 'What is HumanitarianResponse.info?',
     'body' => '<iframe width="100%" height="200" src="https://www.youtube.com/embed/OAzNjYtabuM?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>',
-    'format' => 'hr_wysiwyg_trusted',
+    'format' => 'hr_wysiwyg',
     'substitute' => TRUE,
   );
   $pane->cache = array(
@@ -452,7 +452,7 @@ function hr_layout_default_page_manager_pages() {
 
 <p><strong>Target audience:</strong> persons deployed to respond to complex emergencies and disasters.</p>
 ',
-    'format' => 'hr_wysiwyg_trusted',
+    'format' => 'hr_wysiwyg',
     'substitute' => TRUE,
     'title_heading' => 'h2',
   );
@@ -506,7 +506,7 @@ function hr_layout_default_page_manager_pages() {
     'admin_title' => '',
     'title' => 'Partner: Humanitarian ID',
     'body' => '<p><iframe allowfullscreen="" src="https://www.youtube.com/embed/60dKwkaq_Sw" height="200" width="100%" frameborder="0"></iframe></p>',
-    'format' => 'hr_wysiwyg_trusted',
+    'format' => 'hr_wysiwyg',
     'substitute' => TRUE,
     'title_heading' => 'h2',
   );

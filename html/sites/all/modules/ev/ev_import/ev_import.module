@@ -95,7 +95,7 @@ function ev_import_process_row_from_hrinfo($row) {
   if (isset($row['description']['safe_value'])) {
     $event->body['en'][] = array(
       'value' => $row['description']['safe_value'],
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     );
   }
 

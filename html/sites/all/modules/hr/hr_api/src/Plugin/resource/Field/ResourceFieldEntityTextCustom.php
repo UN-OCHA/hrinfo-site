@@ -34,7 +34,7 @@ class ResourceFieldEntityTextCustom extends ResourceFieldEntityText implements R
       return array(
         'value' => $value,
         // TODO: This is hardcoded! Fix it.
-        'format' => 'panopoly_wysiwyg_text',
+        'format' => 'hr_wysiwyg',
       );
     }
 
@@ -46,7 +46,7 @@ class ResourceFieldEntityTextCustom extends ResourceFieldEntityText implements R
       else {
         $return[$delta] = array(
           'value' => $single_value,
-          'format' => 'panopoly_wysiwyg_text',
+          'format' => 'hr_wysiwyg',
         );
       }
     }

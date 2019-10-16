@@ -154,7 +154,7 @@ function _hr_disasters_reliefweb_disaster_map(&$node, $disaster) {
   }
 
   if ($node->is_new || $node->body['en'][0]['value'] != $fields->description) {
-    $node->body = array('en' => array(0 => array('value' => $fields->description, 'format' => 'panopoly_wysiwyg_text')));
+    $node->body = array('en' => array(0 => array('value' => $fields->description, 'format' => 'hr_wysiwyg')));
     $changed = TRUE;
   }
 
