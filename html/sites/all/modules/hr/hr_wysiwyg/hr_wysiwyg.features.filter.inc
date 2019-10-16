@@ -33,7 +33,7 @@ function hr_wysiwyg_filter_default_formats() {
     'name' => 'HR WYSIWYG',
     'cache' => 1,
     'status' => 1,
-    'weight' => -8,
+    'weight' => -20,
     'filters' => array(
       'wysiwyg' => array(
         'weight' => -49,
