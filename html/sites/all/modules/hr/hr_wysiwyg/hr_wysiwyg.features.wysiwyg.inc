@@ -28,6 +28,8 @@ function hr_wysiwyg_wysiwyg_default_profiles() {
           'JustifyLeft' => 1,
           'JustifyCenter' => 1,
           'JustifyRight' => 1,
+          'BidiLtr' => 1,
+          'BidiRtl' => 1,
           'BulletedList' => 1,
           'NumberedList' => 1,
           'Unlink' => 1,
