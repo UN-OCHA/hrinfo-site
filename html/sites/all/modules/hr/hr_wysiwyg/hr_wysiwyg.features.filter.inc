@@ -27,7 +27,7 @@ function hr_wysiwyg_filter_default_formats() {
     ),
   );
 
-  // Exported format: WYSIWYG.
+  // Exported format: HR WYSIWYG.
   $formats['hr_wysiwyg'] = array(
     'format' => 'hr_wysiwyg',
     'name' => 'HR WYSIWYG',
