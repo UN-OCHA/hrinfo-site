@@ -45,6 +45,7 @@ form .table-responsive {
     font-size: 16px;
     height: 65px;
     padding: 10px;
+    width: 100%;
   }
 
   @include desktop {
@@ -56,19 +57,11 @@ form .table-responsive {
     }
 
     .main-inputs,
-    .field-name-field-locations,
+    .field-name-field-related-content,
     .form-item-title {
       flex-grow: 1;
       margin-right: 20px;
       width: 50%;
-    }
-
-    .hr-additional {
-      border-bottom: 2px solid $cd-light-grey;
-      border-top: 2px solid $cd-light-grey;
-      margin: 20px 0;
-      padding: 20px 0;
-      width: 100%;
     }
 
     .details,
@@ -89,4 +82,12 @@ form .table-responsive {
       width: 100%;
     }
   }
+}
+
+.hr-additional {
+  border-bottom: 2px solid $cd-light-grey;
+  border-top: 2px solid $cd-light-grey;
+  margin: 20px 0;
+  padding: 20px 0;
+  width: 100%;
 }
