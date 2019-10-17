@@ -51,7 +51,7 @@ function hr_events_field_default_field_instances() {
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => 20,
+        'rows' => 12,
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
@@ -437,6 +437,7 @@ function hr_events_field_default_field_instances() {
         'input_format' => 'd/m/Y - H:i:s',
         'input_format_custom' => '',
         'label_position' => 'above',
+        'no_fieldset' => 1,
         'repeat_collapsed' => 1,
         'text_parts' => array(),
         'year_range' => '-3:+3',
@@ -897,8 +898,7 @@ function hr_events_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => 'Click on the field and select where to publish the event (operation, regional site or thematic site).
-',
+    'description' => 'Click on the field and select where to publish the event (operation, regional site or thematic site).',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -921,7 +921,7 @@ function hr_events_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Webspace(s)',
+    'label' => 'Operation(s)/ Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
@@ -1073,8 +1073,7 @@ function hr_events_field_default_field_instances() {
   t('Choose whether the event will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
   t('Click on the field and select all relevant themes. Choose only themes the event substantively refers to.');
   t('Click on the field and select the coordination hub(s) the event refers to (if any).');
-  t('Click on the field and select where to publish the event (operation, regional site or thematic site).
-');
+  t('Click on the field and select where to publish the event (operation, regional site or thematic site).');
   t('Cluster(s)/Sector(s)');
   t('Contact(s)');
   t('Content visibility');
@@ -1102,7 +1101,7 @@ function hr_events_field_default_field_instances() {
   t('Type in and select the the event\'s organizer(s). To indicate multiple organizations add a comma after each entry.');
   t('Type the original title of the event. Try not to use abbreviations or acronyms. See standards and naming conventions guidelines <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
   t('Venue');
-  t('Webspace(s)');
+  t('Operation(s)/ Webspace(s)');
 
   return $field_instances;
 }
