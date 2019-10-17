@@ -178,14 +178,6 @@ form .table-responsive {
       width: 50%;
     }
 
-    .hr-additional {
-      border-bottom: 2px solid $cd-light-grey;
-      border-top: 2px solid $cd-light-grey;
-      margin: 20px 0;
-      padding: 20px 0;
-      width: 100%;
-    }
-
     .details,
     .hr-additional-side,
     .form-item-language {
@@ -243,14 +235,6 @@ form .table-responsive {
       width: 50%;
     }
 
-    .hr-additional {
-      border-bottom: 2px solid $cd-light-grey;
-      border-top: 2px solid $cd-light-grey;
-      margin: 20px 0;
-      padding: 20px 0;
-      width: 100%;
-    }
-
     .details,
     .field-name-field-themes,
     .field-name-field-related-content,
@@ -272,7 +256,65 @@ form .table-responsive {
   }
 }
 
+.node-hr_event-form {
+
+  #actions,
+  .form-item-title input,
+  > div > .form-group,
+  > div > .form-wrapper {
+    margin-top: 20px;
+  }
+
+  @include desktop {
+    > div,
+    .hr-additional > div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .field-name-body,
+    .field-name-field-bundles,
+    .field-name-field-coordination-hubs,
+    .field-name-field-disasters,
+    .field-name-field-event-category,
+    .field-name-field-event-date,
+    .field-name-field-location,
+    .field-name-field-related-content,
+    .field-name-og-group-ref,
+    .form-item-title {
+      flex-grow: 1;
+      margin-right: 20px;
+      width: 50%;
+    }
+
+    .contact,
+    .form-item-language,
+    .field-name-field-address,
+    .field-name-field-event-agenda,
+    .field-name-field-event-meeting-minutes,
+    .field-name-field-hid-contact-ref,
+    .field-name-field-organizations,
+    .field-name-field-sectors,
+    .field-name-field-themes {
+      width: 35%;
+    }
+
+    #edit-actions {
+      width: 100%;
+    }
+  }
+}
+
 /* Hiding fields. */
+.hr-additional {
+  border-bottom: 2px solid $cd-light-grey;
+  border-top: 2px solid $cd-light-grey;
+  margin: 20px 0;
+  padding: 20px 0;
+  width: 100%;
+}
+
 .js .hr-add-button {
   background: none;
   color: $cd-dark-grey;

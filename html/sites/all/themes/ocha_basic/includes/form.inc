@@ -13,6 +13,7 @@ function ocha_basic_form_themes($existing, $type, $theme, $path) {
   $themes = array();
   $types = array(
     'hr_document',
+    'hr_event',
     'hr_office',
     'hr_infographic',
   );

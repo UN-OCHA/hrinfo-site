@@ -337,6 +337,19 @@ function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id)
     }
     $form['#after_build'][] = '_hr_document_clone_disable_language';
   }
+
+  // These details aren't necessary.
+  unset($form['additional_settings']);
+  unset($form['author']);
+  unset($form['options']);
+  unset($form['redirect']);
+  unset($form['revision_information']);
+
+  // Necessary to remove path settings.
+  $form['#after_build'][] = 'hr_events_form_alter_after_build';
+
+  // Attach js to toggle additional fields.
+  $form['#attached']['js'][] = drupal_get_path('module', 'hr_events') . '/js/hr_events_toggle_fields.js';
 }
 
 /**
@@ -357,4 +370,18 @@ function hr_events_clone_node_alter(&$node, $context) {
   unset($node->field_event_meeting_minutes);
   unset($node->field_event_agenda);
   unset($node->field_related_content);
+}
+
+/**
+ * Remove the path and menu settings for node form and hide text format options.
+ *
+ * Added in hr_infographics_form_hr_infographic_node_form_alter().
+ */
+function hr_events_form_alter_after_build($form, &$form_state) {
+  $form['menu']['#access'] = FALSE;
+  $language = $form['body']['#language'];
+  $form['body'][$language][0]['format']['#access'] = FALSE;
+  unset($form['path']);
+
+  return $form;
 }
