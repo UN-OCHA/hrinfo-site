@@ -49,8 +49,7 @@ form .table-responsive {
   }
 
   @include desktop {
-    > div,
-    .hr-additional > div {
+    > div {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
@@ -90,4 +89,18 @@ form .table-responsive {
   margin: 20px 0;
   padding: 20px 0;
   width: 100%;
+}
+
+.js .hr-additional > .hr-additional-hide {
+  display: none;
+}
+
+.js .hr-additional > .hr-additional-show {
+  display: block;
+}
+
+@include desktop {
+  .js .hr-additional > .hr-additional-show {
+    display: flex;
+  }
 }
