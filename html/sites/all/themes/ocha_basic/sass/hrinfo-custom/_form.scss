@@ -160,18 +160,18 @@ form .table-responsive {
     font-size: 16px;
     height: 65px;
     padding: 10px;
+    width: 100%;
   }
 
   @include desktop {
-    > div,
-    .hr-additional > div {
+    > div {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
     }
 
     .main-inputs,
-    .field-name-field-locations,
+    .field-name-field-related-content,
     .form-item-title {
       flex-grow: 1;
       margin-right: 20px;
@@ -313,6 +313,20 @@ form .table-responsive {
   margin: 20px 0;
   padding: 20px 0;
   width: 100%;
+}
+
+.js .hr-additional > .hr-additional-hide {
+  display: none;
+}
+
+.js .hr-additional > .hr-additional-show {
+  display: block;
+}
+
+@include desktop {
+  .js .hr-additional > .hr-additional-show {
+    display: flex;
+  }
 }
 
 .js .hr-add-button {

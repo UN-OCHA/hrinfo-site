@@ -40,17 +40,12 @@
       function toggleFields() {
         var toggle = this.previousElementSibling;
         if (this.value === 'show') {
-          if (document.documentElement.clientWidth > 1024) {
-            toggle.style.display = 'flex';
-          }
-          else {
-            toggle.style.display = 'block';
-          }
+          toggle.className = toggle.className.replace('hr-additional-hide', 'hr-additional-show');
           this.value = 'hide';
           this.innerHTML = toggleTextHide[lang];
         }
         else {
-          toggle.style.display = 'none';
+          toggle.className = toggle.className.replace('hr-additional-show', 'hr-additional-hide');
           this.value = 'show';
           this.innerHTML = toggleTextShow[lang];
         }
@@ -62,7 +57,9 @@
       function prepareToggle() {
         var additional = document.getElementsByClassName('hr-additional')[0];
         if (additional !== undefined && additional.children.length > 0) {
-          additional.children[0].style.display = 'none';
+          if (additional.children[0].className.indexOf('hr-additional-hide') === -1) {
+            additional.children[0].className += ' hr-additional-hide';
+          }
           // We only need one per table.
           if (additional.getElementsByClassName('hr-toggle-button').length === 0) {
             var add = createButton('show', toggleTextShow[lang]);
