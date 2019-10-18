@@ -216,19 +216,19 @@ form .table-responsive {
     font-size: 16px;
     height: 65px;
     padding: 10px;
+    width: 100%;
   }
 
   @include desktop {
-    > div,
-    .hr-additional > div {
+    > div {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
     }
 
     .main-inputs,
-    .field-name-field-locations,
-    .field-name-field-data-sources,
+    .field-name-field-related-content,
+    .field-name-field-sectors,
     .form-item-title {
       flex-grow: 1;
       margin-right: 20px;
@@ -236,8 +236,7 @@ form .table-responsive {
     }
 
     .details,
-    .field-name-field-themes,
-    .field-name-field-related-content,
+    .hr-additional-side,
     .form-item-language {
       width: 35%;
     }
@@ -326,6 +325,7 @@ form .table-responsive {
 @include desktop {
   .js .hr-additional > .hr-additional-show {
     display: flex;
+    flex-wrap: wrap;
   }
 }
 
