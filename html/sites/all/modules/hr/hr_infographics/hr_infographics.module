@@ -87,7 +87,7 @@ function hr_infographics_form_hr_infographic_node_form_alter(&$form, &$form_stat
   $form['#after_build'][] = 'hr_infographics_form_alter_after_build';
 
   // Attach js to toggle additional fields.
-  $form['#attached']['js'][] = drupal_get_path('module', 'hr_infographics') . '/js/hr_infographics_toggle_fields.js';
+  $form['#attached']['js'][] = drupal_get_path('module', 'hr_core') . '/js/hr_core_toggle_fields.js';
 }
 
 /**
@@ -208,6 +208,9 @@ function hr_infographics_clone_node_alter(&$node, $context) {
  * Added in hr_infographics_form_hr_infographic_node_form_alter().
  */
 function hr_infographics_form_alter_after_build($form, &$form_state) {
+  // Add description text for language field.
+  $form['language']['#description'] = t('Select the map/ infographic language. If not listed choose English and indicate the language in the title.');
+
   $form['menu']['#access'] = FALSE;
   $language = $form['body']['#language'];
   $form['body'][$language][0]['format']['#access'] = FALSE;
