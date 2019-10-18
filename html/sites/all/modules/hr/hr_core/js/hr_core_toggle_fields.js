@@ -46,7 +46,6 @@
         }
         else {
           toggle.className = toggle.className.replace('hr-additional-show', 'hr-additional-hide');
-          //toggle.style.display = 'none';
           this.value = 'show';
           this.innerHTML = toggleTextShow[lang];
         }
