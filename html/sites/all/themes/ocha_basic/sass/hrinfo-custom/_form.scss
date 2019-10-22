@@ -148,6 +148,7 @@ form .table-responsive {
   #actions,
   .details,
   .field-name-field-sectors,
+  .form-item-language input,
   .form-item-title input,
   > div > .form-group,
   > div > .form-wrapper {
@@ -272,30 +273,17 @@ form .table-responsive {
       justify-content: space-between;
     }
 
-    .field-name-body,
-    .field-name-field-bundles,
-    .field-name-field-coordination-hubs,
-    .field-name-field-disasters,
-    .field-name-field-event-category,
-    .field-name-field-event-date,
-    .field-name-field-location,
+    .main-inputs,
     .field-name-field-related-content,
-    .field-name-og-group-ref,
     .form-item-title {
       flex-grow: 1;
       margin-right: 20px;
       width: 50%;
     }
 
-    .contact,
+    .details,
     .form-item-language,
-    .field-name-field-address,
-    .field-name-field-event-agenda,
-    .field-name-field-event-meeting-minutes,
-    .field-name-field-hid-contact-ref,
-    .field-name-field-organizations,
-    .field-name-field-sectors,
-    .field-name-field-themes {
+    .hr-additional-side {
       width: 35%;
     }
 

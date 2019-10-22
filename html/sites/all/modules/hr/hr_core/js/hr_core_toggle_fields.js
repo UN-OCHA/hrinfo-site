@@ -5,7 +5,7 @@
 
 (function ($, Drupal) {
   'use strict;'
-  Drupal.behaviors.hrDocumentsToggleFields = {
+  Drupal.behaviors.hrCoreToggleFields = {
     attach: function (context, settings) {
 
       var toggleTextShow = {

@@ -349,7 +349,7 @@ function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id)
   $form['#after_build'][] = 'hr_events_form_alter_after_build';
 
   // Attach js to toggle additional fields.
-  $form['#attached']['js'][] = drupal_get_path('module', 'hr_events') . '/js/hr_events_toggle_fields.js';
+  $form['#attached']['js'][] = drupal_get_path('module', 'hr_core') . '/js/hr_core_toggle_fields.js';
 }
 
 /**
