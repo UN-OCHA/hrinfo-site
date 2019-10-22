@@ -49,6 +49,9 @@
           for (var i = 0, l = fields.length; i < l; i++) {
             fieldname = fields[i].replace(underscoreRegex, '-');
             table = document.getElementById(fieldname + '-values');
+            if (table === null) {
+              continue;
+            }
             if (table.className.indexOf('add-more-processed') !== -1) {
               continue;
             }
