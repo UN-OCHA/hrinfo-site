@@ -819,7 +819,7 @@ function hr_infographics_field_default_field_instances() {
         'og_widget' => array(
           'access_override' => 0,
           'admin' => array(
-            'widget_type' => 'entityreference_autocomplete',
+            'widget_type' => 'options_select',
           ),
           'default' => array(
             'widget_type' => 'options_select',
