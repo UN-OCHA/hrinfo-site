@@ -15,12 +15,11 @@
 </fieldset>
 <fieldset class="details">
   <?php print drupal_render($form['og_group_ref']); ?>
-  <?php print drupal_render($form['field_sectors']); ?>
+  <?php print drupal_render($form['field_bundles']); ?>
   <?php print drupal_render($form['field_publication_date']); ?>
   <?php print drupal_render($form['field_organizations']); ?>
   <?php print drupal_render($form['field_coordination_hubs']); ?>
   <?php print drupal_render($form['field_disasters']); ?>
-  <?php print drupal_render($form['field_bundles']); ?>
 </fieldset>
 
 <fieldset class="hr-additional">
@@ -30,6 +29,7 @@
       <?php print drupal_render($form['field_locations']); ?>
       <?php print drupal_render($form['field_themes']); ?>
     </fieldset>
+    <?php print drupal_render($form['field_sectors']); ?>
   </div>
 </fieldset>
 
