@@ -87,6 +87,9 @@ class DocRefHRCoreSelectionHandler extends EntityReference_SelectionHandler_Gene
     if (!empty($this->field['settings']['handler_settings']['document_type'])) {
       $document_type = $this->field['settings']['handler_settings']['document_type'];
       $query->fieldCondition('field_document_type', 'target_id', $document_type);
+      // Unfortunately, this produces an error without node access. Fortunately,
+      // lack of node_access check is already signalled in the handler name.
+      unset($query->tags['node_access']);
     }
 
     return $query;
