@@ -319,9 +319,7 @@ PDF_FOOTER;
  * Implements hook_form_FORM_ID_alter()
  */
 function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id) {
-  $form['#attached']['js'][] = array(
-    drupal_get_path('module', 'hr_events') . '/js/hr_events.js',
-  );
+  $form['#attached']['js'][] = drupal_get_path('module', 'hr_events') . '/js/hr_events.js';
 
   // If it's a clone, validate the title.
   if (isset($form['clone_from_original_nid'])) {
