@@ -81,6 +81,7 @@ features[field_instance][] = node-hr_event-field_organizations
 features[field_instance][] = node-hr_event-field_related_content
 features[field_instance][] = node-hr_event-field_sectors
 features[field_instance][] = node-hr_event-field_themes
+features[field_instance][] = node-hr_event-group_content_access
 features[field_instance][] = node-hr_event-og_group_ref
 features[field_instance][] = node-hr_event-title_field
 features[field_instance][] = taxonomy_term-hr_event_category-name_field

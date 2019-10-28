@@ -825,6 +825,66 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-hr_event-group_content_access'.
+  $field_instances['node-hr_event-group_content_access'] = array(
+    'bundle' => 'hr_event',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Choose whether the event will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 21,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'group_content_access',
+    'label' => 'Content visibility',
+    'required' => 1,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'view modes' => array(
+      'full' => array(
+        'label' => 'above',
+        'type' => 'list_default',
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'type' => 'list_default',
+      ),
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'apply_chosen' => 0,
+      ),
+      'type' => 'options_select',
+      'weight' => 18,
+    ),
+    'widget_type' => 'options_select',
+  );
+
   // Exported field_instance: 'node-hr_event-og_group_ref'.
   $field_instances['node-hr_event-og_group_ref'] = array(
     'bundle' => 'hr_event',
