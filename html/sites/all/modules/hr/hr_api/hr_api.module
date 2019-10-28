@@ -153,6 +153,7 @@ function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translatio
     watchdog('hr_api_call_webhook', 'Curl error: @error', array(
       '@error' => curl_error($ch),
     ));
+    watchdog('hr_api_call_webhook', t('This content could not be saved to Humanitarian ID. You can try to resave this page, or contact an administrator'));
     drupal_set_message(t('This content could not be saved to Humanitarian ID. You can try to resave this page, or contact an administrator'), 'error');
   }
 
