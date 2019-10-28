@@ -59,62 +59,6 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_address'.
-  $field_instances['node-hr_event-field_address'] = array(
-    'bundle' => 'hr_event',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Indicate here where the event takes place.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 13,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_address',
-    'label' => 'Venue',
-    'required' => 0,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'addressfield',
-      'settings' => array(
-        'available_countries' => array(),
-        'default_country' => 'site_default',
-        'format_handlers' => array(
-          'address' => 'address',
-          'address-optional' => 'address-optional',
-          'address-hide-postal-code' => 0,
-          'address-hide-street' => 0,
-          'address-hide-country' => 0,
-          'organisation' => 0,
-          'name-full' => 0,
-          'name-oneline' => 0,
-        ),
-      ),
-      'type' => 'addressfield_standard',
-      'weight' => 5,
-    ),
-  );
-
   // Exported field_instance: 'node-hr_event-field_bundles'.
   $field_instances['node-hr_event-field_bundles'] = array(
     'bundle' => 'hr_event',
