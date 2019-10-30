@@ -362,6 +362,17 @@ function _hr_core_draft_button($label) {
  * Alter the node edit forms.
  */
 function hr_core_form_node_form_alter(&$form, &$form_state) {
+  $guideline_bundles = array(
+    'hr_assessment',
+    'hr_document',
+    'hr_event',
+    'hr_infographic',
+  );
+  if (in_array($form['#bundle'], $guideline_bundles)) {
+    $form['#attached']['js'][] = drupal_get_path('module', 'hr_core') . '/js/hr_core_guidelines.js';
+    $form['#attached']['css'][] = drupal_get_path('module', 'hr_core') . '/css/hr_core_guidelines.css';
+  }
+
   $node = $form['#node'];
   if (isset($_GET[OG_AUDIENCE_FIELD])) {
     $node->{HR_CORE_OG_AUDIENCE_FIELD} = $_GET[OG_AUDIENCE_FIELD];
