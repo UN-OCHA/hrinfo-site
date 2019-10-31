@@ -38,3 +38,4 @@
 <fieldset id="actions">
   <?php print drupal_render($form['actions']); ?>
 </fieldset>
+<?php print drupal_render_children($form); ?>
