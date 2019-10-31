@@ -196,7 +196,8 @@ function _hr_core_files_download_button($entity, $type) {
     $fc = field_collection_item_revision_load($item['revision_id']);
 
     $file = field_get_items('field_collection_item', $fc, 'field_file');
-    // Continue is the file no longer exists.
+
+    // Bail if the file no longer exists.
     if (!$file) {
       continue;
     }
@@ -204,9 +205,11 @@ function _hr_core_files_download_button($entity, $type) {
 
     $language = field_get_items('field_collection_item', $fc, 'field_language');
     $file_language = '';
-    if ($language && isset($language_list[$language['value']])) {
+    if (is_array($language)) {
       $language = reset($language);
-      $file_language = !empty($language['value']) ? '(' . $language_list[$language['value']]['name_native'] . ')' : '';
+      if (isset($language_list[$language['value']])) {
+        $file_language = !empty($language['value']) ? '(' . $language_list[$language['value']]['name_native'] . ')' : '';
+      }
     }
 
     $file_title = isset($file['title']) ? $file['title'] : $file['filename'];
