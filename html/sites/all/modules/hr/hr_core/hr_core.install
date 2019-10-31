@@ -726,12 +726,3 @@ function hr_core_update_7043() {
 function hr_core_update_7044() {
   module_disable(array('dblog'));
 }
-
-/**
- * Remove group content access field from documents.
- */
-function hr_core_update_7046() {
-  if ($instance = field_info_instance('node', 'group_content_access', 'hr_documents')) {
-    field_delete_instance($instance, TRUE);
-  }
-}

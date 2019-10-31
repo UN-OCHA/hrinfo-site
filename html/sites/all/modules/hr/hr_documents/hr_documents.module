@@ -83,6 +83,7 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
   unset($form['options']);
   unset($form['redirect']);
   unset($form['revision_information']);
+  $form['group_content_access']['#access'] = FALSE;
 
   // Necessary to remove path settings.
   $form['#after_build'][] = 'hr_documents_form_alter_after_build';
