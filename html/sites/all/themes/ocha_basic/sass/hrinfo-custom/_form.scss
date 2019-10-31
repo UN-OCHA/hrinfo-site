@@ -60,6 +60,14 @@ form .table-responsive {
       width: 35%;
     }
 
+    .link-field-subrow {
+      display: flex;
+      flex-direction: column;
+      > .link-field-column {
+        width: 100%;
+      }
+    }
+
     #edit-actions {
       width: 100%;
     }
