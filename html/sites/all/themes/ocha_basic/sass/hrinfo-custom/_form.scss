@@ -91,7 +91,7 @@ form .table-responsive {
 
   #actions,
   #edit-field-phones,
-  .contact,
+  .form-item-language,
   .form-item-title input,
   .field-type-email input,
   > div > .form-group,
@@ -123,17 +123,15 @@ form .table-responsive {
       justify-content: space-between;
     }
 
-    .field-name-field-address,
-    .field-name-og-group-ref,
+    .main-inputs,
     .form-item-title {
       flex-grow: 1;
       margin-right: 20px;
       width: 50%;
     }
 
-    .contact,
-    .form-item-language,
-    .field-name-field-is-coordination-hub {
+    .details,
+    .form-item-language {
       width: 35%;
     }
 

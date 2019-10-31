@@ -8,13 +8,15 @@
 
 <?php print drupal_render($form['title_field']); ?>
 <?php print drupal_render($form['language']); ?>
-<?php print drupal_render($form['field_address']); ?>
-<fieldset class="contact">
+<fieldset class="main-inputs">
+  <?php print drupal_render($form['field_address']); ?>
   <?php print drupal_render($form['field_email']); ?>
   <?php print drupal_render($form['field_phones']); ?>
 </fieldset>
-<?php print drupal_render($form['og_group_ref']); ?>
-<?php print drupal_render($form['field_is_coordination_hub']); ?>
+<fieldset class="details">
+  <?php print drupal_render($form['og_group_ref']); ?>
+  <?php print drupal_render($form['field_is_coordination_hub']); ?>
+</fieldset>
 
 <fieldset id="actions">
   <?php print drupal_render($form['actions']); ?>
