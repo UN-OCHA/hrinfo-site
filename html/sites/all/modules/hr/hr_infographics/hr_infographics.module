@@ -82,6 +82,8 @@ function hr_infographics_form_hr_infographic_node_form_alter(&$form, &$form_stat
   unset($form['options']);
   unset($form['redirect']);
   unset($form['revision_information']);
+  $form['field_data_sources']['#access'] = FALSE;
+  $form['group_content_access']['#access'] = FALSE;
 
   // Necessary to remove path settings.
   $form['#after_build'][] = 'hr_infographics_form_alter_after_build';
