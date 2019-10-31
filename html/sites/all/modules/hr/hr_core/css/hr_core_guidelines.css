@@ -28,8 +28,8 @@ form fieldset.titled > legend.has-guidelines > span {
   margin-bottom: 2px !important;
 }
 table thead tr th .guideline-toggler {
-  border: 1px solid #fff !important;
-  color: #fff !important;
+  border: 1px solid #333 !important;
+  color: #333 !important;
 }
 .guideline-toggler + .guideline-checkbox {
   display: none;
@@ -65,7 +65,9 @@ input:checked + .guideline {
   box-shadow: rgba(64,64,60,.1) 0px 0px 0px 10px;
   -webkit-box-shadow: rgba(64,64,60,.1) 0px 0px 0px 10px;
   -moz-box-shadow: rgba(64,64,60,.1) 0px 0px 0px 10px;
+  margin-auto;
   position: relative;
+  width: 80%;
 }
 .guideline-content > h3 {
   font-family: Helvetica,Arial,sans-serif;
@@ -79,8 +81,6 @@ input:checked + .guideline {
 }
 .guideline-content {
   background-color: white;
-  width: 500px;
-  height: 300px;
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
