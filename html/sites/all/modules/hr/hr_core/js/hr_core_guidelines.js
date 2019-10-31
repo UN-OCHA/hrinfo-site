@@ -18,10 +18,10 @@
 
       // Get Form ID
       var entityBundle = getEntityBundleFromForm([
-        ['hr-assessment-node-form', 'assessments'],
+        ['node-hr_assessment-form', 'assessments'],
         ['node-hr_document-form', 'documents'],
-        ['hr-event-node-form', 'events'],
-        ['hr-infographic-node-form', 'mapinfographics'],
+        ['node-hr_event-form', 'events'],
+        ['node-hr_infographic-form', 'mapinfographics'],
       ]);
       if (entityBundle === '') {
         return;
@@ -59,7 +59,7 @@
 
           // Field name.
           var field = 'form-' + label.text()
-          .replace(/\s*[()*+]\s*/g, '')
+          .replace(/\s*[():*+]\s*/g, '')
           .trim()
           .toLowerCase()
           .replace(/\s*[&]\s*/, ' ')
