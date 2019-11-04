@@ -53,9 +53,10 @@ function hr_infographics_form_hr_infographic_node_form_alter(&$form, &$form_stat
   unset($form['redirect']);
   unset($form['revision_information']);
   $form['field_data_sources']['#access'] = FALSE;
+  $form['field_sectors']['#access'] = FALSE;
   $form['group_content_access']['#access'] = FALSE;
 
-  // Necessary to remove path settings.
+  // To alter changes not yet made.
   $form['#after_build'][] = 'hr_infographics_form_alter_after_build';
 
   // Attach js to toggle additional fields.
@@ -175,8 +176,6 @@ function hr_infographics_clone_node_alter(&$node, $context) {
 }
 
 /**
- * Remove the path and menu settings for node form and hide text format options.
- *
  * Added in hr_infographics_form_hr_infographic_node_form_alter().
  */
 function hr_infographics_form_alter_after_build($form, &$form_state) {
@@ -184,8 +183,10 @@ function hr_infographics_form_alter_after_build($form, &$form_state) {
   $form['language']['#description'] = t('Select the map/ infographic language. If not listed choose English and indicate the language in the title.');
 
   $form['menu']['#access'] = FALSE;
+  // Hide wysiwyg (and other text format) options.
   $language = $form['body']['#language'];
   $form['body'][$language][0]['format']['#access'] = FALSE;
+  // Remove the path settings for node form.
   unset($form['path']);
 
   return $form;
