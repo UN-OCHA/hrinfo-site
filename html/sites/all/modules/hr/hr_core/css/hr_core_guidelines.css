@@ -76,6 +76,11 @@ input:checked + .guideline {
   position: relative;
   width: 80%;
 }
+@media screen and (min-width: 1024px) {
+  .guideline-box {
+    width: 50%;
+  }
+}
 .guideline-content > h3 {
   font-family: Helvetica,Arial,sans-serif;
   font-weight: bold;
