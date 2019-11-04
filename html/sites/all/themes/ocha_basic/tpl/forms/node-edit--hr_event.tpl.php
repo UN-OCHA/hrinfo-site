@@ -26,11 +26,11 @@
 <fieldset class="hr-additional">
   <div class="toggle">
     <?php print drupal_render($form['field_related_content']); ?>
-    <fieldset class="hr-additional-side">
-      <?php print drupal_render($form['field_location']); ?>
-      <?php print drupal_render($form['field_themes']); ?>
-    </fieldset>
-    <?php print drupal_render($form['field_sectors']); ?>
+    <?php print drupal_render($form['field_location']); ?>
+    <?php print drupal_render($form['field_themes']); ?>
+  </div>
+  <div class="optional-fields">
+    Related content, Locations and Themes.
   </div>
 </fieldset>
 
