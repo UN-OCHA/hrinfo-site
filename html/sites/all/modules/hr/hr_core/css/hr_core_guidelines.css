@@ -1,7 +1,8 @@
 #hr-field-guidelines {
   display: none;
 }
-form .form-item label.has-guidelines {
+form .form-item label.has-guidelines,
+form .form-wrapper legend.has-guidelines .panel-title {
   display: inline-block;
 }
 form fieldset.titled > legend.has-guidelines > span {
