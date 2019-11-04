@@ -83,9 +83,10 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
   unset($form['options']);
   unset($form['redirect']);
   unset($form['revision_information']);
+  $form['field_sectors']['#access'] = FALSE;
   $form['group_content_access']['#access'] = FALSE;
 
-  // Necessary to remove path settings.
+  // To alter changes not yet made.
   $form['#after_build'][] = 'hr_documents_form_alter_after_build';
 
   // Attach js to toggle additional fields.
@@ -286,16 +287,16 @@ function hr_documents_module_implements_alter(&$implementations, $hook) {
 }
 
 /**
- * Remove the path settings for node form and hide text format options.
- *
  * After_build hook added in hr_documents_form_hr_document_node_form_alter().
  */
 function hr_documents_form_alter_after_build($form, &$form_state) {
   // Add description text for language field.
   $form['language']['#description'] = t('Select the document language. If not listed choose English and indicate the language in the title.');
 
+  // Hide wysiwyg (and other text format) options.
   $language = $form['body']['#language'];
   $form['body'][$language][0]['format']['#access'] = FALSE;
+  // Remove the path settings for node form.
   unset($form['path']);
 
   return $form;
