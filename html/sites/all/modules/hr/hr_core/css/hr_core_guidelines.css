@@ -30,6 +30,12 @@ form fieldset.titled > legend.has-guidelines > span {
 table thead tr th .guideline-toggler {
   border: 1px solid #333 !important;
   color: #333 !important;
+  padding-left: 0;
+}
+.checkbox label.guideline-toggler,
+.radio label.guideline-toggler {
+  min-height: 12px;
+  padding-left: 0;
 }
 .guideline-toggler + .guideline-checkbox {
   display: none;
