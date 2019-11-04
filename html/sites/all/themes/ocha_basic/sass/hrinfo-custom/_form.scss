@@ -30,9 +30,13 @@ form .table-responsive {
 
 .node-hr_infographic-form {
 
+  table {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
   #actions,
   .details,
-  .field-name-field-sectors,
   .form-item-language input,
   .form-item-title input,
   > div > .form-group,
@@ -58,7 +62,7 @@ form .table-responsive {
 
     .main-inputs,
     .field-name-field-related-content,
-    .field-name-field-sectors,
+    .field-name-field-themes,
     .form-item-title {
       flex-grow: 1;
       margin-right: 20px;
@@ -66,7 +70,7 @@ form .table-responsive {
     }
 
     .details,
-    .hr-additional-side,
+    .field-name-field-locations,
     .form-item-language {
       width: 35%;
     }
@@ -93,12 +97,27 @@ form .table-responsive {
   width: 100%;
 }
 
+.js .form-type-date-popup .help-block {
+  display: none;
+}
+
 .js .hr-additional > .hr-additional-hide {
   display: none;
 }
 
+.js .optional-fields,
 .js .hr-additional > .hr-additional-show {
   display: block;
+}
+
+.optional-fields {
+  display: none;
+  float: left;
+  margin: 8px 12px 0 0;
+}
+
+.js .hr-additional-show + .optional-fields {
+  display: none;
 }
 
 @include desktop {
