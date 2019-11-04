@@ -38,7 +38,7 @@
        * button if appropriate.
        */
       function toggleFields() {
-        var toggle = this.previousElementSibling;
+        var toggle = this.nextElementSibling;
         if (this.value === 'show') {
           toggle.className = toggle.className.replace('hr-additional-hide', 'hr-additional-show');
           this.value = 'hide';
@@ -65,7 +65,7 @@
             var add = createButton('show', toggleTextShow[lang]);
             add.className = 'hr-toggle-button btn btn-default';
             add.addEventListener('click', toggleFields);
-            additional.appendChild(add);
+            additional.insertBefore(add, additional.children[0]);
           }
         }
       }
