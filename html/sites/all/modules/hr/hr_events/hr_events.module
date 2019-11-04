@@ -343,6 +343,7 @@ function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id)
   unset($form['redirect']);
   unset($form['revision_information']);
   $form['field_address']['#access'] = FALSE;
+  $form['field_sectors']['#access'] = FALSE;
   $form['group_content_access']['#access'] = FALSE;
 
   // Necessary to remove path settings.
