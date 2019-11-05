@@ -321,6 +321,62 @@ form .table-responsive {
   }
 }
 
+.node-hr_assessment-form {
+
+  #actions,
+  .details,
+  .form-item-title input,
+  > div > .form-group,
+  > div > .form-wrapper {
+    margin-top: 20px;
+  }
+
+  @include desktop {
+    > div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .main-inputs,
+    .field-name-field-asst-key-findings,
+    .field-name-field-asst-methodology,
+    .field-name-field-asst-sample-size,
+    .field-name-field-asst-subject,
+    .field-name-field-hid-contact-ref,
+    .field-name-field-related-content,
+    .field-name-field-contact-ref,
+    .form-item-title {
+      flex-grow: 1;
+      margin-right: 20px;
+      width: 50%;
+    }
+
+    .details,
+    .field-name-field-asst-collection-method,
+    .field-name-field-asst-freq,
+    .field-name-field-asst-unit,
+    .field-name-field-disasters,
+    .field-name-field-level-of-representation,
+    .field-name-field-themes,
+    .form-item-language {
+      width: 35%;
+    }
+
+    .link-field-subrow {
+      display: flex;
+      flex-direction: column;
+      > .link-field-column {
+        width: 100%;
+      }
+    }
+
+    #edit-actions {
+      width: 100%;
+    }
+  }
+}
+
 /* Hiding fields. */
 .hr-additional {
   border-bottom: 2px solid $cd-light-grey;
