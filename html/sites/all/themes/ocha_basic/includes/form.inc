@@ -5,6 +5,34 @@
  */
 
 /**
+ * Form theme declarations.
+ *
+ * @see hook_theme()
+ */
+function ocha_basic_form_themes($existing, $type, $theme, $path) {
+  $themes = array();
+  $types = array(
+    'hr_assessment',
+  );
+
+  // Templates for the node types.
+  foreach (node_type_get_names() as $type => $name) {
+    if (!in_array($type, $types)) {
+      continue;
+    }
+    // Edit form templates.
+    $themes[$type . '_node_form'] = array(
+      'render element' => 'form',
+      'template' => 'node-edit--' . $type,
+      'path' => $path . '/tpl/forms',
+      'preprocess functions' => array(),
+    );
+  }
+
+  return $themes;
+}
+
+/**
  * Implements theme_container().
  */
 function ocha_basic_container($variables) {

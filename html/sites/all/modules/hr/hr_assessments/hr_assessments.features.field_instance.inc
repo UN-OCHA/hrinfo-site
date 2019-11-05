@@ -1179,7 +1179,7 @@ function hr_assessments_field_default_field_instances() {
     'required' => 1,
     'settings' => array(
       'default_value' => 'now',
-      'default_value2' => 'same',
+      'default_value2' => '',
       'default_value_code' => '',
       'default_value_code2' => '',
       'entity_translation_sync' => FALSE,
@@ -1285,14 +1285,14 @@ function hr_assessments_field_default_field_instances() {
         'enable' => 0,
         'profile' => '',
       ),
-      'text_processing' => 0,
+      'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => 5,
+        'rows' => 12,
       ),
       'type' => 'text_textarea',
       'weight' => 11,
@@ -1336,14 +1336,14 @@ function hr_assessments_field_default_field_instances() {
         'enable' => 0,
         'profile' => '',
       ),
-      'text_processing' => 0,
+      'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => 5,
+        'rows' => 12,
       ),
       'type' => 'text_textarea',
       'weight' => 10,
@@ -1620,14 +1620,14 @@ function hr_assessments_field_default_field_instances() {
         'enable' => 0,
         'profile' => '',
       ),
-      'text_processing' => 0,
+      'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => 5,
+        'rows' => 12,
       ),
       'type' => 'text_textarea',
       'weight' => 9,
@@ -2329,14 +2329,14 @@ function hr_assessments_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Webspace(s)',
+    'label' => 'Operations(s)/Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
           'access_override' => 0,
           'admin' => array(
-            'widget_type' => 'entityreference_autocomplete',
+            'widget_type' => 'options_select',
           ),
           'default' => array(
             'widget_type' => 'options_select',
@@ -2534,7 +2534,7 @@ function hr_assessments_field_default_field_instances() {
   t('Upload the assessment data file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
   t('Upload the assessment questionnaire file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
   t('Upload the assessment report file, stored on your computer or on your Dropbox account, and indicate its level of accessibility. If the file is “Available on request”, write the instructions in the related space. To see File Standards and Naming Conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
-  t('Webspace(s)');
+  t('Operations(s)/Webspace(s)');
   t('You can specify here a location not available in the Location(s) field list.');
 
   return $field_instances;
