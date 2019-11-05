@@ -61,6 +61,7 @@ function hr_offices_field_default_field_instances() {
         'default_country' => '',
         'format_handlers' => array(
           'address' => 'address',
+          'address-optional' => 'address-optional',
           'address-hide-country' => 0,
           'organisation' => 0,
           'name-full' => 0,
@@ -728,12 +729,13 @@ function hr_offices_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Address');
   t('Email');
+  t('Indicate the address of the office.');
   t('Is coordination hub');
   t('Location');
-  t('Organizations');
-  t('Phones');
   t('Office / Coordination Hub Name');
   t('Operation(s)/ Webspace(s)');
+  t('Organizations');
+  t('Phones');
 
   return $field_instances;
 }
