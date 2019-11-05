@@ -719,3 +719,10 @@ function hr_core_update_7043() {
 
   module_enable(array('ocha_snap'));
 }
+
+/**
+ * Disable the dblog module.
+ */
+function hr_core_update_7044() {
+  module_disable(array('dblog'));
+}
