@@ -10,6 +10,12 @@ label {
   max-width: 100%;
 }
 
+.chosen-container-multi {
+  input[value="Choose some options"] {
+    min-width: 200px !important;
+  }
+}
+
 .form-type-checkboxes {
 
     .form-checkboxes .form-item, .form-radios .form-item {
@@ -157,16 +163,6 @@ form .table-responsive {
 }
 
 .node-hr_document-form {
-
-  table {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-
-  table {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
 
   #actions,
   .details,
