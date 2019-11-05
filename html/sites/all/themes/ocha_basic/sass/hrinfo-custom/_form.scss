@@ -34,6 +34,21 @@ form .table-responsive {
     padding: 10px 0;
   }
 
+  .field-name-field-data-sources,
+  .field-name-field-files-collection,
+  .field-name-field-hid-contact-ref,
+  .field-name-field-locations,
+  .field-name-field-phones,
+  .field-name-field-related-content {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    .description,
+    .tabledrag-toggle-weight-wrapper {
+      padding: 10px;
+    }
+  }
+
   label {
     font-size: 16px;
   }
