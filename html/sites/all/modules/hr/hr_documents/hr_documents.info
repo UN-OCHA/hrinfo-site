@@ -153,7 +153,6 @@ features[views_view][] = hr_document_types
 features[views_view][] = hr_documents
 features[views_view][] = hr_documents_feed
 features[views_view][] = hr_documents_panes
-features[views_view][] = hr_hubs_panes
 features_exclude[field_base][field_exclude_reliefweb] = field_exclude_reliefweb
 features_exclude[og_features_role][node:hr_bundle:manager] = node:hr_bundle:manager
 features_exclude[og_features_role][node:hr_bundle:contributor] = node:hr_bundle:contributor

@@ -75,6 +75,7 @@ features[variable][] = pathauto_node_hr_office_es_pattern
 features[variable][] = pathauto_node_hr_office_fr_pattern
 features[variable][] = pathauto_node_hr_office_pattern
 features[variable][] = pathauto_node_hr_office_und_pattern
+features[views_view][] = hr_hubs_panes
 features[views_view][] = hr_offices
 features[views_view][] = hr_offices_panes
 features_exclude[og_features_role][node:hr_bundle:manager] = node:hr_bundle:manager
