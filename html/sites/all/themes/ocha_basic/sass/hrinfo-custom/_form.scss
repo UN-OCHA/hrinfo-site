@@ -108,13 +108,20 @@ form .table-responsive {
 }
 
 .js .optional-fields,
+.hr-toggle-button[value="show"] {
+  display: inline-block;
+}
+
+.hr-toggle-button[value="hide"] {
+  margin-bottom: 20px;
+}
+
 .js .hr-additional > .hr-additional-show {
   display: block;
 }
 
 .optional-fields {
   display: none;
-  float: left;
   margin: 8px 12px 0 0;
 }
 
