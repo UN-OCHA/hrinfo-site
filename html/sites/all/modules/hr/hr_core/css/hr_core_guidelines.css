@@ -128,7 +128,7 @@ input:checked + .guideline {
 .guideline-box .guideline-toggler-hide {
   position: absolute;
   top: -20px;
-  left: -20px;
+  right: -20px;
   z-index: 2;
 }
 .guideline-toggler-hide {
