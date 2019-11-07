@@ -347,6 +347,15 @@ form .table-responsive {
     display: none;
   }
 
+  .field-name-field-asst-subject,
+  .field-name-field-asst-methodology,
+  .field-name-field-asst-key-findings,
+  .field-name-field-hid-contact-ref,
+  .field-name-field-locations,
+  .field-name-field-related-content {
+    margin-bottom: 20px;
+  }
+
   @include desktop {
     > div {
       display: flex;
