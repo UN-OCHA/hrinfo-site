@@ -243,6 +243,12 @@ form .table-responsive {
     width: 100%;
   }
 
+  .field-name-body,
+  .field-name-field-locations,
+  .field-name-field-related-content {
+    margin-bottom: 20px;
+  }
+
   @include desktop {
     > div {
       display: flex;
