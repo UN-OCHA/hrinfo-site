@@ -45,6 +45,10 @@ form .table-responsive {
     margin-top: 20px;
   }
 
+  label[for="edit-field-locations-und-0-target-id"] {
+    display: none;
+  }
+
   @include desktop {
     > div {
       display: flex;
