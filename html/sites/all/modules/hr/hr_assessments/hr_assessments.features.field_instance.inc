@@ -1957,7 +1957,7 @@ function hr_assessments_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Type in and select from the list the organization(s) conducting the assessment. To indicate multiple organizations add a comma after each entry.',
+    'description' => 'Type in and select from the list the organization(s) conducting the assessment.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -2011,7 +2011,7 @@ function hr_assessments_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Type in and select from the list the organization(s) taking part into (but not leading) the assessment. To indicate multiple organizations add a comma after each entry.',
+    'description' => 'Type in and select from the list the organization(s) taking part into (but not leading) the assessment.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -2053,11 +2053,8 @@ function hr_assessments_field_default_field_instances() {
       'module' => 'entityreference',
       'settings' => array(
         'apply_chosen' => 1,
-        'match_operator' => 'CONTAINS',
-        'path' => '',
-        'size' => 60,
       ),
-      'type' => 'entityreference_autocomplete_tags',
+      'type' => 'options_select',
       'weight' => 4,
     ),
   );
