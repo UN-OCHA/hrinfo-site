@@ -290,9 +290,6 @@ function hr_documents_module_implements_alter(&$implementations, $hook) {
  * After_build hook added in hr_documents_form_hr_document_node_form_alter().
  */
 function hr_documents_form_alter_after_build($form, &$form_state) {
-  // Add description text for language field.
-  $form['language']['#description'] = t('Select the document language. If not listed choose English and indicate the language in the title.');
-
   // Hide wysiwyg (and other text format) options.
   $language = $form['body']['#language'];
   $form['body'][$language][0]['format']['#access'] = FALSE;
