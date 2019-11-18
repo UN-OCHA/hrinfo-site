@@ -21,7 +21,7 @@
         ['node-hr_assessment-form', 'assessments'],
         ['node-hr_document-form', 'documents'],
         ['node-hr_event-form', 'events'],
-        ['node-hr_infographic-form', 'mapinfographics'],
+        ['node-hr_infographic-form', 'mapsinfographics'],
       ]);
       if (entityBundle === '') {
         return;
