@@ -237,7 +237,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => 'Select the cluster(s)/sector(s) the document refers to. More instructions <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.tnih4xxaodg">here</a>.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -304,7 +304,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select the coordination hub(s) the document refers to (if any).',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -355,7 +355,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select the disaster(s) or emergency the document refers to.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -406,7 +406,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select the document type and sub-type that best describe the document. Complete taxonomy available <a href="https://docs.google.com/spreadsheets/d/1dfgOtG5GQKJqRutkWQ6TFKkSJAFL5JXpzK4QWYd5_ZA/edit#gid=0">here</a>.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -508,7 +508,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Upload the file(s) to publish and specify the language(s).',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -722,7 +722,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Add title (max 128 characters) and URL of content related to the document you are publishing (example: language versions of the same document).',
+    'description' => 'Add title (max 128 characters) and URL of content related to the document you are publishing.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -842,7 +842,7 @@ function hr_documents_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select all relevant themes. Choose only themes the document substantively refers to. Complete taxonomy available <a href="https://docs.google.com/spreadsheets/d/1dfgOtG5GQKJqRutkWQ6TFKkSJAFL5JXpzK4QWYd5_ZA/edit#gid=1310702751">here</a>.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -974,7 +974,7 @@ function hr_documents_field_default_field_instances() {
     'bundle' => 'hr_document',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Enter the original title of the document, with the country the document refers to, its date and language: <b>Country: Orignal Title - DD MMM YYYY [EN/FR]</b>. Do not use abbreviations.',
+    'description' => 'Enter the original title of the document, with the country the document refers to, its date and language: <b>Country: Orignal Title - DD MMM YYYY [EN/FR]</b>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1144,7 +1144,7 @@ function hr_documents_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Acronym');
-  t('Add title (max 128 characters) and URL of content related to the document you are publishing (example: language versions of the same document).');
+  t('Add title (max 128 characters) and URL of content related to the document you are publishing.');
   t('Add text that best describes the document - either the full text of the document, or a part of it such as the executive summary or document highlights. If no text is available, add a description of the file(s) you are publishing. More instructions available <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.7izidzeds8ps">here</a>.');
   t('Choose whether the document will be public, private or will have the same setting (private or public)as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
   t('Cluster(s)/Sector(s)');
@@ -1156,7 +1156,7 @@ function hr_documents_field_default_field_instances() {
   t('Do not share with ReliefWeb');
   t('Document type');
   t('Documents');
-  t('Enter the original title of the document, with the country the document refers to, its date and language: <b>Country: Orignal Title - DD MMM YYYY [EN/FR]</b>. Do not use abbreviations.');
+  t('Enter the original title of the document, with the country the document refers to, its date and language: <b>Country: Orignal Title - DD MMM YYYY [EN/FR]</b>.');
   t('File');
   t('File(s)');
   t('Global Cluster(s)');
@@ -1169,17 +1169,11 @@ function hr_documents_field_default_field_instances() {
   t('Organization(s)');
   t('Original Publication Date');
   t('Related content');
-  t('Select all relevant themes. Choose only themes the document substantively refers to. Complete taxonomy available <a href="https://docs.google.com/spreadsheets/d/1dfgOtG5GQKJqRutkWQ6TFKkSJAFL5JXpzK4QWYd5_ZA/edit#gid=1310702751">here</a>.');
-  t('Select the cluster(s)/sector(s) the document refers to. More instructions <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.tnih4xxaodg">here</a>.');
-  t('Select the coordination hub(s) the document refers to (if any).');
   t('Select the country(ies) (or more specific locations) the document is about. Further instructions available <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.w6ji8wu8t8v5">here</a>.');
-  t('Select the disaster(s) or emergency the document refers to.');
-  t('Select the document type and sub-type that best describe the document. Complete taxonomy available <a href="https://docs.google.com/spreadsheets/d/1dfgOtG5GQKJqRutkWQ6TFKkSJAFL5JXpzK4QWYd5_ZA/edit#gid=0">here</a>.');
   t('Select the source(s) of the document. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select “other” in the meantime.');
   t('Select where to publish the document (operation, regional site or thematic site).');
   t('Theme(s)');
   t('Title');
-  t('Upload the file(s) to publish and specify the language(s).');
 
   return $field_instances;
 }
