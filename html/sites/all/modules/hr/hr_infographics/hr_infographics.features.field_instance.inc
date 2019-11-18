@@ -138,7 +138,7 @@ function hr_infographics_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select the cluster(s)/sector(s) the document refers to. More instructions <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.eb85iwbc985x">here</a>.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -197,7 +197,7 @@ function hr_infographics_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select the coordination hub(s) the map/infographic refers to (if any).',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -248,7 +248,7 @@ function hr_infographics_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select the disaster(s) or emergency the map/infographic refers to.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -348,7 +348,7 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Upload the file(s) to publish and specify the language(s).',
+    'description' => 'Upload the file(s) to publish and specify the language(s). Check file naming conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>. Additional instructions available <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.6wz7m3b0p6hh">here</a>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -558,7 +558,7 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => array(),
     'deleted' => 0,
-    'description' => 'Indicate when the map/infographic has been created/published, this can be different from the day you are uploading it. Instructions available <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.8d2gp5h18bw5">here</a>.',
+    'description' => 'Indicate when the map/infographic has been created/published. Note that this is likely different from the day you are uploading it.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -615,7 +615,7 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Add title (max 128 characters) and URL of content related to the map/infographic you are publishing (example: language versions of the same map/infographic).',
+    'description' => 'Add title (max 128 characters) and URL of content related to the map/infographic you are publishing.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -735,7 +735,7 @@ function hr_infographics_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select all relevant themes. Choose only themes the map/infographic substantively refers to. Complete taxonomy available <a href="https://docs.google.com/spreadsheets/d/1dfgOtG5GQKJqRutkWQ6TFKkSJAFL5JXpzK4QWYd5_ZA/edit#gid=1310702751">here</a>.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -867,7 +867,7 @@ function hr_infographics_field_default_field_instances() {
     'bundle' => 'hr_infographic',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Enter the original title of the map/ infographic, with the country the document refers to, its date and language: <b>Country: Original Title - DD MMM YYYY [EN/FR]</b>. Do not use abbreviations.',
+    'description' => 'Enter the original title of the map/ infographic, with the country the document refers to, its date and language: <b>Country: Original Title - DD MMM YYYY [EN/FR]</b>.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -997,7 +997,7 @@ function hr_infographics_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Acronym');
-  t('Add title (max 128 characters) and URL of content related to the map/infographic you are publishing (example: language versions of the same map/infographic).');
+  t('Add title (max 128 characters) and URL of content related to the map/infographic you are publishing.');
   t('Add text that best describes the map/ infographic, such as the map/infographic overview or its highlights. If no text is available, add a description of the file(s) you are publishing. More instructions available <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.q0y1ay5fenvr">here</a>.');
   t('Choose whether the map/infographic will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
   t('Cluster(s)/Sector(s)');
@@ -1007,12 +1007,12 @@ function hr_infographics_field_default_field_instances() {
   t('Description or Summary of content');
   t('Disaster(s)/Emergency');
   t('Do not share with ReliefWeb');
-  t('Enter the original title of the map/ infographic, with the country the document refers to, its date and language: <b>Country: Original Title - DD MMM YYYY [EN/FR]</b>. Do not use abbreviations.');
+  t('Enter the original title of the map/ infographic, with the country the document refers to, its date and language: <b>Country: Original Title - DD MMM YYYY [EN/FR]</b>.');
   t('File(s)');
   t('Global Cluster(s)');
   t('Indicate the Global Cluster(s) the map/infographic refers to');
   t('Indicate the title and the url of the row data file used to create the map/infographic');
-  t('Indicate when the map/infographic has been created/published, this can be different from the day you are uploading it. Instructions available <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.8d2gp5h18bw5">here</a>.');
+  t('Indicate when the map/infographic has been created/published. Note that this is likely different from the day you are uploading it.');
   t('Infographics');
   t('Location(s)');
   t('Map/Infographic Type');
@@ -1021,17 +1021,13 @@ function hr_infographics_field_default_field_instances() {
   t('Organization(s)');
   t('Original Publication Date');
   t('Related content');
-  t('Select all relevant themes. Choose only themes the map/infographic substantively refers to. Complete taxonomy available <a href="https://docs.google.com/spreadsheets/d/1dfgOtG5GQKJqRutkWQ6TFKkSJAFL5JXpzK4QWYd5_ZA/edit#gid=1310702751">here</a>.');
-  t('Select the cluster(s)/sector(s) the document refers to. More instructions <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.eb85iwbc985x">here</a>.');
-  t('Select the coordination hub(s) the map/infographic refers to (if any).');
   t('Select the country(ies) (or more specific locations) the document is about. Further instructions available <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.33p6uajsech9">here</a>.');
-  t('Select the disaster(s) or emergency the map/infographic refers to.');
   t('Select the map/ infographic type and sub-type that best describe the map/infographic. Complete taxonomy available <a href="https://docs.google.com/spreadsheets/d/1dfgOtG5GQKJqRutkWQ6TFKkSJAFL5JXpzK4QWYd5_ZA/edit#gid=1707153393">here</a>.');
   t('Select the source(s) of the document. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select “other” in the meantime.');
   t('Select where to publish the document (operation, regional site or thematic site).');
   t('Theme(s)');
   t('Title');
-  t('Upload the file(s) to publish and specify the language(s).');
+  t('Upload the file(s) to publish and specify the language(s). Check file naming conventions <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA">here</a>. Additional instructions available <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.6wz7m3b0p6hh">here</a>.');
 
   return $field_instances;
 }
