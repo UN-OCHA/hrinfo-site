@@ -8,6 +8,10 @@ label {
 
 .chosen-container {
   max-width: 100%;
+
+  .chosen-choices li.search-field input[type="text"] {
+    color: $cd-dark-grey;
+  }
 }
 
 .chosen-container-multi {
@@ -35,8 +39,13 @@ form .table-responsive {
 }
 
 .node-form {
+  .form-item .form-control {
+    color: $cd-dark-grey;
+  }
+
   .form-item .description,
   .form-item .help-block {
+    color: $cd-dark-grey;
     padding: 10px 0;
   }
 
