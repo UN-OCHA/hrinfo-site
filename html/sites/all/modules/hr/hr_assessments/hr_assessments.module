@@ -256,9 +256,6 @@ function hr_assessments_views_post_render(&$view, &$output, &$cache) {
  * After_build hook added in hr_documents_form_hr_document_node_form_alter().
  */
 function hr_assessments_form_alter_after_build($form, &$form_state) {
-  // Add description text for language field.
-  $form['language']['#description'] = t('Select the document language. If not listed choose English and indicate the language in the title.');
-
   // Hide wysiwyg (and other text format) options.
   $language = $form['field_asst_key_findings']['#language'];
   $form['field_asst_key_findings'][$language][0]['format']['#access'] = FALSE;
