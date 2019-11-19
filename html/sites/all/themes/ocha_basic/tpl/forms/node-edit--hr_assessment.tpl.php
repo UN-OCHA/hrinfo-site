@@ -23,6 +23,7 @@
   <?php print drupal_render($form['field_organizations']); ?>
   <?php print drupal_render($form['field_organizations2']); ?>
   <?php print drupal_render($form['field_population_types']); ?>
+  <?php print drupal_render($form['field_coordination_hubs']); ?>
   <?php print drupal_render($form['field_disasters']); ?>
 </fieldset>
 
