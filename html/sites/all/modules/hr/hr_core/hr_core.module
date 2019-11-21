@@ -375,6 +375,9 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
     $form['#attached']['css'][] = drupal_get_path('module', 'hr_core') . '/css/hr_core_guidelines.css';
   }
 
+  if (isset($form['field_related_content']) && !empty($form['field_related_content']['und'])) {
+    $form['field_related_content']['und']['#after_build'][] = 'hr_core_related_content_after_build';
+  }
 
   $node = $form['#node'];
   if (isset($_GET[OG_AUDIENCE_FIELD])) {
@@ -853,6 +856,20 @@ function hr_core_languagefield_options_alter(&$languages, $subsets, $langcode) {
       'name_native' => 'Dari (دری)',
     );
   }
+}
+
+/**
+ * After build for field_related_content.
+ *
+ * Remove title description, set in link module.
+ */
+function hr_core_related_content_after_build($element) {
+  foreach (element_children($element) as $child) {
+    if (!empty($element[$child]['title'])) {
+      unset($element[$child]['title']['#description']);
+    }
+  }
+  return $element;
 }
 
 /**
