@@ -61,7 +61,7 @@
 
           // Field name.
           var field = 'form-' + label.text()
-          .replace(/\s*[():*+]\s*/g, '')
+          .replace(/\s*[()':*+]\s*/g, '')
           .trim()
           .toLowerCase()
           .normalize('NFD')
