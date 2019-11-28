@@ -49,6 +49,8 @@
         $('.guideline-toggler, .guideline-checkbox, .guideline').remove();
 
         var labels = $('label, legend');
+        var languageField = ['form-language', 'form-langue', 'form-idioma'];
+        var titleField = ['form-title', 'form-titre', 'form-titulo', 'form-заголовок'];
         for (var i = 0, l = labels.length; i < l; i++) {
           var label = $(labels[i]);
 
@@ -62,14 +64,16 @@
           .replace(/\s*[():*+]\s*/g, '')
           .trim()
           .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, "")
           .replace(/\s*[&]\s*/, ' ')
           .replace(/[_ /]+/g, '-');
 
           // Skip title and language when they're not the main element.
-          if (field === 'form-language' && label.parents('.form-item-language').length === 0) {
+          if (languageField.indexOf(field) > -1 && label.parents('.form-item-language').length === 0) {
             continue;
           }
-          if (field === 'form-title' && label.parents('.form-item-title').length === 0) {
+          if (titleField.indexOf(field) > -1 && label.parents('.form-item-title').length === 0) {
             continue;
           }
 
