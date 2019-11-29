@@ -1,0 +1,131 @@
+<?php
+
+/**
+ * Basic Field Collection Source tests.
+ */
+class TMGMTFieldCollectionSourceTestCase extends TMGMTEntityTestCaseUtility {
+
+  const FIELD_COLLECTION_TEXT = 'Test field collection field content';
+
+  static function getInfo() {
+    return array(
+      'name' => 'Field Collection Source tests',
+      'description' => 'Exporting source data from nodes that use field collections',
+      'group' => 'Translation Management',
+    );
+  }
+
+  function setUp() {
+    parent::setUp(array('tmgmt_node', 'tmgmt_field', 'translation', 'field_collection'));
+    $this->loginAsAdmin();
+    $this->setEnvironment('de');
+    $this->createNodeType('page', 'Basic page', TRANSLATION_ENABLED, FALSE);
+    $this->createFieldCollectionInstance();
+  }
+
+  /**
+   * Creates a node and field collection entity pair.
+   */
+  function createFieldCollectionInstance() {
+    $this->field_name = 'field_test_collection';
+    $node_field = array(
+      'field_name' => $this->field_name,
+      'type' => 'field_collection',
+      'cardinality' => 4,
+      'translatable' => TRUE,
+    );
+    field_create_field($node_field);
+    $node_field_instance = array(
+      'field_name' => $this->field_name,
+      'entity_type' => 'node',
+      'bundle' => 'page',
+      'label' => $this->randomName() . '_label',
+      'description' => $this->randomName() . '_description',
+      'weight' => mt_rand(0, 127),
+      'settings' => array(),
+      'widget' => array(
+        'type' => 'hidden',
+        'label' => 'Test',
+        'settings' => array(),
+      ),
+    );
+    field_create_instance($node_field_instance);
+
+    // Add a field to the collection.
+    $field_collection_field = array(
+      'field_name' => 'field_text',
+      'type' => 'text',
+      'cardinality' => 1,
+      'translatable' => TRUE,
+    );
+    field_create_field($field_collection_field);
+    $field_collection_field_instance = array(
+      'entity_type' => 'field_collection_item',
+      'field_name' => 'field_text',
+      'bundle' => $this->field_name,
+      'label' => 'Test text field',
+      'widget' => array(
+        'type' => 'text_textfield',
+      ),
+    );
+    field_create_instance($field_collection_field_instance);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  function createNode($bundle, $sourcelang = 'en') {
+    $node = parent::createNode($bundle);
+    $field_collection = entity_create('field_collection_item', array(
+      'bundle' => $this->field_name,
+      'field_name' => $this->field_name,
+    ));
+    $field_collection->field_text[LANGUAGE_NONE][0]['value'] = self::FIELD_COLLECTION_TEXT;
+    $field_collection->setHostEntity('node', $node, LANGUAGE_NONE, TRUE);
+    entity_save('field_collection_item', $field_collection);
+    node_save($node);
+    return $node;
+  }
+
+  /**
+   * Tests nodes field translation.
+   */
+  function testFieldCollectionSource() {
+    // Create a translation job.
+    $job = $this->createJob();
+    $job->translator = $this->default_translator->name;
+    $job->settings = array();
+    $job->save();
+
+    $node = $this->createNode('page');
+    // Create a job item for this node and add it to the job.
+    $job->addItem('node', 'node', $node->nid);
+    // Translate the job.
+    $job->requestTranslation();
+
+    foreach ($job->getItems() as $item) {
+      $item->acceptTranslation();
+      $node = node_load($item->item_id);
+
+      // The translations may be statically cached, so make make sure
+      // to reset the cache before loading the node translations.
+      $cached_translations = & drupal_static('translation_node_get_translations', array());
+      unset($cached_translations[$node->tnid]);
+
+      // Load the translation set of the source node.
+      $translations = translation_node_get_translations($node->tnid);
+
+      if (isset($translations['de'])) {
+        $translated_node = node_load($translations['de']->nid, NULL, TRUE);
+        $translated_collection = field_collection_item_load($translated_node->field_test_collection['und'][0]['value']);
+        $translated_collection_text = $translated_collection->field_text['de'][0]['value'];
+
+        $data = $item->getData();
+        $job_item_text = $data['field_test_collection'][0]['field_text'][0]['value']['#translation']['#text'];
+
+        $this->assertEqual($translated_collection_text, $job_item_text, 'Job item translation and field collection translation do not match');
+        $this->assertEqual('de_' . self::FIELD_COLLECTION_TEXT, $translated_collection_text, 'Text from field collection is not translated');
+      }
+    }
+  }
+}
