@@ -57,6 +57,10 @@
       function prepareToggle() {
         var additional = document.getElementsByClassName('hr-additional')[0];
         if (additional !== undefined && additional.children.length > 0) {
+          if (additional.hasAttribute('processed')) {
+            return;
+          }
+          additional.setAttribute('processed', '');
           if (additional.children[0].className.indexOf('hr-additional-hide') === -1) {
             additional.children[0].className += ' hr-additional-hide';
           }
