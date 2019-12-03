@@ -349,7 +349,6 @@ function hr_assessments_panelizer_defaults() {
   );
   $pane->cache = array();
   $pane->style = array(
-    'style' => 'hr_highlighted',
     'settings' => NULL,
   );
   $pane->css = array();
@@ -474,7 +473,6 @@ function hr_assessments_panelizer_defaults() {
   );
   $pane->cache = array();
   $pane->style = array(
-    'style' => 'hr_highlighted',
     'settings' => NULL,
   );
   $pane->css = array();
