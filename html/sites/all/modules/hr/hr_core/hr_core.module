@@ -449,6 +449,7 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
           ->propertyCondition('status', NODE_PUBLISHED)
           ->entityCondition('bundle', 'hr_office')
           ->fieldCondition('og_group_ref', 'target_id', $groups, 'IN')
+          ->fieldCondition('field_is_coordination_hub', 'value', 1)
           ->execute();
         if (isset($results['node'])) {
           $options = array(
