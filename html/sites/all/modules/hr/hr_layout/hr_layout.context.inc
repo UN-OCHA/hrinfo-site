@@ -161,6 +161,30 @@ function hr_layout_context_default_contexts() {
         'node_form' => 0,
       ),
     ),
+    'node' => array(
+      'values' => array(
+        'acc_application' => 'acc_application',
+        'acc_incident' => 'acc_incident',
+        'hr_assessment' => 'hr_assessment',
+        'hr_bundle' => 'hr_bundle',
+        'hr_disaster' => 'hr_disaster',
+        'hr_document' => 'hr_document',
+        'hr_event' => 'hr_event',
+        'hr_indicator' => 'hr_indicator',
+        'hr_infographic' => 'hr_infographic',
+        'hr_news' => 'hr_news',
+        'hr_office' => 'hr_office',
+        'hr_operation' => 'hr_operation',
+        'hr_page' => 'hr_page',
+        'hr_sector' => 'hr_sector',
+        'hr_space' => 'hr_space',
+        'hr_toolbox_category' => 'hr_toolbox_category',
+        'hr_toolbox_item' => 'hr_toolbox_item',
+      ),
+      'options' => array(
+        'node_form' => '0',
+      ),
+    ),
     'path' => array(
       'values' => array(
         '~j2h/contactos' => '~j2h/contactos',

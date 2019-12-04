@@ -46,7 +46,7 @@ function hr_infographics_form_hr_infographic_node_form_alter(&$form, &$form_stat
     $form['#after_build'][] = '_hr_document_clone_disable_language';
   }
 
-  // These details aren't necessary for offices.
+  // These details aren't necessary for maps/infographics.
   unset($form['additional_settings']);
   unset($form['author']);
   unset($form['options']);
