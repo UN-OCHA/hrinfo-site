@@ -47,7 +47,7 @@ function hr_documents_field_default_field_instances() {
     'entity_type' => 'field_collection_item',
     'field_name' => 'field_file',
     'label' => 'File',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'description_field' => 0,
       'entity_translation_sync' => FALSE,
