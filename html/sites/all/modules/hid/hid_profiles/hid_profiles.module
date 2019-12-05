@@ -449,6 +449,9 @@ function _hid_profiles_get_contacts(array $terms = array()) {
  * Compatability wrapper.
  */
 function hid_profiles_get_contact($id) {
+  if (empty($id)) {
+    return false;
+  }
   return hid_profiles_v2_get_contact(array('_id' => $id));
 }
 
