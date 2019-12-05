@@ -99,7 +99,7 @@ function hid_contact_reference_field_widget_info() {
  */
 function hid_contact_reference_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   $default_value = '';
-  if (!empty($items[$delta])) {
+  if (!empty($items[$delta]) && !empty($items[$delta]['cid'])) {
     if (variable_get('hid_profiles_v2', FALSE)) {
       $contact = hid_profiles_get_contact($items[$delta]['cid']);
       $default_value = $contact->name . " [id: $contact->_id]";
@@ -217,7 +217,7 @@ function hid_contact_reference_field_formatter_view($entity_type, $entity, $fiel
       $settings = $display['settings'];
       $wrapper = entity_metadata_wrapper($entity_type, $entity);
       foreach ($items as $delta => $item) {
-        if ($contact = hid_profiles_get_contact($item['cid'])) {
+        if (!empty($item['cid']) && $contact = hid_profiles_get_contact($item['cid'])) {
           $element[$delta] = array(
             '#theme' => $theme,
             '#contact' => $contact,
