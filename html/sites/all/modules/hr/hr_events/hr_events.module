@@ -160,6 +160,9 @@ function hr_events_views_pre_view(&$view, &$display_id, &$args) {
           $header .= '<div class="filters">' . t('Filter criteria');
         }
         $entity = entity_load_single($entity_types[$key], $_GET[$key]);
+        if (empty($entity)) {
+          continue;
+        }
         $header .= '<span class="filter">' . entity_label($entity_types[$key], $entity) . '</span>';
         $i++;
       }
