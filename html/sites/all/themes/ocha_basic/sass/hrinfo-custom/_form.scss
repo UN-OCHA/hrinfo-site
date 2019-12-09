@@ -20,6 +20,12 @@ label {
   }
 }
 
+.chosen-container-multi {
+  input[value="Choose some options"] {
+    min-width: 200px !important;
+  }
+}
+
 .form-type-checkboxes {
 
     .form-checkboxes .form-item, .form-radios .form-item {
@@ -172,6 +178,7 @@ form .table-responsive {
   }
 }
 
+.node-hr_assessment-form,
 .node-hr_document-form,
 .node-hr_event-form,
 .node-hr_infographic-form {
@@ -195,7 +202,15 @@ form .table-responsive {
     width: 100%;
   }
 
+  label[for="edit-field-locations-und-0-target-id"] {
+    display: none;
+  }
+
   .field-name-body,
+  .field-name-field-asst-subject,
+  .field-name-field-asst-methodology,
+  .field-name-field-asst-key-findings,
+  .field-name-field-hid-contact-ref,
   .field-name-field-locations,
   .field-name-field-related-content {
     margin-bottom: 20px;
@@ -211,6 +226,12 @@ form .table-responsive {
 
     .main-inputs,
     .field-name-field-related-content,
+    .field-name-field-asst-key-findings,
+    .field-name-field-asst-methodology,
+    .field-name-field-asst-subject,
+    .field-name-field-hid-contact-ref,
+    .field-name-field-related-content,
+    .field-name-field-contact-ref,
     .form-item-title {
       flex-grow: 1;
       margin-right: 20px;
@@ -223,8 +244,14 @@ form .table-responsive {
     }
 
     .details,
+    .field-name-field-asst-collection-method,
+    .field-name-field-asst-freq,
+    .field-name-field-asst-sample-size,
+    .field-name-field-asst-unit,
+    .field-name-field-level-of-representation,
     .field-name-field-locations,
     .field-name-field-location,
+    .field-name-field-themes,
     .form-item-language {
       width: 35%;
     }
