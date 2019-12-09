@@ -14,7 +14,9 @@ function ocha_basic_form_themes($existing, $type, $theme, $path) {
   $types = array(
     'hr_document',
     'hr_infographic',
+    'hr_event',
   );
+
   // Templates for the node types.
   foreach (node_type_get_names() as $type => $name) {
     if (!in_array($type, $types)) {

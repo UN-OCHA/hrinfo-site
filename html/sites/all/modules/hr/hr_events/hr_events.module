@@ -160,6 +160,9 @@ function hr_events_views_pre_view(&$view, &$display_id, &$args) {
           $header .= '<div class="filters">' . t('Filter criteria');
         }
         $entity = entity_load_single($entity_types[$key], $_GET[$key]);
+        if (empty($entity)) {
+          continue;
+        }
         $header .= '<span class="filter">' . entity_label($entity_types[$key], $entity) . '</span>';
         $i++;
       }
@@ -335,6 +338,22 @@ function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id)
     }
     $form['#after_build'][] = '_hr_document_clone_disable_language';
   }
+
+  // These details aren't necessary.
+  unset($form['additional_settings']);
+  unset($form['author']);
+  unset($form['options']);
+  unset($form['redirect']);
+  unset($form['revision_information']);
+  $form['field_address']['#access'] = FALSE;
+  $form['field_sectors']['#access'] = FALSE;
+  $form['group_content_access']['#access'] = FALSE;
+
+  // Necessary to remove path settings.
+  $form['#after_build'][] = 'hr_events_form_alter_after_build';
+
+  // Attach js to toggle additional fields.
+  $form['#attached']['js'][] = drupal_get_path('module', 'hr_core') . '/js/hr_core_toggle_fields.js';
 }
 
 /**
@@ -355,4 +374,18 @@ function hr_events_clone_node_alter(&$node, $context) {
   unset($node->field_event_meeting_minutes);
   unset($node->field_event_agenda);
   unset($node->field_related_content);
+}
+
+/**
+ * Remove the path and menu settings for node form and hide text format options.
+ *
+ * Added in hr_infographics_form_hr_infographic_node_form_alter().
+ */
+function hr_events_form_alter_after_build($form, &$form_state) {
+  $form['menu']['#access'] = FALSE;
+  $language = $form['body']['#language'];
+  $form['body'][$language][0]['format']['#access'] = FALSE;
+  unset($form['path']);
+
+  return $form;
 }

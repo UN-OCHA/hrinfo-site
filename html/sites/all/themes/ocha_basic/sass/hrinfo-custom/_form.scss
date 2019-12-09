@@ -163,6 +163,7 @@ form .table-responsive {
 }
 
 .node-hr_document-form,
+.node-hr_event-form,
 .node-hr_infographic-form {
 
   #actions,
@@ -191,7 +192,8 @@ form .table-responsive {
   }
 
   @include desktop {
-    > div {
+    > div,
+    .hr-additional > div {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
@@ -212,6 +214,7 @@ form .table-responsive {
 
     .details,
     .field-name-field-locations,
+    .field-name-field-location,
     .form-item-language {
       width: 35%;
     }

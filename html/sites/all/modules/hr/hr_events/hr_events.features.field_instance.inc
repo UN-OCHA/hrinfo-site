@@ -16,7 +16,7 @@ function hr_events_field_default_field_instances() {
     'bundle' => 'hr_event',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Provide here additional information regarding the event.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'hidden',
@@ -39,7 +39,7 @@ function hr_events_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'body',
-    'label' => 'Event description',
+    'label' => 'Venue and Event description',
     'required' => 0,
     'settings' => array(
       'display_summary' => 0,
@@ -51,67 +51,11 @@ function hr_events_field_default_field_instances() {
       'active' => 1,
       'module' => 'text',
       'settings' => array(
-        'rows' => 20,
+        'rows' => 12,
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
       'weight' => 9,
-    ),
-  );
-
-  // Exported field_instance: 'node-hr_event-field_address'.
-  $field_instances['node-hr_event-field_address'] = array(
-    'bundle' => 'hr_event',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'Indicate here where the event takes place.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 13,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_address',
-    'label' => 'Venue',
-    'required' => 0,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'addressfield',
-      'settings' => array(
-        'available_countries' => array(),
-        'default_country' => 'site_default',
-        'format_handlers' => array(
-          'address' => 'address',
-          'address-optional' => 'address-optional',
-          'address-hide-postal-code' => 0,
-          'address-hide-street' => 0,
-          'address-hide-country' => 0,
-          'organisation' => 0,
-          'name-full' => 0,
-          'name-oneline' => 0,
-        ),
-      ),
-      'type' => 'addressfield_standard',
-      'weight' => 5,
     ),
   );
 
@@ -121,7 +65,7 @@ function hr_events_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => 'Indicate the cluster(s)/sector(s) the event refers to.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -188,7 +132,7 @@ function hr_events_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Click on the field and select the coordination hub(s) the event refers to (if any).',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -239,7 +183,7 @@ function hr_events_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => ' Click on the field and select the disaster(s) and/or emergency the event refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations. See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -290,7 +234,7 @@ function hr_events_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Add the agenda of the event as a document first, and then reference this document from here.',
+    'description' => 'Select the agenda of the event, which must have been previously uploaded to HR.info as a document.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -326,13 +270,11 @@ function hr_events_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'entityreference',
+      'module' => 'options',
       'settings' => array(
-        'match_operator' => 'CONTAINS',
-        'path' => '',
-        'size' => 60,
+        'apply_chosen' => 1,
       ),
-      'type' => 'entityreference_autocomplete',
+      'type' => 'options_select',
       'weight' => 14,
     ),
   );
@@ -343,7 +285,7 @@ function hr_events_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'From the list, select the kind of event you are creating.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -395,7 +337,7 @@ function hr_events_field_default_field_instances() {
   $field_instances['node-hr_event-field_event_date'] = array(
     'bundle' => 'hr_event',
     'deleted' => 0,
-    'description' => 'Indicate the date(s) of the event. ',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -422,7 +364,7 @@ function hr_events_field_default_field_instances() {
     'required' => 1,
     'settings' => array(
       'default_value' => 'now',
-      'default_value2' => 'same',
+      'default_value2' => '',
       'default_value_code' => '',
       'default_value_code2' => '',
       'entity_translation_sync' => FALSE,
@@ -437,6 +379,7 @@ function hr_events_field_default_field_instances() {
         'input_format' => 'd/m/Y - H:i:s',
         'input_format_custom' => '',
         'label_position' => 'above',
+        'no_fieldset' => 1,
         'repeat_collapsed' => 1,
         'text_parts' => array(),
         'year_range' => '-3:+3',
@@ -452,7 +395,7 @@ function hr_events_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Add the meeting minutes of the event as a document first, and then reference this document from here.',
+    'description' => 'Select the meeting minutes of the event, which must have been previously uploaded to HR.info as a document.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -488,13 +431,11 @@ function hr_events_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'entityreference',
+      'module' => 'options',
       'settings' => array(
-        'match_operator' => 'CONTAINS',
-        'path' => '',
-        'size' => 60,
+        'apply_chosen' => 1,
       ),
-      'type' => 'entityreference_autocomplete',
+      'type' => 'options_select',
       'weight' => 15,
     ),
   );
@@ -504,7 +445,7 @@ function hr_events_field_default_field_instances() {
     'bundle' => 'hr_event',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Indicate the person(s) to contact for information regarding the event. To show up in the list, the person must have a <a href="https://humanitarian.id/" target="info">HumanitarianID</a> profile.',
+    'description' => 'To show in the list, the person must have a <a href="https://humanitarian.id/">HumanitarianID</a> profile.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -548,7 +489,7 @@ function hr_events_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Select from the menu the country where the event takes place. You can add more specific locations by selecting multiple layers (region, province, town).',
+    'description' => 'Select the country(ies) (or more specific locations) related to the event.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -593,7 +534,6 @@ function hr_events_field_default_field_instances() {
           'create_new_levels' => 0,
           'create_new_terms' => 0,
           'force_deepest' => 0,
-          'node_count' => 0,
           'use_chosen' => 'always',
         ),
       ),
@@ -608,7 +548,7 @@ function hr_events_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Type in and select the the event\'s organizer(s). To indicate multiple organizations add a comma after each entry.',
+    'description' => 'Add organization(s) running the event. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select "other" in the meantime.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -647,13 +587,11 @@ function hr_events_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'entityreference',
+      'module' => 'options',
       'settings' => array(
-        'match_operator' => 'CONTAINS',
-        'path' => '',
-        'size' => 60,
+        'apply_chosen' => 1,
       ),
-      'type' => 'entityreference_autocomplete_tags',
+      'type' => 'options_select',
       'weight' => 6,
     ),
   );
@@ -663,7 +601,7 @@ function hr_events_field_default_field_instances() {
     'bundle' => 'hr_event',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Add links to content that is related to the event you are creating by indicating the title of the content and its url. When using the Search function make sure to search by content title.',
+    'description' => 'Add title (max 128 characters) and URL of content related to the event you are publishing.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -783,7 +721,7 @@ function hr_events_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'Click on the field and select all relevant themes. Choose only themes the event substantively refers to.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -897,8 +835,7 @@ function hr_events_field_default_field_instances() {
     'default_value' => NULL,
     'default_value_function' => 'entityreference_prepopulate_field_default_value',
     'deleted' => 0,
-    'description' => 'Click on the field and select where to publish the event (operation, regional site or thematic site).
-',
+    'description' => 'Select where to publish the event (operation, regional site or thematic site).',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -921,14 +858,14 @@ function hr_events_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Webspace(s)',
+    'label' => 'Operation(s)/ Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
           'access_override' => 0,
           'admin' => array(
-            'widget_type' => 'entityreference_autocomplete',
+            'widget_type' => 'options_select',
           ),
           'default' => array(
             'widget_type' => 'options_select',
@@ -976,7 +913,7 @@ function hr_events_field_default_field_instances() {
     'bundle' => 'hr_event',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Type the original title of the event. Try not to use abbreviations or acronyms. See standards and naming conventions guidelines <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.',
+    'description' => 'Enter the title of the event and indicate its subject, category, and where applicable the cluster and the coordination hub. Acronyms should be avoided to make the title easily understandable. Example: Subject of the event, Event type, Cluster - Coordination Hub.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1065,44 +1002,36 @@ function hr_events_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t(' Click on the field and select the disaster(s) and/or emergency the event refers to. Each disaster/emergency is associated with a number, called GLIDE, which is a common standard used by a wide network of organizations. See <a href="http://glidenumber.net/?ref=hrinfo" target="disasters">glidenumber.net</a>.');
-  t('Add links to content that is related to the event you are creating by indicating the title of the content and its url. When using the Search function make sure to search by content title.');
-  t('Add the agenda of the event as a document first, and then reference this document from here.');
-  t('Add the meeting minutes of the event as a document first, and then reference this document from here.');
+  t('Add organization(s) running the event. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select "other" in the meantime.');
+  t('Add title (max 128 characters) and URL of content related to the event you are publishing.');
   t('Agenda(s)');
   t('Choose whether the event will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
-  t('Click on the field and select all relevant themes. Choose only themes the event substantively refers to.');
-  t('Click on the field and select the coordination hub(s) the event refers to (if any).');
-  t('Click on the field and select where to publish the event (operation, regional site or thematic site).
-');
   t('Cluster(s)/Sector(s)');
   t('Contact(s)');
   t('Content visibility');
   t('Coordination hub(s)');
   t('Date(s)');
   t('Disaster(s)/Emergency');
+  t('Enter the title of the event and indicate its subject, category, and where applicable the cluster and the coordination hub. Acronyms should be avoided to make the title easily understandable. Example: Subject of the event, Event type, Cluster - Coordination Hub.');
   t('Event Category');
   t('Event description');
-  t('From the list, select the kind of event you are creating.');
   t('Global Cluster(s)');
   t('Indicate here where the event takes place.');
   t('Indicate the Global Cluster(s) the event refers to.');
-  t('Indicate the cluster(s)/sector(s) the event refers to.');
-  t('Indicate the date(s) of the event. ');
-  t('Indicate the person(s) to contact for information regarding the event. To show up in the list, the person must have a <a href="https://humanitarian.id/" target="info">HumanitarianID</a> profile.');
   t('Location');
   t('Meeting minutes');
   t('Name');
+  t('Operation(s)/ Webspace(s)');
   t('Organization(s)');
-  t('Provide here additional information regarding the event.');
   t('Related content');
-  t('Select from the menu the country where the event takes place. You can add more specific locations by selecting multiple layers (region, province, town).');
+  t('Select the agenda of the event, which must have been previously uploaded to HR.info as a document.');
+  t('Select the country(ies) (or more specific locations) related to the event.');
+  t('Select the meeting minutes of the event, which must have been previously uploaded to HR.info as a document.');
+  t('Select where to publish the event (operation, regional site or thematic site).');
   t('Theme(s)');
   t('Title');
-  t('Type in and select the the event\'s organizer(s). To indicate multiple organizations add a comma after each entry.');
-  t('Type the original title of the event. Try not to use abbreviations or acronyms. See standards and naming conventions guidelines <a href="https://drive.google.com/open?id=1TxOek13c4uoYAQWqsYBhjppeYUwHZK7nhx5qgm1FALA" target="info">click here</a>.');
+  t('To show in the list, the person must have a <a href="https://humanitarian.id/">HumanitarianID</a> profile.');
   t('Venue');
-  t('Webspace(s)');
 
   return $field_instances;
 }
