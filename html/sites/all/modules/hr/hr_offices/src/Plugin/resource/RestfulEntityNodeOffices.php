@@ -39,6 +39,7 @@ class RestfulEntityNodeOffices extends ResourceCustom implements ResourceInterfa
   public function publicFields() {
     $public_fields = parent::publicFields();
 
+    // TODO: consider removing this.
     $public_fields['location'] = array(
       'property' => 'field_location',
       'resource' => array(
@@ -64,6 +65,7 @@ class RestfulEntityNodeOffices extends ResourceCustom implements ResourceInterfa
       'property' => 'field_is_coordination_hub'
     );
 
+    // TODO: consider removing this.
     $public_fields['organizations'] = array(
       'property' => 'field_organizations',
       'resource' => array(

@@ -40,7 +40,7 @@ function hr_offices_field_default_field_bases() {
         'view' => array(
           'args' => array(),
           'display_name' => 'entityreference_1',
-          'view_name' => 'hr_offices_panes',
+          'view_name' => 'hr_hubs_panes',
         ),
       ),
       'profile2_private' => FALSE,

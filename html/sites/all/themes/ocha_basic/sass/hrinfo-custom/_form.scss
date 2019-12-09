@@ -28,3 +28,56 @@ form .table-responsive {
   overflow-x: inherit;
 }
 
+.node-hr_office-form {
+
+  #actions,
+  #edit-field-phones,
+  .form-item-language,
+  .form-item-title input,
+  .field-type-email input,
+  > div > .form-group,
+  > div > .form-wrapper {
+    margin-top: 20px;
+  }
+
+  .form-type-phone-tel,
+  .form-type-phone .form-item {
+    float: none;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  .field-name-field-is-coordination-hub {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    height: 65px;
+    padding: 10px;
+  }
+
+  @include desktop {
+    > div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .main-inputs,
+    .form-item-title {
+      flex-grow: 1;
+      margin-right: 20px;
+      width: 50%;
+    }
+
+    .details,
+    .form-item-language {
+      width: 35%;
+    }
+
+    #edit-actions {
+      width: 100%;
+    }
+  }
+}
