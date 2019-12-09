@@ -28,6 +28,80 @@ form .table-responsive {
   overflow-x: inherit;
 }
 
+.node-form {
+  .form-item .description,
+  .form-item .help-block {
+    padding: 10px 0;
+  }
+
+  .field-name-field-data-sources,
+  .field-name-field-files-collection,
+  .field-name-field-hid-contact-ref,
+  .field-name-field-locations,
+  .field-name-field-phones,
+  .field-name-field-related-content {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    .description,
+    .tabledrag-toggle-weight-wrapper {
+      padding: 10px;
+    }
+  }
+
+  label {
+    font-size: 16px;
+  }
+  table thead tr th {
+    background-color: $cd-light-grey;
+
+    color: $cd-dark-grey;
+    font-weight: normal;
+    text-transform: none;
+  }
+
+  thead label {
+    padding-left: 10px;
+  }
+
+  .chosen-container {
+    font-size: 14px;
+    margin: 20px 20px 0 0;
+    width: 100% !important;
+
+    span {
+      font-weight: normal;
+    }
+
+    .chosen-results li.highlighted {
+      background: $cd-light-grey;
+      color: $cd-dark-grey;
+    }
+  }
+
+  // To override hiding table headers in _page.scss.
+  @include max-width(md) {
+    .field-multiple-drag {
+      height: 30px;
+    }
+
+    thead tr {
+      position: relative;
+      top: 0;
+      left: 0;
+    }
+
+    /* Override !important setting from _page.scss */
+    td {
+      padding-left: 10px !important;
+    }
+  }
+
+  .field-add-more-submit {
+    border: 1px solid #ccc;
+  }
+}
+
 .node-hr_office-form {
 
   #actions,
@@ -80,4 +154,21 @@ form .table-responsive {
       width: 100%;
     }
   }
+}
+
+/* Hiding fields. */
+.js .hr-add-button {
+  background: none;
+  color: $cd-dark-grey;
+  font-size: 16px;
+  margin: 10px;
+  &:hover,
+  &:focus {
+    background-color: $cd-mid-light-grey;
+    color: $cd-mid-grey;
+  }
+}
+
+.js .hr-add-more {
+  display: none;
 }

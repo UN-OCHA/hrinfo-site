@@ -319,31 +319,7 @@ PDF_FOOTER;
  * Implements hook_form_FORM_ID_alter()
  */
 function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id) {
-  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
-  $form['#attached']['js'] = array(
-    drupal_get_path('module', 'hr_events') . '/js/hr_events.js',
-  );
-
-  // Show multiple empty ones for meeting minutes.
-  if (!isset($form['#node']->nid)) {
-    $items_count = 2;
-    $field_name = 'field_event_meeting_minutes';
-    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
-  }
-
-  // Show multiple empty ones for agenda.
-  if (!isset($form['#node']->nid)) {
-    $items_count = 2;
-    $field_name = 'field_event_agenda';
-    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
-  }
-
-  // Show multiple empty ones for contacts.
-  if (!isset($form['#node']->nid)) {
-    $items_count = 2;
-    $field_name = 'field_hid_contact_ref';
-    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
-  }
+  $form['#attached']['js'][] = drupal_get_path('module', 'hr_events') . '/js/hr_events.js';
 
   // If it's a clone, validate the title.
   if (isset($form['clone_from_original_nid'])) {
