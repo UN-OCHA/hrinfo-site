@@ -987,7 +987,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
   );
   $export['search_api@default_node_index:block:field_asst_date:value'] = $facet;
@@ -1030,7 +1030,7 @@ function hr_search_facetapi_default_facet_settings() {
     'submit_page' => '',
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1107,7 +1107,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1159,7 +1159,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
   );
   $export['search_api@default_node_index:block:field_bundles:field_sector'] = $facet;
@@ -1200,7 +1200,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1244,7 +1244,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 1,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1288,7 +1288,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1334,7 +1334,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
   );
@@ -1376,7 +1376,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1420,7 +1420,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 1,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'default_option_label' => '',
@@ -1466,7 +1466,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1512,7 +1512,7 @@ function hr_search_facetapi_default_facet_settings() {
     'submit_page' => '',
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
   );
@@ -1556,7 +1556,7 @@ function hr_search_facetapi_default_facet_settings() {
     'submit_page' => '',
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1638,7 +1638,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
   );
@@ -1682,7 +1682,7 @@ function hr_search_facetapi_default_facet_settings() {
     'submit_page' => '',
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1728,7 +1728,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
   );
@@ -1770,7 +1770,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 1,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'default_option_label' => '',
@@ -1816,7 +1816,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 1,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'default_option_label' => '',
@@ -1862,7 +1862,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1906,7 +1906,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1950,7 +1950,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -1996,7 +1996,7 @@ function hr_search_facetapi_default_facet_settings() {
     'submit_page' => '',
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2040,7 +2040,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2084,7 +2084,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2128,7 +2128,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2172,7 +2172,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2218,7 +2218,7 @@ function hr_search_facetapi_default_facet_settings() {
     'submit_page' => '',
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2264,7 +2264,7 @@ function hr_search_facetapi_default_facet_settings() {
     'submit_page' => '',
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2308,7 +2308,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2352,7 +2352,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2396,7 +2396,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2440,7 +2440,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2484,7 +2484,7 @@ function hr_search_facetapi_default_facet_settings() {
     'show_expanded' => 0,
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
@@ -2530,7 +2530,7 @@ function hr_search_facetapi_default_facet_settings() {
     'submit_page' => '',
     'empty_text' => array(
       'value' => '',
-      'format' => 'panopoly_wysiwyg_text',
+      'format' => 'hr_wysiwyg',
     ),
     'submit_realm' => 'Save and go back to realm settings',
     'facet_more_text' => 'Show more',
