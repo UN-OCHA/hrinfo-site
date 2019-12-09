@@ -1,0 +1,301 @@
+<?php
+/*
+ * @file
+ * Contains tests for Translation management
+ */
+
+/**
+ * Basic Source-Suggestions tests.
+ */
+class TMGMTSuggestionsTestCase extends TMGMTBaseTestCase {
+
+  static function getInfo() {
+    return array(
+      'name' => 'Entity Suggestions tests',
+      'description' => 'Tests suggestion implementation for the entity source plugin',
+      'group' => 'Translation Management',
+      'dependencies' => array(
+        'file_entity',
+        'entityreference',
+      ),
+    );
+  }
+
+  public function setUp() {
+    parent::setUp(array('file_entity', 'tmgmt_entity', 'tmgmt_ui', 'entityreference', 'tmgmt_i18n_string', 'i18n_menu'));
+    $this->loginAsAdmin(array('administer entity translation'));
+
+    $this->setEnvironment('de');
+
+    // Enable entity translations for nodes and comments.
+    $edit = array();
+    $edit['entity_translation_entity_types[node]'] = 1;
+    $edit['entity_translation_entity_types[file]'] = 1;
+    $this->drupalPost('admin/config/regional/entity_translation', $edit, t('Save configuration'));
+  }
+
+  /**
+   * Prepare a node to get suggestions from.
+   *
+   * Creates a node with two file fields. The first one is not translatable,
+   * the second one is. Both fields got two files attached, where one has
+   * translatable content (title and atl-text) and the other one not.
+   *
+   * @return object
+   *   The node which is prepared with all needed fields for the suggestions.
+   */
+  protected function prepareTranslationSuggestions() {
+    // Create a content type with fields.
+    // Only the first field is a translatable reference.
+    $type = $this->drupalCreateContentType();
+
+    $field1 = field_create_field(array(
+      'field_name' => 'field1',
+      'type' => 'file',
+      'cardinality' => -1,
+    ));
+    $field2 = field_create_field(array(
+      'field_name' => 'field2',
+      'type' => 'file',
+      'cardinality' => -1,
+      'translatable' => TRUE,
+    ));
+    $field3 = field_create_field(array(
+      'field_name' => 'field3',
+      'type' => 'entityreference',
+      'cardinality' => -1,
+      'settings' => array(
+        'target_type' => 'node',
+        'handler' => 'base',
+        'handler_settings' => array(
+          'target_bundles' => array($type->type => $type->type),
+          'sort' => array('type' => 'none'),
+        ),
+      ),
+    ));
+
+    // Create field instances on the content type.
+    field_create_instance(array(
+      'field_name' => $field1['field_name'],
+      'entity_type' => 'node',
+      'bundle' => $type->type,
+      'label' => 'Field 1',
+      'widget' => array('type' => 'file'),
+      'settings' => array(),
+    ));
+    field_create_instance(array(
+      'field_name' => $field2['field_name'],
+      'entity_type' => 'node',
+      'bundle' => $type->type,
+      'label' => 'Field 2',
+      'widget' => array('type' => 'file'),
+      'settings' => array(),
+    ));
+    field_create_instance(array(
+      'field_name' => $field3['field_name'],
+      'entity_type' => 'node',
+      'bundle' => $type->type,
+      'label' => 'Field 3',
+      'settings' => array(),
+      'widget' => array('type' => 'entityreference_autocomplete_tags'),
+    ));
+
+    // Make the body field translatable from node.
+    $info = field_info_field('body');
+    $info['translatable'] = TRUE;
+    field_update_field($info);
+
+    // Make the file entity fields translatable.
+    $info = field_info_field('field_file_image_alt_text');
+    $info['translatable'] = TRUE;
+    field_update_field($info);
+
+    $info = field_info_field('field_file_image_title_text');
+    $info['translatable'] = TRUE;
+    field_update_field($info);
+
+    // Create and save files - two with some text and two with no text.
+    list($file1, $file2, $file3, $file4) = $this->drupalGetTestFiles('image');
+    $file2->field_file_image_alt_text['en'][0] = array(
+      'value' => $this->randomName(),
+      'type' => 'plain_text',
+    );
+    $file2->field_file_image_title_text['en'][0] = array(
+      'value' => $this->randomName() . ' ' . $this->randomName(),
+      'type' => 'plain_text',
+    );
+
+    $file4->field_file_image_alt_text['en'][0] = array(
+      'value' => $this->randomName(),
+      'type' => 'plain_text',
+    );
+    $file4->field_file_image_title_text['en'][0] = array(
+      'value' => $this->randomName() . ' ' . $this->randomName(),
+      'type' => 'plain_text',
+    );
+
+    file_save($file1);
+    file_save($file2);
+    file_save($file3);
+    file_save($file4);
+
+    // Create a dummy node that will be referenced
+    $referenced_node = $this->drupalCreateNode(array(
+      'type' => $type->type,
+      'language' => 'en',
+      'body' => array(
+        'en' => array(
+          array('value' => $this->randomName() . ' ' . $this->randomName()),
+        ),
+      ),
+    ));
+
+    // Create a node that will be referenced and then deleted, so the entity
+    // reference field will refer to a missing node.
+    $missing_node = $this->drupalCreateNode(array(
+      'type' => $type->type,
+      'language' => 'en',
+      'body' => array(
+        'en' => array(
+          array('value' => $this->randomName() . ' ' . $this->randomName()),
+        ),
+      ),
+    ));
+
+    // Create an untranslatable node.
+    $untranslatable_node = $this->drupalCreateNode(array(
+      'type' => $type->type,
+      'language' => LANGUAGE_NONE,
+      'body' => array(
+        LANGUAGE_NONE => array(
+          array('value' => $this->randomName() . ' ' . $this->randomName()),
+        ),
+      ),
+    ));
+
+    // Create a node with two translatable and two non-translatable files.
+    $node = $this->drupalCreateNode(array(
+      'type' => $type->type,
+      'language' => 'en',
+      'body' => array('en' => array(
+        array(
+          'value' => $this->randomName(),
+        ),
+      )),
+      $field1['field_name'] => array(LANGUAGE_NONE => array(
+        array(
+          'fid' => $file1->fid,
+          'display' => 1,
+          'description' => '',
+        ),
+        array(
+          'fid' => $file2->fid,
+          'display' => 1,
+          'description' => '',
+        ),
+      )),
+      $field2['field_name'] => array(LANGUAGE_NONE => array(
+        array(
+          'fid' => $file3->fid,
+          'display' => 1,
+          'description' => '',
+        ),
+        array(
+          'fid' => $file4->fid,
+          'display' => 1,
+          'description' => '',
+        ),
+      )),
+      $field3['field_name'] => array(LANGUAGE_NONE => array(
+        array('target_id' => $referenced_node->nid),
+        array('target_id' => $missing_node->nid),
+        array('target_id' => $untranslatable_node->nid),
+      )),
+    ));
+
+    node_delete($missing_node->nid);
+
+    // Create a translatable menu.
+    $config = array(
+      'menu_name' => 'translatable-menu',
+      'title' => 'Translatable menu',
+      'description' => $this->randomName(),
+      'i18n_mode' => I18N_MODE_MULTIPLE,
+    );
+    menu_save($config);
+    $menu = menu_load($config['menu_name']);
+
+    // Create a menu link for the node.
+    $menu_link = array(
+      'link_path' => 'node/' . $node->nid,
+      'link_title' => 'Menu link one',
+      // i18n_menu_link::get_title() uses the title, set that too.
+      'title' => 'Menu link one',
+      'menu_name' => $menu['menu_name'],
+      'customized' => TRUE,
+    );
+    $node->link = menu_link_load(menu_link_save($menu_link));
+
+    return $node;
+  }
+
+  /**
+   * Test suggested entities from a translation job.
+   */
+  public function testSuggestions() {
+    // Prepare a job and a node for testing.
+    $job = $this->createJob();
+    $node = $this->prepareTranslationSuggestions();
+    $item = $job->addItem('entity', 'node', $node->nid);
+
+    // Get all suggestions and clean the list.
+    $suggestions = $job->getSuggestions();
+    $job->cleanSuggestionsList($suggestions);
+
+    // Check for suggestions.
+    $this->assertEqual(count($suggestions), 4, 'Found four suggestions.');
+
+    // Check for valid attributes on the suggestions.
+    foreach ($suggestions as $suggestion) {
+      switch ($suggestion['reason']) {
+        case 'Field Field 1':
+          $this->assertEqual($suggestion['job_item']->getWordCount(), 3, 'Three translatable words in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->plugin, 'entity', 'Got an entity as plugin in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_type, 'file', 'Got a file in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_id, $node->field1[LANGUAGE_NONE][1]['fid'], 'File id match between node and suggestion.');
+          break;
+        case 'Field Field 2':
+          $this->assertEqual($suggestion['job_item']->getWordCount(), 3, 'Three translatable words in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->plugin, 'entity', 'Got an entity as plugin in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_type, 'file', 'Got a file in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_id, $node->field2[LANGUAGE_NONE][1]['fid'], 'File id match between node and suggestion.');
+          break;
+        case 'Field Field 3':
+          $this->assertEqual($suggestion['job_item']->getWordCount(), 2, 'Two translatable words in the suggestion');
+          $this->assertEqual($suggestion['job_item']->plugin, 'entity', 'Got an entity as plugin in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_type, 'node', 'Got a node in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_id, $node->field3[LANGUAGE_NONE][0]['target_id'], 'File id match between node and suggestion.');
+          break;
+        case 'Menu link Menu link one':
+          $this->assertEqual($suggestion['job_item']->getWordCount(), 3, 'Three translatable words in the suggestion' . $suggestion['job_item']->plugin . $suggestion['job_item']->item_type);
+          $this->assertEqual($suggestion['job_item']->plugin, 'i18n_string', 'Got a string as plugin in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_type, 'menu_link', 'Got a menu link in the suggestion.');
+          $this->assertEqual($suggestion['job_item']->item_id, 'menu:item:'. $node->link['mlid'], 'Menu link id match between menu link and suggestion.');
+          break;
+        default:
+          $this->fail('Found an invalid suggestion.');
+          break;
+      }
+      $this->assertEqual($suggestion['from_item'], $item->tjiid);
+      $job->addExistingItem($suggestion['job_item']);
+    }
+
+    // Re-get all suggestions.
+    $suggestions = $job->getSuggestions();
+    $job->cleanSuggestionsList($suggestions);
+
+    // Check for no more suggestions.
+    $this->assertEqual(count($suggestions), 0, 'Found no more suggestion.');
+  }
+
+}

@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Source plugin for the Translation Management system that handles nodes.
+ */
+
+/**
+ * Implements hook_tmgmt_source_plugin_info().
+ */
+function tmgmt_node_tmgmt_source_plugin_info() {
+  $info['node'] = array(
+    'label' => t('Node'),
+    'description' => t('Source handler for nodes.'),
+    'plugin controller class' => 'TMGMTNodeSourcePluginController',
+    'ui controller class' => 'TMGMTNodeSourceUIController',
+    'views controller class' => 'TMGMTNodeSourceViewsController',
+    'item types' => array(),
+  );
+  foreach (node_type_get_names() as $type => $name) {
+    if (translation_supported_type($type)) {
+      $info['node']['item types'][$type] = $name;
+    }
+  }
+  return $info;
+}
+
+/**
+ * Form element validator for the missing target language views field handler.
+ */
+function tmgmt_node_views_exposed_target_language_validate($form, &$form_state) {
+  if (!empty($form_state['values']['tmgmt_node_missing_translation']) && $form_state['values']['language_1'] == $form_state['values']['tmgmt_node_missing_translation']) {
+    form_set_error('tmgmt_node_missing_translation', t('The source and target languages must not be the same.'));
+  }
+}

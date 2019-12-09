@@ -1,0 +1,26 @@
+name = Entity Source
+description = Entity source plugin for the Translation Management system.
+package = Translation Management
+core = 7.x
+
+dependencies[] = tmgmt
+dependencies[] = tmgmt_field
+dependencies[] = entity
+dependencies[] = entity_translation
+
+test_dependencies[] = pathauto
+test_dependencies[] = file_entity
+test_dependencies[] = entityreference
+
+files[] = tmgmt_entity.source.test
+files[] = tmgmt_entity.source.none.test
+files[] = tmgmt_entity.pathauto.test
+files[] = tmgmt_entity.suggestions.test
+files[] = tmgmt_entity.plugin.inc
+files[] = tmgmt_entity.ui.inc
+
+; Information added by Drupal.org packaging script on 2018-08-02
+version = "7.x-1.0-rc3"
+core = "7.x"
+project = "tmgmt"
+datestamp = "1533219610"

@@ -1,0 +1,15 @@
+#edit-tmgmt-node-missing-translation-wrapper .form-item-target-status,
+#edit-tmgmt-node-missing-translation-wrapper .form-item-tmgmt-node-missing-translation {
+  float: left;
+}
+
+#edit-tmgmt-node-missing-translation-wrapper .form-item-target-status {
+  margin: 0 0 0 55px;
+  padding: 0;
+  position: relative;
+  top: -19px;
+}
+
+#edit-tmgmt-node-missing-translation-wrapper .form-item-target-status select {
+  margin-top: 9px;
+}
