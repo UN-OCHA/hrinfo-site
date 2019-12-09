@@ -251,7 +251,6 @@ form .table-responsive {
     .field-name-field-level-of-representation,
     .field-name-field-locations,
     .field-name-field-location,
-    .field-name-field-themes,
     .form-item-language {
       width: 35%;
     }
@@ -265,6 +264,22 @@ form .table-responsive {
     }
 
     #edit-actions {
+      width: 100%;
+    }
+  }
+}
+
+.node-hr_assessment-form {
+  @include desktop {
+    .field-name-field-locations {
+      width: 100%;
+    }
+  }
+}
+
+.node-hr_event-form {
+  @include desktop {
+    .field-name-field-hid-contact-ref {
       width: 100%;
     }
   }
