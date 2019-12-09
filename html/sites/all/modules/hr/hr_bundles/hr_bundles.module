@@ -195,26 +195,6 @@ function hr_bundles_form_node_form_alter(&$form, &$form_state) {
       $form['field_bundles']['#attributes']['class'][] = 'hidden';
     }
   }
-
-  // Adds a modal dialog which asks the user to avoid cluster multitagging and chose the Inter-cluster coordination theme instead
-  // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
-  if (isset($form['field_bundles'])) {
-    $form['field_bundles']['#attached']['js'][] = drupal_get_path('module', 'hr_bundles') . '/js/hr_bundles_popup.js';
-    $form['field_bundles']['#suffix'] = '<div class="modal fade" id="hr_bundles_multitagging" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">' . t('Tagging multiple clusters') . '</h4>
-      </div>
-      <div class="modal-body">' . t('Are you sure you would like to tag your content by that many clusters/sectors ? Please consider using the Inter-Cluster Coordination theme instead.') . '</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">' . t('Close') . '</button>
-      </div>
-    </div>
-  </div>
-</div>';
-  }
 }
 
 /**

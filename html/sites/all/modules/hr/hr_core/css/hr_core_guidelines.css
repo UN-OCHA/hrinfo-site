@@ -1,0 +1,185 @@
+#hr-field-guidelines {
+  display: none;
+}
+form .form-item label.has-guidelines,
+form .form-wrapper legend.has-guidelines .panel-title {
+  display: inline-block;
+}
+form fieldset.titled > legend.has-guidelines > span {
+  padding: 0;
+  position: relative;
+}
+.guideline-toggler {
+  border: 1px solid #A02837 !important;
+  display: inline-block !important;
+  font-family: Helvetica,Arial,sans-serif !important;
+  font-size: 9px !important;
+  font-weight: bold !important;
+  height: 12px !important;
+  line-height: 10px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  width: 12px !important;
+  -webkit-border-radius: 12px !important;
+  -moz-border-radius: 12px !important;
+  border-radius: 12px !important;
+  color: #A02837 !important;
+  cursor: pointer !important;
+  margin-left: 5px !important;
+  margin-bottom: 2px !important;
+}
+table thead tr th .guideline-toggler {
+  border: 1px solid #333 !important;
+  color: #333 !important;
+  padding-left: 0;
+}
+.checkbox label.guideline-toggler,
+.radio label.guideline-toggler {
+  min-height: 12px;
+  padding-left: 0;
+}
+.guideline-toggler + .guideline-checkbox {
+  display: none;
+}
+.guideline-toggler .form-required {
+  display: none;
+}
+.guideline {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  background: rgba(1,1,1,0.3);
+  z-index: 10000;
+  text-transform: none;
+  font-weight: normal;
+  font-family: Verdana;
+  font-size: 13px;
+  font-style: normal;
+  color: #333;
+}
+input:checked + .guideline {
+  display: -webkit-flex;
+  display: flex;
+}
+.guideline-box {
+  box-shadow: rgba(64,64,60,.1) 0px 0px 0px 10px;
+  -webkit-box-shadow: rgba(64,64,60,.1) 0px 0px 0px 10px;
+  -moz-box-shadow: rgba(64,64,60,.1) 0px 0px 0px 10px;
+  margin-auto;
+  position: relative;
+  width: 80%;
+}
+@media screen and (min-width: 1024px) {
+  .guideline-box {
+    width: 50%;
+  }
+}
+.guideline-content > h3 {
+  font-family: Helvetica,Arial,sans-serif;
+  font-weight: bold;
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.guideline-content > h3 a {
+  display: block;
+}
+.guideline-content {
+  background-color: white;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.guideline-content img {
+  max-width: 470px;
+}
+.guideline-content a {
+  display: inline;
+}
+.guideline-content h2 {
+  font-family: Verdana;
+  font-weight: bold;
+}
+.guideline-content ul {
+  list-style-type: disc;
+  margin-bottom: 0;
+  padding-left: 20px;
+}
+.guideline-content li {
+  list-style: inherit;
+}
+.guideline-content code {
+  padding: 3px;
+  font-size: 85%;
+  background-color: #eee;
+  border-radius: 3px;
+}
+
+.guideline-box .guideline-toggler-hide {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  z-index: 2;
+}
+.guideline-toggler-hide {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  font-style: normal;
+  color: #666;
+  text-align: left;
+  text-indent: -9999px;
+  direction: ltr;
+  box-sizing: border-box;
+  border: 3px solid #666;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin: 2px;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  background-color: white;
+  cursor: pointer;
+}
+.guideline-toggler-hide:before,
+.guideline-toggler-hide:after {
+  content: "";
+  color: #666;
+  background-color: #666;
+  border: 1px solid #666;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+}
+.guideline-toggler-hide::before {
+  height: 2px;
+  width: 16px;
+}
+.guideline-toggler-hide::after {
+  height: 16px;
+  width: 2px;
+}
+.guideline-toggler-hide:hover {
+  color: #000;
+  border-color: #000;
+}
+.guideline-toggler-hide:hover:before,
+.guideline-toggler-hide:hover:after {
+  color: #000;
+  background-color: #000;
+  border-color: #000;
+}
