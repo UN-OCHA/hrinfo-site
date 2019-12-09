@@ -45,6 +45,22 @@ function hr_infographics_form_hr_infographic_node_form_alter(&$form, &$form_stat
     }
     $form['#after_build'][] = '_hr_document_clone_disable_language';
   }
+
+  // These details aren't necessary for maps/infographics.
+  unset($form['additional_settings']);
+  unset($form['author']);
+  unset($form['options']);
+  unset($form['redirect']);
+  unset($form['revision_information']);
+  $form['field_data_sources']['#access'] = FALSE;
+  $form['field_sectors']['#access'] = FALSE;
+  $form['group_content_access']['#access'] = FALSE;
+
+  // To alter changes not yet made.
+  $form['#after_build'][] = 'hr_infographics_form_alter_after_build';
+
+  // Attach js to toggle additional fields.
+  $form['#attached']['js'][] = drupal_get_path('module', 'hr_core') . '/js/hr_core_toggle_fields.js';
 }
 
 /**
@@ -157,4 +173,18 @@ function hr_infographics_clone_node_alter(&$node, $context) {
   unset($node->field_publication_date);
   unset($node->body);
   unset($node->field_related_content);
+}
+
+/**
+ * Added in hr_infographics_form_hr_infographic_node_form_alter().
+ */
+function hr_infographics_form_alter_after_build($form, &$form_state) {
+  $form['menu']['#access'] = FALSE;
+  // Hide wysiwyg (and other text format) options.
+  $language = $form['body']['#language'];
+  $form['body'][$language][0]['format']['#access'] = FALSE;
+  // Remove the path settings for node form.
+  unset($form['path']);
+
+  return $form;
 }

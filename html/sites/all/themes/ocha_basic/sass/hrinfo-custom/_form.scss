@@ -162,11 +162,13 @@ form .table-responsive {
   }
 }
 
-.node-hr_document-form {
+.node-hr_document-form,
+.node-hr_infographic-form {
 
   #actions,
   .details,
   .field-name-field-sectors,
+  .form-item-language input,
   .form-item-title input,
   > div > .form-group,
   > div > .form-wrapper {
