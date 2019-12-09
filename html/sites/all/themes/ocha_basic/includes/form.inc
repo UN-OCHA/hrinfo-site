@@ -11,9 +11,21 @@
  */
 function ocha_basic_form_themes($existing, $type, $theme, $path) {
   $themes = array();
+<<<<<<< HEAD
 
   // Templates for the node types.
   foreach (node_type_get_names() as $type => $name) {
+=======
+  $types = array(
+    'hr_document',
+  );
+
+  // Templates for the node types.
+  foreach (node_type_get_names() as $type => $name) {
+    if (!in_array($type, $types)) {
+      continue;
+    }
+>>>>>>> HRINFO-973-rework-documents-form
     // Edit form templates.
     $themes[$type . '_node_form'] = array(
       'render element' => 'form',

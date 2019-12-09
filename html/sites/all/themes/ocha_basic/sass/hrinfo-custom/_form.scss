@@ -10,6 +10,12 @@ label {
   max-width: 100%;
 }
 
+.chosen-container-multi {
+  input[value="Choose some options"] {
+    min-width: 200px !important;
+  }
+}
+
 .form-type-checkboxes {
 
     .form-checkboxes .form-item, .form-radios .form-item {
@@ -156,6 +162,72 @@ form .table-responsive {
   }
 }
 
+.node-hr_document-form {
+
+  #actions,
+  .details,
+  .field-name-field-sectors,
+  .form-item-title input,
+  > div > .form-group,
+  > div > .form-wrapper {
+    margin-top: 20px;
+  }
+
+  .field-name-field-exclude-reliefweb {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    height: 65px;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .field-name-body,
+  .field-name-field-locations,
+  .field-name-field-related-content {
+    margin-bottom: 20px;
+  }
+
+  @include desktop {
+    > div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .main-inputs,
+    .field-name-field-related-content,
+    .form-item-title {
+      flex-grow: 1;
+      margin-right: 20px;
+      width: 50%;
+    }
+
+    .field-name-field-themes {
+      margin-right: 20px;
+      width: 50%;
+    }
+
+    .details,
+    .field-name-field-locations,
+    .form-item-language {
+      width: 35%;
+    }
+
+    .link-field-subrow {
+      display: flex;
+      flex-direction: column;
+      > .link-field-column {
+        width: 100%;
+      }
+    }
+
+    #edit-actions {
+      width: 100%;
+    }
+  }
+}
+
 /* Hiding fields. */
 .js .hr-add-button {
   background: none;
@@ -171,4 +243,49 @@ form .table-responsive {
 
 .js .hr-add-more {
   display: none;
+}
+
+.hr-additional {
+  border-bottom: 2px solid $cd-light-grey;
+  border-top: 2px solid $cd-light-grey;
+  margin: 20px 0;
+  padding: 20px 0;
+  width: 100%;
+}
+
+.js .form-type-date-popup .help-block {
+  display: none;
+}
+
+.js .hr-additional > .hr-additional-hide {
+  display: none;
+}
+
+.js .optional-fields,
+.hr-toggle-button[value="show"] {
+  display: inline-block;
+}
+
+.hr-toggle-button[value="hide"] {
+  margin-bottom: 20px;
+}
+
+.js .hr-additional > .hr-additional-show {
+  display: block;
+}
+
+.optional-fields {
+  display: none;
+  margin: 8px 12px 0 0;
+}
+
+.js .hr-additional-show + .optional-fields {
+  display: none;
+}
+
+@include desktop {
+  .js .hr-additional > .hr-additional-show {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
