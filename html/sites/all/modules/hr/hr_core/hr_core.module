@@ -503,7 +503,7 @@ function hr_core_theme_registry_alter(&$theme_registry) {
 /**
  * Override to remove drag-n-drop table when indicated.
  *
- * @param $variables array
+ * @param array $variables
  *   An associative array containing:
  *   - element: A render element representing the form element.
  *
