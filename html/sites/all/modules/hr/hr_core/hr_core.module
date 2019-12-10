@@ -503,12 +503,11 @@ function hr_core_theme_registry_alter(&$theme_registry) {
 /**
  * Override to remove drag-n-drop table when indicated.
  *
- * @see theme_field_multiple_value_form().
- *
- * @param $variables
+ * @param $variables array
  *   An associative array containing:
  *   - element: A render element representing the form element.
  *
+ * @see theme_field_multiple_value_form()
  * @ingroup themeable
  */
 function hr_core_theme_field_multiple_value_form($variables) {
@@ -617,7 +616,14 @@ function hr_core_theme_field_multiple_value_form($variables) {
     }
 
     $output = '<div class="form-item">';
-    $output .= theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('id' => $table_id, 'class' => array('field-multiple-table'))));
+    $output .= theme('table', array(
+      'header' => $header,
+      'rows' => $rows,
+      'attributes' => array(
+        'id' => $table_id,
+        'class' => array('field-multiple-table')
+      )
+    ));
     $output .= $element['#description'] ? '<div class="description">' . $element['#description'] . '</div>' : '';
     $output .= '<div class="clearfix">' . drupal_render($add_more_button) . '</div>';
     $output .= '</div>';

@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * HR Core selection handler for document types.
  */
