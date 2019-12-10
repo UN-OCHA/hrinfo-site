@@ -14,7 +14,7 @@ function hr_offices_og_features_registry() {
   $registry = array();
   $feature = new stdClass();
   $feature->id = 'hr_offices';
-  $feature->name = 'Offices';
+  $feature->name = 'Offices / Coordination Hubs';
   $feature->description = t('Provide offices to your space.');
   $feature->components = array(
     'node' => array(
@@ -23,4 +23,36 @@ function hr_offices_og_features_registry() {
   );
   $registry[$feature->id] = $feature;
   return $registry;
+}
+
+/**
+ * Implements hook_form_alter()
+ */
+function hr_offices_form_hr_office_node_form_alter(&$form, &$form_state, $form_id) {
+  // TODO: These two fields are no longer being collected.
+  // Consider how to handle changes for existing fields, or whether to remove
+  // these fields altogether.
+  unset($form['field_location']);
+  unset($form['field_organizations']);
+
+  // These details aren't necessary for offices.
+  unset($form['additional_settings']);
+  unset($form['author']);
+  unset($form['options']);
+  unset($form['redirect']);
+  unset($form['revision_information']);
+
+  // Necessary to remove path settings.
+  $form['#after_build'][] = 'hr_offices_form_alter_after_build';
+}
+
+/**
+ * Remove the path settings for hr_office_node_form.
+ *
+ * After_build hook added in hr_offices_form_hr_office_node_form_alter().
+ */
+function hr_offices_form_alter_after_build($form, &$form_state) {
+  unset($form['path']);
+
+  return $form;
 }

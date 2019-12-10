@@ -72,7 +72,6 @@ features[field_instance][] = node-hr_document-field_publication_date
 features[field_instance][] = node-hr_document-field_related_content
 features[field_instance][] = node-hr_document-field_sectors
 features[field_instance][] = node-hr_document-field_themes
-features[field_instance][] = node-hr_document-group_content_access
 features[field_instance][] = node-hr_document-og_group_ref
 features[field_instance][] = node-hr_document-title_field
 features[field_instance][] = taxonomy_term-hr_document_type-description_field

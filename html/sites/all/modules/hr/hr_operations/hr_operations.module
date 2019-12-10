@@ -145,7 +145,6 @@ function _hr_operations_get_active_operation_labels() {
  * Implements hook_form_FORM_ID_alter().
  */
 function hr_operations_form_hr_operation_node_form_alter(&$form, &$form_state) {
-  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
   // Disable title and country in edit mode.
   if (isset($form['#node']->nid)) {
     $user_roles = user_roles();

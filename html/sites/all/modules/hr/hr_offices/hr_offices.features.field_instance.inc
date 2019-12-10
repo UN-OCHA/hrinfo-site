@@ -24,7 +24,7 @@ function hr_offices_field_default_field_instances() {
       ),
     ),
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Indicate the address of the office.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -61,6 +61,7 @@ function hr_offices_field_default_field_instances() {
         'default_country' => '',
         'format_handlers' => array(
           'address' => 'address',
+          'address-optional' => 'address-optional',
           'address-hide-country' => 0,
           'organisation' => 0,
           'name-full' => 0,
@@ -625,14 +626,14 @@ function hr_offices_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'og_group_ref',
-    'label' => 'Webspace(s)',
+    'label' => 'Operation(s)/ Webspace(s)',
     'required' => 1,
     'settings' => array(
       'behaviors' => array(
         'og_widget' => array(
           'access_override' => 0,
           'admin' => array(
-            'widget_type' => 'entityreference_autocomplete',
+            'widget_type' => 'options_select',
           ),
           'default' => array(
             'widget_type' => 'options_select',
@@ -703,7 +704,7 @@ function hr_offices_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'title_field',
-    'label' => 'Title',
+    'label' => 'Office / Coordination Hub Name',
     'required' => TRUE,
     'settings' => array(
       'entity_translation_sync' => FALSE,
@@ -728,12 +729,13 @@ function hr_offices_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Address');
   t('Email');
+  t('Indicate the address of the office.');
   t('Is coordination hub');
   t('Location');
+  t('Office / Coordination Hub Name');
+  t('Operation(s)/ Webspace(s)');
   t('Organizations');
   t('Phones');
-  t('Title');
-  t('Webspace(s)');
 
   return $field_instances;
 }

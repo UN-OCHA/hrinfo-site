@@ -13,6 +13,17 @@ require_once dirname(__FILE__) . '/includes/user.inc';
 require_once dirname(__FILE__) . '/includes/view.inc';
 
 /**
+ * Implements hook_theme().
+ */
+function ocha_basic_theme($existing, $type, $theme, $path) {
+  $info = array();
+
+  $info += ocha_basic_form_themes($existing, $type, $theme, $path);
+
+  return $info;
+}
+
+/**
  * Implements hook_form_alter().
  */
 function ocha_basic_form_alter(&$form, &$form_state, $form_id) {
@@ -398,4 +409,14 @@ function ocha_basic_menu_local_tasks(&$variables) {
   }
 
   return $output;
+}
+
+/**
+ * Implements theme_input_group_addon().
+ *
+ * TODO: Do we need this? It's left over from radix theme.
+ * @see ocha_basic_form_element().
+ */
+function theme_ocha_basic_input_group_addon($variables) {
+  return '<span class="input-group-addon">' . $variables['content'] . '</span>';
 }

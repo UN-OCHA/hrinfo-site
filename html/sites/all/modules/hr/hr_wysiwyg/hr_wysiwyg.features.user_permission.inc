@@ -21,9 +21,9 @@ function hr_wysiwyg_user_default_permissions() {
     'module' => 'filter',
   );
 
-  // Exported permission: 'use text format hr_wysiwyg_trusted'.
-  $permissions['use text format hr_wysiwyg_trusted'] = array(
-    'name' => 'use text format hr_wysiwyg_trusted',
+  // Exported permission: 'use text format hr_wysiwyg'.
+  $permissions['use text format hr_wysiwyg'] = array(
+    'name' => 'use text format hr_wysiwyg',
     'roles' => array(
       'administrator' => 'administrator',
       'authenticated user' => 'authenticated user',
@@ -35,15 +35,6 @@ function hr_wysiwyg_user_default_permissions() {
   // Exported permission: 'use text format panopoly_html_text'.
   $permissions['use text format panopoly_html_text'] = array(
     'name' => 'use text format panopoly_html_text',
-    'roles' => array(
-      'authenticated user' => 'authenticated user',
-    ),
-    'module' => 'filter',
-  );
-
-  // Exported permission: 'use text format panopoly_wysiwyg_text'.
-  $permissions['use text format panopoly_wysiwyg_text'] = array(
-    'name' => 'use text format panopoly_wysiwyg_text',
     'roles' => array(
       'authenticated user' => 'authenticated user',
     ),

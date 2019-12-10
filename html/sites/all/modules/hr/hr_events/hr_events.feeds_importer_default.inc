@@ -221,7 +221,7 @@ function hr_events_feeds_importer_default() {
           ),
         ),
         'update_existing' => '2',
-        'input_format' => 'panopoly_wysiwyg_text',
+        'input_format' => 'hr_wysiwyg',
         'skip_hash_check' => 0,
         'bundle' => 'hr_event',
       ),
