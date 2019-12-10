@@ -510,7 +510,7 @@ function hr_core_theme_registry_alter(&$theme_registry) {
  * @see theme_field_multiple_value_form()
  * @ingroup themeable
  */
-function hr_core_theme_field_multiple_value_form($variables) {
+function hr_core_theme_field_multiple_value_form(array $variables) {
   $element = $variables['element'];
   $output = '';
 
