@@ -829,7 +829,7 @@ function hr_infographics_field_default_field_instances() {
         'prepopulate' => array(
           'action' => 'none',
           'action_on_edit' => 0,
-          'fallback' => 'form_error',
+          'fallback' => 'none',
           'providers' => array(
             'og_context' => 0,
             'url' => 1,
