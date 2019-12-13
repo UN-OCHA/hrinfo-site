@@ -12,6 +12,7 @@
   <?php print drupal_render($form['field_event_category']); ?>
   <?php print drupal_render($form['field_event_date']); ?>
   <?php print drupal_render($form['body']); ?>
+  <?php print drupal_render($form['field_address']); ?>
   <?php print drupal_render($form['field_event_agenda']); ?>
   <?php print drupal_render($form['field_event_meeting_minutes']); ?>
 </fieldset>

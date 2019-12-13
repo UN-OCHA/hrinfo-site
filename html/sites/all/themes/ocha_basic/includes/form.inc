@@ -14,8 +14,9 @@ function ocha_basic_form_themes($existing, $type, $theme, $path) {
   $types = array(
     'hr_assessment',
     'hr_document',
-    'hr_infographic',
     'hr_event',
+    'hr_infographic',
+    'hr_office',
   );
 
   // Templates for the node types.

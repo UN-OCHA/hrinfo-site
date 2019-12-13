@@ -67,6 +67,7 @@ features[field_base][] = field_event_category
 features[field_base][] = field_event_date
 features[field_base][] = field_event_meeting_minutes
 features[field_instance][] = node-hr_event-body
+features[field_instance][] = node-hr_event-field_address
 features[field_instance][] = node-hr_event-field_bundles
 features[field_instance][] = node-hr_event-field_coordination_hubs
 features[field_instance][] = node-hr_event-field_disasters
