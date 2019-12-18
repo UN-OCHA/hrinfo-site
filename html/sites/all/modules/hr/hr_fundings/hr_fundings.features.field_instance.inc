@@ -565,7 +565,7 @@ function hr_fundings_field_default_field_instances() {
         'prepopulate' => array(
           'action' => 'disable',
           'action_on_edit' => 1,
-          'fallback' => 'form_error',
+          'fallback' => 'none',
           'og_context' => 0,
           'skip_perm' => 0,
           'status' => 1,
