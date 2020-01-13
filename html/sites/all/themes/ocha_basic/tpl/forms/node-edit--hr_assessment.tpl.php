@@ -42,7 +42,7 @@
     <?php print drupal_render($form['field_themes']); ?>
   </div>
   <div class="optional-fields">
-    Click to add Subject, Methodology, Key Findings, Related content, and other details.
+    <?php print t("Click to add Subject, Methodology, Key Findings, Related content, and other details."); ?>
   </div>
 </fieldset>
 
