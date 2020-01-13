@@ -29,7 +29,7 @@
     <?php print drupal_render($form['field_themes']); ?>
   </div>
   <div class="optional-fields">
-    Click to add Related content, Locations and Themes.
+    <?php print t("Click to add Related content, Locations and Themes."); ?>
   </div>
 </fieldset>
 
