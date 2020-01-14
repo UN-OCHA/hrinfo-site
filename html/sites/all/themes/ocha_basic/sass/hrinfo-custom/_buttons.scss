@@ -1,0 +1,12 @@
+//——————————————————————————————————————————————————————————————————————————————
+// Button styles
+//——————————————————————————————————————————————————————————————————————————————
+
+.btn-primary,
+.form-actions input[type="submit"] {
+  background-color: $hrinfo-red;
+  &:hover,
+  &:focus {
+    background-color: $hrinfo-dark-red;
+  }
+}

@@ -36,11 +36,11 @@ function hr_offices_views_api($module = NULL, $api = NULL) {
 function hr_offices_node_info() {
   $items = array(
     'hr_office' => array(
-      'name' => t('Office'),
+      'name' => t('Office / Coordination Hub'),
       'base' => 'node_content',
       'description' => '',
       'has_title' => '1',
-      'title_label' => t('Title'),
+      'title_label' => t('Office / Coordination Hub Name'),
       'help' => '',
     ),
   );

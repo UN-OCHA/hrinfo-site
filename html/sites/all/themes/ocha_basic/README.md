@@ -8,7 +8,7 @@ See [OCHA basic dev site](https://ochabasic.dev.ahconu.org) for documentation an
 
 **Releases**
 
-Refer to [Github releases](https://github.com/UN-OCHA/ocha_basic/releases) for latest updates. We use [npm-version](https://docs.npmjs.com/cli/version) and [sematantic versioning](https://semver.org/)
+Refer to [Github releases](https://github.com/UN-OCHA/ocha_basic/releases) for latest updates. We use [npm-version](https://docs.npmjs.com/cli/version) and [semantic versioning](https://semver.org/)
 
 
 ## This theme contains

@@ -6,6 +6,6 @@
  */
 
 $plugin = array(
-  'title' => t('HR Selector without access check'),
+  'title' => t('HR Ref Selector without access check'),
   'class' => 'RefHRCoreSelectionHandler',
 );

@@ -105,28 +105,6 @@ function hr_assessments_global_map() {
  */
 function hr_assessments_form_hr_assessment_node_form_alter(&$form, &$form_state) {
   hr_sectors_hide_sectors($form, $form_state);
-  if (module_exists('hs_taxonomy')) {
-    if (isset($form['field_locations']['und']['#config'])) {
-      $form['field_locations']['und']['#config']['dropbox']['title'] = t('Current selections');
-      $form['field_locations']['und']['#config']['animation_delay'] = 0;
-      $form['field_locations']['und']['#config']['level_labels'] = array(
-        'status' => 1,
-        'labels' => array(
-          0 => t('Country'),
-          1 => t('Admin 1'),
-          2 => t('Admin 2'),
-          3 => t('Admin 3'),
-        ),
-      );
-    }
-  }
-
-  // Show multiple empty ones for locations.
-  if (!isset($form['#node']->nid)) {
-    $items_count = 4;
-    $field_name = 'field_locations';
-    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
-  }
 
   // If it's a clone, validate the title.
   if (isset($form['clone_from_original_nid'])) {
@@ -143,6 +121,18 @@ function hr_assessments_form_hr_assessment_node_form_alter(&$form, &$form_state)
     $form['#after_build'][] = '_hr_document_clone_disable_language';
   }
 
+  // These details aren't necessary for assessments.
+  unset($form['additional_settings']);
+  unset($form['author']);
+  unset($form['options']);
+  unset($form['redirect']);
+  unset($form['revision_information']);
+  $form['group_content_access']['#access'] = FALSE;
+
+  // To alter changes not yet made.
+  $form['#after_build'][] = 'hr_assessments_form_alter_after_build';
+  // Attach js to toggle additional fields.
+  $form['#attached']['js'][] = drupal_get_path('module', 'hr_core') . '/js/hr_core_toggle_fields.js';
 }
 
 /**
@@ -260,4 +250,23 @@ function hr_assessments_views_post_render(&$view, &$output, &$cache) {
       }
     }
   }
+}
+
+/**
+ * After_build hook added in hr_documents_form_hr_document_node_form_alter().
+ */
+function hr_assessments_form_alter_after_build($form, &$form_state) {
+  // Hide wysiwyg (and other text format) options.
+  $language = $form['field_asst_key_findings']['#language'];
+  $form['field_asst_key_findings'][$language][0]['format']['#access'] = FALSE;
+  $language = $form['field_asst_methodology']['#language'];
+  $form['field_asst_methodology'][$language][0]['format']['#access'] = FALSE;
+  $language = $form['field_asst_subject']['#language'];
+  $form['field_asst_subject'][$language][0]['format']['#access'] = FALSE;
+
+  // Remove the path settings for node form.
+  unset($form['path']);
+  unset($form['menu']);
+
+  return $form;
 }

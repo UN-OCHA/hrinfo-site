@@ -6,6 +6,6 @@
  */
 
 $plugin = array(
-  'title' => t('HR Selector without access check'),
+  'title' => t('HR OG Selector without access check'),
   'class' => 'OgHRCoreSelectionHandler',
 );

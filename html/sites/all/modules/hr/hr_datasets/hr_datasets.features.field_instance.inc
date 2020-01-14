@@ -672,7 +672,7 @@ Suggested text: <strong>OCHA</strong> is the data guardian; send question or com
       0 => array(
         'value' => '<p>See the site&#39;s <a href="/applications/data/page/terms-use">Terms of Use</a>. &nbsp;This does not replace any terms of use information provided with the dataset.</p>
 ',
-        'format' => 'panopoly_wysiwyg_text',
+        'format' => 'hr_wysiwyg',
       ),
     ),
     'deleted' => 0,
