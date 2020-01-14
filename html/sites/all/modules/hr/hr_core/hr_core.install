@@ -726,3 +726,14 @@ function hr_core_update_7043() {
 function hr_core_update_7044() {
   module_disable(array('dblog'));
 }
+
+/**
+ * HRINFO-995 - Update links in a disabled field.
+ */
+function hr_core_update_7045() {
+  db_query("UPDATE {field_data_field_data_sources} SET field_data_sources_url = :real_url WHERE field_data_sources_url = :wrong_url OR field_data_sources_url = :short_url", array(
+    ':real_url' => 'https://data.humdata.org/dataset/syrian-arab-republic-idp-movements-and-idp-spontaneous-return-movements-data',
+    ':wrong_url' => 'https://bit.ly/33Dc3bX',
+    ':short_url' => 'https://bit.ly/2XAuaMG',
+  ));
+}

@@ -8,21 +8,6 @@
 include_once 'hr_api.features.inc';
 
 /**
- * Convert a bundle to a RESTful plugin.
- */
-function hr_api_bundle_to_restful_plugin($bundle, $type) {
-  $resource = '';
-  $plugins = restful()->getResourceManager()->getPlugins();
-  foreach ($plugins as $key => $plugin) {
-    $definition = $plugin->getPluginDefinition();
-    if (!empty($definition['dataProvider']['bundles']) && in_array($bundle, $definition['dataProvider']['bundles']) && $definition['dataProvider']['entityType'] == $type) {
-      $resource = $plugin;
-    }
-  }
-  return $resource;
-}
-
-/**
  * Implements hook_entity_insert()
  */
 function hr_api_entity_insert($entity, $type) {
@@ -45,11 +30,11 @@ function hr_api_entity_delete($entity, $type) {
     list($id) = entity_extract_ids($type, $entity);
     $wrapper = entity_metadata_wrapper($type, $entity);
     $bundle = $wrapper->getBundle();
-    $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
-    $json_entity = new \stdClass();
-    $json_entity->id = $id;
     foreach ($conf['hr_api_webhooks'] as $webhook) {
-      if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
+      if ($restful_plugin = hr_api_should_call_webhook($webhook, $type, $bundle)) {
+        $resource = restful()->getResourceManager()->getPlugin($restful_plugin);
+        $json_entity = new \stdClass();
+        $json_entity->id = $id;
         hr_api_call_webhook($webhook, 'delete', $resource, 'en', array(), $json_entity);
       }
     }
@@ -70,24 +55,17 @@ function hr_api_entity_hook($event, $entity, $type) {
     $wrapper = entity_metadata_wrapper($type, $id);
     $bundle = $wrapper->getBundle();
     foreach ($conf['hr_api_webhooks'] as $webhook) {
-      if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
-        $call_webhook = TRUE;
-      }
-    }
-    if ($call_webhook) {
-      $langcode = $language->language;
-      $resource = hr_api_bundle_to_restful_plugin($bundle, $type);
-      if ($resource) {
-        $resource->setAccount($user);
-        $thandler = entity_translation_get_handler($type, $entity);
-        $translations = $thandler->getTranslations();
-        $translations = array_keys($translations->data);
-        $json_entities = json_decode(restful()->getFormatterManager()->format($resource->doGet($id), 'json'));
-        $json_entity = reset($json_entities->data);
-        foreach ($conf['hr_api_webhooks'] as $webhook) {
-          if (hr_api_should_call_webhook($webhook, $type, $bundle)) {
-            hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $json_entity);
-          }
+      if ($restful_plugin = hr_api_should_call_webhook($webhook, $type, $bundle)) {
+        $langcode = $language->language;
+        $resource = restful()->getResourceManager()->getPlugin($restful_plugin);
+        if ($resource) {
+          $resource->setAccount($user);
+          $thandler = entity_translation_get_handler($type, $entity);
+          $translations = $thandler->getTranslations();
+          $translations = array_keys($translations->data);
+          $json_entities = json_decode(restful()->getFormatterManager()->format($resource->doGet($id), 'json'));
+          $json_entity = reset($json_entities->data);
+          hr_api_call_webhook($webhook, $event, $resource, $langcode, $translations, $json_entity);
         }
       }
     }
@@ -100,9 +78,9 @@ function hr_api_entity_hook($event, $entity, $type) {
 function hr_api_should_call_webhook($webhook, $type, $bundle) {
   $types = array_keys($webhook['types']);
   if (in_array($type, $types)) {
-    $bundles = $webhook['types'][$type];
+    $bundles = array_keys($webhook['types'][$type]);
     if (in_array($bundle, $bundles)) {
-      return TRUE;
+      return $webhook['types'][$type][$bundle];
     }
     else {
       return FALSE;
@@ -145,6 +123,9 @@ function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translatio
   // Grab URL and pass it to the browser.
   $response = curl_exec($ch);
 
+  // Switch user back to be able to use session again.
+  $resource->switchUserBack();
+
   // Log errors to watchdog.
   if ($response === FALSE || curl_errno($ch)) {
     watchdog('hr_api_call_webhook', 'Curl HTTP code: @code', array(
@@ -153,6 +134,8 @@ function hr_api_call_webhook($webhook, $event, $resource, $langcode, $translatio
     watchdog('hr_api_call_webhook', 'Curl error: @error', array(
       '@error' => curl_error($ch),
     ));
+    watchdog('hr_api_call_webhook', 'This content could not be saved to Humanitarian ID. You can try to resave this page, or contact an administrator');
+    drupal_set_message(t('This content could not be saved to Humanitarian ID. You can try to resave this page, or contact an administrator'), 'error');
   }
 
   // Close cURL resource, and free up system resources.

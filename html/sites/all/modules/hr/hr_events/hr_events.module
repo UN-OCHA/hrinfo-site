@@ -160,6 +160,9 @@ function hr_events_views_pre_view(&$view, &$display_id, &$args) {
           $header .= '<div class="filters">' . t('Filter criteria');
         }
         $entity = entity_load_single($entity_types[$key], $_GET[$key]);
+        if (empty($entity)) {
+          continue;
+        }
         $header .= '<span class="filter">' . entity_label($entity_types[$key], $entity) . '</span>';
         $i++;
       }
@@ -319,31 +322,7 @@ PDF_FOOTER;
  * Implements hook_form_FORM_ID_alter()
  */
 function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id) {
-  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
-  $form['#attached']['js'] = array(
-    drupal_get_path('module', 'hr_events') . '/js/hr_events.js',
-  );
-
-  // Show multiple empty ones for meeting minutes.
-  if (!isset($form['#node']->nid)) {
-    $items_count = 2;
-    $field_name = 'field_event_meeting_minutes';
-    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
-  }
-
-  // Show multiple empty ones for agenda.
-  if (!isset($form['#node']->nid)) {
-    $items_count = 2;
-    $field_name = 'field_event_agenda';
-    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
-  }
-
-  // Show multiple empty ones for contacts.
-  if (!isset($form['#node']->nid)) {
-    $items_count = 2;
-    $field_name = 'field_hid_contact_ref';
-    _hr_document_render_multiple_input_lines($field_name, $items_count, $form, $form_state);
-  }
+  $form['#attached']['js'][] = drupal_get_path('module', 'hr_events') . '/js/hr_events.js';
 
   // If it's a clone, validate the title.
   if (isset($form['clone_from_original_nid'])) {
@@ -359,6 +338,21 @@ function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id)
     }
     $form['#after_build'][] = '_hr_document_clone_disable_language';
   }
+
+  // These details aren't necessary.
+  unset($form['additional_settings']);
+  unset($form['author']);
+  unset($form['options']);
+  unset($form['redirect']);
+  unset($form['revision_information']);
+  $form['field_sectors']['#access'] = FALSE;
+  $form['group_content_access']['#access'] = FALSE;
+
+  // Necessary to remove path settings.
+  $form['#after_build'][] = 'hr_events_form_alter_after_build';
+
+  // Attach js to toggle additional fields.
+  $form['#attached']['js'][] = drupal_get_path('module', 'hr_core') . '/js/hr_core_toggle_fields.js';
 }
 
 /**
@@ -379,4 +373,18 @@ function hr_events_clone_node_alter(&$node, $context) {
   unset($node->field_event_meeting_minutes);
   unset($node->field_event_agenda);
   unset($node->field_related_content);
+}
+
+/**
+ * Remove the path and menu settings for node form and hide text format options.
+ *
+ * Added in hr_infographics_form_hr_infographic_node_form_alter().
+ */
+function hr_events_form_alter_after_build($form, &$form_state) {
+  $form['menu']['#access'] = FALSE;
+  $language = $form['body']['#language'];
+  $form['body'][$language][0]['format']['#access'] = FALSE;
+  unset($form['path']);
+
+  return $form;
 }

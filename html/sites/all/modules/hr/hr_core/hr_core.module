@@ -357,11 +357,29 @@ function _hr_core_draft_button($label) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_BASE_FORM_ID_alter().
  *
  * Alter the node edit forms.
  */
 function hr_core_form_node_form_alter(&$form, &$form_state) {
+
+  _hr_core_render_multiple_input_lines($form, $form_state);
+
+  $guideline_bundles = array(
+    'hr_assessment',
+    'hr_document',
+    'hr_event',
+    'hr_infographic',
+  );
+  if (in_array($form['#bundle'], $guideline_bundles)) {
+    $form['#attached']['js'][] = drupal_get_path('module', 'hr_core') . '/js/hr_core_guidelines.js';
+    $form['#attached']['css'][] = drupal_get_path('module', 'hr_core') . '/css/hr_core_guidelines.css';
+  }
+
+  if (isset($form['field_related_content']) && !empty($form['field_related_content']['und'])) {
+    $form['field_related_content']['und']['#after_build'][] = 'hr_core_related_content_after_build';
+  }
+
   $node = $form['#node'];
   if (isset($_GET[OG_AUDIENCE_FIELD])) {
     $node->{HR_CORE_OG_AUDIENCE_FIELD} = $_GET[OG_AUDIENCE_FIELD];
@@ -382,6 +400,7 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
       }
 
     }
+    // TODO: check this is intended to skip all the rest of this function.
     return;
   }
 
@@ -431,6 +450,7 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
           ->propertyCondition('status', NODE_PUBLISHED)
           ->entityCondition('bundle', 'hr_office')
           ->fieldCondition('og_group_ref', 'target_id', $groups, 'IN')
+          ->fieldCondition('field_is_coordination_hub', 'value', 1)
           ->execute();
         if (isset($results['node'])) {
           $options = array(
@@ -467,7 +487,210 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
     }
   }
 
-  _hr_core_fix_entity_reference_ajax_calls($form, $form_state);
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function hr_core_theme_registry_alter(&$theme_registry) {
+  if (isset($theme_registry['field_multiple_value_form'])) {
+    $theme_registry['field_multiple_value_form']['type'] = 'module';
+    $theme_registry['field_multiple_value_form']['theme path'] = drupal_get_path('module', 'hr_core');
+    $theme_registry['field_multiple_value_form']['function'] = 'hr_core_theme_field_multiple_value_form';
+  }
+}
+
+/**
+ * Override to remove drag-n-drop table when indicated.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: A render element representing the form element.
+ *
+ * @see theme_field_multiple_value_form()
+ * @ingroup themeable
+ */
+function hr_core_theme_field_multiple_value_form(array $variables) {
+  $element = $variables['element'];
+  $output = '';
+
+  // These fields are also in _hr_core_render_multiple_input_lines().
+  $no_drag_fields = array(
+    'field_data_sources',
+    'field_files_collection',
+    'field_hid_contact_ref',
+    'field_locations',
+    'field_phones',
+    'field_related_content',
+  );
+  if (in_array($element['#field_name'], $no_drag_fields) && ($element['#cardinality'] > 1 || $element['#cardinality'] == FIELD_CARDINALITY_UNLIMITED)) {
+    $table_id = drupal_html_id($element['#field_name'] . '_values');
+    $required = !empty($element['#required']) ? theme('form_required_marker', $variables) : '';
+
+    $header = array(
+      array(
+        'data' => '<label>' . t('!title !required', array('!title' => $element['#title'], '!required' => $required)) . "</label>",
+        'class' => array('field-label'),
+      ),
+    );
+    $rows = array();
+
+    // Sort items according to 'weight'.
+    $items = array();
+    foreach (element_children($element) as $key) {
+      if ($key === 'add_more') {
+        $add_more_button = &$element[$key];
+      }
+      else {
+        $items[] = &$element[$key];
+      }
+    }
+    usort($items, '_field_sort_items_value_helper');
+
+    // Add the items as table rows.
+    foreach ($items as $key => $item) {
+      // We don't want the weight to render.
+      unset($item['_weight']);
+      $cells = array(
+        drupal_render($item),
+      );
+      $rows[] = array(
+        'data' => $cells,
+      );
+    }
+
+    $output = '<div class="form-item">';
+    $output .= theme('table', array(
+      'header' => $header,
+      'rows' => $rows,
+      'attributes' => array(
+        'id' => $table_id,
+        'class' => array('field-multiple-table'),
+      ),
+    ));
+    $output .= $element['#description'] ? '<div class="description">' . $element['#description'] . '</div>' : '';
+    $output .= '<div class="clearfix">' . drupal_render($add_more_button) . '</div>';
+    $output .= '</div>';
+  }
+  elseif ($element['#cardinality'] > 1 || $element['#cardinality'] == FIELD_CARDINALITY_UNLIMITED) {
+    $table_id = drupal_html_id($element['#field_name'] . '_values');
+    $order_class = $element['#field_name'] . '-delta-order';
+    $required = !empty($element['#required']) ? theme('form_required_marker', $variables) : '';
+
+    $header = array(
+      array(
+        'data' => '<label>' . t('!title !required', array('!title' => $element['#title'], '!required' => $required)) . "</label>",
+        'colspan' => 2,
+        'class' => array('field-label'),
+      ),
+      t('Order'),
+    );
+    $rows = array();
+
+    // Sort items according to '_weight' (needed when the form comes back after
+    // preview or failed validation)
+    $items = array();
+    foreach (element_children($element) as $key) {
+      if ($key === 'add_more') {
+        $add_more_button = &$element[$key];
+      }
+      else {
+        $items[] = &$element[$key];
+      }
+    }
+    usort($items, '_field_sort_items_value_helper');
+
+    // Add the items as table rows.
+    foreach ($items as $key => $item) {
+      $item['_weight']['#attributes']['class'] = array($order_class);
+      $delta_element = drupal_render($item['_weight']);
+      $cells = array(
+        array('data' => '', 'class' => array('field-multiple-drag')),
+        drupal_render($item),
+        array('data' => $delta_element, 'class' => array('delta-order')),
+      );
+      $rows[] = array(
+        'data' => $cells,
+        'class' => array('draggable'),
+      );
+    }
+
+    $output = '<div class="form-item">';
+    $output .= theme('table', array(
+      'header' => $header,
+      'rows' => $rows,
+      'attributes' => array(
+        'id' => $table_id,
+        'class' => array('field-multiple-table')
+      )
+    ));
+    $output .= $element['#description'] ? '<div class="description">' . $element['#description'] . '</div>' : '';
+    $output .= '<div class="clearfix">' . drupal_render($add_more_button) . '</div>';
+    $output .= '</div>';
+
+    drupal_add_tabledrag($table_id, 'order', 'sibling', $order_class);
+  }
+  else {
+    foreach (element_children($element) as $key) {
+      $output .= drupal_render($element[$key]);
+    }
+  }
+
+  return $output;
+}
+
+/**
+ * Helper to render multiple inputs for fields.
+ */
+function _hr_core_render_multiple_input_lines(&$form, &$form_state) {
+  // Skip if this node already exists, or is a clone.
+  if (isset($form['clone_from_original_nid']) || isset($form['#node']->nid)) {
+    return;
+  }
+
+  $field_names = array(
+    'field_data_sources' => 4,
+    'field_files_collection' => 4,
+    'field_hid_contact_ref' => 2,
+    'field_locations' => 4,
+    'field_phones' => 4,
+    'field_related_content' => 4,
+  );
+
+  foreach ($field_names as $field_name => $items_count) {
+
+    if (!isset($form[$field_name])) {
+      continue;
+    }
+
+    $field_language = $form[$field_name]['#language'];
+    $form_theme = $form[$field_name][$field_language]['#theme'];
+
+    // Remove delete and add more buttons.
+    $form[$field_name][$field_language][0]['remove_button']['#access'] = FALSE;
+    $form[$field_name][$field_language]['add_more']['#access'] = FALSE;
+
+    $items = &$form_state['field'][$field_name][$field_language];
+
+    // Generate required number of fields collection.
+    if ($items_count > 1 and $items['items_count'] != $items_count) {
+      $items['items_count'] = $items_count;
+      $items['field']['cardinality'] = $items_count;
+      $form[$field_name][$field_language] += field_multiple_value_form($items['field'], $items['instance'], $field_language, array(), $form, $form_state);
+      $form[$field_name][$field_language]['#description'] .= t(' Add up to @count values using the "Add another item" button. To add more, save the form as draft then edit it.', array('@count' => $items_count));
+
+      // Reset theme function.
+      $form[$field_name][$field_language]['#theme'] = $form_theme;
+    }
+
+    // Attach js to handle add-more-button.
+    $form['#attached']['js'][] = drupal_get_path('module', 'hr_core') . '/js/hr_core_add_more.js';
+    // Let js know which extra fields to hide.
+    $form['#attached']['js'][] = array(
+      'type' => 'setting',
+      'data' => array('hr_core' => array('fields' => array($field_name))),
+    );
+  }
 }
 
 /**
@@ -641,6 +864,20 @@ function hr_core_languagefield_options_alter(&$languages, $subsets, $langcode) {
       'name_native' => 'Dari (دری)',
     );
   }
+}
+
+/**
+ * After build for field_related_content.
+ *
+ * Remove title description, set in link module.
+ */
+function hr_core_related_content_after_build($element) {
+  foreach (element_children($element) as $child) {
+    if (!empty($element[$child]['title'])) {
+      unset($element[$child]['title']['#description']);
+    }
+  }
+  return $element;
 }
 
 /**
@@ -937,41 +1174,6 @@ function _hr_core_display_cache_content_defaults($minutes = 'none', $margin = 5,
       ->fields(array('cache' => serialize($cache_settings)))
       ->condition('did', $obj->did, '=')
       ->execute();
-  }
-}
-
-/**
- * Store initial form values when rendering for the first time.
- *
- * Needed to solve problems with entity reference and AJAX.
- */
-function _hr_core_fix_entity_reference_ajax_calls(&$form, &$form_state) {
-  $fields_to_save = array(
-    'field_acc_geo_location_dest',
-    'field_acc_impact_type',
-    'field_bundles',
-    'field_coordination_hubs',
-    'field_disasters',
-    'field_geographic_level',
-    'field_organizations',
-    'field_organizations2',
-    'field_parent_cluster',
-    'og_group_ref',
-  );
-
-  foreach ($fields_to_save as $field_to_save) {
-    // Store the options.
-    if (isset($form[$field_to_save])) {
-      if (!isset($form_state['storage'][$field_to_save])) {
-        $form_state['storage'][$field_to_save] = $form[$field_to_save];
-      }
-      // If it is set, re-fill it.
-      else {
-        if (isset($form_state['storage'][$field_to_save]) && empty($form[$field_to_save][LANGUAGE_NONE]['#default_value'])) {
-          $form[$field_to_save] = $form_state['storage'][$field_to_save];
-        }
-      }
-    }
   }
 }
 

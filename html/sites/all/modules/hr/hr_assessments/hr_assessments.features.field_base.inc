@@ -177,7 +177,7 @@ function hr_assessments_field_default_field_bases() {
       'profile2_private' => FALSE,
       'repeat' => 0,
       'timezone_db' => '',
-      'todate' => 'optional',
+      'todate' => 'required',
       'tz_handling' => 'none',
     ),
     'translatable' => 0,
