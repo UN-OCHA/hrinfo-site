@@ -85,14 +85,20 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
 
     $public_fields['subject'] = array(
       'property' => 'field_asst_subject',
+      'sub_property' => 'value',
+      'process_callbacks' => array('strip_tags', 'trim'),
     );
 
     $public_fields['methodology'] = array(
       'property' => 'field_asst_methodology',
+      'sub_property' => 'value',
+      'process_callbacks' => array('strip_tags', 'trim'),
     );
 
     $public_fields['key_findings'] = array(
       'property' => 'field_asst_key_findings',
+      'sub_property' => 'value',
+      'process_callbacks' => array('strip_tags', 'trim'),
     );
 
     $public_fields['unit_measurement'] = array(
