@@ -1,4 +1,4 @@
-FROM unocha/php7-k8s:7.2.18-r0-201911-01-NR
+FROM unocha/php7-k8s:7.2.26-r0-202001-03-NR
 
 ARG VCS_REF
 ARG VCS_URL
