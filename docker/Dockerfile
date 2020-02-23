@@ -24,3 +24,7 @@ COPY ./html /srv/www/html
 COPY ./composer.json /srv/www/composer.json
 COPY ./composer.lock /srv/www/composer.lock
 COPY ./composer.patches.json /srv/www/composer.patches.json
+
+RUN  cd /srv/www/html/sites && \
+       rm -f www.humanitarianresponse.info && \
+       ln -s default www.humanitarianresponse.info
