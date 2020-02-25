@@ -24,6 +24,7 @@ COPY ./html /srv/www/html
 COPY ./composer.json /srv/www/composer.json
 COPY ./composer.lock /srv/www/composer.lock
 COPY ./composer.patches.json /srv/www/composer.patches.json
+COPY ./docker/custom /etc/nginx/custom
 
 RUN  cd /srv/www/html/sites && \
        rm -f www.humanitarianresponse.info && \
