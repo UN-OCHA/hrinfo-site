@@ -35,6 +35,26 @@ function hr_users_menu_alter(&$items) {
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function hr_users_form_user_login_block_alter(&$form, &$form_state, $form_id) {
+  $form['name']['#access'] = FALSE;
+  $form['pass']['#access'] = FALSE;
+  $form['actions']['#access'] = FALSE;
+  $form['links']['#access'] = FALSE;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function hr_users_form_user_login_alter(&$form, &$form_state, $form_id) {
+  $form['name']['#access'] = FALSE;
+  $form['pass']['#access'] = FALSE;
+  $form['actions']['#access'] = FALSE;
+  $form['links']['#access'] = FALSE;
+}
+
+/**
  * Redirect to hybrid auth.
  */
 function hr_users_login_redirect() {
