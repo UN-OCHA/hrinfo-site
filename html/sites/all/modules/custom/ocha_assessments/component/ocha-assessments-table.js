@@ -2458,6 +2458,7 @@ const tableStyles = css`
     margin: 0 auto 3rem;
     border-collapse: collapse;
     width: 100%;
+    empty-cells: hide;
   }
 
   th,
@@ -2485,15 +2486,15 @@ const tableStyles = css`
   }
 
   /* Row numbers */
-  .row-numbers {
+  .cd-table--row-numbers {
     counter-reset: rowNumber;
   }
 
-  .row-numbers tbody tr {
+  .cd-table--row-numbers tbody tr {
     counter-increment: rowNumber;
   }
 
-  .row-numbers tbody tr td.cd-table--row-num:first-child::before {
+  .cd-table--row-numbers tbody tr td.cd-table--row-num:first-child::before {
     content: counter(rowNumber);
     min-width: 1em;
     margin-right: 0.5em;
@@ -2540,8 +2541,15 @@ const tableStyles = css`
       position: relative;
       padding: 0.5rem;
       padding-left: 40% !important;
+      min-height: 2rem;
       white-space: normal !important;
       text-align: left;
+    }
+
+    td:empty {
+      border-bottom: none;
+      padding: 0;
+      min-height: unset;
     }
 
     td:before {
@@ -2558,11 +2566,15 @@ const tableStyles = css`
       content: attr(data-content);
     }
 
-    .row-numbers tbody tr td.cd-table--row-num {
+    td:empty:before {
+      content: none;
+    }
+
+    .cd-table--row-numbers tbody tr td.cd-table--row-num {
       height: 3rem;
     }
 
-    .row-numbers tbody tr td.cd-table--row-num::before {
+    .cd-table--row-numbers tbody tr td.cd-table--row-num::before {
       font-weight: bold;
       font-size: 1.5rem;
     }
@@ -2836,7 +2848,7 @@ class OchaAssessmentsTable extends OchaAssessmentsBase {
 
         <button @click="${this.resetData}">Reset</button>
       </div>
-      <table>
+      <table class="cd-table cd-table--striped">
         <thead>
           <tr>
             <th>Title</th>
@@ -2855,18 +2867,14 @@ class OchaAssessmentsTable extends OchaAssessmentsBase {
               r =>
                 html`
                   <tr>
-                    <td><a href="${this.baseurl}/node/${r.nid}">${r.title}</a></td>
-                    <td>${r.field_locations_label}</td>
-                    <td>${r.field_organizations_label}</td>
-                    <td>${r.field_asst_organizations_label}</td>
-                    <td>${r.field_local_groups_label}</td>
-                    <td>${r.field_status}</td>
-                    <td>${this.renderDate(r)}</td>
-                    <td>
-                      ${this.buildDocument('report', r, 'Report')}
-                      ${this.buildDocument('questionnaire', r, 'Questionnaire')}
-                      ${this.buildDocument('data', r, 'Data')}
-                    </td>
+                    <td data-content="Title"><a href="${this.baseurl}/node/${r.nid}">${r.title}</a></td>
+                    <td data-content="Location(s)">${r.field_locations_label}</td>
+                    <td data-content="Managed by">${r.field_organizations_label}</td>
+                    <td data-content="Participating Organization(s)">${r.field_asst_organizations_label}</td>
+                    <td data-content="Clusters/Sectors">${r.field_local_groups_label}</td>
+                    <td data-content="Status">${r.field_status}</td>
+                    <td data-content="Assessment Date(s)">${this.renderDate(r)}</td>
+                    <td data-content="Data">${this.buildDocument('report', r, 'Report')}${this.buildDocument('questionnaire', r, 'Questionnaire')}${this.buildDocument('data', r, 'Data')}</td>
                   </tr>
                   `
           )}
