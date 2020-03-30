@@ -59,6 +59,13 @@ function ocha_assessments_menu() {
 }
 
 /**
+ * Base URL.
+ */
+function ocha_assessments_base_url() {
+  return variable_get('ocha_assessments_base_url', 'https://site-assessments8.docksal');
+}
+
+/**
  * Page callback to display a list as tab in the assessments list.
  */
 function ocha_assessments_operation_list($node) {
@@ -103,17 +110,18 @@ function ocha_assessments_list($location_id = NULL) {
  * Page callback to display a table as tab in the assessments list.
  */
 function ocha_assessments_table($location_id = NULL) {
-  $src = 'https://site-assessments8.docksal/rest/assessments';
+  $base_url = ocha_assessments_base_url();
+  $src = $base_url . '/rest/assessments?items_per_page=50';
 
   if ($location_id) {
-    $src = 'https://site-assessments8.docksal/rest/assessments?f[0]=locations%3A' . $location_id;
+    $src = $base_url . '/rest/assessments?items_per_page=50&f[0]=locations%3A' . $location_id;
   }
 
   return <<< EOF
   <script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-table.js"></script>
   <ocha-assessments-table
     id="ocha-table"
-    baseurl="https://site-assessments8.docksal"
+    baseurl="$base_url"
     src="$src"
     componenturl="/sites/all/modules/custom/ocha_assessments/component/"
   ></ocha-assessments-table>
@@ -124,24 +132,25 @@ function ocha_assessments_table($location_id = NULL) {
  * Page callback to display a map as tab in the assessments list.
  */
 function ocha_assessments_map($location_id = NULL) {
-  $src = 'https://site-assessments8.docksal/rest/assessments-map';
+  $base_url = ocha_assessments_base_url();
+  $src = $base_url . '/rest/assessments-map?items_per_page=2000';
 
   if ($location_id) {
-    $src = 'https://site-assessments8.docksal/rest/assessments-map?f[0]=locations%3A' . $location_id;
+    $src = $base_url . '/rest/assessments-map?items_per_page=2000&f[0]=locations%3A' . $location_id;
   }
 
   return <<< EOF
   <script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-map.js"></script>
   <ocha-assessments-map
     id="ocha-map"
-    baseurl="https://site-assessments8.docksal"
+    baseurl="$base_url"
     src="$src"
     componenturl="/sites/all/modules/custom/ocha_assessments/component/"
     latitude="51"
     longitude="4"
     zoom="13"
-    min-zoom="11"
-    max-zoom="19"
+    min-zoom="10"
+    max-zoom="16"
     style="
       height: 500px;
       margin-bottom: 200px;
