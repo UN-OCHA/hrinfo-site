@@ -157,15 +157,13 @@ function ocha_assessments_table($location_id = NULL) {
     $src = $base_url . '/rest/assessments?items_per_page=50&f[0]=locations%3A' . $location_id;
   }
 
-  return <<< EOF
-  <script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-table.js"></script>
-  <ocha-assessments-table
-    id="ocha-table"
-    baseurl="$base_url"
-    src="$src"
-    componenturl="/sites/all/modules/custom/ocha_assessments/component/"
-  ></ocha-assessments-table>
-  EOF;
+  return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-table.js"></script>
+    <ocha-assessments-table
+      id="ocha-table"
+      baseurl="' . $base_url . '"
+      src="' . $src . '"
+      componenturl="/sites/all/modules/custom/ocha_assessments/component/"
+    ></ocha-assessments-table>';
 }
 
 /**
@@ -179,21 +177,19 @@ function ocha_assessments_map($location_id = NULL) {
     $src = $base_url . '/rest/assessments-map?items_per_page=2000&f[0]=locations%3A' . $location_id;
   }
 
-  return <<< EOF
-  <script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-map.js"></script>
-  <ocha-assessments-map
-    id="ocha-map"
-    baseurl="$base_url"
-    src="$src"
-    componenturl="/sites/all/modules/custom/ocha_assessments/component/"
-    latitude="51"
-    longitude="4"
-    zoom="13"
-    min-zoom="10"
-    max-zoom="16"
-    style="
-      height: 500px;
-      margin-bottom: 200px;
-    "></ocha-assessments-map>
-  EOF;
+  return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-map.js"></script>
+    <ocha-assessments-map
+      id="ocha-map"
+      baseurl="' . $base_url . '"
+      src="' . $src . '"
+      componenturl="/sites/all/modules/custom/ocha_assessments/component/"
+      latitude="51"
+      longitude="4"
+      zoom="13"
+      min-zoom="10"
+      max-zoom="16"
+      style="
+        height: 500px;
+        margin-bottom: 200px;
+      "></ocha-assessments-map>';
 }
