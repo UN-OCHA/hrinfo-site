@@ -1,0 +1,4 @@
+name = OCHA Assessments
+description = OCHA Assessments integration
+core = 7.x
+package = OCHA

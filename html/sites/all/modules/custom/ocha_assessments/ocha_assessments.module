@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Code for the OCHA Assessments.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function ocha_assessments_menu() {
+  $items = array();
+
+  $items['assessments/test-map'] = array(
+    'title' => 'Map',
+    'access callback' => TRUE,
+    'page callback' => 'ocha_assessments_global_map',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 99,
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback to display the global map as tab in the assessments list.
+ */
+function ocha_assessments_global_map() {
+  return <<< EOF
+  <script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-map.js"></script>
+  <ocha-assessments-map
+    id="ocha-map"
+    baseurl="https://site-assessments8.docksal"
+    src="https://site-assessments8.docksal/rest/assessments-map?f[0]=countries%3A116"
+    componenturl="/sites/all/modules/custom/ocha_assessments/component/"
+    latitude="51"
+    longitude="4"
+    zoom="13"
+    min-zoom="11"
+    max-zoom="19"
+    style="
+      height: 500px;
+      margin-bottom: 200px;
+    "></ocha-assessments-map>
+  EOF;
+}
