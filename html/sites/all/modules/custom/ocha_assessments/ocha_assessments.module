@@ -13,7 +13,9 @@ function ocha_assessments_menu() {
 
   $items['assessments'] = array(
     'title' => 'Assessments',
-    'access callback' => TRUE,
+    'access arguments' => array(
+      'access content',
+    ),
     'page callback' => 'ocha_assessments_list',
     'type' => MENU_NORMAL_ITEM,
     'weight' => 99,
@@ -21,7 +23,9 @@ function ocha_assessments_menu() {
 
   $items['assessments/list'] = array(
     'title' => 'List',
-    'access callback' => TRUE,
+    'access arguments' => array(
+      'access content',
+    ),
     'page callback' => 'ocha_assessments_list',
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 95,
@@ -29,7 +33,9 @@ function ocha_assessments_menu() {
 
   $items['assessments/table'] = array(
     'title' => 'Table',
-    'access callback' => TRUE,
+    'access arguments' => array(
+      'access content',
+    ),
     'page callback' => 'ocha_assessments_table',
     'type' => MENU_LOCAL_TASK,
     'weight' => 96,
@@ -37,7 +43,9 @@ function ocha_assessments_menu() {
 
   $items['assessments/map-2'] = array(
     'title' => 'Map',
-    'access callback' => TRUE,
+    'access arguments' => array(
+      'access content',
+    ),
     'page callback' => 'ocha_assessments_map',
     'type' => MENU_LOCAL_TASK,
     'weight' => 97,
@@ -45,7 +53,9 @@ function ocha_assessments_menu() {
 
   $items['node/%node/assessments'] = array(
     'title' => 'Assessments',
-    'access callback' => TRUE,
+    'access arguments' => array(
+      'access content',
+    ),
     'page callback' => 'ocha_assessments_operation_list',
     'page arguments' => array(1),
     'type' => MENU_NORMAL_ITEM,
@@ -54,7 +64,9 @@ function ocha_assessments_menu() {
 
   $items['node/%node/assessments/list'] = array(
     'title' => 'List',
-    'access callback' => TRUE,
+    'access arguments' => array(
+      'access content',
+    ),
     'page callback' => 'ocha_assessments_operation_list',
     'page arguments' => array(1),
     'type' => MENU_DEFAULT_LOCAL_TASK,
@@ -63,7 +75,9 @@ function ocha_assessments_menu() {
 
   $items['node/%node/assessments/table'] = array(
     'title' => 'Table',
-    'access callback' => TRUE,
+    'access arguments' => array(
+      'access content',
+    ),
     'page callback' => 'ocha_assessments_operation_table',
     'page arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
@@ -72,7 +86,9 @@ function ocha_assessments_menu() {
 
   $items['node/%node/assessments/map'] = array(
     'title' => 'Map',
-    'access callback' => TRUE,
+    'access arguments' => array(
+      'access content',
+    ),
     'page callback' => 'ocha_assessments_operation_map',
     'page arguments' => array(1),
     'type' => MENU_LOCAL_TASK,
@@ -94,7 +110,7 @@ function ocha_assessments_base_url() {
  */
 function ocha_assessments_operation_list($node) {
   if (isset($node->field_country)) {
-    return ocha_assessments_list($node->field_country['und'][0]['target_id']);
+    return ocha_assessments_list($node->field_country[LANGUAGE_NONE][0]['target_id']);
   }
 
   return drupal_access_denied();
@@ -105,7 +121,7 @@ function ocha_assessments_operation_list($node) {
  */
 function ocha_assessments_operation_table($node) {
   if (isset($node->field_country)) {
-    return ocha_assessments_table($node->field_country['und'][0]['target_id']);
+    return ocha_assessments_table($node->field_country[LANGUAGE_NONE][0]['target_id']);
   }
 
   return drupal_access_denied();
@@ -116,7 +132,7 @@ function ocha_assessments_operation_table($node) {
  */
 function ocha_assessments_operation_map($node) {
   if (isset($node->field_country)) {
-    return ocha_assessments_map($node->field_country['und'][0]['target_id']);
+    return ocha_assessments_map($node->field_country[LANGUAGE_NONE][0]['target_id']);
   }
 
   return drupal_access_denied();
