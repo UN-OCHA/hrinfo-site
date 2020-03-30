@@ -18167,6 +18167,8 @@ class OchaAssessmentsMap extends OchaAssessmentsBase {
 
   firstUpdated(changedProperties) {
     if (!this.map) {
+      Icon.Default.imagePath = this.componenturl;
+
       this.map = new Map$1(this.shadowRoot.getElementById('map'), {
         center: [this.latitude, this.longitude],
         zoom: this.zoom,

@@ -11,27 +11,131 @@
 function ocha_assessments_menu() {
   $items = array();
 
-  $items['assessments/test-map'] = array(
-    'title' => 'Map',
+  $items['assessments/global-map'] = array(
+    'title' => 'Assessments map',
     'access callback' => TRUE,
-    'page callback' => 'ocha_assessments_global_map',
+    'page callback' => 'ocha_assessments_map',
     'type' => MENU_LOCAL_TASK,
     'weight' => 99,
+  );
+
+  $items['node/%node/assessments'] = array(
+    'title' => 'Assessments',
+    'access callback' => TRUE,
+    'page callback' => 'ocha_assessments_operation_list',
+    'page arguments' => array(1),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 99,
+  );
+
+  $items['node/%node/assessments/list'] = array(
+    'title' => 'List',
+    'access callback' => TRUE,
+    'page callback' => 'ocha_assessments_operation_list',
+    'page arguments' => array(1),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 95,
+  );
+
+  $items['node/%node/assessments/table'] = array(
+    'title' => 'Table',
+    'access callback' => TRUE,
+    'page callback' => 'ocha_assessments_operation_table',
+    'page arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 96,
+  );
+
+  $items['node/%node/assessments/map'] = array(
+    'title' => 'Map',
+    'access callback' => TRUE,
+    'page callback' => 'ocha_assessments_operation_map',
+    'page arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 97,
   );
 
   return $items;
 }
 
 /**
- * Page callback to display the global map as tab in the assessments list.
+ * Page callback to display a list as tab in the assessments list.
  */
-function ocha_assessments_global_map() {
+function ocha_assessments_operation_list($node) {
+  if (isset($node->field_country)) {
+    return ocha_assessments_list($node->field_country['und'][0]['target_id']);
+  }
+
+  return drupal_access_denied();
+}
+
+/**
+ * Page callback to display a map as tab in the assessments list.
+ */
+function ocha_assessments_operation_table($node) {
+  if (isset($node->field_country)) {
+    return ocha_assessments_table($node->field_country['und'][0]['target_id']);
+  }
+
+  return drupal_access_denied();
+}
+
+/**
+ * Page callback to display a map as tab in the assessments list.
+ */
+function ocha_assessments_operation_map($node) {
+  if (isset($node->field_country)) {
+    return ocha_assessments_map($node->field_country['und'][0]['target_id']);
+  }
+
+  return drupal_access_denied();
+}
+
+/**
+ * Page callback to display a list as tab in the assessments list.
+ */
+function ocha_assessments_list($location_id = NULL) {
+  // TODO: Add list.
+  return ocha_assessments_table($location_id);
+}
+
+/**
+ * Page callback to display a table as tab in the assessments list.
+ */
+function ocha_assessments_table($location_id = NULL) {
+  $src = 'https://site-assessments8.docksal/rest/assessments';
+
+  if ($location_id) {
+    $src = 'https://site-assessments8.docksal/rest/assessments?f[0]=locations%3A' . $location_id;
+  }
+
+  return <<< EOF
+  <script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-table.js"></script>
+  <ocha-assessments-table
+    id="ocha-table"
+    baseurl="https://site-assessments8.docksal"
+    src="$src"
+    componenturl="/sites/all/modules/custom/ocha_assessments/component/"
+  ></ocha-assessments-table>
+  EOF;
+}
+
+/**
+ * Page callback to display a map as tab in the assessments list.
+ */
+function ocha_assessments_map($location_id = NULL) {
+  $src = 'https://site-assessments8.docksal/rest/assessments-map';
+
+  if ($location_id) {
+    $src = 'https://site-assessments8.docksal/rest/assessments-map?f[0]=locations%3A' . $location_id;
+  }
+
   return <<< EOF
   <script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-map.js"></script>
   <ocha-assessments-map
     id="ocha-map"
     baseurl="https://site-assessments8.docksal"
-    src="https://site-assessments8.docksal/rest/assessments-map?f[0]=countries%3A116"
+    src="$src"
     componenturl="/sites/all/modules/custom/ocha_assessments/component/"
     latitude="51"
     longitude="4"
