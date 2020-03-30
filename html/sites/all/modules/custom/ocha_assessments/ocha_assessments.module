@@ -11,12 +11,36 @@
 function ocha_assessments_menu() {
   $items = array();
 
-  $items['assessments/global-map'] = array(
-    'title' => 'Assessments map',
+  $items['assessments'] = array(
+    'title' => 'Assessments',
+    'access callback' => TRUE,
+    'page callback' => 'ocha_assessments_list',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 99,
+  );
+
+  $items['assessments/list'] = array(
+    'title' => 'List',
+    'access callback' => TRUE,
+    'page callback' => 'ocha_assessments_list',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 95,
+  );
+
+  $items['assessments/table'] = array(
+    'title' => 'Table',
+    'access callback' => TRUE,
+    'page callback' => 'ocha_assessments_table',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 96,
+  );
+
+  $items['assessments/map-2'] = array(
+    'title' => 'Map',
     'access callback' => TRUE,
     'page callback' => 'ocha_assessments_map',
     'type' => MENU_LOCAL_TASK,
-    'weight' => 99,
+    'weight' => 97,
   );
 
   $items['node/%node/assessments'] = array(
@@ -133,7 +157,7 @@ function ocha_assessments_table($location_id = NULL) {
  */
 function ocha_assessments_map($location_id = NULL) {
   $base_url = ocha_assessments_base_url();
-  $src = $base_url . '/rest/assessments-map?items_per_page=2000';
+  $src = $base_url . '/rest/assessments-map?items_per_page=8000';
 
   if ($location_id) {
     $src = $base_url . '/rest/assessments-map?items_per_page=2000&f[0]=locations%3A' . $location_id;
