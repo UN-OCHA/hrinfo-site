@@ -41,7 +41,7 @@ function ocha_assessments_menu() {
     'weight' => 96,
   );
 
-  $items['assessments/map-2'] = array(
+  $items['assessments/global-map'] = array(
     'title' => 'Map',
     'access arguments' => array(
       'access content',
@@ -96,6 +96,14 @@ function ocha_assessments_menu() {
   );
 
   return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function ocha_assessments_menu_alter(&$items) {
+  $items['assessments/map']['access callback'] = FALSE;
+  $items['assessments/global-map']['page callback'] = 'ocha_assessments_map';
 }
 
 /**
