@@ -150,8 +150,20 @@ function ocha_assessments_operation_map($node) {
  * Page callback to display a list as tab in the assessments list.
  */
 function ocha_assessments_list($location_id = NULL) {
-  // TODO: Add list.
-  return ocha_assessments_table($location_id);
+  $base_url = ocha_assessments_base_url();
+  $src = $base_url . '/rest/assessments?items_per_page=50';
+
+  if ($location_id) {
+    $src = $base_url . '/rest/assessments?items_per_page=50&f[0]=locations%3A' . $location_id;
+  }
+
+  return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-list.js"></script>
+    <ocha-assessments-list
+      id="ocha-list"
+      baseurl="' . $base_url . '"
+      src="' . $src . '"
+      componenturl="/sites/all/modules/custom/ocha_assessments/component/"
+    ></ocha-assessments-list>';
 }
 
 /**

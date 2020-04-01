@@ -11,6 +11,7 @@
     <li>https://site-assessments8.docksal/rest/assessments-map?items_per_page=2000</li>
     <li>https://site-assessments8.docksal/rest/assessments-map?items_per_page=4000</li>
     <li>https://site-assessments8.docksal/rest/assessments-map?items_per_page=8000</li>
+    <li>https://d8.dev.assessments-hpc-tools.ahconu.org/rest/assessments-map?items_per_page=1000</li>
   </ul>
 
   <h2>Kenya</h2>
@@ -34,7 +35,7 @@
     let ochaMap = document.getElementById('ocha-map');
 
     testLinks.addEventListener('click', function(event) {
-      ochaMap.src = event.toElement.innerText;
+      ochaMap.src = event.target.innerText;
     });
   </script>
 
