@@ -114,6 +114,13 @@ function ocha_assessments_base_url() {
 }
 
 /**
+ * Basic Auth.
+ */
+function ocha_assessments_basis_auth() {
+  return variable_get('ocha_assessments_basic_auth', '');
+}
+
+/**
  * Page callback to display a list as tab in the assessments list.
  */
 function ocha_assessments_operation_list($node) {
@@ -151,6 +158,7 @@ function ocha_assessments_operation_map($node) {
  */
 function ocha_assessments_list($location_id = NULL) {
   $base_url = ocha_assessments_base_url();
+  $basic_auth = ocha_assessments_basis_auth();
   $src = $base_url . '/rest/assessments?items_per_page=50';
 
   if ($location_id) {
@@ -160,7 +168,7 @@ function ocha_assessments_list($location_id = NULL) {
   return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-list.js"></script>
     <ocha-assessments-list
       id="ocha-list"
-      basicAuth="ocha:dev"
+      basicAuth="' . $basic_auth . '"
       baseurl="' . $base_url . '"
       src="' . $src . '"
       componenturl="/sites/all/modules/custom/ocha_assessments/component/"
@@ -172,6 +180,7 @@ function ocha_assessments_list($location_id = NULL) {
  */
 function ocha_assessments_table($location_id = NULL) {
   $base_url = ocha_assessments_base_url();
+  $basic_auth = ocha_assessments_basis_auth();
   $src = $base_url . '/rest/assessments?items_per_page=50';
 
   if ($location_id) {
@@ -181,7 +190,7 @@ function ocha_assessments_table($location_id = NULL) {
   return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-table.js"></script>
     <ocha-assessments-table
       id="ocha-table"
-      basicAuth="ocha:dev"
+      basicAuth="' . $basic_auth . '"
       baseurl="' . $base_url . '"
       src="' . $src . '"
       componenturl="/sites/all/modules/custom/ocha_assessments/component/"
@@ -193,6 +202,7 @@ function ocha_assessments_table($location_id = NULL) {
  */
 function ocha_assessments_map($location_id = NULL) {
   $base_url = ocha_assessments_base_url();
+  $basic_auth = ocha_assessments_basis_auth();
   $src = $base_url . '/rest/assessments-map?items_per_page=8000';
 
   if ($location_id) {
@@ -202,7 +212,7 @@ function ocha_assessments_map($location_id = NULL) {
   return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-map.js"></script>
     <ocha-assessments-map
       id="ocha-map"
-      basicAuth="ocha:dev"
+      basicAuth="' . $basic_auth . '"
       baseurl="' . $base_url . '"
       src="' . $src . '"
       componenturl="/sites/all/modules/custom/ocha_assessments/component/"
