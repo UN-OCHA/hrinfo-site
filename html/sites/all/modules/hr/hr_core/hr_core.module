@@ -1637,13 +1637,11 @@ function hr_core_entity_property_info_alter(&$entity_info) {
 /**
  * Implements hook_node_validate()
  *
- * Makes sure clusters, operations and offices have an English translation.
+ * Makes sure offices have an English translation.
  */
 function hr_core_node_validate($node, $form, &$form_state) {
-  $node_types = array('hr_bundle', 'hr_operation', 'hr_office');
+  $node_types = array('hr_office');
   $node_labels = array(
-    'hr_bundle' => t('Cluster'),
-    'hr_operation' => t('Operation'),
     'hr_office' => t('Office')
   );
   if (in_array($node->type, $node_types) && $node->language !== 'en') {
