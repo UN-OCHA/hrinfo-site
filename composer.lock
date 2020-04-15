@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0cb63eb306daa0ce72e15c1b4a67e84d",
+    "content-hash": "a5231a3c26cc2e265b16c37507c51a65",
     "packages": [
         {
             "name": "composer/installers",
@@ -1990,6 +1990,10 @@
                     "homepage": "https://www.drupal.org/user/227761"
                 },
                 {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
                     "name": "realityloop",
                     "homepage": "https://www.drupal.org/user/139189"
                 },
@@ -2040,7 +2044,8 @@
                     "Invalid node_load() parameters fix": "PATCHES/node_load_fix.patch",
                     "Notice: Undefined index: field_xxx in file_ajax_upload() and Undefined index: #suffix in file_ajax_upload": "https://www.drupal.org/files/undefined_index_file_ajax-1336212-23.patch",
                     "Cannot create references to/from string offsets nor overloaded objects": "https://www.drupal.org/files/issues/cannot_create_references_tofrom_string_offsets_nor_overloaded_objects-2313517-32.patch",
-                    "Call to undefined function drupal_get_path_alias() in url()": "https://www.drupal.org/files/issues/2019-02-27/drupal-undefined_function_drupal_get_path_alias-2842762-14-D7.patch"
+                    "Call to undefined function drupal_get_path_alias() in url()": "https://www.drupal.org/files/issues/2019-02-27/drupal-undefined_function_drupal_get_path_alias-2842762-14-D7.patch",
+                    "Patch robot file": "PATCHES/allow-themes-path.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -2252,7 +2257,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.4",
-                    "datestamp": "1544635380",
+                    "datestamp": "1567477986",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2433,7 +2438,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.0",
-                    "datestamp": "1522600680",
+                    "datestamp": "1574630884",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2837,7 +2842,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.5",
-                    "datestamp": "1405685327",
+                    "datestamp": "1568909888",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2872,6 +2877,14 @@
                 {
                     "name": "eugene.ilyin",
                     "homepage": "https://www.drupal.org/user/1767626"
+                },
+                {
+                    "name": "gisle",
+                    "homepage": "https://www.drupal.org/user/409554"
+                },
+                {
+                    "name": "joseph.olstad",
+                    "homepage": "https://www.drupal.org/user/1321830"
                 },
                 {
                     "name": "jurcello",
@@ -2917,7 +2930,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.3-rc3",
-                    "datestamp": "1465202339",
+                    "datestamp": "1568901185",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -2943,6 +2956,10 @@
                 {
                     "name": "danielnolde",
                     "homepage": "https://www.drupal.org/user/79829"
+                },
+                {
+                    "name": "joseph.olstad",
+                    "homepage": "https://www.drupal.org/user/1321830"
                 },
                 {
                     "name": "thePanz",
@@ -3107,6 +3124,10 @@
                 {
                     "name": "dawehner",
                     "homepage": "https://www.drupal.org/user/99340"
+                },
+                {
+                    "name": "donquixote",
+                    "homepage": "https://www.drupal.org/user/459338"
                 },
                 {
                     "name": "e2thex",
@@ -3403,7 +3424,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.0-beta13",
-                    "datestamp": "1548457080",
+                    "datestamp": "1567264689",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -3533,7 +3554,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.0",
-                    "datestamp": "1476649739",
+                    "datestamp": "1570136286",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3785,7 +3806,7 @@
                 },
                 "drupal": {
                     "version": "7.x-2.25",
-                    "datestamp": "1541794684",
+                    "datestamp": "1569787385",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4041,7 +4062,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.0-alpha2",
-                    "datestamp": "1434542580",
+                    "datestamp": "1571756287",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -4273,7 +4294,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.25",
-                    "datestamp": "1533849180",
+                    "datestamp": "1576274586",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4286,8 +4307,16 @@
             ],
             "authors": [
                 {
+                    "name": "Manuel Garcia",
+                    "homepage": "https://www.drupal.org/user/213194"
+                },
+                {
                     "name": "geerlingguy",
                     "homepage": "https://www.drupal.org/user/389011"
+                },
+                {
+                    "name": "vijaycs85",
+                    "homepage": "https://www.drupal.org/user/93488"
                 }
             ],
             "description": "Mitigates spam form submissions using the honeypot method.",
@@ -4798,7 +4827,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.8",
-                    "datestamp": "1460849406",
+                    "datestamp": "1568130784",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4817,6 +4846,26 @@
                 {
                     "name": "dawehner",
                     "homepage": "https://www.drupal.org/user/99340"
+                },
+                {
+                    "name": "geek-merlin",
+                    "homepage": "https://www.drupal.org/user/229048"
+                },
+                {
+                    "name": "joachim",
+                    "homepage": "https://www.drupal.org/user/107701"
+                },
+                {
+                    "name": "jsacksick",
+                    "homepage": "https://www.drupal.org/user/972218"
+                },
+                {
+                    "name": "kaythay",
+                    "homepage": "https://www.drupal.org/user/2182186"
+                },
+                {
+                    "name": "oknate",
+                    "homepage": "https://www.drupal.org/user/471638"
                 },
                 {
                     "name": "rszrama",
@@ -5019,7 +5068,7 @@
                 },
                 "drupal": {
                     "version": "7.x-2.4",
-                    "datestamp": "1492622642",
+                    "datestamp": "1571207285",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5074,7 +5123,7 @@
                 },
                 "drupal": {
                     "version": "7.x-2.2",
-                    "datestamp": "1505717343",
+                    "datestamp": "1570038290",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5243,7 +5292,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.6",
-                    "datestamp": "1550692584",
+                    "datestamp": "1573731186",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5255,6 +5304,10 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "DamienMcKenna",
+                    "homepage": "https://www.drupal.org/user/108450"
+                },
                 {
                     "name": "RenatoG",
                     "homepage": "https://www.drupal.org/user/3326031"
@@ -5821,7 +5874,7 @@
                 },
                 "drupal": {
                     "version": "7.x-3.8",
-                    "datestamp": "1550118780",
+                    "datestamp": "1570113186",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6144,6 +6197,10 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "Robert Ngo",
+                    "homepage": "https://www.drupal.org/user/610230"
+                },
                 {
                     "name": "adriancid",
                     "homepage": "https://www.drupal.org/user/1962106"
@@ -6937,6 +6994,10 @@
                     "homepage": "https://www.drupal.org/user/48673"
                 },
                 {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
                     "name": "tim.plunkett",
                     "homepage": "https://www.drupal.org/user/241634"
                 }
@@ -7164,7 +7225,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.2",
-                    "datestamp": "1394573306",
+                    "datestamp": "1572381184",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7559,7 +7620,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.6",
-                    "datestamp": "1546363380",
+                    "datestamp": "1575811985",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7737,7 +7798,7 @@
                 },
                 "drupal": {
                     "version": "7.x-3.7",
-                    "datestamp": "1557122344",
+                    "datestamp": "1579112016",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7952,17 +8013,17 @@
         },
         {
             "name": "drupal/redis",
-            "version": "3.17.0",
+            "version": "3.18.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/redis.git",
-                "reference": "7.x-3.17"
+                "reference": "7.x-3.18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/redis-7.x-3.17.zip",
-                "reference": "7.x-3.17",
-                "shasum": "e8ce391d7bae34c0cf1df1b9c808be9d18fa1c61"
+                "url": "https://ftp.drupal.org/files/projects/redis-7.x-3.18.zip",
+                "reference": "7.x-3.18",
+                "shasum": "a88f8bb788ab7640de3b8a0a85e4e7a9b179cf7d"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -7973,15 +8034,17 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "7.x-3.17",
-                    "datestamp": "1513939085",
+                    "version": "7.x-3.18",
+                    "datestamp": "1572430084",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "patches_applied": {
-                    "Use path_alias_xt when installed": "PATCHES/drupal-undefined_function_drupal_get_path_alias-2842762-14-D7-PART2-2420275-1-path_alias_xt.patch"
+                    "Use path_alias_xt when installed": "PATCHES/drupal-undefined_function_drupal_get_path_alias-2842762-14-D7-PART2-2420275-1-path_alias_xt.patch",
+                    "New feature: option to use SCAN command instead of KEYS on cache wildcard deletions": "https://www.drupal.org/files/issues/2018-05-07/redis-delete-by-prefix-using-scan-2851625-21.patch",
+                    "[D7] Not compatible with php-redis 5": "https://www.drupal.org/files/issues/2019-11-27/redis-n3074189-23.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -8472,7 +8535,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.14",
-                    "datestamp": "1539192489",
+                    "datestamp": "1573123085",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9118,7 +9181,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.0-alpha9",
-                    "datestamp": "1484324997",
+                    "datestamp": "1568461685",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -10056,7 +10119,7 @@
                     "datestamp": "1451575439",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -10677,20 +10740,20 @@
             "authors": [
                 {
                     "name": "Manuel Pichler",
-                    "role": "Project Founder",
                     "email": "github@manuel-pichler.de",
-                    "homepage": "https://github.com/manuelpichler"
+                    "homepage": "https://github.com/manuelpichler",
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Marc Würth",
-                    "role": "Project Maintainer",
                     "email": "ravage@bluewin.ch",
-                    "homepage": "https://github.com/ravage84"
+                    "homepage": "https://github.com/ravage84",
+                    "role": "Project Maintainer"
                 },
                 {
                     "name": "Other contributors",
-                    "role": "Contributors",
-                    "homepage": "https://github.com/phpmd/phpmd/graphs/contributors"
+                    "homepage": "https://github.com/phpmd/phpmd/graphs/contributors",
+                    "role": "Contributors"
                 }
             ],
             "description": "PHPMD is a spin-off project of PHP Depend and aims to be a PHP equivalent of the well known Java tool PMD.",
@@ -10742,8 +10805,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "Utility class for timing",
@@ -10833,8 +10896,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "FinderFacade is a convenience wrapper for Symfony's Finder component.",
@@ -10884,8 +10947,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "Copy/Paste Detector (CPD) for PHP code.",
@@ -10927,8 +10990,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
@@ -11621,8 +11684,8 @@
             "authors": [
                 {
                     "name": "Arne Blankerts",
-                    "role": "lead",
-                    "email": "arne@blankerts.de"
+                    "email": "arne@blankerts.de",
+                    "role": "lead"
                 }
             ],
             "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",

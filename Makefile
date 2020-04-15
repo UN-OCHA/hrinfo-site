@@ -5,6 +5,7 @@ DOCKER_BUILDKIT=1
 # The main build recipe.
 build:	clean
 	DOCKER_BUILDKIT=$(DOCKER_BUILDKIT) $(DOCKER) build \
+				--build-arg BRANCH_ENVIRONMENT=development \
 				--build-arg VCS_REF=`git rev-parse --short HEAD` \
 				--build-arg VCS_URL=`git config --get remote.origin.url | sed 's#git@github.com:#https://github.com/#'` \
 				--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \

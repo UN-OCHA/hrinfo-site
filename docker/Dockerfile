@@ -1,4 +1,4 @@
-FROM unocha/php7-k8s:7.2.18-r0-201911-01-NR
+FROM unocha/php7-k8s:7.2.27-r0-202003-03-NR
 
 ARG VCS_REF
 ARG VCS_URL
@@ -24,3 +24,8 @@ COPY ./html /srv/www/html
 COPY ./composer.json /srv/www/composer.json
 COPY ./composer.lock /srv/www/composer.lock
 COPY ./composer.patches.json /srv/www/composer.patches.json
+COPY ./docker/custom /etc/nginx/custom
+
+RUN  cd /srv/www/html/sites && \
+       rm -f www.humanitarianresponse.info && \
+       ln -s default www.humanitarianresponse.info

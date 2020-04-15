@@ -1,0 +1,228 @@
+<?php
+
+/**
+ * @file
+ * Code for the OCHA Assessments.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function ocha_assessments_menu() {
+  $items = array();
+
+  $items['assessments'] = array(
+    'title' => 'Assessments',
+    'access arguments' => array(
+      'access content',
+    ),
+    'page callback' => 'ocha_assessments_list',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 99,
+  );
+
+  $items['assessments/list'] = array(
+    'title' => 'List',
+    'access arguments' => array(
+      'access content',
+    ),
+    'page callback' => 'ocha_assessments_list',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 95,
+  );
+
+  $items['assessments/table'] = array(
+    'title' => 'Table',
+    'access arguments' => array(
+      'access content',
+    ),
+    'page callback' => 'ocha_assessments_table',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 96,
+  );
+
+  $items['assessments/global-map'] = array(
+    'title' => 'Map',
+    'access arguments' => array(
+      'access content',
+    ),
+    'page callback' => 'ocha_assessments_map',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 97,
+  );
+
+  $items['node/%node/assessments'] = array(
+    'title' => 'Assessments',
+    'access arguments' => array(
+      'access content',
+    ),
+    'page callback' => 'ocha_assessments_operation_list',
+    'page arguments' => array(1),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 99,
+  );
+
+  $items['node/%node/assessments/list'] = array(
+    'title' => 'List',
+    'access arguments' => array(
+      'access content',
+    ),
+    'page callback' => 'ocha_assessments_operation_list',
+    'page arguments' => array(1),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 95,
+  );
+
+  $items['node/%node/assessments/table'] = array(
+    'title' => 'Table',
+    'access arguments' => array(
+      'access content',
+    ),
+    'page callback' => 'ocha_assessments_operation_table',
+    'page arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 96,
+  );
+
+  $items['node/%node/assessments/map'] = array(
+    'title' => 'Map',
+    'access arguments' => array(
+      'access content',
+    ),
+    'page callback' => 'ocha_assessments_operation_map',
+    'page arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 97,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function ocha_assessments_menu_alter(&$items) {
+  $items['assessments/map']['access callback'] = FALSE;
+  $items['assessments/global-map']['page callback'] = 'ocha_assessments_map';
+}
+
+/**
+ * Base URL.
+ */
+function ocha_assessments_base_url() {
+  return variable_get('ocha_assessments_base_url', 'https://d8.dev.assessments-hpc-tools.ahconu.org');
+}
+
+/**
+ * Basic Auth.
+ */
+function ocha_assessments_basis_auth() {
+  return variable_get('ocha_assessments_basic_auth', '');
+}
+
+/**
+ * Page callback to display a list as tab in the assessments list.
+ */
+function ocha_assessments_operation_list($node) {
+  if (isset($node->field_country)) {
+    return ocha_assessments_list($node->field_country[LANGUAGE_NONE][0]['target_id']);
+  }
+
+  return drupal_access_denied();
+}
+
+/**
+ * Page callback to display a map as tab in the assessments list.
+ */
+function ocha_assessments_operation_table($node) {
+  if (isset($node->field_country)) {
+    return ocha_assessments_table($node->field_country[LANGUAGE_NONE][0]['target_id']);
+  }
+
+  return drupal_access_denied();
+}
+
+/**
+ * Page callback to display a map as tab in the assessments list.
+ */
+function ocha_assessments_operation_map($node) {
+  if (isset($node->field_country)) {
+    return ocha_assessments_map($node->field_country[LANGUAGE_NONE][0]['target_id']);
+  }
+
+  return drupal_access_denied();
+}
+
+/**
+ * Page callback to display a list as tab in the assessments list.
+ */
+function ocha_assessments_list($location_id = NULL) {
+  $base_url = ocha_assessments_base_url();
+  $basic_auth = ocha_assessments_basis_auth();
+  $src = $base_url . '/rest/assessments?items_per_page=50';
+
+  if ($location_id) {
+    $src = $base_url . '/rest/assessments?items_per_page=50&f[0]=locations%3A' . $location_id;
+  }
+
+  return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-list.js"></script>
+    <ocha-assessments-list
+      id="ocha-list"
+      basicAuth="' . $basic_auth . '"
+      baseurl="' . $base_url . '"
+      src="' . $src . '"
+      componenturl="/sites/all/modules/custom/ocha_assessments/component/"
+    ></ocha-assessments-list>';
+}
+
+/**
+ * Page callback to display a table as tab in the assessments list.
+ */
+function ocha_assessments_table($location_id = NULL) {
+  $base_url = ocha_assessments_base_url();
+  $basic_auth = ocha_assessments_basis_auth();
+  $src = $base_url . '/rest/assessments?items_per_page=50';
+
+  if ($location_id) {
+    $src = $base_url . '/rest/assessments?items_per_page=50&f[0]=locations%3A' . $location_id;
+  }
+
+  return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-table.js"></script>
+    <ocha-assessments-table
+      id="ocha-table"
+      basicAuth="' . $basic_auth . '"
+      baseurl="' . $base_url . '"
+      src="' . $src . '"
+      componenturl="/sites/all/modules/custom/ocha_assessments/component/"
+    ></ocha-assessments-table>';
+}
+
+/**
+ * Page callback to display a map as tab in the assessments list.
+ */
+function ocha_assessments_map($location_id = NULL) {
+  $base_url = ocha_assessments_base_url();
+  $basic_auth = ocha_assessments_basis_auth();
+  $src = $base_url . '/rest/assessments-map?items_per_page=8000';
+
+  if ($location_id) {
+    $src = $base_url . '/rest/assessments-map?items_per_page=2000&f[0]=locations%3A' . $location_id;
+  }
+
+  return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-map.js"></script>
+    <ocha-assessments-map
+      id="ocha-map"
+      basicAuth="' . $basic_auth . '"
+      baseurl="' . $base_url . '"
+      src="' . $src . '"
+      componenturl="/sites/all/modules/custom/ocha_assessments/component/"
+      latitude="51"
+      longitude="4"
+      zoom="13"
+      min-zoom="10"
+      max-zoom="16"
+      style="
+        height: 500px;
+        margin-bottom: 200px;
+      "></ocha-assessments-map>';
+}
