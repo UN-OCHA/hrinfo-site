@@ -737,3 +737,17 @@ function hr_core_update_7045() {
     ':short_url' => 'https://bit.ly/2XAuaMG',
   ));
 }
+
+/**
+ * Switch to RefShsHRCoreSelectionHandler for field_location(s).
+ */
+function hr_core_update_7046() {
+  foreach (field_info_fields() as $field_info) {
+    if ($field_info['field_name'] === 'field_locations' || $field_info['field_name'] === 'field_location') {
+      if (isset($field_info['settings']['handler']) && $field_info['settings']['handler'] === 'ref_hr_core') {
+        $field_info['settings']['handler'] = 'ref_shs_hr_core';
+        field_update_field($field_info);
+      }
+    }
+  }
+}
