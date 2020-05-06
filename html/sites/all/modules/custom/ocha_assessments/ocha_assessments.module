@@ -110,7 +110,7 @@ function ocha_assessments_menu_alter(&$items) {
  * Base URL.
  */
 function ocha_assessments_base_url() {
-  return variable_get('ocha_assessments_base_url', 'https://d8.dev.assessments-hpc-tools.ahconu.org');
+  return variable_get('ocha_assessments_base_url', 'http://assessmentregistry8-site.docksal');
 }
 
 /**
