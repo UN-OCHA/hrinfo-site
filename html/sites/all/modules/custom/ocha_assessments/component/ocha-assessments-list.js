@@ -3262,7 +3262,6 @@ const typography = css`
     font-size: var(--cd-font-size-base);
     font-family: var(--cd-font);
     color: var(--cd-dark-grey);
-    font-size: 16px;
     line-height: 1.5;
   }
 `;
@@ -3278,13 +3277,6 @@ const buttonStyles = css`
     text-decoration: none;
   }
 
-  .blue-button {
-    color: white;
-    background-color: blue;
-  }
-  .blue-button:disabled {
-    background-color: grey;
-  }
   .cd-button {
     -webkit-appearance: none;
     border-radius: 0;
@@ -3292,15 +3284,14 @@ const buttonStyles = css`
     border: 0;
     padding: 0.5rem 1rem;
     font-size: 1rem;
-    font-weight: bold;
     transition: background 0.3s ease;
     width: auto;
   }
 
   .cd-button--small {
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem 0.5rem;
     font-size: 0.8rem;
-    font-weight: normal;
+    font-weight: 400;
   }
 
   .cd-button--icon {
@@ -3319,7 +3310,6 @@ const buttonStyles = css`
   }
 
   .cd-button--style {
-    text-transform: uppercase;
     background: var(--cd-ocha-blue);
     color: var(--cd-white);
   }
@@ -3328,6 +3318,14 @@ const buttonStyles = css`
   .cd-button--style:focus {
     background: var(--cd-dark-blue);
     color: var(--cd-white);
+  }
+
+  .cd-button--bold {
+    font-weight: bold;
+  }
+
+  .cd-button--uppercase {
+    text-transform: uppercase;
   }
 
   /* Some buttons have SVG icons */
@@ -3340,7 +3338,7 @@ const buttonStyles = css`
   }
 
   .cd-button--icon span + svg {
-  /* Icon after */
+    /* Icon after */
     padding: 0 0 0 0.5rem;
   }
 
@@ -3467,20 +3465,19 @@ const dropdownStyles = css`
 `;
 
 const tableStyles = css`
-  .cd-table {
+ .cd-table {
     margin: 0 auto 3rem;
     border-collapse: collapse;
     width: 100%;
-    empty-cells: hide;
   }
 
-  th,
-  td {
+  .cd-table th,
+  .cd-table td {
     padding: 0.5rem;
     text-align: left;
   }
 
-  th {
+  .cd-table th {
     color: var(--cd-ocha-blue);
     border-bottom: 1px solid white;
     background: var(--cd-site-bg-color);
@@ -3491,14 +3488,14 @@ const tableStyles = css`
   }
 
   @media (min-width: 576px) {
-    th[data-sort-type="numeric"],
-    .cd-table--amount,
-    .cd-table--amount-total {
+    .cd-table th[data-sort-type="numeric"],
+    .cd-table .cd-table--amount,
+    .cd-table .cd-table--amount-total {
       text-align: right;
     }
   }
 
-  tfoot {
+  .cd-table tfoot {
     font-weight: bold;
   }
 
@@ -3529,47 +3526,41 @@ const tableStyles = css`
 
   @media (max-width: 575px) {
     /* Force table to not be like tables anymore */
-    table,
-    thead,
-    tbody,
-    tfoot,
-    th,
-    td,
-    tr {
+    .cd-table--responsive,
+    .cd-table--responsive thead,
+    .cd-table--responsive tbody,
+    .cd-table--responsive tfoot,
+    .cd-table--responsive th,
+    .cd-table--responsive td,
+    .cd-table--responsive tr {
       display: block;
     }
 
     /* Hide table headers (but not display: none;, for accessibility) */
-    thead tr {
+    .cd-table--responsive thead tr {
       position: absolute;
       top: -9999px;
       left: -9999px;
     }
 
-    tr {
+    .cd-table--responsive tr {
       border-bottom: 1px solid var(--cd-light-grey);
       padding: 0 !important;
     }
 
-    td {
+    .cd-table--responsive td {
       /* Behave  like a "row" */
       border: none;
       border-bottom: 1px solid var(--cd-site-bg-color);
       position: relative;
       padding: 0.5rem;
       padding-left: 40% !important;
-      min-height: 2rem;
+      min-height: 2rem; /* label should wrap */
       white-space: normal !important;
       text-align: left;
     }
 
-    td:empty {
-      border-bottom: none;
-      padding: 0;
-      min-height: unset;
-    }
-
-    td:before {
+    .cd-table--responsive td:before {
       position: absolute;
       top: 0.5rem;
       left: 0.5rem;
@@ -3583,8 +3574,8 @@ const tableStyles = css`
       content: attr(data-content);
     }
 
-    td:empty:before {
-      content: none;
+    .cd-table--responsive tfoot td {
+      border-bottom: 0 none;
     }
 
     .cd-table--row-numbers tbody tr td.cd-table--row-num {
@@ -3594,10 +3585,6 @@ const tableStyles = css`
     .cd-table--row-numbers tbody tr td.cd-table--row-num::before {
       font-weight: bold;
       font-size: 1.5rem;
-    }
-
-    tfoot td {
-      border-bottom: 0 none;
     }
   }
 
@@ -3831,7 +3818,7 @@ class OchaAssessmentsBase extends LitElement {
                 d => this.renderDropdown(d)
               )
             }
-            <button @click="${this.resetData}" class="cd-button cd-button--style">Reset</button>
+            <button @click="${this.resetData}" class="cd-button cd-button--style cd-button--small">Reset</button>
           </form>
         </div>
       </div>
