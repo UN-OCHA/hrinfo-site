@@ -45,19 +45,27 @@ function fullcalendar_api_update($action, $id) {
   // @todo this could be a lot more flexible
   $date_value = $entity->{$date_field}[LANGUAGE_NONE][0];
 
-  if ($date_value['date_type'] == 'datestamp') {
-    $date_value['value'] = $start_time;
-    if (empty($end_time)) {
-      $date_value['value2'] = $date_value['value'];
-    }
-    else {
-      $date_value['value2'] = $end_time;
-    }
+  $format_string = DATE_FORMAT_DATETIME;
+  switch ($date_value['date_type']) {
+    case 'date':
+      $format_string = DATE_FORMAT_ISO;
+      break;
+    case 'datestamp':
+      $format_string = DATE_FORMAT_UNIX;
+      break;
+    case 'datetime':
+    case 'ep_datetime':
+      $format_string = DATE_FORMAT_DATETIME;
+      break;
   }
-  elseif ($date_value['date_type'] == 'ep_datetime') {
-    $format_string = DATE_FORMAT_DATETIME;
+
+  if ($date_value['date_type'] == 'ep_datetime') {
     $date_value['type'] = 'exact';
-    $date_value['value'] = date($format_string, $start_time);
+  }
+  // Get date format and use php date() function.
+  // @todo timezone?
+  $date_value['value'] = date($format_string, $start_time);
+  if (!empty($date_value['value2'])) {
     if (empty($end_time)) {
       $date_value['value2'] = $date_value['value'];
     }
@@ -65,26 +73,13 @@ function fullcalendar_api_update($action, $id) {
       $date_value['value2'] = date($format_string, $end_time);
     }
   }
-  else {
-    // Get date format and use php date() function.
-    // @todo timezone?
-    $format_string = date_type_format($date_value['date_type']);
-    $date_value['value'] = date($format_string, $start_time);
-    if (empty($end_time)) {
-      $date_value['value2'] = $date_value['value'];
-    }
-    else {
-      $date_value['value2'] = date($format_string, $end_time);
-    }
-  }
-  $entity->{$date_field}[LANGUAGE_NONE][0] = $date_value;;
-  
-  if (entity_save($entity_type, $entity)) {
-    drupal_json_output('success');
-  }
-  else {
-    drupal_json_output('failure');
-  }
+
+  $entity->{$date_field}[LANGUAGE_NONE][0] = $date_value;
+
+  // entity_save() will throw an error if it did not successfully save, 
+  // which will prevent 'success' from being returned.
+  entity_save($entity_type, $entity);
+  drupal_json_output('success');
 }
 
 /**
@@ -102,7 +97,7 @@ function fullcalendar_api_libraries_info() {
     ),
     'files' => array(
       'js' => array(
-        'fullcalendar.js' => array(
+        'fullcalendar.min.js' => array(
           'scope' => 'footer',
         ),
       ),
@@ -124,12 +119,23 @@ function fullcalendar_api_theme($existing, $type, $theme, $path) {
   return array(
     'fullcalendar_calendar' => array(
       'file' => 'theme.inc',
+      'path' => "$path/theme",
       'variables' => array(
+        'calendar_settings' => array(NULL),
+      ),
+    ),
+    'fullcalendar_calendar_datasource' => array(
+      'file' => 'theme.inc',
+      'path' => "$path/theme",
+      'variables' => array(
+        'datasource_uri' => NULL,
+        'calendar_id' => NULL,
         'calendar_settings' => array(NULL),
       ),
     ),
     'fullcalendar_calendar_entity' => array(
       'file' => 'theme.inc',
+      'path' => "$path/theme",
       'variables' => array(
         'entities' => array(NULL),
         'date_field_map' => array(NULL),
@@ -143,11 +149,13 @@ function fullcalendar_api_theme($existing, $type, $theme, $path) {
 /**
  * Helper function to load all scripts necessary to embed FullCalendar.
  */
-function fullcalendar_api_load_calendar($calendar_id, $settings) {
+function fullcalendar_api_load_calendar($calendar_id, $calendar_settings) {
   libraries_load('fullcalendar');
-  drupal_add_js(drupal_get_path('module', 'fullcalendar_api') . '/fullcalendar_calendar.js', array('scope' => 'footer'));
-  drupal_add_js(array('fullcalendar_api' => array(
-    'calendarId' => $calendar_id,
-    'calendarSettings' => $settings,
-  )), 'setting');
+  drupal_add_js(drupal_get_path('module', 'fullcalendar_api') . '/js/fullcalendar.load.js', array('scope' => 'footer'));
+  $js_settings = array(
+    'instances' => array(
+      $calendar_id => $calendar_settings,
+    ),
+  );
+  drupal_add_js(array('fullCalendarApi' => $js_settings), 'setting');
 }

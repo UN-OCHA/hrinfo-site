@@ -64,11 +64,9 @@ function panels_newrelic_insight_page_alter(&$page) {
         $name = 'node_page_view';
         if (isset($menu_item['page_arguments'][0])) {
           $entity = $menu_item['page_arguments'][0];
-          if (isset($entity->type)) {
-            $name .= '/' . $entity->type;
-            $params['node-id'] = $entity->nid;
-            $params['node-type'] = $entity->type;
-          }
+          $name .= '/' . $entity->type;
+          $params['node-id'] = $entity->nid;
+          $params['node-type'] = $entity->type;
         }
         break;
 

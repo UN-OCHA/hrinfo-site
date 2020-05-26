@@ -1314,9 +1314,8 @@ function advagg_install_check_via_http(array &$requirements) {
   $types = array('css', 'js');
   $config_path = advagg_admin_config_root_path();
 
-  if (module_exists('s3fs') && is_callable('_s3fs_get_config')) {
-    $s3fs_config = _s3fs_get_config();
-  }
+  // Get s3fs no_rewrite_cssjs setting.
+  $s3fs_no_rewrite_cssjs = advagg_get_s3fs_config('no_rewrite_cssjs');
 
   // Make sure we get an advagg fast 404.
   $mod_url = FALSE;
@@ -1337,7 +1336,8 @@ function advagg_install_check_via_http(array &$requirements) {
       $options = array('timeout' => 8);
 
       if (empty($url)) {
-        $filename = advagg_install_get_first_advagg_file($file_path, $type);
+        $filename_path = (!is_null($s3fs_no_rewrite_cssjs) && empty($s3fs_no_rewrite_cssjs)) ? $url_path : $file_path;
+        $filename = advagg_install_get_first_advagg_file($filename_path, $type);
         $url = file_create_url($url_path . '/' . $filename);
         $end = strpos($url, $filename);
         if ($end !== FALSE) {
@@ -1573,10 +1573,10 @@ location ~* files/advagg_(?:css|js)/ {
             )),
           );
         }
-        elseif (module_exists('s3fs')
+        elseif (!is_null($s3fs_no_rewrite_cssjs)
+            && !empty($s3fs_no_rewrite_cssjs)
             && !empty($request->headers['server'])
             && $request->headers['server'] === 'AmazonS3'
-            && !empty($s3fs_config['no_rewrite_cssjs'])
         ) {
           $severity = REQUIREMENT_WARNING;
           if (module_exists('httprl') && variable_get('advagg_use_httprl', ADVAGG_USE_HTTPRL)) {
@@ -1628,7 +1628,8 @@ location ~* files/advagg_(?:css|js)/ {
       $file_path = $js_path[1];
     }
     // Get filename.
-    $filename = advagg_install_get_first_advagg_file($file_path, $type);
+    $filename_path = (!is_null($s3fs_no_rewrite_cssjs) && empty($s3fs_no_rewrite_cssjs)) ? $url_path : $file_path;
+    $filename = advagg_install_get_first_advagg_file($filename_path, $type);
 
     // Skip if filename is empty.
     if (empty($filename)) {
@@ -1766,6 +1767,26 @@ function advagg_install_chk_urls(array &$requirements, array $urls, array $optio
       else {
         $url = 'http:' . $url;
       }
+    }
+
+    // Before sending the request when using s3fs, check if the file exists.
+    if (module_exists('s3fs') && !file_exists($url_path . '/' . $filename)) {
+      if (module_exists('httprl') && variable_get('advagg_use_httprl', ADVAGG_USE_HTTPRL)) {
+        $httprl_message = 'This may be due to an issue with the HTTPRL module or its configuration. ';
+      }
+      else {
+        $httprl_message = '';
+      }
+      $requirements['advagg_' . $type . '_missing' . $key] = array(
+        'title' => $t('Adv CSS/JS Agg - file does not exist'),
+        'severity' => REQUIREMENT_WARNING,
+        'value' => $t('Unable to find %type files.', array('%type' => $type)),
+        'description' => $t('The AdvAgg database records and S3 files are not in sync. The file referenced in the database to perform a test cannot be found in the S3 file system. @httprl_messageFile URL: <pre>@file</pre>', array(
+          '@httprl_message' => $httprl_message,
+          '@file' => $url,
+        )),
+      );
+      continue;
     }
 
     // Send request.
@@ -2012,7 +2033,8 @@ function advagg_install_chk_urls(array &$requirements, array $urls, array $optio
           }
         }
         // Check for double gzip compression.
-        if (@gzinflate(substr($request->data, 10)) !== FALSE || @gzinflate($request->data) !== FALSE) {
+        $contents = @file_get_contents($options['#advagg_path']);
+        if ($contents !== $request->data && (@gzinflate(substr($request->data, 10)) !== FALSE || @gzinflate($request->data) !== FALSE)) {
           $config_path = advagg_admin_config_root_path();
           $description = '';
           if (variable_get('advagg_gzip', ADVAGG_GZIP)) {
@@ -2037,7 +2059,7 @@ function advagg_install_chk_urls(array &$requirements, array $urls, array $optio
             'description' => $description,
           );
         }
-        if (is_callable('brotli_uncompress') && @brotli_uncompress($request->data) !== FALSE) {
+        if ($contents !== $request->data && (is_callable('brotli_uncompress') && @brotli_uncompress($request->data) !== FALSE)) {
           $config_path = advagg_admin_config_root_path();
           $description = '';
           if (variable_get('advagg_brotli', ADVAGG_BROTLI)) {
@@ -2374,8 +2396,15 @@ function advagg_install_get_first_advagg_file($directory, $type) {
       && variable_get('advagg_brotli', ADVAGG_BROTLI)
     ) {
       $gzip_filename = $scanned_directory[$key + 2];
-      // Skip if the next file is not a .br file.
-      if (strcmp($filename . '.br', $br_filename) !== 0) {
+      // Skip if the next file does not have a .br extension.
+      // This can occur if:
+      // - File is not .br compressed, or,
+      // - Using s3fs module and only .br compression is set. In
+      //   this case, the advagg_advadgg_save_aggregate_alter()
+      //   function will not add a file extension.
+      if (strcmp($filename . '.br', $br_filename) !== 0
+        && (!module_exists('s3fs')
+          || (module_exists('s3fs') && variable_get('advagg_gzip', ADVAGG_GZIP)))) {
         continue;
       }
     }
@@ -2387,8 +2416,15 @@ function advagg_install_get_first_advagg_file($directory, $type) {
     }
 
     if (variable_get('advagg_gzip', ADVAGG_GZIP)) {
-      // Skip if the next file is not a .gz file.
-      if (strcmp($filename . '.gz', $gzip_filename) !== 0) {
+      // Skip if the next file does not have a .gz extension.
+      // This can occur if:
+      // - File is not .gz compressed, or,
+      // - Using s3fs module and either:
+      //   - Only .gz compression option is set or,
+      //   - Both .gz and .br compression options are set. In
+      //     this case, the advagg_advagg_save_aggregate_alter()
+      //     function creates a .gz file by default.
+      if (strcmp($filename . '.gz', $gzip_filename) !== 0 && !module_exists('s3fs')) {
         continue;
       }
     }

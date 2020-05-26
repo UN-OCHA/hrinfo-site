@@ -172,6 +172,46 @@ function entity_translation_admin_form($form, $form_state) {
     }
   }
 
+  if (module_exists('pathauto')) {
+    $form['pathauto'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Pathauto'),
+      '#collapsible' => FALSE,
+    );
+
+    $form['pathauto']['entity_translation_pathauto_state_active_new_translation'] = array(
+      '#title' => t('Pathauto state automatically activated on forms for new translations'),
+      '#type' => 'checkbox',
+      '#description' => t('When this option is enabled, the Pathauto state checkbox is automatically selected on the add-translation form. <br/><b>Attention:</b>When combining this option with the next one it may lead to cases where all aliases for all languages are auto-updated whenever a new translation is added.'),
+      '#default_value' => variable_get('entity_translation_pathauto_state_active_new_translation', TRUE),
+    );
+
+    // These are the possible options when pathauto state is active.
+    $mode_options = array(
+      'generate_alias_active_language' => t('Generate alias only for current language'),
+      'generate_missing_aliases_all_languages' => t('Generate missing aliases for all languages'),
+      'generate_all_aliases_all_languages' => t('Generate all aliases for all languages'),
+    );
+
+    // Single entity update mode.
+    $form['pathauto']['entity_translation_pathauto_state_mode_update'] = array(
+      '#title' => t('Pathauto state mode for single update'),
+      '#type' => 'select',
+      '#description' => t('When the Pathauto state is activated, the mode defined here will be used for alias generation, on a single update, e.g. when editing a node using the node edit form.'),
+      '#options' => $mode_options,
+      '#default_value' => variable_get('entity_translation_pathauto_state_mode_update', 'generate_alias_active_language'),
+    );
+
+    // Bulk entity updates mode.
+    $form['pathauto']['entity_translation_pathauto_state_mode_bulkupdate'] = array(
+      '#title' => t('Pathauto state mode for bulk updates'),
+      '#type' => 'select',
+      '#description' => t('When the Pathauto state is activated, the mode defined here will be used for alias generation, on bulk updates.'),
+      '#options' => $mode_options,
+      '#default_value' => variable_get('entity_translation_pathauto_state_mode_bulkupdate', 'generate_all_aliases_all_languages'),
+    );
+  }
+
   $form = system_settings_form($form);
 
   // Menu rebuilding needs to be performed after the system settings are saved.
@@ -217,10 +257,12 @@ function entity_translation_settings_init($entity_type, $settings = array()) {
  * Translations overview page callback.
  */
 function entity_translation_overview($entity_type, $entity, $callback = NULL) {
+  $args = func_get_args();
+
   // Entity translation and node translation share the same system path.
   if ($callback && !entity_translation_enabled($entity_type, $entity)) {
-    $args = array_slice(func_get_args(), 3);
-    return entity_translation_overview_callback($callback, $args);
+    $callback_args = array_slice($args, 3);
+    return entity_translation_overview_callback($callback, $callback_args);
   }
 
   $handler = entity_translation_get_handler($entity_type, $entity);

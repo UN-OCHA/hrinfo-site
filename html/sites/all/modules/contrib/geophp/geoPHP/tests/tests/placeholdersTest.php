@@ -1,5 +1,7 @@
 <?php
 require_once('../geoPHP.inc');
+require_once('PHPUnit/Autoload.php');
+
 class PlaceholdersTests extends PHPUnit_Framework_TestCase {
 
   function setUp() {
@@ -12,7 +14,6 @@ class PlaceholdersTests extends PHPUnit_Framework_TestCase {
       if ($parts[0]) {
         $format = $parts[1];
         $value = file_get_contents('./input/'.$file);
-        echo "\nloading: " . $file . " for format: " . $format;
         $geometry = geoPHP::load($value, $format);
 
         $placeholders = array(
@@ -33,23 +34,35 @@ class PlaceholdersTests extends PHPUnit_Framework_TestCase {
           }
 
           switch ($method_name) {
-            case 'hasZ':
-              if ($geometry->geometryType() == 'Point') {
-                $this->assertNotNull($geometry->$method_name($argument), 'Failed on ' . $method_name .' (test file: ' . $file . ')');
-              }
-              if ($geometry->geometryType() == 'LineString') {
-                $this->assertNotNull($geometry->$method_name($argument), 'Failed on ' . $method_name .' (test file: ' . $file . ')');
-              }
-              if ($geometry->geometryType() == 'MultiLineString') {
-                $this->assertNotNull($geometry->$method_name($argument), 'Failed on ' . $method_name .' (test file: ' . $file . ')');
-              }
-              break;
             case 'm':
             case 'z':
+              if ($geometry->geometryType() == 'Point') {
+                $this->assertNotNull($geometry->$method_name($argument), 'Failed on ' . $method_name);
+              }
+              if ($geometry->geometryType() == 'LineString') {
+                $this->assertNotNull($geometry->$method_name($argument), 'Failed on ' . $method_name);
+              }
+              if ($geometry->geometryType() == 'MultiLineString') {
+                $this->assertNull($geometry->$method_name($argument), 'Failed on ' . $method_name);
+              }
+              break;
             case 'coordinateDimension':
             case 'isEmpty':
             case 'isMeasured':
             case 'is3D':
+            case 'hasZ':
+              if ($geometry->geometryType() == 'Point') {
+                $this->assertNotNull($geometry->$method_name($argument), 'Failed on ' . $method_name);
+              }
+              if ($geometry->geometryType() == 'LineString') {
+                $this->assertNotNull($geometry->$method_name($argument), 'Failed on ' . $method_name);
+              }
+              if ($geometry->geometryType() == 'MultiLineString') {
+                $this->assertNotNull($geometry->$method_name($argument), 'Failed on ' . $method_name);
+              }
+              break;
+            default:
+              $this->assertTrue($geometry->$method_name($argument), 'Failed on ' . $method_name);
           }
         }
 

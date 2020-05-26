@@ -51,6 +51,12 @@ define('ADVAGG_JS_COMPRESSOR_FILE_SETTINGS', -1);
 define('ADVAGG_JS_COMPRESS_ADD_LICENSE', 3);
 
 /**
+ * Default value to refresh the data in the cache 1 week before the TTL expires.
+ */
+define('ADVAGG_JS_COMPRESS_REFRESH_BEFORE_CACHE_TTL', 604800);
+
+
+/**
  * @} End of "addtogroup default_variables".
  */
 
@@ -468,6 +474,7 @@ function advagg_js_compress_all_js_files_list() {
   $redo_list = array();
   $failed_redo_list = array();
   $list = array();
+  $cache_ids = array();
   foreach ($result as $row) {
     $row = (array) $row;
     // Check cache for jsmin info.
@@ -475,11 +482,29 @@ function advagg_js_compress_all_js_files_list() {
     if ($info['filesize'] == 0) {
       continue;
     }
-    $list[] = $info;
+    $list[$row['filename']] = $info;
 
+    // Get the cache id as well.
+    $cache_id = 'advagg:js_compress:info:' . $info['filename_hash'];
+    $cache_id .= !empty($info['content_hash']) ? ':' . $info['content_hash'] : '';
+    $cache_ids[$cache_id] = $row['filename'];
+  }
+
+  // Check for soon to expire cache ids.
+  $values = array_keys($cache_ids);
+  $cache_hits = cache_get_multiple($values, 'cache_advagg_info');
+  $ttl = variable_get('advagg_js_compress_refresh_before_cache_ttl', ADVAGG_JS_COMPRESS_REFRESH_BEFORE_CACHE_TTL);
+  foreach ($cache_hits as $cache) {
+    if (!empty($cache->expire) && $cache->expire - $ttl < REQUEST_TIME) {
+      $info = $list[$cache_ids[$cache->cid]];
+      $redo_list[$info['data']] = $info;
+    }
+  }
+
+  foreach ($list as $info) {
     // No jsmin info or incomplete data => rerun compression tests.
     if (empty($info['advagg_js_compress']) || count($info['advagg_js_compress']) !== $compressor_list_count) {
-      $redo_list[] = $info;
+      $redo_list[$info['data']] = $info;
       continue;
     }
     $empty_ratio_count = 0;
@@ -496,24 +521,42 @@ function advagg_js_compress_all_js_files_list() {
     }
     // More than one compressor has an empty ratio.
     if ($empty_ratio_count > 1) {
-      $failed_redo_list[] = $info;
+      $failed_redo_list[$info['data']] = $info;
     }
     // All failed; try again.
     if ($bad_compression_count == count($info['advagg_js_compress'])) {
-      $failed_redo_list[] = $info;
+      $failed_redo_list[$info['data']] = $info;
     }
   }
 
-  // Filter out .min.js if they have already been ran.
+  $redo_list = array_merge($redo_list, $failed_redo_list);
   $reversed_needle = strrev('.min.js');
-  foreach ($failed_redo_list as $key => $info) {
-    if (stripos(strrev($row['filename']), $reversed_needle) === 0
+  foreach ($redo_list as $key => $info) {
+    // Filter out .min.js if they have already been ran.
+    if (stripos(strrev($info['data']), $reversed_needle) === 0
       && !empty($info['advagg_js_compress'][2]['ratio'])
     ) {
-      unset($failed_redo_list[$key]);
+      unset($redo_list[$key]);
+      continue;
+    }
+
+    // Filter out file if it is empty.
+    $data = file_get_contents($info['data']);
+    if (empty($data)) {
+      unset($redo_list[$key]);
+      continue;
+    }
+
+    // Filter out file if it only contains a small amount of whitespace.
+    $count_ws = strlen($data);
+    $count = strlen(preg_replace('/\s/', '', $data));
+    if ($count / $count_ws > 0.97) {
+      unset($redo_list[$key]);
+      continue;
     }
   }
-  $redo_list = array_merge($redo_list, $failed_redo_list);
+
+  shuffle($redo_list);
   return array($list, $redo_list);
 }
 
@@ -568,6 +611,22 @@ function advagg_js_compress_redo_files(array $redo_list, $max_time = 30, $drush 
       drush_log(dt('Compressing @data.', array(
         '@data' => $values['data'],
       )), 'ok');
+    }
+
+    // Remove jsqueeze if compression failed.
+    if (!empty($values['advagg_js_compress'])) {
+      $neg_one_counter = 0;
+      foreach ($values['advagg_js_compress'] as $compressor_data) {
+        if ($compressor_data['code'] == -1) {
+          $neg_one_counter++;
+        }
+      }
+      if (count($values['advagg_js_compress']) === $neg_one_counter) {
+        $compressor_key = array_search('jsqueeze', $compressors);
+        if ($compressor_key !== FALSE) {
+          unset($compressors[$compressor_key]);
+        }
+      }
     }
 
     // Prime cache.
@@ -658,4 +717,52 @@ function advagg_js_compress_batch_done($success, $results, $operations) {
     ));
     drupal_set_message($message, 'error');
   }
+}
+
+/**
+ * Test the cache_advagg_info cache bin; make sure it works.
+ *
+ * @return array
+ *   Single section of the requirements array.
+ */
+function advagg_js_compress_check_cache_bin() {
+  $t = get_t();
+
+  $requirements = array();
+  // Make sure cache table is working.
+  $cid = 'advagg_js_compres:install:cache_test';
+  $bin = 'cache_advagg_info';
+  cache_set($cid, TRUE, $bin);
+  $cache = cache_get($cid, $bin);
+  $working = FALSE;
+  if (!empty($cache->data)) {
+    cache_clear_all($cid, $bin);
+    $cache = cache_get($cid, $bin);
+    if (empty($cache->data)) {
+      $working = TRUE;
+    }
+  }
+
+  if (empty($working)) {
+    $broken_name = get_class(_cache_get_object($bin));
+
+    if ($broken_name === 'DrupalFakeCache') {
+      $working_name = get_class(_cache_get_object('cache_form'));
+      if ($working_name === 'DrupalFakeCache') {
+        $working_name = 'DrupalDatabaseCache';
+      }
+      $extra_description = t('Please add this to the bottom of your settings.php file. <p><code>@string</code></p>', array('@string' => "\$conf['cache_class_cache_advagg_info'] = '{$working_name}';"));
+    }
+    $requirements['advagg_js_compres_cache_bin'] = array(
+      'title' => $t('AdvAgg JS Compressor - The %bin cache table does not work', array('%bin' => $bin)),
+      'severity' => REQUIREMENT_WARNING,
+      'value' => $t('The %class_name cache bin appears to be broken.', array('%class_name' => $broken_name)),
+      'description' => $t('You need to adjust your settings.php file so that the %bin bin is working correctly.', array(
+        '%bin' => $bin,
+      )),
+    );
+    $requirements['advagg_js_compres_cache_bin']['description'] .= " {$extra_description}";
+  }
+
+  return $requirements;
 }

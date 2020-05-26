@@ -1440,9 +1440,15 @@ function advagg_rename($source, $destination) {
   $real_destination = drupal_realpath($destination);
   $real_destination = $real_destination ? $real_destination : $destination;
 
+  // Try php rename.
   if (!@rename($real_source, $real_destination)) {
+    // Try drupal move.
     if (!file_unmanaged_move($source, $destination)) {
-      return FALSE;
+      // Try file scheme's rename method if it exists.
+      $fs_wrapper = file_stream_wrapper_get_instance_by_scheme(file_uri_scheme($source));
+      if (!$fs_wrapper || !method_exists($fs_wrapper, 'rename') || !$fs_wrapper->rename($source, $destination)) {
+        return FALSE;
+      }
     }
   }
 

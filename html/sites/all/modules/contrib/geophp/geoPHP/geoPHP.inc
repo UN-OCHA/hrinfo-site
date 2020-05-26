@@ -35,7 +35,7 @@ class geoPHP
 {
 
   static function version() {
-    return '1.2';
+    return '1.1';
   }
 
   // geoPHP::load($data, $type, $other_args);
@@ -54,13 +54,7 @@ class geoPHP
       if (is_object($data)) {
         if ($data instanceOf Geometry) return $data;
       }
-      
-      $detected = geoPHP::detectFormat($data);
-      if (!$detected) {
-        return FALSE;
-      }
-      
-      $format = explode(':', $detected);
+      $format = explode(':', geoPHP::detectFormat($data));
       $type = array_shift($format);
       $args = $format;
     }
@@ -97,7 +91,6 @@ class geoPHP
       'wkb' =>  'WKB',
       'ewkb' => 'EWKB',
       'json' => 'GeoJSON',
-      'geojson' => 'GeoJSON',
       'kml' =>  'KML',
       'gpx' =>  'GPX',
       'georss' => 'GeoRSS',
@@ -148,8 +141,7 @@ class geoPHP
   static function geometryReduce($geometry) {
     // If it's an array of one, then just parse the one
     if (is_array($geometry)) {
-      if (empty($geometry)) return FALSE;
-      if (count($geometry) == 1) return geoPHP::geometryReduce(array_shift($geometry));
+      if (count($geometry) == 1) return geoPHP::geometryReduce($geometry[0]);
     }
 
     // If the geometry cannot even theoretically be reduced more, then pass it back
@@ -186,25 +178,19 @@ class geoPHP
     $collections = array('MultiPoint','MultiLineString','MultiPolygon','GeometryCollection');
 
     foreach ($geometry as $item) {
-      if ($item) {
-        if (in_array(get_class($item), $collections)) {
-          foreach ($item->getComponents() as $component) {
-            $geometries[] = $component;
-            $geom_types[] = $component->geometryType();
-          }
+      if (in_array(get_class($item), $collections)) {
+        foreach ($item->getComponents() as $component) {
+          $geometries[] = $component;
+          $geom_types[] = $component->geometryType();
         }
-        else {
-          $geometries[] = $item;
-          $geom_types[] = $item->geometryType();
-        }
+      }
+      else {
+        $geometries[] = $item;
+        $geom_types[] = $item->geometryType();
       }
     }
 
     $geom_types = array_unique($geom_types);
-    
-    if (empty($geom_types)) {
-      return FALSE;
-    }
 
     if (count($geom_types) == 1) {
       if (count($geometries) == 1) {
@@ -234,8 +220,7 @@ class geoPHP
 
     // First char is a tab, space or carriage-return. trim it and try again
     if ($bytes[1] == 9 || $bytes[1] == 10 || $bytes[1] == 32) {
-      $ltinput = ltrim($input);
-      return geoPHP::detectFormat($ltinput);
+      return geoPHP::detectFormat(ltrim($input));
     }
 
     // Detect WKB or EWKB -- first byte is 1 (little endian indicator)

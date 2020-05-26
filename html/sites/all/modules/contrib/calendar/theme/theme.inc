@@ -269,11 +269,11 @@ function template_preprocess_calendar_day(&$vars) {
         $group_time = NULL;
         $divisor = NULL;
         if ($display_overlap) {
-          if ($view->date_info->style_groupby_times_original == 'half') {
+          if ($view->style_options['groupby_times'] == 'half') {
             $group_time = 30;
             $divisor = 7.5;
           }
-          elseif ($view->date_info->style_groupby_times_original == 'hour') {
+          elseif ($view->style_options['groupby_times'] == 'hour') {
             $group_time = 60;
             $divisor = 15;
           }
@@ -482,11 +482,11 @@ function template_preprocess_calendar_week(&$vars) {
           if ($display_overlap) {
             $group_time = NULL;
             $divisor = NULL;
-            if ($view->date_info->style_groupby_times_original == 'half'){
+            if ($view->style_options['groupby_times'] == 'half'){
               $group_time = 30;
               $divisor = 7.5;
             }
-            elseif ($view->date_info->style_groupby_times_original == 'hour'){
+            elseif ($view->style_options['groupby_times'] == 'hour'){
               $group_time = 60;
               $divisor = 15;
             }

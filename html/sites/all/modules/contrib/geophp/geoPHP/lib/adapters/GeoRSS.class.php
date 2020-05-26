@@ -82,11 +82,6 @@ class GeoRSS extends GeoAdapter
   
   protected function getPointsFromCoords($string) {
     $coords = array();
-
-    if (empty($string)) {
-      return $coords;
-    }
-
     $latlon = explode(' ',$string);
     foreach ($latlon as $key => $item) {
       if (!($key % 2)) {
@@ -106,15 +101,8 @@ class GeoRSS extends GeoAdapter
     $points = array();
     $pt_elements = $this->xmlobj->getElementsByTagName('point');
     foreach ($pt_elements as $pt) {
-      if ($pt->hasChildNodes()) {
-        $point_array = $this->getPointsFromCoords(trim($pt->firstChild->nodeValue));
-      }
-      if (!empty($point_array)) {
-        $points[] = $point_array[0];
-      }
-      else {
-        $points[] = new Point();
-      }
+      $point_array = $this->getPointsFromCoords(trim($pt->firstChild->nodeValue));
+      $points[] = $point_array[0];
     }
     return $points;
   }
@@ -200,13 +188,9 @@ class GeoRSS extends GeoAdapter
   }
   
   private function pointToGeoRSS($geom) {
-    $out = '<'.$this->nss.'point>';
-    if (!$geom->isEmpty()) {
-      $out .= $geom->getY().' '.$geom->getX();
-    }
-    $out .= '</'.$this->nss.'point>';
-    return $out;
+    return '<'.$this->nss.'point>'.$geom->getY().' '.$geom->getX().'</'.$this->nss.'point>';
   }
+  
 
   private function linestringToGeoRSS($geom) {
     $output = '<'.$this->nss.'line>';

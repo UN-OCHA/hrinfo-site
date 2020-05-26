@@ -1,4 +1,0 @@
-name = Geofield PostGIS
-description = Provides a PostGIS backend plugin for geofield
-core = 7.x
-dependencies[] = geofield

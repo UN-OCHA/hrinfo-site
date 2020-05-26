@@ -16,7 +16,7 @@
 
 ### About
 
-JavaScript callback handler is an interim solution for high-performance server 
+JavaScript callback handler is an interim solution for high-performance server
 requests including (but not limited to) AHAH, AJAX, JSON, XML, etc.
 
 Note: this module does nothing by itself. It requires other modules to leverage
@@ -84,7 +84,7 @@ sub-module for more information.
 
 There are a few variables that can be set in an appropriate `settings.php` file:
 
-- `js_endpoint`: Configures the expected URL endpoint:  
+- `js_endpoint`: Configures the expected URL endpoint:
   ```php
   $conf['js_endpoint'] = 'js';
   ```
@@ -92,9 +92,15 @@ There are a few variables that can be set in an appropriate `settings.php` file:
   handlers from being invoked. By default, this variable is not set and the
   JS module will automatically handle any PHP error or exception and display
   them (respecting the site's PHP error display configuration) as an error
-  type status message via `drupal_set_message()`. To disable this, use:  
+  type status message via `drupal_set_message()`. To disable this, use:
   ```php
   $conf['js_silence_php_errors'] = TRUE;
+  ```
+- `js_excluded_cache_classes`: This allows to configure a list of cache backend
+  classes that should not trigger a full bootstrap on cache misses. By default
+  it only includes the `DrupalFakeCache` class. To change this:
+  ```php
+  $conf['js_excluded_cache_classes'] = array('MyCustomCache');
   ```
 
 

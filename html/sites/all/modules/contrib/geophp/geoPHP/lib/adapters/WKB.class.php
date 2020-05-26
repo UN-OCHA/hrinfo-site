@@ -86,12 +86,7 @@ class WKB extends GeoAdapter
 
   function getPoint(&$mem) {
     $point_coords = unpack("d*", fread($mem,$this->dimension*8));
-    if (!empty($point_coords)) {
-      return new Point($point_coords[1],$point_coords[2]);
-    }
-    else {
-      return new Point(); // EMPTY point
-    }
+    return new Point($point_coords[1],$point_coords[2]);
   }
 
   function getLinstring(&$mem) {
@@ -203,12 +198,9 @@ class WKB extends GeoAdapter
 
   function writePoint($point) {
     // Set the coords
-    if (!$point->isEmpty()) {
-      $wkb = pack('dd',$point->x(), $point->y());
-      return $wkb;
-    } else {
-      return '';
-    }
+    $wkb = pack('dd',$point->x(), $point->y());
+
+    return $wkb;
   }
 
   function writeLineString($line) {

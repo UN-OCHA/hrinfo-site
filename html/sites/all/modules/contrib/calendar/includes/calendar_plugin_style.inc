@@ -271,11 +271,6 @@ class calendar_plugin_style extends views_plugin_style {
     $this->date_info->style_theme_style = $this->options['theme_style'];
     $this->date_info->style_max_items = $this->options['max_items'];
     $this->date_info->style_max_items_behavior = $this->options['max_items_behavior'];
-
-    // Create an array of times to group dates by
-    // However, we need to also store the original option in a different
-    // variable, as it may be required later during theming.
-    $this->date_info->style_groupby_times_original = $this->options['groupby_times'];
     if (!empty($this->options['groupby_times_custom'])) {
       $this->date_info->style_groupby_times = explode(',', $this->options['groupby_times_custom']);
     }

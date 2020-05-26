@@ -606,46 +606,17 @@ function advagg_mod_page_alter() {
   }
 
   // Get critical css file.
-  list($filenames, , $inline_strings) = advagg_mod_find_critical_css_file();
+  list(, , $inline_strings) = advagg_mod_find_critical_css_file();
 
-  // Get inline css string.
-  $inline_css = '';
-  if (!empty($inline_strings[0])) {
-    $inline_css = $inline_strings[0];
-  }
-  if (empty($inline_css)
-    && !empty($filenames[0])
-    && is_readable($filenames[0])
-  ) {
-    module_load_include('inc', 'advagg', 'advagg');
-    $inline_css = advagg_load_stylesheet($filenames[0], TRUE);
-
-    // Allow other modules to modify this files contents.
-    // Call hook_advagg_get_css_file_contents_alter().
-    drupal_alter('advagg_get_css_file_contents', $inline_css, $filenames[0]);
-  }
   $preload_from_inline_css = array();
   $domains_from_inline_css = array();
   // Add inline critical css for front page.
-  if (!empty($inline_css)) {
-    // Remove !important from all CSS rules.
-    if (variable_get('advagg_mod_inline_critical_css_strip_important', ADVAGG_MOD_INLINE_CRITICAL_CSS_STRIP_IMPORTANT)) {
-      $inline_css = str_replace(' !important', '', $inline_css);
-    }
-    // Remove starting and ending style tags.
-    if (stripos($inline_css, '<style>') === 0) {
-      $inline_css = trim(substr($inline_css, 7));
-    }
-    $len = strlen($inline_css);
-    if (stripos($inline_css, '</style>') === $len - 8) {
-      $inline_css = trim(substr($inline_css, 0, $len - 8));
-    }
-
+  if (!empty($inline_strings[0])) {
     // Extract url() references to add to the preloaded links.
     $matches = array();
     // Match url ( "' ... '" ).
     $pattern = '/url\s*\(\s*[\'"]?(.+?)[\'"]?\s*\)/i';
-    preg_match_all($pattern, $inline_css, $matches);
+    preg_match_all($pattern, $inline_strings[0], $matches);
     if (!empty($matches[1])) {
       foreach ($matches[1] as $key => $url) {
         $parsed = parse_url($url);
@@ -668,7 +639,8 @@ function advagg_mod_page_alter() {
     }
 
     // Add critical css.
-    drupal_add_css($inline_css, array(
+    drupal_add_css('advagg_mod_critical_css', array(
+      'data' => $inline_strings[0],
       'type' => 'inline',
       'group' => CSS_SYSTEM - 1,
       'weight' => -50000,
@@ -684,12 +656,6 @@ function advagg_mod_page_alter() {
   if (!empty($inline_strings[1])) {
     $domains = preg_split("/\\r\\n|\\r|\\n/", $inline_strings[1]);
   }
-  if (empty($domains)
-    && !empty($filenames[1])
-    && is_readable($filenames[1])
-  ) {
-    $domains = file($filenames[1], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-  }
   $domains = array_merge($domains, $domains_from_inline_css);
   // Remove duplicates and empty sets.
   $domains = array_filter(array_unique($domains));
@@ -703,12 +669,6 @@ function advagg_mod_page_alter() {
   $preload = array();
   if (!empty($inline_strings[2])) {
     $preload = preg_split("/\\r\\n|\\r|\\n/", $inline_strings[2]);
-  }
-  if (empty($preload)
-    && !empty($filenames[2])
-    && is_readable($filenames[2])
-  ) {
-    $preload = file($filenames[2], FILE_IGNORE_NEW_LINES);
   }
   $preload = array_merge($preload, $preload_from_inline_css);
   // Remove duplicates and empty sets.
@@ -943,6 +903,11 @@ function advagg_mod_advagg_modify_js_pre_render_alter(&$children, &$elements) {
  * Implements hook_advagg_modify_css_pre_render_alter().
  */
 function advagg_mod_advagg_modify_css_pre_render_alter(&$children, &$elements) {
+  // Skip if there is no css.
+  if (empty($children)) {
+    return;
+  }
+
   if (!module_exists('advagg') || !advagg_enabled()) {
     return;
   }
@@ -1737,7 +1702,7 @@ function advagg_mod_find_critical_css_file() {
   list($dirs, $front_page, $object) = $params;
 
   // Look in themename/critical-css/authenticated|anonymous/urls|object_type.
-  if (!empty($dirs[0]) || !empty($dirs[1])) {
+  if ((!empty($dirs[0]) || !empty($dirs[1])) && is_readable("{$dirs[0]}{$dirs[1]}")) {
     if (!$filename
       && $front_page
       && is_readable("{$dirs[0]}{$dirs[1]}{$dirs[2]}{$dirs[4]}front.css")
@@ -1759,11 +1724,18 @@ function advagg_mod_find_critical_css_file() {
     ) {
       $filename = "{$dirs[0]}{$dirs[1]}{$dirs[2]}{$dirs[4]}{$dirs[8]}";
     }
-    if (!$filename
-      && isset($object->type)
-      && is_readable("{$dirs[0]}{$dirs[1]}{$dirs[2]}{$dirs[5]}{$object->type}.css")
-    ) {
-      $filename = "{$dirs[0]}{$dirs[1]}{$dirs[2]}{$dirs[5]}{$object->type}";
+    if (isset($object->type)) {
+      $filtered_object_type = advagg_url_to_filename($object->type);
+      if (!$filename
+        && is_readable("{$dirs[0]}{$dirs[1]}{$dirs[2]}{$dirs[5]}{$object->type}.css")
+      ) {
+        $filename = "{$dirs[0]}{$dirs[1]}{$dirs[2]}{$dirs[5]}{$object->type}";
+      }
+      if (!$filename
+        && is_readable("{$dirs[0]}{$dirs[1]}{$dirs[2]}{$dirs[5]}$filtered_object_type.css")
+      ) {
+        $filename = "{$dirs[0]}{$dirs[1]}{$dirs[2]}{$dirs[5]}$filtered_object_type";
+      }
     }
 
     // Look in themename/critical-css/all/urls|object_type.
@@ -1788,11 +1760,18 @@ function advagg_mod_find_critical_css_file() {
     ) {
       $filename = "{$dirs[0]}{$dirs[1]}{$dirs[3]}{$dirs[4]}{$dirs[8]}";
     }
-    if (!$filename
-      && isset($object->type)
-      && is_readable("{$dirs[0]}{$dirs[1]}{$dirs[3]}{$dirs[5]}{$object->type}.css")
-    ) {
-      $filename = "{$dirs[0]}{$dirs[1]}{$dirs[3]}{$dirs[5]}{$object->type}";
+    if (isset($object->type)) {
+      $filtered_object_type = advagg_url_to_filename($object->type);
+      if (!$filename
+        && is_readable("{$dirs[0]}{$dirs[1]}{$dirs[3]}{$dirs[5]}{$object->type}.css")
+      ) {
+        $filename = "{$dirs[0]}{$dirs[1]}{$dirs[3]}{$dirs[5]}{$object->type}";
+      }
+      if (!$filename
+        && is_readable("{$dirs[0]}{$dirs[1]}{$dirs[3]}{$dirs[5]}$filtered_object_type.css")
+      ) {
+        $filename = "{$dirs[0]}{$dirs[1]}{$dirs[3]}{$dirs[5]}$filtered_object_type";
+      }
     }
   }
 
@@ -1806,9 +1785,57 @@ function advagg_mod_find_critical_css_file() {
     );
   }
 
+  // Get inline css string.
+  if (empty($inline_strings[0])
+    && !empty($filenames[0])
+    && is_readable($filenames[0])
+  ) {
+    module_load_include('inc', 'advagg', 'advagg');
+    $inline_css = advagg_load_stylesheet($filenames[0], TRUE);
+
+    // Allow other modules to modify this files contents.
+    // Call hook_advagg_get_css_file_contents_alter().
+    drupal_alter('advagg_get_css_file_contents', $inline_css, $filenames[0]);
+    $inline_strings[0] = $inline_css;
+  }
+
+  // Remove starting and ending style tags.
+  if (stripos($inline_strings[0], '<style>') === 0) {
+    $inline_strings[0] = trim(substr($inline_strings[0], 7));
+  }
+  $len = strlen($inline_strings[0]);
+  if (stripos($inline_strings[0], '</style>') === $len - 8) {
+    $inline_strings[0] = trim(substr($inline_strings[0], 0, $len - 8));
+  }
+
+  // Add in domain prefetch.
+  if (empty($inline_strings[1])
+    && !empty($filenames[1])
+    && is_readable($filenames[1])
+  ) {
+    $inline_strings[1] = file_get_contents($filenames[1]);
+  }
+
+  // Add in files to preload.
+  if (empty($inline_strings[2])
+    && !empty($filenames[2])
+    && is_readable($filenames[2])
+  ) {
+    $inline_strings[2] = file_get_contents($filenames[2]);
+  }
+
+  // Remove !important from all CSS rules. Strips it even without a space in
+  // front, unlike the earlier version of this code.
+  if (variable_get('advagg_mod_inline_critical_css_strip_important', ADVAGG_MOD_INLINE_CRITICAL_CSS_STRIP_IMPORTANT)) {
+    if (!empty($inline_strings)) {
+      $inline_strings[0] = str_replace('!important', '', $inline_strings[0]);
+    }
+  }
+
   // Allow for altering the ending point.
   // Call hook_advagg_mod_critical_css_file_post_alter().
   drupal_alter('advagg_mod_critical_css_file_post', $filenames, $params, $inline_strings);
+
   return array($filenames, $params, $inline_strings);
 }
 
@@ -2229,6 +2256,10 @@ function advagg_mod_js_move_to_footer(array &$js) {
               $values['scope_lock'] = TRUE;
               break;
             }
+            if (!empty($values['pre_relocate_data']) && is_string($values['pre_relocate_data']) && strpos($values['pre_relocate_data'], $string) !== FALSE) {
+              $values['scope_lock'] = TRUE;
+              break;
+            }
           }
         }
       }
@@ -2262,6 +2293,9 @@ function advagg_mod_js_move_to_footer(array &$js) {
         if (stripos($values['data'], $search_string) !== FALSE) {
           continue 2;
         }
+        if (!empty($values['pre_relocate_data']) && stripos($values['pre_relocate_data'], $search_string) !== FALSE) {
+          continue 2;
+        }
       }
     }
 
@@ -2288,11 +2322,11 @@ function advagg_mod_js_move_to_footer(array &$js) {
     }
 
     // If JS is not in the header increase group by 10000.
-    if ($values['scope'] !== 'header') {
+    if ($values['scope'] !== 'header' && is_numeric($values['group'])) {
       $values['group'] += 10000;
     }
     // If JS is already in the footer increase group by 10000.
-    if ($values['scope'] === 'footer') {
+    if ($values['scope'] === 'footer' && is_numeric($values['group'])) {
       $values['group'] += 10000;
     }
     $values['scope'] = 'footer';
@@ -2358,6 +2392,7 @@ function advagg_mod_js_async_defer(array &$js) {
       $min = variable_get('jquery_update_compression_type', 'min') == 'none' ? '' : '.min';
       $path = drupal_get_path('module', 'jquery_update');
       foreach ($js as $name => &$values) {
+        // Skip if not inline.
         if ($values['type'] !== 'inline') {
           continue;
         }

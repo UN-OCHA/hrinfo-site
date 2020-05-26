@@ -14,7 +14,7 @@ class DropboxChooserAPI extends FileChooserFieldPlugin {
    * {@inheritdoc}
    */
   public function label() {
-    return t('Select from Dropbox');
+    return t('Dropbox');
   }
 
   /**

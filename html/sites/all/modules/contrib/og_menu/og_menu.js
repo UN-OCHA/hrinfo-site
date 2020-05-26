@@ -19,7 +19,7 @@ Drupal.behaviors.ogMenuGroupswitch = {
     Drupal.ogMenu.bindEvents(); // Bind events to group audience fields.
     Drupal.ogMenu.setSelected(); // Get all currently selected.
     Drupal.ogMenu.populateParentSelect(); // Populate
- 
+
     // Make sure the originalParent is set on page load.
     $('.menu-parent-select').val(Drupal.ogMenu.originalParent);
   }
@@ -49,17 +49,9 @@ Drupal.ogMenu.bindEvents = function() {
 Drupal.ogMenu.bindEvent = function(type, selector) {
   // Autocomplete events can be tricky and need specific logic.
   if (type == 'entityreference_autocomplete') {
-    // Selecting with the mouse will trigger blur.
-    $(selector).blur( function() {
+    $(selector).bind('autocompleteSelect', function() {
       Drupal.ogMenu.setSelected();
       Drupal.ogMenu.populateParentSelect();
-    });
-    // Selecting with arrows needs more advanced logic.
-    $(selector).keyup( function() {
-      if (event.keyCode == 13) { // Enter key.
-        Drupal.ogMenu.setSelected();
-        Drupal.ogMenu.populateParentSelect();
-      }
     });
   }
   // Other fields are simpler.

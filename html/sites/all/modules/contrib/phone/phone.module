@@ -24,9 +24,8 @@ function phone_libraries_info() {
   $libraries['libphonenumber-for-php'] = array(
     // Only used in administrative UI of Libraries API.
     'name' => 'libphonenumber (PHP Port)',
-    'vendor url' => 'https://github.com/giggsey/libphonenumber-for-php',
-    'download url' => 'https://github.com/giggsey/libphonenumber-for-php/archive/master.zip',
-    'path' => 'src/libphonenumber',
+    'vendor url' => 'https://github.com/chipperstudios/libphonenumber-for-php',
+    'download url' => 'https://github.com/chipperstudios/libphonenumber-for-php/archive/master.zip',
     'version' => '1.0',
     'files' => array(
       'php' => array(
@@ -43,8 +42,6 @@ function phone_libraries_info() {
         'CountryCodeSource.php',
         'NumberParseException.php',
         'ValidationResult.php',
-        'MetadataLoaderInterface.php',
-        'DefaultMetadataLoader.php',
       ),
     ),
     'integration files' => array(
@@ -137,32 +134,30 @@ function phone_countries_alter(&$countries) {
  */
 function phone_countries($codes = NULL, $type = 'combined', $reset = FALSE) {
   // We don't need drupal_static() do we? Why would we reset this?
-  static $country_data = array();
-  global $language;
-  $lang_code = $language->language;
+  static $country_data = NULL;
 
-  if (!isset($country_data[$lang_code]) || $reset) {
-    if (!$reset && ($cache = cache_get('phone_countries_' . $lang_code))) {
-      $country_data[$lang_code] = $cache->data;
+  if (!isset($country_data) || $reset) {
+    if (!$reset && ($cache = cache_get('phone_countries'))) {
+      $country_data = $cache->data;
     }
 
-    if (!isset($country_data[$lang_code])) {
+    if (!isset($country_data)) {
       // Load libphonenumber.
       phone_libphonenumber();
 
-      $country_data[$lang_code] = phone_libphonenumber_get_supported_country_lists();
-      cache_set('phone_countries_' . $lang_code, $country_data[$lang_code]);
+      $country_data = phone_libphonenumber_get_supported_country_lists();
+      cache_set('phone_countries', $country_data);
     }
   }
 
   if (empty($codes)) {
-    return $country_data[$lang_code][$type];
+    return $country_data[$type];
   }
   elseif (is_array($codes)) {
-    return array_intersect_key($country_data[$lang_code][$type], drupal_map_assoc($codes));
+    return array_intersect_key($country_data[$type], drupal_map_assoc($codes));
   }
-  elseif (isset($country_data[$lang_code][$type][$codes])) {
-    return $country_data[$lang_code][$type][$codes];
+  elseif (isset($country_data[$type][$codes])) {
+    return $country_data[$type][$codes];
   }
   else {
     return FALSE;
@@ -432,20 +427,8 @@ function phone_field_presave($entity_type, $entity, $field, $instance, $langcode
 
   foreach ($items as $delta => $item) {
     $extension = isset($item['extension']) ? trim($item['extension']) : '';
-    $number = trim($item['number']);
     $items[$delta] = phone_libphonenumber_clean(trim($item['number']), $item['countrycode'], $extension) + $items[$delta];
-    if ($items[$delta]['countrycode'] == '001') {
-      $number = str_replace('+', '', $number);
-      $code = substr($number, 0, 3);
-      $supported_global_networks = phone_libphonenumber_get_supported_global_networks();
-      foreach ($supported_global_networks['calling_code'] as $region_code => $network) {
-        if ($code == $network) {
-          $items[$delta]['countrycode'] = $region_code;
-        }
-      }
-    }
   }
-
 }
 
 /**
@@ -566,7 +549,6 @@ function phone_field_formatter_info() {
     'field types' => array('phone'),
     'settings' => array(
       'as_tel_link' => FALSE,
-      'raw' => FALSE,
       'full_hcard' => FALSE,
       'allow_alpha' => FALSE,
       'country_name_position' => 'after',
@@ -626,7 +608,6 @@ function phone_field_formatter_settings_summary($field, $instance, $view_mode) {
 
   $summary[] = t('<strong>Full hCard 1.0 type support:</strong>') . ' ' . (($settings['full_hcard']) ? t('Yes') : t('No'));
   $summary[] = t('<strong>As tel: link:</strong>') . ' ' . (($settings['as_tel_link']) ? t('Yes') : t('No'));
-  $summary[] = t('<strong>Raw (no HTML)</strong>') . ' ' . (($settings['raw']) ? t('Yes') : t('No'));
   $summary[] = t('<strong>Convert alpha to digits:</strong>') . ' ' . ((!$settings['allow_alpha']) ? t('Yes') : t('No'));
 
   if (isset($components['country'])) {
@@ -680,11 +661,6 @@ function phone_field_formatter_settings_form($field, $instance, $view_mode, $for
     '#type' => 'checkbox',
     '#title' => t('As tel: link'),
     '#default_value' => $settings['as_tel_link'],
-  );
-  $element['raw'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Raw (no HTML)'),
-    '#default_value' => $settings['raw'],
   );
   $element['allow_alpha'] = array(
     '#type' => 'checkbox',
@@ -783,12 +759,7 @@ function phone_field_formatter_view($entity_type, $entity, $field, $instance, $l
 
     $formatted_number = phone_libphonenumber_format($number, $countrycode, $extension, $formatter, $settings['allow_alpha'], $settings['extension_prefix']);
     $link = $settings['as_tel_link'];
-    $href = phone_libphonenumber_format($number, $countrycode, $extension, 'phone_rfc3966');
-    // As of commit 2447df4655dcbddfab733de392ff077cf3d621e6, libphonenumber-for-php adds tel: for RFC3966 format
-    // Prevent tel: from being prefixed twice, while retaining compatibility with older versions of the library.
-    if (substr($href, 0, 4) !== 'tel:') {
-      $href = 'tel:' . $href;
-    }
+    $href = 'tel:' . phone_libphonenumber_format($number, $countrycode, $extension, 'phone_rfc3966');
 
     $numbertype_attributes = array();
     if ($settings['full_hcard']) {
@@ -799,68 +770,48 @@ function phone_field_formatter_view($entity_type, $entity, $field, $instance, $l
 
     // Create a render array for our item.
     $numbertype_before = $settings['numbertype_position'] == 'before';
-    if ($settings['raw']) {
-      $output = '';
-      if (!empty($number_type) && $numbertype_before) {
-        $output .= empty($numbertype_label) ? $numbertype : $numbertype_label;
-        $output .= ': ';
-      }
-      if (isset($components['country']) && $settings['country_name_position'] == 'before') {
-        $output .= '('.phone_countries($countrycode, 'country').')';
-      }
-      $output .= $formatted_number;
-      if (isset($components['country']) && $settings['country_name_position'] != 'before') {
-        $output .= '('.phone_countries($countrycode, 'country').')';
-      }
-      if (!empty($number_type) && !$numbertype_before) {
-        $output .= empty($numbertype_label) ? $numbertype : $numbertype_label;
-      }
-      $render = array('#markup' => $output);
-    }
-    else {
-      $render = array(
-        'phone' => array(
-          '#type' => 'container',
-          '#attributes' => array(
-            'class' => array('tel', 'phone-container' . $numbertype_id),
-          ),
-          'numbertype' => array(
-            '#access' => !empty($numbertype),
-            '#type' => 'html_tag',
-            '#tag' => $settings['full_hcard'] ? 'abbr' : 'span',
-            '#attributes' => $numbertype_attributes + array(
-              'class' => array('type', 'phone-numbertype'),
-            ),
-            '#value' => empty($numbertype_label) ? $numbertype : $numbertype_label,
-            '#value_suffix' => $numbertype_before ? ': ' : '',
-            '#weight' => $numbertype_before ? -2 : 2,
-          ),
-          'number' => array(
-            '#type' => $link ? 'link' : 'html_tag',
-            '#tag' => 'span',
-            '#attributes' => array(
-              'class' => array('value', 'phone-number'),
-            ),
-            '#value' => $formatted_number,
-            '#title' => $formatted_number,
-            '#href' => $href,
-            '#weight' => 0,
-          ),
-          'country' => array(
-            '#access' => isset($components['country']),
-            '#type' => 'html_tag',
-            '#tag' => 'span',
-            '#attributes' => array(
-              'class' => array('phone-country'),
-            ),
-            '#value' => phone_countries($countrycode, 'country'),
-            '#value_prefix' => '(',
-            '#value_suffix' => ')',
-            '#weight' => $settings['country_name_position'] == 'before' ? -1 : 1,
-          ),
+    $render = array(
+      'phone' => array(
+        '#type' => 'container',
+        '#attributes' => array(
+          'class' => array('tel', 'phone-container' . $numbertype_id),
         ),
-      );
-    }
+        'numbertype' => array(
+          '#access' => !empty($numbertype),
+          '#type' => 'html_tag',
+          '#tag' => $settings['full_hcard'] ? 'abbr' : 'span',
+          '#attributes' => $numbertype_attributes + array(
+            'class' => array('type', 'phone-numbertype'),
+          ),
+          '#value' => empty($numbertype_label) ? $numbertype : $numbertype_label,
+          '#value_suffix' => $numbertype_before ? ': ' : '',
+          '#weight' => $numbertype_before ? -2 : 2,
+        ),
+        'number' => array(
+          '#type' => $link ? 'link' : 'html_tag',
+          '#tag' => 'span',
+          '#attributes' => array(
+            'class' => array('value', 'phone-number'),
+          ),
+          '#value' => $formatted_number,
+          '#title' => $formatted_number,
+          '#href' => $href,
+          '#weight' => 0,
+        ),
+        'country' => array(
+          '#access' => isset($components['country']),
+          '#type' => 'html_tag',
+          '#tag' => 'span',
+          '#attributes' => array(
+            'class' => array('phone-country'),
+          ),
+          '#value' => phone_countries($countrycode, 'country'),
+          '#value_prefix' => '(',
+          '#value_suffix' => ')',
+          '#weight' => $settings['country_name_position'] == 'before' ? -1 : 1,
+        ),
+      ),
+    );
 
     $element[$delta] = $render;
   }
@@ -1266,16 +1217,6 @@ function _phone_migrate_phone_number($number, $default_country = NULL) {
   // discard it.
   $countrycode = $phone_util->getRegionCodeForNumber($processed_phone);
   if (!empty($countrycode)) {
-    if ($countrycode == '001') {
-      $satnumber = str_replace('+', '', $number);
-      $code = substr($satnumber, 0, 3);
-      $supported_global_networks = phone_libphonenumber_get_supported_global_networks();
-      foreach ($supported_global_networks['calling_code'] as $region_code => $network) {
-        if ($code == $network) {
-          $countrycode = $region_code;
-        }
-      }
-    }
     $item['countrycode'] = $countrycode;
     $item['number'] = $processed_phone->getNationalNumber();
     if ($processed_phone->getExtension()) {

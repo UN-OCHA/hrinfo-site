@@ -335,10 +335,10 @@ function _openlayers_openlayers_layers() {
     $openlayers_layers->description = $item['description'];
     $openlayers_layers->data = array(
       'url' => array(
-        0 => 'https://a.tiles.mapbox.com/',
-        1 => 'https://b.tiles.mapbox.com/',
-        2 => 'https://c.tiles.mapbox.com/',
-        3 => 'https://d.tiles.mapbox.com/',
+        0 => 'http://a.tiles.mapbox.com/',
+        1 => 'http://b.tiles.mapbox.com/',
+        2 => 'http://c.tiles.mapbox.com/',
+        3 => 'http://d.tiles.mapbox.com/',
       ),
       'layername' => $item['layername'],
       'layer_type' => 'openlayers_layer_type_tms',

@@ -56,12 +56,9 @@ function facetapi_i18n_map_content_types(array $values, array $options) {
 
 /**
  * Implements hook_facetapi_translate_string().
- *
- * NOTE: Facet API is always responsible for escaping the string based on how
- * its translation system is architected.
  */
 function facetapi_i18n_facetapi_translate_string($name, $string, $langcode) {
-  return i18n_string($name, $string, array('update' => TRUE, 'langcode' => $langcode, 'sanitize' => FALSE));
+  return i18n_string($name, $string, array('langcode' => $langcode));
 }
 
 /**

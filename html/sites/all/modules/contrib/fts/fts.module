@@ -8,41 +8,30 @@
 /**
  *  FTS URL
  */
-define('FTS_URL', 'https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/');
+define('FTS_URL', 'http://fts.unocha.org/api/v1/');
 
 /**
- * Returns API endpoint.
- */
-function _fts_get_api_endpoint() {
-  return variable_get('fts_api_endpoint', FTS_URL);
-}
-
-/**
- * Get all appeals for the current year.
+ * Get all appeals for the current year
  */
 function fts_get_appeals($year = '') {
   if (empty($year)) {
     $year = date('Y');
   }
-
-  $cache = cache_get('fts_appeals_cache_' . $year, 'cache');
-  if (!$cache) {
-    $response = drupal_http_request(_fts_get_api_endpoint() . 'plan/year/' . $year);
-    $data = json_decode($response->data);
+  $cache = cache_get('fts_appeals_cache'.$year, 'cache');
+  if(!$cache){
+    $xml = simplexml_load_file(FTS_URL . 'appeal/year/'.$year.'.xml');
     $appeals = array();
-    if (isset($data->data)) {
-      foreach ($data->data as $plan) {
-        $appeal = (object) $plan;
-        $appeal->title = $plan->planVersion->name;
-        $appeals[$plan->id] = $appeal;
+    if (isset($xml->Appeal)) {
+      foreach ($xml->Appeal as $appeal) {
+        $tmp = json_decode(json_encode($appeal));
+        $appeals[$tmp->id] = $tmp;
       }
-      cache_set('fts_appeals_cache_' . $year, $appeals, 'cache', REQUEST_TIME + 24 * 60 * 60);
+      cache_set('fts_appeals_cache'.$year, $appeals, 'cache', REQUEST_TIME + 24*60*60);
     }
   }
-  else {
+  else{
     $appeals = $cache->data;
   }
-
   return $appeals;
 }
 
@@ -50,134 +39,97 @@ function fts_get_appeals($year = '') {
  * Get appeal information by appeal ID
  */
 function fts_get_appeal($id) {
-  $appeal = NULL;
-  if (empty($id)) {
-    return $appeal;
+  if(empty($id)){
+    return NULL;
   }
-
-  $cache = cache_get('fts_appeal_by_id_cache_' . $id, 'cache');
-  if (!$cache) {
-    $response = drupal_http_request(_fts_get_api_endpoint() . 'plan/id/' . $id);
-    $data = json_decode($response->data);
-    if (isset($data->data)) {
-      $appeal = $data->data;
-      $appeal->title = $appeal->planVersion->name;
-      cache_set('fts_appeal_by_id_cache_' . $id, $appeal, 'cache', REQUEST_TIME + 24 * 60 * 60);
+  $cache = cache_get('fts_appeal_by_id_cache'.$id, 'cache');
+  if(!$cache){
+    $xml = simplexml_load_file(FTS_URL . 'appeal/id/' . $id . '.xml');
+    if (isset($xml->Appeal)) {
+      $appeal = json_decode(json_encode($xml->Appeal));
+      cache_set('fts_appeal_by_id_cache'.$id, $appeal, 'cache', REQUEST_TIME + 24*60*60);
+      return $appeal;
+    }
+    else {
+      return NULL;
     }
   }
-  else {
-    $appeal = $cache->data;
+  else{
+    return $cache->data;
   }
-  return $appeal;
+}
+
+/**
+ * Get all countries
+ */
+function fts_get_countries() {
+  $cache = cache_get('fts_countries', 'cache');
+  if(!$cache){
+    $xml = simplexml_load_file(FTS_URL . 'Country.xml');
+    $countries = array();
+    if(isset($xml->Country)) {
+      foreach ($xml->Country as $country) {
+        $tmp = json_decode(json_encode($country));
+        $countries[$tmp->iso_code_A] = $tmp;
+      }
+      cache_set('fts_countries', $countries, 'cache', REQUEST_TIME + 24*60*60);
+    }
+    return $countries;
+  }
+  else{
+    return $cache->data;
+  }
+}
+
+/**
+ * Get country by ISO code
+ */
+function fts_get_country($iso3) {
+  $countries = fts_get_countries();
+  if (isset($countries[$iso3])) {
+    return $countries[$iso3];
+  }
+  else {
+    return NULL;
+  }
 }
 
 /**
  * Get general funding information
  */
 function fts_get_funding($params) {
-  $funding = array();
-
-  $query = drupal_http_build_query($params);
-  $cache = cache_get('fts_funding_' . md5($query), 'cache');
-
-  if (!$cache) {
-    $response = drupal_http_request(_fts_get_api_endpoint() . 'fts/flow?' . $query);
-    $data = json_decode($response->data);
-
-    if (isset($data->data)) {
-      $funding = new stdClass();
-      if (isset($data->data->report1)) {
-        $report1 = $data->data->report1;
-        $funding->current_requirements = $report1->fundingTotals->total;
-        $funding->funding = $report1->pledgeTotals->total + $report1->fundingTotals->total;
-
-        if (isset($data->data->report3)) {
-          $report3 = $data->data->report3;
-          if (isset($report3->fundingTotals->objects[0]->singleFundingObjects)) {
-            foreach ($report3->fundingTotals->objects[0]->singleFundingObjects as $funding_object) {
-              if (!isset($funding->data[$funding_object->name])) {
-                $funding->data[$funding_object->name] = 0;
-              }
-              $funding->data[$funding_object->name] = $funding_object->totalFunding;
-            }
-          }
-
-          if (isset($report3->pledgeTotals->objects[0]->singleFundingObjects)) {
-            foreach ($report3->pledgeTotals->objects[0]->singleFundingObjects as $funding_object) {
-              if (!isset($funding->data[$funding_object->name])) {
-                $funding->data[$funding_object->name] = 0;
-              }
-              $funding->data[$funding_object->name] = $funding_object->totalFunding;
-            }
-          }
-        }
-      }
-      else {
-        $funding->current_requirements = $data->data->incoming->fundingTotal;
-        $funding->funding = $data->data->incoming->pledgeTotal + $data->data->incoming->fundingTotal;
-      }
-
-      // Check requirements.
-      if (isset($data->data->requirements->totalRevisedReqs)) {
-        $requirements = $data->data->requirements;
-        $funding->current_requirements = $requirements->totalRevisedReqs;
-      }
-
-      $funding->raw_data = $data->data;
-
-      cache_set('fts_funding_' . md5($query), $funding, 'cache', REQUEST_TIME + 24 * 60 * 60);
+    $id_string = 'params'. implode(',', $params);
+    $md5_string = md5($id_string);
+    $cache = cache_get('fts_funding'.$md5_string, 'cache');
+    if(!$cache){
+      $url = FTS_URL . 'funding.xml?'.http_build_query($params, '', '&');
+      $xml = simplexml_load_file($url);
+      $funding = json_decode(json_encode($xml));
+      cache_set('fts_funding'.$md5_string, $funding, 'cache', REQUEST_TIME + 24*60*60);
+      return $funding;
     }
-  }
-  else {
-    $funding = $cache->data;
-  }
-  return $funding;
-}
-
-/**
- * Get global clusters.
- */
-function fts_get_global_clusters() {
-  $clusters = array();
-  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/global-cluster
-
-  $cache = cache_get('fts_appeals_cache_global_clusters', 'cache');
-  if (!$cache) {
-    $response = drupal_http_request(_fts_get_api_endpoint() . 'global-cluster');
-    $data = json_decode($response->data);
-    if (isset($data->data)) {
-      $clusters = $data->data;
-      cache_set('fts_appeals_cache_global_clusters', $clusters, 'cache', REQUEST_TIME + 24 * 60 * 60);
+    else{
+      return $cache->data;
     }
-  }
-  else {
-    $clusters = $cache->data;
-  }
-
-  return $clusters;
 }
 
 /**
  * Get clusters information by appeal
- *
- * @todo: remove.
  */
 function fts_get_clusters_by_appeal($id) {
-  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/global-cluster
   if (empty($id)) {
     return array();
   }
-  $cache = cache_get('clusters_by_appeal_'.$id, 'cache');
+  $cache = cache_get('clusters_by_appeal'.$id, 'cache');
   if(!$cache){
-    $url = FTS_URL . 'fts/flow?planId='.$id.'&groupby=cluster';
-    $response = drupal_http_request($url);
-    $data = json_decode($response->data);
+    $url = FTS_URL . 'cluster/appeal/'.$id.'.xml';
+    $xml = simplexml_load_file($url);
     $clusters = array();
-    if (isset($data->data)) {
-      foreach ($data->data->requirements->objects as $cluster) {
-        $clusters[] = $cluster;
+    if (isset($xml->Cluster)) {
+      foreach ($xml->Cluster as $cluster) {
+        $clusters[] = json_decode(json_encode($cluster));
       }
-      cache_set('clusters_by_appeal_'.$id, $clusters, 'cache', REQUEST_TIME + 24*60*60);
+      cache_set('clusters_by_appeal'.$id, $clusters, 'cache', REQUEST_TIME + 24*60*60);
     }
     return $clusters;
   }
@@ -188,8 +140,6 @@ function fts_get_clusters_by_appeal($id) {
 
 /**
  * Get information for a specific cluster within a specific appeal
- *
- * @todo: remove.
  */
 function fts_get_cluster_by_appeal($appeal, $cluster_name) {
   $clusters = fts_get_clusters_by_appeal($appeal);
@@ -202,3 +152,4 @@ function fts_get_cluster_by_appeal($appeal, $cluster_name) {
   }
   return $cluster_found;
 }
+

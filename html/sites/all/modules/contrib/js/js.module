@@ -19,6 +19,20 @@ define('JS_MENU_SITE_ONLINE', 5);
 define('JS_MENU_METHOD_NOT_ALLOWED', 6);
 
 /**
+ * Implements hook_hook_info().
+ */
+function js_hook_info() {
+  $group = array('group' => 'js');
+  $hooks['js_callback_filter_xss'] = $group;
+  $hooks['js_captured_content'] = $group;
+  $hooks['js_info'] = $group;
+  $hooks['js_info_alter'] = $group;
+  $hooks['js_server_info'] = $group;
+  $hooks['js_server_info_alter'] = $group;
+  return $hooks;
+}
+
+/**
  * Implements hook_menu().
  */
 function js_menu() {
@@ -221,9 +235,8 @@ function js_server_info($server = NULL, $reset = FALSE) {
       $servers = $cache->data;
     }
     else {
-      $hook = 'js_server_info';
-      foreach (module_implements($hook, FALSE, $reset) as $module) {
-        $results = module_invoke($module, $hook);
+      foreach (module_implements('js_server_info', FALSE, $reset) as $module) {
+        $results = module_invoke($module, 'js_server_info');
         // Iterate over each module and retrieve the server info.
         foreach ($results as $name => $info) {
           $servers[$name] = (array) $info;
@@ -247,7 +260,7 @@ function js_server_info($server = NULL, $reset = FALSE) {
       }
       // Invokes hook_js_server_info_alter(). Allow modules to alter the
       // server info before it's cached in the database.
-      drupal_alter($hook, $servers);
+      drupal_alter('js_server_info', $servers);
       cache_set($cid, $servers);
     }
   }
@@ -259,6 +272,29 @@ function js_server_info($server = NULL, $reset = FALSE) {
 
   // Return all server info implemented by any module.
   return $servers;
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function js_module_implements_alter(&$implementations, $hook) {
+  global $_js;
+
+  // We need to make sure hook implementation cache is never written while
+  // processing a JS request.
+  // Since most callbacks act at a bootstrap level lower than full, that is
+  // without loading all modules.
+  if (!empty($_js['module']) && !empty($_js['callback'])) {
+    $global_implementations = &drupal_static('module_implements');
+    // Remove the flag to write this cache.
+    unset($global_implementations['#write_cache']);
+  }
+
+  // Remove the JS module from the services module hook.
+  // @see https://www.drupal.org/project/js/issues/3075281
+  if ($hook === 'server_info' && !empty($implementations['js'])) {
+    unset($implementations['js']);
+  }
 }
 
 /**
@@ -341,15 +377,80 @@ function js_process_autocomplete($element) {
     // browser interpreting the path plus search string as an actual file.
     $current_clean_url = isset($GLOBALS['conf']['clean_url']) ? $GLOBALS['conf']['clean_url'] : NULL;
     $GLOBALS['conf']['clean_url'] = 0;
+
     // Force the script path to 'js.php', in case the server is not
     // configured to find it automatically. Normally it is the responsibility
     // of the site to do this themselves using hook_url_outbound_alter() (see
     // url()) but since this code is forcing non-clean URLs on sites that don't
     // normally use them, it is done here instead.
-    $element['#autocomplete_input']['#url_value'] = url('<front>', $options);
+    // @see https://www.drupal.org/project/js/issues/2873484
+    $base_url = url('<front>', $options);
+
+    // Because url() enforces it's own q parameter if a path/path-prefix is
+    // given, which happens if language prefixes are enabled, we need to
+    // enforce our q parameter.
+    $drupal_parsed_url = drupal_parse_url($base_url);
+
+    // Run the autocomplete path through url to ensure it get's the same
+    // prefixes. We use drupal_parse_url() as it nicely extracts q right away.
+    $autocomplete_path = drupal_parse_url(url($element['#autocomplete_path']));
+
+    // Add the extracted path as the q parameter for the autocomplete url.
+    $drupal_parsed_url['query']['q'] = $autocomplete_path['path'];
+
+    // Now create the fully cleaned url.
+    $parsed = parse_url($base_url);
+
+    // Inject our custom query.
+    $parsed['query'] = drupal_http_build_query($drupal_parsed_url['query']);
+
+    // Now build the uri from the parsed data.
+    $element['#autocomplete_input']['#url_value'] = _js_http_build_url($parsed);
+
     $GLOBALS['conf']['clean_url'] = $current_clean_url;
   }
   return $element;
+}
+
+/**
+ * Alt to http_build_url().
+ *
+ * @param array $parsed
+ *   Array from parse_url().
+ *
+ * @return string
+ *   URI is returned.
+ */
+function _js_http_build_url(array $parsed) {
+  $uri = '';
+  if (isset($parsed['scheme'])) {
+    switch (strtolower($parsed['scheme'])) {
+      // Mailto uri.
+      case 'mailto':
+        $uri .= $parsed['scheme'] . ':';
+        break;
+
+      // Protocol relative uri.
+      case '//':
+        $uri .= $parsed['scheme'];
+        break;
+
+      // Standard uri.
+      default:
+        $uri .= $parsed['scheme'] . '://';
+    }
+  }
+  $uri .= isset($parsed['user']) ? $parsed['user'] . (isset($parsed['pass']) ? ':' . $parsed['pass'] : '') . '@' : '';
+  $uri .= isset($parsed['host']) ? $parsed['host'] : '';
+  $uri .= !empty($parsed['port']) ? ':' . $parsed['port'] : '';
+
+  if (isset($parsed['path'])) {
+    $uri .= (substr($parsed['path'], 0, 1) === '/') ? $parsed['path'] : ((!empty($uri) ? '/' : '') . $parsed['path']);
+  }
+
+  $uri .= isset($parsed['query']) ? '?' . $parsed['query'] : '';
+  $uri .= isset($parsed['fragment']) ? '#' . $parsed['fragment'] : '';
+  return $uri;
 }
 
 /**
@@ -409,21 +510,31 @@ function _js_error_handler($error_level, $message) {
  * always fatal: the execution of the script will stop as soon as the exception
  * handler exits.
  *
- * @param \Exception $exception
+ * @param \Exception|\Throwable $exception
  *   The exception object that was thrown.
  */
-function _js_exception_handler(\Exception $exception) {
+function _js_exception_handler($exception) {
   require_once DRUPAL_ROOT . '/includes/errors.inc';
+
+  // Support both PHP 5 exceptions and PHP 7 throwables.
+  // @see https://www.drupal.org/project/js/issues/3027913
   try {
     _js_log_php_error(_drupal_decode_exception($exception), TRUE);
   }
-  catch (Exception $exception2) {
-    // Another uncaught exception was thrown while handling the first one.
-    // If we are displaying errors, then do so with no possibility of a further
-    // uncaught exception being thrown.
+  catch (\Throwable $uncaught) {
+    // Intentionally left blank.
+  }
+  catch (\Exception $uncaught) {
+    // Intentionally left blank.
+  }
+
+  // Another uncaught exception was thrown while handling the first one.
+  // If we are displaying errors, then do so with no possibility of a further
+  // uncaught exception being thrown.
+  if (isset($uncaught)) {
     $message = '<h1>Additional uncaught exception thrown while handling exception.</h1>';
     $message .= '<h2>Original</h2><p>' . _drupal_render_exception_safe($exception) . '</p>';
-    $message .= '<h2>Additional</h2><p>' . _drupal_render_exception_safe($exception2) . '</p>';
+    $message .= '<h2>Additional</h2><p>' . _drupal_render_exception_safe($uncaught) . '</p>';
     $backtrace = debug_backtrace();
     $caller = _drupal_get_last_caller($backtrace);
     _js_log_php_error(array(
@@ -649,6 +760,10 @@ function _js_cache_initialize() {
   // supposed to use.
   JsProxyCache::setConf($cache_conf);
 
+  // Configure excluded cache classes.
+  $excluded_conf = !empty($conf['js_excluded_cache_classes']) ? $conf['js_excluded_cache_classes'] : array('DrupalFakeCache');
+  JsProxyCache::setExcludedConf($excluded_conf);
+
   // Memcache requires an additional bootstrap phase to access variables.
   if (!empty($cache_conf[$default_key]) && $cache_conf[$default_key] === 'MemCacheDrupal') {
     js_bootstrap(DRUPAL_BOOTSTRAP_VARIABLES);
@@ -686,12 +801,6 @@ function js_deliver($result, array $info = NULL) {
   if ($delivery_callback === 'js_deliver_json') {
     module_load_include('inc', 'js', 'includes/json');
   }
-
-  // Since most callbacks act at a bootstrap level lower than full, that is
-  // without loading all modules, we need to make sure hook implementation cache
-  // is never written while processing a JS request.
-  $implementations = &drupal_static('module_implements');
-  unset($implementations['#write_cache']);
 
   // Deliver the results. The delivery callback is responsible for setting the
   // appropriate headers, handling the result returned from the callback and
@@ -731,21 +840,31 @@ function js_update_path() {
   if (!$processed) {
     $processed = TRUE;
     $path = implode('/', $_js['args']);
+
     // Add language path prefix if there's one. If not added the language
     // detection based on path prefix wont work.
     if (!empty($_js['lang'])) {
       $path = $_js['lang'] . '/' . $path;
     }
+
+    // Rebuild the query string.
+    $query_array = array();
+    foreach (array_diff_key($_GET, array('q' => FALSE)) as $param => $value) {
+      $query_array[] = $param . '=' . urlencode($value);
+    }
+    $query_params = implode('&', $query_array);
+
+    // Update global state.
     $_GET['q'] = $path;
     if (isset($_SERVER['REQUEST_URI'])) {
-      $_SERVER['REQUEST_URI'] = '/' . $path;
+      $_SERVER['REQUEST_URI'] = '/' . $path . ($query_params ? '?' . $query_params : '');
     }
     else {
       if (isset($_SERVER['argv'])) {
-        $_SERVER['argv'][0] = $path;
+        $_SERVER['argv'][0] = $path . ($query_params ? '?' . $query_params : '');
       }
       elseif (isset($_SERVER['QUERY_STRING'])) {
-        $_SERVER['QUERY_STRING'] = 'q=' . $path;
+        $_SERVER['QUERY_STRING'] = 'q=' . $path . ($query_params ? '&' . $query_params : '');
       }
     }
   }
@@ -830,9 +949,8 @@ function js_get_callback($module = NULL, $callback = NULL, $reset = FALSE) {
       if ($_js) {
         js_bootstrap(DRUPAL_BOOTSTRAP_FULL);
       }
-      $hook = 'js_info';
-      foreach (module_implements($hook, FALSE, $reset) as $_module) {
-        $results = module_invoke($_module, $hook);
+      foreach (module_implements('js_info', FALSE, $reset) as $_module) {
+        $results = module_invoke($_module, 'js_info');
         // Iterate over each module and retrieve the callback info.
         foreach ($results as $_callback => $info) {
           $callbacks[$_module][$_callback] = (array) $info;

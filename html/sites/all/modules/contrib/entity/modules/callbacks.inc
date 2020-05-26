@@ -674,7 +674,7 @@ function entity_metadata_no_hook_node_access($op, $node = NULL, $account = NULL)
       // This is a new node or the original node.
       if (isset($node->type)) {
         $op = empty($node->nid) || !empty($node->is_new) ? 'create' : 'update';
-        return node_access($op, $node, $account);
+        return node_access($op, $op == 'create' ? $node->type : $node, $account);
       }
       else {
         throw new EntityMalformedException('Permission to create a node was requested but no node type was given.');

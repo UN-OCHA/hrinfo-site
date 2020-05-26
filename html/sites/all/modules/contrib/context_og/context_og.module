@@ -88,10 +88,28 @@ function context_og_context_registry() {
   );
 }
 
-/*
- * Implementation of hook_context_page_condition().
+/**
+ * TODO The call order of the plugins has been reversed here (which arguably is
+ * confusing).
+ * The hook_context_page_reaction() sets up our condition plugins and the the
+ * hook_context_page_condition() sets up our reaction.
+ * This had to be done because we need the hooks in the following order:
+ *
+ * 1. OG hooks (to set context)
+ * 2. context_og reaction (so our conditions can work with it)
+ * 3. context_og condition
  */
-function context_og_context_page_condition() {
+
+
+/*
+ * Implementation of hook_context_page_reaction().
+ *
+ * This needs to run after Organic Groups' hook_init() because we need the group context to be set.
+ *
+ * It also needs to run after Views processes arguments because og_views provides argument handlers
+ * that set OG's group context.
+ */
+function context_og_context_page_reaction() {
   $group = og_context();
 
   // Only execute the group context conditions if there is a group node.
@@ -125,7 +143,7 @@ function context_og_context_page_condition() {
  * when they get executed.  We want to come after organic groups' hook_init() so
  * the context doesn't get switched out from under us.
  */
-function context_og_context_page_reaction() {
+function context_og_context_page_condition() {
   $plugin = context_get_plugin('reaction', 'context_og_reaction_set_group_context');
 
   if ($plugin) {

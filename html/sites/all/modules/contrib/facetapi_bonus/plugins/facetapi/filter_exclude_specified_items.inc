@@ -44,13 +44,15 @@ class FacetapiFilterExcludeItems extends FacetapiFilter {
         }
       }
       if ($this->settings->settings['invert']) {
-        if ($exclude) {
-          $filtered_build[$key] = $item;
+        $exclude = !$exclude;
+      }
+      if (!$exclude) {
+        // Recurse into item children if available to make sure those are
+        // filtered too.
+        if (!empty($item['#item_children'])) {
+          $item['#item_children'] = $this->execute($item['#item_children']);
         }
-      } else {
-        if (!$exclude) {
-          $filtered_build[$key] = $item;
-        }
+        $filtered_build[$key] = $item;
       }
     }
 

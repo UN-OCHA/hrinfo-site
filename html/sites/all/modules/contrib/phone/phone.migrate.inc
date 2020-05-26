@@ -123,10 +123,6 @@ class MigratePhoneFieldHandler extends MigrateFieldHandler {
       $arguments = array();
     }
 
-    if (is_array($values[0])) {
-      $values = $values[0];
-    }
-
     $language = $this->getFieldLanguage($entity, $field_info, $arguments);
 
     // Setup the standard Field API array for saving.

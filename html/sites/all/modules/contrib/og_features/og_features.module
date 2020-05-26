@@ -32,22 +32,6 @@ function og_features_permission() {
 }
 
 /**
- * Implements hook_og_permission().
- */
-function og_features_og_permission() {
-  $perms = array();
-  $perms['edit group features'] = array(
-    'title' => t('Edit group features'),
-    'description' => t('Users may turn on/off group features.'),
-    'roles' => array(OG_ANONYMOUS_ROLE, OG_AUTHENTICATED_ROLE),
-    'default role' => array(OG_ADMINISTRATOR_ROLE),
-    'restrict access' => TRUE,
-    'module' => 'og_features',
-  );
-  return $perms;
-}
-
-/**
  * Implements hook_menu().
  */
 function og_features_menu() {
@@ -214,7 +198,7 @@ function og_features_context_load_alter(&$context) {
         // It should be noted that this case should not exist, as it's
         // recommended that you wrap all your blocks in contexts that
         // belong to your feature, to avoid cross-requirements.
-        else if (isset($context->reactions['block']) && is_array($context->reactions['block']['blocks'])) {
+        else if (is_array($context->reactions['block']['blocks'])) {
           // Iterate the blocks in this context
           foreach ($context->reactions['block']['blocks'] as $key => $block) {
             // See if this block comes from views
@@ -276,7 +260,7 @@ function og_features_panels_pane_content_alter(&$content, $pane, $args, $context
   // Detect group context
   if ($group = og_features_get_group_context()) {
     // See if this is the OG "create content" linkss
-    if (isset($content->module) && ($content->module == 'og') && ($content->type == 'node_create_links')) {
+    if (($content->module == 'og') && ($content->type == 'node_create_links')) {
       // Iterate the links
       if (isset($content->content['og_node_create_links']['#items'])) {
         foreach ($content->content['og_node_create_links']['#items'] as $key => $item) {
@@ -352,21 +336,19 @@ function og_features_feature_form_access($entity_type, $entity_id) {
     return FALSE;
   }
 
-  // Administers always have access.
+  // Administers always have access
   if (user_access('administer og features') || user_access('edit all group features')) {
     return TRUE;
   }
 
-  // Check if the user can edit their own group features.
-  if (user_access('edit own group features') || $group->uid == $user->uid) {
-    return TRUE;
+  // Check if the user can edit their own group features
+  if (user_access('edit own group features')) {
+    // Make sure the user is an admin of this group
+    if (og_user_access($entity_type, $entity_id, 'administer group')) {
+      return TRUE;
+    }
   }
-
-  // Check if the user is able to edit features within this group.
-  if (og_user_access($entity_type, $entity_id, 'edit group features')) {
-    return TRUE;
-  }
-
+  
   return FALSE;
 }
 

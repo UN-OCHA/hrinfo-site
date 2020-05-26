@@ -14,10 +14,3 @@ function pdfpreview_uninstall() {
   variable_del('pdfpreview_quality');
   variable_del('pdfpreview_filenames');
 }
-
-/**
- * Delete unused configuration variable.
- */
-function pdfpreview_update_7001() {
-  variable_del('pdfpreview_quality');
-}

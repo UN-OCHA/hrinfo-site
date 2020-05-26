@@ -160,14 +160,6 @@ function og_menu_edit_menu_form($form, &$form_state, $type, $group_type, $gid, $
       '#value' => $menu['menu_name'],
     );
   }
-
-  if (module_exists('i18n_menu')) {
-    $i18n_mode = $menu && isset($menu['i18n_mode']) ? $menu['i18n_mode'] : I18N_MODE_NONE;
-    $langcode = $menu && isset($menu['language']) ? $menu['language'] : LANGUAGE_NONE;
-
-    $form += i18n_translation_mode_element('menu', $i18n_mode, $langcode);
-  }
-
   // Add submit handlers.
   $form['#submit'][] = 'menu_edit_menu_submit';
   $form['#submit'][] = 'og_menu_edit_menu_form_submit';
@@ -201,7 +193,7 @@ function og_menu_edit_menu_form_submit_redirect($form, &$form_state) {
  */
 function og_menu_overview_form($form, &$form_state, $group_type, $gid, $menu) {
   module_load_include('inc', 'menu', 'menu.admin');
-  drupal_set_title(t('List items for menu !mtitle', array('!mtitle' => $menu['title'])), PASS_THROUGH);
+  drupal_set_title(t('List links for menu !mtitle', array('!mtitle' => $menu['title'])), PASS_THROUGH);
   // Set the breadcrumb.
   og_set_breadcrumb($group_type, $gid, array(l(t('Group'), "$group_type/$gid/group")));
   $b = drupal_get_breadcrumb();
@@ -210,7 +202,7 @@ function og_menu_overview_form($form, &$form_state, $group_type, $gid, $menu) {
   $form = menu_overview_form($form, $form_state, $menu);
 
   $form['#theme'] = 'menu_overview_form';
-  $form['#empty_text'] = t('There are no menu links yet.') . ' ' . l(t('Add link'), 'group/' . $group_type . '/' . $gid . '/admin/menus/' . $menu['menu_name'] . '/add');
+  $form['#empty_text'] = t('There are no menu links yet.');
 
   foreach (element_children($form) as $mlid) {
     if (strstr($mlid, 'mlid:')) {
@@ -231,12 +223,6 @@ function og_menu_overview_form($form, &$form_state, $group_type, $gid, $menu) {
       }
       $form[$mlid]['operations'] = $operations;
     }
-  }
-  if (module_exists('i18n_menu')) {
-    i18n_menu_form_menu_overview_form_alter($form, $form_state);
-  }
-  if (module_exists('menu_token')) {
-    menu_token_form_menu_overview_form_alter($form, $form_state);
   }
   return $form;
 }
@@ -273,7 +259,7 @@ function og_menu_delete_menu_confirm($form, &$form_state, $menu, $group_type, $g
  * Form callback; Build the menu link editing form.
  */
 function og_menu_edit_item_form($form, &$form_state, $type, $group_type, $gid, $menu, $item = array()) {
-  form_load_include($form_state, 'inc', 'menu', 'menu.admin');
+  module_load_include('inc', 'menu', 'menu.admin');
   $form = menu_edit_item($form, $form_state, $type, $item, $menu);
   // Set the breadcrumb now to override menu_edit_item() breadcrumb.
   og_set_breadcrumb($group_type, $gid, array(l(t('Group'), "$group_type/$gid/group")));
@@ -288,7 +274,7 @@ function og_menu_edit_item_form($form, &$form_state, $type, $group_type, $gid, $
   }
 
   // Set the title of the page.
-  drupal_set_title(t('Add item into menu !mtitle', array('!mtitle' => $menu['title'])), PASS_THROUGH);
+  drupal_set_title(t('Add link into menu !mtitle', array('!mtitle' => $menu['title'])), PASS_THROUGH);
 
 
   // Build the form.
@@ -328,23 +314,9 @@ function og_menu_edit_item_form($form, &$form_state, $type, $group_type, $gid, $
      mpac_form_menu_edit_item_alter($form, $form_state);
   }
 
-  // Integrate with i18n module if installed.
-  if (module_exists('i18n_menu')) {
-    i18n_menu_form_menu_edit_item_alter($form, $form_state);
-  }
-
-  // Integrate with menu_token if installed.
-  if (module_exists('menu_token')) {
-    menu_token_form_menu_edit_item_alter($form, $form_state);
-  }
-
-  // Integrate with Menu Target if installed.
-  if (module_exists('menu_target')) {
-    module_load_include('inc', 'menu_target', 'menu_target.admin');
-    // Check function_exists(), just in case the include didn't load.
-    if (function_exists('menu_target_edit_form_extra_elements')) {
-      menu_target_edit_form_extra_elements($form, FALSE);
-    }
+  // Integrate with Special Menu Items if installed.
+  if (module_exists('special_menu_items')) {
+    special_menu_items_form_menu_edit_item_alter($form, $form_state);
   }
 
   return $form;

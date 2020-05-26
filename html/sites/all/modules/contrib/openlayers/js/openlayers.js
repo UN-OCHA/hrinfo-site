@@ -20,9 +20,8 @@ document.namespaces;
 
 (function($) {
 
-// Initialize openlayers data objects if undefined.
-Drupal.settings.openlayers = Drupal.settings.openlayers || {};
-Drupal.settings.openlayers.maps = Drupal.settings.openlayers.maps || {};
+Drupal.settings.openlayers = {};
+Drupal.settings.openlayers.maps = {};
 
 /**
  * Minimal OpenLayers map bootstrap.
@@ -158,15 +157,8 @@ Drupal.openlayers = {
     }
 
     sorted.sort(function(a, b) {
-      if (a.isBaseLayer && b.isBaseLayer) {
-        return parseInt(a.weight) - parseInt(b.weight);
-      }
-      else if (a.isBaseLayer || b.isBaseLayer) {
-        return a.isBaseLayer ? -1 : 1;
-      }
-      else {
-        return parseInt(a.weight) - parseInt(b.weight);
-      }
+      var x = parseInt(a.weight, 10), y = parseInt(b.weight, 10);
+      return ((a.isBaseLayer && x < y) ? -1 : ((b.isBaseLayer || x > y) ? 1 : 0));
     });
 
     for (var i = 0; i < sorted.length; ++i) {

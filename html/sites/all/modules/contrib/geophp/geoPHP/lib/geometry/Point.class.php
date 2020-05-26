@@ -8,7 +8,7 @@ class Point extends Geometry
 {
   public $coords = array(2);
   protected $geom_type = 'Point';
-  protected $dimension = 2;
+  protected $dimention = 2;
 
   /**
    * Constructor
@@ -17,15 +17,7 @@ class Point extends Geometry
    * @param numeric $y The y coordinate (or latitude)
    * @param numeric $z The z coordinate (or altitude) - optional
    */
-  public function __construct($x = NULL, $y = NULL, $z = NULL) {
-
-    // Check if it's an empty point
-    if ($x === NULL && $y === NULL) {
-      $this->coords = array(NULL, NULL);
-      $this->dimension = 0;
-      return;
-    }
-
+  public function __construct($x, $y, $z = NULL) {
     // Basic validation on x and y
     if (!is_numeric($x) || !is_numeric($y)) {
       throw new Exception("Cannot construct Point. x and y should be numeric");
@@ -36,7 +28,7 @@ class Point extends Geometry
       if (!is_numeric($z)) {
        throw new Exception("Cannot construct Point. z should be numeric");
       }
-      $this->dimension = 3;
+      $this->dimention = 3;
     }
 
     // Convert to floatval in case they are passed in as a string or integer etc.
@@ -45,10 +37,10 @@ class Point extends Geometry
     $z = floatval($z);
 
     // Add poitional elements
-    if ($this->dimension == 2) {
+    if ($this->dimention == 2) {
       $this->coords = array($x, $y);
     }
-    if ($this->dimension == 3) {
+    if ($this->dimention == 3) {
       $this->coords = array($x, $y, $z);
     }
   }
@@ -77,7 +69,7 @@ class Point extends Geometry
    * @return float The Z coordinate or NULL is not a 3D point
    */
   public function z() {
-    if ($this->dimension == 3) {
+    if ($this->dimention == 3) {
       return $this->coords[2];
     }
     else return NULL;
@@ -127,12 +119,7 @@ class Point extends Geometry
   }
 
   public function isEmpty() {
-    if ($this->dimension == 0) {
-      return TRUE;
-    }
-    else {
-      return FALSE;
-    }
+    return FALSE;
   }
 
   public function numPoints() {
@@ -144,18 +131,7 @@ class Point extends Geometry
   }
 
   public function equals($geometry) {
-    if (get_class($geometry) != 'Point') {
-      return FALSE;
-    }
-    if (!$this->isEmpty() && !$geometry->isEmpty()) {
-      return ($this->x() == $geometry->x() && $this->y() == $geometry->y());
-    }
-    else if ($this->isEmpty() && $geometry->isEmpty()) {
-      return TRUE;
-    }
-    else {
-      return FALSE;
-    }
+    return ($this->x() == $geometry->x() && $this->y() == $geometry->y());
   }
 
   public function isSimple() {

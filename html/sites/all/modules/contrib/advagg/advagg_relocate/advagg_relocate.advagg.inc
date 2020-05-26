@@ -11,6 +11,60 @@
  */
 
 /**
+ * Implements hook_advagg_get_info_on_files_alter().
+ */
+function advagg_relocate_advagg_get_info_on_files_alter(&$return, $cached_data, $bypass_cache) {
+  $aggregate_settings = advagg_current_hooks_hash_array();
+  // Check external js setting.
+  if (empty($aggregate_settings['variables']['advagg_relocate_js'])) {
+    return;
+  }
+  foreach ($return as $key => &$info) {
+    // Skip if not a js file.
+    if (empty($info['fileext']) || $info['fileext'] !== 'js') {
+      continue;
+    }
+    // Get the file contents.
+    $file_contents = (string) @advagg_file_get_contents($info['data']);
+    if (empty($file_contents)) {
+      continue;
+    }
+    $value['data'] = $file_contents;
+    $scripts_found = advagg_relocate_js_script_rewrite_list($key, $value, $aggregate_settings);
+
+    if (!empty($scripts_found)) {
+      $info['advagg_relocate'] = $scripts_found;
+    }
+  }
+}
+
+/**
+ * Implements hook_advagg_get_js_file_contents_alter().
+ */
+function advagg_relocate_advagg_get_js_file_contents_alter(&$contents, $filename, $aggregate_settings) {
+  // Do nothing if this is disabled.
+  if (empty($aggregate_settings['variables']['advagg_relocate_js'])) {
+    return;
+  }
+
+  module_load_include('inc', 'advagg', 'advagg');
+  // Get info on file.
+  $info = advagg_get_info_on_file($filename);
+  if (!empty($info['advagg_relocate'])) {
+    // Set values so it thinks its an inline script.
+    $value['data'] = &$contents;
+    $key = $filename;
+    $scripts_found = advagg_relocate_js_script_rewrite_list($key, $value, $aggregate_settings);
+
+    // Do rewrite of the data.
+    if (!empty($scripts_found)) {
+      $js[$key] = &$value;
+      advagg_relocate_js_script_rewrite($js, $scripts_found);
+    }
+  }
+}
+
+/**
  * Implements hook_advagg_get_css_aggregate_contents_alter().
  */
 function advagg_relocate_advagg_get_css_aggregate_contents_alter(&$data, $files, $aggregate_settings) {
@@ -30,6 +84,16 @@ function advagg_relocate_advagg_get_css_aggregate_contents_alter(&$data, $files,
 
     // Replace external import statements with the contents of them.
     $data = preg_replace_callback('%@import\s*+(?:url\(\s*+)?+[\'"]?+((?:http:\/\/|https:\/\/|\/\/)(?:[^\'"()\s]++))[\'"]?+\s*+\)?+\s*+;%i', '_advagg_relocate_callback', $data);
+
+    // Per the W3C specification at
+    // http://www.w3.org/TR/REC-CSS2/cascade.html#at-import, @import rules
+    // must proceed any other style, so we move those to the top.
+    $matches = array();
+    $regexp = '/@import[^;]+;/i';
+    preg_match_all($regexp, $data, $matches);
+    $data = preg_replace($regexp, '', $data);
+    // Add import statements to the top of the stylesheet.
+    $data = implode("\n", $matches[0]) . $data;
   }
 }
 
@@ -210,18 +274,27 @@ function _advagg_relocate_callback(array $matches = array(), array $files = arra
   if (!isset($_args['aggregate_settings']['variables']['advagg_relocate_css_file_settings'])) {
     $_args['aggregate_settings']['variables']['advagg_relocate_css_file_settings'] = variable_get('advagg_relocate_css_file_settings', array());
   }
+
+  $key_to_check = str_replace(array('=', '&', ' '), array('_', '-', '-'), $matches[1]);
+
   foreach ($_args['files'] as $filename => $values) {
-    $form_api_filename = str_replace(array('/', '.'), array('__', '--'), $filename);
-    if (isset($_args['aggregate_settings']['variables']['advagg_relocate_css_file_settings'][$form_api_filename])
-      && is_array($_args['aggregate_settings']['variables']['advagg_relocate_css_file_settings'][$form_api_filename])
-    ) {
-      foreach ($_args['aggregate_settings']['variables']['advagg_relocate_css_file_settings'][$form_api_filename] as $key => $value) {
-        if ($key !== $value && $key === $matches[1]) {
-          // Do not replace.
-          return $matches[0];
-        }
-      }
+    $form_api_filename = str_replace(
+      array('/', '.', '=', '&', ' '),
+      array('__', '--', '_', '-', '+'),
+      $filename
+    );
+    // All has been checked; good to go.
+    if (!empty($_args['aggregate_settings']['variables']['advagg_relocate_css_file_settings']["all:{$form_api_filename}"])) {
+      continue;
     }
+
+    // This file is good to be inlined.
+    if (!empty($_args['aggregate_settings']['variables']['advagg_relocate_css_file_settings'][$form_api_filename][$key_to_check])) {
+      continue;
+    }
+
+    // No go, return unaltered.
+    return $matches[0];
   }
 
   $font_faces = advagg_relocate_get_remote_font_data($matches[1], $_args['aggregate_settings']);

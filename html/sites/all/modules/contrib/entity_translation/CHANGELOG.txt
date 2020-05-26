@@ -3,6 +3,26 @@ Entity Translation 7.x-1.x, xxxx-xx-xx
 --------------------------------------
 
 
+Entity Translation 7.x-1.1, 2019-11-24
+--------------------------------------
+#2877103 by stefanos.petrakis, Simon Georges, Delphine Lepers, Andras_Szilagyi,
+  drasgardian, Alexander Fedorenko, plach: Content can not be created in
+  another language as the one chosen by configuration
+#2580231 by danyg, stefanos.petrakis, MariskaTh: Undefined index in
+  entity_translation.views.inc
+#3085046 by stefanos.petrakis: Fix test breakage due to Title module
+  7.x-1.0-beta1 version
+#3010146 by stefanos.petrakis: Expose extended ET-specific configuration for
+  pathauto
+#3050434 by shital.mahajan, jweowu, stefanos.petrakis: Since PHP 7.0, functions
+  inspecting arguments, like func_get_args(), no longer report the original
+  value as passed to a parameter
+#3025770 by sudheeshps, patelmayank7552, stefanos.petrakis: PHP 7.0
+  Compatibility
+#2536292 by plopesc, stefanos.petrakis: "Warning: array_merge(): Argument #2 is
+  not an array in entity_translation_menu_alter" When 'page arguments' or
+  'access arguments' are not defined in the original item
+#2921298 by Stevel, stefanos.petrakis: Missing test dependencies
 
 
 Entity Translation 7.x-1.0, 2018-04-01

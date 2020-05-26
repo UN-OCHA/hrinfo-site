@@ -207,6 +207,16 @@ class EntityTranslationTestCase extends DrupalWebTestCase {
     // Check if the setting works.
     $this->drupalGet('node/add/page');
     $this->assertFieldById('edit-body-en-add-more', t('Add another item'), t('Add another item button found.'));
+
+    // Settings defaults for new page nodes.
+    variable_set('entity_translation_settings_node__page', array(
+      'default_language' => ENTITY_TRANSLATION_LANGUAGE_CURRENT,
+      'hide_language_selector' => 0,
+      'exclude_language_none' => 1,
+      'lock_language' => 1,
+      'shared_fields_original_only' => 0,
+      'locale_field_language_fallback' => 0,
+    ));
   }
 
   /**
@@ -281,13 +291,17 @@ class EntityTranslationTranslationTestCase extends EntityTranslationTestCase {
   }
 
   function setUp() {
-    parent::setUp('locale', 'entity_translation');
-    $this->login($this->getAdminUser());
+    parent::setUp('locale', 'entity_translation', 'entity_translation_test');
+    $perms = array(
+      'administer entity translation',
+    );
+    $this->login($this->getAdminUser($perms));
     $this->addLanguage('en');
     $this->addLanguage('es');
     $this->addLanguage('fr');
     $this->disableLanguage('fr');
     $this->configureContentType();
+    $this->enableUrlLanguageDetection();
     $this->login($this->getTranslatorUser());
   }
 
@@ -324,6 +338,31 @@ class EntityTranslationTranslationTestCase extends EntityTranslationTestCase {
     $node_translation_body = $this->randomName();
     $node_translation = $this->createTranslation($node, $node_translation_title, $node_translation_body, 'es');
   }
+
+  /**
+   * Tests the interplay of the locale language selector on a new Page node.
+   *
+   * Add a new Page node in a given language (using URL language detection).
+   * On the node page form, use the Locale language field to set the new node's
+   * language to a language different from the URL language.
+   * Make sure that the newly created node has translatable fields created in the
+   * Locale's set language (and not the one coming from the URL).
+   */
+  function testLocaleLanguageWidgetTranslation() {
+    variable_set('entity_translation_test_disable_form_cache', TRUE);
+    // Create Basic page in Spanish.
+    $this->drupalGet('es/node/add/page');
+    $node_title = $this->randomName();
+    $node_body = $this->randomName();
+    $edit["title"] = $node_title;
+    $edit["body[es][0][value]"] = $node_body;
+    // But switch the locale field to English.
+    $edit['language'] = 'en';
+    $this->drupalPost(NULL, $edit, t('Save'));
+    $node = $this->drupalGetNodeByTitle($node_title);
+    $this->assertTrue(in_array('en', array_keys($node->body)), 'Locale field language settings takes precedence.');
+  }
+
 }
 
 /**
@@ -752,6 +791,7 @@ class EntityTranslationIntegrationTestCase extends EntityTranslationTestCase {
     $this->login($this->getAdminUser());
     $this->addLanguage('en');
     $this->addLanguage('es');
+    $this->addLanguage('fr');
     $this->enableUrlLanguageDetection();
     $this->configureContentType();
     $this->login($this->getTranslatorUser());
@@ -770,80 +810,171 @@ class EntityTranslationIntegrationTestCase extends EntityTranslationTestCase {
   public function testPathautoIntegration() {
     $languages = language_list();
 
-    // Enable the path module to add aliases manually.
-    $this->login($this->getAdminUser());
-    if (!module_exists('path')) {
-      module_enable(array('path'));
-    }
-    $this->login($this->getTranslatorUser());
-
-    // Create Basic page in English.
-    $node_title = $this->randomName();
-    $node_body = $this->randomName();
-    $node = $this->createPage($node_title, $node_body, 'en');
-    $node_alias = $this->randomName();
-    $edit = array(
-      'path[alias]' => $node_alias,
-    );
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
-
-    // Submit translation in Spanish.
-    $node_translation_body = $this->randomName();
-    $this->createTranslation($node, $node_title, $node_translation_body, 'es');
-    $node_translation_alias = $this->randomName();
-    $edit = array(
-      'path[alias]' => $node_translation_alias,
-    );
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'), array('language' => $languages['es']));
-
-    // Enable the pathauto module.
+    // Enable and configure the pathauto module.
     $this->login($this->getAdminUser());
     if (!module_exists('pathauto')) {
       module_enable(array('pathauto'));
     }
+    // Configure pathauto patterns.
+    variable_set('pathauto_node_page_en_pattern', 'content/[node:title]/en_pattern');
+    variable_set('pathauto_node_page_fr_pattern', 'content/[node:title]/fr_pattern');
+    variable_set('pathauto_node_page_es_pattern', 'content/[node:title]/es_pattern');
+    // Disable pathauto lowercase conversion.
+    variable_set('pathauto_case', 0);
+    // Configure pathauto related permissions.
     $admin_rid = $this->getUserRole($this->getAdminUser());
     user_role_grant_permissions($admin_rid, array('administer url aliases', 'administer pathauto'));
     $translator_rid = $this->getUserRole($this->getTranslatorUser());
     user_role_grant_permissions($translator_rid, array('create url aliases'));
     $this->login($this->getTranslatorUser());
 
-    // Create pathauto alias for source node.
-    $edit = array(
-      'path[pathauto]' => TRUE,
-    );
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'));
+    // Configure auto-generation of all aliases for new translations.
+    variable_set('entity_translation_pathauto_state_active_new_translation', TRUE);
+    variable_set('entity_translation_pathauto_state_mode_update', 'generate_all_aliases_all_languages');
+
+    // Create Basic page in English and add a translation in Spanish.
+    $node_title = $this->randomName();
+    $node_body = $this->randomName();
+    $node = $this->createPage($node_title, $node_body, 'en');
+    $this->createTranslation($node, $node_title, $node_body, 'es');
+
     // Clear the static caches in case they interfere.
     drupal_lookup_path('wipe');
-    $node_pathauto_alias = pathauto_node_update_alias($node, 'return');
-    $node_translation_pathauto_alias = pathauto_node_update_alias($node, 'return', array('language' => 'es'));
-
-    // Check that the new alias for the translation matches the
-    // pathauto's logic.
-    $this->assertEqual($this->getUrl(), url(drupal_get_path_alias($node_pathauto_alias), array('absolute' => TRUE)));
 
     // Check that a pathauto alias was created for the source and
-    // matches the pathauto's logic.
-    $this->drupalGet('node/' . $node->nid, array('language' => $languages['es']));
-    $this->assertEqual($this->getUrl(), url(drupal_get_path_alias($node_translation_pathauto_alias), array('absolute' => TRUE, 'language' => $languages['es'])));
+    // matches the pathauto's pattern logic.
+    $source_alias = drupal_get_path_alias('node/' . $node->nid);
+    $this->assertEqual($source_alias, 'content/' . $node_title . '/en_pattern');
 
-    // Delete the two aliases.
+    // Check that a pathauto alias was created for the translation and
+    // matches the pathauto's pattern logic.
+    $translation_alias = drupal_get_path_alias('node/' . $node->nid, 'es');
+    $this->assertEqual($translation_alias, 'content/' . $node_title . '/es_pattern');
+
+    // Check that when adding a new translation, and the variable
+    // 'entity_translation_pathauto_state_active_new_translation' is not set,
+    // TRUE is used as its default value and the path[pathauto] checkbox is
+    // checked.
+    variable_del('entity_translation_pathauto_state_active_new_translation');
+    $this->drupalGet('node/' . $node->nid . '/edit/add/en/fr');
+    $this->assertFieldChecked('edit-path-pathauto');
+    // Check that when adding a new translation, and the variable
+    // 'entity_translation_pathauto_state_active_new_translation' is TRUE,
+    // the path[pathauto] checkbox is checked.
+    variable_set('entity_translation_pathauto_state_active_new_translation', TRUE);
+    $this->drupalGet('node/' . $node->nid . '/edit/add/en/fr');
+    $this->assertFieldChecked('edit-path-pathauto');
+    // Check that when adding a new translation, and the variable
+    // 'entity_translation_pathauto_state_active_new_translation' is FALSE,
+    // the path[pathauto] checkbox is unchecked.
+    variable_set('entity_translation_pathauto_state_active_new_translation', FALSE);
+    $this->drupalGet('node/' . $node->nid . '/edit/add/en/fr');
+    $this->assertNoFieldChecked('edit-path-pathauto');
+
+    // Check that when adding a new translation, and the variables
+    // 'entity_translation_pathauto_state_active_new_translation' is TRUE,
+    // and 'entity_translation_pathauto_state_mode_update' is set to
+    // 'generate_all_aliases_all_languages', aliases are added for all
+    // languages, overwriting existing ones.
+    variable_set('entity_translation_pathauto_state_active_new_translation', TRUE);
+    variable_set('entity_translation_pathauto_state_mode_update', 'generate_all_aliases_all_languages');
     path_delete(array('source' => 'node/' . $node->nid));
-
-    // Create pathauto alias for the translation of the node.
-    $this->drupalPost('node/' . $node->nid . '/edit', $edit, t('Save'), array('language' => $languages['es']));
+    $path_en = drupal_get_path_alias('node/' . $node->nid, 'en');
+    $path_fr = drupal_get_path_alias('node/' . $node->nid, 'fr');
+    $path_es = drupal_get_path_alias('node/' . $node->nid, 'es');
+    $this->createTranslation($node, $node_title, '', 'fr');
     // Clear the static caches in case they interfere.
     drupal_lookup_path('wipe');
-    $node_pathauto_alias = pathauto_node_update_alias($node, 'return');
-    $node_translation_pathauto_alias = pathauto_node_update_alias($node, 'return', array('language' => 'es'));
+    $path_en_new = drupal_get_path_alias('node/' . $node->nid, 'en');
+    $path_fr_new = drupal_get_path_alias('node/' . $node->nid, 'fr');
+    $path_es_new = drupal_get_path_alias('node/' . $node->nid, 'es');
+    $this->assertNotEqual($path_en, $path_en_new);
+    $this->assertNotEqual($path_fr, $path_fr_new);
+    $this->assertNotEqual($path_es, $path_es_new);
 
-    // Check that the new alias for the translation matches the
-    // pathauto's logic.
-    $this->assertEqual($this->getUrl(), url(drupal_get_path_alias($node_translation_pathauto_alias), array('absolute' => TRUE, 'language' => $languages['es'])));
+    // Check that when adding a new translation, and the variables
+    // 'entity_translation_pathauto_state_active_new_translation' is TRUE,
+    // and 'entity_translation_pathauto_state_mode_update' is set to
+    // 'generate_alias_active_language', an alias is generated only for
+    // the active language, maintaining the existing one(s).
+    variable_set('entity_translation_pathauto_state_active_new_translation', TRUE);
+    variable_set('entity_translation_pathauto_state_mode_update', 'generate_alias_active_language');
+    // Create another Basic page in English.
+    $node_title = $this->randomName();
+    $node_body = $this->randomName();
+    $node = $this->createPage($node_title, $node_body, 'en');
+    $this->createTranslation($node, $node_title, '', 'es');
+    $path_en = drupal_get_path_alias('node/' . $node->nid, 'en');
+    $path_es = drupal_get_path_alias('node/' . $node->nid, 'es');
+    $edit = array(
+      'title' => $this->randomName(),
+    );
+    $this->drupalPost('node/' . $node->nid . '/edit/add/en/fr', $edit, t('Save'));
+    // Clear the static caches in case they interfere.
+    drupal_lookup_path('wipe');
+    $path_en_new = drupal_get_path_alias('node/' . $node->nid, 'en');
+    $path_fr_new = drupal_get_path_alias('node/' . $node->nid, 'fr');
+    $path_es_new = drupal_get_path_alias('node/' . $node->nid, 'es');
+    $this->assertEqual($path_en, $path_en_new);
+    $this->assertNotEqual($path_fr_new, 'node/' . $node->nid);
+    $this->assertEqual($path_es, $path_es_new);
 
-    // Check that a pathauto alias was created for the source and
-    // matches the pathauto's logic.
-    $this->drupalGet('node/' . $node->nid);
-    $this->assertEqual($this->getUrl(), url(drupal_get_path_alias($node_pathauto_alias), array('absolute' => TRUE)));
+    // Check that when adding a new translation, and the variable
+    // 'entity_translation_pathauto_state_active_new_translation' is FALSE
+    // no alias is generated for the active language or otherwise,
+    // maintaining the existing one(s), irrespective of the value of the
+    // 'entity_translation_pathauto_state_mode_update' variable.
+    variable_set('entity_translation_pathauto_state_active_new_translation', FALSE);
+    variable_set('entity_translation_pathauto_state_mode_update', 'generate_all_aliases_all_languages');
+    // Create another Basic page in English.
+    $node_title = $this->randomName();
+    $node_body = $this->randomName();
+    $node = $this->createPage($node_title, $node_body, 'en');
+    $this->createTranslation($node, $node_title, '', 'es');
+    $path_en = drupal_get_path_alias('node/' . $node->nid, 'en');
+    $path_es = drupal_get_path_alias('node/' . $node->nid, 'es');
+    $edit = array(
+      'title' => $this->randomName(),
+    );
+    $this->drupalPost('node/' . $node->nid . '/edit/add/en/fr', $edit, t('Save'));
+    // Clear the static caches in case they interfere.
+    drupal_lookup_path('wipe');
+    $path_en_new = drupal_get_path_alias('node/' . $node->nid, 'en');
+    $path_fr_new = drupal_get_path_alias('node/' . $node->nid, 'fr');
+    $path_es_new = drupal_get_path_alias('node/' . $node->nid, 'es');
+    $this->assertEqual($path_en, $path_en_new);
+    $this->assertEqual($path_fr_new, 'node/' . $node->nid);
+    $this->assertEqual($path_es, $path_es_new);
+
+    // Check that when adding a new translation, and the variables
+    // 'entity_translation_pathauto_state_active_new_translation' is TRUE,
+    // and 'entity_translation_pathauto_state_mode_update' is set to
+    // 'generate_missing_aliases_all_languages', only missing aliases are
+    // generated for all languages, maintaining the existing one(s).
+    variable_set('entity_translation_pathauto_state_active_new_translation', TRUE);
+    variable_set('entity_translation_pathauto_state_mode_update', 'generate_missing_aliases_all_languages');
+    // Create another Basic page in English.
+    $node_title = $this->randomName();
+    $node_body = $this->randomName();
+    $node = $this->createPage($node_title, $node_body, 'en');
+    $this->createTranslation($node, $node_title, '', 'es');
+    path_delete(array('source' => 'node/' . $node->nid, 'language' => 'es'));
+    $path_en = drupal_get_path_alias('node/' . $node->nid, 'en');
+    $path_fr = drupal_get_path_alias('node/' . $node->nid, 'fr');
+    $path_es = drupal_get_path_alias('node/' . $node->nid, 'es');
+    $edit = array(
+      'title' => $this->randomName(),
+    );
+    $this->drupalPost('node/' . $node->nid . '/edit/add/en/fr', $edit, t('Save'));
+    // Clear the static caches in case they interfere.
+    drupal_lookup_path('wipe');
+    $path_en_new = drupal_get_path_alias('node/' . $node->nid, 'en');
+    $path_fr_new = drupal_get_path_alias('node/' . $node->nid, 'fr');
+    $path_es_new = drupal_get_path_alias('node/' . $node->nid, 'es');
+    $this->assertEqual($path_en, $path_en_new);
+    $this->assertNotEqual($path_fr_new, 'node/' . $node->nid);
+    $this->assertNotEqual($path_es, $path_es_new);
+
   }
 
 }
@@ -1072,6 +1203,7 @@ class EntityTranslationTaxonomyAutocompleteTestCase extends EntityTranslationTes
       'name' => 'Entity translation taxonomy autocomplete',
       'description' => 'Tests for the taxonomy autocomplete translation modes.',
       'group' => 'Entity translation',
+      'dependencies' => array('title'),
     );
   }
 

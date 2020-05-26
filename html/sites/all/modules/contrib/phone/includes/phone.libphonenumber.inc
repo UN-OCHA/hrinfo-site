@@ -67,11 +67,6 @@ function _phone_libphonenumber($number, $countrycode, $extension, $allow_alpha =
  *   a formatted error message otherwise.
  */
 function phone_libphonenumber_valid($number, $countrycode, $extension, $all_countries = TRUE, $allowed_countries = array()) {
-  $supported_global_networks = phone_libphonenumber_get_supported_global_networks();
-  if (isset($supported_global_networks['calling_code'][$countrycode])) {
-    $number = '+'.$supported_global_networks['calling_code'][$countrycode].$number;
-    $countrycode = '001';
-  }
   try {
     // Get the parsed phone objects.
     // Allow alpha characters, in case $number contains an extension that we need to parse.
@@ -184,11 +179,6 @@ function phone_libphonenumber_valid($number, $countrycode, $extension, $all_coun
  *   Return the formatted number, or FALSE on error.
  */
 function phone_libphonenumber_format($number, $countrycode, $extension, $format, $allow_alpha = FALSE, $extension_prefix = '') {
-  $supported_global_networks = phone_libphonenumber_get_supported_global_networks();
-  if (isset($supported_global_networks['calling_code'][$countrycode])) {
-    $number = '+'.$supported_global_networks['calling_code'][$countrycode].$number;
-    $countrycode = '001';
-  }
   try {
     // Get the parsed phone objects.
     list($phoneutil, $phonenumber) = _phone_libphonenumber($number, $countrycode, $extension, $allow_alpha);
@@ -339,42 +329,9 @@ function phone_libphonenumber_get_supported_country_lists() {
     $combined[$region_code] = $country_name . ' (+' . $calling_code . ')';
   }
 
-  $globalnets = phone_libphonenumber_get_supported_global_networks();
-
-  $countries = array_merge($countries, $globalnets['country']);
-  $calling_codes = array_merge($calling_codes, $globalnets['calling_code']);
-  $combined = array_merge($combined, $globalnets['combined']);
-
   return array(
     'country' => $countries,
     'calling_code' => $calling_codes,
     'combined' => $combined,
   );
 }
-
-/**
- * Function to get a list of supported global networks (for satellite phones)
- *
- * @return array
- *   An array with the keys 'country', 'calling_code', and 'combined',
- *   with each one being indexed by the country code, and containg
- *   either the country name, the calling code, or a combination of both.
- */
-function phone_libphonenumber_get_supported_global_networks() {
-  $phoneutil = libphonenumber\PhoneNumberUtil::getInstance();
-
-  $supported = $phoneutil->getSupportedGlobalNetworkCallingCodes();
-  foreach ($supported as $i => $calling_code) {
-    $region_code = "0".(string)$i;
-    $countries[$region_code] = "Global Network";
-    $calling_codes[$region_code] = $calling_code;
-    $combined[$region_code] = "Global Network" . ' (+' . $calling_code . ')';
-  }
-
-  return array(
-    'country' => $countries,
-    'calling_code' => $calling_codes,
-    'combined' => $combined,
-  );
-}
-
