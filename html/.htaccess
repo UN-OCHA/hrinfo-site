@@ -61,12 +61,6 @@ DirectoryIndex index.php index.html index.htm
 <IfModule mod_rewrite.c>
   RewriteEngine on
 
-  # Rewrite JavaScript callback URLs of the form js.php?q=x.
-  RewriteCond %{REQUEST_URI} ^\/([a-z]{2}\/)?js\/.*
-  RewriteRule ^(.*)$ js.php?q=$1 [L,QSA]
-  RewriteCond %{QUERY_STRING} (^|&)q=((\/)?[a-z]{2})?(\/)?js\/.*
-  RewriteRule .* js.php [L]
-
   # Set "protossl" to "s" if we were accessed via https://.  This is used later
   # if you enable "www." stripping or enforcement, in order to ensure that
   # you don't bounce between http and https.
