@@ -223,6 +223,6 @@ function ocha_assessments_map($location_id = NULL) {
       max-zoom="16"
       style="
         height: 500px;
-        margin-bottom: 200px;
+        margin-bottom: 250px;
       "></ocha-assessments-map>';
 }

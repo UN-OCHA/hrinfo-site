@@ -3661,6 +3661,7 @@ class OchaAssessmentsBase extends LitElement {
       local_groups: 'Local group',
       clusters_sectors: 'Cluster/sector',
       countries: 'Country',
+      disasters_emergencies: 'Disasters/Emergencies',
       disasters: 'Disaster',
       locations: 'Location',
       organizations: 'Organization',
