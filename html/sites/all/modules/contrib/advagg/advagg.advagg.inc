@@ -275,7 +275,8 @@ function advagg_advagg_get_info_on_files_alter(&$return, $cached_data, $bypass_c
 
     // Get the css path.
     list($css_path) = advagg_get_root_files_dir();
-    $parts_path = $css_path[1] . '/parts/';
+    $css_parts_path = (advagg_s3fs_evaluate_no_rewrite_cssjs(FALSE)) ? $css_path[0] : $css_path[1];
+    $parts_path = $css_parts_path . '/parts/';
 
     foreach ($return as &$info) {
       // Skip if not a css file.

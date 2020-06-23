@@ -21,7 +21,7 @@ foreach ($files as $file) {
 }
 
 /**
- * Resets static variables related to adding CSS to a page.
+ * Resets static variables related to adding CSS or JS to a page.
  */
 function advagg_test_reset_statics() {
   drupal_static_reset('drupal_add_css');
@@ -29,6 +29,7 @@ function advagg_test_reset_statics() {
   drupal_static_reset('drupal_get_library');
   drupal_static_reset('drupal_add_js');
   drupal_static_reset('drupal_add_js:jquery_added');
+  drupal_static_reset('advagg_get_js');
 }
 
 /**

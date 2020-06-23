@@ -31,7 +31,7 @@
     <<?php print $header_element; ?> <?php print $header_attributes; ?>>
       <<?php print $title_element; ?> <?php print $title_attributes; ?>>
         <?php if ($collapsible): ?>
-          <a href="#" data-toggle="collapse" data-target="#collapse-<?php print $id; ?>" data-parent="#accordion-<?php print $pane->did; ?>">
+          <a href="#collapse-<?php print $id; ?>" data-toggle="collapse" data-target="#collapse-<?php print $id; ?>" data-parent="#accordion-<?php print $pane->did; ?>">
             <?php print $title; ?>
           </a>
         <?php else: ?>

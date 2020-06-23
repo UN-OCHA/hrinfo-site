@@ -6,6 +6,18 @@
  */
 
 /**
+ * Implements hook_form_alter().
+ */
+function entity_translation_test_form_alter(&$form, &$form_state) {
+  if ($info = entity_translation_edit_form_info($form, $form_state)) {
+    $handler = entity_translation_get_handler($info['entity type'], $info['entity']);
+    if (entity_translation_enabled($info['entity type'], $info['entity'])) {
+      $form_state['no_cache'] = $handler->isNewEntity() && variable_get('entity_translation_test_disable_form_cache', FALSE);
+    }
+  }
+}
+
+/**
  * Implements hook_entity_translation_insert().
  */
 function entity_translation_test_entity_translation_insert($entity_type, $entity, $translation, $values = array()) {

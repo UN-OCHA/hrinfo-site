@@ -86,7 +86,11 @@ function title_test_phase_check($phase, $entity) {
   $info = entity_get_info('test_entity');
   $label_key = $info['entity keys']['label'];
   $field_name = $label_key . '_field';
-  $value = $entity->{$label_key} == $entity->{$field_name}[LANGUAGE_NONE][0]['value'];
+  $langcode = LANGUAGE_NONE;
+  if (isset($entity->type)) {
+    $langcode = entity_language($entity->type, $entity);
+  }
+  $value = $entity->{$label_key} == $entity->{$field_name}[$langcode][0]['value'];
   title_test_phase_store($phase, $value);
   return $value;
 }

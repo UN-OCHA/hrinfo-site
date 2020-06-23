@@ -1225,10 +1225,11 @@ function advagg_admin_info_form($form, $form_state) {
     ),
   );
   module_load_include('install', 'advagg', 'advagg');
+  $first_file_path = (advagg_s3fs_evaluate_no_rewrite_cssjs(FALSE)) ? $js_path[0] : $js_path[1];
   $form['get_info_about_agg']['tip'] = array(
     '#markup' => '<p>' . t('Takes input like "@css_file" or a full aggregate name like "@advagg_js"', array(
       '@css_file' => $css_file,
-      '@advagg_js' => advagg_install_get_first_advagg_file($js_path[1], 'js'),
+      '@advagg_js' => advagg_install_get_first_advagg_file($first_file_path, 'js'),
     )) . '</p>',
   );
   $form['get_info_about_agg']['wrapper'] = array(

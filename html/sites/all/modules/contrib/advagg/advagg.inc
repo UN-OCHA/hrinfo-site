@@ -1382,9 +1382,10 @@ function advagg_create_subfile($css, $overall_split, array $file_info) {
   $part_uri = $parts_uri . '/' . $new_filename;
   $dirname = drupal_dirname($part_uri);
   file_prepare_directory($dirname, FILE_CREATE_DIRECTORY);
+  $filename_path = (advagg_s3fs_evaluate_no_rewrite_cssjs(FALSE)) ? $parts_uri : $parts_path;
 
   // Get info on the file that was just created.
-  $part = advagg_get_info_on_file($parts_path . '/' . $new_filename, TRUE) + $file_info;
+  $part = advagg_get_info_on_file($filename_path . '/' . $new_filename, TRUE) + $file_info;
   $part['split'] = TRUE;
   $part['split_location'] = $overall_split;
   $part['split_original'] = $file_info['data'];
@@ -1393,7 +1394,7 @@ function advagg_create_subfile($css, $overall_split, array $file_info) {
   $hash = drupal_hash_base64($css);
   if ($part['content_hash'] !== $hash) {
     advagg_save_data($part_uri, $css, TRUE);
-    $part = advagg_get_info_on_file($parts_path . '/' . $new_filename, TRUE) + $file_info;
+    $part = advagg_get_info_on_file($filename_path . '/' . $new_filename, TRUE) + $file_info;
     $part['split'] = TRUE;
     $part['split_location'] = $overall_split;
     $part['split_original'] = $file_info['data'];
@@ -1645,7 +1646,7 @@ function advagg_load_css_stylesheet($file, $optimize = TRUE, array $aggregate_se
 
   // Handle split css files.
   list($css_path) = advagg_get_root_files_dir();
-  $parts_path = $css_path[1] . '/parts/';
+  $parts_path = ((advagg_s3fs_evaluate_no_rewrite_cssjs(FALSE)) ? $css_path[0] : $css_path[1]) . '/parts/';
   $url_parts = strpos($css_base_url, $parts_path);
   // If this CSS file is actually a part of a previously split larger CSS file,
   // don't use it to construct relative paths within the CSS file for

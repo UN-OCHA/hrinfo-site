@@ -85,6 +85,9 @@ function js_callback_bootstrap(array &$info) {
     }
   }
 
+  // Load a MODULE.js.inc file, if it exists.
+  module_load_include('inc', $info['module'], $info['module'] . '.js');
+
   // If the callback function is located in another file, load that file.
   $path = !empty($info['path']) ? $info['path'] : drupal_get_path('module', $info['module']);
   if (isset($info['file']) && ($filepath = $path . '/' . $info['file']) && file_exists($filepath)) {
@@ -105,12 +108,10 @@ function js_callback_bootstrap(array &$info) {
       $info['access callback'] = 'user_access';
     }
 
-    // If language is enabled and site is multilingual, bootstrap at least to
-    // DRUPAL_BOOTSTRAP_LANGUAGE and ensure the required modules are enabled.
-    if (isset($info['lang'])) {
-      $_js['lang'] = $info['lang'];
-    }
-    if ($_js['lang']) {
+    // If language is enabled or a language prefix was detected and site is
+    // multilingual, bootstrap at least to DRUPAL_BOOTSTRAP_LANGUAGE and ensure
+    // the required modules are enabled.
+    if (!empty($info['lang']) || $_js['lang']) {
       if (!in_array('user', $info['dependencies'])) {
         $info['dependencies'][] = 'user';
       }

@@ -18,8 +18,10 @@ function path_alias_xt_requirements($phase) {
   if (!$has_runkit) {
     $requirements['path_alias_xt']['severity'] = REQUIREMENT_INFO;
     $requirements['path_alias_xt']['description'] = $t('Reminder: the PECL runkit is not installed. If, in addition to the already enabled basic functions, you want this module\'s advanced features to be operational, please edit file %path-inc, if you have not done so already. See the <a href="!README">README</a> file for details.',
-      array('%path-inc' => 'include/path.inc',
-            '!README' => url(drupal_get_path('module', 'path_alias_xt') . '/README.txt')));
+      array(
+        '%path-inc' => 'include/path.inc',
+        '!README' => url(drupal_get_path('module', 'path_alias_xt') . '/README.txt', array('alias' => TRUE)),
+      ));
   }
   return $requirements;
 }
