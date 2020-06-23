@@ -674,6 +674,7 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
    * @see EntityTranslationHandlerInterface::setTranslation()
    */
   public function setTranslation($translation, $values = NULL) {
+    $args = func_get_args();
     if (isset($translation['source']) && $translation['language'] == $translation['source']) {
       throw new Exception('Invalid translation language');
     }
@@ -710,7 +711,6 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
       }
     }
 
-    $args = func_get_args();
     $this->notifyChildren(__FUNCTION__, $args);
   }
 
@@ -873,8 +873,8 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
    * {@inheritdoc}
    */
   public function setFormLanguage($langcode) {
-    $this->activeLanguage = $langcode;
     $args = func_get_args();
+    $this->activeLanguage = $langcode;
     $this->notifyChildren(__FUNCTION__, $args);
   }
 
@@ -942,6 +942,7 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
    * @see EntityTranslationHandlerInterface::setOriginalLanguage()
    */
   public function setOriginalLanguage($langcode) {
+    $args = func_get_args();
     $translations = $this->getTranslations();
 
     if (!isset($translations->original) || $translations->original != $langcode) {
@@ -952,7 +953,6 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
       }
 
       $translations->original = $langcode;
-      $args = func_get_args();
       $this->notifyChildren(__FUNCTION__, $args);
     }
   }
@@ -1044,6 +1044,7 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
    * @see EntityTranslationHandlerInterface::setOutdated()
    */
   public function setOutdated($outdated) {
+    $args = func_get_args();
     if ($outdated) {
       $translations = $this->getTranslations();
       foreach ($translations->data as $langcode => &$translation) {
@@ -1051,7 +1052,6 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
           $translation['translate'] = 1;
         }
       }
-      $args = func_get_args();
       $this->notifyChildren(__FUNCTION__, $args);
     }
   }
@@ -1207,8 +1207,8 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
    * @see EntityTranslationHandlerInterface::setSourceLanguage()
    */
   public function setSourceLanguage($langcode) {
-    $this->sourceLanguage = $langcode;
     $args = func_get_args();
+    $this->sourceLanguage = $langcode;
     $this->notifyChildren(__FUNCTION__, $args);
   }
 
@@ -1518,6 +1518,15 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
    * @see EntityTranslationHandlerInterface::entityFormValidate()
    */
   public function entityFormValidate($form, &$form_state) {
+    // The locale module is creating the node object anew based on the form's
+    // submitted values, thus losing the relation with the currently assigned
+    // translation handler. By adding the 'entity_translation_handler_id' property to
+    // the $form_state['values'] array, we can persist that relation and utilize
+    // a correctly instantiated translation handler for the new node entity.
+    if (empty($form_state['values']['entity_translation_handler_id']) && field_has_translation_handler($this->getEntityType(), 'locale')) {
+      $form_state['values']['entity_translation_handler_id'] = $form_state[$this->getEntityType()]->entity_translation_handler_id;
+    }
+
     if (!empty($form_state['values']['translation'])) {
       $values = $form_state['values']['translation'];
       // Validate the "authored by" field.
@@ -1761,7 +1770,7 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
       if ($segment == $this->pathWildcard) {
         $path_segments[$index] = $this->getEntityId();
       }
-      elseif ($segment{0} == '%' && isset($this->routerMap[$index])) {
+      elseif ($segment[0] == '%' && isset($this->routerMap[$index])) {
         $path_segments[$index] = $this->routerMap[$index];
       }
     }

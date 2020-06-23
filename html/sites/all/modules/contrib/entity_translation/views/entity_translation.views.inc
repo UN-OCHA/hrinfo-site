@@ -233,7 +233,7 @@ function entity_translation_views_data_alter(&$data) {
       // Set defaults and just change the handler, title, group, and help.
       $defaults = field_views_field_default_views_data($field);
       foreach ($defaults as $table_name => $table_data) {
-        if (isset($data[$table_name][$field['field_name']])) {
+        if (isset($data[$table_name][$field['field_name']]) && isset($table_data[$field['field_name']])) {
           $field_title = $table_data[$field['field_name']]['title'];
           $table_data[$field['field_name']]['title'] = t('!title: translated', array('!title' => $field_title));
           $table_data[$field['field_name']]['group'] = t('Entity translation');

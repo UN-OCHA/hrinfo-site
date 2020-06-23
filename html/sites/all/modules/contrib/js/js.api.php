@@ -158,6 +158,20 @@ function hook_js_info() {
 }
 
 /**
+ * Alters registered JS callbacks.
+ *
+ * @param array $callbacks
+ *   An associative array, passed by reference, where the keys are modules that
+ *   implement callbacks and the value is an associative array where they keys
+ *   are callback machine names and the value is the callback info array.
+ *
+ * @see hook_js_info()
+ */
+function hook_js_info_alter(array &$callbacks) {
+  $callbacks['some_module']['callback_name']['access callback'] = 'my_module_js_callback_access';
+}
+
+/**
  * Allows modules to alter delivery content with captured (printed) output.
  *
  * In some rare instances, some code uses "printable" functions (print,
@@ -221,6 +235,21 @@ function hook_js_server_info() {
   $servers['apache']['rewrite'][] = "RewriteRule .* js.php [L]";
 
   return $servers;
+}
+
+/**
+ * Alters registered JS server information.
+ *
+ * @param array $servers
+ *   An associative array, passed by reference, where the keys are server
+ *   machine names and the value is the server info array.
+ *
+ * @see hook_js_server_info()
+ */
+function hook_js_server_info_alter(array &$servers) {
+  // Use a file to provide rewrite example.
+  $path = drupal_get_path('module', 'my_module') . '/js-rewrites.conf';
+  $callbacks['apache']['rewrite'] = file_get_contents($path);
 }
 
 /**

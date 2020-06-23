@@ -25,6 +25,24 @@ function title_install() {
 }
 
 /**
+ * Implements hook_disable().
+ */
+function title_disable() {
+  foreach (field_read_fields() as $field) {
+    if ($field['type'] !== 'taxonomy_term_reference') {
+      continue;
+    }
+
+    if ($field['settings']['options_list_callback'] !== 'title_taxonomy_allowed_values') {
+      continue;
+    }
+
+    $field['settings']['options_list_callback'] = '';
+    field_update_field($field);
+  }
+}
+
+/**
  * Implements hook_update_N.
  *
  * Make sure Title has a very high weight to be able to perform reverse

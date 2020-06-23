@@ -17,6 +17,22 @@ function fullcalendar_api_example_menu() {
     'file' => 'fullcalendar_api_example.pages.inc',
     'type' => MENU_CALLBACK,
   );
+  $items['fullcalendar/datasource'] = array(
+    'title' => 'FullCalendar Datasource',
+    'description' => 'FullCalendar datasource implementation.',
+    'page callback' => 'fullcalendar_api_example_datasource_page',
+    'access callback' => TRUE,
+    'file' => 'fullcalendar_api_example.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+  $items['fullcalendar/json-data'] = array(
+    'title' => 'JSON Data',
+    'description' => 'Example JSON datasource feed',
+    'page callback' => 'full_calendar_api_example_data_provider',
+    'access callback' => TRUE,
+    'delivery callback' => 'ajax_deliver',
+    'file' => 'fullcalendar_api_example.ajax.inc',
+  );
   $items['fullcalendar/entity'] = array(
     'title' => 'FullCalendar Entities',
     'description' => 'FullCalendar entity implementation.',

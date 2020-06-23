@@ -20,6 +20,13 @@ class JsProxyCache implements DrupalCacheInterface {
   protected static $conf;
 
   /**
+   * The excluded cache classes configuration.
+   *
+   * @var string[]
+   */
+  protected static $excludedConf;
+
+  /**
    * Flag indicating whether a full bootstrap may be performed.
    *
    * @var bool
@@ -45,6 +52,17 @@ class JsProxyCache implements DrupalCacheInterface {
   }
 
   /**
+   * Sets the cache bin configuration.
+   *
+   * @param string[] $conf
+   *   An associative array of cache backend class names keyed by their cache
+   *   bin name.
+   */
+  public static function setExcludedConf(array $conf) {
+    static::$excludedConf = array_combine($conf, $conf);
+  }
+
+  /**
    * Sets the flag indicating whether a full bootstrap can be performed.
    *
    * @param bool $allowed
@@ -62,7 +80,8 @@ class JsProxyCache implements DrupalCacheInterface {
    */
   public function __construct($bin) {
     if (isset(static::$conf[static::DEFAULT_BIN_KEY])) {
-      $class = isset(static::$conf[$bin]) ? static::$conf[$bin] : static::$conf[static::DEFAULT_BIN_KEY];
+      $bin_key = 'cache_class_' . $bin;
+      $class = isset(static::$conf[$bin_key]) ? static::$conf[$bin_key] : static::$conf[static::DEFAULT_BIN_KEY];
       $this->backend = new $class($bin);
     }
     else {
@@ -118,7 +137,10 @@ class JsProxyCache implements DrupalCacheInterface {
    * Fully bootstraps Drupal.
    */
   protected function doFullBootstrap() {
-    if (static::$fullBootstrapAllowed) {
+    // If a full bootstrap is allowed and the backend class is not configured as
+    // excluded, as it intentionally does not return any cache hits, run a full
+    // bootstrap.
+    if (static::$fullBootstrapAllowed && !isset(static::$excludedConf[get_class($this->backend)])) {
       static::setFullBootstrapAllowed(FALSE);
       if (drupal_get_bootstrap_phase() < DRUPAL_BOOTSTRAP_FULL) {
         js_bootstrap(DRUPAL_BOOTSTRAP_FULL);

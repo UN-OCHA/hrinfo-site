@@ -53,6 +53,8 @@ function advagg_js_compress_requirements($phase) {
     }
   }
 
+  $requirements += advagg_js_compress_check_cache_bin();
+
   return $requirements;
 }
 

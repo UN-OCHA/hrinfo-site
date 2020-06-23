@@ -4,12 +4,12 @@ core = 7.x
 package = Testing
 hidden = TRUE
 dependencies[] = title
+dependencies[] = taxonomy
 dependencies[] = entity
 dependencies[] = entity_translation
 
-; Information added by Drupal.org packaging script on 2017-01-13
-version = "7.x-1.0-alpha9"
+; Information added by Drupal.org packaging script on 2019-10-18
+version = "7.x-1.0-beta3"
 core = "7.x"
 project = "title"
-datestamp = "1484302985"
-
+datestamp = "1571406489"

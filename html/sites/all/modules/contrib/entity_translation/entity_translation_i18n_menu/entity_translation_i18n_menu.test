@@ -126,22 +126,35 @@ class EntityTranslationMenuTranslationTestCase extends EntityTranslationTestCase
   }
 
   /**
+   * Asserts a link with a given label and title is found in the page.
+   */
+  function assertLinkWithTitleAttribute($label, $title) {
+    $links = $this->xpath('//a[normalize-space(text())=:label and normalize-space(@title)=:title]', array(
+      ':label' => $label,
+      ':title' => $title,
+    ));
+    $this->assert(isset($links[0]));
+  }
+
+  /**
    * Test if menu localization works.
    */
   function testMenuLocalization() {
     // Create Basic page in English.
     $link_title_en = $this->randomName();
-    $node = $this->createPage($link_title_en, NULL, 'en');
+    $link_description_en = $this->randomName() . ' & htmlentity';
+    $node = $this->createPage($link_title_en, $link_description_en, 'en');
 
     // Submit translation in Spanish.
     $link_title_es = $this->randomName();
-    $node_translation = $this->createTranslation($node, $link_title_es, NULL, 'es');
+    $link_description_es = $this->randomName() . ' & htmlentity';
+    $node_translation = $this->createTranslation($node, $link_title_es, $link_description_es, 'es');
 
     // Check menu links in both languages.
     $this->get('en', '<front>');
-    $this->assertText($link_title_en);
+    $this->assertLinkWithTitleAttribute($link_title_en, $link_description_en);
     $this->get('es', '<front>');
-    $this->assertText($link_title_es);
+    $this->assertLinkWithTitleAttribute($link_title_es, $link_description_es);
 
     // Edit English menu link.
     $link_title_en2 = $this->randomName();
@@ -149,15 +162,19 @@ class EntityTranslationMenuTranslationTestCase extends EntityTranslationTestCase
 
     // Check that Spanish menu link has not changed.
     $this->get('es', '<front>');
-    $this->assertText($link_title_es);
+    $this->assertLinkWithTitleAttribute($link_title_es, $link_description_es);
 
     // Edit Spanish menu link.
     $link_title_es2 = $this->randomName();
     $this->editPage($node, $link_title_es, $link_title_es2, 'es');
 
-    // Check that English menu link has not changed.
+    // Check that English menu link has changed.
     $this->get('en', '<front>');
-    $this->assertText($link_title_en2);
+    $this->assertLinkWithTitleAttribute($link_title_en2, $link_description_en);
+
+    // Check that Spanish menu link has changed.
+    $this->get('es', '<front>');
+    $this->assertLinkWithTitleAttribute($link_title_es2, $link_description_es);
 
     // Delete Spanish translation and check that the respective menu item has
     // been deleted as well.
