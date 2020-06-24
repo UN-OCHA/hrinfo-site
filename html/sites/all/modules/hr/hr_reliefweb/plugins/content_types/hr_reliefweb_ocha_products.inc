@@ -295,10 +295,10 @@ function _hr_reliefweb_get_list_item($value, $label, $prefix, $initial_state = '
   }
   $img_link = '<div id="' . $prefix . '-thumbnail" class="hr-thumbnail ' . $initial_state . '">' . $img_link . $more_link . '</div>';
   $date_string = '';
-  if (!empty($node->field_publication_date)) {
-    $date = new DateObject($node->field_publication_date[LANGUAGE_NONE][0]['value'], $node->field_publication_date[LANGUAGE_NONE][0]['timezone_db']);
+  if (!empty($value->field_publication_date)) {
+    $date = new DateObject($value->field_publication_date[LANGUAGE_NONE][0]['value'], $value->field_publication_date[LANGUAGE_NONE][0]['timezone_db']);
     $date_string = ' - ' . date_format_date($date, 'custom', 'd M Y');
-    $out['date'] = $node->field_publication_date[LANGUAGE_NONE][0]['value'];
+    $out['date'] = $date_string;
   }
   $active_link = '';
   if ($initial_state == 'show') {

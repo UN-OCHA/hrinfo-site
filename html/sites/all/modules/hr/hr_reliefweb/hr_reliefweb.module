@@ -18,7 +18,7 @@ function hr_reliefweb_ctools_plugin_directory($module, $plugin) {
 }
 
 /**
- * Implementation of hook_ctools_plugin_api().
+ * Implements hook_ctools_plugin_api().
  */
 function hr_reliefweb_ctools_plugin_api($module, $api) {
   if ($module == 'context' && ($api == 'plugins' || $api == 'context')) {
@@ -27,7 +27,7 @@ function hr_reliefweb_ctools_plugin_api($module, $api) {
 }
 
 /**
- * Implements hook_og_features_registry()
+ * Implements hook_og_features_registry().
  */
 function hr_reliefweb_og_features_registry() {
   $registry = array();
@@ -58,7 +58,7 @@ function hr_reliefweb_og_features_registry() {
 }
 
 /**
- * Implements hook_menu()
+ * Implements hook_menu().
  */
 function hr_reliefweb_menu() {
   $items = array();
@@ -137,7 +137,7 @@ function hr_reliefweb_autocomplete($string) {
     $data = hr_reliefweb_fetch_documents('', 20, 0, array(), $query, TRUE);
 
     if (!empty($data['data'])) {
-      foreach ($data['data'] as $key => $value) {
+      foreach ($data['data'] as $value) {
         $matches[$value['title'] . ' (' . $value['id'] . ')'] = $value['title'];
       }
     }
@@ -162,7 +162,7 @@ function hr_reliefweb_autocomplete_hno($string) {
     $data = hr_reliefweb_fetch_documents('', 20, 0, array(), $query, TRUE, FALSE);
 
     if (!empty($data['data'])) {
-      foreach ($data['data'] as $key => $value) {
+      foreach ($data['data'] as $value) {
         $matches[$value['title'] . ' (' . $value['id'] . ')'] = $value['title'];
       }
     }
@@ -253,6 +253,9 @@ function hr_reliefweb_get_document_by_id($id) {
  * Get the latest document.
  */
 function hr_reliefweb_get_latest_document_by_key($key, $country) {
+  if (empty($country)) {
+    return FALSE;
+  }
   $filters = array();
   $ocha_reports = hr_reliefweb_get_ocha_reports();
 
@@ -571,10 +574,6 @@ function hr_reliefweb_fetch_disasters($country, $limit = 999, $offset = 0, $filt
     );
   }
 
-  if (!empty($query)) {
-    $params['query']['value'] = $query;
-  }
-
   if (!empty($filters)) {
     $params['filter']['conditions'] = array_merge($params['filter']['conditions'], $filters);
   }
@@ -582,13 +581,10 @@ function hr_reliefweb_fetch_disasters($country, $limit = 999, $offset = 0, $filt
   $url = $endpoint . '?' . drupal_http_build_query($params);
 
   $data_array = array();
-  $total_count = 0;
-  $facets = array();
 
   $request = drupal_http_request($url);
   if (isset($request->data)) {
     $response = drupal_json_decode($request->data);
-    $total_count = $response['totalCount'];
 
     $data = $response['data'];
     foreach ($data as $value) {
@@ -723,8 +719,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
   $filters = array();
 
   $global_cluster = 0;
-  if (isset($node->field_sector['und'][0]['target_id'])) {
-    $global_cluster = $node->field_sector['und'][0]['target_id'];
+  if (isset($node->field_sector[LANGUAGE_NONE][0]['target_id'])) {
+    $global_cluster = $node->field_sector[LANGUAGE_NONE][0]['target_id'];
   }
 
   switch ($global_cluster) {
@@ -904,7 +900,9 @@ function hr_reliefweb_get_country_from_operation($wrapper) {
   if (isset($wrapper->field_country) && isset($wrapper->field_country->field_pcode)) {
     $iso2 = $wrapper->field_country->field_pcode->value();
     $country_codes = hdx_datasets_get_country_codes();
-    return drupal_strtolower($country_codes[$iso2]);
+    if (isset($country_codes[$iso2])) {
+      return drupal_strtolower($country_codes[$iso2]);
+    }
   }
 
   return '';
