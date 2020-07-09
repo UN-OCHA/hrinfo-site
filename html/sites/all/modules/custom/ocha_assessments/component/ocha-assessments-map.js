@@ -19252,8 +19252,8 @@ class OchaAssessmentsMap extends OchaAssessmentsBase {
         #map {
           width: 100%;
           height: 100%;
-          @apply (--leaflet-map-component);
-          z-index: inherit;
+          z-index: 0;
+          @apply (--leaflet-map-component)
         }
       </style>
 
