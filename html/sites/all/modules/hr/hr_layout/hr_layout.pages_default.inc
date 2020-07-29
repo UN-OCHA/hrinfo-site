@@ -495,38 +495,6 @@ function hr_layout_default_page_manager_pages() {
   $pane->uuid = '63730577-59cd-461b-812d-2c90c4ecdffe';
   $display->content['new-63730577-59cd-461b-812d-2c90c4ecdffe'] = $pane;
   $display->panels['column3'][0] = 'new-63730577-59cd-461b-812d-2c90c4ecdffe';
-  $pane = new stdClass();
-  $pane->pid = 'new-3ab8fd47-ca97-428c-a7e7-17c9e49de2fb';
-  $pane->panel = 'column3';
-  $pane->type = 'custom';
-  $pane->subtype = 'custom';
-  $pane->shown = TRUE;
-  $pane->access = array();
-  $pane->configuration = array(
-    'admin_title' => '',
-    'title' => 'Partner: Humanitarian ID',
-    'body' => '<p><iframe allowfullscreen="" src="https://www.youtube.com/embed/60dKwkaq_Sw" height="200" width="100%" frameborder="0"></iframe></p>',
-    'format' => 'hr_wysiwyg',
-    'substitute' => TRUE,
-    'title_heading' => 'h2',
-  );
-  $pane->cache = array(
-    'method' => 'simple',
-    'settings' => array(
-      'lifetime' => '604800',
-      'granularity' => 'none',
-    ),
-  );
-  $pane->style = array(
-    'settings' => NULL,
-  );
-  $pane->css = array();
-  $pane->extras = array();
-  $pane->position = 1;
-  $pane->locks = array();
-  $pane->uuid = '3ab8fd47-ca97-428c-a7e7-17c9e49de2fb';
-  $display->content['new-3ab8fd47-ca97-428c-a7e7-17c9e49de2fb'] = $pane;
-  $display->panels['column3'][1] = 'new-3ab8fd47-ca97-428c-a7e7-17c9e49de2fb';
   $display->hide_title = PANELS_TITLE_NONE;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;
