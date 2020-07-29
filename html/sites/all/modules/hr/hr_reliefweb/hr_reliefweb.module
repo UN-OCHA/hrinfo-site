@@ -327,7 +327,7 @@ function hr_reliefweb_block_view($delta = '') {
         <div class="views-exposed-widgets clearfix">
           <div id="edit-search-wrapper" class="views-exposed-widget form-group">
           <div class="input-group">
-            <input class="form-control form-text" id="search" name="text" value="" size="30" maxlength="128" type="text" placeholder="' . t('Search RW Documents') . '">
+            <input class="form-control form-text" id="search" name="text" value="" size="30" type="text" placeholder="' . t('Search RW Documents') . '">
             <span class="input-group-btn">
               <button id="search-button" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
             </span>
@@ -349,7 +349,6 @@ function hr_reliefweb_get_filters($key = NULL) {
     'theme.name' => t('Theme'),
     'format.name' => t('Format'),
     'disaster_type' => t('Disaster type'),
-    'vulnerable_groups.name' => t('Vulnerable group'),
     'language.name' => t('Language'),
     'date.original' => t('Original publication date'),
     'date.changed' => t('Posting date'),
@@ -714,6 +713,8 @@ function hr_reliefweb_get_list_of_filters() {
 
 /**
  * Map HR Info cluster to ReliefWeb filters.
+ *
+ * TODO: This is called from hr_reliefweb_document_list(), but is it used?
  */
 function _hr_reliefweb_map_cluster_to_rw_filters($node) {
   $filters = array();
@@ -724,6 +725,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
   }
 
   switch ($global_cluster) {
+    // TODO: there's inconsistency in the naming/ numbering, and there is no
+    // 'global bundle' for 'Agriculture'.
     case 'Agriculture':
       $filters[] = array(
         'field' => 'theme.name',
@@ -827,19 +830,8 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
 
     // Protection.
     case 10:
-      $filters[] = array(
-        'field' => 'source.name',
-        'value' => 'Protection Cluster',
-        'operator' => 'OR',
-      );
-      $filters[] = array(
-        'field' => 'theme.name',
-        'value' => 'Protection and Human Rights',
-        'operator' => 'OR',
-      );
-      break;
-
-    // Gender Based Violence.
+      // These had a filter on 'vulnerable groups', which no longer exists.
+      // Gender Based Violence.
     case 5404:
       // Child Protection.
     case 5403:
@@ -851,11 +843,6 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
       $filters[] = array(
         'field' => 'theme.name',
         'value' => 'Protection and Human Rights',
-        'operator' => 'OR',
-      );
-      $filters[] = array(
-        'field' => 'vulnerable_groups.name',
-        'value' => 'Children; Women',
         'operator' => 'OR',
       );
       break;
