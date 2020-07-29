@@ -31,6 +31,7 @@ function hr_layout_rss_feeds_edit_form($form, &$form_state) {
     '#title' => 'Feed URL',
     '#description' => t('Enter the Feed URL for which you want to display content'),
     '#default_value' => $conf['feed_url'],
+    '#maxlength' => 2048,
   );
   $form['no_of_items'] = array(
     '#type' => 'select',
