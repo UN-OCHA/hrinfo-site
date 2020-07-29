@@ -218,6 +218,13 @@ function advagg_critical_css_admin_settings_form() {
     );
   }
 
+  $form['advagg_critical_css_selector_blacklist'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Selector Blacklist'),
+    '#description' => t('Selectors to exclude. Enter one per line. Useful for things like google ads.'),
+    '#default_value' => variable_get('advagg_critical_css_selector_blacklist', ''),
+  );
+
   // Clear the cache bins on submit.
   $form['#submit'][] = 'advagg_critical_css_admin_settings_form_submit';
 
@@ -279,6 +286,16 @@ function advagg_critical_css_admin_settings_form_submit($form, &$form_state) {
   // Exclude unnecessary elements.
   form_state_values_clean($form_state);
 
+  // Save advagg_critical_css_selector_blacklist.
+  if (!isset($form_state['values']['advagg_critical_css_selector_blacklist'])) {
+    $form_state['values']['advagg_critical_css_selector_blacklist'] = '';
+  }
+  $advagg_critical_css_selector_blacklist = variable_get('advagg_critical_css_selector_blacklist', '');
+  if ($form_state['values']['advagg_critical_css_selector_blacklist'] !== $advagg_critical_css_selector_blacklist) {
+    variable_set('advagg_critical_css_selector_blacklist', $form_state['values']['advagg_critical_css_selector_blacklist']);
+  }
+  unset($form_state['values']['advagg_critical_css_selector_blacklist']);
+
   // Rearrange form values into key value pairs.
   $items = advagg_critical_css_get_rows_from_form($form_state['values']);
   // Get default values.
@@ -287,7 +304,7 @@ function advagg_critical_css_admin_settings_form_submit($form, &$form_state) {
   $default_items = advagg_critical_css_get_rows_from_form($default_values);
 
   // Get diff, see what items need to be saved.
-  $diff = advagg_critical_css_diff_multi($default_items, $items);
+  $diff = advagg_diff_multi($default_items, $items);
   $changed_items = array();
   foreach ($diff as $key => $values) {
     $changed_items[$key] = $items[$key];
@@ -361,40 +378,4 @@ function advagg_critical_css_get_db_operations_arrays(array $items, array $old_i
     }
   }
   return array($insert_update, $delete);
-}
-
-/**
- * Given a list of items see what ones need to be inserted/updated or deleted.
- *
- * @param array $defaults
- *   Array of default values, representing a row in the db.
- * @param mixed $new_values
- *   Array of edited values, representing a row in the db.
- *
- * @return array
- *   Nested array strucutre; only the diff.
- */
-function advagg_critical_css_diff_multi(array $defaults, $new_values) {
-  $result = array();
-
-  foreach ($defaults as $key => $val) {
-    if (is_array($val) && isset($new_values[$key])) {
-      $tmp = advagg_critical_css_diff_multi($val, $new_values[$key]);
-      if ($tmp) {
-        $result[$key] = $tmp;
-      }
-    }
-    elseif (!isset($new_values[$key])) {
-      $result[$key] = NULL;
-    }
-    elseif ($val != $new_values[$key]) {
-      $result[$key] = $new_values[$key];
-    }
-    if (isset($new_values[$key])) {
-      unset($new_values[$key]);
-    }
-  }
-
-  $result = $result + $new_values;
-  return $result;
 }

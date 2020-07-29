@@ -31,28 +31,28 @@ class CurrentSearchItemActive extends CurrentSearchItem {
 
     // Gets the translated pattern with token replacements in tact.
     $pattern = $this->translate('pattern', $this->settings['pattern']);
-
     // Adds the keywords if any were passed.
     $keys = $adapter->getSearchKeys();
     $keys_link = isset($this->settings['keys_link']) ? $this->settings['keys_link'] : FALSE;
     if ($this->settings['keys'] && !$keys_link && $keys) {
-      $items[] = theme('current_search_keys', array('keys' => $keys, 'adapter' => $adapter));
+      $items[] = theme('current_search_keys', array(
+        'keys' => $keys,
+        'adapter' => $adapter
+      ));
     }
     elseif ($this->settings['keys'] && $keys_link && $keys) {
       $active_items = $adapter->getAllActiveItems();
       if (count($active_items) > 0) {
-        if (isset($active_items[0])) {
-          $item = $active_items[0];
-          $item['adapter'] = $adapter;
-          $path = $adapter->getUrlProcessor()->getFacetPath($item, $this->getItemValues($item, $adapter), 0);
-          $params = $adapter->getUrlProcessor()->getQueryString($item, $this->getItemValues($item, $adapter), 0);
+        $item = reset($active_items);
+        $item['adapter'] = $adapter;
+        if (!isset($item['name'])) {
+          $item['name'] = $item['field alias'];
         }
-        else {
-          $path = $adapter->getSearchPath();
-          $item = array();
-          $item['adapter'] = $adapter;
-          $params = $adapter->getUrlProcessor()->getQueryString(array(), array(), 0);
-        }
+        $item['adapter'] = $adapter;
+        $path = $adapter->getUrlProcessor()
+          ->getFacetPath($item, $this->getItemValues($item, $adapter), 0);
+        $params = $adapter->getUrlProcessor()
+          ->getQueryString($item, $this->getItemValues($item, $adapter), 0);
       }
       else {
         $path = $adapter->getSearchPath();
@@ -74,7 +74,10 @@ class CurrentSearchItemActive extends CurrentSearchItem {
       }
 
       $variables = array(
-        'text' => theme('current_search_keys', array('keys' => $keys, 'adapter' => $adapter)),
+        'text' => theme('current_search_keys', array(
+          'keys' => $keys,
+          'adapter' => $adapter
+        )),
         'path' => $path,
         'options' => array(
           'attributes' => $attributes,
@@ -83,7 +86,7 @@ class CurrentSearchItemActive extends CurrentSearchItem {
         ),
       );
 
-      $items[] = theme('facetapi_link_active', $variables);
+      $items[] = theme('current_search_link_active', $variables);
     }
 
     // Adds active facets to the current search block.
@@ -104,14 +107,16 @@ class CurrentSearchItemActive extends CurrentSearchItem {
       );
 
       // Renders the active link.
-      $items[] = theme('facetapi_link_active', $variables);
+      $row['data'] = theme('current_search_link_active', $variables);
+      $row['class'][] = 'active';
+      $items[] = $row;
     }
 
     // If there are items, return the render array.
     if ($items) {
       $classes = ($this->settings['css']) ? current_search_get_classes($this->settings['classes']) : array();
       return array(
-        '#theme' => 'item_list',
+        '#theme' => 'item_list__facetapi__current_search_item_active',
         '#items' => $items,
         '#attributes' => array('class' => $classes),
       );

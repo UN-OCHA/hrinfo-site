@@ -833,37 +833,34 @@ function advagg_menu() {
   $config_path = advagg_admin_config_root_path();
 
   $path_defined = FALSE;
-  if (module_exists('s3fs') && is_callable('_s3fs_get_config')) {
-    $s3fs_config = _s3fs_get_config();
-    if (empty($s3fs_config['no_rewrite_cssjs'])) {
-      $external_css = trim(parse_url(str_replace('/test.css', '/%', file_create_url($css_path[0] . '/test.css')), PHP_URL_PATH));
-      if (strpos($external_css, $GLOBALS['base_path']) === 0) {
-        $external_css = substr($external_css, strlen($GLOBALS['base_path']));
-      }
-      $external_js = trim(parse_url(str_replace('/test.js', '/%', file_create_url($js_path[0] . '/test.js')), PHP_URL_PATH));
-      if (strpos($external_js, $GLOBALS['base_path']) === 0) {
-        $external_js = substr($external_js, strlen($GLOBALS['base_path']));
-      }
-      $items[$external_css] = array(
-        'title' => "Generate CSS Aggregate",
-        'page callback' => 'advagg_missing_aggregate',
-        'type' => MENU_CALLBACK,
-        // Allow anyone to access these public css files.
-        'access callback' => TRUE,
-        'file path' => $file_path,
-        'file' => 'advagg.missing.inc',
-      );
-      $items[$external_js] = array(
-        'title' => "Generate CSS Aggregate",
-        'page callback' => 'advagg_missing_aggregate',
-        'type' => MENU_CALLBACK,
-        // Allow anyone to access these public css files.
-        'access callback' => TRUE,
-        'file path' => $file_path,
-        'file' => 'advagg.missing.inc',
-      );
-      $path_defined = TRUE;
+  if (advagg_s3fs_evaluate_no_rewrite_cssjs(FALSE)) {
+    $external_css = trim(parse_url(str_replace('/test.css', '/%', file_create_url($css_path[0] . '/test.css')), PHP_URL_PATH));
+    if (strpos($external_css, $GLOBALS['base_path']) === 0) {
+      $external_css = substr($external_css, strlen($GLOBALS['base_path']));
     }
+    $external_js = trim(parse_url(str_replace('/test.js', '/%', file_create_url($js_path[0] . '/test.js')), PHP_URL_PATH));
+    if (strpos($external_js, $GLOBALS['base_path']) === 0) {
+      $external_js = substr($external_js, strlen($GLOBALS['base_path']));
+    }
+    $items[$external_css] = array(
+      'title' => "Generate CSS Aggregate",
+      'page callback' => 'advagg_missing_aggregate',
+      'type' => MENU_CALLBACK,
+      // Allow anyone to access these public css files.
+      'access callback' => TRUE,
+      'file path' => $file_path,
+      'file' => 'advagg.missing.inc',
+    );
+    $items[$external_js] = array(
+      'title' => "Generate JS Aggregate",
+      'page callback' => 'advagg_missing_aggregate',
+      'type' => MENU_CALLBACK,
+      // Allow anyone to access these public js files.
+      'access callback' => TRUE,
+      'file path' => $file_path,
+      'file' => 'advagg.missing.inc',
+    );
+    $path_defined = TRUE;
   }
 
   if (!$path_defined) {
@@ -885,6 +882,23 @@ function advagg_menu() {
       'file path' => $file_path,
       'file' => 'advagg.missing.inc',
     );
+  }
+
+  // If mutiple paths are symlinked to the same location; allow advagg to handle
+  // those addtional locations.
+  $advagg_additional_generate_paths = variable_get('advagg_additional_generate_paths', array());
+  if (!empty($advagg_additional_generate_paths)) {
+    foreach ($advagg_additional_generate_paths as $path) {
+      $items[$path] = array(
+        'title' => "Generate CSS/JS Aggregate",
+        'page callback' => 'advagg_missing_aggregate',
+        'type' => MENU_CALLBACK,
+        // Allow anyone to access these public css files.
+        'access callback' => TRUE,
+        'file path' => $file_path,
+        'file' => 'advagg.missing.inc',
+      );
+    }
   }
 
   $items[$config_path . '/default'] = array(
@@ -1354,6 +1368,52 @@ function advagg_s3fs_upload_params_alter(&$upload_params) {
       // Set br.
       $upload_params['ContentEncoding'] = 'br';
     }
+  }
+}
+
+/**
+ * Return s3fs configuration settings and values.
+ *
+ * @param string $key
+ *   A specific key available in the s3fs configuration. NULL by default.
+ *
+ * @return array | string | null
+ *   The full s3fs configuration settings, value of a specific key,
+ *   or NULL if s3fs and the function do not exist.
+ */
+function advagg_get_s3fs_config($key = NULL) {
+  if (module_exists('s3fs') && is_callable('_s3fs_get_config')) {
+    $s3fs_config = _s3fs_get_config();
+    return (empty($key)) ? $s3fs_config : $s3fs_config[$key];
+  }
+  else {
+    return NULL;
+  }
+}
+
+/**
+ * Shortcut to evaluate if s3fs no_rewrite_cssjs is set or empty.
+ *
+ * If this needs to be accessed in a loop, it is more efficient to call
+ * advagg_get_s3fs_config() once from outside of the loop. An example
+ * can be seen in the advagg_install_check_via_http function.
+ *
+ * @param bool $is_set
+ *   Check if no_write_cssjs field is set (TRUE) or empty (FALSE).
+ *
+ * @return bool
+ *   TRUE or FALSE is returned based on evaluating the field. If
+ *   s3fs_config returns a NULL, evaluate the function to FALSE.
+ *
+ * @see advagg_get_s3fs_config()
+ */
+function advagg_s3fs_evaluate_no_rewrite_cssjs($is_set = TRUE) {
+  $s3fs_no_rewrite_cssjs = advagg_get_s3fs_config('no_rewrite_cssjs');
+  if (!is_null($s3fs_no_rewrite_cssjs)) {
+    return ($is_set) ? !empty($s3fs_no_rewrite_cssjs) : empty($s3fs_no_rewrite_cssjs);
+  }
+  else {
+    return FALSE;
   }
 }
 
@@ -2544,6 +2604,15 @@ function advagg_add_dns_prefetch($url) {
       return FALSE;
     }
   }
+
+  // Filter out wrong schemes.
+  if (!empty($parse['scheme'])
+    && $parse['scheme'] !== 'http'
+    && $parse['scheme'] !== 'https'
+  ) {
+    return FALSE;
+  }
+
   // Filter out local host.
   $host = @parse_url($GLOBALS['base_root'], PHP_URL_HOST);
   if ($parse['host'] === $host) {
@@ -2815,6 +2884,9 @@ function advagg_get_full_js(array $javascript = array(), $skip_alter = FALSE) {
  * @see drupal_js_defaults()
  */
 function advagg_get_js($scope = 'header', array $javascript = array(), $ajax = FALSE) {
+  // Keep track of js added for ajaxPageState.
+  $page_state = &drupal_static(__FUNCTION__, array());
+
   // Add in javascript if none was passed in.
   if (empty($javascript) && !$ajax) {
     $javascript = advagg_get_full_js();
@@ -2874,7 +2946,7 @@ function advagg_get_js($scope = 'header', array $javascript = array(), $ajax = F
 
   // Provide the page with information about the individual JavaScript files
   // used, information not otherwise available when aggregation is enabled.
-  $setting['ajaxPageState']['js'] = array_fill_keys(array_keys($items), 1);
+  $page_state = array_merge($page_state, array_fill_keys(array_keys($items), 1));
 
   // If we're outputting the header scope, then this should be the final time
   // that drupal_get_js() is running, so add the setting to this output as well
@@ -2884,40 +2956,11 @@ function advagg_get_js($scope = 'header', array $javascript = array(), $ajax = F
   // output, so in this case, do not add the setting to this output.
   // Also output the settings if we have pushed all javascript to the footer.
   if (isset($items['settings'])) {
-    // Get settings from the static.
-    $javascript_static = &drupal_static('drupal_add_js', array());
-
-    // Merge in last js ajaxPageState into the current data.
-    $reverse_settings = array_reverse($javascript_static['settings']['data']);
-    foreach ($reverse_settings as $key => $values) {
-      if (is_scalar($values) || empty($values)) {
-        // Skip if not an array or object.
-        continue;
-      }
-      $values = (array) $values;
-      if (!array_key_exists('ajaxPageState', $values)) {
-        // Skip if $values['ajaxPageState'] does not exist.
-        continue;
-      }
-      if (is_scalar($values['ajaxPageState']) || empty($values['ajaxPageState'])) {
-        // Skip if not an array or object.
-        continue;
-      }
-      $values['ajaxPageState'] = (array) $values['ajaxPageState'];
-      if (array_key_exists('js', $values['ajaxPageState'])) {
-        // $values['ajaxPageState']['js'] exists.
-        $javascript['settings']['data'][] = $reverse_settings[$key];
-        break;
-      }
-    }
-    $items['settings']['data'] = $javascript['settings']['data'];
-
-    // Add in this round of settings.
-    $items['settings']['data'][] = $setting;
-  }
-  else {
-    // Add the js ajaxPageState to the drupal.settings.
-    drupal_add_js($setting, 'setting');
+    $items['settings']['data'][] = array(
+      'ajaxPageState' => array(
+        'js' => $page_state,
+      ),
+    );
   }
 
   // Do not include jQuery.extend(Drupal.settings) if the output is ajax.
@@ -6041,6 +6084,67 @@ function advagg_insert_into_array_at_location(array $input_array, array $new_val
 }
 
 /**
+ * Insert element into an array at a specific key location.
+ *
+ * @param array $input_array
+ *   The original array.
+ * @param array $insert
+ *   The element that is getting inserted; array(key => value).
+ * @param string $target_key
+ *   The key name.
+ * @param int $location
+ *   After is 1 , 0 is replace, -1 is before.
+ *
+ * @return array
+ *   The new array with the element merged in.
+ */
+function advagg_insert_into_array_at_key(array $input_array, array $insert, $target_key, $location = 1) {
+  $output = array();
+  $new_value = reset($insert);
+  $new_key = key($insert);
+  foreach ($input_array as $key => $value) {
+    if ($key === $target_key) {
+      // Insert before.
+      if ($location == -1) {
+        $output[$new_key] = $new_value;
+        $output[$key] = $value;
+      }
+      // Replace.
+      if ($location == 0) {
+        $output[$new_key] = $new_value;
+      }
+      // After.
+      if ($location == 1) {
+        $output[$key] = $value;
+        $output[$new_key] = $new_value;
+      }
+    }
+    else {
+      // Pick next key if there is an number collision.
+      if (is_numeric($key)) {
+        while (isset($output[$key])) {
+          $key++;
+        }
+      }
+      $output[$key] = $value;
+    }
+  }
+  // Add to array if not found.
+  if (!isset($output[$new_key])) {
+    // Before everything.
+    if ($location == -1) {
+      $output = $insert + $output;
+    }
+    // After everything.
+    if ($location == 1) {
+      $output[$new_key] = $new_value;
+    }
+
+  }
+  return $output;
+}
+
+/**
  * Given a URL output a filename.
  *
  * @param string $url
@@ -6285,11 +6389,14 @@ function advagg_generate_advagg_filename_from_db($type) {
 
 /**
  * Display a message if there are requirement issues with AdvAgg.
+ *
+ * @param array $requirements
+ *   Other requirements to list besides the standard ones.
  */
-function advagg_display_message_if_requirements_not_met() {
+function advagg_display_message_if_requirements_not_met(array $requirements = array()) {
   include_once DRUPAL_ROOT . '/includes/install.inc';
   module_load_include('install', 'advagg');
-  $requirements = advagg_install_fast_checks();
+  $requirements += advagg_install_fast_checks();
   if (!empty($requirements)) {
     module_load_include('admin.inc', 'system');
     usort($requirements, '_system_sort_requirements');
@@ -6643,9 +6750,14 @@ function advagg_find_all_changed_admin_values(array &$element) {
         && !empty($child['#name'])
         && isset($child['#default_value'])
         && isset($child['#value'])
-        && $child['#default_value'] != $child['#value']
       ) {
-        $results[$child['#name']] = array($child['#value'], $child['#default_value']);
+        if ($child['#type'] === 'checkboxes') {
+          // Add in not selected by default values.
+          $child['#value'] += array_diff_assoc($child['#default_value'], $child['#value']);
+        }
+        if ($child['#default_value'] != $child['#value']) {
+          $results[$child['#name']] = array($child['#value'], $child['#default_value']);
+        }
       }
       $results = array_merge($results, advagg_find_all_changed_admin_values($child));
     }
@@ -6726,9 +6838,12 @@ function advagg_set_admin_form_defaults_recommended(array &$form_state, $trigger
 
       // Default to FALSE.
       $default = FALSE;
+      // Get easy defaults.
       if (defined(strtoupper($key))) {
         $default = constant(strtoupper($key));
       }
+
+      // Get more complex default values.
       if ($key === 'advagg_resource_hints_preload_settings') {
         $default = advagg_get_resource_hints_preload_settings(TRUE);
         foreach ($default as $key => &$values) {
@@ -6751,7 +6866,10 @@ function advagg_set_admin_form_defaults_recommended(array &$form_state, $trigger
           'svg' => 0,
         );
       }
+
+      // See if it changed.
       if ($default != $value) {
+        // After, Before.
         $changed[$key] = array($default, $value);
         $value = $default;
       }
@@ -6767,6 +6885,7 @@ function advagg_set_admin_form_defaults_recommended(array &$form_state, $trigger
 
   $all_titles_descriptions = advagg_find_title($form_state['complete form']);
   foreach ($changed as $key => $values) {
+
     // Remove things that didn't really change.
     if (isset($values[1])) {
       if ($values[0] == $values[1]) {
@@ -6817,4 +6936,40 @@ function advagg_set_admin_form_defaults_recommended(array &$form_state, $trigger
   }
 
   return $changed;
+}
+
+/**
+ * Given a list of items see what ones need to be inserted/updated or deleted.
+ *
+ * @param array $defaults
+ *   Array of default values, representing a row in the db.
+ * @param mixed $new_values
+ *   Array of edited values, representing a row in the db.
+ *
+ * @return array
+ *   Nested array strucutre; only the diff.
+ */
+function advagg_diff_multi(array $defaults, $new_values) {
+  $result = array();
+
+  foreach ($defaults as $key => $val) {
+    if (is_array($val) && isset($new_values[$key])) {
+      $tmp = advagg_diff_multi($val, $new_values[$key]);
+      if ($tmp) {
+        $result[$key] = $tmp;
+      }
+    }
+    elseif (!isset($new_values[$key])) {
+      $result[$key] = NULL;
+    }
+    elseif ($val != $new_values[$key]) {
+      $result[$key] = $new_values[$key];
+    }
+    if (isset($new_values[$key])) {
+      unset($new_values[$key]);
+    }
+  }
+
+  $result = $result + $new_values;
+  return $result;
 }

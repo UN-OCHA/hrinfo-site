@@ -56,7 +56,7 @@ function title_field_replacement_form($form, $form_state, $entity_type, $bundle,
 }
 
 /**
- * Process field replacement form subissions.
+ * Process field replacement form submissions.
  */
 function title_field_replacement_form_submit($form, &$form_state) {
   if ($form_state['values']['enabled'] != $form['enabled']['#default_value']) {
@@ -72,11 +72,32 @@ function title_field_replacement_form_submit($form, &$form_state) {
 }
 
 /**
- * Form settings for automated title_field attachement.
+ * Form settings for automated title_field attachment.
  */
 function title_admin_settings_form() {
   $form['tabs'] = array(
     '#type' => 'vertical_tabs',
+  );
+
+  $form['settings']['title_general'] = array(
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#tree' => TRUE,
+    '#group' => 'tabs',
+    '#title' => t('General'),
+  );
+
+  $general = variable_get('title_general', array('maxlength' => 255));
+  $form['settings']['title_general']['maxlength'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Default maximum field length'),
+    '#description' => t('The default maximum length for the title field. ' .
+        'This setting will have no effect once a title field for a specific entity type ' .
+        'has been created, because the maximum field length is a global field setting and the ' .
+        'databases tables will already have been created with a specific length.'),
+    '#element_validate' => array('element_validate_integer_positive'),
+    '#default_value' => $general['maxlength'],
   );
 
   foreach (entity_get_info() as $entity_type => $info) {
@@ -90,7 +111,7 @@ function title_admin_settings_form() {
       '#collapsed' => TRUE,
       '#tree' => TRUE,
       '#group' => 'tabs',
-      '#title' => $info['label'],
+      '#title' => check_plain($info['label']),
     );
 
     $options = array();

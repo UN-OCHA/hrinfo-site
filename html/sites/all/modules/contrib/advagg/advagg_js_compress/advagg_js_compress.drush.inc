@@ -15,7 +15,7 @@
  */
 function advagg_js_compress_drush_help($command) {
   switch ($command) {
-    case 'drush:advagg-jsmin':
+    case 'drush:advagg-js-compress':
       return dt('Run js minification for all js files.');
 
   }
@@ -28,17 +28,21 @@ function advagg_js_compress_drush_command() {
   $items = array();
   $items['advagg-js-compress'] = array(
     'callback' => 'drush_advagg_js_compress',
-    'description' => dt('Run the advagg cron hook.'),
+    'description' => dt('Run js minification.'),
     'core' => array('7+'),
     'arguments' => array(
       'filename' => 'all will do all files, or specify the filename to target that file.',
     ),
     'examples' => array(
-      'drush advagg-jsmin' => dt('Minify only the files that need to be done.'),
-      'drush advagg-jsmin all' => dt('Minify all js files again.'),
-      'drush advagg-jsmin misc/jquery.once.js' => dt('Minify the misc/jquery.once.js file.'),
+      'drush advagg-js-compress' => dt('Minify only the files that need to be done.'),
+      'drush advagg-js-compress all' => dt('Minify all js files again.'),
+      'drush advagg-js-compress misc/jquery.once.js' => dt('Minify the misc/jquery.once.js file.'),
     ),
-    'aliases' => array('advagg-jsmin'),
+    'aliases' => array(
+      'advagg-jsc',
+      'advagg-jsmin',
+      '',
+    ),
   );
 
   return $items;
@@ -49,7 +53,7 @@ function advagg_js_compress_drush_command() {
  */
 
 /**
- * Callback function for drush advagg-jsmin.
+ * Callback function for drush advagg-js-compress.
  *
  * Callback is called by using drush_hook_command() where
  * hook is the name of the module (advagg) and command is the name of

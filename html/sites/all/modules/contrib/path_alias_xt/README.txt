@@ -126,9 +126,9 @@ HOW TO OBTAIN THE PECL RUNKIT EXTENSION LIBRARY
 There are some copies of runkit.so and php_runkit.dll lying about on the
 internet, but most of them are old (i.e. version 0.9) and will NOT work with
 PHP 5.2.x or later. You're likely to get a white screen of death.
-Check this issue for a PECL runkit library for your OS: http://drupal.org/node/760758
-If there isn't one suitable for your system, you may have to compile the PECL
-runkit (version 1.0) yourself, see below.
+Check this issue for a PECL runkit library for your OS: 
+http://drupal.org/node/760758 . If there isn't one suitable for your system, you
+may have to compile the PECL runkit (version 1.0) yourself, see below.
 
 Mac/Unix/Linux
 --------------
@@ -137,7 +137,8 @@ Developer (free at http://developer.apple.com/programs/register), then download
 and install the Xcode developer package comptabile with your OS. In addition, if
 you use a MAMP stack, you may also want to point it to the Xcode header files:
 
-$ ln -s /Developer/SDKs/MacOSX10.5.sdk/usr/include  /Applications/MAMP/bin/php5/include
+$ ln -s /Developer/SDKs/MacOSX10.5.sdk/usr/include
+/Applications/MAMP/bin/php5/include
 
 If not on a Mac make sure that the following commands exist on your system:
 svn, php, phpize.
@@ -155,7 +156,9 @@ $ ./configure
 $ make
 
 For the final step, on MAMP:
-$ cp modules/runkit.so /Applications/MAMP/bin/php5/lib/php/extensions/no-debug-non-zts-20060613 (or similar number)
+$ cp modules/runkit.so 
+/Applications/MAMP/bin/php5/lib/php/extensions/no-debug-non-zts-20060613
+(or similar number)
 
 Whereas on most other flavours of Unix/Linux you'd go:
 $ sudo make install
@@ -168,4 +171,4 @@ should match this by default. You can verify the active "extension_dir" on the
 Windows
 -------
 To compile a PECL extension on Windows see for instance: 
-http://blog.renangoncalves.com/2010/01/15/how-to-compile-a-pecl-extension-on-windows
+https://www.barneyparker.com/building-php-pecl-extension-in-windows/

@@ -32,14 +32,40 @@ function theme_fullcalendar_calendar($vars) {
   // Override defaults with user submitted data.
   $settings = array_replace_recursive($settings, $user_settings);
 
+  // Have to make sure that html id and id in settings are identical.
+  $calendar_id = drupal_html_id($calendar_id);
+
   // Add FullCalendar scripts.
   fullcalendar_api_load_calendar($calendar_id, $settings);
 
   return array(
-    '#markup' => '<div id="' . check_plain($calendar_id) . '"></div>',
+    '#markup' => '<div id="' . $calendar_id . '"></div>',
   );
 }
 
+/**
+ * Theme function for fullcalendar_calendar_datasource.
+ * Renders a calendar using passed in datasource URL. This datasource should 
+ * be a JSON feed set up externally.
+ * 
+ * @params
+ *   datasource_uri string the path of the JSON data feed
+ *   calendar_id string the CSS id of the calendar DOM object
+ *   calendar_settings array of settings to override FullCalendar.js defaults
+ */
+function theme_fullcalendar_calendar_datasource($vars) {
+  $datasource_uri = $vars['datasource_uri'];
+  $calendar_id = $vars['calendar_id'];
+  $settings = $vars['calendar_settings'];
+
+  $full_url = url($datasource_uri, array('absolute' => TRUE));
+  $settings['events'] = $full_url;
+
+  return theme('fullcalendar_calendar', array(
+    'calendar_id' => $calendar_id,
+    'calendar_settings' => $settings,
+  ));
+}
 
 /**
  * Theme function for fullcalendar_calendar_entity.
@@ -134,6 +160,13 @@ function theme_fullcalendar_calendar_entity($vars) {
         'event-' . $entity_type . '-' . $entity->type,
       ),
     );
+    // If className has been passed in, append.
+    if (!empty($entity->className)) {
+      if (!is_array($entity->className)) {
+        $entity->className = array($entity->className);
+      }
+      $entity_array['className'] = array_merge($entity_array['className'], $entity->className);
+    }
     if (!empty($end)) {
       $entity_array['end'] = date('c', $end);
     }

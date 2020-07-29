@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * OCHA Snap generator module.
@@ -12,6 +13,22 @@
 
 // A default snap service endpoint.
 define('OCHA_SNAP_URL', 'http://localhost:8442/snap');
+
+/**
+ * Implements hook_menu().
+ */
+function ocha_snap_menu() {
+  $items['admin/config/services/snap'] = array(
+    'title' => 'Snap Service',
+    'description' => 'Snap Service intergration configuration',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ocha_snap_settings'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'ocha_snap.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
 
 /**
  * Helper to fetch the snap service endpoint.
@@ -47,9 +64,7 @@ function ocha_snap_credentials() {
  * @return various
  *   A binary file data blob or FALSE if an error occurred.
  */
-function ocha_snap($url, $params = array()) {
-  global $base_url;
-
+function ocha_snap($url, array $params = array()) {
   // Since Drupal's string translations are set up with this existing string, we
   // allow localization to occur first before doing string substitution to work
   // with the Snap Service.
@@ -57,42 +72,12 @@ function ocha_snap($url, $params = array()) {
   $pdf_pagination = str_replace('[page]', '<span class="pageNumber"></span>', $pdf_pagination);
   $pdf_pagination = str_replace('[topage]', '<span class="totalPages"></span>', $pdf_pagination);
 
-  // Construct our PDF footer.
+  // Construct our PDF header and footer.
   //
   // Note: you CANNOT use remote references such as image URLs or stylesheets,
   // nor can JS be executed in this context. Inline HTML/CSS only!
-  $pdf_footer = <<<PDF_FOOTER
-<footer class="pdf-footer">
-  <div class="pdf-footer__left">
-    $pdf_pagination
-  </div>
-</footer>
-<style type="text/css">
-  *, *:before, *:after {
-    box-sizing: border-box;
-    -webkit-print-color-adjust: exact;
-  }
-  .pdf-footer {
-    display: table;
-    width: 100%;
-    margin: 0 5mm;
-    white-space: nowrap;
-
-    font-family: Roboto, serif;
-    font-weight: 400;
-    font-size: 9px;
-  }
-  .pdf-footer__left,
-  .pdf-footer__right {
-    display: table-cell;
-    vertical-align: bottom;
-    width: 49%;
-  }
-  .pdf-footer__right {
-    text-align: right;
-  }
-</style>
-PDF_FOOTER;
+  $pdf_header = str_replace('[pagination]', $pdf_pagination, ocha_snap_pdf_header());
+  $pdf_footer = str_replace('[pagination]', $pdf_pagination, ocha_snap_pdf_footer());
 
   $default_params = array(
     'url'           => $url,
@@ -103,10 +88,11 @@ PDF_FOOTER;
     'pdfLandscape'  => 'false',
     'pdfBackground' => 'true',
     // Suppress default header by sending space character.
-    'pdfHeader'     => ' ',
+    'pdfHeader'     => $pdf_header,
     'pdfFooter'     => $pdf_footer,
     'pdfMarginTop'  => '24',
     'pdfMarginUnit' => 'px',
+    'debug'         => variable_get('ocha_snap_debug', 0) ? 'true' : 'false',
   );
 
   // Apply default parameters in case anything was missing.
@@ -145,4 +131,64 @@ PDF_FOOTER;
   }
 
   return $output->data;
+}
+
+/**
+ * Generate a PDF header snippet.
+ */
+function ocha_snap_pdf_header() {
+  // The default is a single space which suppresses header output.
+  $header = variable_get('ocha_snap_header', ' ');
+
+  // If CSS is specified, now would be a good time to inject it.
+  if ($css = variable_get('ocha_snap_css', '')) {
+    $header .= '<style type="text/css">' . $css . '</style>';
+  }
+  return $header;
+}
+
+/**
+ * Provide a default PDF footer for compatibility reasons.
+ */
+function ocha_snap_pdf_footer() {
+  if ($footer = variable_get('ocha_snap_footer', '')) {
+    return $footer;
+  }
+  return '<footer class="pdf-footer">
+  <div class="pdf-footer__left">
+    [pagination]
+  </div>
+</footer>
+<style type="text/css">
+  *, *:before, *:after {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+  }
+  .pdf-footer {
+    display: table;
+    width: 100%;
+    margin: 0 5mm;
+    white-space: nowrap;
+
+    font-family: Roboto, serif;
+    font-weight: 400;
+    font-size: 9px;
+  }
+  .pdf-footer__left,
+  .pdf-footer__right {
+    display: table-cell;
+    vertical-align: bottom;
+    width: 49%;
+  }
+  .pdf-footer__right {
+    text-align: right;
+  }
+</style>';
+}
+
+/**
+ * Implements hook_print_pdf_available_libs_alter().
+ */
+function ocha_snap_print_pdf_available_libs_alter(&$pdf_tools) {
+  $pdf_tools['ocha_snap|' . check_plain(variable_get('ocha_snap_url'))] = t('OCHA Snap Service (@url)', array('@url' => variable_get('ocha_snap_url')));
 }

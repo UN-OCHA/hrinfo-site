@@ -18,7 +18,12 @@ function hybridauth_endpoint() {
       require_once $lib_path . '/index.php';
     }
     catch(Exception $e) {
-      watchdog_exception('hybridauth', $e);
+      // Don't log the message "You cannot access this page directly." as error
+      // because we return an Access Denied result anyway for the logs.
+      $exclude_message = 'You cannot access this page directly.';
+      if (strpos($e->getMessage(), $exclude_message) === FALSE) {
+        watchdog_exception('hybridauth', $e);
+      }
     }
   }
 

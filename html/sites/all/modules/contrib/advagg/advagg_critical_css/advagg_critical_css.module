@@ -54,7 +54,7 @@ function advagg_critical_css_module_implements_alter(&$implementations, $hook) {
  */
 
 /**
- * Implements hook_critical_css_advagg_mod_critical_css_file_pre_alter().
+ * Implements hook_advagg_mod_critical_css_file_pre_alter().
  */
 function advagg_critical_css_advagg_mod_critical_css_file_pre_alter(&$filename, &$params, &$inline_strings) {
   list($dirs, $front_page, $object) = $params;
@@ -88,6 +88,22 @@ function advagg_critical_css_advagg_mod_critical_css_file_pre_alter(&$filename, 
 
   // Repack the $params array.
   $params = array($dirs, $front_page, $object);
+}
+
+/**
+ * Implements hook_advagg_mod_critical_css_file_post_alter().
+ */
+function advagg_critical_css_advagg_mod_critical_css_file_post_alter(&$filename, &$params, &$inline_strings) {
+  if (!empty($inline_strings[0])) {
+    // Remove given css selectors.
+    $selectors = variable_get('advagg_critical_css_selector_blacklist', '');
+    $selectors_array = array_filter(array_map('trim', explode("\n", $selectors)));
+    foreach ($selectors_array as $pattern) {
+      $pattern = preg_quote($pattern, '/');
+      $pattern = "/([^}]*{$pattern}[^{]*[^}]*\})/s";
+      $inline_strings[0] = preg_replace($pattern, '', $inline_strings[0]);
+    }
+  }
 }
 
 /**

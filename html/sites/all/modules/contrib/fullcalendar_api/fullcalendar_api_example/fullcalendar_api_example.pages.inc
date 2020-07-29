@@ -85,6 +85,29 @@ function fullcalendar_api_example_calendar_page() {
 }
 
 /**
+ * Page callback for /fullcalendar/datasource.
+ */
+function fullcalendar_api_example_datasource_page() {
+  // Array of FullCalendar settings.
+  $settings = array(
+    'header' => array(
+      'left' => 'prev,next today',
+      'center' => 'title',
+      'right' => 'month,agendaWeek,agendaDay',
+    ),
+    'defaultDate' => '2015-02-12',
+    'editable' => TRUE,
+  );
+  // @see fullcalendar_api_example.ajax.inc.
+  $datasource_uri = 'fullcalendar/json-data';
+  return theme('fullcalendar_calendar_datasource', array(
+    'calendar_id' => 'fullcalendar',
+    'calendar_settings' => $settings,
+    'datasource_uri' => $datasource_uri,
+  ));
+}
+
+/**
  * Page callback for /fullcalendar/entity.
  */
 function fullcalendar_api_example_entity_page() {

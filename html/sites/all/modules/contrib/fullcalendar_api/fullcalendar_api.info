@@ -9,9 +9,8 @@ dependencies[] = jquery_update
 dependencies[] = libraries
 dependencies[] = moment
 
-; Information added by Drupal.org packaging script on 2015-06-17
-version = "7.x-1.0-alpha2"
+; Information added by Drupal.org packaging script on 2019-10-22
+version = "7.x-1.0"
 core = "7.x"
 project = "fullcalendar_api"
-datestamp = "1434542593"
-
+datestamp = "1571756297"
