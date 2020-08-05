@@ -51,6 +51,21 @@ define('ADVAGG_RELOCATE_JS_FBEVENTS_LOCAL', FALSE);
 define('ADVAGG_RELOCATE_JS_PIWIK_LOCAL', FALSE);
 
 /**
+ * Default value to see if perfectaudience JS is loaded locally.
+ */
+define('ADVAGG_RELOCATE_JS_PERFECTAUDIENCE_LOCAL', FALSE);
+
+/**
+ * Default value to see if twitter uwt JS is loaded locally.
+ */
+define('ADVAGG_RELOCATE_JS_TWITTER_UWT_LOCAL', FALSE);
+
+/**
+ * Default value to see if twitter uwt JS is loaded locally.
+ */
+define('ADVAGG_RELOCATE_JS_LINKEDIN_INSIGHT_LOCAL', FALSE);
+
+/**
  * Default value to see if CSS is loaded locally.
  */
 define('ADVAGG_RELOCATE_CSS', FALSE);
@@ -123,6 +138,18 @@ define('ADVAGG_RELOCATE_ADMIN_MODE', 4);
  * @addtogroup hooks
  * @{
  */
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function advagg_relocate_module_implements_alter(&$implementations, $hook) {
+  // Move advagg_relocate to the top.
+  if ($hook === 'advagg_get_js_file_contents_alter' && array_key_exists('advagg_relocate', $implementations)) {
+    $item = array('advagg_relocate' => $implementations['advagg_relocate']);
+    unset($implementations['advagg_relocate']);
+    $implementations = array_merge($item, $implementations);
+  }
+}
 
 /**
  * Implements hook_menu().
@@ -303,6 +330,9 @@ function advagg_relocate_css_post_alter(array &$css, $force_check = FALSE) {
   module_load_include('advagg.inc', 'advagg_relocate');
   $responses = advagg_relocate_get_remote_data($urls, 'css', array(), $force_check);
 
+  // Get s3fs no_rewrite_cssjs setting.
+  $s3fs_no_rewrite_cssjs = advagg_get_s3fs_config('no_rewrite_cssjs');
+
   $filenames = array();
   $advagg_relocate_css_ttl = variable_get('advagg_relocate_css_ttl', ADVAGG_RELOCATE_CSS_TTL);
   foreach ($responses as $value) {
@@ -364,7 +394,7 @@ function advagg_relocate_css_post_alter(array &$css, $force_check = FALSE) {
     }
     // List of files that need the cache cleared.
     if ($saved) {
-      $filenames[] = $relative_path;
+      $filenames[] = (!is_null($s3fs_no_rewrite_cssjs) && empty($s3fs_no_rewrite_cssjs)) ? $full_filename : $relative_path;
     }
   }
   if (!empty($filenames)) {
@@ -372,6 +402,553 @@ function advagg_relocate_css_post_alter(array &$css, $force_check = FALSE) {
     module_load_include('cache.inc', 'advagg');
     $files = advagg_get_info_on_files($filenames, TRUE);
     advagg_push_new_changes($files);
+  }
+}
+
+/**
+ * Alter the js array.
+ *
+ * @param string $key
+ *   Key that can be used to lookup the value from the js array.
+ * @param array $value
+ *   Inner part of the js array.
+ * @param array $aggregate_settings
+ *   Array of settings.
+ *
+ * @return array
+ *   An array of inline scripts found and locations for them in the file.
+ */
+function advagg_relocate_js_script_rewrite_list($key, array $value, array $aggregate_settings) {
+  $scripts_found = array();
+  // Handle analytics.js.
+  if (!empty($aggregate_settings['variables']['advagg_relocate_js_ga_local'])) {
+    $start = strpos($value['data'], '(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date()');
+    $middle = strpos($value['data'], '})(window,document,"script",', $start);
+    $end = strpos($value['data'], ',"ga");ga("create",', $middle);
+    // Found the GA code.
+    if ($start !== FALSE && $middle !== FALSE && $end !== FALSE) {
+      $scripts_found['analytics.js'] = array($key, $start, $middle, $end);
+    }
+  }
+
+  // Handle piwik.js.
+  if (!empty($aggregate_settings['variables']['advagg_relocate_js_piwik_local'])) {
+    $start = strpos($value['data'], 'var _paq');
+    $middle = strpos($value['data'], '_paq.push(["setTrackerUrl"', $start);
+    // Skip if not the paq code.
+    if ($start !== FALSE && $middle !== FALSE) {
+      $scripts_found['piwik.js'] = array($key, $start, $middle);
+    }
+  }
+
+  // Handle gtm.js.
+  if (!empty($aggregate_settings['variables']['advagg_relocate_js_gtm_local'])) {
+    $start = strpos($value['data'], '(function(w,d,s,l,i){');
+    $middle = strpos($value['data'], 'var f=d.getElementsByTagName(s)[0]', $start);
+    $end = strpos($value['data'], '})(window,document,', $middle);
+    // Skip if not the GTM code.
+    if ($start !== FALSE && $middle !== FALSE && $end !== FALSE) {
+      $scripts_found['gtm.js'] = array($key, $start, $middle, $end);
+    }
+  }
+
+  // Handle fbds.js.
+  if (!empty($aggregate_settings['variables']['advagg_relocate_js_fbds_local'])) {
+    $start = strpos($value['data'], 'var _fbq');
+    $middle = strpos($value['data'], '(!_fbq.loaded)', $start);
+    $end = strpos($value['data'], 's.parentNode.insertBefore(fbds', $middle);
+    // Skip if not the fbds code.
+    if ($start !== FALSE && $middle !== FALSE && $end !== FALSE) {
+      $scripts_found['fbds.js'] = array($key, $start, $middle, $end);
+    }
+  }
+
+  // Handle fbevents.js.
+  if (!empty($aggregate_settings['variables']['advagg_relocate_js_fbevents_local'])) {
+    $end = strpos($value['data'], 'connect.facebook.net/en_US/fbevents.js');
+    // Skip if not the fbevents code.
+    if ($end !== FALSE) {
+      // Get middle of string.
+      $matches = array();
+      preg_match('/fbq\s*=\s*function\(\)/', $value['data'], $matches, PREG_OFFSET_CAPTURE);
+      if (!empty($matches[0][1])) {
+        $middle = $matches[0][1];
+        // Get start of string.
+        $matches = array();
+        preg_match('/\!\s*function\(f,b,e,v,n,t,s\)/', $value['data'], $matches, PREG_OFFSET_CAPTURE);
+        if (isset($matches[0][1])) {
+          $start = $matches[0][1];
+          if ($middle - $start <= 90) {
+            $scripts_found['fbevents.js'] = array($key, $start, $middle, $end);
+          }
+        }
+      }
+    }
+  }
+
+  // Handle perfectaudience.js.
+  if (!empty($aggregate_settings['variables']['advagg_relocate_js_perfectaudience_local'])) {
+    $matches = array();
+    preg_match('/window\._pa\s*=\s*window._pa\s*\|\|\s*\{\s*\}\s*;/', $value['data'], $matches, PREG_OFFSET_CAPTURE);
+    if (!empty($matches[0][1])) {
+      $start = $matches[0][1];
+      $middle = strpos($value['data'], '//tag.perfectaudience.com/serve/', $start);
+      $end = strpos($value['data'], 's.parentNode.insertBefore(pa, s);', $middle);
+      // Add if perfectaudience code.
+      if ($start !== FALSE && $middle !== FALSE && $end !== FALSE) {
+        $scripts_found['perfectaudience.js'] = array(
+          $key,
+          $start,
+          $middle,
+          $end,
+        );
+      }
+    }
+
+    // Handle twitter uwt.js.
+    if (!empty($aggregate_settings['variables']['advagg_relocate_js_twitter_uwt_local'])) {
+      $start = strpos($value['data'], '!function(e,t,n,s,u,a){e.twq||');
+      $middle = strpos($value['data'], '//static.ads-twitter.com/uwt.js', $start);
+      $end = strpos($value['data'], "a.parentNode.insertBefore(u,a))}(window,document,'script');", $middle);
+      // Add in twitter uwt.js code.
+      if ($start !== FALSE && $middle !== FALSE && $end !== FALSE) {
+        $scripts_found['uwt.js'] = array($key, $start, $middle, $end);
+      }
+    }
+
+    // Handle linkedin insight.js.
+    if (!empty($aggregate_settings['variables']['advagg_relocate_js_linkedin_insight_local'])) {
+      $start = strpos($value['data'], '_linkedin_data_partner_id');
+      $middle = strpos($value['data'], '//snap.licdn.com/li.lms-analytics/insight.min.js', $start);
+      $end = strpos($value['data'], "s.parentNode.insertBefore(b, s)", $middle);
+      // Add in linkedin insight.js code.
+      if ($start !== FALSE && $middle !== FALSE && $end !== FALSE) {
+        $scripts_found['linkedin_insight.js'] = array(
+          $key,
+          $start,
+          $middle,
+          $end,
+        );
+      }
+    }
+  }
+
+  return $scripts_found;
+}
+
+/**
+ * Add external.
+ *
+ * @param array $js
+ *   JS array.
+ * @param array $scripts_found
+ *   An array of inline scripts found and locations for them in the file.
+ */
+function advagg_relocate_js_script_rewrite(array &$js, array $scripts_found) {
+  // Move inline code to external if possible.
+  foreach ($scripts_found as $key_name => $values) {
+    if ($key_name === 'analytics.js') {
+      list($key, $start, $middle, $end) = $values;
+      $value = $js[$key];
+
+      // Get analytics.js URL and add it to the js array.
+      $analytics_js_url = substr($value['data'], $middle + 29, $end - strlen($value['data']) - 1);
+      $insert = array(
+        $analytics_js_url => array(
+          'data' => $analytics_js_url,
+          'type' => 'external',
+          'async' => TRUE,
+          'defer' => TRUE,
+          'noasync' => FALSE,
+          'nodefer' => FALSE,
+        ),
+      );
+      $js = advagg_insert_into_array_at_key($js, $insert, $key);
+      $js[$analytics_js_url] += $value;
+
+      // Fix if analytics.js is already local.
+      $http_pos = strpos($analytics_js_url, 'http://');
+      $https_pos = strpos($analytics_js_url, 'https://');
+      $double_slash_pos = strpos($analytics_js_url, '//');
+      if ($http_pos !== 0
+        && $https_pos !== 0
+        && $double_slash_pos !== 0
+      ) {
+        $js[$analytics_js_url]['type'] = 'file';
+      }
+
+      // Shorten function arguments.
+      $value['data'] = substr($value['data'], 0, $middle + 27) . substr($value['data'], $end);
+      // Strip loader string.
+      $value['data'] = substr($value['data'], 0, $start + 132) . substr($value['data'], $middle);
+      // Shorten function parameters.
+      $value['data'] = str_replace('function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]', 'function(i,s,o,r){i["GoogleAnalyticsObject"]', $value['data']);
+      $js[$key]['pre_relocate_data'] = $js[$key]['data'];
+      $js[$key]['data'] = $value['data'];
+      // Pin to header as the js expects ga to be there.
+      $js[$key]['scope'] = 'header';
+      $js[$key]['scope_lock'] = TRUE;
+
+      // Handle ga("require", ...) calls for external scripts to be loaded.
+      $matches = array();
+      preg_match_all('/ga\([\'"]require[\'"],\s*[\'"][a-zA-Z0-9_ ]*[\'"],\s*[\'"](.*?)[\'"]\)/', $value['data'], $matches, PREG_SET_ORDER);
+      foreach ($matches as $match) {
+        // Remove inline js loader code.
+        $start = strpos($js[$key]['data'], $match[0]);
+        if ($start === FALSE) {
+          continue;
+        }
+        $strlen = strlen($match[0]);
+        $js[$key]['data'] = substr($js[$key]['data'], 0, $start) . substr($js[$key]['data'], $start + $strlen);
+
+        // Add script to the drupal js array.
+        $url = '//www.google-analytics.com/plugins/ua/' . $match[1];
+        $insert = array(
+          $url => array(
+            'data' => $url,
+            'type' => 'external',
+            'async' => TRUE,
+            'defer' => TRUE,
+            'noasync' => FALSE,
+            'nodefer' => FALSE,
+          ),
+        );
+        $js = advagg_insert_into_array_at_key($js, $insert, $analytics_js_url);
+        $js[$url] += $value;
+      }
+    }
+
+    if ($key_name === 'piwik.js') {
+      list($key, $start, $middle) = $values;
+      $value = $js[$key];
+
+      // Get URL.
+      $url = variable_get('matomo_url_http', '');
+      if ($GLOBALS['is_https']) {
+        // Use HTTPS.
+        $url = variable_get('matomo_url_https', '');
+      }
+      if (is_callable('_matomo_cache')
+        && variable_get('matomo_cache', 0)
+        && $matomo_cache = _matomo_cache($url . 'piwik.js')
+      ) {
+        // Try cache.
+        $url = $matomo_cache;
+      }
+      if (empty($url)) {
+        // Extract info from inline script.
+        // "https:" == document.location.protocol ? "https://.../piwik/" : "http://.../piwik/".
+        $pattern = '/[\'"]https\:[\'"]\s*==\s*document\.location\.protocol.*?[\'"](.*?)[\'"]\s*\:\s*[\'"](.*?)[\'"]/';
+        preg_match($pattern, $value['data'], $matches);
+        if ($GLOBALS['is_https'] && !empty($matches[1])) {
+          $url = $matches[1];
+        }
+        elseif (empty($GLOBALS['is_https']) && !empty($matches[2])) {
+          $url = $matches[2];
+        }
+      }
+      if (!empty($url)) {
+        // Use HTTP.
+        // The $url may or may not have "piwik.js" at the end (it has if it came from _matomo_cache call above, otherwise not). Add if needed.
+        $url = check_url($url);
+        if (basename($url) != 'piwik.js') {
+          $url = $url . 'piwik.js';
+        }
+      }
+
+      // Final checks.
+      if (!empty($url)) {
+        $scope = variable_get('matomo_js_scope', $value['scope']);
+        $url = advagg_convert_abs_to_rel($url, TRUE);
+        $type = 'file';
+        if (advagg_is_external($url)) {
+          $parsed = parse_url($url);
+          if (strpos($parsed['path'], $GLOBALS['base_path']) === 0) {
+            $path = substr($parsed['path'], strlen($GLOBALS['base_path']));
+            if (file_exists($path)) {
+              $url = $path;
+            }
+            else {
+              $type = 'external';
+            }
+          }
+          else {
+            $type = 'external';
+          }
+        }
+
+        // Add to js array.
+        $insert = array(
+          $url => array(
+            'scope' => $scope,
+            'data' => $url,
+            'type' => $type,
+            'async' => TRUE,
+            'defer' => TRUE,
+            'noasync' => FALSE,
+            'nodefer' => FALSE,
+          ),
+        );
+        $js = advagg_insert_into_array_at_key($js, $insert, $key);
+
+        $matches = array();
+        // s.parentNode.insertBefore(g,s);.
+        $pattern = '/\,?\s*[\w]{1,2}\.parentNode\.insertBefore\(\s*[\w]{1,2}\s*,\s*[\w]{1,2}\s*\)\s*\;*/';
+        preg_match($pattern, $value['data'], $matches);
+        // Strip loader string.
+        $value['data'] = str_replace($matches[0], '', $value['data']);
+
+        $js[$key]['pre_relocate_data'] = $js[$key]['data'];
+        $js[$key]['data'] = $value['data'];
+        // Pin to header as the js expects paq to be loaded before the file.
+        $js[$key]['scope'] = 'header';
+        $js[$key]['scope_lock'] = TRUE;
+        $js[$key]['weight'] = -50000;
+        $js[$key]['movable'] = FALSE;
+      }
+    }
+
+    if ($key_name === 'gtm.js') {
+      list($key, $start, $middle, $end) = $values;
+      $value = $js[$key];
+
+      // Get URL for script.
+      $matches_a = array();
+      preg_match('/j.src\s*=\s*[\'"](.*?);/', $value['data'], $matches_a);
+      $matches_b = array();
+      preg_match('/\}\)\(window,document,[\'"]script[\'"],[\'"](.*?)[\'"],[\'"](.*?)[\'"]\);/', $value['data'], $matches_b);
+      if (empty($matches_a[1]) || empty($matches_b[1])) {
+        continue;
+      }
+      if ($matches_b[1] !== 'dataLayer') {
+        $matches_b[1] = '&l=' . $matches_b[1];
+      }
+      else {
+        $matches_b[1] = '';
+      }
+      $gtm_url = trim(str_replace(array(
+        "'+i",
+        "+dl+'",
+        "+dl",
+      ), array(
+        $matches_b[2],
+        $matches_b[1],
+        $matches_b[1],
+      ), $matches_a[1]), "'");
+
+      // Add script to the drupal js array.
+      $insert = array(
+        $gtm_url => array(
+          'data' => $gtm_url,
+          'type' => 'external',
+          'async' => TRUE,
+          'defer' => TRUE,
+          'noasync' => FALSE,
+          'nodefer' => FALSE,
+        ),
+      );
+      $js = advagg_insert_into_array_at_key($js, $insert, $key);
+      $js[$gtm_url] += $value;
+
+      // Shorten function arguments.
+      $args = explode(',', substr($value['data'], $end + 3, -2));
+      $value['data'] = substr($value['data'], 0, $end + 9) . ",{$args[3]});";
+      // Strip loader string.
+      $value['data'] = substr($value['data'], 0, $middle) . substr($value['data'], $end);
+      // Shorten function parameters.
+      $value['data'] = str_replace('(function(w,d,s,l,i){', '(function(w,l){', $value['data']);
+      // Add back.
+      $js[$key]['pre_relocate_data'] = $js[$key]['data'];
+      $js[$key]['data'] = $value['data'];
+      // Pin to header as the js expects dataLayer to be there.
+      $js[$key]['scope'] = 'header';
+      $js[$key]['scope_lock'] = TRUE;
+    }
+
+    if ($key_name === 'fbds.js') {
+      list($key, $start, $middle, $end) = $values;
+      $value = $js[$key];
+
+      // Get URL for script.
+      $matches = array();
+      preg_match('/fbds.src\s*=\s*[\'"](.*?)[\'"];/', $value['data'], $matches);
+      if (empty($matches[1])) {
+        continue;
+      }
+      $url = trim($matches[1]);
+
+      // Add script to the drupal js array.
+      $insert = array(
+        $url => array(
+          'data' => $url,
+          'type' => 'external',
+          'async' => TRUE,
+          'defer' => TRUE,
+          'noasync' => FALSE,
+          'nodefer' => FALSE,
+        ),
+      );
+      $js = advagg_insert_into_array_at_key($js, $insert, $key);
+      $js[$url] += $value;
+
+      // Strip loader string.
+      $matches = array();
+      preg_match('/if\s*\(!_fbq.loaded\)\s*\{/', $value['data'], $matches, PREG_OFFSET_CAPTURE);
+      $new_js = substr($value['data'], 0, $matches[0][1]);
+      // Set loaded TRUE.
+      $matches = array();
+      preg_match('/_fbq.loaded\s*=\s*true/', $value['data'], $matches, PREG_OFFSET_CAPTURE);
+      $new_js .= $matches[0][0] . ';';
+      // Get the rest of the JS string.
+      $end = strpos($value['data'], '}', $matches[0][1]);
+      $new_js .= trim(substr($value['data'], $end + 1));
+      $js[$key]['pre_relocate_data'] = $js[$key]['data'];
+      $js[$key]['data'] = $new_js;
+      // Pin to header as the js expects _fbq to be there.
+      $js[$key]['scope'] = 'header';
+      $js[$key]['scope_lock'] = TRUE;
+    }
+
+    if ($key_name === 'fbevents.js') {
+      list($key, $start, $middle, $end) = $values;
+      $value = $js[$key];
+
+      // Add script to the drupal js array.
+      $url = 'https://connect.facebook.net/en_US/fbevents.js';
+      $insert = array(
+        $url => array(
+          'data' => $url,
+          'type' => 'external',
+        ),
+      );
+      $js = advagg_insert_into_array_at_key($js, $insert, $key);
+      $js[$url] += $value;
+
+      $before = substr($value['data'], 0, $start);
+      $after = ltrim(substr($value['data'], $end + 40), ';');
+
+      // Get all facebook pixel ids.
+      $fb_ids = array_filter(array_map('trim', explode("\n", variable_get('advagg_relocate_js_fbevents_local_ids', ADVAGG_RELOCATE_JS_FBEVENTS_LOCAL_IDS))));
+      $matches = array();
+      preg_match('/fbq\(\s*[\'"]init[\'"]\s*,\s*[\'"](\d+)[\'"]\s*\)/', $value['data'], $matches);
+      if (!empty($matches[1])) {
+        $fb_ids[] = $matches[1];
+      }
+      $fb_ids = array_filter($fb_ids);
+
+      // Update in place the ids if any others were found inline.
+      $GLOBALS['conf']['advagg_relocate_js_fbevents_local_ids'] = implode("\n", $fb_ids);
+
+      // Get scripts before and after; replace middle of script.
+      $new_js = $before . "!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0]}(window,document,'script','//connect.facebook.net/en_US/fbevents.js');" . $after;
+      $js[$key]['pre_relocate_data'] = $js[$key]['data'];
+      $js[$key]['data'] = $new_js;
+      // Pin to header as the js expects fbq to be there.
+      $js[$key]['scope'] = 'header';
+      $js[$key]['scope_lock'] = TRUE;
+    }
+
+    if ($key_name === 'perfectaudience.js') {
+      list($key, $start, $middle, $end) = $values;
+      $value = $js[$key];
+
+      // Reindex.
+      $matches = array();
+      preg_match('/window\._pa\s*=\s*window._pa\s*\|\|\s*\{\s*\}\s*;/', $value['data'], $matches, PREG_OFFSET_CAPTURE);
+      if (!empty($matches[0][1])) {
+        $start = $matches[0][1];
+        $middle = strpos($value['data'], '//tag.perfectaudience.com/serve/', $start);
+        $end = strpos($value['data'], 's.parentNode.insertBefore(pa, s);', $middle);
+
+        $substr = substr($value['data'], $start, $end - $start + 35);
+        $matches = array();
+        preg_match('/\.src\s*=\s*[\'"](\/\/tag.perfectaudience.com\/serve\/.*\.js)[\'"]/', $substr, $matches);
+        if (!empty($matches[1])) {
+          $url = $matches[1];
+
+          // Add script to the drupal js array.
+          $insert = array(
+            $url => array(
+              'data' => $url,
+              'type' => 'external',
+              'async' => TRUE,
+              'defer' => TRUE,
+              'noasync' => FALSE,
+              'nodefer' => FALSE,
+            ),
+          );
+          $js = advagg_insert_into_array_at_key($js, $insert, $key);
+          $js[$url] += $value;
+
+          // s.parentNode.insertBefore(pa, s);.
+          $pattern = '/\,?\s*[\w]{1,2}\.parentNode\.insertBefore\(\s*[\w]{1,2}\s*,\s*[\w]{1,2}\s*\)\s*\;*/';
+          // Strip loader string.
+          $new_substr = preg_replace($pattern, '', $substr);
+          $js[$key]['data'] = str_replace($substr, $new_substr, $value['data']);
+        }
+      }
+    }
+
+    if ($key_name === 'uwt.js') {
+      list($key, $start, $middle, $end) = $values;
+      $value = $js[$key];
+
+      $url = '//static.ads-twitter.com/uwt.js';
+      // Add script to the drupal js array.
+      $insert = array(
+        $url => array(
+          'data' => $url,
+          'type' => 'external',
+          'scope_lock' => FALSE,
+          'scope' => 'footer',
+        ),
+      );
+      $js = advagg_insert_into_array_at_key($js, $insert, $key);
+      $js[$url] += $value;
+
+      // Reindex.
+      $start = strpos($value['data'], '!function(e,t,n,s,u,a){e.twq||');
+      $middle = strpos($value['data'], '//static.ads-twitter.com/uwt.js', $start);
+      $end = strpos($value['data'], "a.parentNode.insertBefore(u,a))}(window,document,'script');", $middle);
+
+      $substr = substr($value['data'], $start, $end - $start + 61);
+      // a.parentNode.insertBefore(u,a).
+      $pattern = '/\,?\s*[\w]{1,2}\.parentNode\.insertBefore\(\s*[\w]{1,2}\s*,\s*[\w]{1,2}\s*\)\s*\;*/';
+      // Strip loader string.
+      $new_substr = preg_replace($pattern, '', $substr);
+      $js[$key]['data'] = str_replace($substr, $new_substr, $value['data']);
+    }
+
+    if ($key_name === 'linkedin_insight.js') {
+      list($key, $start, $middle, $end) = $values;
+      $value = $js[$key];
+
+      $url = 'https://snap.licdn.com/li.lms-analytics/insight.min.js';
+      // Add script to the drupal js array.
+      $insert = array(
+        $url => array(
+          'data' => $url,
+          'type' => 'external',
+          'async' => TRUE,
+          'defer' => TRUE,
+          'noasync' => FALSE,
+          'nodefer' => FALSE,
+        ),
+      );
+      $js = advagg_insert_into_array_at_key($js, $insert, $key);
+      $js[$url] += $value;
+
+      $start = strpos($value['data'], '_linkedin_data_partner_id');
+      $middle = strpos($value['data'], '//snap.licdn.com/li.lms-analytics/insight.min.js', $start);
+      $end = strpos($value['data'], "s.parentNode.insertBefore(b, s)", $middle);
+
+      $substr = substr($value['data'], $start, $end - $start + 35);
+      // a.parentNode.insertBefore(u,a).
+      $pattern = '/\,?\s*[\w]{1,2}\.parentNode\.insertBefore\(\s*[\w]{1,2}\s*,\s*[\w]{1,2}\s*\)\s*\;*/';
+      // Strip loader string.
+      $new_substr = preg_replace($pattern, '', $substr);
+      $js[$key]['data'] = str_replace($substr, $new_substr, $value['data']);
+    }
   }
 }
 
@@ -388,364 +965,53 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
     return;
   }
 
-  $aggregate_settings = advagg_current_hooks_hash_array();
   // Check external js setting.
+  $aggregate_settings = advagg_current_hooks_hash_array();
   if (empty($aggregate_settings['variables']['advagg_relocate_js'])) {
     return;
   }
 
-  // Move inline code to external if possible.
-  // Google Analytics.
+  // Look for inline scrtips that add external js via inline code.
+  $scripts_found = array();
+  module_load_include('inc', 'advagg', 'advagg');
+
+  $temp_inserts = array();
   foreach ($js as $key => $value) {
-    if ($value['type'] !== 'inline'
-      || !$aggregate_settings['variables']['advagg_relocate_js_ga_local']
-    ) {
-      continue;
+    if ($value['type'] === 'inline') {
+      $scripts_found += advagg_relocate_js_script_rewrite_list($key, $value, $aggregate_settings);
     }
-    // Handle analytics.js.
-    $start = strpos($value['data'], '(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date()');
-    $middle = strpos($value['data'], '})(window,document,"script",');
-    $end = strpos($value['data'], ',"ga");ga("create",');
-    // Skip if not the GA code.
-    if ($start === FALSE || $middle === FALSE || $end === FALSE) {
-      continue;
-    }
-
-    // Get analytics.js URL and add it to the js array.
-    $analytics_js_url = substr($value['data'], $middle + 29, $end - strlen($value['data']) - 1);
-    $js[$analytics_js_url] = array(
-      'data' => $analytics_js_url,
-      'type' => 'external',
-      'async' => TRUE,
-      'defer' => TRUE,
-      'noasync' => FALSE,
-      'nodefer' => FALSE,
-    );
-    $js[$analytics_js_url] += $value;
-
-    // Fix if analytics.js is already local.
-    $http_pos = strpos($analytics_js_url, 'http://');
-    $https_pos = strpos($analytics_js_url, 'https://');
-    $double_slash_pos = strpos($analytics_js_url, '//');
-    if ($http_pos !== 0
-      && $https_pos !== 0
-      && $double_slash_pos !== 0
-    ) {
-      $value['type'] = 'file';
-    }
-
-    // Shorten function arguments.
-    $value['data'] = substr($value['data'], 0, $middle + 27) . substr($value['data'], $end);
-    // Strip loader string.
-    $value['data'] = substr($value['data'], 0, $start + 132) . substr($value['data'], $middle);
-    // Shorten function parameters.
-    $value['data'] = str_replace('function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]', 'function(i,s,o,r){i["GoogleAnalyticsObject"]', $value['data']);
-    $js[$key]['pre_relocate_data'] = $js[$key]['data'];
-    $js[$key]['data'] = $value['data'];
-    // Pin to header as the js expects ga to be there.
-    $js[$key]['scope'] = 'header';
-    $js[$key]['scope_lock'] = TRUE;
-
-    // Handle ga("require", ...) calls for external scripts to be loaded.
-    $matches = array();
-    preg_match_all('/ga\([\'"]require[\'"],\s*[\'"][a-zA-Z0-9_ ]*[\'"],\s*[\'"](.*?)[\'"]\)/', $value['data'], $matches, PREG_SET_ORDER);
-    foreach ($matches as $match) {
-      // Remove inline js loader code.
-      $start = strpos($js[$key]['data'], $match[0]);
-      if ($start === FALSE) {
-        continue;
-      }
-      $strlen = strlen($match[0]);
-      $js[$key]['data'] = substr($js[$key]['data'], 0, $start) . substr($js[$key]['data'], $start + $strlen);
-
-      // Add script to the drupal js array.
-      $url = '//www.google-analytics.com/plugins/ua/' . $match[1];
-      $js[$url] = array(
-        'data' => $url,
-        'type' => 'external',
-        'async' => TRUE,
-        'defer' => TRUE,
-        'noasync' => FALSE,
-        'nodefer' => FALSE,
-      );
-      $js[$url] += $value;
-    }
-    break;
-  }
-  // Piwik.
-  foreach ($js as $key => $value) {
-    if ($value['type'] !== 'inline'
-      || !$aggregate_settings['variables']['advagg_relocate_js_piwik_local']
-    ) {
-      continue;
-    }
-
-    // Handle piwik.js.
-    $start = strpos($value['data'], 'var _paq');
-    $middle = strpos($value['data'], '_paq.push(["setTrackerUrl"');
-    // Skip if not the paq code.
-    if ($start === FALSE || $middle === FALSE) {
-      continue;
-    }
-
-    // Get URL.
-    $url = variable_get('piwik_url_http', '');
-    if ($GLOBALS['is_https']) {
-      // Use HTTPS.
-      $url = variable_get('piwik_url_https', '');
-    }
-    if (is_callable('_piwik_cache')
-      && variable_get('piwik_cache', 0)
-      && $piwik_cache = _piwik_cache($url . 'piwik.js')
-    ) {
-      // Try cache.
-      $url = $piwik_cache;
-    }
-    if (empty($url)) {
-      // Extract info from inline script.
-      // "https:" == document.location.protocol ? "https://.../piwik/" : "http://.../piwik/".
-      $pattern = '/[\'"]https\:[\'"]\s*==\s*document\.location\.protocol.*?[\'"](.*?)[\'"]\s*\:\s*[\'"](.*?)[\'"]/';
-      preg_match($pattern, $value['data'], $matches);
-      if ($GLOBALS['is_https'] && !empty($matches[1])) {
-        $url = $matches[1];
-      }
-      elseif (empty($GLOBALS['is_https']) && !empty($matches[2])) {
-        $url = $matches[2];
-      }
-    }
-    if (!empty($url)) {
-      // Use HTTP.
-      $url = check_url($url) . 'piwik.js';
-    }
-
-    // Final checks.
-    if (empty($url)) {
-      continue;
-    }
-    $scope = variable_get('piwik_js_scope', $value['scope']);
-    $url = advagg_convert_abs_to_rel($url, TRUE);
-    $type = 'file';
-    if (advagg_is_external($url)) {
-      $parsed = parse_url($url);
-      if (strpos($parsed['path'], $GLOBALS['base_path']) === 0) {
-        $path = substr($parsed['path'], strlen($GLOBALS['base_path']));
-        if (file_exists($path)) {
-          $url = $path;
+    if ($value['type'] === 'file') {
+      $info = advagg_get_info_on_file($key);
+      if (!empty($info['advagg_relocate'])) {
+        // Get the file contents.
+        $file_contents = (string) @advagg_file_get_contents($info['data']);
+        if (empty($file_contents)) {
+          continue;
         }
-        else {
-          $type = 'external';
-        }
-      }
-      else {
-        $type = 'external';
+        $value['data'] = $file_contents;
+        $temp_inserts[$key] = array("advagg_relocate:{$key}" => $value);
+        $scripts_found += advagg_relocate_js_script_rewrite_list("advagg_relocate:{$key}", $value, $aggregate_settings);
       }
     }
-
-    // Add to js array.
-    $js[$url] = array(
-      'scope' => $scope,
-      'data' => $url,
-      'type' => $type,
-      'async' => TRUE,
-      'defer' => TRUE,
-      'noasync' => FALSE,
-      'nodefer' => FALSE,
-    );
-
-    $matches = array();
-    // s.parentNode.insertBefore(g,s);.
-    $pattern = '/\,?\s*[\w]{1,2}\.parentNode\.insertBefore\(\s*[\w]{1,2}\s*,\s*[\w]{1,2}\s*\)\s*\;*/';
-    preg_match($pattern, $value['data'], $matches);
-    // Strip loader string.
-    $value['data'] = str_replace($matches[0], '', $value['data']);
-
-    $js[$key]['pre_relocate_data'] = $js[$key]['data'];
-    $js[$key]['data'] = $value['data'];
-    // Pin to header as the js expects paq to be loaded before the file.
-    $js[$key]['scope'] = 'header';
-    $js[$key]['scope_lock'] = TRUE;
-    $js[$key]['weight'] = -50000;
-    $js[$key]['movable'] = FALSE;
-    break;
   }
-  foreach ($js as $key => $value) {
-    if ($value['type'] !== 'inline'
-      || (!module_exists('google_tag') && !$aggregate_settings['variables']['advagg_relocate_js_gtm_local'])
-    ) {
-      continue;
-    }
-    // Handle gtm.js.
-    $start = strpos($value['data'], '(function(w,d,s,l,i){');
-    $middle = strpos($value['data'], 'var f=d.getElementsByTagName(s)[0]');
-    $end = strpos($value['data'], '})(window,document,');
-    // Skip if not the GTM code.
-    if ($start === FALSE || $middle === FALSE || $end === FALSE) {
-      continue;
-    }
 
-    // Get URL for script.
-    $matches_a = array();
-    preg_match('/j.src\s*=\s*[\'"](.*?);/', $value['data'], $matches_a);
-    $matches_b = array();
-    preg_match('/\}\)\(window,document,[\'"]script[\'"],[\'"](.*?)[\'"],[\'"](.*?)[\'"]\);/', $value['data'], $matches_b);
-    if (empty($matches_a[1]) || empty($matches_b[1])) {
-      continue;
+  // Add in file as inline so replacement works.
+  if (!empty($temp_inserts)) {
+    foreach ($temp_inserts as $key => $value) {
+      $js = advagg_insert_into_array_at_key($js, $value, $key);
     }
-    if ($matches_b[1] !== 'dataLayer') {
-      $matches_b[1] = '&l=' . $matches_b[1];
-    }
-    else {
-      $matches_b[1] = '';
-    }
-    $gtm_url = trim(str_replace(array(
-      "'+i",
-      "+dl+'",
-      "+dl",
-    ), array(
-      $matches_b[2],
-      $matches_b[1],
-      $matches_b[1],
-    ), $matches_a[1]), "'");
-
-    // Add script to the drupal js array.
-    $js[$gtm_url] = array(
-      'data' => $gtm_url,
-      'type' => 'external',
-      'async' => TRUE,
-      'defer' => TRUE,
-      'noasync' => FALSE,
-      'nodefer' => FALSE,
-    );
-    $js[$gtm_url] += $value;
-
-    // Shorten function arguments.
-    $args = explode(',', substr($value['data'], $end + 3, -2));
-    $value['data'] = substr($value['data'], 0, $end + 9) . ",{$args[3]});";
-    // Strip loader string.
-    $value['data'] = substr($value['data'], 0, $middle) . substr($value['data'], $end);
-    // Shorten function parameters.
-    $value['data'] = str_replace('(function(w,d,s,l,i){', '(function(w,l){', $value['data']);
-    // Add back.
-    $js[$key]['pre_relocate_data'] = $js[$key]['data'];
-    $js[$key]['data'] = $value['data'];
-    // Pin to header as the js expects dataLayer to be there.
-    $js[$key]['scope'] = 'header';
-    $js[$key]['scope_lock'] = TRUE;
-    break;
   }
-  foreach ($js as $key => $value) {
-    if ($value['type'] !== 'inline' || !$aggregate_settings['variables']['advagg_relocate_js_fbds_local']) {
-      continue;
+
+  // Rewrite inline scrtips and add external references to js array.
+  advagg_relocate_js_script_rewrite($js, $scripts_found);
+
+  // Remove temp inline code.
+  if (!empty($temp_inserts)) {
+    foreach ($temp_inserts as $value) {
+      reset($value);
+      $key = key($value);
+      unset($js[$key]);
     }
-
-    $start = strpos($value['data'], 'var _fbq');
-    $middle = strpos($value['data'], '(!_fbq.loaded)');
-    $end = strpos($value['data'], 's.parentNode.insertBefore(fbds');
-    // Skip if not the fbds code.
-    if ($start === FALSE || $middle === FALSE || $end === FALSE) {
-      continue;
-    }
-
-    // Get URL for script.
-    $matches = array();
-    preg_match('/fbds.src\s*=\s*[\'"](.*?)[\'"];/', $value['data'], $matches);
-    if (empty($matches[1])) {
-      continue;
-    }
-    $url = trim($matches[1]);
-
-    // Add script to the drupal js array.
-    $js[$url] = array(
-      'data' => $url,
-      'type' => 'external',
-      'async' => TRUE,
-      'defer' => TRUE,
-      'noasync' => FALSE,
-      'nodefer' => FALSE,
-    );
-    $js[$url] += $value;
-
-    // Strip loader string.
-    $matches = array();
-    preg_match('/if\s*\(!_fbq.loaded\)\s*\{/', $value['data'], $matches, PREG_OFFSET_CAPTURE);
-    $new_js = substr($value['data'], 0, $matches[0][1]);
-    // Set loaded TRUE.
-    $matches = array();
-    preg_match('/_fbq.loaded\s*=\s*true/', $value['data'], $matches, PREG_OFFSET_CAPTURE);
-    $new_js .= $matches[0][0] . ';';
-    // Get the rest of the JS string.
-    $end = strpos($value['data'], '}', $matches[0][1]);
-    $new_js .= trim(substr($value['data'], $end + 1));
-    $js[$key]['pre_relocate_data'] = $js[$key]['data'];
-    $js[$key]['data'] = $new_js;
-    // Pin to header as the js expects _fbq to be there.
-    $js[$key]['scope'] = 'header';
-    $js[$key]['scope_lock'] = TRUE;
-    break;
-  }
-  foreach ($js as $key => $value) {
-    if ($value['type'] !== 'inline' || !$aggregate_settings['variables']['advagg_relocate_js_fbevents_local']) {
-      continue;
-    }
-
-    $end = strpos($value['data'], 'connect.facebook.net/en_US/fbevents.js');
-    // Skip if not the fbds code.
-    if ($end === FALSE) {
-      continue;
-    }
-    // Get middle of string.
-    $matches = array();
-    preg_match('/fbq\s*=\s*function\(\)/', $value['data'], $matches, PREG_OFFSET_CAPTURE);
-    if (empty($matches[0][1])) {
-      continue;
-    }
-    $middle = $matches[0][1];
-
-    // Get start of string.
-    $matches = array();
-    preg_match('/\!\s*function\(/', $value['data'], $matches, PREG_OFFSET_CAPTURE);
-    if (!isset($matches[0][1])) {
-      continue;
-    }
-    $start = $matches[0][1];
-    if ($middle - $start > 90) {
-      continue;
-    }
-
-    // Add script to the drupal js array.
-    $url = 'https://connect.facebook.net/en_US/fbevents.js';
-    $js[$url] = array(
-      'data' => $url,
-      'type' => 'external',
-      'async' => TRUE,
-      'defer' => TRUE,
-      'noasync' => FALSE,
-      'nodefer' => FALSE,
-    );
-    $js[$url] += $value;
-
-    $before = substr($value['data'], 0, $start);
-    $after = ltrim(substr($value['data'], $end + 40), ';');
-
-    // Get all facebook pixel ids.
-    $fb_ids = array_filter(array_map('trim', explode("\n", variable_get('advagg_relocate_js_fbevents_local_ids', ADVAGG_RELOCATE_JS_FBEVENTS_LOCAL_IDS))));
-    $matches = array();
-    preg_match('/fbq\(\s*[\'"]init[\'"]\s*,\s*[\'"](\d+)[\'"]\s*\)/', $value['data'], $matches);
-    if (!empty($matches[1])) {
-      $fb_ids[] = $matches[1];
-    }
-    $fb_ids = array_filter($fb_ids);
-    // Update in place the ids if any others were found inline.
-    $GLOBALS['conf']['advagg_relocate_js_fbevents_local_ids'] = implode("\n", $fb_ids);
-
-    // Get scripts before and after; replace middle of script.
-    $new_js = $before . "!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0]}(window,document,'script','//connect.facebook.net/en_US/fbevents.js');" . $after;
-    $js[$key]['pre_relocate_data'] = $js[$key]['data'];
-    $js[$key]['data'] = $new_js;
-    // Pin to header as the js expects fbq to be there.
-    $js[$key]['scope'] = 'header';
-    $js[$key]['scope_lock'] = TRUE;
-    break;
   }
 
   // Get all external js files.
@@ -759,6 +1025,9 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
   module_load_include('advagg.inc', 'advagg_relocate');
   $responses = advagg_relocate_get_remote_data($urls, 'js', array(), $force_check);
 
+  // Get s3fs no_rewrite_cssjs setting.
+  $s3fs_no_rewrite_cssjs = advagg_get_s3fs_config('no_rewrite_cssjs');
+
   $filenames = array();
   $advagg_relocate_js_ttl = variable_get('advagg_relocate_js_ttl', ADVAGG_RELOCATE_JS_TTL);
   foreach ($responses as $value) {
@@ -769,6 +1038,9 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
 
     list($full_filename, $errors, $saved) = _advagg_relocate_save_remote_asset($value->options['filename'], $value->data, $value->local_cache, $value->hash);
     if (!empty($errors)) {
+      watchdog('advagg-relocate', 'Write failed. Errors: <pre><tt>@errors</tt></pre>', array(
+        '@errors' => $errors,
+      ));
       continue;
     }
 
@@ -796,8 +1068,12 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
     }
 
     // Handle domain prefectch.
-    $key_host = parse_url($key, PHP_URL_HOST);
-    if (!empty($js[$relative_path]['dns_prefetch'])) {
+    $parse = @parse_url($key);
+    $key_host = '';
+    if (!empty($parse['host'])) {
+      $key_host = $parse['host'];
+    }
+    if (!empty($key_host) && !empty($js[$relative_path]['dns_prefetch'])) {
       foreach ($js[$relative_path]['dns_prefetch'] as $key => $domain_name) {
         if (strpos($domain_name, $key_host) !== FALSE && strpos($value->data, $key_host)) {
           unset($js[$relative_path]['dns_prefetch'][$key]);
@@ -805,9 +1081,19 @@ function advagg_relocate_js_post_alter(array &$js, $force_check = FALSE) {
       }
     }
 
+    // Make sure the external reference has been removed.
+    $schemes = array('//', 'http', 'https');
+    foreach ($schemes as $scheme) {
+      $parse['scheme'] = $scheme;
+      $key = advagg_glue_url($parse);
+      if (isset($js[$key])) {
+        unset($js[$key]);
+      }
+    }
+
     // List of files that need the cache cleared.
     if ($saved) {
-      $filenames[] = $relative_path;
+      $filenames[] = (!is_null($s3fs_no_rewrite_cssjs) && empty($s3fs_no_rewrite_cssjs)) ? $full_filename : $relative_path;
     }
   }
 
@@ -855,6 +1141,9 @@ function advagg_relocate_advagg_current_hooks_hash_array_alter(&$aggregate_setti
   $aggregate_settings['variables']['advagg_relocate_js_fbds_local'] = variable_get('advagg_relocate_js_fbds_local', ADVAGG_RELOCATE_JS_FBDS_LOCAL);
   $aggregate_settings['variables']['advagg_relocate_js_fbevents_local'] = variable_get('advagg_relocate_js_fbevents_local', ADVAGG_RELOCATE_JS_FBEVENTS_LOCAL);
   $aggregate_settings['variables']['advagg_relocate_js_piwik_local'] = variable_get('advagg_relocate_js_piwik_local', ADVAGG_RELOCATE_JS_PIWIK_LOCAL);
+  $aggregate_settings['variables']['advagg_relocate_js_perfectaudience_local'] = variable_get('advagg_relocate_js_perfectaudience_local', ADVAGG_RELOCATE_JS_PERFECTAUDIENCE_LOCAL);
+  $aggregate_settings['variables']['advagg_relocate_js_twitter_uwt_local'] = variable_get('advagg_relocate_js_twitter_uwt_local', ADVAGG_RELOCATE_JS_TWITTER_UWT_LOCAL);
+  $aggregate_settings['variables']['advagg_relocate_js_linkedin_insight_local'] = variable_get('advagg_relocate_js_linkedin_insight_local', ADVAGG_RELOCATE_JS_LINKEDIN_INSIGHT_LOCAL);
 
 }
 

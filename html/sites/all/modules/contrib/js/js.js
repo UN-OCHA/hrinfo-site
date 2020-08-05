@@ -75,15 +75,23 @@
     // Force prefix the URL to use the internal JS module callback path. If
     // requests do not want it to be processed by the JS module, then the
     // normal $.ajax() method should be used instead.
-    this.options.url = base + prefix + 'js/' + (this.options.url ? this.options.url : '');
+    this.options.url = base + prefix + 'js/' + (this.options.url ? prefix + this.options.url : '');
 
     // Normalize data keys to Drupal variable standards.
     JS.snakeCaseObject(this.options.data);
 
+    return this;
+  };
+
+  /**
+   * Executes the AJAX request.
+   *
+   * @return {XMLHttpRequest}
+   */
+  JsAjax.prototype.send = function () {
     // Execute the request using $.ajax().
     this.jqXHR = $.ajax(this.options);
-
-    return this;
+    return this.jqXHR;
   };
 
   /**
@@ -108,7 +116,13 @@
     if (!!options.url.match(new RegExp('^' + Drupal.settings.basePath + Drupal.settings.pathPrefix + (Drupal.settings.jsEndpoint || 'js')))) {
       // Older versions of jQuery do not have jqXHR.responseJSON, we must parse
       // the responseText manually.
-      var json = options.dataType === 'json' && jqXHR.responseText && $.parseJSON(jqXHR.responseText) || {};
+      var json = {};
+      try {
+        json = options.dataType === 'json' && jqXHR.responseText && $.parseJSON(jqXHR.responseText) || {};
+      }
+      catch (e) {
+        // Intentionally left blank, parsing failed (syntax error).
+      }
 
       // Process our own internal events (so they cannot be overridden).
       switch (type) {
@@ -205,7 +219,7 @@
       // Save this instance using a new identifier.
       options._jsInstance = this.instanceCount++;
       instance = this.instances[options._jsInstance] = new JsAjax(options);
-      return instance.jqXHR;
+      return instance.send();
     },
 
     /**
@@ -266,8 +280,8 @@
       $elements.each(function () {
         var $input = $(this);
         var name = $input.attr('name') || $input.attr('id') || null;
-        var value = $input.is(':checkbox') ? ($input.is(':checked') ? $input.val() : 0) : $input.val();
-        if (name) {
+        var value = $input.is(':checkbox') ? ($input.is(':checked') ? $input.val() : null) : $input.val();
+        if (name && value !== null) {
           data[name] = value;
         }
       });
@@ -459,7 +473,7 @@
     $form.find(':button').bind('click', function () {
       $trigger = $(this);
     });
-    $form.bind('submit', function (e) {
+    $form.bind('submit.jsForm', function (e) {
       // Prevent the form submission.
       e.preventDefault();
 

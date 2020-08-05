@@ -37,6 +37,14 @@ function title_module_implements_alter(&$implementations, $hook) {
         $implementations['title'] = $group;
         break;
 
+      // The following hook implementations should be executed after entity_translation.
+      case 'entity_load':
+        if (isset($implementations['entity_translation'])) {
+          $length = array_search('entity_translation', array_keys($implementations)) + 1;
+          $implementations = array_merge(array_slice($implementations, 0, $length, TRUE), array('title' => $group), array_slice($implementations, $length, count($implementations) - 1, TRUE));
+        }
+        break;
+
       // Normally Title needs to act as first module to perform synchronization.
       default:
         $implementations = array('title' => $group) + $implementations;
@@ -88,7 +96,7 @@ function title_entity_info_alter(&$info) {
  * @param $entity_type
  *   The name of the entity type.
  * @param $legacy_field
- *   (Otional) The legacy field name to be replaced.
+ *   (Optional) The legacy field name to be replaced.
  */
 function title_field_replacement_info($entity_type, $legacy_field = NULL) {
   $info = entity_get_info($entity_type);
@@ -99,9 +107,8 @@ function title_field_replacement_info($entity_type, $legacy_field = NULL) {
   if (isset($legacy_field)) {
     return isset($info['field replacement'][$legacy_field]) ? $info['field replacement'][$legacy_field] : FALSE;
   }
-  else {
-    return $info['field replacement'];
-  }
+
+  return $info['field replacement'];
 }
 
 /**
@@ -117,15 +124,16 @@ function title_entity_label($entity, $type, $langcode = NULL) {
   if (title_field_replacement_enabled($type, $bundle, $legacy_field)) {
     $langcode = field_language($type, $entity, $info['field']['field_name'], $langcode);
     $values = $info['callbacks']['sync_get']($type, $entity, $legacy_field, $info, $langcode);
-    return $values[$legacy_field];
+    return isset($values[$legacy_field]) ? $values[$legacy_field] : $entity->{$legacy_field};
+  }
+
+  if (isset($entity_info['label fallback']['title']) && function_exists($entity_info['label fallback']['title'])) {
+    $label = $entity_info['label fallback']['title']($entity, $type, $langcode);
+    return isset($label) ? $label : $entity->{$legacy_field};
   }
   // Otherwise if we have a fallback defined we use the original label callback.
-  elseif (isset($entity_info['label fallback']['title']) && function_exists($entity_info['label fallback']['title'])) {
-    return $entity_info['label fallback']['title']($entity, $type, $langcode);
-  }
-  else {
-    return (property_exists($entity, $legacy_field)) ? $entity->{$legacy_field} : NULL;
-  }
+
+  return property_exists($entity, $legacy_field) ? $entity->{$legacy_field} : NULL;
 }
 
 /**
@@ -210,10 +218,21 @@ function title_field_attach_load($entity_type, $entities, $age, $options) {
 function title_entity_load($entities, $type) {
   // Load entity translations otherwise field language will not be computed
   // correctly.
-  module_invoke('entity_translation', 'entity_load', $entities, $type);
+  if (module_exists('entity_translation')) {
+    module_invoke('entity_translation', 'entity_load', $entities, $type);
+  }
   foreach ($entities as &$entity) {
     // Synchronize values from the regular field unless we are intializing it.
-    title_entity_sync($type, $entity, NULL, !empty($GLOBALS['title_field_replacement_init']));
+    // When the node is not being edited, the language must be set to current
+    // entity language if set, otherwise NULL.
+    $language = NULL;
+    if ((preg_match('/node\/\d+\/edit/', current_path()) == 0)
+      && (preg_match('/node\/\d+$/', current_path()) == 0)) {
+      if (!empty($entity->language)) {
+        $language = $entity->language;
+      }
+    }
+    title_entity_sync($type, $entity, $language, !empty($GLOBALS['title_field_replacement_init']));
   }
 }
 
@@ -224,59 +243,7 @@ function title_entity_load($entities, $type) {
  * synchronization will not be performed on entity load.
  */
 function title_entitycache_load($entities, $type) {
-  // Reset the title sync cache.
-  $entity_ids = array();
-  foreach ($entities as $entity) {
-    list($id, $vid, $bundle) = entity_extract_ids($type, $entity);
-    $entity_ids[] = $id;
-  }
-  title_entity_sync_static_reset($type, $entity_ids);
-  // Sync regular field values into the legacy field.
   title_entity_load($entities, $type);
-}
-
-/**
- * Implements hook_entitycache_pre_cache_set_alter().
- */
-function title_entitycache_pre_cache_set_alter($entities, $entity_type) {
-  // Let's make sure entitycache stores the legacy field in the original
-  // language of the entity. We revert this change in
-  // title_entitycache_post_cache_set_alter() to make sure we use the correct legacy
-  // field value later.
-  $entity_info = entity_get_info($entity_type);
-  if (!empty($entity_info['fieldable']) && !empty($entity_info['field replacement'])) {
-    foreach ($entities as $entity) {
-      foreach ($entity_info['field replacement'] as $legacy_field => $data) {
-        $entity->{'entitycache_old_' . $legacy_field} = $entity->{$legacy_field};
-      }
-      list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
-      title_entity_sync_static_reset($entity_type, array($id));
-      $entity_langcode = title_entity_language($entity_type, $entity);
-      title_entity_sync($entity_type, $entity, $entity_langcode);
-    }
-  }
-}
-
-/**
- * Implements hook_entitycache_post_cache_set_alter().
- */
-function title_entitycache_post_cache_set_alter($entities, $entity_type) {
-  // Entitycache is set, now revert the change made in
-  // title_entitycache_pre_cache_set_alter().
-  $entity_info = entity_get_info($entity_type);
-  if (!empty($entity_info['fieldable']) && !empty($entity_info['field replacement'])) {
-    foreach ($entity_info['field replacement'] as $legacy_field => $data) {
-      foreach ($entities as $entity) {
-        $entity->{$legacy_field} = $entity->{'entitycache_old_' . $legacy_field};
-        unset($entity->{'entitycache_old_' . $legacy_field});
-
-        // Clear the sync static cache to make sure the wrong value is not
-        // cached.
-        list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
-        title_entity_sync_static_reset($entity_type, array($id));
-      }
-    }
-  }
 }
 
 /**
@@ -354,10 +321,9 @@ function title_field_replacement_toggle($entity_type, $bundle, $legacy_field) {
     field_create_instance($info['instance']);
     return TRUE;
   }
-  else {
-    field_delete_instance($instance);
-    return FALSE;
-  }
+
+  field_delete_instance($instance);
+  return FALSE;
 }
 
 /**
@@ -517,8 +483,6 @@ function title_entity_sync_static_reset($entity_type, $entity_ids = NULL) {
  *   The entity to work with.
  * @param $legacy_field
  *   The name of the legacy field to be replaced.
- * @param $field_name
- *   The regular field to use as source value.
  * @param $info
  *   Field replacement information for the given entity.
  * @param $langcode
@@ -536,6 +500,8 @@ function title_field_sync_get($entity_type, $entity, $legacy_field, $info, $lang
         $entity->{$name} = $value;
       }
     }
+    // Save the actual language used to LEGACY_FIELD_NAME_language.
+    $entity->{$legacy_field . '_language'} = $langcode;
     // Ensure we do not pollute field language static cache.
     $cache = &drupal_static('field_language');
     list($id, ,) = entity_extract_ids($entity_type, $entity);
@@ -552,8 +518,6 @@ function title_field_sync_get($entity_type, $entity, $legacy_field, $info, $lang
  *   The entity to work with.
  * @param $legacy_field
  *   The name of the legacy field to be replaced.
- * @param $field_name
- *   The regular field to use as source value.
  * @param $info
  *   Field replacement information for the given entity.
  * @param $langcode
@@ -632,7 +596,9 @@ function title_field_attach_form($entity_type, $entity, &$form, &$form_state, $l
       if (isset($form[$legacy_field]) && title_field_replacement_enabled($entity_type, $bundle, $legacy_field)) {
         // Inherit the access from the title widget, so that other modules
         // restricting access to it keep working.
-        if (isset($form[$legacy_field]['#access'])) {
+        $replaced = isset($form[$legacy_field]['#field_replacement']) ?
+          $form[$legacy_field]['#field_replacement'] : FALSE;
+        if (!$replaced && isset($form[$legacy_field]['#access'])) {
           $form[$info['field']['field_name']]['#access'] = $form[$legacy_field]['#access'];
         }
 
@@ -669,8 +635,6 @@ function title_field_attach_submit($entity_type, $entity, $form, &$form_state) {
 
     foreach ($fr_info as $legacy_field => $info) {
       if (!empty($form[$legacy_field]['#field_replacement'])) {
-        $field_name = $info['field']['field_name'];
-
         // Give a chance to operate on submitted values either.
         if (!empty($info['callbacks']['submit'])) {
           $info['callbacks']['submit']($entity_type, $entity, $legacy_field, $info, $langcode, $values);
@@ -712,7 +676,7 @@ function title_menu() {
           );
 
           $path = "$path/fields/replace/%";
-          $field_arg = count(explode('/', $path)) - 1;
+          $field_arg = substr_count($path, '/');
           $items[$path] = array(
             'load arguments' => array(),
             'title' => 'Replace fields',
@@ -743,7 +707,7 @@ function title_menu() {
 function title_help($path, $arg) {
   switch ($path) {
     case 'admin/config/content/title':
-      return '<p>' . t('The settings below allow to configure the <em>default</em> settings to be used when creating new replacing fields. It is even possibile to configure them so that the selected fields are created automatically when a new bundle is created.') . '</p>';
+      return '<p>' . t('The settings below allow to configure the <em>default</em> settings to be used when creating new replacing fields. It is even possible to configure them so that the selected fields are created automatically when a new bundle is created.') . '</p>';
   }
 }
 
@@ -794,9 +758,8 @@ function title_tokens_alter(array &$replacements, array $context) {
     $fr_info = title_field_replacement_info($entity_type);
     if ($fr_info && !empty($context['data'][$context['type']])) {
       $entity = $context['data'][$context['type']];
-      list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+      list(, , $bundle) = entity_extract_ids($entity_type, $entity);
       $options = $context['options'];
-      $sanitize = !empty($options['sanitize']);
 
       // Since Title tokens are mostly used in storage contexts we default to
       // the current working language, that is the entity language. Modules
@@ -806,16 +769,17 @@ function title_tokens_alter(array &$replacements, array $context) {
 
       if ($fr_info) {
         foreach ($fr_info as $legacy_field => $info) {
-          if (title_field_replacement_enabled($entity_type, $bundle, $legacy_field)) {
-            if (isset($context['tokens'][$legacy_field])) {
-              $langcode = field_language($entity_type, $entity, $info['field']['field_name'], $langcode);
-              $values = $info['callbacks']['sync_get']($entity_type, $entity, $legacy_field, $info, $langcode);
-              $item = $values[$legacy_field];
-              if (!empty($item)) {
-                if (is_array($item)) {
-                  $item = reset($item);
-                }
-                $replacements[$context['tokens'][$legacy_field]] = $sanitize ? check_plain($item) : $item;
+          if (isset($context['tokens'][$legacy_field])
+            && title_field_replacement_enabled($entity_type, $bundle, $legacy_field)) {
+            $langcode = field_language($entity_type, $entity, $info['field']['field_name'], $langcode);
+            $item = $info['callbacks']['sync_get']($entity_type, $entity, $legacy_field, $info, $langcode);
+            if (!empty($item)) {
+              list($value, $format) = array_values($item);
+              if (empty($format)) {
+                $replacements[$context['tokens'][$legacy_field]] = check_plain($value);
+              }
+              else {
+                $replacements[$context['tokens'][$legacy_field]] = check_markup($value, $format, $langcode);
               }
             }
           }
@@ -912,7 +876,7 @@ function title_field_replacement_get_legacy_field($entity_type, $field_name) {
  * @param $bundle
  *   The name of the bundle the instance is attached to.
  *
- *  @return
+ * @return
  *   The field instance replacing the label or FALSE if none available.
  */
 function title_field_replacement_get_label_field($entity_type, $bundle) {
@@ -1029,8 +993,17 @@ function title_field_info_alter(&$info) {
  * Return taxonomy term values for taxonomy reference fields.
  */
 function title_taxonomy_allowed_values($field) {
-  $bundle = !empty($field['settings']['allowed_values'][0]['vocabulary']) ? $field['settings']['allowed_values'][0]['vocabulary'] : NULL;
-  if ($bundle && ($label = title_field_replacement_get_label_field('taxonomy_term', $bundle))) {
+  // Since we call taxonomy_get_tree() with $load_entities = TRUE, there is a
+  // chance that this will trigger theme functions. For this case, we need to
+  // ensure that we are not in the process of theme registry rebuilding.
+  $theme_registry_cache = drupal_static('theme_get_registry');
+  /* @see theme_get_registry() */
+  $theme_registry_is_rebuilding = is_array($theme_registry_cache) &&
+    empty($theme_registry_cache);
+
+  $bundle = !empty($field['settings']['allowed_values'][0]['vocabulary']) ?
+    $field['settings']['allowed_values'][0]['vocabulary'] : NULL;
+  if ($bundle && ($label = title_field_replacement_get_label_field('taxonomy_term', $bundle)) && !$theme_registry_is_rebuilding) {
     $options = array();
     foreach ($field['settings']['allowed_values'] as $tree) {
       $vocabulary = taxonomy_vocabulary_machine_name_load($tree['vocabulary']);
@@ -1043,4 +1016,22 @@ function title_taxonomy_allowed_values($field) {
     return $options;
   }
   return taxonomy_allowed_values($field);
+}
+
+/**
+ * Implements hook_ctools_context_converter_alter().
+ */
+function title_ctools_context_converter_alter($context, $converter, &$value, &$converter_options) {
+  // This is a temporary fix for https://www.drupal.org/node/2505311.
+  // It fixes a language issue for the pane title containing entity
+  // related keywords.
+  if (isset($context->type[0]) && 0 === strpos($context->type[0], 'entity:') && empty($converter_options['language'])) {
+    $plugin = ctools_get_context($context->plugin);
+    if ($function = ctools_plugin_get_function($plugin, 'convert')) {
+      // Provide "language" option for converter and perform the conversion
+      // again.
+      $converter_options['language'] = $GLOBALS[LANGUAGE_TYPE_CONTENT];
+      $value = $function($context, $converter, $converter_options);
+    }
+  }
 }

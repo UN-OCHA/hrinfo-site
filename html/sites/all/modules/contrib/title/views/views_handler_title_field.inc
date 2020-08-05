@@ -1,9 +1,12 @@
 <?php
+
 /**
+ * @file
  * Field handler to present field title with link to the entity.
  *
  * @ingroup views_field_handlers
  */
+
 class views_handler_title_field extends views_handler_field_field {
 
   function option_definition() {
@@ -47,4 +50,5 @@ class views_handler_title_field extends views_handler_field_field {
     }
     return parent::render_item($count, $item);
   }
+
 }

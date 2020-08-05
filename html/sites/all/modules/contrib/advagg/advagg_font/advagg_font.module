@@ -16,6 +16,11 @@
 define('ADVAGG_FONT_FONTFACEOBSERVER', 0);
 
 /**
+ * Default value to include font info in critical css.
+ */
+define('ADVAGG_FONT_ADD_TO_CRITICAL_CSS', 1);
+
+/**
  * Default value to use localStorage in order to prevent the FOUT.
  */
 define('ADVAGG_FONT_STORAGE', 1);
@@ -123,6 +128,60 @@ function advagg_font_page_alter() {
     'async' => TRUE,
     'defer' => TRUE,
   ));
+}
+
+/**
+ * Implements hook_css_alter().
+ */
+function advagg_css_alter(&$css) {
+  // Skip if advagg is disabled.
+  if (!advagg_enabled()) {
+    return;
+  }
+
+  // Skip if fontface is disabled.
+  if (empty(variable_get('advagg_font_fontfaceobserver', ADVAGG_FONT_FONTFACEOBSERVER))) {
+    return;
+  }
+
+  // Skip if fonts added to critical css is disabled.
+  if (empty(variable_get('advagg_font_add_to_critical_css', ADVAGG_FONT_ADD_TO_CRITICAL_CSS))) {
+    return;
+  }
+
+  $critical_css_key = NULL;
+  foreach ($css as $key => $values) {
+    if (!empty($values['critical-css']) && $values['type'] === 'inline') {
+      $critical_css_key = $key;
+    }
+  }
+
+  // Skip if no critical css.
+  if (is_null($critical_css_key)) {
+    return;
+  }
+
+  module_load_include('inc', 'advagg', 'advagg');
+  $css_to_add = '';
+  foreach ($css as $key => $values) {
+    if ($values['type'] === 'file') {
+      $info = advagg_get_info_on_file($key);
+      if (!empty($info['advagg_font'])) {
+        // Get the file contents.
+        $file_contents = (string) @advagg_file_get_contents($info['data']);
+        if (empty($file_contents)) {
+          continue;
+        }
+        list($replacements) = advagg_font_get_replacements_array($file_contents);
+        foreach ($replacements as $replace) {
+          $css_to_add .= $replace[2];
+        }
+      }
+    }
+  }
+  if (!empty($css_to_add)) {
+    $css[$critical_css_key]['data'] .= "\n{$css_to_add}";
+  }
 }
 
 /**
@@ -456,7 +515,9 @@ function advagg_font_get_replacements_array($css_string) {
     // Add css class to all the selectors.
     $selectors_array = explode(',', $selectors_stripped);
     foreach ($selectors_array as &$selector) {
-      $selector = ' .' . $removed_value_classname . ' ' . $selector;
+      // Remove extra whitespace.
+      $selector = trim($selector);
+      $selector = " .{$removed_value_classname} {$selector}";
     }
     $new_selectors = implode(',', $selectors_array);
 

@@ -14,8 +14,8 @@
       "drupal/entity_api": {
         "Send entire node to node_access on create": "https://www.drupal.org/files/issues/2018-12-04/3017993-send_full_node.patch"
       },
-      "drupal/facetapi_bonus": {
-        "PHP 7.2: Warning: count(): Parameter must be an array or an object that implements Countable a FacetapiDependencyFacet->getDefaultSettings()": "https://www.drupal.org/files/issues/2018-09-04/non-countable-2938545-5.patch"
+      "drupal/hybridauth": {
+        "https://www.drupal.org/project/hybridauth/issues/3154070": "https://www.drupal.org/files/issues/2020-06-23/session_already_exist_exception-3154070-7.patch"
       },
       "drupal/og": {
         "User can create node without permission": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/442.patch",

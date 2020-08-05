@@ -6,9 +6,8 @@ dependencies[] = advagg
 
 configure = admin/config/development/performance/advagg/relocate
 
-; Information added by Drupal.org packaging script on 2018-03-20
-version = "7.x-2.33"
+; Information added by Drupal.org packaging script on 2020-05-18
+version = "7.x-2.34"
 core = "7.x"
 project = "advagg"
-datestamp = "1521515592"
-
+datestamp = "1589837015"

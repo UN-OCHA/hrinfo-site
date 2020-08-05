@@ -130,7 +130,7 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
     );
 
     $public_fields['related_content'] = array(
-      'property' => 'field_related_content'
+      'property' => 'field_related_content',
     );
 
     $public_fields['disasters'] = array(
@@ -159,7 +159,7 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
     );
 
     $public_fields['language'] = array(
-      'property' => 'language'
+      'property' => 'language',
     );
 
     $public_fields['created'] = array(
@@ -175,7 +175,7 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
     );
 
     $public_fields['exclude_from_reliefweb'] = array(
-      'property' => 'field_exclude_reliefweb'
+      'property' => 'field_exclude_reliefweb',
     );
 
     $public_fields['published'] = array(
@@ -184,7 +184,7 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
 
     $public_fields['author'] = array(
       'property' => 'author',
-      'process_callbacks' => array(array($this, 'getUser'))
+      'process_callbacks' => array(array($this, 'getUser')),
     );
 
     return $public_fields;
@@ -224,7 +224,7 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
         $tmp->glide = $node->field_glide_number[LANGUAGE_NONE][0]['value'];
         $tmp->label = $node->title;
         if (!empty($node->field_reliefweb_id)) {
-          $tmp->self = 'http://api.reliefweb.int/v1/disasters/' . $value->field_reliefweb_id[LANGUAGE_NONE][0]['value'];
+          $tmp->self = 'http://api.reliefweb.int/v1/disasters/' . $node->field_reliefweb_id[LANGUAGE_NONE][0]['value'];
         }
         $return[] = $tmp;
       }
@@ -253,7 +253,7 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
         $tmp->file->fid = $field_file['fid'];
         $tmp->file->filename = $field_file['filename'];
         $tmp->file->filesize = $field_file['filesize'];
-        $tmp->file->url = file_create_url($field_file['uri']);
+        $tmp->file->uri = file_create_url($field_file['uri']);
         $tmp->file->preview = file_create_url(_pdfpreview_create_preview($tmp->file));
         if (!empty($value->field_language)) {
           $tmp->language = $value->field_language[LANGUAGE_NONE][0]['value'];

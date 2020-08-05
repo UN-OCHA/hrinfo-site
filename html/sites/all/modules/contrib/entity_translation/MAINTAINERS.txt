@@ -11,6 +11,7 @@ whole. The project maintainers for Entity translation are:
 
 - Francesco Placella 'plach' <https://www.drupal.org/u/plach>
 - Daniel F. Kudwien 'sun' <https://www.drupal.org/u/sun>
+- Stefanos Petrakis 'stefanos.petrakis' <https://www.drupal.org/u/stefanospetrakis>
 
 
 Component maintainers

@@ -24,7 +24,7 @@ function field_permissions_uninstall() {
   // Collect all the field data that reference "field_permissions", within
   // the field_config table.
   //
-  $records = db_query("SELECT * FROM field_config WHERE data LIKE '%field_permissions%'");
+  $records = db_query("SELECT * FROM {field_config} WHERE data LIKE '%field_permissions%'");
 
   foreach ($records as $record) {
     $data = $record->data;
@@ -33,7 +33,7 @@ function field_permissions_uninstall() {
     $data = serialize($data);
 
     // Update the record.
-    db_query("UPDATE field_config SET data = :data WHERE id = :id",
+    db_query("UPDATE {field_config} SET data = :data WHERE id = :id",
       array(':data' => $data, ':id' => $record->id));
   }
 }

@@ -9,3 +9,9 @@ files[] = plugins/views_plugin_display_system.inc
 files[] = plugins/views_plugin_access_menu.inc
 
 files[] = tests/admin_views.test
+
+; Information added by Drupal.org packaging script on 2019-11-19
+version = "7.x-1.7"
+core = "7.x"
+project = "admin_views"
+datestamp = "1574192287"

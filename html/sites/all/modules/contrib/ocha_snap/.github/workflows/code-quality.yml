@@ -1,0 +1,26 @@
+name: CI
+
+on: 
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  Code_Quality:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Composerify
+      run: composer install
+    - name: Check code syntax with php.
+      run: |
+        find -L . -iregex '.*\.\(php\|module\|inc\|install\)$' -depth 1 -print0 | xargs -0 -n 1 -P 4 php -l
+    - name: Check code quality with phpcs.
+      run: |
+        ./vendor/bin/phpcs --config-set installed_paths vendor/drupal/coder/coder_sniffer
+        ./vendor/bin/phpcs -p --report=full .
+    - name: Check code duplication with phpcpd.
+      run: |
+        ./vendor/bin/phpcpd . --names=*.php,*.inc,*.module,*.install --exclude=vendor
