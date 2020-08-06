@@ -66,7 +66,7 @@ function hr_core_form_alter(&$form, &$form_state, $form_id) {
     }
   }
 
-  foreach ($form as $id => &$item) {
+  foreach ($form as &$item) {
     if (is_array($item) && isset($item['#type']) && $item['#type'] == 'container') {
       switch ($item['#type']) {
         case 'container':
@@ -117,7 +117,7 @@ function hr_core_path_insert($path) {
 }
 
 /**
- * Implements hook_entity_presave()
+ * Implements hook_entity_presave().
  *
  * Makes sure pathauto is not used when no path is set.
  */
@@ -128,7 +128,7 @@ function hr_core_entity_presave($node, $type) {
 }
 
 /**
- * Implements hook_field_extra_fields()
+ * Implements hook_field_extra_fields().
  */
 function hr_core_field_extra_fields() {
   $content_types = array(
@@ -164,7 +164,6 @@ function hr_core_field_extra_fields() {
  */
 function hr_core_entity_view($entity, $type, $view_mode, $langcode) {
   if ($type == 'node' && isset($entity->type)) {
-    $extra_fields = field_info_extra_fields($type, $entity->type, 'display');
     $field_name = 'hr_core_files_download_button';
     $entity->content[$field_name] = array(
       '#type' => 'item',
@@ -192,7 +191,7 @@ function _hr_core_files_download_button($entity, $type) {
     return;
   }
 
-  foreach ($items as $delta => $item) {
+  foreach ($items as $item) {
     $fc = field_collection_item_revision_load($item['revision_id']);
 
     $file = field_get_items('field_collection_item', $fc, 'field_file');
@@ -212,11 +211,11 @@ function _hr_core_files_download_button($entity, $type) {
       }
     }
 
-    $file_title = isset($file['title']) ? $file['title'] : $file['filename'];
+    $file_title = !empty($file['title']) ? $file['title'] : $file['filename'];
     $file_url = file_create_url($file['uri']);
 
     $output .= '<li>' . l($file_title . ' ' . $file_language, $file_url, array(
-      'attributes' => array('target' => '_blank')
+      'attributes' => array('target' => '_blank'),
     )) . '</li>';
   }
 
@@ -246,10 +245,10 @@ function hr_core_node_view($node, $view_mode, $langcode) {
             'a2a_dd',
             'btn',
             'btn-secondary',
-            'btn-sm'
-          )
+            'btn-sm',
+          ),
         ),
-        'html' => TRUE
+        'html' => TRUE,
       )
     ),
     '#suffix' => '<script type="text/javascript">if (typeof a2a_config !== "undefined") { a2a_config.linkname = "' . $node->title . '";a2a_config.linkurl = "' . $url . '";a2a.init("page");}</script>',
@@ -267,10 +266,10 @@ function hr_core_node_view($node, $view_mode, $langcode) {
           'class' => array(
             'btn',
             'btn-secondary',
-            'btn-sm'
-          )
+            'btn-sm',
+          ),
         ),
-        'html' => TRUE
+        'html' => TRUE,
       )
     ),
   );
@@ -309,7 +308,7 @@ function hr_core_og_context_handler($node = NULL) {
 }
 
 /**
- * Implements hook_token_info()
+ * Implements hook_token_info().
  */
 function hr_core_token_info() {
   $info['site']['og_context_current_group'] = array(
@@ -320,7 +319,7 @@ function hr_core_token_info() {
 }
 
 /**
- * Implements hook_tokens()
+ * Implements hook_tokens().
  */
 function hr_core_tokens($type, $tokens, array $data = array(), array $options = array()) {
   $replacements = array();
@@ -347,7 +346,7 @@ function _hr_core_draft_button($label) {
   return array(
     '#type' => 'submit',
     '#access' => TRUE,
-    '#value' => t($label),
+    '#value' => $label,
     '#weight' => 6,
     '#submit' =>
       array(
@@ -376,8 +375,8 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
     $form['#attached']['css'][] = drupal_get_path('module', 'hr_core') . '/css/hr_core_guidelines.css';
   }
 
-  if (isset($form['field_related_content']) && !empty($form['field_related_content']['und'])) {
-    $form['field_related_content']['und']['#after_build'][] = 'hr_core_related_content_after_build';
+  if (isset($form['field_related_content']) && !empty($form['field_related_content'][LANGUAGE_NONE])) {
+    $form['field_related_content'][LANGUAGE_NONE]['#after_build'][] = 'hr_core_related_content_after_build';
   }
 
   $node = $form['#node'];
@@ -388,15 +387,15 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
   if (!variable_get('publishcontent_' . $node->type, FALSE)) {
     if (!isset($node->nid)) {
       $form['actions']['submit']['#value'] = t('Publish');
-      $form['actions']['draft'] = _hr_core_draft_button('Save As Draft');
+      $form['actions']['draft'] = _hr_core_draft_button(t('Save As Draft'));
     }
     else {
       if ($node->status == 1) {
-        $form['actions']['draft'] = _hr_core_draft_button('Unpublish');
+        $form['actions']['draft'] = _hr_core_draft_button(t('Unpublish'));
       }
       else {
         $form['actions']['submit']['#value'] = t('Publish');
-        $form['actions']['draft'] = _hr_core_draft_button('Save As Draft');
+        $form['actions']['draft'] = _hr_core_draft_button(t('Save As Draft'));
       }
 
     }
@@ -407,8 +406,8 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
   // Limit disasters/hubs to selected groups on node edit.
   if (isset($form['field_disasters']) || isset($form['field_coordination_hubs'])) {
     $groups = array();
-    if (isset($form['#node']->og_group_ref) && isset($form['#node']->og_group_ref['und'])) {
-      foreach ($form['#node']->og_group_ref['und'] as $group_ref) {
+    if (isset($form['#node']->og_group_ref) && isset($form['#node']->og_group_ref[LANGUAGE_NONE])) {
+      foreach ($form['#node']->og_group_ref[LANGUAGE_NONE] as $group_ref) {
         $groups[] = $group_ref['target_id'];
       }
     }
@@ -437,7 +436,7 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
           foreach ($disasters as $nid => $disaster) {
             $options[$nid] = $disaster->title;
           }
-          $form['field_disasters']['und']['#options'] = $options;
+          $form['field_disasters'][LANGUAGE_NONE]['#options'] = $options;
         }
         else {
           $form['field_disasters']['#access'] = FALSE;
@@ -462,7 +461,7 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
           }
           asort($options);
 
-          $form['field_coordination_hubs']['und']['#options'] = $options;
+          $form['field_coordination_hubs'][LANGUAGE_NONE]['#options'] = $options;
         }
         else {
           $form['field_coordination_hubs']['#access'] = FALSE;
@@ -474,13 +473,13 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
   if (publishcontent_publish_access($node)) {
     if (!isset($node->nid)) {
       $form['actions']['submit']['#value'] = t('Publish');
-      $form['actions']['draft'] = _hr_core_draft_button('Save As Draft');
+      $form['actions']['draft'] = _hr_core_draft_button(t('Save As Draft'));
     }
   }
   else {
     if (isset($node->clone_from_original_nid)) {
       $form['actions']['submit']['#value'] = t('Publish');
-      $form['actions']['draft'] = _hr_core_draft_button('Save As Draft');
+      $form['actions']['draft'] = _hr_core_draft_button(t('Save As Draft'));
     }
     elseif (!isset($node->nid)) {
       $form['actions']['submit']['#value'] = t('Save As Draft');
@@ -621,8 +620,8 @@ function hr_core_theme_field_multiple_value_form(array $variables) {
       'rows' => $rows,
       'attributes' => array(
         'id' => $table_id,
-        'class' => array('field-multiple-table')
-      )
+        'class' => array('field-multiple-table'),
+      ),
     ));
     $output .= $element['#description'] ? '<div class="description">' . $element['#description'] . '</div>' : '';
     $output .= '<div class="clearfix">' . drupal_render($add_more_button) . '</div>';
@@ -677,7 +676,7 @@ function _hr_core_render_multiple_input_lines(&$form, &$form_state) {
       $items['items_count'] = $items_count;
       $items['field']['cardinality'] = $items_count;
       $form[$field_name][$field_language] += field_multiple_value_form($items['field'], $items['instance'], $field_language, array(), $form, $form_state);
-      $form[$field_name][$field_language]['#description'] .= t(' Add up to @count values using the "Add another item" button. To add more, save the form as draft then edit it.', array('@count' => $items_count));
+      $form[$field_name][$field_language]['#description'] .= ' ' . t('Add up to @count values using the "Add another item" button. To add more, save the form as draft then edit it.', array('@count' => $items_count));
 
       // Reset theme function.
       $form[$field_name][$field_language]['#theme'] = $form_theme;
@@ -838,7 +837,7 @@ function hr_core_menu_link_exists($path, $menu_name) {
 }
 
 /**
- * Implements hook_addressfield_default_values_alter()
+ * Implements hook_addressfield_default_values_alter().
  *
  * Sets default country to the country of the space
  * See https://atrium.humanitarianresponse.info/humanitarian_response/node/4329.
@@ -850,9 +849,9 @@ function hr_core_addressfield_default_values_alter(&$default_values, $context) {
 }
 
 /**
- * Implements hook_languagefield_options_alter()
+ * Implements hook_languagefield_options_alter().
  *
- * Added Dari as a language. See https://atrium.humanitarianresponse.info/humanitarian_response/node/4367.
+ * Added Dari as a language.
  */
 function hr_core_languagefield_options_alter(&$languages, $subsets, $langcode) {
   if (!isset($languages['prs'])) {
@@ -881,7 +880,7 @@ function hr_core_related_content_after_build($element) {
 }
 
 /**
- * Implements hook_panels_new_pane_alter($pane)
+ * Implements hook_panels_new_pane_alter().
  *
  * Set default panel style to hr_highlighted.
  */
@@ -1457,7 +1456,8 @@ function hr_core_boot() {
 /**
  * Implements hook_file_update().
  *
- * Avoid links from changing when a file is replaced. Taken from upload_replace module.
+ * Avoid links from changing when a file is replaced. Taken from
+ * upload_replace module.
  */
 function hr_core_file_update($new_file) {
 
@@ -1521,13 +1521,11 @@ function hr_core_file_update($new_file) {
 
       $old_destination = $db_path['uri'];
 
-      $t_message = 'The file %old could not be moved to %new';
-
       // Swap the files.
       if ($is_blocked) {
         // Move the blocking file to a temporary location.
         if (!file_unmanaged_move($desired_destination, $tmp_destination)) {
-          drupal_set_message(t($t_message, array('%old' => $desired_destination, '%new' => $tmp_destination)), 'error');
+          drupal_set_message(t('The file %old could not be moved to %new', array('%old' => $desired_destination, '%new' => $tmp_destination)), 'error');
           return;
         }
 
@@ -1540,7 +1538,7 @@ function hr_core_file_update($new_file) {
 
       // Move the new file to the preferred location.
       if (!file_unmanaged_move($old_destination, $desired_destination)) {
-        drupal_set_message(t($t_message, array('%old' => $old_destination, '%new' => $desired_destination)), 'error');
+        drupal_set_message(t('The file %old could not be moved to %new', array('%old' => $old_destination, '%new' => $desired_destination)), 'error');
         return;
       }
 
@@ -1557,7 +1555,7 @@ function hr_core_file_update($new_file) {
 
         // Move the older file from temp to the new _X location.
         if (!file_unmanaged_move($tmp_destination, $old_destination)) {
-          drupal_set_message(t($t_message, array('%old' => $tmp_destination, '%new' => $old_destination)), 'error');
+          drupal_set_message(t('The file %old could not be moved to %new', array('%old' => $tmp_destination, '%new' => $old_destination)), 'error');
           return;
         }
 
@@ -1601,7 +1599,7 @@ function hr_core_file_delete($file) {
 }
 
 /**
- * Implements hook_query_TAG_alter()
+ * Implements hook_query_TAG_alter().
  *
  * Allows filter by parent in the API.
  */
@@ -1635,14 +1633,14 @@ function hr_core_entity_property_info_alter(&$entity_info) {
 }
 
 /**
- * Implements hook_node_validate()
+ * Implements hook_node_validate().
  *
  * Makes sure offices have an English translation.
  */
 function hr_core_node_validate($node, $form, &$form_state) {
   $node_types = array('hr_office');
   $node_labels = array(
-    'hr_office' => t('Office')
+    'hr_office' => t('Office'),
   );
   if (in_array($node->type, $node_types) && $node->language !== 'en') {
     // Make sure the node has an English translation.
@@ -1652,13 +1650,13 @@ function hr_core_node_validate($node, $form, &$form_state) {
       $languages = array_keys($translations);
       if (!in_array('en', $languages)) {
         form_set_error($form['language']['#name'], t('This @label must have an English translation', array(
-          '@label' => $node_labels[$node->type]
+          '@label' => $node_labels[$node->type],
         )));
       }
     }
     else {
       form_set_error($form['language']['#name'], t('This @label must have an English translation', array(
-        '@label' => $node_labels[$node->type]
+        '@label' => $node_labels[$node->type],
       )));
     }
   }
