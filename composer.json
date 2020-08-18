@@ -97,6 +97,7 @@
         "drupal/media": "2.19",
         "drupal/media_vimeo": "^2.1",
         "drupal/media_youtube": "^3.8",
+        "drupal/memcache": "^1.8",
         "drupal/menu_target": "^1.7",
         "drupal/modernizr": "^3.11",
         "drupal/moment": "^2.0",
