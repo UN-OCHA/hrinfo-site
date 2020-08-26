@@ -35,6 +35,9 @@
       "drupal/restful": {
         "HR.info issue 754": "PATCHES/restful-754.patch"
       },
+      "drupal/facetapi_bonus": {
+        "Allow HTML in reset link": "https://www.drupal.org/files/issues/2020-08-26/2205469-allow_html-2.patch"
+      },
       "drupal/dbtng_migrator": {
         "#2757035: Integrity constraint violation errors when migrating from Postgres to MySQL": "PATCHES/integrity-constraint-error-postgres-source-2757035-1-D7.patch",
         "Skip deleted tables": "PATCHES/dbtng_migrator_skip_field_deleted.patch"
