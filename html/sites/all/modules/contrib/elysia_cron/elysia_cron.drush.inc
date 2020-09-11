@@ -128,7 +128,7 @@ function drush_elysia_cron_run_wrapper($op = FALSE, $target = FALSE) {
             $line[] = dt('Last run: !time', array('!time' => elysia_cron_date(_ec_variable_get('elysia_cron_last_run', 0))));
           }
         }
-        drush_print(implode($line, ', '));
+        drush_print(implode(', ', $line));
 
         foreach ($jobs as $job => $conf) {
           $line = array();
