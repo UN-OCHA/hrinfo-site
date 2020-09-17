@@ -529,10 +529,6 @@
                     "homepage": "https://www.drupal.org/user/216396"
                 },
                 {
-                    "name": "colan",
-                    "homepage": "https://www.drupal.org/user/58704"
-                },
-                {
                     "name": "diqidoq",
                     "homepage": "https://www.drupal.org/user/1001934"
                 },
@@ -825,6 +821,9 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-3.x": "3.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-3.5",
                     "datestamp": "1413299929",
@@ -842,10 +841,6 @@
                 {
                     "name": "KarenS",
                     "homepage": "https://www.drupal.org/user/45874"
-                },
-                {
-                    "name": "Neslee Canil Pinto",
-                    "homepage": "https://www.drupal.org/user/3580850"
                 },
                 {
                     "name": "fizk",
@@ -1511,6 +1506,9 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-2.10",
                     "datestamp": "1491562115",
@@ -2101,17 +2099,17 @@
         },
         {
             "name": "drupal/elysia_cron",
-            "version": "2.7.0",
+            "version": "2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/elysia_cron.git",
-                "reference": "7.x-2.7"
+                "reference": "7.x-2.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/elysia_cron-7.x-2.7.zip",
-                "reference": "7.x-2.7",
-                "shasum": "1b96c051bf775fafd69564f1769730135e219037"
+                "url": "https://ftp.drupal.org/files/projects/elysia_cron-7.x-2.8.zip",
+                "reference": "7.x-2.8",
+                "shasum": "f74bce5995274fda3d7ac6a5367286c4af2b944b"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -2119,8 +2117,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.7",
-                    "datestamp": "1556076184",
+                    "version": "7.x-2.8",
+                    "datestamp": "1596861895",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3060,6 +3058,9 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-2.11",
                     "datestamp": "1541189192",
@@ -3091,10 +3092,6 @@
                     "homepage": "https://www.drupal.org/user/43670"
                 },
                 {
-                    "name": "flocondetoile",
-                    "homepage": "https://www.drupal.org/user/2006064"
-                },
-                {
                     "name": "jmiccolis",
                     "homepage": "https://www.drupal.org/user/31731"
                 },
@@ -3123,17 +3120,17 @@
         },
         {
             "name": "drupal/feeds",
-            "version": "2.0.0-beta4",
+            "version": "2.0.0-beta5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/feeds.git",
-                "reference": "7.x-2.0-beta4"
+                "reference": "7.x-2.0-beta5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/feeds-7.x-2.0-beta4.zip",
-                "reference": "7.x-2.0-beta4",
-                "shasum": "195e5d0d3795f8f1981f8f83f5c0c7bc27d275a6"
+                "url": "https://ftp.drupal.org/files/projects/feeds-7.x-2.0-beta5.zip",
+                "reference": "7.x-2.0-beta5",
+                "shasum": "952a64619cdf382b6a7aa372cdfe52aac0912672"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -3141,13 +3138,14 @@
                 "drupal/job_scheduler": "*"
             },
             "require-dev": {
-                "drupal/ctools": "*",
+                "drupal/ctools": "<=1.12",
                 "drupal/date": "*",
                 "drupal/entity_translation": "*",
                 "drupal/features": "*",
                 "drupal/feeds_xpathparser": "*",
                 "drupal/i18n_taxonomy": "*",
                 "drupal/link": "*",
+                "drupal/og": "*",
                 "drupal/rules": "*",
                 "drupal/variable": "*",
                 "drupal/views": "*"
@@ -3155,8 +3153,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.0-beta4",
-                    "datestamp": "1506437520",
+                    "version": "7.x-2.0-beta5",
+                    "datestamp": "1597331280",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -5864,6 +5862,78 @@
             }
         },
         {
+            "name": "drupal/memcache",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/memcache.git",
+                "reference": "7.x-1.8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/memcache-7.x-1.8.zip",
+                "reference": "7.x-1.8",
+                "shasum": "89395ddc7bdae9d4a34e42a1bd62078c7b910587"
+            },
+            "require": {
+                "drupal/drupal": "~7.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "7.x-1.8",
+                    "datestamp": "1594981706",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/7/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Fabianx",
+                    "homepage": "https://www.drupal.org/user/693738"
+                },
+                {
+                    "name": "Jeremy",
+                    "homepage": "https://www.drupal.org/user/409"
+                },
+                {
+                    "name": "bdragon",
+                    "homepage": "https://www.drupal.org/user/53081"
+                },
+                {
+                    "name": "catch",
+                    "homepage": "https://www.drupal.org/user/35733"
+                },
+                {
+                    "name": "damiankloip",
+                    "homepage": "https://www.drupal.org/user/1037976"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "jvandyk",
+                    "homepage": "https://www.drupal.org/user/2375"
+                },
+                {
+                    "name": "robertDouglass",
+                    "homepage": "https://www.drupal.org/user/5449"
+                }
+            ],
+            "description": "High performance integration with memcache.",
+            "homepage": "https://www.drupal.org/project/memcache",
+            "support": {
+                "source": "https://git.drupalcode.org/project/memcache"
+            }
+        },
+        {
             "name": "drupal/menu_target",
             "version": "1.7.0",
             "source": {
@@ -6073,9 +6143,12 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-2.7",
-                    "datestamp": "1582667821",
+                    "datestamp": "1497976586",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6888,17 +6961,17 @@
         },
         {
             "name": "drupal/panels",
-            "version": "3.9.0",
+            "version": "3.10.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/panels.git",
-                "reference": "7.x-3.9"
+                "reference": "7.x-3.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/panels-7.x-3.9.zip",
-                "reference": "7.x-3.9",
-                "shasum": "6c06c2caa8ac0c170e6cca4e3b37baba57dda6e4"
+                "url": "https://ftp.drupal.org/files/projects/panels-7.x-3.10.zip",
+                "reference": "7.x-3.10",
+                "shasum": "9d9a1c7820dd64a6daec3ecd1cd01243ef00597c"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -6912,8 +6985,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-3.9",
-                    "datestamp": "1486394283",
+                    "version": "7.x-3.10",
+                    "datestamp": "1593990785",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6942,10 +7015,6 @@
                     "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
-                    "name": "joelpittet",
-                    "homepage": "https://www.drupal.org/user/160302"
-                },
-                {
                     "name": "merlinofchaos",
                     "homepage": "https://www.drupal.org/user/26979"
                 },
@@ -6960,6 +7029,10 @@
                 {
                     "name": "samuel.mortenson",
                     "homepage": "https://www.drupal.org/user/2582268"
+                },
+                {
+                    "name": "sdboyer",
+                    "homepage": "https://www.drupal.org/user/146719"
                 },
                 {
                     "name": "tim.plunkett",
@@ -7834,6 +7907,9 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-1.0-rc3",
                     "datestamp": "1436393339",
@@ -8273,6 +8349,9 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-1.26",
                     "datestamp": "1552334580",
@@ -9083,6 +9162,9 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1485316084",
@@ -9148,6 +9230,9 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-1.1",
                     "datestamp": "1325700944",
@@ -10218,7 +10303,7 @@
                 },
                 "drupal": {
                     "version": "7.x-2.6",
-                    "datestamp": "1563520137",
+                    "datestamp": "1563397062",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
