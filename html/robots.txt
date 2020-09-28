@@ -91,3 +91,10 @@ Disallow: /?q=user/login/
 Disallow: /?q=user/logout/
 Disallow: */calendar.ics/*
 Disallow: */events/pdf$
+# Searches (everywhere)
+Disallow: /en/search
+Disallow: /es/search
+Disallow: /fr/search
+Disallow: /ru/search
+Disallow: */search
+Disallow: *?search
