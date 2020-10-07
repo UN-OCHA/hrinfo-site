@@ -45,6 +45,9 @@
       "drupal/shs": {
         "Disable entity loading": "PATCHES/shs_lazyload.patch",
         "Disable entity loading 2": "PATCHES/shs_lazyload_2.patch"
+      },
+      "drupal/cors": {
+        "#2280323: Sends Multiple Access-Control-Allow-Origin": "https://www.drupal.org/files/issues/sends_multiple-2280323-10.patch"
       }
     }
 }
