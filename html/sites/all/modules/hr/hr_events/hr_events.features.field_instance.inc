@@ -182,6 +182,60 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-hr_event-field_contacts_text'.
+  $field_instances['node-hr_event-field_contacts_text'] = array(
+    'bundle' => 'hr_event',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 27,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_contacts_text',
+    'label' => 'Contacts',
+    'required' => 0,
+    'settings' => array(
+      'display_summary' => 0,
+      'entity_translation_sync' => FALSE,
+      'linkit' => array(
+        'button_text' => 'Search',
+        'enable' => 0,
+        'profile' => '',
+      ),
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 20,
+        'summary_rows' => 5,
+      ),
+      'type' => 'text_textarea_with_summary',
+      'weight' => 23,
+    ),
+  );
+
   // Exported field_instance: 'node-hr_event-field_coordination_hubs'.
   $field_instances['node-hr_event-field_coordination_hubs'] = array(
     'bundle' => 'hr_event',
@@ -287,7 +341,7 @@ function hr_events_field_default_field_instances() {
   // Exported field_instance: 'node-hr_event-field_event_agenda'.
   $field_instances['node-hr_event-field_event_agenda'] = array(
     'bundle' => 'hr_event',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => 'Select the agenda of the event, which must have been previously uploaded to HR.info as a document.',
@@ -448,7 +502,7 @@ function hr_events_field_default_field_instances() {
   // Exported field_instance: 'node-hr_event-field_event_meeting_minutes'.
   $field_instances['node-hr_event-field_event_meeting_minutes'] = array(
     'bundle' => 'hr_event',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => 'Select the meeting minutes of the event, which must have been previously uploaded to HR.info as a document.',
@@ -601,7 +655,7 @@ function hr_events_field_default_field_instances() {
   // Exported field_instance: 'node-hr_event-field_organizations'.
   $field_instances['node-hr_event-field_organizations'] = array(
     'bundle' => 'hr_event',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => 'Add organization(s) running the event. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select "other" in the meantime.',
@@ -1064,6 +1118,7 @@ function hr_events_field_default_field_instances() {
   t('Choose whether the event will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
   t('Cluster(s)/Sector(s)');
   t('Contact(s)');
+  t('Contacts');
   t('Content visibility');
   t('Coordination hub(s)');
   t('Date(s)');
@@ -1072,8 +1127,8 @@ function hr_events_field_default_field_instances() {
   t('Event Category');
   t('Event description');
   t('Global Cluster(s)');
-  t('Indicate here where the event takes place.');
   t('Indicate the Global Cluster(s) the event refers to.');
+  t('Indicate where the event takes place.');
   t('Location');
   t('Meeting minutes');
   t('Name');

@@ -22,6 +22,7 @@
   <?php print drupal_render($form['field_organizations']); ?>
   <?php print drupal_render($form['field_coordination_hubs']); ?>
   <?php print drupal_render($form['field_disasters']); ?>
+  <?php print drupal_render($form['field_contacts_text']); ?>
   <?php print drupal_render($form['field_hid_contact_ref']); ?>
 </fieldset>
 <fieldset class="hr-additional">

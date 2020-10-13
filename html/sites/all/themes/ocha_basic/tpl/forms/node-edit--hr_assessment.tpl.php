@@ -37,7 +37,6 @@
     <?php print drupal_render($form['field_asst_freq']); ?>
     <?php print drupal_render($form['field_related_content']); ?>
     <?php print drupal_render($form['field_asst_unit']); ?>
-    <?php print drupal_render($form['field_hid_contact_ref']); ?>
     <?php print drupal_render($form['field_asst_collection_method']); ?>
     <?php print drupal_render($form['field_themes']); ?>
   </div>

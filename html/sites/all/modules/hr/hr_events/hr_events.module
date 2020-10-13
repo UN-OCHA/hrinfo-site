@@ -385,6 +385,8 @@ function hr_events_form_alter_after_build($form, &$form_state) {
   $form['menu']['#access'] = FALSE;
   $language = $form['body']['#language'];
   $form['body'][$language][0]['format']['#access'] = FALSE;
+  $language = $form['field_contacts_text']['#language'];
+  $form['field_contacts_text'][$language][0]['format']['#access'] = FALSE;
   unset($form['path']);
 
   return $form;
