@@ -66,13 +66,11 @@ function drush_hr_events_hid_contacts_batch_operation($limit = 1, &$context) {
   // Process the next 50 nodes.
   $batch_limit = $limit > 50 ? 50 : $limit;
   $results = db_query_range("SELECT entity_id, field_hid_contact_ref_cid FROM {field_data_field_hid_contact_ref} WHERE entity_id > :entity_id AND bundle = :bundle ORDER BY entity_id ASC", 0, $batch_limit, array(':entity_id' => $context['sandbox']['current_entity_id'], ':bundle' => 'hr_event'))->fetchAll();
-  dd($results, 'results');
   foreach ($results as $result) {
     $text = '';
     $wrapper = entity_metadata_wrapper('node', $result->entity_id);
 
     if (in_array($result->entity_id, $processed) && !empty($wrapper->field_contacts_text->value()['value'])) {
-      dd($wrapper->field_contacts_text->value()['value'], '$wrapper->field_contacts_text->value() value');
       $text .= $wrapper->field_contacts_text->value()['value'] . "<br><br>";
     }
 
@@ -94,7 +92,6 @@ function drush_hr_events_hid_contacts_batch_operation($limit = 1, &$context) {
     }
 
     if (!empty($text)) {
-      dd($text, 'text');
       $wrapper->field_contacts_text->set(array(
         'value' => $text,
         'format' => 'hr_wysiwyg',
