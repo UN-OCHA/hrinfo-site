@@ -649,7 +649,6 @@ function _hr_core_render_multiple_input_lines(&$form, &$form_state) {
   $field_names = array(
     'field_data_sources' => 4,
     'field_files_collection' => 4,
-    'field_hid_contact_ref' => 2,
     'field_locations' => 4,
     'field_phones' => 4,
     'field_related_content' => 4,
