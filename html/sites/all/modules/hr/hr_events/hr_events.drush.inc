@@ -34,7 +34,8 @@ function drush_hr_events_hid_contacts() {
     return drush_set_error('DRUPAL_SITE_NOT_FOUND', dt('You need to specify an alias or run this command within a drupal site.'));
   }
 
-  $limit = drush_get_option('limit', 1);
+  $default_limit = db_query("SELECT entity_id FROM {field_data_field_hid_contact_ref} WHERE bundle = :bundle", array(':bundle' => 'hr_event'))->rowCount();
+  $limit = drush_get_option('limit', $default_limit);
 
   $batch = array(
     'title' => t('Importing contact details from HID'),
@@ -52,7 +53,7 @@ function drush_hr_events_hid_contacts() {
  * Batch handler.
  */
 // @codingStandardsIgnoreLine
-function drush_hr_events_hid_contacts_batch_operation($limit = 1, &$context) {
+function drush_hr_events_hid_contacts_batch_operation($limit, &$context) {
   static $processed = array();
 
   if (empty($context['sandbox'])) {
@@ -106,9 +107,12 @@ function drush_hr_events_hid_contacts_batch_operation($limit = 1, &$context) {
   }
 
   // Multistep processing : report progress.
-  if ($context['sandbox']['progress'] <= $context['sandbox']['max']) {
+  if (!empty($results) && $context['sandbox']['progress'] <= $context['sandbox']['max']) {
     $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
     $context['message'] = 'Progress ' . $context['sandbox']['progress'] . '/' . $context['sandbox']['max'];
+  }
+  else {
+    $context['finished'] = TRUE;
   }
 }
 
