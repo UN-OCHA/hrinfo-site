@@ -765,5 +765,12 @@ function hr_core_update_7047() {
 function hr_core_update_7048() {
   field_delete_field('field_hid_contact_ref');
   field_delete_field('field_hid_access');
-  field_delete_field('bundle_hid_access');
+  field_delete_field('field_bundle_hid_access');
+}
+
+/**
+ * Remove HID contacts ref fields properly.
+ */
+function hr_core_update_7049() {
+  field_delete_field('field_bundle_hid_access');
 }
