@@ -15,6 +15,7 @@
   <?php print drupal_render($form['field_address']); ?>
   <?php print drupal_render($form['field_event_agenda']); ?>
   <?php print drupal_render($form['field_event_meeting_minutes']); ?>
+  <?php print drupal_render($form['field_contacts_text']); ?>
 </fieldset>
 <fieldset class="details">
   <?php print drupal_render($form['og_group_ref']); ?>
@@ -22,8 +23,6 @@
   <?php print drupal_render($form['field_organizations']); ?>
   <?php print drupal_render($form['field_coordination_hubs']); ?>
   <?php print drupal_render($form['field_disasters']); ?>
-  <?php print drupal_render($form['field_contacts_text']); ?>
-  <?php print drupal_render($form['field_hid_contact_ref']); ?>
 </fieldset>
 <fieldset class="hr-additional">
   <div class="toggle">
