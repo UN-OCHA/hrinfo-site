@@ -756,7 +756,14 @@ function hr_core_update_7046() {
  * Remove HID contacts ref fields.
  */
 function hr_core_update_7047() {
-  field_delete_instance('node-hr_assessment-field_hid_contact_ref');
-  field_delete_instance('node-hr_event-field_hid_contact_ref');
-  field_delete_instance('node-hr_operation-field_hid_contact_ref');
+  return "Code removed";
+}
+
+/**
+ * Remove HID contacts ref fields properly.
+ */
+function hr_core_update_7048() {
+  field_delete_field('field_hid_contact_ref');
+  field_delete_field('field_hid_access');
+  field_delete_field('bundle_hid_access');
 }
