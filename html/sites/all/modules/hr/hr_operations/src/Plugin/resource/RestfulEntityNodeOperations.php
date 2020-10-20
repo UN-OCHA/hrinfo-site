@@ -57,10 +57,6 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
       'property' => 'field_operation_status',
     );
 
-    $public_fields['hid_access'] = array(
-      'property' => 'field_hid_access',
-    );
-
     $public_fields['country'] = array(
       'property' => 'field_country',
       'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',
@@ -105,10 +101,6 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
       'callback' => array($this, 'getTimezone')
     );
 
-    $public_fields['focal_points'] = array(
-      'callback' => array($this, 'getContacts')
-    );
-
     $public_fields['social_media'] = array(
       'property' => 'field_social_media'
     );
@@ -138,22 +130,6 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
     );
 
     return $public_fields;
-  }
-
-  /**
-   * Get contacts.
-   */
-  public function getContacts(DataInterpreterInterface $di) {
-    $cids = array();
-    $wrapper = $di->getWrapper();
-    $nid = $wrapper->getIdentifier();
-    $node = node_load($nid);
-    if (!empty($node->field_hid_contact_ref)) {
-      foreach ($node->field_hid_contact_ref[LANGUAGE_NONE] as $cid) {
-        $cids[] = $cid['cid'];
-      }
-    }
-    return $cids;
   }
 
   /**

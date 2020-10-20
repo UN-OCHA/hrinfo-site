@@ -267,7 +267,7 @@ function hr_events_pdf_output($nid) {
   }
   .pdf-footer {
     display: table;
-    width: 100%;
+    width: 213mm; /* 297mm * 0.75 - 5mm - 5mm */
     margin: 0 5mm;
     white-space: nowrap;
 
@@ -297,7 +297,7 @@ PDF_FOOTER;
     'pdfFormat' => 'A4',
     'pdfLandscape' => 'true',
     'pdfBackground' => 'true',
-  // Suppress default by sending space character.
+    // Suppress default by sending space character.
     'pdfHeader' => ' ',
     'pdfFooter' => $pdf_footer,
     'pdfMarginTop' => '24',
@@ -385,6 +385,8 @@ function hr_events_form_alter_after_build($form, &$form_state) {
   $form['menu']['#access'] = FALSE;
   $language = $form['body']['#language'];
   $form['body'][$language][0]['format']['#access'] = FALSE;
+  $language = $form['field_contacts_text']['#language'];
+  $form['field_contacts_text'][$language][0]['format']['#access'] = FALSE;
   unset($form['path']);
 
   return $form;

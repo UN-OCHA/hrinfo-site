@@ -47,7 +47,7 @@ function hr_jobs_reliefweb_jobs($operation) {
 }
 
 /**
- * Adopted from the hid_profiles module(github.com/humanitarianresponse/hid_profiles).
+ * Add and attach template.
  */
 function hr_jobs_load_template($file, $id) {
   $template = DRUPAL_ROOT . '/' . drupal_get_path('module', 'hr_jobs') . '/templates/' . $file . '.html';
