@@ -16,7 +16,7 @@ function hr_events_drush_command() {
     'callback' => 'drush_hr_events_hid_contacts',
     'options' => array(
       'limit' => array(
-        'description' => 'The amount of contacts to import. Defaults to 1.',
+        'description' => 'The amount of contacts to import. Defaults to all.',
         'example-value' => '30',
       ),
     ),
