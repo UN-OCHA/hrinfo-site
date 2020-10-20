@@ -74,8 +74,6 @@ function hdx_datasets_block_view($delta = '') {
 
 /**
  * Load the template for displaying datasets.
- *
- * @see hid_profiles_local_contacts()
  */
 function hdx_datasets_load_template($file, $id) {
   $template = DRUPAL_ROOT . '/' . drupal_get_path('module', 'hdx_datasets') . '/templates/' . $file . '.html';

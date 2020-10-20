@@ -114,10 +114,6 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
       ),
     );
 
-    $public_fields['hid_access'] = array(
-      'property' => 'field_bundle_hid_access',
-    );
-
     $public_fields['operation'] = array(
       'property' => 'og_group_ref',
       'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldEntityMinimal',

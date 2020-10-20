@@ -105,32 +105,6 @@ function hr_bundles_panelizer_defaults() {
   $display->content['new-95e3e805-0870-4575-b617-cec3ea15411d'] = $pane;
   $display->panels['column1'][1] = 'new-95e3e805-0870-4575-b617-cec3ea15411d';
   $pane = new stdClass();
-  $pane->pid = 'new-78681d00-c9d4-4bc8-8693-9c6dbd083be4';
-  $pane->panel = 'column1';
-  $pane->type = 'hr_contacts_key_contacts';
-  $pane->subtype = 'hr_contacts_key_contacts';
-  $pane->shown = TRUE;
-  $pane->access = array();
-  $pane->configuration = array(
-    'contacts' => array(
-      0 => FALSE,
-    ),
-    'override_title' => 1,
-    'override_title_text' => 'Key Contacts',
-  );
-  $pane->cache = array();
-  $pane->style = array(
-    'settings' => NULL,
-    'style' => 'hr_highlighted',
-  );
-  $pane->css = array();
-  $pane->extras = array();
-  $pane->position = 2;
-  $pane->locks = array();
-  $pane->uuid = '78681d00-c9d4-4bc8-8693-9c6dbd083be4';
-  $display->content['new-78681d00-c9d4-4bc8-8693-9c6dbd083be4'] = $pane;
-  $display->panels['column1'][2] = 'new-78681d00-c9d4-4bc8-8693-9c6dbd083be4';
-  $pane = new stdClass();
   $pane->pid = 'new-b6ec1f94-7313-4b3a-ba67-c5b2145a3674';
   $pane->panel = 'column1';
   $pane->type = 'views_panes';
