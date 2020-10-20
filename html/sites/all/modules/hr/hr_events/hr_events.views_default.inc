@@ -1162,20 +1162,10 @@ return 0;';
       'address' => 'address',
     ),
   );
-  /* Field: Content: Contact(s) */
-  $handler->display->display_options['fields']['field_hid_contact_ref']['id'] = 'field_hid_contact_ref';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['table'] = 'field_data_field_hid_contact_ref';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['field'] = 'field_hid_contact_ref';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['label'] = 'Contacts';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['element_label_class'] = 'col-sm-3';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['settings'] = array(
-    'show_name' => 1,
-    'show_organization' => 0,
-    'show_job_title' => 0,
-    'show_email' => 1,
-    'show_phone_number' => 1,
-  );
-  $handler->display->display_options['fields']['field_hid_contact_ref']['delta_offset'] = '0';
+  /* Field: Content: Contacts */
+  $handler->display->display_options['fields']['field_contacts_text']['id'] = 'field_contacts_text';
+  $handler->display->display_options['fields']['field_contacts_text']['table'] = 'field_data_field_contacts_text';
+  $handler->display->display_options['fields']['field_contacts_text']['field'] = 'field_contacts_text';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
@@ -1356,19 +1346,10 @@ return 0;';
       'address' => 'address',
     ),
   );
-  /* Field: Content: Contact(s) */
-  $handler->display->display_options['fields']['field_hid_contact_ref']['id'] = 'field_hid_contact_ref';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['table'] = 'field_data_field_hid_contact_ref';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['field'] = 'field_hid_contact_ref';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['label'] = 'Contacts';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['settings'] = array(
-    'show_name' => 1,
-    'show_organization' => 0,
-    'show_job_title' => 0,
-    'show_email' => 1,
-    'show_phone_number' => 1,
-  );
-  $handler->display->display_options['fields']['field_hid_contact_ref']['delta_offset'] = '0';
+  /* Field: Content: Contacts */
+  $handler->display->display_options['fields']['field_contacts_text']['id'] = 'field_contacts_text';
+  $handler->display->display_options['fields']['field_contacts_text']['table'] = 'field_data_field_contacts_text';
+  $handler->display->display_options['fields']['field_contacts_text']['field'] = 'field_contacts_text';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
@@ -1511,19 +1492,10 @@ return 0;';
       'address' => 'address',
     ),
   );
-  /* Field: Content: Contact(s) */
-  $handler->display->display_options['fields']['field_hid_contact_ref']['id'] = 'field_hid_contact_ref';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['table'] = 'field_data_field_hid_contact_ref';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['field'] = 'field_hid_contact_ref';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['label'] = 'Contacts';
-  $handler->display->display_options['fields']['field_hid_contact_ref']['settings'] = array(
-    'show_name' => 1,
-    'show_organization' => 0,
-    'show_job_title' => 0,
-    'show_email' => 1,
-    'show_phone_number' => 1,
-  );
-  $handler->display->display_options['fields']['field_hid_contact_ref']['delta_offset'] = '0';
+  /* Field: Content: Contacts */
+  $handler->display->display_options['fields']['field_contacts_text']['id'] = 'field_contacts_text';
+  $handler->display->display_options['fields']['field_contacts_text']['table'] = 'field_data_field_contacts_text';
+  $handler->display->display_options['fields']['field_contacts_text']['field'] = 'field_contacts_text';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';

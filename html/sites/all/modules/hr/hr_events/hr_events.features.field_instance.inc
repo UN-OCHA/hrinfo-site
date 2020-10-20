@@ -550,49 +550,6 @@ function hr_events_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_event-field_hid_contact_ref'.
-  $field_instances['node-hr_event-field_hid_contact_ref'] = array(
-    'bundle' => 'hr_event',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'To show in the list, the person must have a <a href="https://humanitarian.id/">HumanitarianID</a> profile.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 24,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_hid_contact_ref',
-    'label' => 'Contact(s)',
-    'required' => 0,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'hid_contact_reference',
-      'settings' => array(),
-      'type' => 'hid_contact_reference_autocomplete',
-      'weight' => 13,
-    ),
-  );
-
   // Exported field_instance: 'node-hr_event-field_location'.
   $field_instances['node-hr_event-field_location'] = array(
     'bundle' => 'hr_event',
