@@ -751,3 +751,13 @@ function hr_core_update_7046() {
     }
   }
 }
+
+/**
+ * Remove HID contacts ref fields.
+ */
+function hr_core_update_7047() {
+  field_delete_field('field_hid_contact_ref');
+  field_delete_field('field_hid_access');
+  field_delete_field('field_bundle_hid_access');
+  field_delete_field('field_bundle_hid_access');
+}

@@ -517,7 +517,6 @@ function hr_core_theme_field_multiple_value_form(array $variables) {
   $no_drag_fields = array(
     'field_data_sources',
     'field_files_collection',
-    'field_hid_contact_ref',
     'field_locations',
     'field_phones',
     'field_related_content',
@@ -650,7 +649,6 @@ function _hr_core_render_multiple_input_lines(&$form, &$form_state) {
   $field_names = array(
     'field_data_sources' => 4,
     'field_files_collection' => 4,
-    'field_hid_contact_ref' => 2,
     'field_locations' => 4,
     'field_phones' => 4,
     'field_related_content' => 4,
@@ -1215,19 +1213,6 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     'fieldable_panels_pane' => array(
       'category' => 'Custom content',
       'title' => 'Free text',
-    ),
-
-    'hr_contacts_key_contacts' => array(
-      'category' => 'Outdated',
-      'title' => 'Static contacts',
-    ),
-    'hr_contacts' => array(
-      'category' => 'Outdated',
-      'title' => 'Dynamic contacts 1',
-    ),
-    'contacts' => array(
-      'category' => 'Outdated',
-      'title' => 'Dynamic contacts 2',
     ),
 
     'hid_profiles_checkins' => array(

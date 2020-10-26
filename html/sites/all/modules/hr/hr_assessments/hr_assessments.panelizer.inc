@@ -323,42 +323,6 @@ function hr_assessments_panelizer_defaults() {
   $display->content['new-e239f245-ba03-40fc-8dad-cf60235e75ec'] = $pane;
   $display->panels['contentmain'][8] = 'new-e239f245-ba03-40fc-8dad-cf60235e75ec';
   $pane = new stdClass();
-  $pane->pid = 'new-715962b1-9ca4-4609-8554-cbd0b1cc3f8d';
-  $pane->panel = 'contentmain';
-  $pane->type = 'entity_field';
-  $pane->subtype = 'node:field_hid_contact_ref';
-  $pane->shown = TRUE;
-  $pane->access = array();
-  $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hid_contact_reference_full',
-    'delta_limit' => '0',
-    'delta_offset' => '0',
-    'delta_reversed' => 0,
-    'formatter_settings' => array(
-      'show_name' => 1,
-      'show_organization' => 0,
-      'show_job_title' => 0,
-      'show_email' => 1,
-      'show_phone_number' => 1,
-    ),
-    'context' => 'panelizer',
-    'override_title' => 0,
-    'override_title_text' => '',
-    'override_title_heading' => 'h2',
-  );
-  $pane->cache = array();
-  $pane->style = array(
-    'settings' => NULL,
-  );
-  $pane->css = array();
-  $pane->extras = array();
-  $pane->position = 9;
-  $pane->locks = array();
-  $pane->uuid = '715962b1-9ca4-4609-8554-cbd0b1cc3f8d';
-  $display->content['new-715962b1-9ca4-4609-8554-cbd0b1cc3f8d'] = $pane;
-  $display->panels['contentmain'][9] = 'new-715962b1-9ca4-4609-8554-cbd0b1cc3f8d';
-  $pane = new stdClass();
   $pane->pid = 'new-70c0a7d5-41a8-4691-8cff-82c940e337d8';
   $pane->panel = 'contentmain';
   $pane->type = 'entity_field';

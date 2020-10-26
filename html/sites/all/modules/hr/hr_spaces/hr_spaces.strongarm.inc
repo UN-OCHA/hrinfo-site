@@ -143,7 +143,6 @@ function hr_spaces_strongarm() {
     'acc_incidents' => '0',
     'ev_events' => '0',
     'hdx_datasets' => '2',
-    'hid_contacts' => '0',
     'hr_assessments' => '0',
     'hr_datasets' => '0',
     'hr_disasters' => '0',
@@ -211,7 +210,6 @@ function hr_spaces_strongarm() {
   $strongarm->value = array(
     'bean_pane-fts_visualization' => TRUE,
     'node_body-node_body' => TRUE,
-    'hid_profiles_list-hid_profiles_list' => TRUE,
     'hr_documents_key_documents-hr_documents_key_documents' => TRUE,
     'hr_infographics_key_infographics-hr_infographics_key_infographics' => TRUE,
     'hr_layout_reliefweb-hr_layout_reliefweb' => TRUE,

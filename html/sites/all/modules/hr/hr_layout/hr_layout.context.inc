@@ -121,10 +121,6 @@ function hr_layout_context_default_contexts() {
   $context->conditions = array(
     'context' => array(
       'values' => array(
-        '~hr_contacts_space' => '~hr_contacts_space',
-        '~hr_contacts_space_list' => '~hr_contacts_space_list',
-        '~hr_contacts_space_map' => '~hr_contacts_space_map',
-        '~hr_contacts_space_graphs' => '~hr_contacts_space_graphs',
         '~hr_datasets_hdx' => '~hr_datasets_hdx',
         '~hr_documents_space' => '~hr_documents_space',
         '~hr_documents_space_table' => '~hr_documents_space_table',

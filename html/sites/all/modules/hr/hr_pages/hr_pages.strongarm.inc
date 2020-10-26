@@ -181,7 +181,6 @@ function hr_pages_strongarm() {
   $strongarm->value = array(
     'bean_pane-fts_visualization' => TRUE,
     'node_body-node_body' => TRUE,
-    'hid_profiles_list-hid_profiles_list' => TRUE,
     'hr_documents_key_documents-hr_documents_key_documents' => TRUE,
     'hr_infographics_key_infographics-hr_infographics_key_infographics' => TRUE,
     'hr_layout_reliefweb-hr_layout_reliefweb' => TRUE,
