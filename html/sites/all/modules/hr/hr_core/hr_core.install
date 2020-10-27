@@ -753,9 +753,85 @@ function hr_core_update_7046() {
 }
 
 /**
+ * Convert remaining HID contact references to text.
+ */
+function hr_core_update_7047(&$sandbox) {
+
+  if (!isset($sandbox['progress'])) {
+    $sandbox['processed'] = array();
+    $sandbox['progress'] = 0;
+    $sandbox['current_entity_id'] = 0;
+    $sandbox['max'] = db_query("SELECT entity_id FROM {field_data_field_hid_contact_ref} WHERE bundle = :bundle AND entity_id NOT IN (SELECT entity_id FROM {field_data_field_contacts_text})", array(':bundle' => 'hr_event'))->rowCount();
+    watchdog('hr_core', 'Max is :count', array(':count' => $sandbox['max']));
+
+    // If there's nothing to do, bail early.
+    if (empty($sandbox['max'])) {
+      return t('No contacts to update.');
+    }
+  }
+
+  // Batches of 50.
+  $limit = 50;
+
+  $results = db_query_range("SELECT entity_id, field_hid_contact_ref_cid FROM {field_data_field_hid_contact_ref} WHERE entity_id > :entity_id AND bundle = :bundle AND entity_id NOT IN (SELECT entity_id FROM {field_data_field_contacts_text}) ORDER BY entity_id ASC", 0, $limit, array(':entity_id' => $sandbox['current_entity_id'], ':bundle' => 'hr_event'))->fetchAll();
+
+  foreach ($results as $result) {
+    $text = '';
+    $wrapper = entity_metadata_wrapper('node', $result->entity_id);
+
+    if (in_array($result->entity_id, $sandbox['processed']) && !empty($wrapper->field_contacts_text->value()['value'])) {
+      $text .= $wrapper->field_contacts_text->value()['value'] . "<br><br>";
+    }
+
+    $contact = hid_profiles_get_contact($result->field_hid_contact_ref_cid);
+    if (!empty($contact->name)) {
+      $text .= $contact->name;
+    }
+    if (!empty($contact->job_title)) {
+      $text .= "<br>" . $contact->job_title;
+    }
+    if (!empty($contact->organizations[0]->name)) {
+      $text .= "<br>" . $contact->organizations[0]->name;
+    }
+    if (!empty($contact->emails[0]->email)) {
+      $text .= "<br>" . $contact->emails[0]->email;
+    }
+    if ($contact->phonesVisibility === 'anyone' && !empty($contact->phone_numbers[0]->number)) {
+      $text .= "<br>" . $contact->phone_numbers[0]->number;
+    }
+
+    if (!empty($text)) {
+      $wrapper->field_contacts_text->set(array(
+        'value' => $text,
+        'format' => 'hr_wysiwyg',
+      ));
+      $wrapper->save();
+    }
+
+    $processed[] = $result->entity_id;
+
+    $sandbox['progress']++;
+    $sandbox['current_entity_id'] = $result->entity_id;
+  }
+
+  // Done yet?
+  if (!empty($results) && $sandbox['progress'] <= $sandbox['max']) {
+    watchdog('hr_core', 'Progress is :count', array(':count' => $sandbox['progress']));
+    $sandbox['#finished'] = empty($sandbox['max']) ? TRUE : ($sandbox['progress'] / $sandbox['max']);
+  }
+  else {
+    $sandbox['#finished'] = TRUE;
+  }
+
+  if ($sandbox['#finished'] === TRUE) {
+    return t('Updated @count record(s) to use the new locking system.', array('@count' => $sandbox['max']));
+  }
+}
+
+/**
  * Remove HID contacts ref fields.
  */
-function hr_core_update_7047() {
+function hr_core_update_7048() {
   field_delete_field('field_hid_contact_ref');
   field_delete_field('field_hid_access');
   field_delete_field('field_bundle_hid_access');
