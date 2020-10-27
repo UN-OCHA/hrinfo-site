@@ -808,7 +808,7 @@ function hr_core_update_7047(&$sandbox) {
       $wrapper->save();
     }
 
-    $processed[] = $result->entity_id;
+    $sandbox['processed'][] = $result->entity_id;
 
     $sandbox['progress']++;
     $sandbox['current_entity_id'] = $result->entity_id;
