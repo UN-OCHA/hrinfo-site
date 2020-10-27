@@ -7,8 +7,6 @@
 
 /**
  * Implements hook_drush_command().
- *
- * TODO: Remove: This was used once and shouldn't be used again.
  */
 function hr_events_drush_command() {
   $items = array();
