@@ -465,6 +465,10 @@ function drush_hr_core_docstore_push_batch_operation($bundle, $offset, $limit, &
     $json->title = $wrapper->label();
     $json->author = 'hrinfo';
 
+    // This is a bit messy. We add an id and then vocab references for
+    // entity reference fields, multiple entity reference fields, and the
+    // 'status' field (which doesn't have a name, and should probably be a
+    // string instead. It doesn't handle strings or dates.
     foreach ($property_fields as $field) {
       if ($field === 'hrinfo_legacy_id') {
         $json->metadata[] = array($field => $wrapper->getIdentifier());
