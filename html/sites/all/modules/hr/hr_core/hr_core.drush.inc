@@ -8,9 +8,6 @@
 /**
  * Implements hook_drush_command().
  *
- * @return array
- *   An associative array describing your command(s).
- *
  * @see drush_parse_command()
  */
 function hr_core_drush_command() {
@@ -26,6 +23,54 @@ function hr_core_drush_command() {
     'description' => "Display the average file size and median of the files for an operation",
     'drupal dependencies' => array(),
     'aliases' => array(),
+  );
+
+  $items['hr-core-docstore-create-vocab'] = array(
+    'description' => "Create a vocabulary in the docstore via its API, and
+      associated fields on the document bundle.",
+    'drupal dependencies' => array(),
+    'options' => array(
+      'vocab' => array(
+        'description' => 'Vocabulary to create',
+        'example-value' => 'Document type',
+      ),
+    ),
+    'aliases' => array("hr-docs-voc"),
+  );
+
+  $items['hr-core-docstore-add-field'] = array(
+    'description' => "Add a field to documents in the docstore via its API.
+      Not needed for fields which reference vocabularies.",
+    'drupal dependencies' => array(),
+    'arguments' => array(
+      'field_name' => array(
+        'description' => 'Name of field to add',
+        'example-value' => 'Document type',
+      ),
+    ),
+    'aliases' => array("hr-docs-field"),
+  );
+
+  $items['hr-core-docstore-populate'] = array(
+    'description' => "Put documents in the docstore via its API.
+      First, create relevant vocabularies and fields.
+      N.B. Make sure to clear the docstore site cache before running this!",
+    'drupal dependencies' => array(),
+    'options' => array(
+      'bundle' => array(
+        'description' => 'The node type to push',
+        'example-value' => 'hr_document',
+      ),
+      'offset' => array(
+        'description' => 'The number of documents to skip',
+        'example-value' => '20',
+      ),
+      'limit' => array(
+        'description' => 'The number of documents to push',
+        'example-value' => '20',
+      ),
+    ),
+    'aliases' => array("hr-docs-pop"),
   );
 
   return $items;
@@ -122,7 +167,7 @@ function drush_hr_core_operation_avg_file_size() {
 
       // Compute median file size.
       $result = db_query('SELECT percentile_disc(0.5) within group (order by filesize) FROM drupal.file_managed WHERE fid IN (:fids);', array(
-        ':fids' => $file_ids
+        ':fids' => $file_ids,
       ));
       foreach ($result as $record) {
         print_r($record);
@@ -134,4 +179,366 @@ function drush_hr_core_operation_avg_file_size() {
   else {
     drush_print('No operation provided');
   }
+}
+
+/**
+ * Call docstore API.
+ */
+function drush_hr_core_docstore_call($type, $path, $params = NULL) {
+  $url = variable_get('docstore_api_url',
+    'https://ocha:dev@dev.docstore-unocha-org.ahconu.org/api/') . $path;
+
+  $headers = array(
+    'Accept: application/json',
+    'Content-Type: application/json',
+  );
+
+  $ch = curl_init();
+
+  switch ($type) {
+    case 'POST':
+      curl_setopt($ch, CURLOPT_POST, 1);
+      curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+      $headers[] = 'API-KEY: ' . variable_get('hrinfo_docstore_write_api_key',
+        'hrinfo-456');
+      break;
+
+    case 'GET':
+      $headers[] = 'API-KEY: ' . variable_get('hrinfo_docstore_read_api_key',
+        'hrinfo-123');
+
+      break;
+  }
+  // Set URL and other appropriate options.
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+  // @codingStandardsIgnoreLine
+  //curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+  // @codingStandardsIgnoreLine
+  //curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+  $response = curl_exec($ch);
+
+  // Log errors to watchdog.
+  if ($response === FALSE || curl_errno($ch)) {
+    watchdog('hr_core_docstore_vocab', 'Curl HTTP code: @code', array(
+      '@code' => curl_getinfo($ch, CURLINFO_HTTP_CODE),
+    ));
+    watchdog('hr_core_docstore_vocab', 'Curl error: @error', array(
+      '@error' => curl_error($ch),
+    ));
+  }
+
+  // Close cURL resource, and free up system resources.
+  curl_close($ch);
+
+  return json_decode($response);
+}
+
+/**
+ * Create a docstore vocabulary.
+ */
+function drush_hr_core_docstore_create_vocab() {
+
+  drush_log(t('Will create vocab on docstore.'));
+
+  $vocab_name = drush_get_option('vocab', '');
+  if (empty($vocab_name)) {
+    drush_log(t('You need to specify a vocabulary name to create.'));
+  }
+
+  $prefix = variable_get('docstore_property_prefix', 'hrinfo_');
+  $exists = drush_hr_core_docstore_call('GET', 'vocabularies/' . $prefix . $vocab_name);
+  if (empty($exists['uuid'])) {
+    $json = new \stdClass();
+    $json->label = $vocab_name;
+    $json->author = 'hrinfo';
+
+    $result = drush_hr_core_docstore_call('POST', 'vocabularies', json_encode($json));
+
+    if (!empty($result->machine_name)) {
+      drush_hr_core_docstore_add_field($vocab_name, 'target', $result->machine_name);
+    }
+  }
+}
+
+/**
+ * Add a field to document.
+ */
+function drush_hr_core_docstore_add_field($label, $type, $value) {
+
+  if (empty($label)) {
+    drush_log(t('You need to specify a name for the field to add.'));
+  }
+  if (empty($type)) {
+    drush_log(t('You need to specify "type" or "target".'));
+  }
+  if (empty($value)) {
+    drush_log(t('You need to specify a type, or machine name for the field.'));
+  }
+
+  $fields = drush_hr_core_docstore_call('GET', 'document/fields');
+  if (!in_array($value, array_keys((array) $fields))) {
+    $json = new \stdClass();
+    $json->label = $label;
+    $json->author = 'hrinfo';
+    $json->$type = $value;
+
+    drush_hr_core_docstore_call('POST', 'document/fields', json_encode($json));
+  }
+}
+
+/**
+ * Get vocabularies for the property.
+ */
+function drush_hr_core_docstore_get_vocabularies() {
+
+  $response = drush_hr_core_docstore_call('GET', 'vocabularies');
+  $prefix = variable_get('docstore_property_prefix', 'hrinfo_');
+
+  return array_filter(array_map(function ($vocab) use ($prefix) {
+    return strpos($vocab->machine_name, $prefix) === 0 ? $vocab : NULL;
+  }, $response));
+}
+
+/**
+ * Push documents to the docstore.
+ */
+function drush_hr_core_docstore_populate() {
+  if (!drush_bootstrap_to_phase(DRUSH_BOOTSTRAP_DRUPAL_DATABASE)) {
+    return drush_set_error('DRUPAL_SITE_NOT_FOUND',
+      dt('You need to specify an alias or run this command within a site.')
+    );
+  }
+
+  $bundle = drush_get_option('bundle', 'hr_document');
+  $offset = drush_get_option('offset', '0');
+  $default_limit = db_query("
+    SELECT nid
+    FROM node
+    WHERE type = :bundle", array(':bundle' => $bundle)
+  )->rowCount();
+  $limit = drush_get_option('limit', $default_limit);
+
+  $batch = array(
+    'title' => t('Pushing documents to docstore'),
+    'operations' => array(
+      array(
+        'drush_hr_core_docstore_push_batch_operation',
+        array($bundle, $offset, $limit),
+      ),
+    ),
+    'finished' => 'drush_hr_core_docstore_push_batch_finished',
+  );
+  batch_set($batch);
+  $batch =& batch_get();
+  drush_backend_batch_process();
+}
+
+/**
+ * Add term to vocab, if it doesn't exist.
+ */
+function drush_hr_core_docstore_add_term($field_value, $vocab, &$context) {
+  if (is_array($context['sandbox']['terms'][$vocab]) &&
+    !in_array($field_value, array_keys($context['sandbox']['terms'][$vocab]))) {
+    $json = new \stdClass();
+    $json->label = $field_value;
+    $json->vocabulary = $vocab;
+    $json->author = 'hrinfo';
+
+    $created_term = drush_hr_core_docstore_call('POST', 'terms', json_encode($json));
+    if (!empty($created_term->uuid)) {
+      $context['sandbox']['terms'][$vocab][$field_value] = $created_term->uuid;
+    }
+  }
+}
+
+/**
+ * Handle new terms.
+ */
+function drush_hr_core_docstore_handle_terms($wrapper, &$context) {
+  foreach ($context['sandbox']['vocabularies'] as $vocab) {
+    $fieldname = str_replace('hrinfo_', 'field_', $vocab->machine_name);
+    if ($fieldname === 'field_status') {
+      $fieldname = 'status';
+    }
+    if ($wrapper->$fieldname->value() != NULL) {
+
+      // Get all terms for this vocabulary.
+      // TODO: this won't scale well - how to handle very large vocabularies?
+      if (empty($context['sandbox']['terms'][$vocab->machine_name])) {
+        $terms = drush_hr_core_docstore_call('GET', 'vocabularies/' . $vocab->machine_name . '/terms');
+        if (!empty($terms)) {
+          $term_names = array();
+          $prefix = $context['sandbox']['prefix'];
+          foreach ($terms as $term) {
+            if (strpos($term->vocabulary_name, $prefix) === 0) {
+              $term_names[$term->label] = $term->uuid;
+            }
+          }
+          $context['sandbox']['terms'][$vocab->machine_name] = $term_names;
+        }
+        else {
+          $context['sandbox']['terms'][$vocab->machine_name] = array();
+        }
+      }
+
+      // Create term name if we don't already have it.
+      if (isset($wrapper->$fieldname->value()->name)) {
+        $field_value = $wrapper->$fieldname->value()->name;
+
+        drush_hr_core_docstore_add_term($field_value, $vocab->machine_name, $context);
+      }
+      else {
+        if (is_array($wrapper->$fieldname->value())) {
+          foreach ($wrapper->$fieldname->value() as $value) {
+            if (isset($value->name)) {
+              drush_hr_core_docstore_add_term($value->name, $vocab->machine_name, $context);
+            }
+          }
+        }
+        else {
+          drush_hr_core_docstore_add_term($wrapper->$fieldname->value(), $vocab->machine_name, $context);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Batch handler.
+ */
+function drush_hr_core_docstore_push_batch_operation($bundle, $offset, $limit, &$context) {
+
+  // Initiate multistep processing.
+  if (empty($context['sandbox'])) {
+    $context['sandbox']['progress'] = 0;
+    // Index more recent documents first.
+    $start = db_query_range("
+      SELECT nid
+      FROM {node}
+      WHERE type = :bundle
+      ORDER BY nid
+      DESC", 0, 1, array(':bundle' => $bundle)
+    )->fetchField();
+    // Get vocabularies for bundle from docstore api.
+    $vocabularies = drush_hr_core_docstore_get_vocabularies();
+    $context['sandbox']['vocabularies'] = $vocabularies;
+    $context['sandbox']['current_entity_id'] = $start;
+    $context['sandbox']['max'] = $limit;
+    $context['sandbox']['terms'] = array();
+    $context['message'] = 'Starting push of documents to docstore.';
+    $prefix = variable_get('docstore_property_prefix', 'hrinfo_');
+    $context['sandbox']['prefix'] = $prefix;
+  }
+
+  // Select the next batch.
+  $batch_limit = $limit > 50 ? 50 : $limit;
+  $results = db_query_range(
+    "SELECT nid FROM {node}
+    WHERE nid < :entity_id
+      AND type = :bundle
+    ORDER BY nid
+    DESC", 0, $batch_limit, array(
+      ':entity_id' => $context['sandbox']['current_entity_id'],
+      ':bundle' => $bundle,
+    ))->fetchAll();
+
+  foreach ($results as $result) {
+    $wrapper = entity_metadata_wrapper('node', $result->nid);
+
+    drush_hr_core_docstore_handle_terms($wrapper, $context);
+
+    // Get all the fields for the property.
+    $fields = drush_hr_core_docstore_call('GET', 'document/fields');
+
+    $prefix = $context['sandbox']['prefix'];
+    $property_fields = array_filter(array_map(function ($field) use ($prefix) {
+      return strpos($field, $prefix) === 0 ? $field : NULL;
+    }, array_keys((array) $fields)));
+
+    $json = new \stdClass();
+    $json->title = $wrapper->label();
+    $json->author = 'hrinfo';
+
+    foreach ($property_fields as $field) {
+      if ($field === 'hrinfo_legacy_id') {
+        $json->metadata[] = array($field => $wrapper->getIdentifier());
+      }
+      else {
+        $fieldname = str_replace('hrinfo_', 'field_', $field);
+        if ($fieldname === 'field_status') {
+          $fieldname = 'status';
+        }
+        if (isset($wrapper->$fieldname) && !empty($wrapper->$fieldname->value())) {
+          if (isset($wrapper->$fieldname->value()->name)) {
+            $field_value = $wrapper->$fieldname->value()->name;
+            $json->metadata[] = array(
+              $field => array(
+                'target_uuid' => $context['sandbox']['terms'][$field][$field_value],
+              ),
+            );
+          }
+          else {
+            $field_values = array();
+            if (is_array($wrapper->$fieldname->value())) {
+              foreach ($wrapper->$fieldname->value() as $value) {
+                if (isset($value->name)) {
+                  $field_values[] = $context['sandbox']['terms'][$field][$value->name];
+                }
+              }
+              $json->metadata[] = array(
+                $field => array(
+                  // TODO: Get this working for multiple values.
+                  // On creating a field, it expects just one value.
+                  'target_uuid' => $field_values[0],
+                ),
+              );
+            }
+            else {
+              $json->metadata[] = array(
+                $field => array(
+                  'target_uuid' => $context['sandbox']['terms'][$field][$wrapper->$fieldname->value()],
+                ),
+              );
+            }
+          }
+        }
+      }
+    }
+
+    // @codingStandardsIgnoreLine
+    //dd(json_encode($json), 'json with metadata');
+
+    drush_hr_core_docstore_call('POST', 'documents', json_encode($json));
+
+    $context['sandbox']['progress']++;
+    $context['sandbox']['current_entity_id'] = $result->nid;
+  }
+
+  // Multistep processing : report progress.
+  if (!empty($results) && $context['sandbox']['progress'] <= $context['sandbox']['max']) {
+    $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
+    $context['message'] = 'Progress ' . $context['sandbox']['progress'] . '/' . $context['sandbox']['max'];
+  }
+  else {
+    $context['finished'] = TRUE;
+  }
+}
+
+/**
+ * Finished callback.
+ */
+function drush_hr_core_docstore_push_batch_finished($success, $results, $operations) {
+  if ($success) {
+    drush_log(t('The documents have been pushed to the docstore.'));
+  }
+  else {
+    drush_log(t('There was an error pushing documents to the docstore.'), 'error');
+  }
+  cache_clear_all();
 }
