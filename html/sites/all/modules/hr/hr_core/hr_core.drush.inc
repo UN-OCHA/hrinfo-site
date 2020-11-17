@@ -252,8 +252,8 @@ function drush_hr_core_docstore_create_vocab() {
   }
 
   $prefix = variable_get('docstore_property_prefix', 'hrinfo_');
-  $exists = drush_hr_core_docstore_call('GET', 'vocabularies/' . $prefix . $vocab_name);
-  if (empty($exists['uuid'])) {
+  $exists = drush_hr_core_docstore_call('GET', 'vocabularies/' . $prefix . strtolower($vocab_name));
+  if (empty($exists->uuid)) {
     $json = new \stdClass();
     $json->label = $vocab_name;
     $json->author = 'hrinfo';
@@ -296,7 +296,6 @@ function drush_hr_core_docstore_add_field($label, $type, $value) {
  * Get vocabularies for the property.
  */
 function drush_hr_core_docstore_get_vocabularies() {
-
   $response = drush_hr_core_docstore_call('GET', 'vocabularies');
   $prefix = variable_get('docstore_property_prefix', 'hrinfo_');
 
