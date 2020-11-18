@@ -34,6 +34,11 @@ function hr_core_drush_command() {
         'description' => 'Vocabulary to create',
         'example-value' => 'Document type',
       ),
+      'cardinality' => array(
+        'description' => 'Whether documents can have multiple terms from this
+          vocabulary',
+        'example-value' => 'multiple',
+      ),
     ),
     'aliases' => array("hr-docs-voc"),
   );
@@ -43,9 +48,24 @@ function hr_core_drush_command() {
       Not needed for fields which reference vocabularies.",
     'drupal dependencies' => array(),
     'arguments' => array(
-      'field_name' => array(
+      'label' => array(
         'description' => 'Name of field to add',
         'example-value' => 'Document type',
+      ),
+      'type' => array(
+        'description' => '"target" or "type" for other fields field',
+        'example-value' => 'type',
+      ),
+      'value' => array(
+        'description' => 'Target name for vocab, or type',
+        'example-value' => 'integer',
+      ),
+    ),
+    'options' => array(
+      'cardinality' => array(
+        'description' => 'Whether documents can have multiple terms from this
+          vocabulary',
+        'example-value' => 'multiple',
       ),
     ),
     'aliases' => array("hr-docs-field"),
@@ -250,6 +270,7 @@ function drush_hr_core_docstore_create_vocab() {
   if (empty($vocab_name)) {
     drush_log(t('You need to specify a vocabulary name to create.'));
   }
+  $cardinality = drush_get_option('cardinality', 'single');
 
   $prefix = variable_get('docstore_property_prefix', 'hrinfo_');
   $exists = drush_hr_core_docstore_call('GET', 'vocabularies/' . $prefix . strtolower($vocab_name));
@@ -261,7 +282,7 @@ function drush_hr_core_docstore_create_vocab() {
     $result = drush_hr_core_docstore_call('POST', 'vocabularies', json_encode($json));
 
     if (!empty($result->machine_name)) {
-      drush_hr_core_docstore_add_field($vocab_name, 'target', $result->machine_name);
+      drush_hr_core_docstore_add_field($vocab_name, 'target', $result->machine_name, $cardinality);
     }
   }
 }
@@ -269,7 +290,7 @@ function drush_hr_core_docstore_create_vocab() {
 /**
  * Add a field to document.
  */
-function drush_hr_core_docstore_add_field($label, $type, $value) {
+function drush_hr_core_docstore_add_field($label, $type, $value, $cardinality = 'single') {
 
   if (empty($label)) {
     drush_log(t('You need to specify a name for the field to add.'));
@@ -278,8 +299,9 @@ function drush_hr_core_docstore_add_field($label, $type, $value) {
     drush_log(t('You need to specify "type" or "target".'));
   }
   if (empty($value)) {
-    drush_log(t('You need to specify a type, or machine name for the field.'));
+    drush_log(t('You need to specify the type value, or the target.'));
   }
+  $cardinality_option = drush_get_option('cardinality', 'single');
 
   $fields = drush_hr_core_docstore_call('GET', 'document/fields');
   if (!in_array($value, array_keys((array) $fields))) {
@@ -287,7 +309,10 @@ function drush_hr_core_docstore_add_field($label, $type, $value) {
     $json->label = $label;
     $json->author = 'hrinfo';
     $json->$type = $value;
-
+    // TODO cardinality isn't working. Why not?
+    if ($cardinality === 'multiple' || $cardinality_option === 'multiple') {
+      $json->multiple = TRUE;
+    }
     drush_hr_core_docstore_call('POST', 'document/fields', json_encode($json));
   }
 }
@@ -351,59 +376,27 @@ function drush_hr_core_docstore_add_term($field_value, $vocab, &$context) {
 
     $created_term = drush_hr_core_docstore_call('POST', 'terms', json_encode($json));
     if (!empty($created_term->uuid)) {
-      $context['sandbox']['terms'][$vocab][$field_value] = $created_term->uuid;
+      $context['sandbox']['terms'][$vocab][] = $field_value;
     }
   }
 }
 
 /**
- * Handle new terms.
+ * Check new terms.
  */
-function drush_hr_core_docstore_handle_terms($wrapper, &$context) {
-  foreach ($context['sandbox']['vocabularies'] as $vocab) {
-    $fieldname = str_replace('hrinfo_', 'field_', $vocab->machine_name);
-    if ($fieldname === 'field_status') {
-      $fieldname = 'status';
-    }
-    if ($wrapper->$fieldname->value() != NULL) {
+function drush_hr_core_docstore_check_new_terms($field, $field_values, $context) {
 
-      // Get all terms for this vocabulary.
-      // TODO: this won't scale well - how to handle very large vocabularies?
-      if (empty($context['sandbox']['terms'][$vocab->machine_name])) {
-        $terms = drush_hr_core_docstore_call('GET', 'vocabularies/' . $vocab->machine_name . '/terms');
-        if (!empty($terms)) {
-          $term_names = array();
-          $prefix = $context['sandbox']['prefix'];
-          foreach ($terms as $term) {
-            if (strpos($term->vocabulary_name, $prefix) === 0) {
-              $term_names[$term->label] = $term->uuid;
-            }
-          }
-          $context['sandbox']['terms'][$vocab->machine_name] = $term_names;
-        }
-        else {
-          $context['sandbox']['terms'][$vocab->machine_name] = array();
-        }
-      }
+  if (empty($context['sandbox']['terms'][$field])) {
+    $terms = drush_hr_core_docstore_call('GET', 'vocabularies/' . $field . '/terms');
+    $term_names = array_map(function ($term) {
+      return $term->name;
+    }, $terms);
+    $context['sandbox']['terms'][$field] = $term_names;
+  }
 
-      // Create term name if we don't already have it.
-      if (isset($wrapper->$fieldname->value()->name)) {
-        $field_value = $wrapper->$fieldname->value()->name;
-
-        drush_hr_core_docstore_add_term($field_value, $vocab->machine_name, $context);
-      }
-      else {
-        if (is_array($wrapper->$fieldname->value())) {
-          foreach ($wrapper->$fieldname->value() as $value) {
-            if (isset($value->name)) {
-              drush_hr_core_docstore_add_term($value->name, $vocab->machine_name, $context);
-            }
-          }
-        }
-        else {
-          drush_hr_core_docstore_add_term($wrapper->$fieldname->value(), $vocab->machine_name, $context);
-        }
-      }
+  foreach ($field_values as $value) {
+    if (!in_array($value, $context['sandbox']['terms'][$field])) {
+      drush_hr_core_docstore_add_term($value, $field, $context);
     }
   }
 }
@@ -422,7 +415,7 @@ function drush_hr_core_docstore_push_batch_operation($bundle, $offset, $limit, &
       FROM {node}
       WHERE type = :bundle
       ORDER BY nid
-      DESC", 0, 1, array(':bundle' => $bundle)
+      DESC", $offset, 1, array(':bundle' => $bundle)
     )->fetchField();
     // Get vocabularies for bundle from docstore api.
     $vocabularies = drush_hr_core_docstore_get_vocabularies();
@@ -450,8 +443,6 @@ function drush_hr_core_docstore_push_batch_operation($bundle, $offset, $limit, &
   foreach ($results as $result) {
     $wrapper = entity_metadata_wrapper('node', $result->nid);
 
-    drush_hr_core_docstore_handle_terms($wrapper, $context);
-
     // Get all the fields for the property.
     $fields = drush_hr_core_docstore_call('GET', 'document/fields');
 
@@ -464,60 +455,69 @@ function drush_hr_core_docstore_push_batch_operation($bundle, $offset, $limit, &
     $json->title = $wrapper->label();
     $json->author = 'hrinfo';
 
-    // This is a bit messy. We add an id and then vocab references for
-    // entity reference fields, multiple entity reference fields, and the
-    // 'status' field (which doesn't have a name, and should probably be a
-    // string instead. It doesn't handle strings or dates.
     foreach ($property_fields as $field) {
-      if ($field === 'hrinfo_legacy_id') {
-        $json->metadata[] = array($field => $wrapper->getIdentifier());
+      $field_info = drush_hr_core_docstore_call('GET', 'document/fields/' . $field);
+      $ds_hr_map = array(
+        'hrinfo_status' => 'status',
+        'hrinfo_og_group_ref' => 'og_group_ref',
+        'hrinfo_group_content_access' => 'group_content_access',
+        'hrinfo_created' => 'created',
+        'hrinfo_changed' => 'changed',
+      );
+      if (in_array($field, array_keys($ds_hr_map))) {
+        $fieldname = $ds_hr_map[$field];
       }
       else {
         $fieldname = str_replace('hrinfo_', 'field_', $field);
-        if ($fieldname === 'field_status') {
-          $fieldname = 'status';
-        }
-        if (isset($wrapper->$fieldname) && !empty($wrapper->$fieldname->value())) {
-          if (isset($wrapper->$fieldname->value()->name)) {
-            $field_value = $wrapper->$fieldname->value()->name;
-            $json->metadata[] = array(
-              $field => array(
-                'target_uuid' => $context['sandbox']['terms'][$field][$field_value],
-              ),
-            );
-          }
-          else {
+      }
+
+      if ($field === 'hrinfo_id') {
+        $json->metadata[] = array($field => $wrapper->getIdentifier());
+      }
+      elseif (isset($wrapper->$fieldname) && !empty($wrapper->$fieldname->value())) {
+        if ($field_info->type === 'entity_reference_uuid') {
+          $label = $field . '_label';
+          if ($field_info->multiple) {
             $field_values = array();
             if (is_array($wrapper->$fieldname->value())) {
               foreach ($wrapper->$fieldname->value() as $value) {
-                if (isset($value->name)) {
-                  $field_values[] = $context['sandbox']['terms'][$field][$value->name];
+                if (!empty($value->name)) {
+                  $field_values[] = $value->name;
                 }
               }
-              $json->metadata[] = array(
-                $field => array(
-                  // TODO: Get this working for multiple values.
-                  // On creating a field, it expects just one value.
-                  'target_uuid' => $field_values[0],
-                ),
-              );
+              // Check field_Values exist as terms.
+              drush_hr_core_docstore_check_new_terms($field, $field_values, $context);
+              $json->metadata[] = array($label => $field_values);
             }
-            else {
-              $json->metadata[] = array(
-                $field => array(
-                  'target_uuid' => $context['sandbox']['terms'][$field][$wrapper->$fieldname->value()],
-                ),
-              );
+          }
+          elseif (isset($wrapper->$fieldname->value()->name)) {
+            $value = $wrapper->$fieldname->value()->name;
+            drush_hr_core_docstore_check_new_terms($field, array($value), $context);
+            // Check field_Value exists as a term.
+            $json->metadata[] = array(
+              $label => $value,
+            );
+          }
+        }
+        else {
+          if ($field_info->multiple) {
+            foreach ($wrapper->$fieldname->value() as $value) {
+              $field_values[] = $value;
             }
+            $json->metadata[] = array($field => $field_values);
+          }
+          else {
+            $json->metadata[] = array($field => $wrapper->$fieldname->value());
           }
         }
       }
     }
 
-    // @codingStandardsIgnoreLine
+    // @codingStandardsIgnoreStart
     //dd(json_encode($json), 'json with metadata');
-
-    drush_hr_core_docstore_call('POST', 'documents', json_encode($json));
+    $created = drush_hr_core_docstore_call('POST', 'documents', json_encode($json));
+    //dd($created, 'created');
+    // @codingStandardsIgnoreEnd
 
     $context['sandbox']['progress']++;
     $context['sandbox']['current_entity_id'] = $result->nid;
