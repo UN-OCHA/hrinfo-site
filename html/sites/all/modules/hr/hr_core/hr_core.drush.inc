@@ -458,11 +458,12 @@ function drush_hr_core_docstore_push_batch_operation($bundle, $offset, $limit, &
     foreach ($property_fields as $field) {
       $field_info = drush_hr_core_docstore_call('GET', 'document/fields/' . $field);
       $ds_hr_map = array(
-        'hrinfo_status' => 'status',
-        'hrinfo_og_group_ref' => 'og_group_ref',
-        'hrinfo_group_content_access' => 'group_content_access',
-        'hrinfo_created' => 'created',
+        'hrinfo_body' => 'body',
         'hrinfo_changed' => 'changed',
+        'hrinfo_created' => 'created',
+        'hrinfo_group_content_access' => 'group_content_access',
+        'hrinfo_og_group_ref' => 'og_group_ref',
+        'hrinfo_status' => 'status',
       );
       if (in_array($field, array_keys($ds_hr_map))) {
         $fieldname = $ds_hr_map[$field];
@@ -505,6 +506,9 @@ function drush_hr_core_docstore_push_batch_operation($bundle, $offset, $limit, &
               $field_values[] = $value;
             }
             $json->metadata[] = array($field => $field_values);
+          }
+          elseif ($field_info->type === 'string_long') {
+            $json->metadata[] = array($field => $wrapper->$fieldname->value()['value']);
           }
           else {
             $json->metadata[] = array($field => $wrapper->$fieldname->value());
