@@ -1,0 +1,4 @@
+name = HR Docstore
+description = Docstore integration for Humanitarianresponse
+core = 7.x
+package = Humanitarianresponse

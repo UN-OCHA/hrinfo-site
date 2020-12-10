@@ -202,64 +202,6 @@ function drush_hr_core_operation_avg_file_size() {
 }
 
 /**
- * Call docstore API.
- */
-function drush_hr_core_docstore_call($type, $path, $params = NULL) {
-  $url = variable_get('docstore_api_url',
-    'https://ocha:dev@dev.docstore-unocha-org.ahconu.org/api/') . $path;
-
-  $headers = array(
-    'Accept: application/json',
-    'Content-Type: application/json',
-  );
-
-  $ch = curl_init();
-
-  switch ($type) {
-    case 'POST':
-      curl_setopt($ch, CURLOPT_POST, 1);
-      curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-      $headers[] = 'API-KEY: ' . variable_get('hrinfo_docstore_write_api_key',
-        'hrinfo-456');
-      break;
-
-    case 'GET':
-      $headers[] = 'API-KEY: ' . variable_get('hrinfo_docstore_read_api_key',
-        'hrinfo-123');
-
-      break;
-  }
-  // Set URL and other appropriate options.
-  curl_setopt($ch, CURLOPT_URL, $url);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-  curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-  // @codingStandardsIgnoreLine
-  //curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-  // @codingStandardsIgnoreLine
-  //curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-
-  $response = curl_exec($ch);
-
-  // Log errors to watchdog.
-  if ($response === FALSE || curl_errno($ch)) {
-    watchdog('hr_core_docstore_vocab', 'Curl HTTP code: @code', array(
-      '@code' => curl_getinfo($ch, CURLINFO_HTTP_CODE),
-    ));
-    watchdog('hr_core_docstore_vocab', 'Curl error: @error', array(
-      '@error' => curl_error($ch),
-    ));
-  }
-
-  // Close cURL resource, and free up system resources.
-  curl_close($ch);
-
-  return json_decode($response);
-}
-
-/**
  * Create a docstore vocabulary.
  */
 function drush_hr_core_docstore_create_vocab() {
@@ -273,16 +215,16 @@ function drush_hr_core_docstore_create_vocab() {
   $cardinality = drush_get_option('cardinality', 'single');
 
   $prefix = variable_get('docstore_property_prefix', 'hrinfo_');
-  $exists = drush_hr_core_docstore_call('GET', 'vocabularies/' . $prefix . strtolower($vocab_name));
-  if (empty($exists->uuid)) {
+  $exists = hr_docstore_call_api('GET', 'vocabularies/' . $prefix . strtolower($vocab_name));
+  if (empty($exists['uuid'])) {
     $json = new \stdClass();
     $json->label = $vocab_name;
     $json->author = 'hrinfo';
 
-    $result = drush_hr_core_docstore_call('POST', 'vocabularies', json_encode($json));
+    $result = hr_docstore_call_api('POST', 'vocabularies', json_encode($json));
 
-    if (!empty($result->machine_name)) {
-      drush_hr_core_docstore_add_field($vocab_name, 'target', $result->machine_name, $cardinality);
+    if (!empty($result['machine_name'])) {
+      drush_hr_core_docstore_add_field($vocab_name, 'target', $result['machine_name'], $cardinality);
     }
   }
 }
@@ -303,30 +245,17 @@ function drush_hr_core_docstore_add_field($label, $type, $value, $cardinality = 
   }
   $cardinality_option = drush_get_option('cardinality', 'single');
 
-  $fields = drush_hr_core_docstore_call('GET', 'document/fields');
-  if (!in_array($value, array_keys((array) $fields))) {
+  $fields = hr_docstore_call_api('GET', 'fields/documents');
+  if (!in_array($value, array_keys($fields))) {
     $json = new \stdClass();
     $json->label = $label;
     $json->author = 'hrinfo';
     $json->$type = $value;
-    // TODO cardinality isn't working. Why not?
     if ($cardinality === 'multiple' || $cardinality_option === 'multiple') {
       $json->multiple = TRUE;
     }
-    drush_hr_core_docstore_call('POST', 'document/fields', json_encode($json));
+    hr_docstore_call_api('POST', 'fields/documents', json_encode($json));
   }
-}
-
-/**
- * Get vocabularies for the property.
- */
-function drush_hr_core_docstore_get_vocabularies() {
-  $response = drush_hr_core_docstore_call('GET', 'vocabularies');
-  $prefix = variable_get('docstore_property_prefix', 'hrinfo_');
-
-  return array_filter(array_map(function ($vocab) use ($prefix) {
-    return strpos($vocab->machine_name, $prefix) === 0 ? $vocab : NULL;
-  }, $response));
 }
 
 /**
@@ -364,44 +293,6 @@ function drush_hr_core_docstore_populate() {
 }
 
 /**
- * Add term to vocab, if it doesn't exist.
- */
-function drush_hr_core_docstore_add_term($field_value, $vocab, &$context) {
-  if (is_array($context['sandbox']['terms'][$vocab]) &&
-    !in_array($field_value, array_keys($context['sandbox']['terms'][$vocab]))) {
-    $json = new \stdClass();
-    $json->label = $field_value;
-    $json->vocabulary = $vocab;
-    $json->author = 'hrinfo';
-
-    $created_term = drush_hr_core_docstore_call('POST', 'terms', json_encode($json));
-    if (!empty($created_term->uuid)) {
-      $context['sandbox']['terms'][$vocab][] = $field_value;
-    }
-  }
-}
-
-/**
- * Check new terms.
- */
-function drush_hr_core_docstore_check_new_terms($field, $field_values, $context) {
-
-  if (empty($context['sandbox']['terms'][$field])) {
-    $terms = drush_hr_core_docstore_call('GET', 'vocabularies/' . $field . '/terms');
-    $term_names = array_map(function ($term) {
-      return $term->name;
-    }, $terms);
-    $context['sandbox']['terms'][$field] = $term_names;
-  }
-
-  foreach ($field_values as $value) {
-    if (!in_array($value, $context['sandbox']['terms'][$field])) {
-      drush_hr_core_docstore_add_term($value, $field, $context);
-    }
-  }
-}
-
-/**
  * Batch handler.
  */
 function drush_hr_core_docstore_push_batch_operation($bundle, $offset, $limit, &$context) {
@@ -417,16 +308,30 @@ function drush_hr_core_docstore_push_batch_operation($bundle, $offset, $limit, &
       ORDER BY nid
       DESC", $offset, 1, array(':bundle' => $bundle)
     )->fetchField();
-    // Get vocabularies for bundle from docstore api.
-    $vocabularies = drush_hr_core_docstore_get_vocabularies();
-    $context['sandbox']['vocabularies'] = $vocabularies;
     $context['sandbox']['current_entity_id'] = $start;
     $context['sandbox']['max'] = $limit;
     $context['sandbox']['terms'] = array();
     $context['message'] = 'Starting push of documents to docstore.';
     $prefix = variable_get('docstore_property_prefix', 'hrinfo_');
     $context['sandbox']['prefix'] = $prefix;
+    // Get all the fields for the property.
+    $fields = hr_docstore_call_api('GET', 'fields/documents');
+
+    $prefix = $context['sandbox']['prefix'];
+    $field_array = array();
+    $property_fields = array_filter(array_map(function ($field) use ($prefix) {
+      return (strpos($field, $prefix) === 0 || strpos($field, 'base_') === 0) ? $field : NULL;
+    }, array_keys($fields)));
+    $context['sandbox']['property_fields'] = $property_fields;
+    foreach ($property_fields as $field) {
+      $field_info = hr_docstore_call_api('GET', 'fields/documents/' . $field);
+      $field_array[$field] = $field_info;
+    }
+    $context['sandbox']['field_array'] = $field_array;
   }
+
+  $property_fields = $context['sandbox']['property_fields'];
+  $field_array = $context['sandbox']['field_array'];
 
   // Select the next batch.
   $batch_limit = $limit > 50 ? 50 : $limit;
@@ -443,85 +348,7 @@ function drush_hr_core_docstore_push_batch_operation($bundle, $offset, $limit, &
   foreach ($results as $result) {
     $wrapper = entity_metadata_wrapper('node', $result->nid);
 
-    // Get all the fields for the property.
-    $fields = drush_hr_core_docstore_call('GET', 'document/fields');
-
-    $prefix = $context['sandbox']['prefix'];
-    $property_fields = array_filter(array_map(function ($field) use ($prefix) {
-      return strpos($field, $prefix) === 0 ? $field : NULL;
-    }, array_keys((array) $fields)));
-
-    $json = new \stdClass();
-    $json->title = $wrapper->label();
-    $json->author = 'hrinfo';
-
-    foreach ($property_fields as $field) {
-      $field_info = drush_hr_core_docstore_call('GET', 'document/fields/' . $field);
-      $ds_hr_map = array(
-        'hrinfo_body' => 'body',
-        'hrinfo_changed' => 'changed',
-        'hrinfo_created' => 'created',
-        'hrinfo_group_content_access' => 'group_content_access',
-        'hrinfo_og_group_ref' => 'og_group_ref',
-        'hrinfo_status' => 'status',
-      );
-      if (in_array($field, array_keys($ds_hr_map))) {
-        $fieldname = $ds_hr_map[$field];
-      }
-      else {
-        $fieldname = str_replace('hrinfo_', 'field_', $field);
-      }
-
-      if ($field === 'hrinfo_id') {
-        $json->metadata[] = array($field => $wrapper->getIdentifier());
-      }
-      elseif (isset($wrapper->$fieldname) && !empty($wrapper->$fieldname->value())) {
-        if ($field_info->type === 'entity_reference_uuid') {
-          $label = $field . '_label';
-          if ($field_info->multiple) {
-            $field_values = array();
-            if (is_array($wrapper->$fieldname->value())) {
-              foreach ($wrapper->$fieldname->value() as $value) {
-                if (!empty($value->name)) {
-                  $field_values[] = $value->name;
-                }
-              }
-              // Check field_Values exist as terms.
-              drush_hr_core_docstore_check_new_terms($field, $field_values, $context);
-              $json->metadata[] = array($label => $field_values);
-            }
-          }
-          elseif (isset($wrapper->$fieldname->value()->name)) {
-            $value = $wrapper->$fieldname->value()->name;
-            drush_hr_core_docstore_check_new_terms($field, array($value), $context);
-            // Check field_Value exists as a term.
-            $json->metadata[] = array(
-              $label => $value,
-            );
-          }
-        }
-        else {
-          if ($field_info->multiple) {
-            foreach ($wrapper->$fieldname->value() as $value) {
-              $field_values[] = $value;
-            }
-            $json->metadata[] = array($field => $field_values);
-          }
-          elseif ($field_info->type === 'string_long') {
-            $json->metadata[] = array($field => $wrapper->$fieldname->value()['value']);
-          }
-          else {
-            $json->metadata[] = array($field => $wrapper->$fieldname->value());
-          }
-        }
-      }
-    }
-
-    // @codingStandardsIgnoreStart
-    //dd(json_encode($json), 'json with metadata');
-    $created = drush_hr_core_docstore_call('POST', 'documents', json_encode($json));
-    //dd($created, 'created');
-    // @codingStandardsIgnoreEnd
+    hr_docstore_create($property_fields, $field_array, $wrapper);
 
     $context['sandbox']['progress']++;
     $context['sandbox']['current_entity_id'] = $result->nid;

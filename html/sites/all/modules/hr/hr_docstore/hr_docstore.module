@@ -1,0 +1,196 @@
+<?php
+
+/**
+ * @file
+ * Code for the docstore integration.
+ */
+
+/**
+ * Call docstore API.
+ */
+function hr_docstore_call_api($type, $path, $params = NULL) {
+  $url = variable_get('docstore_api_url',
+    'https://ocha:dev@dev.docstore-unocha-org.ahconu.org/api/') . $path;
+
+  // @codingStandardsIgnoreLine
+  $headers = array(
+    'Accept: application/json',
+    'Content-Type: application/json',
+  );
+
+  $ch = curl_init();
+
+  switch ($type) {
+    case 'POST':
+      curl_setopt($ch, CURLOPT_POST, 1);
+      curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+      $headers[] = 'API-KEY: ' . variable_get('hr_docstore_write_api_key',
+        'hrinfo-456');
+      break;
+
+    case 'GET':
+      $headers[] = 'API-KEY: ' . variable_get('hr_docstore_read_api_key',
+        'hrinfo-123');
+
+      break;
+  }
+  // Set URL and other appropriate options.
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+  // @codingStandardsIgnoreLine
+  //curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+  // @codingStandardsIgnoreLine
+  //curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+  $response = curl_exec($ch);
+
+  // Log errors to watchdog.
+  if ($response === FALSE || curl_errno($ch)) {
+    watchdog('hr_docstore', 'Curl HTTP code: @code', array(
+      '@code' => curl_getinfo($ch, CURLINFO_HTTP_CODE),
+    ));
+    watchdog('hr_docstore', 'type: @type', array('@type' => $type));
+    watchdog('hr_docstore', 'path: @path', array('@path' => $path));
+    // @codingStandardsIgnoreLine
+    //dd($params, 'params with an error');
+    watchdog('hr_docstore', 'Curl error: @error', array(
+      '@error' => curl_error($ch),
+    ));
+  }
+
+  // Close cURL resource, and free up system resources.
+  curl_close($ch);
+
+  return drupal_json_decode($response);
+}
+
+/**
+ * Create new document.
+ */
+function hr_docstore_create($fields, $field_array, $wrapper) {
+
+  $field_map = array(
+    'base_files' => 'field_files_collection',
+    'hrinfo_body' => 'body',
+    'hrinfo_changed' => 'changed',
+    'hrinfo_countries' => 'field_locations',
+    'hrinfo_created' => 'created',
+    'hrinfo_group_content_access' => 'group_content_access',
+    'hrinfo_id' => 'nid',
+    'hrinfo_operations' => 'og_group_ref',
+    'hrinfo_status' => 'status',
+    'hrinfo_title' => 'title_field',
+  );
+
+  $json = new \stdClass();
+  $json->title = $wrapper->label();
+  $json->author = 'hrinfo';
+
+  foreach ($fields as $field) {
+    $field_info = $field_array[$field];
+    if (in_array($field, array_keys($field_map))) {
+      $fieldname = $field_map[$field];
+    }
+    else {
+      if (strpos($field, 'base_') === 0) {
+        continue;
+      }
+      $fieldname = str_replace('hrinfo_', 'field_', $field);
+    }
+
+    if ($field_info['type'] === 'entity_reference_uuid') {
+      $label = $field . '_label';
+      $field_values = array();
+      switch ($wrapper->$fieldname->type()) {
+        // This is for files.
+        // @todo It doesn't handle duplicates, yet.
+        case 'list<field_collection_item>':
+          if (is_array($wrapper->$fieldname->value())) {
+            $json->files = array();
+            foreach ($wrapper->$fieldname->value() as $value) {
+              if (empty($value->field_file) || empty($value->field_file[LANGUAGE_NONE])) {
+                break;
+              }
+              $files = $value->field_file[LANGUAGE_NONE];
+              // This is for use on other instances than prod.
+              $prod_files_dir = variable_get('hrinfo_prod_files_dir', 'https://www.humanitarianresponse.info/sites/www.humanitarianresponse.info/files/');
+              foreach ($files as $file) {
+                if (empty($file['uri'])) {
+                  continue;
+                }
+                // Transform uri to that of prod.
+                $prod_uri = str_replace('public://', $prod_files_dir, $file['uri']);
+                $json->files[] = array('uri' => $prod_uri);
+              }
+            }
+          }
+          break;
+
+        case 'list<node>':
+          if ($fieldname === 'field_disasters') {
+            // @todo Get disasters matched and working.
+            continue;
+          }
+          foreach ($wrapper->$fieldname->value() as $value) {
+            $value_wrapper = entity_metadata_wrapper('node', $value->nid);
+            $field_values[] = $value_wrapper->label();
+          }
+          break;
+
+        case 'list<taxonomy_term>':
+          foreach ($wrapper->$fieldname->value() as $value) {
+            $value_wrapper = entity_metadata_wrapper('taxonomy_term', $value->tid);
+            // Only locations with an iso3.
+            // @todo evaluate storing other locations in another field.
+            if ($field_info['label'] === 'countries' &&
+              $value_wrapper->field_iso3->value() === NULL) {
+              continue;
+            }
+            $field_values[] = $value_wrapper->label();
+          }
+          break;
+
+        case 'taxonomy_term':
+          $value = $wrapper->$fieldname->value();
+          $value_wrapper = entity_metadata_wrapper('taxonomy_term', $value->tid);
+          $field_values = $value_wrapper->label();
+          break;
+
+      }
+    }
+    else {
+      $label = $field;
+      switch ($wrapper->$fieldname->type()) {
+        case 'boolean':
+        case 'date':
+        case 'integer':
+        case 'taxonomy_term':
+        case 'text':
+          $field_values = $wrapper->$fieldname->value();
+          break;
+
+        case 'text_formatted':
+          $field_values = $wrapper->$fieldname->value()['value'];
+          break;
+
+      }
+    }
+
+    if (!empty($field_values)) {
+      $json->metadata[] = array($label => $field_values);
+      unset($field_values);
+    }
+  }
+
+  // @codingStandardsIgnoreStart
+  //dd(json_encode($json), 'json with metadata');
+  $created = hr_docstore_call_api('POST', 'documents', json_encode($json));
+  //dd($created, 'created');
+  // @codingStandardsIgnoreEnd
+
+  return 'something indicative of success';
+}
