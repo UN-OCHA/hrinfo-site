@@ -126,7 +126,6 @@ function hr_wysiwyg_default_linkit_profiles() {
       'bundles' => array(
         'fieldable_panels_pane' => 0,
         'hr_assessments' => 0,
-        'hr_contacts' => 0,
         'hr_documents' => 0,
         'hr_infographics' => 0,
       ),

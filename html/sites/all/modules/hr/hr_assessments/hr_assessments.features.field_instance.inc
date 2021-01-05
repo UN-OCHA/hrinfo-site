@@ -1851,49 +1851,6 @@ function hr_assessments_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_assessment-field_hid_contact_ref'.
-  $field_instances['node-hr_assessment-field_hid_contact_ref'] = array(
-    'bundle' => 'hr_assessment',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => 'To show in the list, the person must have a <a href="https://humanitarian.id/" target="info">HumanitarianID</a> profile.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 27,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_hid_contact_ref',
-    'label' => 'Contact(s)',
-    'required' => 0,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'hid_contact_reference',
-      'settings' => array(),
-      'type' => 'hid_contact_reference_autocomplete',
-      'weight' => 23,
-    ),
-  );
-
   // Exported field_instance:
   // 'node-hr_assessment-field_level_of_representation'.
   $field_instances['node-hr_assessment-field_level_of_representation'] = array(

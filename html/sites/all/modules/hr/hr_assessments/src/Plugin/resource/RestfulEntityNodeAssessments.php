@@ -117,11 +117,6 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
       'property' => 'field_level_of_representation',
     );
 
-    $public_fields['contacts'] = array(
-      'property' => 'field_hid_contact_ref',
-      'sub_property' => 'cid'
-    );
-
     $public_fields['population_types'] = array(
       'property' => 'field_population_types',
       'resource' => array(

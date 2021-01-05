@@ -266,7 +266,6 @@ function hr_layout_block_view($delta = '') {
       }
       if (!empty($gid)) {
         $order = array(
-          'hid_contacts',
           'hr_events',
           'ev_events',
           'hr_reliefweb_meeting_documents',
@@ -301,16 +300,6 @@ function hr_layout_block_view($delta = '') {
           if (!og_features_feature_is_disabled($key, $og_group)) {
             $path = str_replace('hr_', '', $key);
             switch ($key) {
-              case 'hid_contacts':
-                // Special case: Colombia, which is not using Humanitarian ID.
-                if ($gid != 77) {
-                  $path = 'hid_contacts';
-                }
-                else {
-                  $path = 'j2h/contactos';
-                }
-                break;
-
               case 'ev_events':
                 $path = 'humanitarian-events';
                 break;
@@ -610,11 +599,6 @@ function hr_layout_form_alter(&$form, &$form_state, $form_id) {
         case 'hr_documents_panes-list':
           $form_state['pane']->cache = $cache;
           $form_state['pane']->cache['settings']['content_types'] = array('hr_document' => 'hr_document');
-          break;
-
-        case 'hr_contacts_panes-list':
-          $form_state['pane']->cache = $cache;
-          $form_state['pane']->cache['settings']['content_types'] = array('hr_contact' => 'hr_contact');
           break;
 
         case 'hr_events_panes-upcoming':

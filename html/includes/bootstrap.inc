@@ -8,7 +8,7 @@
 /**
  * The current system version.
  */
-define('VERSION', '7.72');
+define('VERSION', '7.75');
 
 /**
  * Core API compatibility.

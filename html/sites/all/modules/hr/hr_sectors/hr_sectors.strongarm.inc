@@ -161,7 +161,6 @@ function hr_sectors_strongarm() {
     'acc_incidents' => '0',
     'ev_events' => '0',
     'hdx_datasets' => '0',
-    'hid_contacts' => '0',
     'hr_assessments' => '0',
     'hr_datasets' => '0',
     'hr_disasters' => '0',
@@ -228,7 +227,6 @@ function hr_sectors_strongarm() {
   $strongarm->name = 'panelizer_node:hr_sector_allowed_types';
   $strongarm->value = array(
     'node_body-node_body' => '1',
-    'hr_contacts_key_contacts-hr_contacts_key_contacts' => '1',
     'hr_documents_key_documents-hr_documents_key_documents' => '1',
     'hr_infographics_key_infographics-hr_infographics_key_infographics' => '1',
     'hr_layout_reliefweb-hr_layout_reliefweb' => '1',
@@ -236,7 +234,6 @@ function hr_sectors_strongarm() {
     'fieldable_panels_pane-fieldable_panels_pane' => '1',
     'views_panes-hr_documents_panes-list' => '1',
     'views_panes-hr_events_panes-upcoming' => '1',
-    'views_panes-hr_contacts_panes-list' => '1',
     'views_panes-hr_news_panes-list' => '1',
   );
   $export['panelizer_node:hr_sector_allowed_types'] = $strongarm;
