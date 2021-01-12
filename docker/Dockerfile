@@ -30,4 +30,4 @@ COPY ./docker/policy.xml /etc/ImageMagick-7/policy.xml
 
 RUN  cd /srv/www/html/sites && \
        rm -f www.humanitarianresponse.info && \
-       ln -s default www.humanitarianresponse.info && \
+       ln -s default www.humanitarianresponse.info
