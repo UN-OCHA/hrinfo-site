@@ -8,7 +8,7 @@
 include_once 'hr_documents.features.inc';
 
 /**
- * Implements hook_og_features_registry()
+ * Implements hook_og_features_registry().
  */
 function hr_documents_og_features_registry() {
   $registry = array();
@@ -33,6 +33,30 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
 
   // If it's a clone, validate the title.
   if (isset($form['clone_from_original_nid'])) {
+    // Keep original language.
+    $node_lang = $form['#node']->language;
+    $field_lang = $form['title_field']['#language'];
+
+    if ($node_lang !== $field_lang) {
+      $form_state['values']['language'] = $node_lang;
+
+      foreach (['body', 'title_field'] as $field_name) {
+        $form[$field_name]['#language'] = $node_lang;
+
+        $form[$field_name][$node_lang] = $form[$field_name][$field_lang];
+        unset($form[$field_name][$field_lang]);
+
+        $form[$field_name][$node_lang][0]['#language'] = $node_lang;
+        $form[$field_name][$node_lang][0]['value']['#language'] = $node_lang;
+        $form[$field_name][$node_lang][0]['value']['#name'] = 'title_field[' . $node_lang . '][0][value]';
+        $form[$field_name][$node_lang][0]['value']['#default_value'] = $form['title']['#default_value'];
+        $form[$field_name][$node_lang]['#language'] = $node_lang;
+
+        $form_state['field'][$field_name][$node_lang] = $form_state['field'][$field_name][$field_lang];
+        unset($form_state['field'][$field_name][$field_lang]);
+      }
+    }
+
     // Add title validation.
     if (!isset($form['#validate'])) {
       $form['#validate'] = array();
@@ -43,7 +67,6 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
     if (!isset($form['#after_build'])) {
       $form['#after_build'] = array();
     }
-    $form['#after_build'][] = '_hr_document_clone_disable_language';
   }
 
   // These details aren't necessary for offices.
@@ -73,7 +96,6 @@ function _hr_document_clone_disable_language(&$form, &$form_state) {
   }
 
   $form['language']['#attributes']['disabled'] = TRUE;
-  return $form;
 }
 
 /**
@@ -89,7 +111,7 @@ function _hr_document_check_clone_title($form, &$form_state) {
 }
 
 /**
- * Implements of hook_entity_info_alter().
+ * Implements hook_entity_info_alter().
  */
 function hr_documents_entity_info_alter(&$entity_info) {
   $entity_info['fieldable_panels_pane']['bundles']['hr_documents'] = array(
@@ -114,7 +136,7 @@ function hr_documents_search_api_views_query_alter(&$view, &$query) {
   if ($view->name == 'hr_documents') {
     $params = drupal_get_query_parameters($_GET, array(
       'q',
-      'page'
+      'page',
     ));
     $existing = $query->getSort();
     if (empty($existing) && !isset($params['sort']) && !isset($params['order'])) {
@@ -163,7 +185,7 @@ function hr_documents_field_widget_form_alter(&$element, &$form_state, $context)
       if (is_numeric($tid)) {
         $option_label = array();
         $parents = taxonomy_get_parents_all($tid);
-        foreach ($parents as $parent_id => $parent) {
+        foreach ($parents as $parent) {
           array_unshift($option_label, entity_label('taxonomy_term', $parent));
         }
         $option = implode(' > ', $option_label);
@@ -174,7 +196,7 @@ function hr_documents_field_widget_form_alter(&$element, &$form_state, $context)
 }
 
 /**
- * Implements hook_clone_node_alter.
+ * Implements hook_clone_node_alter().
  */
 function hr_documents_clone_node_alter(&$node, $context) {
   if ($node->type != 'hr_document') {
@@ -194,7 +216,7 @@ function hr_documents_clone_node_alter(&$node, $context) {
 }
 
 /**
- * Implements hook_clone_access_alter.
+ * Implements hook_clone_access_alter().
  */
 function hr_documents_clone_access_alter(&$access, $node) {
   $allowed_types = array(
@@ -214,7 +236,7 @@ function hr_documents_clone_access_alter(&$access, $node) {
 }
 
 /**
- * Implements hook_module_implements_alter.
+ * Implements hook_module_implements_alter().
  */
 function hr_documents_module_implements_alter(&$implementations, $hook) {
   if ($hook != 'clone_access_alter') {
