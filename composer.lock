@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a60de64ea78f105f8693bcdd91507108",
+    "content-hash": "d0f6277410d87e0725428b5468b429df",
     "packages": [
         {
             "name": "composer/installers",
@@ -1492,17 +1492,17 @@
         },
         {
             "name": "drupal/date",
-            "version": "2.10.0",
+            "version": "2.11.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/date.git",
-                "reference": "7.x-2.10"
+                "reference": "7.x-2.11-rc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/date-7.x-2.10.zip",
-                "reference": "7.x-2.10",
-                "shasum": "f3d11ae63d841420f47ea9568139daa1f684e24e"
+                "url": "https://ftp.drupal.org/files/projects/date-7.x-2.11-rc1.zip",
+                "reference": "7.x-2.11-rc1",
+                "shasum": "d875c8a7dc6ab77910f7ed95b8039d3054343919"
             },
             "require": {
                 "drupal/date_api": "*",
@@ -1512,22 +1512,19 @@
                 "drupal/context": "*",
                 "drupal/date_api": "*",
                 "drupal/date_repeat": "*",
-                "drupal/date_repeat_field": "*",
-                "drupal/features": "*",
+                "drupal/entity": "*",
+                "drupal/features": "~2.0",
                 "drupal/migrate": "*",
                 "drupal/views": "*"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "7.x-2.10",
-                    "datestamp": "1491562115",
+                    "version": "7.x-2.11-rc1",
+                    "datestamp": "1601635723",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
@@ -1592,22 +1589,19 @@
         },
         {
             "name": "drupal/date_api",
-            "version": "2.10.0",
+            "version": "2.11.0-rc1",
             "require": {
                 "drupal/date": "self.version",
                 "drupal/drupal": "~7.0"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "7.x-2.10",
-                    "datestamp": "1491562115",
+                    "version": "7.x-2.11-rc1",
+                    "datestamp": "1601635723",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -1738,7 +1732,7 @@
         },
         {
             "name": "drupal/date_views",
-            "version": "2.10.0",
+            "version": "2.11.0-rc1",
             "require": {
                 "drupal/date": "self.version",
                 "drupal/date_api": "*",
@@ -1747,15 +1741,12 @@
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "7.x-2.10",
-                    "datestamp": "1491562115",
+                    "version": "7.x-2.11-rc1",
+                    "datestamp": "1601635723",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -12062,6 +12053,7 @@
     "minimum-stability": "alpha",
     "stability-flags": {
         "drupal/conditional_fields": 15,
+        "drupal/date": 5,
         "drupal/defaultconfig": 15,
         "drupal/facetapi_i18n": 20,
         "drupal/feeds_et": 20,
