@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1cb489d51deeaaee5e51f29164af0c3b",
+    "content-hash": "d0f6277410d87e0725428b5468b429df",
     "packages": [
         {
             "name": "composer/installers",
@@ -1492,17 +1492,17 @@
         },
         {
             "name": "drupal/date",
-            "version": "2.10.0",
+            "version": "2.11.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/date.git",
-                "reference": "7.x-2.10"
+                "reference": "7.x-2.11-rc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/date-7.x-2.10.zip",
-                "reference": "7.x-2.10",
-                "shasum": "f3d11ae63d841420f47ea9568139daa1f684e24e"
+                "url": "https://ftp.drupal.org/files/projects/date-7.x-2.11-rc1.zip",
+                "reference": "7.x-2.11-rc1",
+                "shasum": "d875c8a7dc6ab77910f7ed95b8039d3054343919"
             },
             "require": {
                 "drupal/date_api": "*",
@@ -1512,22 +1512,19 @@
                 "drupal/context": "*",
                 "drupal/date_api": "*",
                 "drupal/date_repeat": "*",
-                "drupal/date_repeat_field": "*",
-                "drupal/features": "*",
+                "drupal/entity": "*",
+                "drupal/features": "~2.0",
                 "drupal/migrate": "*",
                 "drupal/views": "*"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "7.x-2.10",
-                    "datestamp": "1491562115",
+                    "version": "7.x-2.11-rc1",
+                    "datestamp": "1601635723",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
@@ -1592,22 +1589,19 @@
         },
         {
             "name": "drupal/date_api",
-            "version": "2.10.0",
+            "version": "2.11.0-rc1",
             "require": {
                 "drupal/date": "self.version",
                 "drupal/drupal": "~7.0"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "7.x-2.10",
-                    "datestamp": "1491562115",
+                    "version": "7.x-2.11-rc1",
+                    "datestamp": "1601635723",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -1738,7 +1732,7 @@
         },
         {
             "name": "drupal/date_views",
-            "version": "2.10.0",
+            "version": "2.11.0-rc1",
             "require": {
                 "drupal/date": "self.version",
                 "drupal/date_api": "*",
@@ -1747,15 +1741,12 @@
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "7.x-2.10",
-                    "datestamp": "1491562115",
+                    "version": "7.x-2.11-rc1",
+                    "datestamp": "1601635723",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -3299,7 +3290,8 @@
             "homepage": "https://www.drupal.org/project/feeds_et",
             "support": {
                 "source": "https://git.drupalcode.org/project/feeds_et"
-            }
+            },
+            "time": "2015-10-10T07:58:52+00:00"
         },
         {
             "name": "drupal/feeds_tamper",
@@ -7497,7 +7489,8 @@
             "homepage": "https://www.drupal.org/project/phone",
             "support": {
                 "source": "https://git.drupalcode.org/project/phone"
-            }
+            },
+            "time": "2013-04-10T20:32:03+00:00"
         },
         {
             "name": "drupal/plug",
@@ -8737,7 +8730,8 @@
             "homepage": "https://www.drupal.org/project/search_api_sorts_widget",
             "support": {
                 "source": "https://git.drupalcode.org/project/search_api_sorts_widget"
-            }
+            },
+            "time": "2014-06-30T16:39:12+00:00"
         },
         {
             "name": "drupal/securelogin",
@@ -9415,7 +9409,8 @@
             "homepage": "https://www.drupal.org/project/token_tweaks",
             "support": {
                 "source": "https://git.drupalcode.org/project/token_tweaks"
-            }
+            },
+            "time": "2014-01-27T20:41:49+00:00"
         },
         {
             "name": "drupal/transliteration",
@@ -9516,7 +9511,8 @@
             "homepage": "https://www.drupal.org/project/twitter_pane",
             "support": {
                 "source": "https://git.drupalcode.org/project/twitter_pane"
-            }
+            },
+            "time": "2014-05-06T18:26:27+00:00"
         },
         {
             "name": "drupal/usermerge",
@@ -10489,6 +10485,70 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/wysiwyg_filter"
             }
+        },
+        {
+            "name": "symfony/flex",
+            "version": "v1.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/flex.git",
+                "reference": "ceb2b4e612bd0b4bb36a4d7fb2e800c861652f48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/ceb2b4e612bd0b4bb36a4d7fb2e800c861652f48",
+                "reference": "ceb2b4e612bd0b4bb36a4d7fb2e800c861652f48",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0|^2.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "composer/composer": "^1.0.2|^2.0",
+                "symfony/dotenv": "^4.4|^5.0",
+                "symfony/filesystem": "^4.4|^5.0",
+                "symfony/phpunit-bridge": "^4.4|^5.0",
+                "symfony/process": "^3.4|^4.4|^5.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.9-dev"
+                },
+                "class": "Symfony\\Flex\\Flex"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Flex\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien.potencier@gmail.com"
+                }
+            ],
+            "description": "Composer plugin for Symfony",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-12-03T10:57:35+00:00"
         },
         {
             "name": "unocha/ocha_snap",
@@ -11993,6 +12053,7 @@
     "minimum-stability": "alpha",
     "stability-flags": {
         "drupal/conditional_fields": 15,
+        "drupal/date": 5,
         "drupal/defaultconfig": 15,
         "drupal/facetapi_i18n": 20,
         "drupal/feeds_et": 20,
