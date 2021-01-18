@@ -324,21 +324,7 @@ PDF_FOOTER;
  */
 function hr_events_form_hr_event_node_form_alter(&$form, &$form_state, $form_id) {
   $form['#attached']['js'][] = drupal_get_path('module', 'hr_events') . '/js/hr_events.js';
-
-  // If it's a clone, validate the title.
-  if (isset($form['clone_from_original_nid'])) {
-    // Add title validation.
-    if (!isset($form['#validate'])) {
-      $form['#validate'] = array();
-    }
-    $form['#validate'][] = '_hr_document_check_clone_title';
-
-    // Disable language changing.
-    if (!isset($form['#after_build'])) {
-      $form['#after_build'] = array();
-    }
-    $form['#after_build'][] = '_hr_document_clone_disable_language';
-  }
+  hr_core_prepare_node_clone_form($form, $form_state);
 
   // These details aren't necessary.
   unset($form['additional_settings']);
