@@ -1695,6 +1695,9 @@ function hr_core_schema_alter(&$schema) {
   }
 }
 
+/**
+ * Prepare the node add form for clones.
+ */
 function hr_core_prepare_node_clone_form(&$form, &$form_state) {
   if (!isset($form['clone_from_original_nid'])) {
     return;
