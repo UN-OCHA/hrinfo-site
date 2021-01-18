@@ -105,21 +105,7 @@ function hr_assessments_global_map() {
  */
 function hr_assessments_form_hr_assessment_node_form_alter(&$form, &$form_state) {
   hr_sectors_hide_sectors($form, $form_state);
-
-  // If it's a clone, validate the title.
-  if (isset($form['clone_from_original_nid'])) {
-    // Add title validation.
-    if (!isset($form['#validate'])) {
-      $form['#validate'] = array();
-    }
-    $form['#validate'][] = '_hr_document_check_clone_title';
-
-    // Disable language changing.
-    if (!isset($form['#after_build'])) {
-      $form['#after_build'] = array();
-    }
-    $form['#after_build'][] = '_hr_document_clone_disable_language';
-  }
+  hr_core_prepare_node_clone_form($form, $form_state);
 
   // These details aren't necessary for assessments.
   unset($form['additional_settings']);

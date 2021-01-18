@@ -30,44 +30,7 @@ function hr_documents_og_features_registry() {
  */
 function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
   hr_sectors_hide_sectors($form, $form_state);
-
-  // If it's a clone, validate the title.
-  if (isset($form['clone_from_original_nid'])) {
-    // Keep original language.
-    $node_lang = $form['#node']->language;
-    $field_lang = $form['title_field']['#language'];
-
-    if ($node_lang !== $field_lang) {
-      $form_state['values']['language'] = $node_lang;
-
-      foreach (['body', 'title_field'] as $field_name) {
-        $form[$field_name]['#language'] = $node_lang;
-
-        $form[$field_name][$node_lang] = $form[$field_name][$field_lang];
-        unset($form[$field_name][$field_lang]);
-
-        $form[$field_name][$node_lang][0]['#language'] = $node_lang;
-        $form[$field_name][$node_lang][0]['value']['#language'] = $node_lang;
-        $form[$field_name][$node_lang][0]['value']['#name'] = 'title_field[' . $node_lang . '][0][value]';
-        $form[$field_name][$node_lang][0]['value']['#default_value'] = $form['title']['#default_value'];
-        $form[$field_name][$node_lang]['#language'] = $node_lang;
-
-        $form_state['field'][$field_name][$node_lang] = $form_state['field'][$field_name][$field_lang];
-        unset($form_state['field'][$field_name][$field_lang]);
-      }
-    }
-
-    // Add title validation.
-    if (!isset($form['#validate'])) {
-      $form['#validate'] = array();
-    }
-    $form['#validate'][] = '_hr_document_check_clone_title';
-
-    // Disable language changing.
-    if (!isset($form['#after_build'])) {
-      $form['#after_build'] = array();
-    }
-  }
+  hr_core_prepare_node_clone_form($form, $form_state);
 
   // These details aren't necessary for offices.
   unset($form['additional_settings']);
@@ -79,23 +42,13 @@ function hr_documents_form_hr_document_node_form_alter(&$form, &$form_state) {
   $form['group_content_access']['#access'] = FALSE;
 
   // To alter changes not yet made.
+  if (!isset($form['#after_build'])) {
+    $form['#after_build'] = array();
+  }
   $form['#after_build'][] = 'hr_documents_form_alter_after_build';
 
   // Attach js to toggle additional fields.
   $form['#attached']['js'][] = drupal_get_path('module', 'hr_core') . '/js/hr_core_toggle_fields.js';
-}
-
-/**
- * Disable language field on clones.
- */
-function _hr_document_clone_disable_language(&$form, &$form_state) {
-  $form['language']['#disabled'] = TRUE;
-
-  if (!isset($form['language']['#attributes'])) {
-    $form['language']['#attributes'] = array();
-  }
-
-  $form['language']['#attributes']['disabled'] = TRUE;
 }
 
 /**
