@@ -1,0 +1,13 @@
+diff --git a/date_popup/themes/datepicker.1.7.css b/date_popup/themes/datepicker.1.7.css
+index 68faf0ebd..4956ac184 100644
+--- a/date_popup/themes/datepicker.1.7.css
++++ b/date_popup/themes/datepicker.1.7.css
+@@ -10,7 +10,7 @@
+ /* Datepicker
+ ----------------------------------*/
+ .ui-datepicker {
+-  width: auto;
++  width: 16rem;
+   padding: .2em .2em 0;
+ }
+ .ui-datepicker .ui-datepicker-header {

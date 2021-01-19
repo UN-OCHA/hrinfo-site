@@ -10,7 +10,7 @@
 /* Datepicker
 ----------------------------------*/
 .ui-datepicker {
-  width: auto;
+  width: 16rem;
   padding: .2em .2em 0;
 }
 .ui-datepicker .ui-datepicker-header {
