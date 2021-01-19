@@ -10,7 +10,8 @@
         "Discourage bots from doing searches": "PATCHES/ops-6982-robot-searches.patch"
       },
       "drupal/date": {
-        "HR.info issue 913": "PATCHES/hrinfo-913.patch"
+        "HR.info issue 913": "PATCHES/hrinfo-913.patch",
+        "HR.info issue 1025": "PATCHES/hrinfo-1025.date-popup.patch"
       },
       "drupal/entity_api": {
         "Send entire node to node_access on create": "https://www.drupal.org/files/issues/2018-12-04/3017993-send_full_node.patch"
