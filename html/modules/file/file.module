@@ -42,8 +42,6 @@ function file_menu() {
     'access arguments' => array('access content'),
     'theme callback' => 'ajax_base_page_theme',
     'type' => MENU_CALLBACK,
-    'file' => 'node.pages.inc',
-    'file path' => drupal_get_path('module', 'node'),
   );
   $items['file/progress'] = array(
     'page callback' => 'file_ajax_progress',
@@ -283,10 +281,11 @@ function file_ajax_upload() {
   }
   // Otherwise just add the new content class on a placeholder.
   else {
-    $form['#suffix'] .= '<span class="ajax-new-content"></span>';
+    $form['#suffix'] = (isset($form['#suffix']) ? $form['#suffix'] : '') . '<span class="ajax-new-content"></span>';
   }
 
-  $form['#prefix'] .= theme('status_messages');
+  $form['#prefix'] = (isset($form['#prefix']) ? $form['#prefix'] : '') . theme('status_messages');
+
   $output = drupal_render($form);
   $js = drupal_add_js();
   $settings = drupal_array_merge_deep_array($js['settings']['data']);

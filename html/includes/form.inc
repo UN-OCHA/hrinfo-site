@@ -1361,7 +1361,10 @@ function _form_validate(&$elements, &$form_state, $form_id = NULL) {
     // The following errors are always shown.
     if (isset($elements['#needs_validation'])) {
       // Verify that the value is not longer than #maxlength.
-      if (isset($elements['#maxlength']) && drupal_strlen($elements['#value']) > $elements['#maxlength']) {
+      if (isset($elements['#maxlength']) && (isset($elements['#value']) && !is_scalar($elements['#value']))) {
+        form_error($elements, $t('An illegal value has been detected. Please contact the site administrator.'));
+      }
+      elseif (isset($elements['#maxlength']) && drupal_strlen($elements['#value']) > $elements['#maxlength']) {
         form_error($elements, $t('!name cannot be longer than %max characters but is currently %length characters long.', array('!name' => empty($elements['#title']) ? $elements['#parents'][0] : $elements['#title'], '%max' => $elements['#maxlength'], '%length' => drupal_strlen($elements['#value']))));
       }
 
@@ -2103,7 +2106,7 @@ function _form_builder_handle_input_element($form_id, &$element, &$form_state) {
       if (!$input_exists && !$form_state['rebuild'] && !$form_state['programmed']) {
         // Add the necessary parent keys to $form_state['input'] and sets the
         // element's input value to NULL.
-        drupal_array_set_nested_value($form_state['input'], $element['#parents'], NULL, TRUE);
+        drupal_array_set_nested_value($form_state['input'], $element['#parents'], NULL);
         $input_exists = TRUE;
       }
       // If we have input for the current element, assign it to the #value
@@ -4124,8 +4127,16 @@ function form_process_weight($element) {
   $max_elements = variable_get('drupal_weight_select_max', DRUPAL_WEIGHT_SELECT_MAX);
   if ($element['#delta'] <= $max_elements) {
     $element['#type'] = 'select';
+    $weights = array();
     for ($n = (-1 * $element['#delta']); $n <= $element['#delta']; $n++) {
       $weights[$n] = $n;
+    }
+    if (isset($element['#default_value'])) {
+      $default_value = (int) $element['#default_value'];
+      if (!isset($weights[$default_value])) {
+        $weights[$default_value] = $default_value;
+        ksort($weights);
+      }
     }
     $element['#options'] = $weights;
     $element += element_info('select');
