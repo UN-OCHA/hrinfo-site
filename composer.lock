@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d0f6277410d87e0725428b5468b429df",
+    "content-hash": "648d794f1eb8d8a47455b383f627cec5",
     "packages": [
         {
             "name": "composer/installers",
@@ -130,6 +130,16 @@
                 "yawik",
                 "zend",
                 "zikula"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-04-07T06:57:05+00:00"
         },
@@ -315,9 +325,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.3",
                     "datestamp": "1540579380",
@@ -376,9 +383,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1574192284",
@@ -462,10 +466,6 @@
                     "homepage": "https://www.drupal.org/user/1300542"
                 },
                 {
-                    "name": "markcarver",
-                    "homepage": "https://www.drupal.org/user/501638"
-                },
-                {
                     "name": "mikeytown2",
                     "homepage": "https://www.drupal.org/user/282446"
                 },
@@ -506,9 +506,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.4",
                     "datestamp": "1493219643",
@@ -534,6 +531,10 @@
                 {
                     "name": "bforchhammer",
                     "homepage": "https://www.drupal.org/user/216396"
+                },
+                {
+                    "name": "colan",
+                    "homepage": "https://www.drupal.org/user/58704"
                 },
                 {
                     "name": "diqidoq",
@@ -569,9 +570,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0",
                     "datestamp": "1566344885",
@@ -623,9 +621,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.13",
                     "datestamp": "1533832980",
@@ -647,10 +642,6 @@
                 {
                     "name": "arithmetric",
                     "homepage": "https://www.drupal.org/user/162305"
-                },
-                {
-                    "name": "brantwynn",
-                    "homepage": "https://www.drupal.org/user/252788"
                 },
                 {
                     "name": "fabsor",
@@ -675,6 +666,10 @@
                 {
                     "name": "rmontero",
                     "homepage": "https://www.drupal.org/user/191552"
+                },
+                {
+                    "name": "saltednut",
+                    "homepage": "https://www.drupal.org/user/252788"
                 },
                 {
                     "name": "skwashd",
@@ -717,9 +712,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.2",
                     "datestamp": "1469193839",
@@ -766,9 +758,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0-beta9",
                     "datestamp": "1407772727",
@@ -786,6 +775,10 @@
                 {
                     "name": "hefox",
                     "homepage": "https://www.drupal.org/user/426416"
+                },
+                {
+                    "name": "joseph.olstad",
+                    "homepage": "https://www.drupal.org/user/1321830"
                 },
                 {
                     "name": "mcrittenden",
@@ -828,9 +821,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.5",
                     "datestamp": "1413299929",
@@ -850,20 +840,20 @@
                     "homepage": "https://www.drupal.org/user/45874"
                 },
                 {
+                    "name": "Neslee Canil Pinto",
+                    "homepage": "https://www.drupal.org/user/3580850"
+                },
+                {
                     "name": "fizk",
                     "homepage": "https://www.drupal.org/user/473174"
                 },
                 {
-                    "name": "geertvd",
-                    "homepage": "https://www.drupal.org/user/536694"
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
-                    "name": "pjonckiere",
-                    "homepage": "https://www.drupal.org/user/2442998"
-                },
-                {
-                    "name": "tedbow",
-                    "homepage": "https://www.drupal.org/user/240860"
+                    "name": "solide-echt",
+                    "homepage": "https://www.drupal.org/user/46176"
                 }
             ],
             "description": "Views plugin to display views containing dates as Calendars.",
@@ -891,9 +881,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.1",
                     "datestamp": "1490260383",
@@ -970,9 +957,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.9",
                     "datestamp": "1547651580",
@@ -1025,9 +1009,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.0-alpha2",
                     "datestamp": "1443545939",
@@ -1043,16 +1024,24 @@
             ],
             "authors": [
                 {
+                    "name": "Neslee Canil Pinto",
+                    "homepage": "https://www.drupal.org/user/3580850"
+                },
+                {
                     "name": "OlgaRabodzei",
                     "homepage": "https://www.drupal.org/user/3389198"
                 },
                 {
-                    "name": "axel.rutz",
-                    "homepage": "https://www.drupal.org/user/229048"
-                },
-                {
                     "name": "colan",
                     "homepage": "https://www.drupal.org/user/58704"
+                },
+                {
+                    "name": "ergonlogic",
+                    "homepage": "https://www.drupal.org/user/368613"
+                },
+                {
+                    "name": "geek-merlin",
+                    "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
                     "name": "itsekhmistro",
@@ -1061,6 +1050,10 @@
                 {
                     "name": "peterpoe",
                     "homepage": "https://www.drupal.org/user/55674"
+                },
+                {
+                    "name": "thalles",
+                    "homepage": "https://www.drupal.org/user/3589086"
                 }
             ],
             "description": "Define dependencies between fields based on their states and values.",
@@ -1088,9 +1081,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0-beta2",
                     "datestamp": "1361736156",
@@ -1156,9 +1146,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.10",
                     "datestamp": "1551291108",
@@ -1214,16 +1201,20 @@
                     "homepage": "https://www.drupal.org/user/426416"
                 },
                 {
-                    "name": "hyrcan",
-                    "homepage": "https://www.drupal.org/user/26618"
-                },
-                {
                     "name": "jmiccolis",
                     "homepage": "https://www.drupal.org/user/31731"
                 },
                 {
                     "name": "nedjo",
                     "homepage": "https://www.drupal.org/user/4481"
+                },
+                {
+                    "name": "patricksettle",
+                    "homepage": "https://www.drupal.org/user/26618"
+                },
+                {
+                    "name": "paulocs",
+                    "homepage": "https://www.drupal.org/user/3640109"
                 },
                 {
                     "name": "tekante",
@@ -1260,9 +1251,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.0",
                     "datestamp": "1349787369",
@@ -1303,13 +1291,14 @@
                 "shasum": "6000ada1e1ba9cf01d8e015e026b96c6fcf059ec"
             },
             "require": {
-                "drupal/drupal": "~7.0"
+                "drupal/context": "*",
+                "drupal/ctools": "*",
+                "drupal/drupal": "~7.0",
+                "drupal/og": "*",
+                "drupal/og_context": "*"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.1",
                     "datestamp": "1355739999",
@@ -1333,6 +1322,7 @@
                     "homepage": "https://www.drupal.org/user/20885"
                 }
             ],
+            "description": "Provides Organic Groups conditions and reactions for the Context module.",
             "homepage": "https://www.drupal.org/project/context_og",
             "support": {
                 "source": "https://git.drupalcode.org/project/context_og"
@@ -1422,9 +1412,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.15",
                     "datestamp": "1549603684",
@@ -1528,7 +1515,8 @@
                     }
                 },
                 "patches_applied": {
-                    "HR.info issue 913": "PATCHES/hrinfo-913.patch"
+                    "HR.info issue 913": "PATCHES/hrinfo-913.patch",
+                    "HR.info issue 1025": "PATCHES/hrinfo-1025.date-popup.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -1686,9 +1674,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.9",
                     "datestamp": "1461609712",
@@ -1708,20 +1693,8 @@
                     "homepage": "https://www.drupal.org/user/1903688"
                 },
                 {
-                    "name": "Hadi Farnoud",
-                    "homepage": "https://www.drupal.org/user/38806"
-                },
-                {
-                    "name": "John Franklin",
-                    "homepage": "https://www.drupal.org/user/683430"
-                },
-                {
-                    "name": "axel.rutz",
-                    "homepage": "https://www.drupal.org/user/229048"
-                },
-                {
-                    "name": "coredumperror",
-                    "homepage": "https://www.drupal.org/user/1140544"
+                    "name": "joseph.olstad",
+                    "homepage": "https://www.drupal.org/user/1321830"
                 }
             ],
             "description": "Enables export of iCal feeds using Views, and import of iCal feeds using Feeds.",
@@ -1825,9 +1798,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.4",
                     "datestamp": "1382596227",
@@ -1877,9 +1847,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0-alpha11",
                     "datestamp": "1443688139",
@@ -1932,9 +1899,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.4",
                     "datestamp": "1541401381",
@@ -1998,23 +1962,23 @@
         },
         {
             "name": "drupal/drupal",
-            "version": "7.75.0",
+            "version": "7.78.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal.git",
-                "reference": "7.75"
+                "reference": "7.78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/drupal-7.75.zip",
-                "reference": "7.75",
-                "shasum": "cd1eaee1b26acd53824c5d42d1bc93d64af026f2"
+                "url": "https://ftp.drupal.org/files/projects/drupal-7.78.zip",
+                "reference": "7.78",
+                "shasum": "1358a9b8022877fc692b62eb19d7efb0d3f85ee4"
             },
             "type": "drupal-core",
             "extra": {
                 "drupal": {
-                    "version": "7.75",
-                    "datestamp": "1606361101",
+                    "version": "7.78",
+                    "datestamp": "1611163112",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2176,9 +2140,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.3",
                     "datestamp": "1397134152",
@@ -2283,9 +2244,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.9",
                     "datestamp": "1518642010",
@@ -2319,6 +2277,10 @@
                 {
                     "name": "fago",
                     "homepage": "https://www.drupal.org/user/16747"
+                },
+                {
+                    "name": "mglaman",
+                    "homepage": "https://www.drupal.org/user/2416470"
                 }
             ],
             "description": "Enables modules to work with any entity type and to provide entities.",
@@ -2461,13 +2423,10 @@
                 "shasum": "ae6ec0739e5a3fbacabb54e05f08864b6e06a2b0"
             },
             "require": {
-                "drupal/drupal": "~7.0"
+                "drupal/drupal": "^7.36"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.5",
                     "datestamp": "1446719510",
@@ -2499,6 +2458,7 @@
                     "homepage": "https://www.drupal.org/user/116305"
                 }
             ],
+            "description": "Provides caching for core entities including nodes and taxonomy terms.",
             "homepage": "https://www.drupal.org/project/entitycache",
             "support": {
                 "source": "https://git.drupalcode.org/project/entitycache"
@@ -2529,9 +2489,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.5",
                     "datestamp": "1502906584",
@@ -2601,9 +2558,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.13",
                     "datestamp": "1490279584",
@@ -2654,9 +2608,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1471604814",
@@ -2671,6 +2622,10 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "maximkashuba",
+                    "homepage": "https://www.drupal.org/user/2463262"
+                },
                 {
                     "name": "maximpodorov",
                     "homepage": "https://www.drupal.org/user/515310"
@@ -2702,9 +2657,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1485445388",
@@ -2754,9 +2706,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.9",
                     "datestamp": "1510267684",
@@ -2778,6 +2727,10 @@
                 {
                     "name": "mrfelton",
                     "homepage": "https://www.drupal.org/user/305669"
+                },
+                {
+                    "name": "pratik_kamble",
+                    "homepage": "https://www.drupal.org/user/3204909"
                 }
             ],
             "description": "Adds a color indicator for the different environments.",
@@ -2959,9 +2912,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0-beta2",
                     "datestamp": "1327885860",
@@ -3007,9 +2957,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.4",
                     "datestamp": "1427560981",
@@ -3066,9 +3013,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.11",
                     "datestamp": "1541189192",
@@ -3098,6 +3042,10 @@
                 {
                     "name": "febbraro",
                     "homepage": "https://www.drupal.org/user/43670"
+                },
+                {
+                    "name": "flocondetoile",
+                    "homepage": "https://www.drupal.org/user/2006064"
                 },
                 {
                     "name": "jmiccolis",
@@ -3316,9 +3264,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.2",
                     "datestamp": "1512894785",
@@ -3447,9 +3392,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.1",
                     "datestamp": "1354726970",
@@ -3576,9 +3518,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.6",
                     "datestamp": "1434802380",
@@ -3640,9 +3579,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.13",
                     "datestamp": "1552402084",
@@ -3707,9 +3643,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.12",
                     "datestamp": "1446333839",
@@ -3883,9 +3816,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.9",
                     "datestamp": "1474619039",
@@ -3900,6 +3830,10 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
+                },
                 {
                     "name": "fago",
                     "homepage": "https://www.drupal.org/user/16747"
@@ -3963,9 +3897,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.2",
                     "datestamp": "1423733881",
@@ -4062,9 +3993,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.4",
                     "datestamp": "1540417981",
@@ -4137,9 +4065,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1352084822",
@@ -4157,6 +4082,10 @@
                 {
                     "name": "Brandonian",
                     "homepage": "https://www.drupal.org/user/77766"
+                },
+                {
+                    "name": "Neslee Canil Pinto",
+                    "homepage": "https://www.drupal.org/user/3580850"
                 },
                 {
                     "name": "phayes",
@@ -4195,9 +4124,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.6",
                     "datestamp": "1548968580",
@@ -4213,12 +4139,28 @@
             ],
             "authors": [
                 {
+                    "name": "andyrigby",
+                    "homepage": "https://www.drupal.org/user/2679687"
+                },
+                {
                     "name": "budda",
                     "homepage": "https://www.drupal.org/user/13164"
                 },
                 {
-                    "name": "hass",
-                    "homepage": "https://www.drupal.org/user/85918"
+                    "name": "ixismark",
+                    "homepage": "https://www.drupal.org/user/3632333"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "pfaocle",
+                    "homepage": "https://www.drupal.org/user/9740"
+                },
+                {
+                    "name": "roberto.rivera.ixis",
+                    "homepage": "https://www.drupal.org/user/3632325"
                 }
             ],
             "homepage": "https://www.drupal.org/project/google_analytics",
@@ -4298,9 +4240,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.16",
                     "datestamp": "1531318398",
@@ -4621,9 +4560,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.16",
                     "datestamp": "1438457939",
@@ -4680,9 +4616,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0",
                     "datestamp": "1362244512",
@@ -4852,9 +4785,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.0",
                     "datestamp": "1518514084",
@@ -4935,9 +4865,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.7",
                     "datestamp": "1445458536",
@@ -4971,10 +4898,6 @@
                 {
                     "name": "markcarver",
                     "homepage": "https://www.drupal.org/user/501638"
-                },
-                {
-                    "name": "mfer",
-                    "homepage": "https://www.drupal.org/user/25701"
                 },
                 {
                     "name": "sun",
@@ -5114,9 +5037,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1507136644",
@@ -5165,12 +5085,9 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.5",
-                    "datestamp": "1538770681",
+                    "datestamp": "1569052574",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5316,9 +5233,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.4",
                     "datestamp": "1534714680",
@@ -5333,6 +5247,10 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "C_Logemann",
+                    "homepage": "https://www.drupal.org/user/218368"
+                },
                 {
                     "name": "hass",
                     "homepage": "https://www.drupal.org/user/85918"
@@ -5365,9 +5283,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.5",
                     "datestamp": "1452407339",
@@ -5412,9 +5327,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.1",
                     "datestamp": "1425773217",
@@ -5467,9 +5379,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0-rc7",
                     "datestamp": "1394333605",
@@ -5543,9 +5452,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.19",
                     "datestamp": "1534544281",
@@ -5628,13 +5534,10 @@
             "version": "2.19.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/media": "self.version"
+                "drupal/media": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.19",
                     "datestamp": "1534544281",
@@ -5732,9 +5635,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.1",
                     "datestamp": "1432838581",
@@ -5807,9 +5707,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.9",
                     "datestamp": "1570113186",
@@ -5887,6 +5784,10 @@
                 {
                     "name": "pwolanin",
                     "homepage": "https://www.drupal.org/user/49851"
+                },
+                {
+                    "name": "solideogloria",
+                    "homepage": "https://www.drupal.org/user/3589277"
                 },
                 {
                     "name": "steinmb",
@@ -5990,9 +5891,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1516182785",
@@ -6045,9 +5943,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.11",
                     "datestamp": "1530180224",
@@ -6097,9 +5992,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.0",
                     "datestamp": "1437901739",
@@ -6144,9 +6036,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0",
                     "datestamp": "1447900440",
@@ -6190,12 +6079,9 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.7",
-                    "datestamp": "1497976586",
+                    "datestamp": "1582667821",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6216,7 +6102,7 @@
                     "homepage": "https://www.drupal.org/user/1962106"
                 },
                 {
-                    "name": "diosbelmezquia",
+                    "name": "dmezquia",
                     "homepage": "https://www.drupal.org/user/3334752"
                 },
                 {
@@ -6263,9 +6149,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.10",
                     "datestamp": "1530174224",
@@ -6311,6 +6194,10 @@
                 {
                     "name": "dww",
                     "homepage": "https://www.drupal.org/user/46549"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "merlinofchaos",
@@ -6442,9 +6329,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.0-beta4",
                     "datestamp": "1396962551",
@@ -6495,9 +6379,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.2",
                     "datestamp": "1563951785",
@@ -6563,9 +6444,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.3",
                     "datestamp": "1396518246",
@@ -6615,9 +6493,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0-beta2",
                     "datestamp": "1383055290",
@@ -6749,9 +6624,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0",
                     "datestamp": "1436385539",
@@ -6810,9 +6682,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.0-beta11",
                     "datestamp": "1413561921",
@@ -6861,14 +6730,11 @@
             "name": "drupal/page_manager",
             "version": "1.15.0",
             "require": {
-                "drupal/ctools": "self.version",
+                "drupal/ctools": "*",
                 "drupal/drupal": "~7.0"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.15",
                     "datestamp": "1549603684",
@@ -6962,9 +6828,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.4",
                     "datestamp": "1471635539",
@@ -7124,9 +6987,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.0",
                     "datestamp": "1398607727",
@@ -7281,15 +7141,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0-rc4",
                     "datestamp": "1364285423",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -7301,6 +7158,14 @@
                 {
                     "name": "gabrielu",
                     "homepage": "https://www.drupal.org/user/279352"
+                },
+                {
+                    "name": "kporras07",
+                    "homepage": "https://www.drupal.org/user/1349780"
+                },
+                {
+                    "name": "otrolopezmas",
+                    "homepage": "https://www.drupal.org/user/3516204"
                 },
                 {
                     "name": "plopesc",
@@ -7337,9 +7202,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.3",
                     "datestamp": "1444232639",
@@ -7397,9 +7259,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.1",
                     "datestamp": "1335210084",
@@ -7515,9 +7374,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.1",
                     "datestamp": "1454848139",
@@ -7570,9 +7426,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.3",
                     "datestamp": "1474067039",
@@ -7682,9 +7535,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.2",
                     "datestamp": "1363209312",
@@ -7733,9 +7583,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.4",
                     "datestamp": "1467708539",
@@ -7769,6 +7616,10 @@
                 {
                     "name": "malaussene",
                     "homepage": "https://www.drupal.org/user/79249"
+                },
+                {
+                    "name": "rodrigoaguilera",
+                    "homepage": "https://www.drupal.org/user/408170"
                 }
             ],
             "description": "Adds a 'Publish' or 'Unpublish' link on the node edit/view pages, and a 'Publish Link' field if the Views module is enabled.",
@@ -7845,9 +7696,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.4",
                     "datestamp": "1433951880",
@@ -7900,9 +7748,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.4",
                     "datestamp": "1548970380",
@@ -7975,9 +7820,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0-rc3",
                     "datestamp": "1436393339",
@@ -8030,9 +7872,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.18",
                     "datestamp": "1572430084",
@@ -8086,9 +7925,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0",
                     "datestamp": "1411816455",
@@ -8133,9 +7969,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.3",
                     "datestamp": "1441286339",
@@ -8180,9 +8013,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.0",
                     "datestamp": "1474305839",
@@ -8245,9 +8075,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.17",
                     "datestamp": "1553101123",
@@ -8303,9 +8130,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0",
                     "datestamp": "1327037146",
@@ -8363,9 +8187,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.12",
                     "datestamp": "1548305581",
@@ -8423,9 +8244,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.26",
                     "datestamp": "1552334580",
@@ -8482,9 +8300,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1537174685",
@@ -8595,9 +8410,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0",
                     "datestamp": "1497319146",
@@ -8654,9 +8466,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1487181167",
@@ -8752,9 +8561,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1514932985",
@@ -8799,9 +8605,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.8",
                     "datestamp": "1552503450",
@@ -8820,6 +8623,10 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "jhedstrom",
+                    "homepage": "https://www.drupal.org/user/208732"
+                },
                 {
                     "name": "stBorchert",
                     "homepage": "https://www.drupal.org/user/36942"
@@ -8853,9 +8660,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1498667346",
@@ -8885,6 +8689,10 @@
                 {
                     "name": "oadaeh",
                     "homepage": "https://www.drupal.org/user/4649"
+                },
+                {
+                    "name": "sadashiv",
+                    "homepage": "https://www.drupal.org/user/1773304"
                 },
                 {
                     "name": "wundo",
@@ -8920,9 +8728,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.1",
                     "datestamp": "1563457686",
@@ -8988,9 +8793,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.0",
                     "datestamp": "1339604214",
@@ -9055,9 +8857,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.2",
                     "datestamp": "1457713741",
@@ -9110,9 +8909,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.4",
                     "datestamp": "1490837285",
@@ -9249,9 +9045,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1485316084",
@@ -9317,9 +9110,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.1",
                     "datestamp": "1325700944",
@@ -9431,9 +9221,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.2",
                     "datestamp": "1395079431",
@@ -9533,9 +9320,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.11",
                     "datestamp": "1439807339",
@@ -9557,6 +9341,10 @@
                 {
                     "name": "ZenDoodles",
                     "homepage": "https://www.drupal.org/user/226976"
+                },
+                {
+                    "name": "alorenc",
+                    "homepage": "https://www.drupal.org/user/3603980"
                 },
                 {
                     "name": "antiorario",
@@ -9600,9 +9388,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.5",
                     "datestamp": "1398250127",
@@ -9781,9 +9566,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.9",
                     "datestamp": "1532082181",
@@ -9987,13 +9769,12 @@
                 "shasum": "0228742d4f96e626207473de08433ad0e98b4d2a"
             },
             "require": {
-                "drupal/drupal": "~7.0"
+                "drupal/ctools": "*",
+                "drupal/drupal": "~7.0",
+                "drupal/views": "*"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.0-alpha3",
                     "datestamp": "1383658105",
@@ -10013,6 +9794,7 @@
                     "homepage": "https://www.drupal.org/user/99644"
                 }
             ],
+            "description": "Provides a views cache plugin based on content type changes.",
             "homepage": "https://www.drupal.org/project/views_content_cache",
             "support": {
                 "source": "https://git.drupalcode.org/project/views_content_cache"
@@ -10038,9 +9820,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-3.x": "3.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-3.2",
                     "datestamp": "1491379384",
@@ -10107,9 +9886,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0-beta3",
                     "datestamp": "1451575439",
@@ -10168,9 +9944,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.7",
                     "datestamp": "1484920083",
@@ -10186,12 +9959,12 @@
             ],
             "authors": [
                 {
-                    "name": "killua99",
-                    "homepage": "https://www.drupal.org/user/699418"
+                    "name": "RickJ",
+                    "homepage": "https://www.drupal.org/user/3371606"
                 },
                 {
-                    "name": "vegansupreme",
-                    "homepage": "https://www.drupal.org/user/674852"
+                    "name": "killua99",
+                    "homepage": "https://www.drupal.org/user/699418"
                 }
             ],
             "description": "Views plugin to export a view as a PDF file.",
@@ -10220,9 +9993,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.1",
                     "datestamp": "1431972781",
@@ -10268,9 +10038,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.0-rc4",
                     "datestamp": "1419363780",
@@ -10304,6 +10071,10 @@
                 {
                     "name": "alex_b",
                     "homepage": "https://www.drupal.org/user/53995"
+                },
+                {
+                    "name": "idebr",
+                    "homepage": "https://www.drupal.org/user/1879760"
                 },
                 {
                     "name": "maciej.zgadzaj",
@@ -10340,9 +10111,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.0-beta2",
                     "datestamp": "1439073239",
@@ -10399,12 +10167,9 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.6",
-                    "datestamp": "1563397062",
+                    "datestamp": "1563520137",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10450,9 +10215,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.6-rc9",
                     "datestamp": "1508857145",
@@ -10468,7 +10230,7 @@
             ],
             "authors": [
                 {
-                    "name": "axel.rutz",
+                    "name": "geek-merlin",
                     "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
@@ -10621,6 +10383,20 @@
             "keywords": [
                 "Xdebug",
                 "performance"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-06-04T11:16:35+00:00"
         },
@@ -11240,6 +11016,20 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-23T13:08:13+00:00"
         },
         {
@@ -11317,6 +11107,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-30T20:06:45+00:00"
         },
         {
@@ -11392,6 +11196,20 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-06-12T08:11:32+00:00"
         },
         {
@@ -11438,6 +11256,20 @@
             ],
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-27T08:34:37+00:00"
         },
         {
@@ -11488,6 +11320,20 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-30T18:50:54+00:00"
         },
         {
@@ -11537,6 +11383,20 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-20T17:43:50+00:00"
         },
         {
@@ -11598,6 +11458,20 @@
                 "ctype",
                 "polyfill",
                 "portable"
+            ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-06-06T08:46:27+00:00"
         },
@@ -11662,6 +11536,20 @@
                 "portable",
                 "shim"
             ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-06-06T08:46:27+00:00"
         },
         {
@@ -11723,6 +11611,20 @@
                 "polyfill",
                 "portable",
                 "shim"
+            ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-06-06T08:46:27+00:00"
         },
@@ -11790,6 +11692,20 @@
                 "portable",
                 "shim"
             ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-06-06T08:46:27+00:00"
         },
         {
@@ -11847,6 +11763,20 @@
                 "interfaces",
                 "interoperability",
                 "standards"
+            ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-05-20T17:43:50+00:00"
         },
@@ -11911,6 +11841,20 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-20T17:43:50+00:00"
         },
         {
@@ -11958,12 +11902,12 @@
             "version": "1.9.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "9dc4f203e36f2b486149058bade43c851dd97451"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/9dc4f203e36f2b486149058bade43c851dd97451",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/9dc4f203e36f2b486149058bade43c851dd97451",
                 "reference": "9dc4f203e36f2b486149058bade43c851dd97451",
                 "shasum": ""
             },
@@ -12080,5 +12024,8 @@
         "php": ">= 7.3"
     },
     "platform-dev": [],
+    "platform-overrides": {
+        "php": "7.3.26"
+    },
     "plugin-api-version": "1.1.0"
 }
