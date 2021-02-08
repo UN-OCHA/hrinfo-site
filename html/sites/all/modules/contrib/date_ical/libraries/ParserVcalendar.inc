@@ -504,7 +504,36 @@ class ParserVcalendar {
     $rrule = trim(preg_replace('/\s/', '', $vcalendar_component->createRrule()));
     $rdate = trim(preg_replace('/\s/', '', $vcalendar_component->createRdate()));
     $exrule = trim(preg_replace('/\s/', '', $vcalendar_component->createExrule()));
-    $exdate = trim(preg_replace('/\s/', '', $vcalendar_component->createExdate()));
+
+    // Modules such as Date Repeat, as well as our parsing functions, generally
+    // expect a single EXDATE entry for optimal operation. If we have multiple
+    // entries in the data, we should concatenate them here.
+    $parsed_exdate = trim(preg_replace('/\s/', '', $vcalendar_component->createExdate()));
+
+    // First, get the individual contents of any definitions. It's OK even if
+    // there is only one.
+    $exdate_parts = explode('EXDATE;', $parsed_exdate);
+    array_shift($exdate_parts); // First element always blank.
+
+    // Extended parameters such as VALUE and TZID are set in the first EXDATE
+    // The other ones must not repeat them. We skip the first entry when
+    // enforcing this, obviously.
+    $skip = TRUE;
+    foreach ($exdate_parts as &$exdate_part) {
+      if ($skip) {
+        $skip = FALSE;
+        continue;
+      }
+
+      // This strips off the part before the colon, since we only want the value
+      // from the first EXDATE entry. end() wants a real array, hence why two
+      // lines.
+      $exdate_part_parts = explode(':', $exdate_part);
+      $exdate_part = end($exdate_part_parts);
+    }
+
+    // Combine the parts back together with an EXDATE; specifier in front.
+    $exdate = !empty($exdate_parts) ? 'EXDATE;' . implode(',', $exdate_parts) : '';
 
     return "$rrule|$rdate|$exrule|$exdate";
   }

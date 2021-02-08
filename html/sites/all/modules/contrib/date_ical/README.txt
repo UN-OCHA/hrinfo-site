@@ -11,15 +11,18 @@ INSTALLATION
 Date iCal has several required dependencies, and an optional one:
 - The Views (version 3.5+), Entity API, Libraries API (version 2.0+), and Date
   modules are required.
-- The iCalcreator library v2.20.2 is required.
+- The iCalcreator library v2.20.2 is required; for PHP 7.4 compatibility, use
+  v2.20.4.
 - PHP 5.3 is required for the iCalcreator library to properly handle timezones.
 - The Feeds module is optional. It's needed only if you you wish to import iCal
   feeds from other sites.
 
-To install the iCalcreator library, download the project's v2.20.2 zip file:
-https://github.com/iCalcreator/iCalcreator/archive/e3dbec2cb3bb91a8bde989e467567ae8831a4026.zip
+To install the iCalcreator library, download the project's latest zip file:
+https://github.com/lkmorlan/iCalcreator/releases
+
 Extract it, and copy iCalcreator.class.php to a folder in your Drupal site
-named sites/all/libraries/iCalcreator (you'll need to create that folder).
+named sites/all/libraries/iCalcreator (you'll need to create that folder). Be
+sure to capitalize the C in iCalcreator.
 
 Or, if you have drush, you can install iCalcreator by running this command from
 your site's root directory:
@@ -245,4 +248,4 @@ http://cldr.unicode.org/.
 
 The author of iCalcreator made extenside backwards incompatible changes to the
 library in the v2.22 release. Thus Date iCal does not support any version of
-iCalcreator after v2.20.2.
+iCalcreator after v2.20.x.
