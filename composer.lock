@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb64f211e26a14e9f53e1cfe05e574e4",
+    "content-hash": "95a5c46406cb701093fc04b836d64db3",
     "packages": [
         {
             "name": "composer/installers",
@@ -10254,7 +10254,12 @@
             "version": "v2.20.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/lkmorlan/icalcreator.git",
+                "url": "https://github.com/lkmorlan/iCalcreator.git",
+                "reference": "v2.20.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/lkmorlan/iCalcreator/archive/v2.20.4.zip",
                 "reference": "v2.20.4"
             },
             "type": "drupal-library"
