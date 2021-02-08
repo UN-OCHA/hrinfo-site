@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "648d794f1eb8d8a47455b383f627cec5",
+    "content-hash": "cb64f211e26a14e9f53e1cfe05e574e4",
     "packages": [
         {
             "name": "composer/installers",
@@ -1651,17 +1651,17 @@
         },
         {
             "name": "drupal/date_ical",
-            "version": "3.9.0",
+            "version": "3.10.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/date_ical.git",
-                "reference": "7.x-3.9"
+                "reference": "7.x-3.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/date_ical-7.x-3.9.zip",
-                "reference": "7.x-3.9",
-                "shasum": "9596b057be6233003dc1dd2e83864711b8202b9f"
+                "url": "https://ftp.drupal.org/files/projects/date_ical-7.x-3.10.zip",
+                "reference": "7.x-3.10",
+                "shasum": "887afe826889533e72de9637fd386d3b63d1a056"
             },
             "require": {
                 "drupal/date": "*",
@@ -1675,8 +1675,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-3.9",
-                    "datestamp": "1461609712",
+                    "version": "7.x-3.10",
+                    "datestamp": "1604698825",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2294,13 +2294,10 @@
             "version": "1.9.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/entity": "self.version"
+                "drupal/entity": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.9",
                     "datestamp": "1518642010",
@@ -2334,6 +2331,10 @@
                 {
                     "name": "fago",
                     "homepage": "https://www.drupal.org/user/16747"
+                },
+                {
+                    "name": "mglaman",
+                    "homepage": "https://www.drupal.org/user/2416470"
                 }
             ],
             "description": "Provides token replacements for all properties that have no tokens and are known to the entity API.",
@@ -4424,7 +4425,7 @@
             "version": "1.27.0",
             "require": {
                 "drupal/drupal": "*",
-                "drupal/i18n": "self.version"
+                "drupal/i18n": "*"
             },
             "type": "metapackage",
             "extra": {
@@ -6231,13 +6232,10 @@
             "version": "2.10.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/og": "self.version"
+                "drupal/og": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.10",
                     "datestamp": "1530174224",
@@ -6279,6 +6277,10 @@
                 {
                     "name": "dww",
                     "homepage": "https://www.drupal.org/user/46549"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "merlinofchaos",
@@ -6523,14 +6525,11 @@
             "version": "2.10.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/og": "self.version",
+                "drupal/og": "*",
                 "drupal/views_bulk_operations": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.10",
                     "datestamp": "1530174224",
@@ -6572,6 +6571,10 @@
                 {
                     "name": "dww",
                     "homepage": "https://www.drupal.org/user/46549"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "merlinofchaos",
@@ -8505,7 +8508,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_sorts_widget.git",
-                "reference": "488d6ae2962d41b42a3af09b76a301127b077aea"
+                "reference": "4fe927a6986363ed5b88a6a3573ae619a4fa516f"
             },
             "require": {
                 "drupal/drupal": "*",
@@ -8531,6 +8534,10 @@
             ],
             "authors": [
                 {
+                    "name": "cosolom",
+                    "homepage": "https://www.drupal.org/user/1816882"
+                },
+                {
                     "name": "malberts",
                     "homepage": "https://www.drupal.org/user/436324"
                 }
@@ -8540,7 +8547,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/search_api_sorts_widget"
             },
-            "time": "2014-06-30T16:39:12+00:00"
+            "time": "2021-02-03T22:35:12+00:00"
         },
         {
             "name": "drupal/securelogin",
@@ -9438,13 +9445,10 @@
             "version": "2.5.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/variable": "self.version"
+                "drupal/variable": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.5",
                     "datestamp": "1398250127",
@@ -9495,13 +9499,10 @@
             "version": "2.5.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/variable": "self.version"
+                "drupal/variable": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.5",
                     "datestamp": "1398250127",
@@ -10249,6 +10250,16 @@
             }
         },
         {
+            "name": "lkmorlan/icalcreator",
+            "version": "v2.20.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lkmorlan/icalcreator.git",
+                "reference": "v2.20.4"
+            },
+            "type": "drupal-library"
+        },
+        {
             "name": "symfony/flex",
             "version": "v1.11.0",
             "source": {
@@ -10546,6 +10557,12 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
+            "funding": [
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/pdepend/pdepend",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-06-20T10:53:13+00:00"
         },
         {
