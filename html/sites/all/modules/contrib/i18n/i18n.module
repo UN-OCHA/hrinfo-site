@@ -638,5 +638,33 @@ function i18n_entity_translation_enabled($entity_type) {
  * Implements hook_modules_enabled().
  */
 function i18n_modules_enabled($modules) {
+  i18n_object_info_cache_clear();
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function i18n_modules_installed($modules) {
+  i18n_object_info_cache_clear();
+}
+
+/**
+ * Helper to clear relevant caches.
+ */
+function i18n_object_info_cache_clear() {
+  drupal_static_reset('i18n_get_object');
   drupal_static_reset('i18n_object_info');
+  drupal_static_reset('entity_i18n_controller');
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function i18n_module_implements_alter(&$implementations, $hook) {
+  if (($hook == 'modules_installed') || ($hook == 'modules_enabled')) {
+    // We must be the first in both hooks.
+    $group = $implementations['i18n'];
+    unset($implementations['i18n']);
+    $implementations = ['i18n' => $group] + $implementations;
+  }
 }

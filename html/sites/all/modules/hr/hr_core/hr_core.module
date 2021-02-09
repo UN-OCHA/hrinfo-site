@@ -1694,3 +1694,57 @@ function hr_core_schema_alter(&$schema) {
     $schema['users']['fields']['name']['length'] = 254;
   }
 }
+
+/**
+ * Prepare the node add form for clones.
+ */
+function hr_core_prepare_node_clone_form(&$form, &$form_state) {
+  if (!isset($form['clone_from_original_nid'])) {
+    return;
+  }
+
+  // Keep original language.
+  $node_lang = $form['#node']->language;
+  $field_lang = $form['title_field']['#language'];
+
+  if ($node_lang !== $field_lang) {
+    $form_state['values']['language'] = $node_lang;
+
+    foreach (['body', 'title_field'] as $field_name) {
+      $form[$field_name]['#language'] = $node_lang;
+
+      $form[$field_name][$node_lang] = $form[$field_name][$field_lang];
+      unset($form[$field_name][$field_lang]);
+
+      $form[$field_name][$node_lang][0]['#language'] = $node_lang;
+      $form[$field_name][$node_lang][0]['value']['#language'] = $node_lang;
+      $form[$field_name][$node_lang][0]['value']['#name'] = 'title_field[' . $node_lang . '][0][value]';
+      $form[$field_name][$node_lang][0]['value']['#default_value'] = $form['title']['#default_value'];
+      $form[$field_name][$node_lang]['#language'] = $node_lang;
+
+      $form_state['field'][$field_name][$node_lang] = $form_state['field'][$field_name][$field_lang];
+      unset($form_state['field'][$field_name][$field_lang]);
+    }
+
+    // Mark title as cloned.
+    $form[$field_name][$node_lang][0]['value']['#default_value'] .= ' [CLONED]';
+  }
+
+  // Add title validation.
+  if (!isset($form['#validate'])) {
+    $form['#validate'] = array();
+  }
+  $form['#validate'][] = '_hr_core_check_clone_title';
+}
+
+/**
+ * Make sure title is changed in cloned node.
+ */
+function _hr_core_check_clone_title($form, &$form_state) {
+  if (isset($form_state['values']['title_field'][$form_state['node']->language][0]['value'])) {
+    if (strpos($form_state['values']['title_field'][$form_state['node']->language][0]['value'], '[CLONED]') !== FALSE) {
+      $types = node_type_get_types();
+      form_set_error('title_field', t('Please adjust the title before saving this @name', array('@name' => $types[$form_state['node']->type]->name)));
+    }
+  }
+}

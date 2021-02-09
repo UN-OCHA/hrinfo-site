@@ -92,7 +92,7 @@ function theme_date_ical_icon($variables) {
     $variables['tooltip'] = t('Add this event to my calendar');
   }
   $variables['path'] = drupal_get_path('module', 'date_ical') . '/images/ical-feed-icon-34x14.png';
-  $variables['alt'] = $variables['title'] = $variables['tooltip'];
+  $variables['alt'] = $variables['tooltip'];
   if ($image = theme('image', $variables)) {
     return "<a href='{$variables['url']}' class='ical-icon'>$image</a>";
   }
@@ -113,8 +113,8 @@ function date_ical_preprocess_node(&$variables) {
     // Trick the default node template into not displaying the page title, by
     // telling it that this *is* a page.
     $variables['page'] = TRUE;
-    $variables['title_prefix'] = '';
-    $variables['title_suffix'] = '';
+    $variables['title_prefix'] = array();
+    $variables['title_suffix'] = array();
 
     // We don't want to see the author information in our feed.
     $variables['display_submitted'] = FALSE;

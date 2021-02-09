@@ -8,7 +8,7 @@
  * @link      http://kigkonsult.se/iCalcreator/index.php
  * @license   http://kigkonsult.se/downloads/dl.php?f=LGPL
  * @package   iCalcreator
- * @version   v2.20.2
+ * @version   v2.20.4
  */
 /**
  * This library is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@
  * @copyright Copyright (c) 2007-2014 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
  * @license   http://kigkonsult.se/downloads/dl.php?f=LGPL
  */
-define( 'ICALCREATOR_VERSION', 'iCalcreator 2.20.2' );
+define( 'ICALCREATOR_VERSION', 'iCalcreator 2.20.4' );
 /*********************************************************************************/
 /**
  * vcalendar class
@@ -73,7 +73,7 @@ class vcalendar {
  * @param array $config
  * @return void
  */
-  function vcalendar ( $config = array()) {
+  function __construct( $config = array()) {
     $this->_makeVersion();
     $this->calscale   = null;
     $this->method     = null;
@@ -1664,7 +1664,7 @@ class vcalendar {
       $proprows  = array();
       for( $i = 0; $i < count( $this->unparsed ); $i++ ) { // concatenate lines
         $line = rtrim( $this->unparsed[$i], $nl );
-        while( isset( $this->unparsed[$i+1] ) && !empty( $this->unparsed[$i+1] ) && ( ' ' == $this->unparsed[$i+1]{0} ))
+        while( isset( $this->unparsed[$i+1] ) && !empty( $this->unparsed[$i+1] ) && ( ' ' == $this->unparsed[$i+1][0] ))
           $line .= rtrim( substr( $this->unparsed[++$i], 1 ), $nl );
         $proprows[] = $line;
       }
@@ -1969,7 +1969,7 @@ class calendarComponent {
  * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.9.6 - 2011-05-17
  */
-  function calendarComponent() {
+  function __construct() {
     $this->objName         = ( isset( $this->timezonetype )) ?
                           strtolower( $this->timezonetype )  :  get_class ( $this );
     $this->uid             = array();
@@ -3062,8 +3062,8 @@ class calendarComponent {
           }
         }
         elseif(( 3 <= strlen( trim( $fbMember ))) &&    // string format duration
-               ( in_array( $fbMember{0}, array( 'P', '+', '-' )))) {
-          if( 'P' != $fbMember{0} )
+               ( in_array( $fbMember[0], array( 'P', '+', '-' )))) {
+          if( 'P' != $fbMember[0] )
             $fbmember = substr( $fbMember, 1 );
           $freebusyPairMember = iCalUtilityFunctions::_durationStr2arr( $fbMember );
         }
@@ -3989,7 +3989,7 @@ class calendarComponent {
     }
     elseif(is_string( $year ) && ( is_array( $month ) || empty( $month ))) {  // duration or date in a string
       $params = iCalUtilityFunctions::_setParams( $month );
-      if( in_array( $year{0}, array( 'P', '+', '-' ))) { // duration
+      if( in_array( $year[0], array( 'P', '+', '-' ))) { // duration
         $relatedStart = ( isset( $params['RELATED'] ) && ( 'END' == strtoupper( $params['RELATED'] ))) ? FALSE : TRUE;
         $before       = ( '-'  == $year[0] ) ? TRUE : FALSE;
         if(     'P'  != $year[0] )
@@ -4251,7 +4251,7 @@ class calendarComponent {
     $length = 6;
     $str    = null;
     for( $p = 0; $p < $length; $p++ )
-      $unique .= $base{mt_rand( $start, $end )};
+      $unique .= $base[mt_rand( $start, $end )];
     $this->uid = array( 'params' => null );
     $this->uid['value']  = $date.'-'.$unique.'@'.$this->getConfig( 'unique_id' );
   }
@@ -5726,7 +5726,7 @@ class calendarComponent {
     $proprows  = array();
     for( $i = 0; $i < count( $this->unparsed ); $i++ ) { // concatenate lines
       $line = rtrim( $this->unparsed[$i], $nl );
-      while( isset( $this->unparsed[$i+1] ) && !empty( $this->unparsed[$i+1] ) && ( ' ' == $this->unparsed[$i+1]{0} ))
+      while( isset( $this->unparsed[$i+1] ) && !empty( $this->unparsed[$i+1] ) && ( ' ' == $this->unparsed[$i+1][0] ))
         $line .= rtrim( substr( $this->unparsed[++$i], 1 ), $nl );
       $proprows[] = $line;
     }
@@ -6230,8 +6230,8 @@ class vevent extends calendarComponent {
  * @param  array $config
  * @return void
  */
-  function vevent( $config = array()) {
-    $this->calendarComponent();
+  function __construct( $config = array()) {
+    parent::__construct();
 
     $this->attach          = '';
     $this->attendee        = '';
@@ -6377,8 +6377,8 @@ class vtodo extends calendarComponent {
  * @param array $config
  * @return void
  */
-  function vtodo( $config = array()) {
-    $this->calendarComponent();
+  function __construct( $config = array()) {
+    parent::__construct();
 
     $this->attach          = '';
     $this->attendee        = '';
@@ -6516,8 +6516,8 @@ class vjournal extends calendarComponent {
  * @param array $config
  * @return void
  */
-  function vjournal( $config = array()) {
-    $this->calendarComponent();
+  function __construct( $config = array()) {
+    parent::__construct();
 
     $this->attach          = '';
     $this->attendee        = '';
@@ -6626,8 +6626,8 @@ class vfreebusy extends calendarComponent {
  * @param array $config
  * @return void
  */
-  function vfreebusy( $config = array()) {
-    $this->calendarComponent();
+  function __construct( $config = array()) {
+    parent::__construct();
 
     $this->attendee        = '';
     $this->comment         = '';
@@ -6708,8 +6708,8 @@ class valarm extends calendarComponent {
  * @param array $config
  * @return void
  */
-  function valarm( $config = array()) {
-    $this->calendarComponent();
+  function __construct( $config = array()) {
+    parent::__construct();
 
     $this->action          = '';
     $this->attach          = '';
@@ -6791,7 +6791,7 @@ class vtimezone extends calendarComponent {
  * @param array $config
  * @return void
  */
-  function vtimezone( $timezonetype=FALSE, $config = array()) {
+  function __construct( $timezonetype=FALSE, $config = array()) {
     if( is_array( $timezonetype )) {
       $config       = $timezonetype;
       $timezonetype = FALSE;
@@ -6800,7 +6800,7 @@ class vtimezone extends calendarComponent {
       $this->timezonetype = 'VTIMEZONE';
     else
       $this->timezonetype = strtoupper( $timezonetype );
-    $this->calendarComponent();
+    parent::__construct();
 
     $this->comment         = '';
     $this->dtstart         = '';
@@ -6955,7 +6955,7 @@ class iCalUtilityFunctions {
         if( isset( $theDate['timestamp'] ))
           $tzid = ( isset( $theDate['tz'] )) ? $theDate['tz'] : null;
         else
-          $tzid = ( isset( $theDate['tz'] )) ? $theDate['tz'] : ( 7 == count( $theDate )) ? end( $theDate ) : null;
+          $tzid = (( isset( $theDate['tz'] )) ? $theDate['tz'] : ( 7 == count( $theDate ))) ? end( $theDate ) : null;
         if( !empty( $tzid )) {
           $parno = 7;
           if( !iCalUtilityFunctions::_isOffset( $tzid ))
@@ -7053,7 +7053,7 @@ class iCalUtilityFunctions {
       $base   = 'aAbB!cCdD"eEfF#gGhHiIjJ%kKlL&mMnN/oOpP(rRsS)tTuU=vVxX?uUvV*wWzZ-1234_5678|90';
       $len    = strlen( $base ) - 1;
       for( $p = 0; $p < 6; $p++ )
-        iCalUtilityFunctions::$baseDelim .= $base{mt_rand( 0, $len )};
+        iCalUtilityFunctions::$baseDelim .= $base[mt_rand( 0, $len )];
     }
             /* fix eol chars */
     $text   = str_replace( array( "\r\n", "\n\r", "\n", "\r" ), iCalUtilityFunctions::$baseDelim, $text );

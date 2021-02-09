@@ -108,7 +108,7 @@ function _date_ical_get_repeat_dates($field_name, $repeat_data, $item, $source) 
     $date_start = new DateObject($date, $timezone, DATE_FORMAT_DATETIME);
     $date_start->limitGranularity($field_info['settings']['granularity']);
     date_timezone_set($date_start, timezone_open($timezone_db));
-    $date_end = clone($date_start);
+    $date_end = clone $date_start;
     date_modify($date_end, '+' . $duration . ' seconds');
     $repeat_dates[$delta] = array(
       'value' => date_format($date_start, date_type_format($field_info['type'])),

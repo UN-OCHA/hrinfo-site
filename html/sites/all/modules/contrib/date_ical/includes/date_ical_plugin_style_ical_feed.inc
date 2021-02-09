@@ -27,15 +27,31 @@ class date_ical_plugin_style_ical_feed extends views_plugin_style {
     }
     $url_options['absolute'] = TRUE;
 
-    $url = url($this->view->get_url(NULL, $path), $url_options);
+    // Only add arguments to ical path for the contextual filters in the feed display.
+    // Clone view to prevent affecting the page view where this is attached.
+    $clone = $this->view->clone_view();
+    $clone->set_display($this->display->id);
+    $contextual_filters = $clone->get_items('argument');
+    $arg_number = count($contextual_filters);
+
+    // Only include as many arguments as the feed display supports.
+    foreach($clone->args as $key => $arg) {
+      if ($key >= $arg_number) {
+        unset($clone->args[$key]);
+      }
+    }
+
+    $url = url($clone->get_url(NULL, $path), $url_options);
+
     // If the user didn't disable the option, change the scheme to webcal://
     // so calendar clients can automatically subscribe via the iCal link.
     if (!$this->_get_option('disable_webcal')) {
       $url = str_replace(array('http://', 'https://'), 'webcal://', $url);
     }
 
-    // Render the feed icon and header tag (except during a View Preview).
-    if (empty($this->view->live_preview)) {
+    // Render the feed icon and header tag (except during a View Preview and
+    // if the display is disabled).
+    if (empty($this->view->live_preview) && (!isset($this->display->display_options['enabled']) || $this->display->display_options['enabled'])) {
       $tooltip = t('Add to My Calendar');
       if (!isset($this->view->feed_icon)) {
         // In PHP 5.5, you're not allowed to concatinate onto an unset
@@ -274,8 +290,9 @@ class date_ical_plugin_style_ical_feed extends views_plugin_style {
             // The spec supports putting multiple date values into one EXDATE,
             // but several popular calendar clients (*cough* Apple *cough*)
             // are bugged, and do not recognize multi-value EXDATEs.
+            $value = $event['all_day'] == 1 ? "DATE" : "DATE-TIME";
             foreach ($exdates as $exdate) {
-              $vevent->setExdate(array($exdate));
+              $vevent->setExdate(array($exdate), array( "VALUE" => $value ));
             }
           }
 
@@ -337,6 +354,9 @@ class date_ical_plugin_style_ical_feed extends views_plugin_style {
         }
         if (!empty($event['description'])) {
           $vevent->setDescription($event['description']);
+        }
+        if (!empty($event['categories'])) {
+          $vevent->setCategories($event['categories']);
         }
         if (!empty($event['last-modified'])) {
           $lm = $event['last-modified']->toArray();

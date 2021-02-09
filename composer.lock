@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "660172d72ab084ef9819c54121bc7a7e",
+    "content-hash": "3afc23a3946a5451c84f7a5b7c229548",
     "packages": [
         {
             "name": "composer/installers",
@@ -130,6 +130,16 @@
                 "yawik",
                 "zend",
                 "zikula"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-04-07T06:57:05+00:00"
         },
@@ -1469,17 +1479,17 @@
         },
         {
             "name": "drupal/date",
-            "version": "2.10.0",
+            "version": "2.11.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/date.git",
-                "reference": "7.x-2.10"
+                "reference": "7.x-2.11-rc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/date-7.x-2.10.zip",
-                "reference": "7.x-2.10",
-                "shasum": "f3d11ae63d841420f47ea9568139daa1f684e24e"
+                "url": "https://ftp.drupal.org/files/projects/date-7.x-2.11-rc1.zip",
+                "reference": "7.x-2.11-rc1",
+                "shasum": "d875c8a7dc6ab77910f7ed95b8039d3054343919"
             },
             "require": {
                 "drupal/date_api": "*",
@@ -1489,23 +1499,24 @@
                 "drupal/context": "*",
                 "drupal/date_api": "*",
                 "drupal/date_repeat": "*",
-                "drupal/date_repeat_field": "*",
-                "drupal/features": "*",
+                "drupal/entity": "*",
+                "drupal/features": "~2.0",
                 "drupal/migrate": "*",
                 "drupal/views": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.10",
-                    "datestamp": "1491562115",
+                    "version": "7.x-2.11-rc1",
+                    "datestamp": "1601635723",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
-                    "HR.info issue 913": "PATCHES/hrinfo-913.patch"
+                    "HR.info issue 913": "PATCHES/hrinfo-913.patch",
+                    "HR.info issue 1025": "PATCHES/hrinfo-1025.date-popup.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -1566,22 +1577,19 @@
         },
         {
             "name": "drupal/date_api",
-            "version": "2.10.0",
+            "version": "2.11.0-rc1",
             "require": {
                 "drupal/date": "self.version",
                 "drupal/drupal": "~7.0"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "7.x-2.10",
-                    "datestamp": "1491562115",
+                    "version": "7.x-2.11-rc1",
+                    "datestamp": "1601635723",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -1643,17 +1651,17 @@
         },
         {
             "name": "drupal/date_ical",
-            "version": "3.9.0",
+            "version": "3.10.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/date_ical.git",
-                "reference": "7.x-3.9"
+                "reference": "7.x-3.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/date_ical-7.x-3.9.zip",
-                "reference": "7.x-3.9",
-                "shasum": "9596b057be6233003dc1dd2e83864711b8202b9f"
+                "url": "https://ftp.drupal.org/files/projects/date_ical-7.x-3.10.zip",
+                "reference": "7.x-3.10",
+                "shasum": "887afe826889533e72de9637fd386d3b63d1a056"
             },
             "require": {
                 "drupal/date": "*",
@@ -1667,8 +1675,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-3.9",
-                    "datestamp": "1461609712",
+                    "version": "7.x-3.10",
+                    "datestamp": "1604698825",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1697,7 +1705,7 @@
         },
         {
             "name": "drupal/date_views",
-            "version": "2.10.0",
+            "version": "2.11.0-rc1",
             "require": {
                 "drupal/date": "self.version",
                 "drupal/date_api": "*",
@@ -1706,15 +1714,12 @@
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
-                    "version": "7.x-2.10",
-                    "datestamp": "1491562115",
+                    "version": "7.x-2.11-rc1",
+                    "datestamp": "1601635723",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -1957,23 +1962,23 @@
         },
         {
             "name": "drupal/drupal",
-            "version": "7.75.0",
+            "version": "7.78.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal.git",
-                "reference": "7.75"
+                "reference": "7.78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/drupal-7.75.zip",
-                "reference": "7.75",
-                "shasum": "cd1eaee1b26acd53824c5d42d1bc93d64af026f2"
+                "url": "https://ftp.drupal.org/files/projects/drupal-7.78.zip",
+                "reference": "7.78",
+                "shasum": "1358a9b8022877fc692b62eb19d7efb0d3f85ee4"
             },
             "type": "drupal-core",
             "extra": {
                 "drupal": {
-                    "version": "7.75",
-                    "datestamp": "1606361101",
+                    "version": "7.78",
+                    "datestamp": "1611163112",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1985,7 +1990,8 @@
                     "Notice: Undefined index: field_xxx in file_ajax_upload() and Undefined index: #suffix in file_ajax_upload": "https://www.drupal.org/files/undefined_index_file_ajax-1336212-23.patch",
                     "Cannot create references to/from string offsets nor overloaded objects": "https://www.drupal.org/files/issues/cannot_create_references_tofrom_string_offsets_nor_overloaded_objects-2313517-32.patch",
                     "Call to undefined function drupal_get_path_alias() in url()": "https://www.drupal.org/files/issues/2019-02-27/drupal-undefined_function_drupal_get_path_alias-2842762-14-D7.patch",
-                    "Patch robot file": "PATCHES/allow-themes-path.patch"
+                    "Patch robot file": "PATCHES/allow-themes-path.patch",
+                    "Discourage bots from doing searches": "PATCHES/ops-6982-robot-searches.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -2288,13 +2294,10 @@
             "version": "1.9.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/entity": "self.version"
+                "drupal/entity": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.9",
                     "datestamp": "1518642010",
@@ -2328,6 +2331,10 @@
                 {
                     "name": "fago",
                     "homepage": "https://www.drupal.org/user/16747"
+                },
+                {
+                    "name": "mglaman",
+                    "homepage": "https://www.drupal.org/user/2416470"
                 }
             ],
             "description": "Provides token replacements for all properties that have no tokens and are known to the entity API.",
@@ -4418,7 +4425,7 @@
             "version": "1.27.0",
             "require": {
                 "drupal/drupal": "*",
-                "drupal/i18n": "self.version"
+                "drupal/i18n": "*"
             },
             "type": "metapackage",
             "extra": {
@@ -5528,13 +5535,10 @@
             "version": "2.19.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/media": "self.version"
+                "drupal/media": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.19",
                     "datestamp": "1534544281",
@@ -5781,6 +5785,10 @@
                 {
                     "name": "pwolanin",
                     "homepage": "https://www.drupal.org/user/49851"
+                },
+                {
+                    "name": "solideogloria",
+                    "homepage": "https://www.drupal.org/user/3589277"
                 },
                 {
                     "name": "steinmb",
@@ -6224,13 +6232,10 @@
             "version": "2.10.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/og": "self.version"
+                "drupal/og": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.10",
                     "datestamp": "1530174224",
@@ -6272,6 +6277,10 @@
                 {
                     "name": "dww",
                     "homepage": "https://www.drupal.org/user/46549"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "merlinofchaos",
@@ -6516,14 +6525,11 @@
             "version": "2.10.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/og": "self.version",
+                "drupal/og": "*",
                 "drupal/views_bulk_operations": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.10",
                     "datestamp": "1530174224",
@@ -6565,6 +6571,10 @@
                 {
                     "name": "dww",
                     "homepage": "https://www.drupal.org/user/46549"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "merlinofchaos",
@@ -6723,14 +6733,11 @@
             "name": "drupal/page_manager",
             "version": "1.15.0",
             "require": {
-                "drupal/ctools": "self.version",
+                "drupal/ctools": "*",
                 "drupal/drupal": "~7.0"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-1.15",
                     "datestamp": "1549603684",
@@ -8501,7 +8508,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_sorts_widget.git",
-                "reference": "488d6ae2962d41b42a3af09b76a301127b077aea"
+                "reference": "4fe927a6986363ed5b88a6a3573ae619a4fa516f"
             },
             "require": {
                 "drupal/drupal": "*",
@@ -8527,6 +8534,10 @@
             ],
             "authors": [
                 {
+                    "name": "cosolom",
+                    "homepage": "https://www.drupal.org/user/1816882"
+                },
+                {
                     "name": "malberts",
                     "homepage": "https://www.drupal.org/user/436324"
                 }
@@ -8536,7 +8547,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/search_api_sorts_widget"
             },
-            "time": "2014-06-30T16:39:12+00:00"
+            "time": "2021-02-03T22:35:12+00:00"
         },
         {
             "name": "drupal/securelogin",
@@ -9434,13 +9445,10 @@
             "version": "2.5.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/variable": "self.version"
+                "drupal/variable": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.5",
                     "datestamp": "1398250127",
@@ -9491,13 +9499,10 @@
             "version": "2.5.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/variable": "self.version"
+                "drupal/variable": "*"
             },
             "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "7.x-2.5",
                     "datestamp": "1398250127",
@@ -10245,6 +10250,70 @@
             }
         },
         {
+            "name": "symfony/flex",
+            "version": "v1.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/flex.git",
+                "reference": "ceb2b4e612bd0b4bb36a4d7fb2e800c861652f48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/ceb2b4e612bd0b4bb36a4d7fb2e800c861652f48",
+                "reference": "ceb2b4e612bd0b4bb36a4d7fb2e800c861652f48",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0|^2.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "composer/composer": "^1.0.2|^2.0",
+                "symfony/dotenv": "^4.4|^5.0",
+                "symfony/filesystem": "^4.4|^5.0",
+                "symfony/phpunit-bridge": "^4.4|^5.0",
+                "symfony/process": "^3.4|^4.4|^5.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.9-dev"
+                },
+                "class": "Symfony\\Flex\\Flex"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Flex\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien.potencier@gmail.com"
+                }
+            ],
+            "description": "Composer plugin for Symfony",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-12-03T10:57:35+00:00"
+        },
+        {
             "name": "unocha/ocha_snap",
             "version": "v1.2.0",
             "source": {
@@ -10315,6 +10384,20 @@
             "keywords": [
                 "Xdebug",
                 "performance"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-06-04T11:16:35+00:00"
         },
@@ -10464,6 +10547,12 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
+            "funding": [
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/pdepend/pdepend",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-06-20T10:53:13+00:00"
         },
         {
@@ -10934,6 +11023,20 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-23T13:08:13+00:00"
         },
         {
@@ -11011,6 +11114,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-30T20:06:45+00:00"
         },
         {
@@ -11086,6 +11203,20 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-06-12T08:11:32+00:00"
         },
         {
@@ -11132,6 +11263,20 @@
             ],
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-27T08:34:37+00:00"
         },
         {
@@ -11182,6 +11327,20 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-30T18:50:54+00:00"
         },
         {
@@ -11231,6 +11390,20 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-20T17:43:50+00:00"
         },
         {
@@ -11292,6 +11465,20 @@
                 "ctype",
                 "polyfill",
                 "portable"
+            ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-06-06T08:46:27+00:00"
         },
@@ -11356,6 +11543,20 @@
                 "portable",
                 "shim"
             ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-06-06T08:46:27+00:00"
         },
         {
@@ -11417,6 +11618,20 @@
                 "polyfill",
                 "portable",
                 "shim"
+            ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-06-06T08:46:27+00:00"
         },
@@ -11484,6 +11699,20 @@
                 "portable",
                 "shim"
             ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-06-06T08:46:27+00:00"
         },
         {
@@ -11541,6 +11770,20 @@
                 "interfaces",
                 "interoperability",
                 "standards"
+            ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-05-20T17:43:50+00:00"
         },
@@ -11605,6 +11848,20 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-05-20T17:43:50+00:00"
         },
         {
@@ -11652,12 +11909,12 @@
             "version": "1.9.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
+                "url": "https://github.com/webmozarts/assert.git",
                 "reference": "9dc4f203e36f2b486149058bade43c851dd97451"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/9dc4f203e36f2b486149058bade43c851dd97451",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/9dc4f203e36f2b486149058bade43c851dd97451",
                 "reference": "9dc4f203e36f2b486149058bade43c851dd97451",
                 "shasum": ""
             },
@@ -11747,6 +12004,7 @@
     "minimum-stability": "alpha",
     "stability-flags": {
         "drupal/conditional_fields": 15,
+        "drupal/date": 5,
         "drupal/defaultconfig": 15,
         "drupal/facetapi_i18n": 20,
         "drupal/feeds_et": 20,
@@ -11770,8 +12028,11 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">= 7.2"
+        "php": ">= 7.3"
     },
     "platform-dev": [],
+    "platform-overrides": {
+        "php": "7.3.26"
+    },
     "plugin-api-version": "1.1.0"
 }
