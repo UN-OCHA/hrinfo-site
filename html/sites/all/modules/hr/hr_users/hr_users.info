@@ -52,7 +52,6 @@ features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
 features[field_base][] = field_first_name
 features[field_base][] = field_last_name
-features[field_base][] = field_users
 features[field_instance][] = profile2-main-field_first_name
 features[field_instance][] = profile2-main-field_job_title_other
 features[field_instance][] = profile2-main-field_last_name

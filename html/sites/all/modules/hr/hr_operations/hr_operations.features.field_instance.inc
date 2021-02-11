@@ -764,7 +764,6 @@ function hr_operations_field_default_field_instances() {
   t('Country');
   t('Determine if this is an OG group.');
   t('Email');
-  t('Focal points');
   t('Group');
   t('Launch date');
   t('Managed by');
