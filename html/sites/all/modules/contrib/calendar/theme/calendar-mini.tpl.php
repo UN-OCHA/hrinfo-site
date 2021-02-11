@@ -1,8 +1,9 @@
 <?php
+
 /**
  * @file
  * Template to display a view as a mini calendar month.
- * 
+ *
  * @see template_preprocess_calendar_mini.
  *
  * $day_names: An array of the day of week names for the table header.
@@ -10,12 +11,11 @@
  * $view: The view.
  * $min_date_formatted: The minimum date for this calendar in the format YYYY-MM-DD HH:MM:SS.
  * $max_date_formatted: The maximum date for this calendar in the format YYYY-MM-DD HH:MM:SS.
- * 
+ *
  * $show_title: If the title should be displayed. Normally false since the title is incorporated
  *   into the navigation, but sometimes needed, like in the year view of mini calendars.
- * 
  */
-//dsm('Display: '. $display_type .': '. $min_date_formatted .' to '. $max_date_formatted);dsm($day_names);
+
 $params = array(
   'view' => $view,
   'granularity' => 'month',
@@ -27,11 +27,11 @@ $params = array(
 <div class="date-nav-wrapper clear-block">
   <div class="date-nav">
     <div class="date-heading">
-      <?php print theme('date_nav_title', $params) ?>
+      <?php print theme('date_nav_title', $params); ?>
     </div>
   </div>
-</div> 
-<?php endif; ?> 
+</div>
+<?php endif; ?>
 <table class="mini">
   <thead>
     <tr>

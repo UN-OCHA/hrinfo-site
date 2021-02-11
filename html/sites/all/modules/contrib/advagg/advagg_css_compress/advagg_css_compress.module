@@ -139,7 +139,7 @@ function advagg_css_compress_libraries_info() {
     'local version' => '2.4.8-p10',
     'remote' => array(
       'callback' => 'advagg_get_github_version_txt',
-      'url' => 'https://rawgit.com/tubalmartin/YUI-CSS-compressor-PHP-port/master/README.md',
+      'url' => 'https://cdn.jsdelivr.net/gh/tubalmartin/YUI-CSS-compressor-PHP-port@master/README.md',
     ),
     'versions' => array(
       '2' => array(

@@ -22,6 +22,9 @@
       "drupal/i18n": {
         "HRINFO-1029 https://www.drupal.org/project/i18n/issues/2082573": "https://www.drupal.org/files/issues/2018-06-24/i18n-fatal-error-undefined-strings_update-2082573-54.patch"
       },
+      "drupal/media_youtube": {
+        "Hotfix until the next version": "https://www.drupal.org/files/issues/2021-01-07/media_youtube-1572550-117.patch"
+      },
       "drupal/og": {
         "User can create node without permission": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/442.patch",
         "HR.info issue 839": "PATCHES/hrinfo-839.patch"
@@ -38,7 +41,8 @@
         "[D7] Not compatible with php-redis 5": "https://www.drupal.org/files/issues/2019-11-27/redis-n3074189-23.patch"
       },
       "drupal/restful": {
-        "HR.info issue 754": "PATCHES/restful-754.patch"
+        "HR.info issue 754": "PATCHES/restful-754.patch",
+        "OPS-7193 PSR-4 files not picked up": "PATCHES/ops-7193-include-restful-files.patch"
       },
       "drupal/facetapi_bonus": {
         "Allow HTML in reset link": "https://www.drupal.org/files/issues/2020-08-26/2205469-allow_html-2.patch"

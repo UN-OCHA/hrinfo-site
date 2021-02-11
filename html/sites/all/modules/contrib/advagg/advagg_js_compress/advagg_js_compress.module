@@ -531,7 +531,15 @@ function advagg_js_compress_all_js_files_list() {
 
   $redo_list = array_merge($redo_list, $failed_redo_list);
   $reversed_needle = strrev('.min.js');
+  $advagg_js_compressor_file_settings = variable_get('advagg_js_compressor_file_settings', []);
   foreach ($redo_list as $key => $info) {
+    // Filter out file if the compressor is disabled.
+    $filename = str_replace(['/', '.'], ['__', '--'], $key);
+    if (isset($advagg_js_compressor_file_settings[$filename]) && $advagg_js_compressor_file_settings[$filename] == 0) {
+      unset($redo_list[$key]);
+      continue;
+    }
+
     // Filter out .min.js if they have already been ran.
     if (stripos(strrev($info['data']), $reversed_needle) === 0
       && !empty($info['advagg_js_compress'][2]['ratio'])

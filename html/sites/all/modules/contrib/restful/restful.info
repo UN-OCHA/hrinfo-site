@@ -8,6 +8,9 @@ configure = admin/config/services/restful
 
 registry_autoload[] = PSR-0
 registry_autoload[] = PSR-4
+; These aren't picked up by registry_autoload.
+files[] = src/RateLimit/Entity/RateLimitController.php
+files[] = src/RenderCache/Entity/CacheFragmentController.php
 
 ; Temporary workaround to allow RESTful to work fine on PHP7.
 registry_autoload_files[] = src/Util/ExplorableDecoratorInterface.php

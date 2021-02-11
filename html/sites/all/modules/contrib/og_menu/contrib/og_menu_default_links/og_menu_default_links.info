@@ -7,9 +7,8 @@ configure = admin/config/group/og_menu/default-links
 package = "Organic groups"
 core = 7.x
 
-; Information added by Drupal.org packaging script on 2015-03-18
-version = "7.x-3.0+6-dev"
+; Information added by Drupal.org packaging script on 2021-01-28
+version = "7.x-3.3"
 core = "7.x"
 project = "og_menu"
-datestamp = "1426681386"
-
+datestamp = "1611854744"
