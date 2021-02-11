@@ -194,7 +194,8 @@
         "drupal-composer/preserve-paths": "^0.1",
         "drupal/coder": "8.3.1",
         "phpmd/phpmd": "^2.6",
-        "sebastian/phpcpd": "^4.0"
+        "sebastian/phpcpd": "^4.0",
+        "squizlabs/php_codesniffer": "3.5.5"
     },
     "conflict": {
         "drupal/core": "8.*"
