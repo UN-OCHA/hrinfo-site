@@ -22,6 +22,9 @@
       "drupal/i18n": {
         "HRINFO-1029 https://www.drupal.org/project/i18n/issues/2082573": "https://www.drupal.org/files/issues/2018-06-24/i18n-fatal-error-undefined-strings_update-2082573-54.patch"
       },
+      "drupal/media_youtube": {
+        "Hotfix until the next version": "https://www.drupal.org/files/issues/2021-01-07/media_youtube-1572550-117.patch"
+      },
       "drupal/og": {
         "User can create node without permission": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/442.patch",
         "HR.info issue 839": "PATCHES/hrinfo-839.patch"

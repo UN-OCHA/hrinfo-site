@@ -96,7 +96,6 @@ class MediaInternetYouTubeHandler extends MediaInternetBaseHandler {
     }
     else {
       throw new Exception("Error Processing Request. (Error: {$response->code}, {$response->error})");
-      return;
     }
   }
 
@@ -124,12 +123,10 @@ class MediaInternetYouTubeHandler extends MediaInternetBaseHandler {
           $error_data = $response->data;
         }
         throw new MediaInternetValidationException("The YouTube video ID is invalid, video was deleted or is disabled for embedding. Error: {$error_data}");
-        return;
       }
     }
     else {
       throw new Exception("Error Processing Request. (Error: {$response->code}, {$response->error})");
-      return;
     }
   }
 }

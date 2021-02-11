@@ -5738,6 +5738,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Hotfix until the next version": "https://www.drupal.org/files/issues/2021-01-07/media_youtube-1572550-117.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
