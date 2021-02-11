@@ -85,6 +85,13 @@ function search_api_sorts_widget_settings_form(array $form, array &$form_state, 
 
   $fields = $index->getFields();
 
+  $fields['search_api_relevance'] = array(
+    'type' => 'decimal',
+    'name' => 'Relevancy',
+    'indexed' => 1
+  );
+  
+  // @todo This is always will be true. We should remove this or move part above into this section
   if (!empty($fields)) {
     if ($disabled = empty($index->enabled)) {
       drupal_set_message(t('Since this index is at the moment disabled, no sorts can be activated.'), 'warning');

@@ -41,6 +41,7 @@ function calendar_views_plugins() {
         'uses fields' => TRUE,
         'uses grouping' => FALSE,
         'uses row plugin' => TRUE,
+        'uses row class' => TRUE,
         'uses options' => TRUE,
         'type' => 'normal',
         'even empty' => TRUE,

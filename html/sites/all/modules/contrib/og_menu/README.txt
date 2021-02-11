@@ -34,7 +34,7 @@ USAGE
   - "OG Menu : multiple" will display all available menus for all available
     groups in the context.
 - OG menus won't show on the regular menu interface. They show up on
-  admin/structure/og_menu.
+  admin/structure/menu/og_menu.
 - Ability to hide OG Menu's from the block admin interface and on other places
   for some contrib modules.
 

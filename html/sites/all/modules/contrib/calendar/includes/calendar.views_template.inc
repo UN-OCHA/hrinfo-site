@@ -15,6 +15,10 @@ function calendar_views_templates() {
 
   $views = array();
 
+  if (!variable_get('calendar_provide_views_templates', 1)) {
+    return $views;
+  }
+
   // Map the base tables to entity types.
   $entity_info = entity_get_info();
   $base_tables = date_views_base_tables();

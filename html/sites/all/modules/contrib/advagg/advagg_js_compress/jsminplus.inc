@@ -1806,6 +1806,8 @@ class JSNode {
   public $varDecls = array();
 
   public function __construct($t, $type = 0) {
+    $args = func_get_args();
+
     if ($token = $t->currentToken()) {
       $this->type = $type ? $type : $token->type;
       $this->value = $token->value;
@@ -1819,7 +1821,6 @@ class JSNode {
     }
 
     if (($numargs = func_num_args()) > 2) {
-      $args = func_get_args();
       for ($i = 2; $i < $numargs; $i++) {
         $this->addNode($args[$i]);
       }

@@ -1178,7 +1178,7 @@ function advagg_mod_libraries_info() {
     'version arguments' => array(
       'file' => 'package.json',
       'pattern' => '/"version":\\s+"([0-9\.]+)"/',
-      'lines' => 10,
+      'lines' => 100,
     ),
     // Called before the library is loaded.
     'callbacks' => array(
@@ -1189,7 +1189,7 @@ function advagg_mod_libraries_info() {
     'local version' => '2.0.1',
     'remote' => array(
       'callback' => 'advagg_get_github_version_json',
-      'url' => 'https://rawgit.com/filamentgroup/loadCSS/master/package.json',
+      'url' => 'https://cdn.jsdelivr.net/gh/filamentgroup/loadCSS@master/package.json',
     ),
     'files' => array(
       'js' => array(
@@ -1267,9 +1267,9 @@ function advagg_mod_libraries_info() {
       'external' => array(
         'files' => array(
           'js' => array(
-            "//cdn.rawgit.com/filamentgroup/loadCSS/v{$version}/src/loadCSS.js" => array(
+            "//cdn.jsdelivr.net/gh/filamentgroup/loadCSS@v{$version}/src/loadCSS.js" => array(
               'type' => 'external',
-              'data' => "//cdn.rawgit.com/filamentgroup/loadCSS/v{$version}/src/loadCSS.js",
+              'data' => "//cdn.jsdelivr.net/gh/filamentgroup/loadCSS@v{$version}/src/loadCSS.js",
               'async' => TRUE,
             ),
           ),
@@ -1278,9 +1278,9 @@ function advagg_mod_libraries_info() {
       'external-preload' => array(
         'files' => array(
           'js' => array(
-            "//cdn.rawgit.com/filamentgroup/loadCSS/v{$version}/src/cssrelpreload.js" => array(
+            "//cdn.jsdelivr.net/gh/filamentgroup/loadCSS@v{$version}/src/cssrelpreload.js" => array(
               'type' => 'external',
-              'data' => "//cdn.rawgit.com/filamentgroup/loadCSS/v{$version}/src/cssrelpreload.js",
+              'data' => "//cdn.jsdelivr.net/gh/filamentgroup/loadCSS@v{$version}/src/cssrelpreload.js",
               'async' => TRUE,
             ),
           ),
@@ -1289,14 +1289,14 @@ function advagg_mod_libraries_info() {
       'external-onload' => array(
         'files' => array(
           'js' => array(
-            "//cdn.rawgit.com/filamentgroup/loadCSS/v{$version}/src/loadCSS.js" => array(
+            "//cdn.jsdelivr.net/gh/filamentgroup/loadCSS@v{$version}/src/loadCSS.js" => array(
               'type' => 'external',
-              'data' => "//cdn.rawgit.com/filamentgroup/loadCSS/v{$version}/src/loadCSS.js",
+              'data' => "//cdn.jsdelivr.net/gh/filamentgroup/loadCSS@v{$version}/src/loadCSS.js",
               'async' => TRUE,
             ),
-            "//cdn.rawgit.com/filamentgroup/loadCSS/v{$version}/src/onloadCSS.js" => array(
+            "//cdn.jsdelivr.net/gh/filamentgroup/loadCSS@v{$version}/src/onloadCSS.js" => array(
               'type' => 'external',
-              'data' => "//cdn.rawgit.com/filamentgroup/loadCSS/v{$version}/src/onloadCSS.js",
+              'data' => "//cdn.jsdelivr.net/gh/filamentgroup/loadCSS@v{$version}/src/onloadCSS.js",
               'async' => TRUE,
             ),
           ),
@@ -2248,15 +2248,15 @@ function advagg_mod_js_move_to_footer(array &$js) {
       if (isset($js[$key])) {
         foreach ($js as $name => &$values) {
           foreach ($search_strings as $string) {
-            if (strpos($name, $string) !== FALSE) {
+            if (!empty($string) && strpos($name, (string) $string) !== FALSE) {
               $values['scope_lock'] = TRUE;
               break;
             }
-            if (is_string($values['data']) && strpos($values['data'], $string) !== FALSE) {
+            if (is_string($values['data']) && !empty($string) && strpos($values['data'], (string) $string) !== FALSE) {
               $values['scope_lock'] = TRUE;
               break;
             }
-            if (!empty($values['pre_relocate_data']) && is_string($values['pre_relocate_data']) && strpos($values['pre_relocate_data'], $string) !== FALSE) {
+            if (!empty($values['pre_relocate_data']) && is_string($values['pre_relocate_data']) && !empty($string) && strpos($values['pre_relocate_data'], (string) $string) !== FALSE) {
               $values['scope_lock'] = TRUE;
               break;
             }

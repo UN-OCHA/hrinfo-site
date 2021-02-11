@@ -684,7 +684,7 @@
   height: 1152px;
 }
 
-.calendar-calendar .week-view div.single-day .i_0 .view-item .calendar {
+.calendar-calendar .week-view div.single-day .i_0 .view-item {
   left: 0px;
   width: 50%;
 }
@@ -734,17 +734,17 @@
   width: 30%;
 }
 
-.calendar-calendar .week-view div.single-day .i_0.md_0 .view-item .calendar {
+.calendar-calendar .week-view div.single-day .i_0.md_0 .view-item {
   width: 95% !important;
   width: auto;
 }
 
-.calendar-calendar .week-view div.single-day .i_0.md_1 .view-item .calendar {
+.calendar-calendar .week-view div.single-day .i_0.md_1 .view-item {
   width: 60% !important;
   width: auto;
 }
 
-.calendar-calendar .day-view div.single-day .i_0 .view-item .calendar {
+.calendar-calendar .day-view div.single-day .i_0 .view-item {
   left: 2px;
   width: 25% !important;
   width: 97%;
@@ -795,22 +795,22 @@
   width: 19%;
 }
 
-.calendar-calendar .day-view div.single-day .i_0.md_0 .view-item .calendar {
+.calendar-calendar .day-view div.single-day .i_0.md_0 .view-item {
   width: 98% !important;
   width: auto;
 }
 
-.calendar-calendar .day-view div.single-day .i_0.md_1 .view-item .calendar {
+.calendar-calendar .day-view div.single-day .i_0.md_1 .view-item {
   width: 60% !important;
   width: auto;
 }
 
-.calendar-calendar .day-view div.single-day .i_0.md_2 .view-item .calendar {
+.calendar-calendar .day-view div.single-day .i_0.md_2 .view-item {
   width: 40% !important;
   width: auto;
 }
 
-.calendar-calendar .day-view div.single-day .i_0.md_3 .view-item .calendar {
+.calendar-calendar .day-view div.single-day .i_0.md_3 .view-item {
   width: 30% !important;
   width: auto;
 }

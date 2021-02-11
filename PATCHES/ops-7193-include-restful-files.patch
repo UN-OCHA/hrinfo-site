@@ -1,0 +1,26 @@
+diff --git a/modules/restful_token_auth/restful_token_auth.info b/modules/restful_token_auth/restful_token_auth.info
+index 0555442..16f44dc 100644
+--- a/modules/restful_token_auth/restful_token_auth.info
++++ b/modules/restful_token_auth/restful_token_auth.info
+@@ -7,5 +7,7 @@ configure = admin/config/services/restful/token-auth
+ 
+ registry_autoload[] = PSR-0
+ registry_autoload[] = PSR-4
++; This isn't picked up by registry_autoload.
++files[] = src/Entity/RestfulTokenAuthController.php
+ 
+ files[] = tests/RestfulTokenAuthenticationTestCase.test
+diff --git a/restful.info b/restful.info
+index 77b38e0..a5fe9cd 100644
+--- a/restful.info
++++ b/restful.info
+@@ -8,6 +8,9 @@ configure = admin/config/services/restful
+ 
+ registry_autoload[] = PSR-0
+ registry_autoload[] = PSR-4
++; These aren't picked up by registry_autoload.
++files[] = src/RateLimit/Entity/RateLimitController.php
++files[] = src/RenderCache/Entity/CacheFragmentController.php
+ 
+ ; Temporary workaround to allow RESTful to work fine on PHP7.
+ registry_autoload_files[] = src/Util/ExplorableDecoratorInterface.php

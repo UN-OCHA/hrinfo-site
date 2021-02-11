@@ -141,7 +141,7 @@ function _og_menu_default_links_set_default_links($menu, $action = 'new') {
         // impose length restrictions on link title.
         'link_title' => mb_substr(token_replace($default_link['label'], array('node' => $entity)), 0, 255),
         'menu_name' => $menu_name,
-        'module' => 'og_menu',
+        'module' => variable_get('og_menu_default_links_module', 'og_menu'),
         'weight' => $default_link['weight'],
       );
       menu_link_save($link);
@@ -183,7 +183,7 @@ function og_menu_default_links_extract_links($string, $error = FALSE) {
     }
     else {
       // Label or path not found in the current link.
-      watchdog('og_menu', 'Default link item did not match pattern (%link)', array('%link' => $link), WATCHDOG_CRITICAL);
+      watchdog('og_menu', 'Default link did not match pattern (%link)', array('%link' => $link), WATCHDOG_CRITICAL);
 
       // Used in form validation functions.
       if ($error) {

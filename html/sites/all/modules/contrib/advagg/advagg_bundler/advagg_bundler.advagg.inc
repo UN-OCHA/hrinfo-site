@@ -42,17 +42,20 @@ function advagg_bundler_advagg_build_aggregate_plans_alter(&$files, &$modified, 
       $group = advagg_bundler_analysis($fileinfo['data']);
       $fileinfo['bundler'] = $group;
 
-      // Set $last_group if this is the first run of this foreach loop.
-      if (empty($last_group)) {
-        $last_group = $group['group_hash'];
+      if (!empty($group['group_hash'])) {
+        // Set $last_group if this is the first run of this foreach loop.
+        if (empty($last_group)) {
+          $last_group = $group['group_hash'];
+        }
+
+        if ($last_group != $group['group_hash']) {
+          // Bump Counter if group has changed from the last one.
+          ++$counter;
+          $last_group = $group['group_hash'];
+          $modified = TRUE;
+        }
       }
 
-      if ($last_group != $group['group_hash']) {
-        // Bump Counter if group has changed from the last one.
-        ++$counter;
-        $last_group = $group['group_hash'];
-        $modified = TRUE;
-      }
       $groupings[$counter][] = $fileinfo;
     }
     // Make sure we didn't go over the max; if we did merge the smallest bundles
@@ -125,6 +128,10 @@ function advagg_bundler_merge(array &$groupings, $max) {
         $file_size = 0;
         $group_hash_counts[$key] = 0;
         foreach ($values as $data) {
+          // Skip if bundler data is missing.
+          if (empty($data['bundler'])) {
+            continue;
+          }
           $file_size += empty($data['bundler']['filesize_processed']) ? $data['bundler']['filesize'] : $data['bundler']['filesize_processed'];
           $group_hash_counts[$key] += intval(substr($data['bundler']['group_hash'], 0, 8));
         }

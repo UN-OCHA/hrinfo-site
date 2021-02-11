@@ -1020,17 +1020,40 @@ function advagg_install_fast_checks($phase = 'runtime') {
   }
 
   // Check that the menu router handler is working.
+  // Paths will vary based on s3fs no_rewrite_cssjs setting.
+  if (advagg_s3fs_evaluate_no_rewrite_cssjs(FALSE)) {
+    // If using s3fs and no_rewrite_cssjs is not set, external paths are needed.
+    // Use $css_path[0] and $js_path[0] since they contain the scheme.
+    $menu_path_key = 0;
+    $menu_css_path = trim(parse_url(file_create_url($css_path[0] . '/test.css'), PHP_URL_PATH));
+    if (strpos($menu_css_path, $GLOBALS['base_path']) === 0) {
+      $menu_css_path = substr($menu_css_path, strlen($GLOBALS['base_path']));
+    }
+    $menu_js_path = trim(parse_url(file_create_url($js_path[0] . '/test.js'), PHP_URL_PATH));
+    if (strpos($menu_js_path, $GLOBALS['base_path']) === 0) {
+      $menu_js_path = substr($menu_js_path, strlen($GLOBALS['base_path']));
+    }
+  }
+  else {
+    // Determine paths if not using s3fs, or no_rewrite_cssjs is set.
+    // Use $css_path[1] and $js_path[1] since they are without schemes.
+    $menu_path_key = 1;
+    $menu_css_path = $css_path[1] . '/test.css';
+    $menu_js_path = $js_path[1] . '/test.js';
+  }
+
+  // Use the paths set above to check menu router handler.
   $advagg_async_generation_menu_issue = FALSE;
-  if (!file_uri_scheme($css_path[1])) {
-    $item_css = menu_get_item($css_path[1] . '/test.css');
+  if (!file_uri_scheme($css_path[$menu_path_key])) {
+    $item_css = menu_get_item($menu_css_path);
     if (empty($item_css['page_callback'])
       || strpos($item_css['page_callback'], 'advagg') === FALSE
     ) {
       $advagg_async_generation_menu_issue = TRUE;
     }
   }
-  if (!file_uri_scheme($js_path[1])) {
-    $item_js = menu_get_item($js_path[1] . '/test.js');
+  if (!file_uri_scheme($js_path[$menu_path_key])) {
+    $item_js = menu_get_item($menu_js_path);
     if (empty($item_js['page_callback'])
       || strpos($item_js['page_callback'], 'advagg') === FALSE
     ) {
