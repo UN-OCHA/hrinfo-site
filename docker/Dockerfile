@@ -1,4 +1,4 @@
-FROM unocha/php7-k8s:${TAG:-7.3-NR-stable}
+FROM unocha/php7-k8s:${TAG:-7.3-NR-develop}
 
 ARG VCS_REF
 ARG VCS_URL
@@ -28,6 +28,4 @@ COPY ./docker/custom /etc/nginx/custom
 
 RUN  cd /srv/www/html/sites && \
        rm -f www.humanitarianresponse.info && \
-       ln -s default www.humanitarianresponse.info && \
-     apk add -U ghostscript freetype fontconfig && \
-     rm -rf /var/cache/apk/*
+       ln -s default www.humanitarianresponse.info
