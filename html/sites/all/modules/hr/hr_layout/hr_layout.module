@@ -166,14 +166,6 @@ function hr_layout_block_view($delta = '') {
           $block['content'] .= '</div>';
         }
 
-        if (isset($view['field_users'])) {
-          $block['content'] .= '<div class="manager">' . t('Focal points') . ': <br />';
-          foreach ($view['field_users']['#items'] as $field_user) {
-            $block['content'] .= '<i>' . l(entity_label('user', $field_user['entity']), 'user/' . $field_user['target_id']) . '</i><br />';
-          }
-          $block['content'] .= '</div>';
-        }
-
         if (isset($view['field_email'])) {
           // Render Email link.
           $link_email_options = array(
