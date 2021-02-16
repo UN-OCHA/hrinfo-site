@@ -1,7 +1,8 @@
 <?php
+
 /**
  * @file
- * Theme and preprocess functions for views
+ * Theme and preprocess functions for views.
  */
 
 /**
@@ -11,43 +12,55 @@ function ocha_basic_preprocess_views_view(&$variables) {
   $variables['feed_icons'] = drupal_get_feeds();
 }
 
+/**
+ * Format RSS icon.
+ */
 function ocha_basic_feed_icon($variables) {
   $text = t('Subscribe to !feed-title', array('!feed-title' => $variables['title']));
-  return l('<i class="fa fa-rss-square fa-lg"></i>', $variables['url'], array('html' => TRUE, 'attributes' => array('class' => array('feed-icon'), 'title' => $text)));
+  return l('<i class="fa fa-rss-square fa-lg"></i>', $variables['url'], array(
+    'html' => TRUE,
+    'attributes' => array('class' => array('feed-icon'), 'title' => $text),
+  ));
 }
 
+/**
+ * Format export feed icon.
+ */
 function ocha_basic_views_data_export_feed_icon($variables) {
   extract($variables, EXTR_SKIP);
   $url_options = array('html' => TRUE);
   if ($query) {
     $url_options['query'] = $query;
   }
-  $image = theme('image', array('path' => $image_path, 'alt' => $text, 'title' => $text));
-  return '<li>'.l($text, $url, $url_options).'</li>';
+  $image = theme('image', array(
+    'path' => $image_path,
+    'alt' => $text,
+    'title' => $text,
+  ));
+  return '<li>' . l($text, $url, $url_options) . '</li>';
 }
 
 /**
  * Theme function for the PDF icon of appended PDFs.
  */
 function ocha_basic_views_pdf_icon($vars) {
-  $title = $vars['title'];
   $path = $vars['path'];
   $options = $vars['options'];
-  return '<li>'.l('PDF', $path, $options).'</li>';
+  return '<li>' . l(t('PDF'), $path, $options) . '</li>';
 }
 
 /**
- * Theme function for ical icon
+ * Theme function for ical icon.
  */
 function ocha_basic_date_ical_icon($variables) {
   if (empty($variables['tooltip'])) {
     $variables['tooltip'] = t('Add this event to my calendar');
   }
-  return '<li>'.l('ICAL', $variables['url']).'</li>';
+  return '<li>' . l(t('ICAL'), $variables['url']) . '</li>';
 }
 
 /**
- * Returns the facet path for a specific field and value
+ * Returns the facet path for a specific field and value.
  */
 function _ocha_basic_views_get_facet_path($real_field, $value) {
   $adapter = facetapi_adapter_load('search_api@default_node_index');
@@ -58,17 +71,23 @@ function _ocha_basic_views_get_facet_path($real_field, $value) {
     $segment = array();
     $segment['value'] = $value;
     $facet_settings = $adapter->getFacetSettingsGlobal($args['facet']);
+    if (!isset($facet_settings->settings['pretty_paths_alias'])) {
+      return FALSE;
+    }
     $segment['alias'] = $facet_settings->settings['pretty_paths_alias'];
     $args['segment'] = &$segment;
     facetapi_pretty_paths_coder_callback('encodePathSegment', $args);
     if (!empty($args['segment']['value'])) {
-      return $args['segment']['alias'].'/'.$args['segment']['value'];
+      return $args['segment']['alias'] . '/' . $args['segment']['value'];
     }
   }
 
   return FALSE;
 }
 
+/**
+ * More links.
+ */
 function _ocha_basic_views_more_path($type, $display, $view) {
   $path = $type;
   $filter_keys = array_keys($view['view']->display[$display]->display_options['filters']);
@@ -76,7 +95,7 @@ function _ocha_basic_views_more_path($type, $display, $view) {
     $val = $view['view']->filter[$key]->{'value'};
     if (!empty($val) && isset($val[0])) {
       if ($key == 'og_group_ref_target_id' || $key == 'field_bundles_target_id_entityreference_filter') {
-        $path = 'node/'.$val[0].'/'.$type;
+        $path = 'node/' . $val[0] . '/' . $type;
         if ($type == 'events') {
           $path .= '/list';
         }
@@ -84,40 +103,54 @@ function _ocha_basic_views_more_path($type, $display, $view) {
       elseif ($key != 'type' && $key != 'status' && $key != 'date_filter') {
         $segment = _ocha_basic_views_get_facet_path($view['view']->filter[$key]->real_field, $val[0]);
         if (!empty($segment)) {
-          $path .= '/'.$segment;
+          $path .= '/' . $segment;
         }
       }
     }
   }
-  return '<div class="more-link">'.l(t('view more'), $path).'</div>';
+  return '<div class="more-link">' . l(t('view more'), $path) . '</div>';
 }
 
 /**
- * More links
+ * More links.
  */
 function ocha_basic_views_more__hr_documents_panes__list($view) {
   return _ocha_basic_views_more_path('documents', 'list', $view);
 }
 
+/**
+ * More links.
+ */
 function ocha_basic_views_more__hr_infographics_panes__list($view) {
   return _ocha_basic_views_more_path('infographics', 'list', $view);
 }
 
+/**
+ * More links.
+ */
 function ocha_basic_views_more__hr_news_panes__list($view) {
   return _ocha_basic_views_more_path('blog', 'list', $view);
 }
 
+/**
+ * More links.
+ */
 function ocha_basic_views_more__hr_events_panes__upcoming($view) {
   return _ocha_basic_views_more_path('events', 'upcoming', $view);
 }
 
+/**
+ * More links.
+ */
 function ocha_basic_views_more__hr_assessments_panes__list($view) {
   return _ocha_basic_views_more_path('assessments', 'list', $view);
 }
 
 /**
  * Preprocess function for Date pager template.
- * Override the pager for the printable calendar. See http://atrium.ocha_basic.info/humanitarian_response/node/4466
+ *
+ * Override the pager for the printable calendar.
+ * See http://atrium.ocha_basic.info/humanitarian_response/node/4466.
  */
 function ocha_basic_preprocess_date_views_pager(&$vars) {
   global $language;
@@ -129,7 +162,10 @@ function ocha_basic_preprocess_date_views_pager(&$vars) {
       if ($language->language != 'en') {
         $format = 'd F Y';
       }
-      $title = t('@mindate to @maxdate', array('@mindate' => date_format_date($date_info->min_date, 'custom', $format), '@maxdate' => date_format_date($date_info->max_date, 'custom', $format)));
+      $title = t('@mindate to @maxdate', array(
+        '@mindate' => date_format_date($date_info->min_date, 'custom', $format),
+        '@maxdate' => date_format_date($date_info->max_date, 'custom', $format),
+      ));
       $vars['nav_title'] = $title;
       $vars['prev_url'] = '';
       $vars['next_url'] = '';
@@ -173,11 +209,10 @@ function ocha_basic_views_mini_pager($vars) {
   $element = $vars['element'];
   $parameters = $vars['parameters'];
 
-  // current is the page we are currently paged to
+  // Current is the page we are currently paged to.
   $pager_current = $pager_page_array[$element] + 1;
-  // max is the maximum page number
+  // Max is the maximum page number.
   $pager_max = $pager_total[$element];
-  // End of marker calculations.
 
   if ($pager_total[$element] > 1) {
 

@@ -243,14 +243,8 @@ function ocha_basic_form_element($variables) {
   }
 
   // Generate the prefix and suffix.
-  if ($is_input_group) {
-    $prefix = isset($element['#field_prefix']) ? theme('ocha_basic_input_group_addon', array('content' => $element['#field_prefix'])) . ' ' : '';
-    $suffix = isset($element['#field_suffix']) ? ' ' . theme('ocha_basic_input_group_addon', array('content' => $element['#field_suffix'])) : '';
-  }
-  else {
-    $prefix = isset($element['#field_prefix']) ? '<span class="field-prefix">' . $element['#field_prefix'] . '</span> ' : '';
-    $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . $element['#field_suffix'] . '</span>' : '';
-  }
+  $prefix = isset($element['#field_prefix']) ? '<span class="field-prefix">' . $element['#field_prefix'] . '</span> ' : '';
+  $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . $element['#field_suffix'] . '</span>' : '';
 
   switch ($element['#title_display']) {
     case 'invisible':
