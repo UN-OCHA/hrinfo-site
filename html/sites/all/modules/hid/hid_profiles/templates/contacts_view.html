@@ -1,0 +1,94 @@
+<div class="panelizer-view-mode node node-full node-hr-contact node-33275 node-promoted">
+  <div class="panel-display bryant-flipped clearfix radix-bryant-flipped" >
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-9 radix-layouts-content panel-panel">
+          <div class="panel-panel-inner">
+            <div class="panel-pane pane-node-title" >
+              <div class="pane-content">
+                <h2><%= contact.getFullName() %> <% if(contact.getVerified() == true) { %><i class="fa fa-check-circle"></i><% } %></h2>
+              </div>
+            </div>
+            <div class="panel-separator"></div>
+            <div class="panel-pane pane-entity-field pane-node-field-email" >
+              <div class="pane-content">
+                <div class="field field-name-field-email field-type-email field-label-above">
+                  <div class="field-label">Emails:&nbsp;</div>
+                  <div class="field-items">
+                    <% _.each(contact.getEmails(), function(email) { %>
+                      <div class="field-item"><a href="mailto:<%= email.address %>"><%= email.address %></a></div>
+                    <% }); %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-pane pane-entity-field pane-node-field-phones" >
+              <div class="pane-content">
+                <div class="field field-name-field-phones field-type-phone field-label-above">
+                  <div class="field-label">Phones:&nbsp;</div>
+                  <div class="field-items">
+                    <% _.each(contact.getPhoneNumbers(), function(phone) { %>
+                      <div class="field-item"><%= phone.type %>: <%= phone.number %></div>
+                    <% }); %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-pane pane-entity-field pane-node-field-uri" >
+              <div class="pane-content">
+                <div class="field field-name-field-uri field-type-link field-label-above">
+                  <div class="field-label">URLs:&nbsp;</div>
+                  <div class="field-items">
+                    <% _.each(contact.getWebsites(), function(uri) { %>
+                      <div class="field-item"><a href="<%= uri %>"><%= uri %></a></div>
+                    <% }); %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel-pane pane-entity-field pane-node-field-voip" >
+              <div class="pane-content">
+                <div class="field field-name-field-voip field-type-text field-label-above">
+                  <div class="field-label">Instant Messengers:&nbsp;</div>
+                  <div class="field-items">
+                    <% _.each(contact.getVoip(), function(voip) { %>
+                      <div class="field-item"><%= voip.type %>: <%= voip.number %></a></div>
+                    <% }); %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-3 radix-layouts-sidebar panel-panel">
+          <div class="panel-panel-inner">
+            <div class="panel-pane pane-entity-field pane-node-og-group-ref" >
+              <div class="pane-content">
+                <div class="field field-name-og-group-ref field-type-entityreference field-label-above"><div class="field-label">Space(s):&nbsp;</div><div class="field-items"><div class="field-item even"><%= contact.getLocationName() %></div></div></div>
+              </div>
+            </div>
+            <div class="panel-separator"></div>
+            <div class="panel-pane pane-entity-field pane-node-field-bundles" >
+              <div class="pane-content">
+                <div class="field field-name-field-bundles field-type-entityreference field-label-above"><div class="field-label">Clusters/Sectors:&nbsp;</div><div class="field-items"><div class="field-item even"><%= contact.getBundles() %></div></div></div>
+              </div>
+            </div>
+            <div class="panel-separator"></div>
+            <div class="panel-pane pane-entity-field pane-node-field-organizations" >
+              <div class="pane-content">
+                <div class="field field-name-field-organizations field-type-entityreference field-label-above"><div class="field-label">Organization:&nbsp;</div><div class="field-items"><div class="field-item even"><%= contact.getMainOrganizationName() %></div></div></div>
+              </div>
+            </div>
+            <div class="panel-separator"></div>
+            <div class="panel-pane pane-entity-field pane-node-field-job-title-other" >
+              <div class="pane-content">
+                <div class="field field-name-field-job-title-other field-type-text field-label-above"><div class="field-label">Job Title:&nbsp;</div><div class="field-items"><div class="field-item even"><%= contact.getJobTitle() %></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /.bryant-flipped -->
+</div>

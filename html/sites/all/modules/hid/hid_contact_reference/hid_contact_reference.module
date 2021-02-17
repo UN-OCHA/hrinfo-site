@@ -1,0 +1,257 @@
+<?php
+
+/**
+ * @file
+ * Contact reference field module file.
+ */
+
+/**
+ * Implements hook_field_info().
+ */
+function hid_contact_reference_field_info() {
+  return array(
+    'hid_contact_reference' => array(
+      'label' => t('Contact reference'),
+      'description' => t('This field stores the ID of a HID contact.'),
+      'settings' => array('options_list_limit' => NULL),
+      'instance_settings' => array(),
+      'default_widget' => 'hid_contact_reference_autocomplete',
+      'default_formatter' => 'hid_contact_reference_full',
+      'property_type' => 'hid_contact_reference',
+      'property_callbacks' => array('hid_contact_reference_property_info_callback'),
+    ),
+  );
+}
+
+/**
+ * Callback to alter the property info of contact reference fields.
+ *
+ * @see hid_contact_reference_field_info()
+ */
+function hid_contact_reference_property_info_callback(&$info, $entity_type, $field, $instance, $field_type) {
+  $name = $field['field_name'];
+  $property = &$info[$entity_type]['bundles'][$instance['bundle']]['properties'][$name];
+
+  $property['type'] = ($field['cardinality'] != 1) ? 'list<hid_contact_reference>' : 'hid_contact_reference';
+  $property['getter callback'] = 'entity_metadata_field_verbatim_get';
+  $property['setter callback'] = 'entity_metadata_field_verbatim_set';
+  // $property['auto creation'] = 'addressfield_auto_creation';.
+  $property['property info']['cid'] = array(
+    'type' => 'text',
+    'label' => t('Humanitarian ID'),
+    'description' => t('Humanitarian ID of the user'),
+    'getter callback' => 'entity_property_verbatim_get',
+    'setter callback' => 'entity_property_verbatim_set',
+    'required' => TRUE,
+  );
+
+  unset($property['query callback']);
+}
+
+/**
+ * Implements hook_field_validate().
+ */
+function hid_contact_reference_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  // Check if the contact exists in HID.
+  foreach ($items as $delta => $item) {
+    if (is_array($item) && !empty($item['cid'])) {
+      if (!$contact = hid_profiles_get_contact($item['cid'])) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'invalid_contact_id',
+          'message' => t(
+            '%name: you have specified an invalid contact id for this reference field.',
+            array('%name' => $instance['label'])
+          ),
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function hid_contact_reference_field_is_empty($item, $field) {
+  return empty($item['cid']);
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function hid_contact_reference_field_widget_info() {
+  $return = array();
+
+  $return['hid_contact_reference_autocomplete'] = array(
+    'label' => t('HID contact reference autocomplete'),
+    'field types' => array('hid_contact_reference'),
+    'settings' => array(),
+    'behaviors' => array(
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+      'default value' => FIELD_BEHAVIOR_DEFAULT,
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function hid_contact_reference_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $default_value = '';
+  if (!empty($items[$delta]) && !empty($items[$delta]['cid'])) {
+    if (variable_get('hid_profiles_v2', FALSE)) {
+      $contact = hid_profiles_get_contact($items[$delta]['cid']);
+      $default_value = $contact->name . " [id: $contact->_id]";
+    }
+    else {
+      if ($contact = hid_profiles_get_contact_by_id($items[$delta]['cid'])) {
+        $location = !empty($contact->location) ? $contact->location : t(
+          'Global profile'
+        );
+        $label = "$contact->nameGiven $contact->nameFamily ($location)";
+        $default_value = "$label [id: $contact->_id]";
+      }
+    }
+  }
+
+  $element += array(
+    '#type' => 'textfield',
+    '#title' => t('Contact'),
+    '#autocomplete_path' => 'hid/autocomplete/all',
+    '#default_value' => $default_value,
+    '#required' => $element['#required'],
+  );
+
+  $element['#element_validate'][] = 'hid_contact_reference_field_widget_validate';
+
+  return array('cid' => $element);
+}
+
+/**
+ * Validation callback to be able to translate the id.
+ */
+function hid_contact_reference_field_widget_validate($element, &$form_state) {
+  $value = $element['#value'];
+  if (!empty($value)) {
+    if (preg_match('/\[id: (.+)\]/', $value, $matches)) {
+      form_set_value($element, $matches[1], $form_state);
+    }
+
+  }
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function hid_contact_reference_field_formatter_info() {
+  $return = array();
+
+  $return['hid_contact_reference_full'] = array(
+    'label' => t('Hid contact reference formatter'),
+    'field types' => array('hid_contact_reference'),
+    'settings' => array(
+      'show_name' => TRUE,
+      'show_organization' => FALSE,
+      'show_job_title' => FALSE,
+      'show_email' => FALSE,
+      'show_phone_number' => FALSE
+    )
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form()
+ */
+function hid_contact_reference_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $element = array();
+  if ($display['type'] == 'hid_contact_reference_full') {
+    $element['show_name'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show user name'),
+      '#default_value' => $settings['show_name']
+    );
+    $element['show_organization'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show organization'),
+      '#default_value' => $settings['show_organization']
+    );
+    $element['show_job_title'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show Job title'),
+      '#default_value' => $settings['show_job_title']
+    );
+    $element['show_email'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show email'),
+      '#default_value' => $settings['show_email']
+    );
+    $element['show_phone_number'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show phone number'),
+      '#default_value' => $settings['show_phone_number']
+    );
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_ield_formatter_settings_summary().
+ */
+function hid_contact_reference_field_formatter_settings_summary($field, $instance, $view_mode) {
+  return t('HID contact reference field');
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function hid_contact_reference_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, &$items, $display) {
+  $theme = 'hid_profiles_single_contact_v2';
+  $element = array();
+  switch ($display['type']) {
+    case 'hid_contact_reference_full':
+      $settings = $display['settings'];
+      $wrapper = entity_metadata_wrapper($entity_type, $entity);
+      foreach ($items as $delta => $item) {
+        if (!empty($item['cid']) && $contact = hid_profiles_get_contact($item['cid'])) {
+          $element[$delta] = array(
+            '#theme' => $theme,
+            '#contact' => $contact,
+            '#settings' => $settings,
+            '#cache' => array(
+              'keys' => array(
+                'hid_contact',
+                $entity_type,
+                $wrapper->getIdentifier(),
+                $item['cid']
+              ),
+              'bin' => 'cache',
+              'expire' => time() + 3600,
+              'granularity' => DRUPAL_CACHE_PER_PAGE,
+            ),
+          );
+        }
+      }
+      break;
+
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_field_update().
+ */
+function hid_contact_reference_field_update($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  // Clear the render cache for the contact field.
+  if ($field['type'] == 'hid_contact_reference') {
+    $wrapper = entity_metadata_wrapper($entity_type, $entity);
+    foreach ($items as $delta => $item) {
+      cache_clear_all('hid_contact:' . $entity_type . ':' . $wrapper->getIdentifier() . ':' . $item['cid'], 'cache');
+    }
+    // cache_clear_all('hid_contact:' . $entity_type . ':' . $wrapper->getIdentifier() . ':', 'cache', TRUE);.
+  }
+}
