@@ -6861,6 +6861,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "HRINFO-711 panelizer access bug": "https://www.drupal.org/files/issues/panelizer-storage_type_issue-2864607-1.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -6939,6 +6942,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Stop logs caused by https://www.drupal.org/project/panels/issues/3032350#comment-13075861": "PATCHES/panels-style-settings-default.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",

@@ -35,6 +35,12 @@
       "drupal/openlayers": {
         "mqcdn server is down - MapQuest map is not working": "https://www.drupal.org/files/issues/replace_mqcdn_server-2877609-2.patch"
       },
+      "drupal/panelizer": {
+        "HRINFO-711 panelizer access bug": "https://www.drupal.org/files/issues/panelizer-storage_type_issue-2864607-1.patch"
+      },
+      "drupal/panels": {
+        "Stop logs caused by https://www.drupal.org/project/panels/issues/3032350#comment-13075861": "PATCHES/panels-style-settings-default.patch"
+      },
       "drupal/redis": {
         "Use path_alias_xt when installed": "PATCHES/drupal-undefined_function_drupal_get_path_alias-2842762-14-D7-PART2-2420275-1-path_alias_xt.patch",
         "New feature: option to use SCAN command instead of KEYS on cache wildcard deletions": "https://www.drupal.org/files/issues/2018-05-07/redis-delete-by-prefix-using-scan-2851625-21.patch",
