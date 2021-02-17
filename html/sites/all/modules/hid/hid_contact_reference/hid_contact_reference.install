@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Install files for the contact reference field.
+ */
+
+/**
+ * Implements hook_field_schema().
+ */
+function hid_contact_reference_field_schema() {
+  return array(
+    'columns' => array(
+      'cid' => array(
+        'description' => 'The contact id coming from HID.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+    ),
+    'indexes' => array(
+      'cid' => array('cid'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function hid_contact_reference_uninstall() {
+  foreach (field_read_fields(array('type' => 'hid_contact_reference'), array('include_inactive' => TRUE)) as $field_name => $field) {
+    // Delete the field.
+    field_delete_field($field_name);
+  }
+}

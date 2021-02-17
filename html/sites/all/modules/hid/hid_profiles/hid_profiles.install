@@ -1,0 +1,90 @@
+<?php
+
+/**
+ * @file
+ * Install file for hid_profiles module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function hid_profiles_schema() {
+  $schema['hid_profiles'] = array(
+    'description' => 'The lookup table between Drupal users and Humanitarian ID profiles.',
+    'fields' => array(
+      'uid' => array(
+        'description' => 'The current {user}.uid identifier.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'cid' => array(
+        'description' => 'The Humanitarian ID auth identifier.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'hid' => array(
+        'description' => 'The Humanitarian ID profile identifier',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => ''
+      ),
+    ),
+    'unique keys' => array(
+      'uid' => array('uid'),
+      'cid' => array('cid'),
+      'hid' => array('hid'),
+    ),
+  );
+  return $schema;
+}
+
+/**
+ * Add hid of all users in authmap to hid_profiles.
+ */
+function hid_profiles_update_7003() {
+  /*$result = db_select('authmap', 'a')
+  ->fields('a')
+  ->execute();
+  while ($record = $result->fetchAssoc()) {
+  $uid = $record['uid'];
+  $cid = str_replace('oauthconnector_hid_oauth__', '', $record['authname']);
+  $params['user_id'] = $cid;
+  $contact = hid_profiles_v2_get_contact($params);
+  if ($contact) {
+  $hid = $contact->id;
+  db_merge('hid_profiles')
+  ->key(array('uid' => $uid))
+  ->fields(array(
+  'cid' => $cid,
+  'hid' => $hid
+  ))
+  ->execute();
+  }
+  }*/
+}
+
+/**
+ * Add the hid column to the schema.
+ */
+function hid_profiles_update_7002() {
+  $field = array(
+    'description' => 'The Humanitarian ID profile identifier',
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => TRUE,
+    'default' => ''
+  );
+  db_add_field('hid_profiles', 'hid', $field);
+}
+
+/**
+ * Install hid contact reference module.
+ */
+function hid_profiles_update_7001() {
+  module_enable(array('hid_contact_reference'));
+}
