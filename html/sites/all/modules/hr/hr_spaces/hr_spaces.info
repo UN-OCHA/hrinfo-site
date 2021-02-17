@@ -34,7 +34,6 @@ features[field_instance][] = node-hr_space-field_organizations
 features[field_instance][] = node-hr_space-field_social_media
 features[field_instance][] = node-hr_space-field_space_category
 features[field_instance][] = node-hr_space-field_space_type
-features[field_instance][] = node-hr_space-field_users
 features[field_instance][] = node-hr_space-field_website
 features[field_instance][] = node-hr_space-group_access
 features[field_instance][] = node-hr_space-group_group

@@ -10,18 +10,27 @@
 (function ($) {
   Drupal.behaviors.field_example_colorpicker = {
     attach: function(context) {
-      $(".edit-calendar-colorpicker").live("focus", function(event) {
-        var edit_field = this;
-        var picker = $(this).closest('div').parent().find(".calendar-colorpicker");
 
-        // Hide all color pickers except this one.
-        $(".calendar-colorpicker").hide();
-        $(picker).show();
-        $.farbtastic(picker, function(color) {
-          edit_field.value = color;
-        }).setColor(edit_field.value);
-      });
+      if ($.isFunction($.fn.on)) {
+        // For jQuery 1.7+
+        $(document).on("focus", ".edit-calendar-colorpicker", calendarFocusHandler);
+      } else {
+        $(".edit-calendar-colorpicker").live("focus", calendarFocusHandler);
+      }
+
     }
+  }
+
+  function calendarFocusHandler(event) {
+    var edit_field = this;
+    var picker = $(this).closest('div').parent().find(".calendar-colorpicker");
+
+    // Hide all color pickers except this one.
+    $(".calendar-colorpicker").hide();
+    $(picker).show();
+    $.farbtastic(picker, function(color) {
+      edit_field.value = color;
+    }).setColor(edit_field.value);
   }
 })(jQuery);
 

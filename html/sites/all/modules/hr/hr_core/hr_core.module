@@ -122,6 +122,10 @@ function hr_core_path_insert($path) {
  * Makes sure pathauto is not used when no path is set.
  */
 function hr_core_entity_presave($node, $type) {
+  // Path is sometimes set to 0.
+  if (empty($node->path)) {
+    $node->path = array();
+  }
   if (!isset($node->path['pathauto'])) {
     $node->path['pathauto'] = FALSE;
   }
@@ -884,6 +888,9 @@ function hr_core_related_content_after_build($element) {
  */
 function hr_core_panels_new_pane_alter(&$pane) {
   $pane->style['style'] = 'hr_highlighted';
+  // This to fix recurrent notice in logs.
+  // https://www.drupal.org/project/panels/issues/3032350#comment-13075861
+  $pane->style['settings'] = array();
 }
 
 /**

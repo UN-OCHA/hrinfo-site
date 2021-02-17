@@ -414,6 +414,11 @@ class DataProviderEntity extends DataProvider implements DataProviderEntityInter
 
   /**
    * Validates an entity's fields before they are saved.
+   *
+   * @param \EntityDrupalWrapper $wrapper
+   *   A metadata wrapper for the entity.
+   *
+   * @throws \Drupal\restful\Exception\RestfulException
    */
   protected function validateFields($wrapper) {
     try {
@@ -577,6 +582,9 @@ class DataProviderEntity extends DataProvider implements DataProviderEntityInter
 
   /**
    * Adds query tags and metadata to the EntityFieldQuery.
+   *
+   * @param \EntityFieldQuery $query
+   *   The query to enhance.
    */
   protected function addExtraInfoToQuery($query) {
     parent::addExtraInfoToQuery($query);

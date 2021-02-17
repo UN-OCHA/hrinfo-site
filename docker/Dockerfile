@@ -1,4 +1,4 @@
-FROM unocha/php7-k8s:${TAG:-7.3-NR-stable}
+FROM unocha/php7-k8s:${TAG:-7.3-NR-develop}
 
 ARG VCS_REF
 ARG VCS_URL
@@ -25,8 +25,6 @@ COPY ./composer.json /srv/www/composer.json
 COPY ./composer.lock /srv/www/composer.lock
 COPY ./composer.patches.json /srv/www/composer.patches.json
 COPY ./docker/custom /etc/nginx/custom
-# Hotfix for https://humanitarian.atlassian.net/browse/HRINFO-1019
-COPY ./docker/policy.xml /etc/ImageMagick-7/policy.xml
 
 RUN  cd /srv/www/html/sites && \
        rm -f www.humanitarianresponse.info && \

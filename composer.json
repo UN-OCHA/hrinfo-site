@@ -123,7 +123,7 @@
         "drupal/og": "^2.10",
         "drupal/og_features": "^2.0-beta4",
         "drupal/og_menu": "^3.0+6-dev",
-        "drupal/og_moderation": "^2.3",
+        "drupal/og_moderation": "^2.x-dev",
         "drupal/og_role_delegate": "^1.0-beta2",
         "drupal/og_variables": "^1.0",
         "drupal/openlayers": "^2.0-beta11+23-dev",
@@ -194,7 +194,8 @@
         "drupal-composer/preserve-paths": "^0.1",
         "drupal/coder": "8.3.1",
         "phpmd/phpmd": "^2.6",
-        "sebastian/phpcpd": "^4.0"
+        "sebastian/phpcpd": "^4.0",
+        "squizlabs/php_codesniffer": "3.5.5"
     },
     "conflict": {
         "drupal/core": "8.*"

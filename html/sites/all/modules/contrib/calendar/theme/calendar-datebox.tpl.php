@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @file 
+ * @file
  * Template to display the date box in a calendar.
  *
  * - $view: The view.
@@ -15,4 +16,4 @@
  * - $items: An array of items for this day.
  */
 ?>
-<div class="<?php print $granularity ?> <?php print $class; ?>"> <?php print !empty($selected) ? $link : $day; ?> </div>
+<div class="<?php print $granularity; ?> <?php print $class; ?>"> <?php print !empty($selected) ? $link : $day; ?> </div>

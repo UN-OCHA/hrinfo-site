@@ -1,7 +1,11 @@
 <?php
+
+/**
+ * @file
+ */
+
 /**
  * Implements hook_og_permission().
- *
  */
 function og_moderation_og_permission() {
   $perms = array();
@@ -59,24 +63,23 @@ function og_moderation_og_permission() {
   return $perms;
 }
 
+/**
+ * Implements hook_form_alter().
+ */
 function og_moderation_form_alter(&$form, &$form_state, $form_id) {
   if (isset($form['#node_edit_form'])) {
     if ($form['#node_edit_form'] && og_is_group_content_type('node', $form['#bundle'])) {
-      if (isset($form['#node']->nid))
-        $gids = og_get_entity_groups('node', $form['#node']);
-      else
-        $gids = og_get_groups_by_user();
-      if ($gids) {
-        foreach($gids['node'] as $id => $gid) {
-          if (og_user_access('node', $gid, "access publishing options of " . $form['#bundle'] . " content")) {
-            $form['options']['#access'] = TRUE;
-          }
-          if (og_user_access('node', $gid, "access revisions options of " . $form['#bundle'] . " content")) {
-            $form['revision_information']['#access'] = TRUE;
-          }
-          if (og_user_access('node', $gid, "access authoring options of " . $form['#bundle'] . " content")) {
-            $form['author']['#access'] = TRUE;
-          }
+      if ($context = og_context()) {
+        $gid = $context['gid'];
+
+        if (og_user_access('node', $gid, "access publishing options of " . $form['#bundle'] . " content")) {
+          $form['options']['#access'] = TRUE;
+        }
+        if (og_user_access('node', $gid, "access revisions options of " . $form['#bundle'] . " content")) {
+          $form['revision_information']['#access'] = TRUE;
+        }
+        if (og_user_access('node', $gid, "access authoring options of " . $form['#bundle'] . " content")) {
+          $form['author']['#access'] = TRUE;
         }
       }
     }
@@ -84,55 +87,26 @@ function og_moderation_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
- * Implements hook_node_access_records().
+ * Implements hook_node_access().
  */
-function og_moderation_node_access_records($node) {
-  if ($node->status == 0 && $group_types = og_get_entity_groups('node', $node)) {
-    $grants = array();
-    foreach (array_values($group_types) as $gids) {
-      foreach ($gids as $gid) {
-        $grants[] = array(
-          'realm' => 'og_view_any_unpublished_' . $node->type . '_content',
-          'gid' => $gid,
-          'grant_view' => 1,
-          'grant_update' => 0,
-          'grant_delete' => 0,
-          'priority' => 0,
-        );
-      }
-    }
-    return $grants;
+function og_moderation_node_access($node, $op, $account) {
+  if ($op != 'view' || !is_object($node)) {
+    return NODE_ACCESS_IGNORE;
   }
-}
 
-/**
- * Implements hook_node_grants().
- */
-function og_moderation_node_grants($account, $op) {
-  if ($op != 'view') {
-    return;
-  }
-  $grants = &drupal_static(__FUNCTION__);
-  if (!isset($grants)) {
-    $grants = array();
-  }
-  $cache_id = $account->uid . $op;
-  if (!isset($grants[$cache_id])) {
-    if ($groups = og_get_entity_groups('user', $account)) {
-      $node_types = node_type_get_types();
-      foreach ($groups as $group_type => $gids) {
-        foreach ($gids as $gid) {
-          foreach ($node_types as $node_type) {
-            if (og_user_access('node', $gid, "view any unpublished " . $node_type->type . " content")) {
-              $realm = 'og_view_any_unpublished_' . $node_type->type . '_content';
-              $grants[$cache_id][$realm][] = $gid;
-            }
+  if ($op == 'view' && !$node->status) {
+    foreach (og_get_entity_groups('node', $node) as $entity_type => $og_memberships) {
+      foreach ($og_memberships as $membership_id => $entity_id) {
+        if ($entity_type == 'node') {
+          if (og_user_access('node', $entity_id, 'view any unpublished ' . $node->type . ' content', $account)) {
+            return NODE_ACCESS_ALLOW;
           }
         }
       }
     }
   }
-  return isset($grants[$cache_id]) ? $grants[$cache_id] : array();
+
+  return NODE_ACCESS_IGNORE;
 }
 
 /**
@@ -158,6 +132,9 @@ function og_moderation_menu_alter(&$items) {
 
 }
 
+/**
+ *
+ */
 function og_moderation_node_revision_access($node, $op = 'view') {
   if ($gids = og_get_entity_groups('node', $node)) {
     foreach ($gids['node'] as $id => $gid) {
@@ -165,6 +142,10 @@ function og_moderation_node_revision_access($node, $op = 'view') {
         return TRUE;
       }
     }
+  }
+  // _node_revision_access() uses 'update' not 'revert'.
+  if ($op == 'revert') {
+    $op = 'update';
   }
   return _node_revision_access($node, $op);
 }
@@ -262,7 +243,6 @@ function og_moderation_form_diff_node_revisions_alter(&$form) {
  * Apply OG roles for node clone permissions.
  */
 function og_moderation_clone_access_alter(&$data, &$context1 = NULL, &$context2 = NULL, &$context3 = NULL) {
-  $result = NODE_ACCESS_IGNORE;
   $node = $context1;
 
   if (clone_is_permitted($node->type)) {
@@ -270,15 +250,13 @@ function og_moderation_clone_access_alter(&$data, &$context1 = NULL, &$context2 
       global $user;
       $gid = $node->og_group_ref[LANGUAGE_NONE][0]['target_id'];
       if (og_user_access('node', $gid, "clone node")) {
-        $result = NODE_ACCESS_ALLOW;
+        $data = NODE_ACCESS_ALLOW;
       }
-      if ($user != NULL) {
+      elseif ($user != NULL) {
         if (($node->uid == $user->uid) && og_user_access('node', $gid, 'clone own nodes', $user)) {
-          return NODE_ACCESS_ALLOW;
+          $data = NODE_ACCESS_ALLOW;
         }
       }
     }
   }
-
-  $data = $result;
 }

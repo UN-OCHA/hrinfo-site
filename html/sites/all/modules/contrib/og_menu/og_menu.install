@@ -41,6 +41,9 @@ function og_menu_schema() {
       ),
     ),
     'primary key' => array('menu_name'),
+    'indexes' => array(
+      'gid_group_type_weight' => array('gid', 'group_type', 'weight'),
+    ),
     'foreign keys' => array(
       'menu_custom' => array(
         'table' => 'menu_custom',
@@ -252,14 +255,24 @@ function og_menu_update_7305(&$sandbox) {
 }
 
 /**
- * Set translation settings at OG menus.
+ * Add og_menu.(gid, group_type, weight) index.
  */
-function og_menu_update_7306(&$sandbox) {
-  if (module_exists('i18n_menu')) {
-    db_update('menu_custom')
-      ->fields(array('i18n_mode' => variable_get('og_menu_default_i18n_mode', I18N_MODE_NONE)))
-      ->condition('menu_name', 'menu-og-%', 'LIKE')
-      ->condition('i18n_mode', '0')
-      ->execute();
+function og_menu_update_7306() {
+  if (!db_index_exists('og_menu', 'gid_group_type_weight')) {
+    db_add_index('og_menu', 'gid_group_type_weight', array('gid', 'group_type', 'weight'));
   }
+}
+
+/**
+ * Clear the menu cache so the renamed items will be picked up.
+ */
+function og_menu_update_7307() {
+  variable_set('menu_rebuild_needed', TRUE);
+}
+
+/**
+ * Clear cache_menu so the renamed menu item will be picked up.
+ */
+function og_menu_update_7308() {
+  cache_clear_all(NULL, 'cache_menu');
 }

@@ -271,11 +271,6 @@ class calendar_plugin_style extends views_plugin_style {
     $this->date_info->style_theme_style = $this->options['theme_style'];
     $this->date_info->style_max_items = $this->options['max_items'];
     $this->date_info->style_max_items_behavior = $this->options['max_items_behavior'];
-
-    // Create an array of times to group dates by
-    // However, we need to also store the original option in a different
-    // variable, as it may be required later during theming.
-    $this->date_info->style_groupby_times_original = $this->options['groupby_times'];
     if (!empty($this->options['groupby_times_custom'])) {
       $this->date_info->style_groupby_times = explode(',', $this->options['groupby_times_custom']);
     }
@@ -314,6 +309,8 @@ class calendar_plugin_style extends views_plugin_style {
         $item_end = date_format($item->calendar_end_date, DATE_FORMAT_DATE);
         $time_start = date_format($item->calendar_start_date, 'H:i:s');
         $item->rendered_fields = $this->rendered_fields[$row_index];
+        //set custom class to item
+        $item->classCustom = $this->view->style_plugin->get_row_class($row_index);
         $items[$item_start][$time_start][] = $item;
       }
     }
@@ -675,6 +672,7 @@ class calendar_plugin_style extends views_plugin_style {
     $multiday_theme = !empty($this->date_info->style_multiday_theme) && $this->date_info->style_multiday_theme == '1';
     $first_day = variable_get('date_first_day', 0);
     $cur_cnt = 0;
+    $extra_events = FALSE;
     $total_cnt = 0;
     $ids = array();
 
@@ -729,7 +727,7 @@ class calendar_plugin_style extends views_plugin_style {
                   // If the last day of this event exceeds the end of the current month or week,
                   // truncate the remaining days
                   $diff =  $this->curday->difference($this->date_info->max_date, 'days');
-                  $remaining_days = ($this->date_info->granularity == 'month') ? min(6 - $wday, $diff) : $diff - 1;
+                  $remaining_days = ($this->date_info->granularity == 'month') ? min(6 - $wday, $diff) : $diff;
                   // The bucket_cnt defines the colspan.  colspan = bucket_cnt + 1
                   $days = $this->curday->difference($item->date_end, 'days');
                   $bucket_cnt = max(0, min($days, $remaining_days));
@@ -801,6 +799,11 @@ class calendar_plugin_style extends views_plugin_style {
                   'wday' => $wday,
                 );
               }
+              elseif (!$extra_events) {
+                // The event we're currently on will never be displaed.
+                // So let's set a flag the make sure more link is set.
+                $extra_events = TRUE;
+              }
 
             }
           }
@@ -809,7 +812,7 @@ class calendar_plugin_style extends views_plugin_style {
     }
 
     // Add a more link if necessary
-    if ($max_events != CALENDAR_SHOW_ALL && $total_cnt > 0 && $cur_cnt < $total_cnt) {
+    if ($max_events != CALENDAR_SHOW_ALL && $total_cnt > 0 && ($cur_cnt < $total_cnt || $extra_events)) {
       $entry = theme('calendar_' . $this->date_info->calendar_type . '_multiple_entity', array(
           'curday' => $curday_date,
           'count' => $total_cnt,

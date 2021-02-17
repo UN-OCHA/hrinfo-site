@@ -121,20 +121,6 @@ function og_menu_config_form($form, &$form_state) {
     );
   }
 
-  if (module_exists('i18n_menu')) {
-    $form['i18n'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Internationalization'),
-    );
-    $form['i18n']['og_menu_default_i18n_mode'] = array(
-      '#type' => 'radios',
-      '#title' => t('Default translation mode for new menus'),
-      '#options' => i18n_translation_options('menu'),
-      '#default_value' => variable_get('og_menu_default_i18n_mode', I18N_MODE_NONE),
-      '#description' => t('For localizable elements, to have all items available for translation visit the <a href="@locale-refresh">translation refresh</a> page.', array('@locale-refresh' => url('admin/config/regional/translate/i18n_string'))),
-    );
-  }
-
   return system_settings_form($form);
 }
 

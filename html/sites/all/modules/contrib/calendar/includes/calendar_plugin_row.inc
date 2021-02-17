@@ -398,7 +398,10 @@ class calendar_plugin_row extends views_plugin_row_fields {
       $this->title = entity_label($this->entity_type, $entity);
       $uri = entity_uri($this->entity_type, $entity);
       $uri['options']['absolute'] = TRUE;
-      $this->url = url($uri['path'], $uri['options']);
+      $this->url = '';
+      if (isset($uri['path'])) {
+        $this->url = url($uri['path'], $uri['options']);
+      }
 
       // Retrieve the field value(s) that matched our query from the cached node.
       // Find the date and set it to the right timezone.
@@ -416,12 +419,12 @@ class calendar_plugin_row extends views_plugin_row_fields {
         $date_delta = 'date_delta_' . $field_name;
         if (isset($row->$date_id)) {
           $delta = $row->$date_delta;
-          $entity->date_id = array('calendar.' . $row->$date_id . '.' . $field_name. '.' . $delta);
+          $entity->date_id = array('calendar-' . $row->$date_id . '-' . $field_name. '-' . $delta);
           $delta_field = $date_delta;
         }
         else {
           $delta = isset($row->$delta_field) ? $row->$delta_field : 0;
-          $entity->date_id = array('calendar.' . $id . '.' . $field_name . '.' . $delta);
+          $entity->date_id = array('calendar-' . $id . '-' . $field_name . '-' . $delta);
         }
 
         $items = field_get_items($this->entity_type, $entity, $field_name, $this->language);
@@ -430,14 +433,15 @@ class calendar_plugin_row extends views_plugin_row_fields {
         $to_zone = date_get_timezone($tz_handling, isset($item->$tz_field) ? $item->$tz_field : $date_info->display_timezone_name);
         if (isset($item['value'])) {
           $item_start_date = new dateObject($item['value'], $db_tz);
-          $item_end_date   = array_key_exists('value2', $item) ? new dateObject($item['value2'], $db_tz) : $item_start_date;
+          $item_end_date   = (array_key_exists('value2', $item) && !empty($item['value2'])) ? new dateObject($item['value2'], $db_tz) : $item_start_date;
         }
 
         $cck_field = field_info_field($field_name);
         $instance = field_info_instance($this->entity_type, $field_name, $this->type);
         $granularity = date_granularity_precision($cck_field['settings']['granularity']);
-        $increment = $instance['widget']['settings']['increment'];
-
+        if ($instance) {
+          $increment = $instance['widget']['settings']['increment'];
+        }
       }
       elseif (!empty($entity->$field_name)) {
         $item = $entity->$field_name;
@@ -445,7 +449,7 @@ class calendar_plugin_row extends views_plugin_row_fields {
         $to_zone = date_get_timezone($tz_handling, isset($item->$tz_field) ? $item->$tz_field : $date_info->display_timezone_name);
         $item_start_date = new dateObject($item, $db_tz);
         $item_end_date   = $item_start_date;
-        $entity->date_id = array('calendar.' . $id . '.' . $field_name . '.0');
+        $entity->date_id = array('calendar-' . $id . '-' . $field_name);
       }
 
       // If we don't have a date value, go no further.
@@ -491,7 +495,11 @@ class calendar_plugin_row extends views_plugin_row_fields {
       ));
 
       $entities = $this->explode_values($event);
+      $date_info = $this->date_argument->view->date_info;
+      $from = $date_info->date_range[0];
+      $to = $date_info->date_range[1];
       foreach ($entities as $entity) {
+        if(($entity->date_start < $from && $entity->date_end < $from) || ($entity->date_start > $to && $entity->date_end > $to)) continue;
         switch ($this->options['colors']['legend']) {
           case 'type':
             $this->calendar_node_type_stripe($entity);
@@ -555,7 +563,7 @@ class calendar_plugin_row extends views_plugin_row_fields {
 
       // Get intersection of current day and the node value's duration (as strings in $to_zone timezone).
       $entity->calendar_start = $item_start < $start ? $start : $item_start;
-      $entity->calendar_end = !empty($item_end) ? ($item_end > $end ? $end : $item_end) : $node->calendar_start;
+      $entity->calendar_end = !empty($item_end) ? ($item_end > $end ? $end : $item_end) : $entity->calendar_start;
 
       // Make date objects
       $entity->calendar_start_date = date_create($entity->calendar_start, timezone_open($to_zone));
@@ -626,17 +634,15 @@ class calendar_plugin_row extends views_plugin_row_fields {
       return;
     }
 
-    $entity = $result->entity;
-    $term_field_name = $this->options['colors']['taxonomy_field'];
-    if ($terms_for_entity = field_get_items($this->view->base_table, $entity, $term_field_name)) {
-      foreach ($terms_for_entity as $delta => $item) {
-        $term_for_entity = taxonomy_term_load($item['tid']);
-        if (!array_key_exists($term_for_entity->tid, $colors) || $colors[$term_for_entity->tid] == CALENDAR_EMPTY_STRIPE) {
-          continue;
-        }
-        $result->stripe[] = $colors[$term_for_entity->tid];
-        $result->stripe_label[] = $term_for_entity->name;
+    $term_field_name = 'field_' . $this->options['colors']['taxonomy_field'];
+    $terms = $result->row->{$term_field_name};
+    foreach ($terms as $term_key => $term_value) {
+      $term = $term_value['raw']['taxonomy_term'];
+      if (!array_key_exists($term->tid, $colors) || $colors[$term->tid] == CALENDAR_EMPTY_STRIPE) {
+        continue;
       }
+      $result->stripe[] = $colors[$term->tid];
+      $result->stripe_label[] = $term->name;
     }
 
     return;
