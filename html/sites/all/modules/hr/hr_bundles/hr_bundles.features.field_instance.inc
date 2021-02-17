@@ -111,54 +111,6 @@ function hr_bundles_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-hr_bundle-field_bundle_hid_access'.
-  $field_instances['node-hr_bundle-field_bundle_hid_access'] = array(
-    'bundle' => 'hr_bundle',
-    'default_value' => array(
-      0 => array(
-        'value' => 'open',
-      ),
-    ),
-    'deleted' => 0,
-    'description' => 'Select "Open" if you want HID users to add themselves to this cluster/sector.
-Select "Closed" if you want only HID managers to be allowed to add HID users to this cluster/sector.',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 23,
-      ),
-      'search_result' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_bundle_hid_access',
-    'label' => 'HID Access',
-    'required' => 1,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_buttons',
-      'weight' => 14,
-    ),
-  );
-
   // Exported field_instance: 'node-hr_bundle-field_bundle_type'.
   $field_instances['node-hr_bundle-field_bundle_type'] = array(
     'bundle' => 'hr_bundle',

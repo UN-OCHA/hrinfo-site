@@ -837,3 +837,11 @@ function hr_core_update_7048() {
   field_delete_field('field_bundle_hid_access');
   field_delete_field('field_bundle_hid_access');
 }
+
+/**
+ * Remove HID focal points field.
+ */
+function hr_core_update_7049() {
+  field_delete_field('field_users');
+  field_purge_batch(1);
+}

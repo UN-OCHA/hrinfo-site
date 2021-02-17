@@ -1,8 +1,0 @@
-name = Humanitarian ID contact reference field
-description = Provides a reference field for contacts
-core = 7.x
-package = Humanitarian ID
-version = 7.x-1.0
-dependencies[] = entity
-dependencies[] = field
-dependencies[] = hid_profiles

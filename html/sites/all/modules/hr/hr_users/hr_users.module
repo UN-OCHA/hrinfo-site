@@ -150,11 +150,11 @@ function hr_users_hybridauth_user_login($account, $data) {
   if (!empty($data) && $profile) {
     $changed = FALSE;
 
-    if (empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) || $profile->field_first_name[LANGUAGE_NONE][0]['value'] != $data['given_name']) {
+    if (empty($profile->field_first_name[LANGUAGE_NONE][0]['value']) || $profile->field_first_name[LANGUAGE_NONE][0]['value'] != $data['firstName']) {
       $profile->field_first_name[LANGUAGE_NONE][0]['value'] = $data['firstName'];
       $changed = TRUE;
     }
-    if (empty($profile->field_last_name[LANGUAGE_NONE][0]['value']) || $profile->field_last_name[LANGUAGE_NONE][0]['value'] != $data['family_name']) {
+    if (empty($profile->field_last_name[LANGUAGE_NONE][0]['value']) || $profile->field_last_name[LANGUAGE_NONE][0]['value'] != $data['lastName']) {
       $profile->field_last_name[LANGUAGE_NONE][0]['value'] = $data['lastName'];
       $changed = TRUE;
     }
