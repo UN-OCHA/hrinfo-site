@@ -84,37 +84,6 @@ function hr_operations_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_hid_access'.
-  $field_bases['field_hid_access'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_hid_access',
-    'field_permissions' => array(
-      'type' => 0,
-    ),
-    'indexes' => array(
-      'value' => array(
-        0 => 'value',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'list',
-    'settings' => array(
-      'allowed_values' => array(
-        'open' => 'Open (individuals in this contact list may be viewed by all HID users)',
-        'closed' => 'Closed (individuals in this contact list may only be viewed by verified responders)',
-        'inactive' => 'Inactive (will not show up on HID)',
-      ),
-      'allowed_values_function' => '',
-      'entity_translation_sync' => FALSE,
-      'profile2_private' => FALSE,
-    ),
-    'translatable' => 0,
-    'type' => 'list_text',
-  );
-
   // Exported field_base: 'field_launch_date'.
   $field_bases['field_launch_date'] = array(
     'active' => 1,
