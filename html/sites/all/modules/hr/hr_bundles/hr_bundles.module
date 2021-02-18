@@ -205,6 +205,9 @@ function hr_bundles_form_node_form_alter(&$form, &$form_state) {
  * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
  */
 function hr_bundles_node_access($node, $op, $account) {
+  if (in_array('administrator', $account->roles)) {
+    return NODE_ACCESS_IGNORE;
+  }
   if (isset($node->nid) && isset($node->{OG_AUDIENCE_FIELD}) && !empty($node->{OG_AUDIENCE_FIELD}) && isset($node->field_bundles) && ($op == 'update' || $op == 'delete')) {
     // Get the group id.
     $gid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
