@@ -362,12 +362,6 @@
     "drupal/redirect": {
         "version": "1.0.0-rc3"
     },
-    "drupal/redis": {
-        "version": "3.18.0"
-    },
-    "drupal/redis_info": {
-        "version": "1.0.0"
-    },
     "drupal/registry_autoload": {
         "version": "1.3.0"
     },
