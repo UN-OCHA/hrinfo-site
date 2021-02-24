@@ -1,0 +1,4 @@
+name = Humanitarian Contact Reference
+description = Removed module, in the file system, uninstalled, to avoid errors.
+core = 7.x
+package = Humanitarian ID

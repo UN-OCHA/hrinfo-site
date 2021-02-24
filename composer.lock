@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "063cb8775f5e32910f587bdb1574307d",
+    "content-hash": "d231fd41d0df33a13e4e031efb1b770d",
     "packages": [
         {
             "name": "composer/installers",
@@ -4334,9 +4334,6 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "HRINFO-1029 https://www.drupal.org/project/i18n/issues/2082573": "https://www.drupal.org/files/issues/2018-06-24/i18n-fatal-error-undefined-strings_update-2082573-54.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -7273,17 +7270,11 @@
         },
         {
             "name": "drupal/pdfpreview",
-            "version": "2.1.0",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/pdfpreview.git",
-                "reference": "7.x-2.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/pdfpreview-7.x-2.1.zip",
-                "reference": "7.x-2.1",
-                "shasum": "be552b6c6d64aadb68c991adaa034c4a22c615da"
+                "reference": "d335817cecffde1ba37f865733a7d9b510feea2e"
             },
             "require": {
                 "drupal/drupal": "*",
@@ -7291,13 +7282,19 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
-                    "version": "7.x-2.1",
-                    "datestamp": "1335210084",
+                    "version": "7.x-2.1+20-dev",
+                    "datestamp": "1455826439",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "HRINFO-1035 filemtime errors": "PATCHES/hrinfo-1035-pdfpreview-filemtime-error.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -7326,7 +7323,8 @@
             "homepage": "https://www.drupal.org/project/pdfpreview",
             "support": {
                 "source": "https://git.drupalcode.org/project/pdfpreview"
-            }
+            },
+            "time": "2016-02-18T20:09:04+00:00"
         },
         {
             "name": "drupal/phone",
@@ -8117,6 +8115,7 @@
                 },
                 "patches_applied": {
                     "HR.info issue 754": "PATCHES/restful-754.patch",
+                    "HRINFO-1035 undefined index": "PATCHES/hrinfo-1035-restful-undefined-index.patch",
                     "OPS-7193 PSR-4 files not picked up": "PATCHES/ops-7193-include-restful-files.patch"
                 }
             },

@@ -122,11 +122,7 @@ function hr_core_path_insert($path) {
  * Makes sure pathauto is not used when no path is set.
  */
 function hr_core_entity_presave($node, $type) {
-  // Path is sometimes set to 0.
-  if (empty($node->path)) {
-    $node->path = array();
-  }
-  if (!isset($node->path['pathauto'])) {
+  if ($type == 'node' && is_array($node->path) && !isset($node->path['pathauto'])) {
     $node->path['pathauto'] = FALSE;
   }
 }

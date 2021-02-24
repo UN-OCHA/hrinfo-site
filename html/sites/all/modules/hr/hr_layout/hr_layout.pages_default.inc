@@ -393,7 +393,7 @@ function hr_layout_default_page_manager_pages() {
   $pane->configuration = array(
     'admin_title' => '',
     'title' => 'What is HumanitarianResponse.info?',
-    'body' => '<iframe width="100%" height="200" src="https://www.youtube.com/embed/OAzNjYtabuM?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>',
+    'body' => '<iframe width="100%" height="200" src="https://www.youtube.com/embed/OAzNjYtabuM?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="fullscreen"></iframe>',
     'format' => 'hr_wysiwyg',
     'substitute' => TRUE,
   );

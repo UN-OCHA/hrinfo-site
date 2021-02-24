@@ -5,10 +5,3 @@ core = 7.x
 dependencies[] = imagemagick
 dependencies[] = image
 
-
-; Information added by Drupal.org packaging script on 2015-04-02
-version = "7.x-2.1+19-dev"
-core = "7.x"
-project = "pdfpreview"
-datestamp = "1428001083"
-

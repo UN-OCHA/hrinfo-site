@@ -14,13 +14,15 @@
           <?php endforeach; ?>
         </ul>
       </div>
-      <div class="panels-root-content-box">
-        <ul class="nav nav-pills nav-stacked">
-          <?php foreach ($root_content_array as $root_content): ?>
-            <li><?php print $root_content; ?></li>
-          <?php endforeach; ?>
-        </ul>
-      </div>
+      <?php if (!empty($root_content_array)): ?>
+        <div class="panels-root-content-box">
+          <ul class="nav nav-pills nav-stacked">
+            <?php foreach ($root_content_array as $root_content): ?>
+              <li><?php print $root_content; ?></li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+      <?php endif; ?>
     </div>
   </div>
 
