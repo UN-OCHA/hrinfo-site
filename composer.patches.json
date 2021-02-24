@@ -19,9 +19,6 @@
       "drupal/hybridauth": {
         "https://www.drupal.org/project/hybridauth/issues/3154070": "https://www.drupal.org/files/issues/2020-06-23/session_already_exist_exception-3154070-7.patch"
       },
-      "drupal/i18n": {
-        "HRINFO-1029 https://www.drupal.org/project/i18n/issues/2082573": "https://www.drupal.org/files/issues/2018-06-24/i18n-fatal-error-undefined-strings_update-2082573-54.patch"
-      },
       "drupal/media_youtube": {
         "Hotfix until the next version": "https://www.drupal.org/files/issues/2021-01-07/media_youtube-1572550-117.patch"
       },
@@ -41,8 +38,12 @@
       "drupal/panels": {
         "Stop logs caused by https://www.drupal.org/project/panels/issues/3032350#comment-13075861": "PATCHES/panels-style-settings-default.patch"
       },
+      "drupal/pdfpreview": {
+        "HRINFO-1035 filemtime errors": "PATCHES/hrinfo-1035-pdfpreview-filemtime-error.patch"
+      },
       "drupal/restful": {
         "HR.info issue 754": "PATCHES/restful-754.patch",
+        "HRINFO-1035 undefined index": "PATCHES/hrinfo-1035-restful-undefined-index.patch",
         "OPS-7193 PSR-4 files not picked up": "PATCHES/ops-7193-include-restful-files.patch"
       },
       "drupal/facetapi_bonus": {

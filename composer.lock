@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dca67f52ecc7599030e95f3e0daa0501",
+    "content-hash": "2bed5af0e07f8237ad2ae65b42dcdf77",
     "packages": [
         {
             "name": "composer/installers",
@@ -2315,10 +2315,13 @@
             "version": "1.9.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/entity": "*"
+                "drupal/entity": "self.version"
             },
             "type": "metapackage",
             "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-1.9",
                     "datestamp": "1518642010",
@@ -2352,10 +2355,6 @@
                 {
                     "name": "fago",
                     "homepage": "https://www.drupal.org/user/16747"
-                },
-                {
-                    "name": "mglaman",
-                    "homepage": "https://www.drupal.org/user/2416470"
                 }
             ],
             "description": "Provides token replacements for all properties that have no tokens and are known to the entity API.",
@@ -4335,9 +4334,6 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "HRINFO-1029 https://www.drupal.org/project/i18n/issues/2082573": "https://www.drupal.org/files/issues/2018-06-24/i18n-fatal-error-undefined-strings_update-2082573-54.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -4449,7 +4445,7 @@
             "version": "1.27.0",
             "require": {
                 "drupal/drupal": "*",
-                "drupal/i18n": "*"
+                "drupal/i18n": "self.version"
             },
             "type": "metapackage",
             "extra": {
@@ -6259,10 +6255,13 @@
             "version": "2.10.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/og": "*"
+                "drupal/og": "self.version"
             },
             "type": "metapackage",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-2.10",
                     "datestamp": "1530174224",
@@ -6304,10 +6303,6 @@
                 {
                     "name": "dww",
                     "homepage": "https://www.drupal.org/user/46549"
-                },
-                {
-                    "name": "joelpittet",
-                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "merlinofchaos",
@@ -6551,11 +6546,14 @@
             "version": "2.10.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/og": "*",
+                "drupal/og": "self.version",
                 "drupal/views_bulk_operations": "*"
             },
             "type": "metapackage",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-2.10",
                     "datestamp": "1530174224",
@@ -6597,10 +6595,6 @@
                 {
                     "name": "dww",
                     "homepage": "https://www.drupal.org/user/46549"
-                },
-                {
-                    "name": "joelpittet",
-                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "merlinofchaos",
@@ -7276,17 +7270,11 @@
         },
         {
             "name": "drupal/pdfpreview",
-            "version": "2.1.0",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/pdfpreview.git",
-                "reference": "7.x-2.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/pdfpreview-7.x-2.1.zip",
-                "reference": "7.x-2.1",
-                "shasum": "be552b6c6d64aadb68c991adaa034c4a22c615da"
+                "reference": "d335817cecffde1ba37f865733a7d9b510feea2e"
             },
             "require": {
                 "drupal/drupal": "*",
@@ -7294,13 +7282,19 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
-                    "version": "7.x-2.1",
-                    "datestamp": "1335210084",
+                    "version": "7.x-2.1+20-dev",
+                    "datestamp": "1455826439",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "HRINFO-1035 filemtime errors": "PATCHES/hrinfo-1035-pdfpreview-filemtime-error.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -7329,7 +7323,8 @@
             "homepage": "https://www.drupal.org/project/pdfpreview",
             "support": {
                 "source": "https://git.drupalcode.org/project/pdfpreview"
-            }
+            },
+            "time": "2016-02-18T20:09:04+00:00"
         },
         {
             "name": "drupal/phone",
@@ -8023,6 +8018,7 @@
                 },
                 "patches_applied": {
                     "HR.info issue 754": "PATCHES/restful-754.patch",
+                    "HRINFO-1035 undefined index": "PATCHES/hrinfo-1035-restful-undefined-index.patch",
                     "OPS-7193 PSR-4 files not picked up": "PATCHES/ops-7193-include-restful-files.patch"
                 }
             },
@@ -9381,10 +9377,13 @@
             "version": "2.5.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/variable": "*"
+                "drupal/variable": "self.version"
             },
             "type": "metapackage",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-2.5",
                     "datestamp": "1398250127",
@@ -9435,10 +9434,13 @@
             "version": "2.5.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/variable": "*"
+                "drupal/variable": "self.version"
             },
             "type": "metapackage",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-2.5",
                     "datestamp": "1398250127",
@@ -10483,12 +10485,6 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
-            "funding": [
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/pdepend/pdepend",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-06-20T10:53:13+00:00"
         },
         {

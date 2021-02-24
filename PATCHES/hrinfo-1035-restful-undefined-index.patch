@@ -1,0 +1,13 @@
+diff --git a/modules/restful_token_auth/restful_token_auth.module b/modules/restful_token_auth/restful_token_auth.module
+index 1b24e28..2d4d010 100644
+--- a/modules/restful_token_auth/restful_token_auth.module
++++ b/modules/restful_token_auth/restful_token_auth.module
+@@ -131,7 +131,7 @@ function restful_token_auth_restful_resource_alter(ResourceInterface &$resource)
+  * Implements hook_user_update().
+  */
+ function restful_token_auth_user_update(&$edit, $account, $category) {
+-  if ($edit['status']) {
++  if (!empty($edit['status'])) {
+     return;
+   }
+ 

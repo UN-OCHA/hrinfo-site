@@ -1,0 +1,14 @@
+diff --git a/pdfpreview.module b/pdfpreview.module
+index e2fc525..528f67d 100644
+--- a/pdfpreview.module
++++ b/pdfpreview.module
+@@ -333,6 +333,9 @@ function pdfpreview_imagemagick_arguments_alter(&$args, &$context) {
+  */
+ function _pdfpreview_create_preview($file) {
+   if (!is_array($file)) $file = (array) $file;
++  if (!file_exists($file['uri'])) {
++    return NULL;
++  }
+   $output_filename = _pdfpreview_output_filename($file);
+   // Check if a preview already exists.
+   if (file_exists($output_filename)) {

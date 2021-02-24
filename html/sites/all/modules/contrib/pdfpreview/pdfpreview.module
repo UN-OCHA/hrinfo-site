@@ -296,7 +296,8 @@ function pdfpreview_admin() {
  * @see _pdfpreview_create_preview()
  */
 function _pdfpreview_convert_first_page($source, $dest, $args = array()) {
-  $args['alpha'] = '-alpha remove';
+  $args['background'] = '-background white';
+  $args['flatten'] = '-flatten';
   $args['previewsize'] = '-resize ' . escapeshellarg(variable_get('pdfpreview_previewsize', PDFPREVIEW_DEFAULT_SIZE));
   $args['pdfpreview'] = TRUE;
   $output_directory = dirname($dest);
@@ -332,6 +333,9 @@ function pdfpreview_imagemagick_arguments_alter(&$args, &$context) {
  */
 function _pdfpreview_create_preview($file) {
   if (!is_array($file)) $file = (array) $file;
+  if (!file_exists($file['uri'])) {
+    return NULL;
+  }
   $output_filename = _pdfpreview_output_filename($file);
   // Check if a preview already exists.
   if (file_exists($output_filename)) {
