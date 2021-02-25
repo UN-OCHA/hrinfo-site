@@ -917,18 +917,19 @@ function hr_core_form_panels_ipe_edit_control_form_alter(&$form, &$form_state) {
 function hr_core_panels_ipe_clear_cache($form, &$form_state) {
   if (!empty($form_state['panelizer entity'])) {
     $entity = $form_state['panelizer entity'];
-    $uri = entity_uri($entity->entity_type, $entity);
-    // Clear all language cache.
-    $uri['options']['language'] = '';
-    if ($url = url($uri['path'], $uri['options'])) {
-      // Manually delete the cache because the cid is a full url we don't know
-      // how's going to be generated.
-      // @See cache_clear_all().
-      db_delete('cache_page')
-        ->condition('cid', '%' . db_like($url) . '%', 'LIKE')
-        ->execute();
+    if (!empty($entity->panelizer) && !empty($entity->panelizer['default'])) {
+      $uri = entity_uri($entity->panelizer['default']->entity_type, $entity);
+      // Clear all language cache.
+      $uri['options']['language'] = '';
+      if ($url = url($uri['path'], $uri['options'])) {
+        // Manually delete the cache because the cid is a full url we don't know
+        // how's going to be generated.
+        // @See cache_clear_all().
+        db_delete('cache_page')
+          ->condition('cid', '%' . db_like($url) . '%', 'LIKE')
+          ->execute();
+      }
     }
-
   }
 }
 
