@@ -8,7 +8,7 @@
 include_once 'hr_pages.features.inc';
 
 /**
- * Implements hook_og_features_registry()
+ * Implements hook_og_features_registry().
  */
 function hr_pages_og_features_registry() {
   $registry = array();
@@ -26,7 +26,7 @@ function hr_pages_og_features_registry() {
 }
 
 /**
- * Implements hook_page_alter()
+ * Implements hook_page_alter().
  *
  * Hide the sidebar when "hide vertical menu" is checked.
  */

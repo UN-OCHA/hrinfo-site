@@ -27,8 +27,11 @@ function hr_documents_key_documents_edit_form($form, &$form_state) {
   if (isset($form_state['documents_count'])) {
     $documents_count = $form_state['documents_count'];
   }
-  else {
+  elseif (isset($conf['documents'])) {
     $documents_count = count($conf['documents']);
+  }
+  else {
+    $documents_count = 1;
   }
 
   // Add a wrapper for the documents and more button.
@@ -56,8 +59,8 @@ function hr_documents_key_documents_edit_form($form, &$form_state) {
     );
   }
 
-  // We name our button 'hr_documents_key_list_more' to avoid conflicts with other modules using
-  // Ajax-enabled buttons with the id 'more'.
+  // We name our button 'hr_documents_key_list_more' to avoid conflicts with
+  // other modules using Ajax-enabled buttons with the id 'more'.
   $form['documents_wrapper']['hr_documents_key_list_more'] = array(
     '#type' => 'submit',
     '#value' => t('Add another item'),
