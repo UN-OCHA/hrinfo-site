@@ -1308,17 +1308,6 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'category' => 'Content by HR.info',
     ),
 
-    // New assessments.
-    'ar_assessments_assessments' => array(
-      'category' => 'Assessments by<br>Assessment Registry',
-    ),
-    'ar_assessments_key_assessments' => array(
-      'category' => 'Assessments by<br>Assessment Registry',
-    ),
-    'ar_assessments_featured_assessments' => array(
-      'category' => 'Assessments by<br>Assessment Registry',
-    ),
-
     // Outdated.
     'bean_pane' => array(
       'category' => 'Outdated',
