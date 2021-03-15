@@ -1298,8 +1298,13 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     'assessments' => array(
       'category' => 'Content by HR.info',
     ),
+    'ar_assessments' => array(
+      'category' => 'Content from AR',
+      'title' => 'Assessments from Registry',
+    ),
     'ocha_assessments' => array(
       'category' => 'Content from AR',
+      'title' => 'Assessments from Registry',
     ),
 
     // Outdated.

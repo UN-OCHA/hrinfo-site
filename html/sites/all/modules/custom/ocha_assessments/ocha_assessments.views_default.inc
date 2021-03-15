@@ -8,7 +8,7 @@
 /**
  * Implements hook_views_default_views().
  */
-function ochochaassessments_views_default_views() {
+function ocha_assessments_views_default_views() {
   $export = array();
 
   $view = new view();

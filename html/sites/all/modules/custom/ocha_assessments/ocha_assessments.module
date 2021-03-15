@@ -125,7 +125,7 @@ function ocha_assessments_base_url() {
 /**
  * Basic Auth.
  */
-function ocha_assessments_basis_auth() {
+function ocha_assessments_basic_auth() {
   return variable_get('ocha_assessments_basic_auth', '');
 }
 
@@ -155,7 +155,7 @@ function ocha_assessments_operation_map($node) {
  */
 function ocha_assessments_list($location_id = NULL) {
   $base_url = ocha_assessments_base_url();
-  $basic_auth = ocha_assessments_basis_auth();
+  $basic_auth = ocha_assessments_basic_auth();
   $src = $base_url . '/rest/list-data';
 
   if ($location_id) {
@@ -177,7 +177,7 @@ function ocha_assessments_list($location_id = NULL) {
  */
 function ocha_assessments_table($location_id = NULL) {
   $base_url = ocha_assessments_base_url();
-  $basic_auth = ocha_assessments_basis_auth();
+  $basic_auth = ocha_assessments_basic_auth();
   $src = $base_url . '/rest/table-data';
 
   if ($location_id) {
@@ -199,7 +199,7 @@ function ocha_assessments_table($location_id = NULL) {
  */
 function ocha_assessments_map($location_id = NULL) {
   $base_url = ocha_assessments_base_url();
-  $basic_auth = ocha_assessments_basis_auth();
+  $basic_auth = ocha_assessments_basic_auth();
   $src = $base_url . '/rest/map-data';
 
   if ($location_id) {
