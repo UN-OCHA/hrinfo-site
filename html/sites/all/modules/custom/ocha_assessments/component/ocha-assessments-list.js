@@ -241,7 +241,7 @@ const createMarker = () => document.createComment('');
  *    * (") then any non-("), or
  *    * (') then any non-(')
  */
-const lastAttributeNameRegex =
+const lastAttributeNameRegex = 
 // eslint-disable-next-line no-control-regex
 /([ \x09\x0a\x0c\x0d])([^\0-\x1F\x7F-\x9F "'>=/]+)([ \x09\x0a\x0c\x0d]*=[ \x09\x0a\x0c\x0d]*(?:[^ \x09\x0a\x0c\x0d"'`<>=]*|"[^"]*|'[^']*))$/;
 
@@ -2343,7 +2343,7 @@ class LitElement extends UpdatingElement {
             // The last item is kept to try to preserve the cascade order with the
             // assumption that it's most important that last added styles override
             // previous styles.
-            const addStyles = (styles, set) => styles.reduceRight((set, s) =>
+            const addStyles = (styles, set) => styles.reduceRight((set, s) => 
             // Note: On IE set.add() does not return the set
             Array.isArray(s) ? addStyles(s, set) : (set.add(s), set), set);
             // Array.from does not work on Set in IE, otherwise return
@@ -3739,29 +3739,19 @@ class OchaAssessmentsBase extends LitElement {
   }
 
   changeSrc(event) {
-    this.src = event.currentTarget.value;
-  }
-
-  getDropdownLabel(id) {
-    const labels = {
-      authored_on: 'Date',
-      local_groups: 'Local group',
-      clusters_sectors: 'Cluster/sector',
-      countries: 'Country',
-      disasters_emergencies: 'Disasters/Emergencies',
-      disasters: 'Disaster',
-      locations: 'Location',
-      organizations: 'Organization',
-      participating_organizations: 'Participating organization',
-      population_types: 'Population type',
-      themes: 'Theme',
-    };
-
-    if (labels[id]) {
-      return labels[id];
+    if (event.currentTarget.value === '') {
+      this.src = this.resetUrl;
     }
+    else {
+      this.activeFilters.push(event.currentTarget.value);
 
-    return id;
+      const url = new URL(this.resetUrl);
+      this.activeFilters.forEach(function (filter) {
+        url.searchParams.append('f[]', filter);
+      });
+
+      this.src = url.toString();
+    }
   }
 
   buildFacets() {
@@ -3770,6 +3760,7 @@ class OchaAssessmentsBase extends LitElement {
     }
 
     let dropdowns = [];
+    this.activeFilters = [];
 
     for (const child_id in this.facets) {
       // Skip disabled filters.
@@ -3782,21 +3773,20 @@ class OchaAssessmentsBase extends LitElement {
 
       dropdown = {
         id: child_id,
-        label: this.getDropdownLabel(child_id),
+        label: child.label,
         selected: null,
-        selected_url: null,
         options: []
       };
 
-      child.forEach(function (option) {
-        if (typeof option.values.active != 'undefined') {
-          dropdown.selected = option.values.value;
-          dropdown.selected_url = option.url;
+      child.options.forEach(function (option) {
+        if (typeof option.active !== 'undefined' && option.active) {
+          dropdown.selected = option.key;
+          this.activeFilters.push(option.key);
         }
 
         dropdown.options.push({
-          key: option.url,
-          label: option.values.value
+          key: option.key,
+          label: option.label
         });
       });
 
@@ -3840,9 +3830,9 @@ class OchaAssessmentsBase extends LitElement {
       value: ''
     };
 
-    if (dropdown.selected_url) {
+    if (dropdown.selected) {
       emptytOption.label = '- Remove filter -';
-      emptytOption.value = dropdown.selected_url;
+      emptytOption.value = dropdown.selected;
     }
 
     return html`
@@ -3852,7 +3842,7 @@ class OchaAssessmentsBase extends LitElement {
           <high-option value="${emptytOption.value}">${emptytOption.label}</high-option>
           ${
             dropdown.options.map(function (o) {
-              if (o.label == dropdown.selected) {
+              if (o.key == dropdown.selected) {
                 return html`
                   <high-option value="" selected>${o.label}</high-option>
                 `
@@ -4058,7 +4048,7 @@ class OchaAssessmentsList extends OchaAssessmentsBase {
             r =>
               html`
                 <li>
-                  <h2 class="cd-list__title"><a href="${this.baseurl}/node/${r.nid}">${r.title}</a></h2>
+                  <h2 class="cd-list__title"><a href="${this.baseurl}/assessment/${r.uuid}">${r.title}</a></h2>
                   <div class="cd-list__description">
                     <p>
                       <span class="label">Leading/Coordinating Organization(s): </span>
