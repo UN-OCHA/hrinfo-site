@@ -6,6 +6,15 @@
  */
 
 /**
+ * Implements hook_views_api().
+ */
+function ocha_assessments_views_api() {
+  return array(
+    'api' => 3.0,
+  );
+}
+
+/**
  * Implements hook_menu().
  */
 function ocha_assessments_menu() {
