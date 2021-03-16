@@ -26,7 +26,7 @@ function hr_assessments_og_features_registry() {
 }
 
 /**
- * Implementation of hook_entity_info_alter().
+ * Implements hook_entity_info_alter().
  */
 function hr_assessments_entity_info_alter(&$entity_info) {
   // Quick links.
@@ -131,7 +131,7 @@ function hr_assessments_field_widget_form_alter(&$element, &$form_state, $contex
         if (is_numeric($tid)) {
           $option_label = array();
           $parents = taxonomy_get_parents_all($tid);
-          foreach ($parents as $parent_id => $parent) {
+          foreach ($parents as $parent) {
             array_unshift($option_label, entity_label('taxonomy_term', $parent));
           }
           $option = implode(' > ', $option_label);
@@ -143,7 +143,7 @@ function hr_assessments_field_widget_form_alter(&$element, &$form_state, $contex
 }
 
 /**
- * Implements hook_clone_node_alter.
+ * Implements hook_clone_node_alter().
  */
 function hr_assessments_clone_node_alter(&$node, $context) {
   if ($node->type != 'hr_assessment') {

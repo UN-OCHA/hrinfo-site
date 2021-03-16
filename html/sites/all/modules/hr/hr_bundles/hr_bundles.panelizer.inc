@@ -105,36 +105,6 @@ function hr_bundles_panelizer_defaults() {
   $display->content['new-95e3e805-0870-4575-b617-cec3ea15411d'] = $pane;
   $display->panels['column1'][1] = 'new-95e3e805-0870-4575-b617-cec3ea15411d';
   $pane = new stdClass();
-  $pane->pid = 'new-b6ec1f94-7313-4b3a-ba67-c5b2145a3674';
-  $pane->panel = 'column1';
-  $pane->type = 'views_panes';
-  $pane->subtype = 'hr_assessments_panes-panel_pane_1';
-  $pane->shown = TRUE;
-  $pane->access = array();
-  $pane->configuration = array(
-    'more_link' => 0,
-    'use_pager' => 0,
-    'pager_id' => '0',
-    'items_per_page' => '5',
-    'context' => array(
-      1 => 'panelizer',
-    ),
-    'override_title' => 0,
-    'override_title_text' => '',
-  );
-  $pane->cache = array();
-  $pane->style = array(
-    'settings' => NULL,
-    'style' => 'hr_highlighted',
-  );
-  $pane->css = array();
-  $pane->extras = array();
-  $pane->position = 3;
-  $pane->locks = array();
-  $pane->uuid = 'b6ec1f94-7313-4b3a-ba67-c5b2145a3674';
-  $display->content['new-b6ec1f94-7313-4b3a-ba67-c5b2145a3674'] = $pane;
-  $display->panels['column1'][3] = 'new-b6ec1f94-7313-4b3a-ba67-c5b2145a3674';
-  $pane = new stdClass();
   $pane->pid = 'new-72991a33-ae33-4088-adbf-5f8b348b0e45';
   $pane->panel = 'column2';
   $pane->type = 'views_panes';

@@ -2,3 +2,6 @@ name = OCHA Assessments
 description = OCHA Assessments integration
 core = 7.x
 package = OCHA
+
+files[] = views/handlers/ocha_assessments_handler_field.inc
+files[] = views/plugins/ocha_assessments_plugin_query.inc

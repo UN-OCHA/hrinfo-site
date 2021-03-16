@@ -219,13 +219,12 @@ function hr_operations_strongarm() {
     'hr_reliefweb_ocha_products-hr_reliefweb_ocha_products' => TRUE,
     'twitter-twitter' => TRUE,
     'fieldable_panels_pane-fieldable_panels_pane' => TRUE,
-    'fieldable_panels_pane-hr_assessments' => TRUE,
-    'views_panes-hr_assessments_panes-list' => TRUE,
     'views_panes-hr_events_panes-upcoming' => TRUE,
     'views_panes-hr_events_panes-upcoming_from_context' => TRUE,
     'views_panes-hr_news_panes-list' => TRUE,
     'views_panes-hr_documents_panes-list' => TRUE,
     'views_panes-hr_infographics_panes-list' => TRUE,
+    'views_panes-assessments_from_registry-panel_pane_1' => TRUE,
   );
   $export['panelizer_node:hr_operation_allowed_types'] = $strongarm;
 
