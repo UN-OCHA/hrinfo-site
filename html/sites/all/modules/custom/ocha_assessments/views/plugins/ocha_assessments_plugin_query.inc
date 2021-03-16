@@ -43,9 +43,9 @@ class OchaAssessmentsPluginQuery extends views_plugin_query {
 
     $limit = variable_get('ocha_assessments_panel_display_limit', 5);
     $base_url = ocha_assessments_base_url();
-    $src = $base_url . '/rest/list-data';
+    $src = $base_url . '/rest/list-data?sort=-field_date';
     if (!empty($filters)) {
-      $src .= '?' . $filters;
+      $src .= '&' . $filters;
     }
 
     $request = drupal_http_request($src);
