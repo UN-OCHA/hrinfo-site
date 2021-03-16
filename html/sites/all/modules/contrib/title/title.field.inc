@@ -188,6 +188,8 @@ function title_field_formatter_view($entity_type, $entity, $field, $instance, $l
 }
 
 /**
+ * Validate the list of values.
+ *
  * Validate that a space-separated list of values are lowercase and appropriate
  * for use as HTML classes.
  *

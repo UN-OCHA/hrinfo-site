@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @file
  * Field handler to present field title with link to the entity.
  *
  * @ingroup views_field_handlers
  */
-
 class views_handler_title_field extends views_handler_field_field {
 
-  function option_definition() {
+  /**
+   *
+   */
+  public function option_definition() {
     $options = parent::option_definition();
     $options['link_to_entity'] = array('default' => isset($this->definition['link_to_entity default']) ? $this->definition['link_to_entity default'] : FALSE);
     return $options;
@@ -19,7 +20,7 @@ class views_handler_title_field extends views_handler_field_field {
   /**
    * Provide link to entity option.
    */
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     $form['link_to_entity'] = array(
       '#title' => t('Link this field to the original entity'),
       '#description' => t("Enable to override this field's links."),
@@ -30,12 +31,18 @@ class views_handler_title_field extends views_handler_field_field {
     parent::options_form($form, $form_state);
   }
 
-  function advanced_render($values) {
+  /**
+   *
+   */
+  public function advanced_render($values) {
     $this->original_values = $values;
     return parent::advanced_render($values);
   }
 
-  function render_item($count, $item) {
+  /**
+   *
+   */
+  public function render_item($count, $item) {
     if (!empty($this->options['link_to_entity'])) {
       $values = $this->original_values;
       $entity_type = $this->definition['entity_tables'][$this->base_table];

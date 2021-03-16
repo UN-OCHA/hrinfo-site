@@ -5,6 +5,9 @@
  */
 class TitleTranslationTestCase extends DrupalWebTestCase {
 
+  /**
+   *
+   */
   public static function getInfo() {
     return array(
       'name' => 'Replaced fields translation',
@@ -22,7 +25,7 @@ class TitleTranslationTestCase extends DrupalWebTestCase {
   /**
    * {@inheritdoc}
    */
-  function setUp(array $modules = array()) {
+  public function setUp(array $modules = array()) {
     // Core.
     $modules[] = 'field_test';
     $modules[] = 'locale';
@@ -260,7 +263,10 @@ class TitleTranslationTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Checks that the field values and optionally the legacy ones match the given values.
+   * Checks the field values.
+   *
+   * Checks that the field values and optionally the legacy ones match the given
+   * values.
    */
   protected function checkFieldValues($term, $values, $langcode, $legacy_match = TRUE) {
     foreach ($values as $name => $value) {
@@ -273,7 +279,7 @@ class TitleTranslationTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Checks that the legacy field values stored in the database match the given values.
+   * Checks that the legacy field values in the database match the given values.
    */
   protected function checkLegacyValues($term, $values) {
     $record = db_query('SELECT * FROM {taxonomy_term_data} t WHERE t.tid = :tid', array(':tid' => $term->tid))->fetchAssoc();

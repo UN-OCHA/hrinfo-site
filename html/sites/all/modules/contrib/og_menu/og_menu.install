@@ -276,3 +276,16 @@ function og_menu_update_7307() {
 function og_menu_update_7308() {
   cache_clear_all(NULL, 'cache_menu');
 }
+
+/**
+ * Set translation settings at OG menus.
+ */
+function og_menu_update_7309() {
+  if (module_exists('i18n_menu')) {
+    $sql = "UPDATE menu_custom AS mc
+        RIGHT JOIN og_menu AS ogm ON ogm.menu_name = mc.menu_name
+        SET mc.i18n_mode = :i18n_mode
+        WHERE mc.i18n_mode = 0";
+    db_query($sql, array(':i18n_mode' => variable_get('og_menu_default_i18n_mode', I18N_MODE_NONE)));
+  }
+}

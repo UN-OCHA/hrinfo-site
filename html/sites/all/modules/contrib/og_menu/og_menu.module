@@ -253,11 +253,16 @@ function og_menu_block_view($delta = '') {
     $menu = array_shift($menus);
 
     if ($menu) {
+      $title = $menu['title'];
+      if (function_exists('i18n_string') && module_exists('i18n_menu')) {
+        $title = filter_xss(i18n_string('menu:menu:' . $menu['menu_name'] . ':title', $title, array('sanitize' => FALSE)));
+      }
+
       if (variable_get('og_menu_block_links', FALSE)) {
-        $block['subject'] = l($menu['title'], $menu['group_type'] . '/' . $menu['gid']);
+        $block['subject'] = l($title, $menu['group_type'] . '/' . $menu['gid']);
       }
       else {
-        $block['subject'] = check_plain($menu['title']);
+        $block['subject'] = $title;
       }
       $block['content'] = menu_tree($menu['menu_name']);
       // Add contextual links.
@@ -277,9 +282,13 @@ function og_menu_block_view($delta = '') {
     $block['content'] = array();
 
     foreach ($menus as $menu) {
-      $title = check_plain($menu['title']);
+      $menu_title = $menu['title'];
+      if (function_exists('i18n_string') && module_exists('i18n_menu')) {
+        $menu_title = filter_xss(i18n_string('menu:menu:' . $menu['menu_name'] . ':title', $menu_title, array('sanitize' => FALSE)));
+      }
+      $title = $menu_title;
       if (variable_get('og_menu_block_links', FALSE)) {
-        $title = l($menu['title'], $menu['group_type'] . '/' . $menu['gid']);
+        $title = l($menu_title, $menu['group_type'] . '/' . $menu['gid']);
       }
       if ($tree = menu_tree($menu['menu_name'])) {
         if ($plural) {
@@ -796,11 +805,15 @@ function og_menu_node_prepare($node) {
 function og_menu_node_insert($node) {
   if (og_is_group('node', $node)) {
     if (isset($node->og_menu) && $node->og_menu) {
-      menu_save(array(
+      $menu = array(
         'menu_name' => 'menu-og-' . $node->nid,
         'title' => $node->title,
         'description' => t('OG Menu for') . ' ' . check_plain($node->title),
-      ));
+      );
+      if (module_exists('i18n_menu')) {
+        $menu['i18n_mode'] = variable_get('og_menu_default_i18n_mode', I18N_MODE_NONE);
+      }
+      menu_save($menu);
       og_menu_update_menu('menu-og-' . $node->nid, $node->nid, 'node');
     }
   }
@@ -815,11 +828,15 @@ function og_menu_node_update($node) {
       if ($node->og_menu) {
         $menu = og_menu_get_group_menus(array('node' => array($node->nid)));
         if (empty($menu)) {
-          menu_save(array(
+          $menu = array(
             'menu_name' => 'menu-og-' . $node->nid,
             'title' => $node->title,
             'description' => t('OG Menu for') . ' ' . check_plain($node->title),
-          ));
+          );
+          if (module_exists('i18n_menu')) {
+            $menu['i18n_mode'] = variable_get('og_menu_default_i18n_mode', I18N_MODE_NONE);
+          }
+          menu_save($menu);
           og_menu_update_menu('menu-og-' . $node->nid, $node->nid, 'node');
         }
       }
@@ -1308,4 +1325,26 @@ function _og_menu_add_menufieldset(&$form, $options) {
     '#default_value' => $link['weight'],
     '#description' => t('Menu links with smaller weights are displayed before links with larger weights.'),
   );
+}
+
+/**
+ * Implements hook_translated_menu_link_alter().
+ */
+function og_menu_translated_menu_link_alter(&$link) {
+  // i18n_menu will mark items as disabled on the og menu overview and edit
+  // forms. This can cause menu links to be disabled when saving the form of
+  // a translated menu. i18n_menu already checks not to do this on the
+  // admin/structure/menu pages and uses this flag to check whether it has
+  // processed a link already or not.
+  if (module_exists('i18n_menu')) {
+    // Skip if administering this menu or this menu item.
+    if (arg(0) == 'group' && arg(3) == 'admin' && arg(4) == 'menus') {
+      if ($link['menu_name'] == arg(5)) {
+        $link['i18n_menu'] = TRUE;
+      }
+      elseif (arg(6) == 'item' && arg(7) == $link['mlid']) {
+        $link['i18n_menu'] = TRUE;
+      }
+    }
+  }
 }

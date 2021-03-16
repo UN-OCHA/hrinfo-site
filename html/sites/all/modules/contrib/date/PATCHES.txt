@@ -5,3 +5,7 @@ HR.info issue 913
 Source: PATCHES/hrinfo-913.patch
 
 
+HR.info issue 1025
+Source: PATCHES/hrinfo-1025.date-popup.patch
+
+
