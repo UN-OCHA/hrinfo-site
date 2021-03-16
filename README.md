@@ -7,6 +7,12 @@ previously). Pinned modules should be checked before updating them. Some
 modules don't have recent releases, so we're on the dev branch. Watch out for
 unintended updates for those.
 
+16/03/2021 Pinned Date and Redirect modules during a composer update. Date
+because there's a warning to wait till version 2.12
+https://www.drupal.org/project/date/releases/7.x-2.11
+and Redirect because there are a lot of changes and it would be better to test
+more thoroughly before the deployment.
+
 Known issues:
 Previews disappear without explanation:
 https://humanitarian.atlassian.net/browse/OPS-7319

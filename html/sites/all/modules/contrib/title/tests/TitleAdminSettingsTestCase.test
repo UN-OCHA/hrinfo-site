@@ -5,6 +5,9 @@
  */
 class TitleAdminSettingsTestCase extends DrupalWebTestCase {
 
+  /**
+   *
+   */
   public static function getInfo() {
     return array(
       'name' => 'Admin settings',
@@ -21,7 +24,7 @@ class TitleAdminSettingsTestCase extends DrupalWebTestCase {
   /**
    * {@inheritdoc}
    */
-  function setUp(array $modules = array()) {
+  public function setUp(array $modules = array()) {
     // Core.
     $modules[] = 'field_test';
     $modules[] = 'taxonomy';

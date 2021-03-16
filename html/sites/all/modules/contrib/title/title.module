@@ -37,7 +37,8 @@ function title_module_implements_alter(&$implementations, $hook) {
         $implementations['title'] = $group;
         break;
 
-      // The following hook implementations should be executed after entity_translation.
+      // The following hook implementations should be executed after
+      // entity_translation.
       case 'entity_load':
         if (isset($implementations['entity_translation'])) {
           $length = array_search('entity_translation', array_keys($implementations)) + 1;
@@ -132,7 +133,6 @@ function title_entity_label($entity, $type, $langcode = NULL) {
     return isset($label) ? $label : $entity->{$legacy_field};
   }
   // Otherwise if we have a fallback defined we use the original label callback.
-
   return property_exists($entity, $legacy_field) ? $entity->{$legacy_field} : NULL;
 }
 
@@ -183,7 +183,7 @@ function title_field_attach_update($entity_type, $entity) {
   // Reset the field_attach_presave static cache so that subsequent saves work
   // correctly.
   $sync = &drupal_static('title_field_attach_presave', array());
-  list($id, , ) = entity_extract_ids($entity_type, $entity);
+  list($id, ,) = entity_extract_ids($entity_type, $entity);
   unset($sync[$entity_type][$id]);
 
   // Immediately after saving the entity we need to ensure that the legacy field
@@ -436,6 +436,10 @@ function title_entity_sync($entity_type, &$entity, $langcode = NULL, $set = FALS
     $langcode = $set ? title_entity_language($entity_type, $entity) : title_active_language();
   }
 
+  if (is_object($langcode)) {
+    $langcode = $langcode->language;
+  }
+
   // We do not need to perform synchronization more than once.
   if (!$set && !empty($id) && !empty($sync[$entity_type][$id][$langcode][$set])) {
     return;
@@ -592,7 +596,7 @@ function title_field_attach_form($entity_type, $entity, &$form, &$form_state, $l
   $fr_info = title_field_replacement_info($entity_type);
 
   if (!empty($fr_info)) {
-    foreach ($fr_info as $legacy_field => $info)  {
+    foreach ($fr_info as $legacy_field => $info) {
       if (isset($form[$legacy_field]) && title_field_replacement_enabled($entity_type, $bundle, $legacy_field)) {
         // Inherit the access from the title widget, so that other modules
         // restricting access to it keep working.
@@ -650,7 +654,7 @@ function title_field_attach_submit($entity_type, $entity, $form, &$form_state) {
 }
 
 /**
- * Implements of hook_menu().
+ * Implements hook_menu().
  */
 function title_menu() {
   $items = array();
@@ -722,7 +726,7 @@ function title_field_extra_fields_alter(&$info) {
         foreach ($entity_info[$entity_type]['field replacement'] as $field_name => $field_replacement_info) {
           if (title_field_replacement_enabled($entity_type, $bundle_name, $field_name)) {
             // Remove the replaced legacy field.
-            unset($info[$entity_type][$bundle_name]['form'][$field_name],  $info[$entity_type][$bundle_name]['display'][$field_name]);
+            unset($info[$entity_type][$bundle_name]['form'][$field_name], $info[$entity_type][$bundle_name]['display'][$field_name]);
           }
         }
       }
@@ -844,13 +848,13 @@ function title_field_replacement_is_label($entity_type, $field_name) {
 /**
  * Returns the legacy field replaced by the given field name.
  *
-  * @param $entity_type
+ * @param $entity_type
  *   The name of the entity type.
  * @param $field_name
  *   The replacing field name.
  *
- *  @return
- *    The replaced legacy field name or FALSE if none available.
+ * @return
+ *   The replaced legacy field name or FALSE if none available.
  */
 function title_field_replacement_get_legacy_field($entity_type, $field_name) {
   $result = FALSE;

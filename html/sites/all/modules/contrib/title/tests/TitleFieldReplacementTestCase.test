@@ -5,6 +5,9 @@
  */
 class TitleFieldReplacementTestCase extends DrupalWebTestCase {
 
+  /**
+   *
+   */
   public static function getInfo() {
     return array(
       'name' => 'Field replacement',
@@ -22,7 +25,7 @@ class TitleFieldReplacementTestCase extends DrupalWebTestCase {
   /**
    * {@inheritdoc}
    */
-  function setUp(array $modules = array()) {
+  public function setUp(array $modules = array()) {
     // Core.
     $modules[] = 'comment';
     $modules[] = 'field_test';
@@ -69,7 +72,8 @@ class TitleFieldReplacementTestCase extends DrupalWebTestCase {
     }
 
     // Store a dummy value in the legacy field.
-    while (($label = $this->randomName()) == $entity->{$label_key});
+    while (($label = $this->randomName()) == $entity->{$label_key}) {
+    }
 
     db_update('test_entity')
       ->fields(array($label_key => $label))
