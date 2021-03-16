@@ -8,12 +8,12 @@
 /**
  * Views query plugin for Assessment Registry.
  */
-class ocha_assessments_plugin_query extends views_plugin_query {
+class OchaAssessmentsPluginQuery extends views_plugin_query {
 
   /**
    * Override query.
    */
-  function query($get_count = FALSE) {
+  public function query($get_count = FALSE) {
   }
 
   /**
@@ -23,7 +23,7 @@ class ocha_assessments_plugin_query extends views_plugin_query {
    * When changing to get the data from AR, only one operation using the
    * Assessments block was not country-based. There's no match to spaces on AR.
    */
-  function execute(&$view) {
+  public function execute(&$view) {
     $node = menu_get_object();
     if (empty($node)) {
       return;

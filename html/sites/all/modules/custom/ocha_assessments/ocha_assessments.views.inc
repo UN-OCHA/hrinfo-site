@@ -12,7 +12,7 @@ function ocha_assessments_views_plugins() {
   $plugin = array();
   $plugin['query']['ocha_assessments_plugin_query'] = array(
     'title' => t('Assessment Registry Query'),
-    'handler' => 'ocha_assessments_plugin_query',
+    'handler' => 'OchaAssessmentsPluginQuery',
   );
 
   return $plugin;
@@ -35,7 +35,7 @@ function ocha_assessments_views_data() {
   $data['ocha_assessments']['title'] = array(
     'title' => t('Title'),
     'field' => array(
-      'handler' => 'ocha_assessments_handler_field',
+      'handler' => 'OchaAssessmentsHandlerField',
     ),
   );
 
