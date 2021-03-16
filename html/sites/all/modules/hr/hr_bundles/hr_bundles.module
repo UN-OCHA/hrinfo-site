@@ -95,7 +95,7 @@ function hr_bundles_og_context_handler($node = NULL) {
   $context = og_context_handler_node($node);
   if (!empty($context) && isset($context['node'])) {
     $operation = NULL;
-    foreach ($context['node'] as $id => $gid) {
+    foreach ($context['node'] as $gid) {
       $node = node_load($gid);
       if ($node->type == 'hr_operation') {
         $operation = $node;
@@ -148,7 +148,7 @@ function hr_bundles_node_og_context_handler($node = NULL) {
 }
 
 /**
- * Implements hook_form_BASE_FORM_ID_alter()
+ * Implements hook_form_BASE_FORM_ID_alter().
  */
 function hr_bundles_form_node_form_alter(&$form, &$form_state) {
   global $user;
@@ -176,7 +176,8 @@ function hr_bundles_form_node_form_alter(&$form, &$form_state) {
       if ($op->type == 'hr_operation') {
         $roles = og_get_user_roles('node', $op_gid);
         if (!in_array('manager', $roles) && !in_array('editor', $roles) && !in_array('contributor', $roles) && $op->uid != $user->uid && !in_array('editor', $user->roles) && !in_array('administrator', $user->roles)) {
-          // If user is not a manager or editor of operation, make bundles field required.
+          // If user is not a manager or editor of operation, make bundles
+          // field required.
           $form['field_bundles'][LANGUAGE_NONE][0]['#required'] = TRUE;
           $form['field_bundles'][LANGUAGE_NONE][0]['default']['#required'] = TRUE;
         }
@@ -198,18 +199,21 @@ function hr_bundles_form_node_form_alter(&$form, &$form_state) {
 }
 
 /**
- * Implements hook_node_access($node, $op, $account)
+ * Implements hook_node_access().
  *
- * Makes sure bundle editors or managers can not edit nodes which
- * are not tagged with any bundle OR are tagged with bundles that they do not manage
+ * Makes sure bundle editors or managers can not edit nodes which are not
+ * tagged with any bundle OR are tagged with bundles that they do not manage.
  * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4363
  */
 function hr_bundles_node_access($node, $op, $account) {
+  if (in_array('administrator', $account->roles)) {
+    return NODE_ACCESS_IGNORE;
+  }
   if (isset($node->nid) && isset($node->{OG_AUDIENCE_FIELD}) && !empty($node->{OG_AUDIENCE_FIELD}) && isset($node->field_bundles) && ($op == 'update' || $op == 'delete')) {
     // Get the group id.
     $gid = $node->{OG_AUDIENCE_FIELD}[LANGUAGE_NONE][0]['target_id'];
     $roles = og_get_user_roles('node', $gid, $account->uid);
-    // If I'm not a manager or editor of the main group or a global editor, check bundles.
+    // If not manager or editor of main group or a global editor, check bundles.
     if (!in_array('manager', $roles) && !in_array('editor', $roles) && !in_array('contributor', $roles) && !in_array('editor', $account->roles)) {
       $group = entity_load_single('node', $gid);
       if ($group->type == 'hr_operation') {
@@ -218,7 +222,8 @@ function hr_bundles_node_access($node, $op, $account) {
           return NODE_ACCESS_DENY;
         }
         else {
-          // Check each bundle and if the account is not a manager or editor of this bundle, deny access.
+          // Check each bundle and if the account is not a manager or editor
+          // of this bundle, deny access.
           foreach ($node->field_bundles[LANGUAGE_NONE] as $bundle) {
             $bid = $bundle['target_id'];
             $roles = og_get_user_roles('node', $bid, $account->uid);
@@ -268,7 +273,7 @@ function hr_bundles_node_revision_access($node, $op = 'view') {
 }
 
 /**
- * Implements hook_og_role_grant($entity_type, $gid, $uid, $rid)
+ * Implements hook_og_role_grant().
  */
 function hr_bundles_og_role_grant($entity_type, $gid, $uid, $rid) {
   $group = entity_load('node', array($gid));
@@ -308,7 +313,7 @@ function hr_bundles_og_role_grant($entity_type, $gid, $uid, $rid) {
 }
 
 /**
- * Implements hook_og_role_revoke($entity_type, $gid, $uid, $rid)
+ * Implements hook_og_role_revoke().
  */
 function hr_bundles_og_role_revoke($entity_type, $gid, $uid, $rid) {
   $group = entity_load('node', array($gid));
@@ -356,7 +361,7 @@ function hr_bundles_og_role_revoke($entity_type, $gid, $uid, $rid) {
 }
 
 /**
- * Implements hook_og_membership_delete(OgMembership $og_membership)
+ * Implements hook_og_membership_delete().
  */
 function hr_bundles_og_membership_delete(OgMembership $og_membership) {
   if ($og_membership->group_type == 'node' && $og_membership->entity_type == 'user') {
@@ -381,7 +386,7 @@ function hr_bundles_og_membership_delete(OgMembership $og_membership) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter()
+ * Implements hook_form_FORM_ID_alter().
  */
 function hr_bundles_form_og_ui_edit_membership_alter(&$form, &$form_state) {
   if (isset($form_state['build_info']['args'][1]) && isset($form_state['build_info']['args'][2])) {
@@ -410,7 +415,7 @@ function hr_bundles_form_og_ui_edit_membership_alter(&$form, &$form_state) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter()
+ * Implements hook_form_FORM_ID_alter().
  */
 function hr_bundles_form_og_ui_delete_membership_alter(&$form, &$form_state) {
   if (isset($form_state['build_info']['args'][1]) && isset($form_state['build_info']['args'][2])) {
@@ -431,7 +436,7 @@ function hr_bundles_form_og_ui_delete_membership_alter(&$form, &$form_state) {
 }
 
 /**
- * Implements hook_init()
+ * Implements hook_init().
  *
  * Sets cluster context in countries and global pages.
  */
@@ -499,7 +504,7 @@ function hr_bundles_block_view($delta = '') {
 }
 
 /**
- * Implements hook_facetapi_facet_info_alter.
+ * Implements hook_facetapi_facet_info_alter().
  *
  * Change the map callback function to display bundles labels with operations
  * See http://atrium.humanitarianresponse.info/humanitarian_response/node/4313
@@ -536,7 +541,7 @@ function hr_bundles_facet_bundles_map_callback(array $values, array $options = a
 /**
  * Implements hook_variable_update().
  *
- * When changing a variable in an operation, update the variables in all bundles.
+ * When changing a variable in an operation, update variables in all bundles.
  */
 function hr_bundles_variable_update($name, $value, $old_value, $options) {
   // If updating an OG variable.
@@ -579,7 +584,7 @@ function hr_bundles_node_insert($node) {
     }
   }
 
-  // Make all managers and editors of the operation a bundle member of this bundle
+  // Make all managers and editors of the operation a member of this bundle
   // See http://atrium.humanitarianresponse.info/humanitarian_response/node/4143
   // Get users belonging to the operation.
   $group_members = _hr_bundles_get_users_in_group($op_gid);

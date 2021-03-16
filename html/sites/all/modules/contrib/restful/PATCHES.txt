@@ -5,6 +5,10 @@ HR.info issue 754
 Source: PATCHES/restful-754.patch
 
 
+HRINFO-1035 undefined index
+Source: PATCHES/hrinfo-1035-restful-undefined-index.patch
+
+
 OPS-7193 PSR-4 files not picked up
 Source: PATCHES/ops-7193-include-restful-files.patch
 

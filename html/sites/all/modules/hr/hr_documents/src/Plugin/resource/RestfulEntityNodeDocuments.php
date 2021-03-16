@@ -196,11 +196,14 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
   public function getUser($value) {
     $valueOut = new \stdClass();
     $valueOut->uid = $value->uid;
-    $identity = reset(_hybridauth_identity_load_by_uid($value->uid));
+    $identities = _hybridauth_identity_load_by_uid($value->uid);
+    $identity = reset($identities);
     if ($identity['provider_identifier']) {
       $valueOut->hid = $identity['provider_identifier'];
     }
-    $valueOut->label = $value->realname;
+    if (isset($value->realname)) {
+      $valueOut->label = $value->realname;
+    }
     return $valueOut;
   }
 
@@ -219,6 +222,9 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
     if (!empty($values)) {
       foreach ($values as $value) {
         $node = node_load($value);
+        if (empty($node)) {
+          continue;
+        }
         $tmp = new \stdClass();
         $tmp->id = $node->nid;
         $tmp->glide = $node->field_glide_number[LANGUAGE_NONE][0]['value'];
@@ -249,6 +255,9 @@ class RestfulEntityNodeDocuments extends ResourceCustom implements ResourceInter
         $tmp = new \stdClass();
         $tmp->item_id = $value->item_id;
         $tmp->file = new \stdClass();
+        if (empty($value->field_file)) {
+          continue;
+        }
         $field_file = $value->field_file[LANGUAGE_NONE][0];
         $tmp->file->fid = $field_file['fid'];
         $tmp->file->filename = $field_file['filename'];

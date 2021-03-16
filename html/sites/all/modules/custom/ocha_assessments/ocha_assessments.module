@@ -124,33 +124,21 @@ function ocha_assessments_basis_auth() {
  * Page callback to display a list as tab in the assessments list.
  */
 function ocha_assessments_operation_list($node) {
-  if (isset($node->field_country)) {
-    return ocha_assessments_list($node->field_country[LANGUAGE_NONE][0]['target_id']);
-  }
-
-  return drupal_access_denied();
+  return ocha_assessments_list($node->nid);
 }
 
 /**
  * Page callback to display a map as tab in the assessments list.
  */
 function ocha_assessments_operation_table($node) {
-  if (isset($node->field_country)) {
-    return ocha_assessments_table($node->field_country[LANGUAGE_NONE][0]['target_id']);
-  }
-
-  return drupal_access_denied();
+  return ocha_assessments_table($node->nid);
 }
 
 /**
  * Page callback to display a map as tab in the assessments list.
  */
 function ocha_assessments_operation_map($node) {
-  if (isset($node->field_country)) {
-    return ocha_assessments_map($node->field_country[LANGUAGE_NONE][0]['target_id']);
-  }
-
-  return drupal_access_denied();
+  return ocha_assessments_map($node->nid);
 }
 
 /**
@@ -159,10 +147,10 @@ function ocha_assessments_operation_map($node) {
 function ocha_assessments_list($location_id = NULL) {
   $base_url = ocha_assessments_base_url();
   $basic_auth = ocha_assessments_basis_auth();
-  $src = $base_url . '/rest/assessments?items_per_page=50';
+  $src = $base_url . '/rest/list-data';
 
   if ($location_id) {
-    $src = $base_url . '/rest/assessments?items_per_page=50&f[0]=locations%3A' . $location_id;
+    $src = $base_url . '/rest/list-data?f[0]=operation_id%3A' . $location_id;
   }
 
   return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-list.js"></script>
@@ -181,10 +169,10 @@ function ocha_assessments_list($location_id = NULL) {
 function ocha_assessments_table($location_id = NULL) {
   $base_url = ocha_assessments_base_url();
   $basic_auth = ocha_assessments_basis_auth();
-  $src = $base_url . '/rest/assessments?items_per_page=50';
+  $src = $base_url . '/rest/table-data';
 
   if ($location_id) {
-    $src = $base_url . '/rest/assessments?items_per_page=50&f[0]=locations%3A' . $location_id;
+    $src = $base_url . '/rest/table-data?f[0]=operation_id%3A' . $location_id;
   }
 
   return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-table.js"></script>
@@ -203,10 +191,10 @@ function ocha_assessments_table($location_id = NULL) {
 function ocha_assessments_map($location_id = NULL) {
   $base_url = ocha_assessments_base_url();
   $basic_auth = ocha_assessments_basis_auth();
-  $src = $base_url . '/rest/assessments-map?items_per_page=8000';
+  $src = $base_url . '/rest/map-data';
 
   if ($location_id) {
-    $src = $base_url . '/rest/assessments-map?items_per_page=2000&f[0]=locations%3A' . $location_id;
+    $src = $base_url . '/rest/map-data?f[0]=operation_id%3A' . $location_id;
   }
 
   return '<script type="module" src="/sites/all/modules/custom/ocha_assessments/component/ocha-assessments-map.js"></script>

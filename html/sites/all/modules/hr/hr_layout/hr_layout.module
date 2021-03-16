@@ -8,7 +8,7 @@
 include_once 'hr_layout.features.inc';
 
 /**
- * Implements hook_ctools_plugin_directory()
+ * Implements hook_ctools_plugin_directory().
  */
 function hr_layout_ctools_plugin_directory($module, $plugin) {
   if ($module == "panels" && in_array($plugin, array('styles'))) {
@@ -20,7 +20,7 @@ function hr_layout_ctools_plugin_directory($module, $plugin) {
 }
 
 /**
- * Implements hook_menu()
+ * Implements hook_menu().
  */
 function hr_layout_menu() {
   $items = array();
@@ -99,7 +99,7 @@ function hr_layout_block_info() {
  * Implements hook_block_view().
  */
 function hr_layout_block_view($delta = '') {
-  global $user, $base_url;
+  global $base_url;
   $block = array();
 
   switch ($delta) {
@@ -143,7 +143,7 @@ function hr_layout_block_view($delta = '') {
                 'btn',
                 'btn-primary',
               ),
-              'target' => '_blank'
+              'target' => '_blank',
             ),
           );
           foreach ($node->field_social_media[LANGUAGE_NONE] as $social_media) {
@@ -159,6 +159,7 @@ function hr_layout_block_view($delta = '') {
         $block['content'] .= '<hr/>';
 
         if (isset($view['field_organizations'])) {
+          // @codingStandardsIgnoreLine
           $block['content'] .= '<div class="manager">' . t('Managed by') . ': <br />';
           foreach ($view['field_organizations']['#items'] as $org) {
             $block['content'] .= '<i>' . entity_label('taxonomy_term', $org['entity']) . '</i><br />';
@@ -270,14 +271,13 @@ function hr_layout_block_view($delta = '') {
           'hr_news',
           'acc_applications',
           'acc_incidents',
-          'ar_assessments'
         );
         $og_group = entity_load('node', array($gid));
         $og_group = $og_group[$gid];
         $items = array();
         $items[] = array(
           'name' => $og_group->title,
-          'path' => 'node/' . $gid
+          'path' => 'node/' . $gid,
         );
         $paths = array();
         // Fetch the og features registry.
@@ -302,10 +302,6 @@ function hr_layout_block_view($delta = '') {
 
               case 'hr_reliefweb_meeting_documents':
                 $path = 'meeting-documents';
-                break;
-
-              case 'ar_assessments':
-                $path = 'ar_assessments';
                 break;
 
               case 'hdx_datasets':
@@ -342,7 +338,7 @@ function hr_layout_block_view($delta = '') {
             // If not disabled add to menu items.
             $paths[$key] = array(
               'name' => $feature->name,
-              'path' => 'node/' . $gid . '/' . $path
+              'path' => 'node/' . $gid . '/' . $path,
             );
 
             if ($path == 'j2h/contactos') {
@@ -355,7 +351,7 @@ function hr_layout_block_view($delta = '') {
         if ($gid == 24) {
           $items[] = array(
             'name' => 'Indicators',
-            'path' => 'node/' . $gid . '/indicators'
+            'path' => 'node/' . $gid . '/indicators',
           );
         }
 
@@ -367,6 +363,7 @@ function hr_layout_block_view($delta = '') {
         }
 
         foreach ($items as $item) {
+          // @codingStandardsIgnoreLine
           $block['content'] .= '<li>' . l(t($item['name']), $item['path']) . '</li>';
         }
         $block['content'] .= '</ul>';
@@ -508,37 +505,37 @@ function hr_layout_create_links() {
       }
     }
 
-    if (in_array($gid, variable_get('hr_layout_show_new_button', array('65')))) {
-      $link = url('node/' . $gid . '/add-content');
-      $button = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--add"><use xlink:href="#add"></use></svg></button>';
+    $extra_fields = array();
+    if (!empty($bundle_id)) {
+      $extra_fields = array('field_bundles' => $bundle_id);
     }
-    else {
-      $extra_fields = array();
-      if (!empty($bundle_id)) {
-        $extra_fields = array('field_bundles' => $bundle_id);
-      }
-      $content = og_node_create_links('node', $group->nid, OG_AUDIENCE_FIELD, FALSE, $types, $extra_fields);
-      if (!empty($content['og_node_create_links']['#items'])) {
-        foreach ($content['og_node_create_links']['#items'] as $key => $item) {
-          // Unfortunately we have to parse the link path to determine
-          // which node type this is for.
-          $matches = array();
-          if (preg_match("/(?<=(node\/add\/)).*(?=\?)/", $item['data'], $matches)) {
-            if (isset($matches[0])) {
-              // Reformat the node type.
-              $type = str_replace('-', '_', $matches[0]);
-              // See if this node type is disabled for this group.
-              if (!og_features_component_is_disabled('node', $type, $group)) {
-                if ($type != 'hr_contact' || ($type == 'hr_contact' && (og_is_member('node', $group->nid) || in_array('editor', $user->roles)))) {
-                  $button .= '<li>' . $item['data'] . '</li>';
+    $content = og_node_create_links('node', $group->nid, OG_AUDIENCE_FIELD, FALSE, $types, $extra_fields);
+    if (!empty($content['og_node_create_links']['#items'])) {
+      foreach ($content['og_node_create_links']['#items'] as $item) {
+        // Unfortunately we have to parse the link path to determine
+        // which node type this is for.
+        $matches = array();
+        if (preg_match("/(?<=(node\/add\/)).*(?=\?)/", $item['data'], $matches)) {
+          if (isset($matches[0])) {
+            // Reformat the node type.
+            $type = str_replace('-', '_', $matches[0]);
+            // See if this node type is disabled for this group.
+            if (!og_features_component_is_disabled('node', $type, $group)) {
+              if ($type === 'hr_assessment') {
+                $ar_create_url = variable_get('hr_layout_ar_create_url', '');
+                if (!empty($ar_create_url)) {
+                  $button .= '<li>' . l(t('Assessment'), $ar_create_url) . '</li>';
                 }
+              }
+              elseif ($type != 'hr_contact' || ($type == 'hr_contact' && (og_is_member('node', $group->nid) || in_array('editor', $user->roles)))) {
+                $button .= '<li>' . $item['data'] . '</li>';
               }
             }
           }
         }
-        if (!empty($button)) {
-          $button = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--add"><use xlink:href="#add"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">' . $button . '</ul>';
-        }
+      }
+      if (!empty($button)) {
+        $button = '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown"><svg class="icon icon--add"><use xlink:href="#add"></use></svg></button><ul class="cd-global-header__dropdown cd-dropdown cd-user-menu__dropdown">' . $button . '</ul>';
       }
     }
   }
@@ -547,7 +544,7 @@ function hr_layout_create_links() {
 }
 
 /**
- * Implements hook_menu_alter()
+ * Implements hook_menu_alter().
  *
  * HACK: fixes a bug that makes ajax calls stop working when adding an FTS
  * Visualization through "Bean Panes" (Panels)
@@ -570,7 +567,8 @@ function hr_layout_ajax_form_callback() {
  * Implements hook_form_alter().
  *
  * Change default cache for new Panels panes.
- * Sets content cache for views panes and simple cache for custom content and fieldable panels panes.
+ * Sets content cache for views panes and simple cache for custom content and
+ * fieldable panels panes.
  */
 function hr_layout_form_alter(&$form, &$form_state, $form_id) {
   $panels_add_content_forms = array('ctools_block_content_type_edit_form',
