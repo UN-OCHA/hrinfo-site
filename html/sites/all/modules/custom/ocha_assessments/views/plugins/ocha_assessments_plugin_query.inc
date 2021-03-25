@@ -29,7 +29,7 @@ class OchaAssessmentsPluginQuery extends views_plugin_query {
     $filters = '';
     switch ($node->type) {
       case 'hr_bundle':
-        $filters .= 'f[0]=field_local_coordination_groups:' . $node->nid;
+        $filters .= 'f[0]=local_group_id:' . $node->nid;
         break;
 
       case 'hr_operation':
