@@ -2,6 +2,8 @@
 
 /**
  * @file
+ * Provide field replacement information.
+ *
  * Provide field replacement information for core entities and type specific
  * callbacks.
  */
@@ -19,7 +21,7 @@ function title_entity_info() {
     'cardinality' => 1,
     'translatable' => TRUE,
     'settings' => array(
-        'max_length' => $general_settings['maxlength'],
+      'max_length' => $general_settings['maxlength'],
     ),
   );
 
@@ -120,7 +122,7 @@ function title_field_term_description_submit($entity_type, $entity, $legacy_fiel
     // If the keys are not defined an empty value has been submitted, hence we
     // need to update the term description accordingly.
     else {
-      $values['description'][$key] = ($key == 'value') ?  '' : filter_default_format();
+      $values['description'][$key] = ($key == 'value') ? '' : filter_default_format();
     }
   }
 }

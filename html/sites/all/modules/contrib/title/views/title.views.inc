@@ -18,9 +18,11 @@ function title_field_views_data_alter(&$result, $field, $module) {
     foreach ($entity_info['field replacement'] as $replacement) {
       if (isset($replacement['field']['field_name'])) {
         $field = field_info_field($replacement['field']['field_name']);
-        $table = _field_sql_storage_tablename($field);
-        if (isset($result[$table][$field['field_name']])) {
-          $result[$table][$field['field_name']]['field']['handler'] = 'views_handler_title_field';
+        if (!empty($field)) {
+          $table = _field_sql_storage_tablename($field);
+          if (isset($result[$table][$field['field_name']])) {
+            $result[$table][$field['field_name']]['field']['handler'] = 'views_handler_title_field';
+          }
         }
       }
     }

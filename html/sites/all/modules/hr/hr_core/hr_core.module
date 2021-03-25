@@ -1219,15 +1219,6 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'title' => 'Free text',
     ),
 
-    'hid_profiles_checkins' => array(
-      'category' => 'Contacts by HID',
-      'title' => 'Checkin',
-    ),
-    'hid_profiles_list' => array(
-      'category' => 'Contacts by HID',
-      'title' => 'Contacts',
-    ),
-
     // Documents.
     'documents' => array(
       'category' => 'Content by HR.info',
@@ -1307,6 +1298,14 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     'assessments' => array(
       'category' => 'Content by HR.info',
     ),
+    'ar_assessments' => array(
+      'category' => 'Content from AR',
+      'title' => 'Assessments from Registry',
+    ),
+    'ocha_assessments' => array(
+      'category' => 'Content from AR',
+      'title' => 'Assessments from Registry',
+    ),
 
     // Outdated.
     'bean_pane' => array(
@@ -1354,6 +1353,8 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   if (isset($plugin['name']) && $plugin['name'] == 'views_panes') {
     if (is_array($subtype['category'])) {
       $key = strtolower($subtype['category'][0]);
+      // @todo Check if key ever needs translating.
+      // @codingStandardsIgnoreLine
       if (array_key_exists(t($key), $categories)) {
         $plugin['category'] = $categories[$key]['category'];
         $subtype['category'] = $categories[$key]['category'];
@@ -1647,6 +1648,7 @@ function hr_core_node_validate($node, $form, &$form_state) {
  */
 function hr_core_form_taxonomy_form_term_alter(&$form, &$form_state, $form_id) {
 
+  // @codingStandardsIgnoreLine
   if ((!isset($form_state['input']['op']) || $form_state['input']['op'] != 'Delete')) {
     $form['#validate'][] = 'hr_core_validate_organization';
   }

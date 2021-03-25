@@ -92,10 +92,7 @@ function title_admin_settings_form() {
   $form['settings']['title_general']['maxlength'] = array(
     '#type' => 'textfield',
     '#title' => t('Default maximum field length'),
-    '#description' => t('The default maximum length for the title field. ' .
-        'This setting will have no effect once a title field for a specific entity type ' .
-        'has been created, because the maximum field length is a global field setting and the ' .
-        'databases tables will already have been created with a specific length.'),
+    '#description' => t('The default maximum length for the title field. This setting will have no effect once a title field for a specific entity type has been created, because the maximum field length is a global field setting and the databases tables will already have been created with a specific length.'),
     '#element_validate' => array('element_validate_integer_positive'),
     '#default_value' => $general['maxlength'],
   );

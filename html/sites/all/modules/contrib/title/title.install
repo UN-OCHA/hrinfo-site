@@ -43,8 +43,10 @@ function title_disable() {
 }
 
 /**
- * Implements hook_update_N.
- *
+ * Implements hook_update_N().
+ */
+
+/**
  * Make sure Title has a very high weight to be able to perform reverse
  * synchronization reliably.
  */
@@ -53,8 +55,6 @@ function title_update_7001() {
 }
 
 /**
- * Implements hook_update_N.
- *
  * Update title_auto_attach variables to the new format.
  */
 function title_update_7002() {

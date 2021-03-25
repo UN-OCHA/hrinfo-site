@@ -26,6 +26,10 @@
         "User can create node without permission": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/442.patch",
         "HR.info issue 839": "PATCHES/hrinfo-839.patch"
       },
+      "drupal/og_menu": {
+        "Add i18n support": "https://www.drupal.org/files/issues/og_menu-i18n-2348821-12.patch",
+        "Integrate with menu_target": "https://www.drupal.org/files/issues/og_menu-integrate-menu-target-2387975-3.patch"
+      },
       "drupal/og_variables": {
         "WSOD when group references a deleted node": "https://www.drupal.org/files/issues/2019-08-08/3055299-4.patch"
       },
@@ -40,6 +44,10 @@
       },
       "drupal/pdfpreview": {
         "HRINFO-1035 filemtime errors": "PATCHES/hrinfo-1035-pdfpreview-filemtime-error.patch"
+      },
+      "drupal/redirect": {
+        "Avoid duplicates on generation": "https://www.drupal.org/files/issues/redirect-duplicate_redirect_save_handling-2260499-11.patch",
+        "Multilingual redirect to files": "https://www.drupal.org/files/issues/2543606-redirect-to-local-files-no-language-prefix-6.patch"
       },
       "drupal/restful": {
         "HR.info issue 754": "PATCHES/restful-754.patch",
