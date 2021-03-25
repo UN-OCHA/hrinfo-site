@@ -19,9 +19,7 @@ class OchaAssessmentsPluginQuery extends views_plugin_query {
   /**
    * Get results.
    *
-   * Only for hr_bundle and hr_operation - by country.
-   * When changing to get the data from AR, only one operation using the
-   * Assessments block was not country-based. There's no match to spaces on AR.
+   * Only for hr_bundle and hr_operation.
    */
   public function execute(&$view) {
     $node = menu_get_object();
@@ -31,9 +29,7 @@ class OchaAssessmentsPluginQuery extends views_plugin_query {
     $filters = '';
     switch ($node->type) {
       case 'hr_bundle':
-        // @todo This isn't working. Need to add local_groups to AR.
-        // @codingStandardsIgnoreLine
-        //$filters .= 'f[0]=clusters_sectors:' . $node->nid;
+        $filters .= 'f[0]=field_local_coordination_groups:' . $node->nid;
         break;
 
       case 'hr_operation':
