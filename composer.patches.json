@@ -16,6 +16,9 @@
       "drupal/entity_api": {
         "Send entire node to node_access on create": "https://www.drupal.org/files/issues/2018-12-04/3017993-send_full_node.patch"
       },
+      "drupal/fts": {
+        "Quite a lof of local modifications": "PATCHES/fts-hacks.patch"
+      },
       "drupal/hybridauth": {
         "https://www.drupal.org/project/hybridauth/issues/3154070": "https://www.drupal.org/files/issues/2020-06-23/session_already_exist_exception-3154070-7.patch"
       },

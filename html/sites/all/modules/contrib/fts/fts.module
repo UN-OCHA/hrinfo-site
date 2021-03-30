@@ -8,7 +8,7 @@
 /**
  *  FTS URL
  */
-define('FTS_URL', 'https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/');
+define('FTS_URL', 'https://api.hpc.tools/v1/public/');
 
 /**
  * Returns API endpoint.
@@ -139,7 +139,6 @@ function fts_get_funding($params) {
  */
 function fts_get_global_clusters() {
   $clusters = array();
-  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/global-cluster
 
   $cache = cache_get('fts_appeals_cache_global_clusters', 'cache');
   if (!$cache) {
@@ -163,7 +162,6 @@ function fts_get_global_clusters() {
  * @todo: remove.
  */
 function fts_get_clusters_by_appeal($id) {
-  // curl https://ocha_hrinfo:edfgz345Hjk@api.hpc.tools/v1/public/global-cluster
   if (empty($id)) {
     return array();
   }
