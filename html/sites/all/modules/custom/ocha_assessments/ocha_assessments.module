@@ -225,7 +225,7 @@ function ocha_assessments_map($id = NULL, $type = NULL) {
         break;
 
       case 'hr_operation':
-        $src = '?f[0]=operation_id%3A' . $id;
+        $src .= '?f[0]=operation_id%3A' . $id;
         break;
     }
   }

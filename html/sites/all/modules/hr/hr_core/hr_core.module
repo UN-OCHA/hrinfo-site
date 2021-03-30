@@ -1299,12 +1299,12 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'category' => 'Content by HR.info',
     ),
     'ar_assessments' => array(
-      'category' => 'Content from AR',
-      'title' => 'Assessments from Registry',
+      'category' => 'Assessments by AR',
+      'title' => 'Assessments',
     ),
     'ocha_assessments' => array(
-      'category' => 'Content from AR',
-      'title' => 'Assessments from Registry',
+      'category' => 'Assessments by AR',
+      'title' => 'Assessments',
     ),
 
     // Outdated.
