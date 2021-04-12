@@ -53,7 +53,7 @@ class OchaAssessmentsPluginQuery extends views_plugin_query {
         $results = array_slice($response['search_results'], 0, $limit);
         foreach ($results as $item) {
           $row = new stdClass();
-          $row->title = l(reset($item['title']), $base_url . '/assessment/' . reset($item['uuid']), $options);
+          $row->title = l($item['title'], $base_url . '/assessment/' . $item['uuid'], $options);
           $view->result[] = $row;
         }
       }
