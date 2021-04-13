@@ -19252,7 +19252,7 @@ class OchaAssessmentsMap extends OchaAssessmentsBase {
       ${this.renderDropdowns()}
 
       <div id="loading-message">Loading...</div>
-      <div id="map" style="display:none">
+      <div id="map" style="display:none;">
         <slot></slot>
       </div>
     `;
