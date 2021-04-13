@@ -3960,7 +3960,7 @@ class OchaAssessmentsTable extends OchaAssessmentsBase {
           <tr>
             <th>Title</th>
             <th>Location(s)</th>
-            <th>Managed by</th>
+            <th>Leading/Coordinating Organization</th>
             <th>Participating Organization(s)</th>
             <th>Clusters/Sectors</th>
             <th>Status</th>
