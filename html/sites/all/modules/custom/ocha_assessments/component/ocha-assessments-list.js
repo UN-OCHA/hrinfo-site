@@ -4052,7 +4052,7 @@ class OchaAssessmentsList extends OchaAssessmentsBase {
                   <div class="cd-list__description">
                     <p>
                       <span class="label">Leading/Coordinating Organization(s): </span>
-                      <span class="values">${unsafeHTML(r.field_organizations_labe)}</span>
+                      <span class="values">${unsafeHTML(r.field_organizations_label)}</span>
                     </p>
                     <p>
                       <span class="label">Status: </span>
