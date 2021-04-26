@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e826498c985440a91fbf2028925640cf",
+    "content-hash": "72e825838182cd83e7f0043c05060c5d",
     "packages": [
         {
             "name": "composer/installers",
@@ -1983,23 +1983,23 @@
         },
         {
             "name": "drupal/drupal",
-            "version": "7.78.0",
+            "version": "7.80.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal.git",
-                "reference": "7.78"
+                "reference": "7.80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/drupal-7.78.zip",
-                "reference": "7.78",
-                "shasum": "1358a9b8022877fc692b62eb19d7efb0d3f85ee4"
+                "url": "https://ftp.drupal.org/files/projects/drupal-7.80.zip",
+                "reference": "7.80",
+                "shasum": "a3bc28036b43ec44deda643182bcdc3e4c28aff0"
             },
             "type": "drupal-core",
             "extra": {
                 "drupal": {
-                    "version": "7.78",
-                    "datestamp": "1611163112",
+                    "version": "7.80",
+                    "datestamp": "1619022873",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2010,7 +2010,6 @@
                     "Invalid node_load() parameters fix": "PATCHES/node_load_fix.patch",
                     "Notice: Undefined index: field_xxx in file_ajax_upload() and Undefined index: #suffix in file_ajax_upload": "https://www.drupal.org/files/undefined_index_file_ajax-1336212-23.patch",
                     "Cannot create references to/from string offsets nor overloaded objects": "https://www.drupal.org/files/issues/cannot_create_references_tofrom_string_offsets_nor_overloaded_objects-2313517-32.patch",
-                    "Call to undefined function drupal_get_path_alias() in url()": "https://www.drupal.org/files/issues/2019-02-27/drupal-undefined_function_drupal_get_path_alias-2842762-14-D7.patch",
                     "Patch robot file": "PATCHES/allow-themes-path.patch",
                     "Discourage bots from doing searches": "PATCHES/ops-6982-robot-searches.patch"
                 }
@@ -2045,10 +2044,6 @@
                     "homepage": "https://www.drupal.org/user/35733"
                 },
                 {
-                    "name": "cilefen",
-                    "homepage": "https://www.drupal.org/user/1850070"
-                },
-                {
                     "name": "drumm",
                     "homepage": "https://www.drupal.org/user/3064"
                 },
@@ -2067,10 +2062,6 @@
                 {
                     "name": "mcdruid",
                     "homepage": "https://www.drupal.org/user/255969"
-                },
-                {
-                    "name": "plach",
-                    "homepage": "https://www.drupal.org/user/183211"
                 },
                 {
                     "name": "webchick",
@@ -2315,10 +2306,13 @@
             "version": "1.9.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/entity": "*"
+                "drupal/entity": "self.version"
             },
             "type": "metapackage",
             "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-1.9",
                     "datestamp": "1518642010",
@@ -2352,10 +2346,6 @@
                 {
                     "name": "fago",
                     "homepage": "https://www.drupal.org/user/16747"
-                },
-                {
-                    "name": "mglaman",
-                    "homepage": "https://www.drupal.org/user/2416470"
                 }
             ],
             "description": "Provides token replacements for all properties that have no tokens and are known to the entity API.",
@@ -3926,6 +3916,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Quite a lof of local modifications": "PATCHES/fts-hacks.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -4446,7 +4439,7 @@
             "version": "1.27.0",
             "require": {
                 "drupal/drupal": "*",
-                "drupal/i18n": "*"
+                "drupal/i18n": "self.version"
             },
             "type": "metapackage",
             "extra": {
@@ -6256,10 +6249,13 @@
             "version": "2.10.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/og": "*"
+                "drupal/og": "self.version"
             },
             "type": "metapackage",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-2.10",
                     "datestamp": "1530174224",
@@ -6301,10 +6297,6 @@
                 {
                     "name": "dww",
                     "homepage": "https://www.drupal.org/user/46549"
-                },
-                {
-                    "name": "joelpittet",
-                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "merlinofchaos",
@@ -6552,11 +6544,14 @@
             "version": "2.10.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/og": "*",
+                "drupal/og": "self.version",
                 "drupal/views_bulk_operations": "*"
             },
             "type": "metapackage",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-2.10",
                     "datestamp": "1530174224",
@@ -6598,10 +6593,6 @@
                 {
                     "name": "dww",
                     "homepage": "https://www.drupal.org/user/46549"
-                },
-                {
-                    "name": "joelpittet",
-                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "merlinofchaos",
@@ -6740,6 +6731,10 @@
                 {
                     "name": "das-peter",
                     "homepage": "https://www.drupal.org/user/762870"
+                },
+                {
+                    "name": "ken-g",
+                    "homepage": "https://www.drupal.org/user/2975041"
                 },
                 {
                     "name": "m.stenta",
@@ -9392,10 +9387,13 @@
             "version": "2.5.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/variable": "*"
+                "drupal/variable": "self.version"
             },
             "type": "metapackage",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-2.5",
                     "datestamp": "1398250127",
@@ -9446,10 +9444,13 @@
             "version": "2.5.0",
             "require": {
                 "drupal/drupal": "~7.0",
-                "drupal/variable": "*"
+                "drupal/variable": "self.version"
             },
             "type": "metapackage",
             "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
                 "drupal": {
                     "version": "7.x-2.5",
                     "datestamp": "1398250127",

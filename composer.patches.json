@@ -5,7 +5,6 @@
         "Invalid node_load() parameters fix": "PATCHES/node_load_fix.patch",
         "Notice: Undefined index: field_xxx in file_ajax_upload() and Undefined index: #suffix in file_ajax_upload": "https://www.drupal.org/files/undefined_index_file_ajax-1336212-23.patch",
         "Cannot create references to/from string offsets nor overloaded objects": "https://www.drupal.org/files/issues/cannot_create_references_tofrom_string_offsets_nor_overloaded_objects-2313517-32.patch",
-        "Call to undefined function drupal_get_path_alias() in url()": "https://www.drupal.org/files/issues/2019-02-27/drupal-undefined_function_drupal_get_path_alias-2842762-14-D7.patch",
         "Patch robot file": "PATCHES/allow-themes-path.patch",
         "Discourage bots from doing searches": "PATCHES/ops-6982-robot-searches.patch"
       },
