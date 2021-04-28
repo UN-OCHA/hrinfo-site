@@ -233,14 +233,9 @@ function drupal_cache_system_paths() {
  *   found.
  */
 function drupal_get_path_alias($path = NULL, $path_language = NULL) {
-  // Make sure nid is numeric.
-  if (isset($nid) && !is_numeric($nid)) {
-    return FALSE;
-  }
-
-  // Ignore non-numeric vid.
-  if (isset($vid) && !is_numeric($vid)) {
-    $vid = NULL;
+  // Patch to enable path_alias_xt.module to operate.
+  if (module_exists('path_alias_xt')) {
+    return path_alias_xt_get_path_alias($path, $path_language);
   }
   // If no path is specified, use the current page's path.
   if ($path == NULL) {
