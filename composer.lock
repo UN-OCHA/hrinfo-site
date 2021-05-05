@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72e825838182cd83e7f0043c05060c5d",
+    "content-hash": "f0e47d3bcce29cd952bd61d677f3eba8",
     "packages": [
         {
             "name": "composer/installers",
@@ -8486,50 +8486,6 @@
                 "source": "https://git.drupalcode.org/project/search_api_sorts_widget"
             },
             "time": "2021-02-03T22:35:12+00:00"
-        },
-        {
-            "name": "drupal/securelogin",
-            "version": "1.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/securelogin.git",
-                "reference": "7.x-1.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/securelogin-7.x-1.7.zip",
-                "reference": "7.x-1.7",
-                "shasum": "37876849bb2bd09a6dab1538a883b59440f2553a"
-            },
-            "require": {
-                "drupal/drupal": "~7.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "7.x-1.7",
-                    "datestamp": "1514932985",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/7/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "mfb",
-                    "homepage": "https://www.drupal.org/user/12302"
-                }
-            ],
-            "description": "Enables user login and other forms to be submitted securely via HTTPS and enforces secure authenticated sessions.",
-            "homepage": "https://www.drupal.org/project/securelogin",
-            "support": {
-                "source": "https://git.drupalcode.org/project/securelogin"
-            }
         },
         {
             "name": "drupal/shs",

@@ -156,7 +156,6 @@
         "drupal/search_api_solr_overrides": "^1.0",
         "drupal/search_api_sorts": "^1.7",
         "drupal/search_api_sorts_widget": "1.x-dev",
-        "drupal/securelogin": "^1.7",
         "drupal/shs": "^1.8",
         "drupal/smtp": "^1.7",
         "drupal/special_menu_items": "^2.0+2-dev",
