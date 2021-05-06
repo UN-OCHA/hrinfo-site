@@ -1,0 +1,16 @@
+diff --git a/path_alias_xt.module b/path_alias_xt.module
+index 693ebc1..ca7947c 100755
+--- a/path_alias_xt.module
++++ b/path_alias_xt.module
+@@ -106,6 +106,11 @@ function path_alias_xt_url_inbound_alter(&$path, $original_path, $path_language)
+       }
+       array_unshift($path_suffix, array_pop($parts));
+       $candidate_alias = implode('/', $parts);
++      // @todo See HRINFO-1057. All files without an alias get redirected to a
++      // different file (which then gets cached). This avoids that situation.
++      if ($candidate_alias === 'file') {
++        return;
++      }
+       if ($src = drupal_lookup_path('source', $candidate_alias, $path_language)) {
+         // If 'user' is aliased to MyAccount, then MyAccount/edit needs to
+         // transform to 'user/123/edit'.

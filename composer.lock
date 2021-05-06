@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0e47d3bcce29cd952bd61d677f3eba8",
+    "content-hash": "e714855d2243e47caea5cc60167e760f",
     "packages": [
         {
             "name": "composer/installers",
@@ -7126,6 +7126,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "HRINFO-1057 file alias redirection": "PATCHES/hrinfo-1057-file-alias-redirection.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
