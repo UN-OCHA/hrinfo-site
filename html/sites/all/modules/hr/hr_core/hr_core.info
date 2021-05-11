@@ -28,7 +28,6 @@ dependencies[] = panelizer
 dependencies[] = panels
 dependencies[] = panels_ipe
 dependencies[] = panels_mini
-dependencies[] = path_alias_xt
 dependencies[] = pathauto
 dependencies[] = phone
 dependencies[] = publishcontent
