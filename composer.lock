@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72e825838182cd83e7f0043c05060c5d",
+    "content-hash": "82b7bd38e9a917360837ac56f86147aa",
     "packages": [
         {
             "name": "composer/installers",
@@ -8488,50 +8488,6 @@
             "time": "2021-02-03T22:35:12+00:00"
         },
         {
-            "name": "drupal/securelogin",
-            "version": "1.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/securelogin.git",
-                "reference": "7.x-1.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/securelogin-7.x-1.7.zip",
-                "reference": "7.x-1.7",
-                "shasum": "37876849bb2bd09a6dab1538a883b59440f2553a"
-            },
-            "require": {
-                "drupal/drupal": "~7.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "7.x-1.7",
-                    "datestamp": "1514932985",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/7/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "mfb",
-                    "homepage": "https://www.drupal.org/user/12302"
-                }
-            ],
-            "description": "Enables user login and other forms to be submitted securely via HTTPS and enforces secure authenticated sessions.",
-            "homepage": "https://www.drupal.org/project/securelogin",
-            "support": {
-                "source": "https://git.drupalcode.org/project/securelogin"
-            }
-        },
-        {
             "name": "drupal/shs",
             "version": "1.8.0",
             "source": {
@@ -10099,17 +10055,17 @@
         },
         {
             "name": "drupal/wysiwyg",
-            "version": "2.6.0",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/wysiwyg.git",
-                "reference": "7.x-2.6"
+                "reference": "7.x-2.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/wysiwyg-7.x-2.6.zip",
-                "reference": "7.x-2.6",
-                "shasum": "18a7b55d93e4f6064c6534671260338668f4401b"
+                "url": "https://ftp.drupal.org/files/projects/wysiwyg-7.x-2.7.zip",
+                "reference": "7.x-2.7",
+                "shasum": "f250622e8c21e6d6d0d3fa2d864cbb59db620724"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -10117,8 +10073,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.6",
-                    "datestamp": "1563520137",
+                    "version": "7.x-2.7",
+                    "datestamp": "1622246285",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11962,8 +11918,7 @@
         "drupal/token_tweaks": 20,
         "drupal/twitter_pane": 20,
         "drupal/views_content_cache": 15,
-        "drupal/views_data_export": 20,
-        "drupal/wysiwyg": 20
+        "drupal/views_data_export": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -156,7 +156,6 @@
         "drupal/search_api_solr_overrides": "^1.0",
         "drupal/search_api_sorts": "^1.7",
         "drupal/search_api_sorts_widget": "1.x-dev",
-        "drupal/securelogin": "^1.7",
         "drupal/shs": "^1.8",
         "drupal/smtp": "^1.7",
         "drupal/special_menu_items": "^2.0+2-dev",
@@ -181,7 +180,7 @@
         "drupal/views_pivot": "^1.1",
         "drupal/views_rss": "^2.0-rc4",
         "drupal/visualization": "^1.0-beta2",
-        "drupal/wysiwyg": "^2.2+54-dev",
+        "drupal/wysiwyg": "^2.7",
         "drupal/wysiwyg_filter": "^1.6-rc9",
         "symfony/flex": "^1.11",
         "unocha/ocha_snap": "^1.1"
