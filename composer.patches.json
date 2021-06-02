@@ -1,7 +1,6 @@
 {
     "patches": {
       "drupal/drupal": {
-        "Extended Aliases core patch": "https://www.drupal.org/files/issues/2420275-1.patch",
         "Invalid node_load() parameters fix": "PATCHES/node_load_fix.patch",
         "Notice: Undefined index: field_xxx in file_ajax_upload() and Undefined index: #suffix in file_ajax_upload": "https://www.drupal.org/files/undefined_index_file_ajax-1336212-23.patch",
         "Cannot create references to/from string offsets nor overloaded objects": "https://www.drupal.org/files/issues/cannot_create_references_tofrom_string_offsets_nor_overloaded_objects-2313517-32.patch",
