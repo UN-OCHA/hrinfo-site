@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "82b7bd38e9a917360837ac56f86147aa",
+    "content-hash": "7131afeb760bc2e1b803fac9448f967c",
     "packages": [
         {
             "name": "composer/installers",
@@ -7098,58 +7098,6 @@
             "homepage": "https://www.drupal.org/project/panels_bootstrap_styles",
             "support": {
                 "source": "https://git.drupalcode.org/project/panels_bootstrap_styles"
-            }
-        },
-        {
-            "name": "drupal/path_alias_xt",
-            "version": "1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/path_alias_xt.git",
-                "reference": "7.x-1.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/path_alias_xt-7.x-1.3.zip",
-                "reference": "7.x-1.3",
-                "shasum": "30b4cddfcf74bab8c73e8d52c12c1ef9aed8cdbc"
-            },
-            "require": {
-                "drupal/drupal": "~7.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "7.x-1.3",
-                    "datestamp": "1572381184",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/7/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "RdeBoer",
-                    "homepage": "https://www.drupal.org/user/404007"
-                },
-                {
-                    "name": "adriancid",
-                    "homepage": "https://www.drupal.org/user/1962106"
-                },
-                {
-                    "name": "sdstyles",
-                    "homepage": "https://www.drupal.org/user/1420228"
-                }
-            ],
-            "description": "Automatically extend path aliases to include tabs, like <em>about-us/edit</em> for <em>node/123/edit</em>. Allow these aliases to be entered in page specification wild-cards, <em>about-us*</em>, e.g for block visibility.",
-            "homepage": "https://www.drupal.org/project/path_alias_xt",
-            "support": {
-                "source": "https://git.drupalcode.org/project/path_alias_xt"
             }
         },
         {
