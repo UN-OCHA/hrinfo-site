@@ -44,6 +44,9 @@
       "drupal/panels": {
         "Stop logs caused by https://www.drupal.org/project/panels/issues/3032350#comment-13075861": "PATCHES/panels-style-settings-default.patch"
       },
+      "drupal/path_alias_xt": {
+        "HRINFO-1057 file alias redirection": "PATCHES/hrinfo-1057-file-alias-redirection.patch"
+      },
       "drupal/pdfpreview": {
         "HRINFO-1035 filemtime errors": "PATCHES/hrinfo-1035-pdfpreview-filemtime-error.patch"
       },

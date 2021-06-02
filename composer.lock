@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "82b7bd38e9a917360837ac56f86147aa",
+    "content-hash": "50f78a04f8dbf008061f3b60da281ba3",
     "packages": [
         {
             "name": "composer/installers",
@@ -2064,6 +2064,10 @@
                     "homepage": "https://www.drupal.org/user/255969"
                 },
                 {
+                    "name": "mlhess",
+                    "homepage": "https://www.drupal.org/user/102818"
+                },
+                {
                     "name": "webchick",
                     "homepage": "https://www.drupal.org/user/24967"
                 },
@@ -2273,6 +2277,10 @@
                 {
                     "name": "Berdir",
                     "homepage": "https://www.drupal.org/user/214652"
+                },
+                {
+                    "name": "TR",
+                    "homepage": "https://www.drupal.org/user/202830"
                 },
                 {
                     "name": "bojanz",
@@ -4763,6 +4771,10 @@
                     "homepage": "https://www.drupal.org/user/471638"
                 },
                 {
+                    "name": "ram4nd",
+                    "homepage": "https://www.drupal.org/user/601534"
+                },
+                {
                     "name": "rszrama",
                     "homepage": "https://www.drupal.org/user/49344"
                 },
@@ -7126,6 +7138,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "HRINFO-1057 file alias redirection": "PATCHES/hrinfo-1057-file-alias-redirection.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
