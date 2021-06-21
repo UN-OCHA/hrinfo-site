@@ -8,9 +8,6 @@
 /**
  * Implements hook_drush_command().
  *
- * @return array
- *   An associative array describing your command(s).
- *
  * @see drush_parse_command()
  */
 function hr_locations_drush_command() {
@@ -31,6 +28,7 @@ function hr_locations_drush_command() {
  * Function callback.
  */
 function drush_hr_locations_admin_levels() {
+  // @codingStandardsIgnoreLine
   // ini_set('memory_limit', '2G');.
 
   $voc = taxonomy_vocabulary_machine_name_load('hr_location');
@@ -43,8 +41,13 @@ function drush_hr_locations_admin_levels() {
   while ($record = $result->fetchAssoc()) {
     $term = taxonomy_term_load($record['tid']);
     $parents = taxonomy_get_parents_all($term->tid);
-    $term->field_loc_admin_level[LANGUAGE_NONE] = array(array('value' => count($parents) - 1));
-    taxonomy_term_save($term);
+    if (count($parents) == 0) {
+      print "\n Parents count of zero for location with tid: " . $term->tid . "\n";
+    }
+    if ($term->field_loc_admin_level[LANGUAGE_NONE][0]['value'] != count($parents) - 1) {
+      $term->field_loc_admin_level[LANGUAGE_NONE] = array(array('value' => count($parents) - 1));
+      taxonomy_term_save($term);
+    }
     unset($term);
   }
 }
