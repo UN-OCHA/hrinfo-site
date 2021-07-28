@@ -482,9 +482,6 @@
     "drupal/wysiwyg_filter": {
         "version": "1.6.0-rc9"
     },
-    "hussainweb/drupal-composer-helper": {
-        "version": "v1.0.0-beta7"
-    },
     "lkmorlan/icalcreator": {
         "version": "v2.20.4"
     },
@@ -587,11 +584,5 @@
     },
     "unocha/ocha_snap": {
         "version": "v1.2.0"
-    },
-    "webmozart/assert": {
-        "version": "1.9.0"
-    },
-    "webmozart/path-util": {
-        "version": "2.3.0"
     }
 }

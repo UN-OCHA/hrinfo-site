@@ -1,4 +1,4 @@
-FROM unocha/php7-k8s:${TAG:-7.3-NR-develop}
+FROM unocha/php-k8s:${TAG:-7.4-NR-develop}
 
 ARG VCS_REF
 ARG VCS_URL

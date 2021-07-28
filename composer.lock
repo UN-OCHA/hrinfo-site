@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "50f78a04f8dbf008061f3b60da281ba3",
+    "content-hash": "a92421448686a4244e705be25eb8b7da",
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.10.0",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "1a0357fccad9d1cc1ea0c9a05b8847fbccccb78d"
+                "reference": "ae03311f45dfe194412081526be2e003960df74b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/1a0357fccad9d1cc1ea0c9a05b8847fbccccb78d",
-                "reference": "1a0357fccad9d1cc1ea0c9a05b8847fbccccb78d",
+                "url": "https://api.github.com/repos/composer/installers/zipball/ae03311f45dfe194412081526be2e003960df74b",
+                "reference": "ae03311f45dfe194412081526be2e003960df74b",
                 "shasum": ""
             },
             "require": {
@@ -111,6 +111,7 @@
                 "majima",
                 "mako",
                 "mediawiki",
+                "miaoxing",
                 "modulework",
                 "modx",
                 "moodle",
@@ -128,12 +129,17 @@
                 "sydes",
                 "sylius",
                 "symfony",
+                "tastyigniter",
                 "typo3",
                 "wordpress",
                 "yawik",
                 "zend",
                 "zikula"
             ],
+            "support": {
+                "issues": "https://github.com/composer/installers/issues",
+                "source": "https://github.com/composer/installers/tree/v1.11.0"
+            },
             "funding": [
                 {
                     "url": "https://packagist.com",
@@ -148,7 +154,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-14T11:07:16+00:00"
+            "time": "2021-04-28T06:42:17+00:00"
         },
         {
             "name": "composer/semver",
@@ -227,16 +233,16 @@
         },
         {
             "name": "cweagans/composer-patches",
-            "version": "1.7.0",
+            "version": "1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cweagans/composer-patches.git",
-                "reference": "ae02121445ad75f4eaff800cc532b5e6233e2ddf"
+                "reference": "9888dcc74993c030b75f3dd548bb5e20cdbd740c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cweagans/composer-patches/zipball/ae02121445ad75f4eaff800cc532b5e6233e2ddf",
-                "reference": "ae02121445ad75f4eaff800cc532b5e6233e2ddf",
+                "url": "https://api.github.com/repos/cweagans/composer-patches/zipball/9888dcc74993c030b75f3dd548bb5e20cdbd740c",
+                "reference": "9888dcc74993c030b75f3dd548bb5e20cdbd740c",
                 "shasum": ""
             },
             "require": {
@@ -267,7 +273,11 @@
                 }
             ],
             "description": "Provides a way to patch Composer packages.",
-            "time": "2020-09-30T17:56:20+00:00"
+            "support": {
+                "issues": "https://github.com/cweagans/composer-patches/issues",
+                "source": "https://github.com/cweagans/composer-patches/tree/1.7.1"
+            },
+            "time": "2021-06-08T15:12:46+00:00"
         },
         {
             "name": "drupal-composer/preserve-paths",
@@ -321,6 +331,10 @@
                 "installer",
                 "nested package"
             ],
+            "support": {
+                "issues": "https://github.com/drupal-composer/preserve-paths/issues",
+                "source": "https://github.com/drupal-composer/preserve-paths/tree/0.1.6"
+            },
             "time": "2020-11-14T20:28:03+00:00"
         },
         {
@@ -1983,35 +1997,27 @@
         },
         {
             "name": "drupal/drupal",
-            "version": "7.80.0",
+            "version": "7.82.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal.git",
-                "reference": "7.80"
+                "reference": "7.82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/drupal-7.80.zip",
-                "reference": "7.80",
-                "shasum": "a3bc28036b43ec44deda643182bcdc3e4c28aff0"
+                "url": "https://ftp.drupal.org/files/projects/drupal-7.82.zip",
+                "reference": "7.82",
+                "shasum": "a51bba09bc194c712fa1fcd349d1bc52a5c9998f"
             },
             "type": "drupal-core",
             "extra": {
                 "drupal": {
-                    "version": "7.80",
-                    "datestamp": "1619022873",
+                    "version": "7.82",
+                    "datestamp": "1626885234",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "Extended Aliases core patch": "https://www.drupal.org/files/issues/2420275-1.patch",
-                    "Invalid node_load() parameters fix": "PATCHES/node_load_fix.patch",
-                    "Notice: Undefined index: field_xxx in file_ajax_upload() and Undefined index: #suffix in file_ajax_upload": "https://www.drupal.org/files/undefined_index_file_ajax-1336212-23.patch",
-                    "Cannot create references to/from string offsets nor overloaded objects": "https://www.drupal.org/files/issues/cannot_create_references_tofrom_string_offsets_nor_overloaded_objects-2313517-32.patch",
-                    "Patch robot file": "PATCHES/allow-themes-path.patch",
-                    "Discourage bots from doing searches": "PATCHES/ops-6982-robot-searches.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/7/downloads",
@@ -10358,70 +10364,6 @@
             "time": "2018-09-21T14:22:49+00:00"
         },
         {
-            "name": "hussainweb/drupal-composer-helper",
-            "version": "v1.0.0-beta7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hussainweb/drupal-composer-helper.git",
-                "reference": "a8c0b358d322b27aba267327fada3af935cdbdc6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hussainweb/drupal-composer-helper/zipball/a8c0b358d322b27aba267327fada3af935cdbdc6",
-                "reference": "a8c0b358d322b27aba267327fada3af935cdbdc6",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.1",
-                "composer/installers": "^1.2",
-                "php": ">=5.5.9",
-                "symfony/filesystem": "^3.3 || ^4.0",
-                "webmozart/path-util": "^2.3"
-            },
-            "require-dev": {
-                "composer/composer": "^1.0",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "suggest": {
-                "cweagans/composer-patches": "Allows patching from local and remote patch files.",
-                "drupal/console": "The Drupal CLI. A tool to generate boilerplate code, interact with and debug Drupal.",
-                "drupal/core": "Why are you even using this package, if not to use Drupal?",
-                "drupal/core-composer-scaffold": "Scaffold individual files from drupal/core into their desired location.",
-                "drupal/core-vendor-hardening": "Removes extraneous directories from the Composer-managed vendor directory.",
-                "drush/drush": "Drush is a command line shell and scripting interface for Drupal.",
-                "oomphinc/composer-installers-extender": "Extend the composer/installers plugin to accept any arbitrary package type."
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                },
-                "class": "Hussainweb\\DrupalComposerHelper\\ComposerPlugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "Hussainweb\\DrupalComposerHelper\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "hussainweb",
-                    "email": "hussainweb@gmail.com",
-                    "homepage": "http://hussainweb.me",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Common scripts used with Drupal",
-            "keywords": [
-                "drupal"
-            ],
-            "time": "2020-02-11T02:16:19+00:00"
-        },
-        {
             "name": "pdepend/pdepend",
             "version": "2.9.0",
             "source": {
@@ -11809,106 +11751,6 @@
             "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
             "homepage": "https://github.com/theseer/fDOMDocument",
             "time": "2017-06-30T11:53:12+00:00"
-        },
-        {
-            "name": "webmozart/assert",
-            "version": "1.10.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webmozarts/assert.git",
-                "reference": "6964c76c7804814a842473e0c8fd15bab0f18e25"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/6964c76c7804814a842473e0c8fd15bab0f18e25",
-                "reference": "6964c76c7804814a842473e0c8fd15bab0f18e25",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2 || ^8.0",
-                "symfony/polyfill-ctype": "^1.8"
-            },
-            "conflict": {
-                "phpstan/phpstan": "<0.12.20",
-                "vimeo/psalm": "<4.6.1 || 4.6.2"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^8.5.13"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.10-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Webmozart\\Assert\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bernhard Schussek",
-                    "email": "bschussek@gmail.com"
-                }
-            ],
-            "description": "Assertions to validate method input/output with nice error messages.",
-            "keywords": [
-                "assert",
-                "check",
-                "validate"
-            ],
-            "time": "2021-03-09T10:59:23+00:00"
-        },
-        {
-            "name": "webmozart/path-util",
-            "version": "2.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webmozart/path-util.git",
-                "reference": "d939f7edc24c9a1bb9c0dee5cb05d8e859490725"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/path-util/zipball/d939f7edc24c9a1bb9c0dee5cb05d8e859490725",
-                "reference": "d939f7edc24c9a1bb9c0dee5cb05d8e859490725",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3",
-                "webmozart/assert": "~1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.6",
-                "sebastian/version": "^1.0.1"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Webmozart\\PathUtil\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bernhard Schussek",
-                    "email": "bschussek@gmail.com"
-                }
-            ],
-            "description": "A robust cross-platform utility for normalizing, comparing and modifying file paths.",
-            "time": "2015-12-17T08:42:14+00:00"
         }
     ],
     "aliases": [],
@@ -11938,11 +11780,11 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">= 7.3"
+        "php": ">= 7.4"
     },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.3.26"
+        "php": "7.4"
     },
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.1.0"
 }
