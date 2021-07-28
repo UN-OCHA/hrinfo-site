@@ -215,7 +215,6 @@
         },
         "preserve-paths": [
             "html/sites/all/libraries",
-            "html/sites/all/modules/contrib",
             "html/sites/all/modules/custom",
             "html/sites/all/modules/access",
             "html/sites/all/modules/ar",
