@@ -196,7 +196,7 @@
         "drupal/core": "8.*"
     },
     "config": {
-        "bin-dir": "bin/",
+        "bin-dir": "vendor/bin/",
         "sort-packages": true,
         "optimize-autoloader": true,
         "platform": {
