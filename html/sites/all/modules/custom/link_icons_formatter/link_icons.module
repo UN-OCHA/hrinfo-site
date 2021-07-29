@@ -39,7 +39,10 @@ function link_icons_field_formatter_view($entity_type, $entity, $field, $instanc
 
     foreach ($items as $delta => $item) {
       $element[$delta] = array(
-        '#markup' => theme('link_icons_link', array('item' => $item, 'field' => $instance)),
+        '#markup' => theme('link_icons_link', array(
+          'item' => $item,
+          'field' => $instance
+        )),
         '#attached' => array(
           'css' => array($path . '/Font-Awesome-More/css/font-awesome.css'),
         ),
