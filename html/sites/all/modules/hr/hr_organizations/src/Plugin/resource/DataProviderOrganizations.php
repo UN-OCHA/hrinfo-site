@@ -35,7 +35,7 @@ class DataProviderOrganizations extends DataProviderTaxonomyTerm implements Data
     $entity_id = $this->getEntityIdByFieldId($identifier);
     $this->isValidEntity('update', $entity_id);
 
-    /* @var \EntityDrupalWrapper $wrapper */
+    /** @var \EntityDrupalWrapper $wrapper */
     $wrapper = entity_metadata_wrapper($this->entityType, $entity_id);
     $handler = entity_translation_get_handler($this->entityType, $wrapper->value());
     $translations = $handler->getTranslations();

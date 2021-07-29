@@ -442,7 +442,10 @@ function hr_bundles_form_og_ui_delete_membership_alter(&$form, &$form_state) {
  */
 function hr_bundles_init() {
   $path = current_path();
-  $paths = array('coordination/clusters/countries', 'coordination/clusters/global');
+  $paths = array(
+    'coordination/clusters/countries',
+    'coordination/clusters/global',
+  );
   if (in_array($path, $paths)) {
     $group = node_load(12);
     og_context('node', $group);

@@ -5,7 +5,7 @@
  * Install file for hr_decommissioner.
  */
 
-// @TODO:
+// @todo
 // Get a fresh copy of the database
 // Export the data of the field collection
 // Check the field collection field_users_ref
@@ -26,7 +26,10 @@ function hr_decommissioner_install() {
 
   // Remove the field instances on assessments and events, first the
   // "subfields".
-  $instances = field_read_instances(array('entity_type' => 'field_collection_item', 'bundle' => 'field_users_ref'));
+  $instances = field_read_instances(array(
+    'entity_type' => 'field_collection_item',
+    'bundle' => 'field_users_ref',
+  ));
   foreach ($instances as $instance) {
     hr_decomissioner_delete_instance($instance);
   }

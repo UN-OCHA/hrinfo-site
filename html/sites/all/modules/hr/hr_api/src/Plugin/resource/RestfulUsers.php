@@ -2,7 +2,6 @@
 
 namespace Drupal\hr_api\Plugin\resource;
 
-use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
@@ -39,12 +38,12 @@ class RestfulUsers extends ResourceCustom implements ResourceInterface {
     $public_fields = parent::publicFields();
 
     $public_fields['roles'] = array(
-      'callback' => array($this, 'getRoles')
+      'callback' => array($this, 'getRoles'),
     );
 
     $public_fields['spaces'] = array(
       'property' => 'og_user_node',
-      'process_callbacks' => array(array($this, 'getGroupRoles'))
+      'process_callbacks' => array(array($this, 'getGroupRoles')),
     );
 
     return $public_fields;

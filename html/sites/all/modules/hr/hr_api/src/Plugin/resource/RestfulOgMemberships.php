@@ -2,7 +2,6 @@
 
 namespace Drupal\hr_api\Plugin\resource;
 
-use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
@@ -39,35 +38,35 @@ class RestfulOgMemberships extends ResourceCustom implements ResourceInterface {
     $public_fields = parent::publicFields();
 
     $public_fields['entity_type'] = array(
-      'property' => 'entity_type'
+      'property' => 'entity_type',
     );
 
     $public_fields['entity'] = array(
       'property' => 'entity',
       'process_callbacks' => array(array($this, 'getUser')),
-      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldOgMembershipGroup'
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldOgMembershipGroup',
     );
 
     $public_fields['group_type'] = array(
-      'property' => 'group_type'
+      'property' => 'group_type',
     );
 
     $public_fields['group'] = array(
       'property' => 'group',
       'sub_property' => 'nid',
-      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldOgMembershipGroup'
+      'class' => '\Drupal\hr_api\Plugin\resource\fields\ResourceFieldOgMembershipGroup',
     );
 
     $public_fields['roles'] = array(
-      'callback' => array($this, 'getRoles')
+      'callback' => array($this, 'getRoles'),
     );
 
     $public_fields['created'] = array(
-      'property' => 'created'
+      'property' => 'created',
     );
 
     $public_fields['state'] = array(
-      'property' => 'state'
+      'property' => 'state',
     );
 
     return $public_fields;

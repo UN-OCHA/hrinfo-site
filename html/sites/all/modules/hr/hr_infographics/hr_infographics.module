@@ -79,7 +79,7 @@ function hr_infographics_search_api_views_query_alter(&$view, &$query) {
     // Case 4369 - Sort by default by publication date.
     $params = drupal_get_query_parameters($_GET, array(
       'q',
-      'page'
+      'page',
     ));
     $existing = $query->getSort();
     if (empty($existing) && !isset($params['sort']) && !isset($params['order'])) {

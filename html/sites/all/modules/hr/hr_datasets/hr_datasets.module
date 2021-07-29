@@ -48,9 +48,9 @@ function hr_datasets_block_view_alter(&$data, $block) {
       '#title' => 'Datasets by location',
       '#options' => $options,
       '#attributes' => array(
-    'onchange' => "top.location.href=document.getElementById('hr_datasets_location').options[document.getElementById('hr_datasets_location').selectedIndex].value",
-        'data-placeholder' => t('Find datasets by location...')
-),
+        'onchange' => "top.location.href=document.getElementById('hr_datasets_location').options[document.getElementById('hr_datasets_location').selectedIndex].value",
+        'data-placeholder' => t('Find datasets by location...'),
+      ),
     );
     $data['subject'] = '';
   }

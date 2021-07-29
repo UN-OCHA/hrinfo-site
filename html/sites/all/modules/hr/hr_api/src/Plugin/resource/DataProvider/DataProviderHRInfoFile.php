@@ -6,7 +6,6 @@ use Drupal\restful\Exception\BadRequestException;
 use Drupal\restful\Exception\ForbiddenException;
 use Drupal\restful\Exception\ServiceUnavailableException;
 use Drupal\restful\Http\RequestInterface;
-use Drupal\restful\Plugin\resource\Field\ResourceFieldCollectionInterface;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderFile;
 
 /**
@@ -27,8 +26,8 @@ class DataProviderHRInfoFile extends DataProviderFile {
    * @return object
    *   The saved file object.
    *
-   * @throws BadRequestException
-   * @throws ServiceUnavailableException
+   * @throws \Drupal\restful\Exception\BadRequestException
+   * @throws \Drupal\restful\Exception\ServiceUnavailableException
    *
    * @see file_save_upload()
    */
@@ -136,6 +135,7 @@ class DataProviderHRInfoFile extends DataProviderFile {
     // If file_destination() returns FALSE then $replace == FILE_EXISTS_ERROR
     // and there's an existing file so we need to bail.
     if ($file->destination === FALSE) {
+      // @codingStandardsIgnoreLine
       $message = format_string('The file %source could not be uploaded because a file by that name already exists in the destination %directory.', array('%source' => $source, '%directory' => $destination));
       throw new ServiceUnavailableException($message);
     }
@@ -164,6 +164,7 @@ class DataProviderHRInfoFile extends DataProviderFile {
     // operations.
     $file->uri = $file->destination;
     if (!$this::moveUploadedFile($files['files']['tmp_name'][$source], $file->uri)) {
+      // @codingStandardsIgnoreLine
       watchdog('file', 'Upload error. Could not move uploaded file %file to destination %destination.', array('%file' => $file->filename, '%destination' => $file->uri));
       $message = 'File upload error. Could not move uploaded file.';
       throw new ServiceUnavailableException($message);

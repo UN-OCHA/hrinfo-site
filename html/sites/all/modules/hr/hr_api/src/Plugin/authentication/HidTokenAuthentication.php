@@ -3,7 +3,6 @@
 namespace Drupal\hr_api\Plugin\authentication;
 
 use Drupal\restful\Http\RequestInterface;
-use Drupal\restful\Plugin\authentication\Authentication;
 use Drupal\restful_token_auth\Plugin\authentication\TokenAuthentication;
 use Firebase\JWT\JWT;
 
@@ -51,7 +50,7 @@ zqIPu9To7KUlCSjqqQTdPxFbOmnBN1rfENg3257N+jo7l6MRfJDL+6WhH6M7Yxp/
       $decoded = JWT::decode($token, $publicKey, array('RS256'));
       $data = array(
         'provider' => 'HumanitarianId',
-        'identifier' => $decoded->id
+        'identifier' => $decoded->id,
       );
       $identity = _hybridauth_identity_load($data);
       $uid = $identity['uid'];

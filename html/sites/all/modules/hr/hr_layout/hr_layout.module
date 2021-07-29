@@ -549,7 +549,7 @@ function hr_layout_create_links() {
  * HACK: fixes a bug that makes ajax calls stop working when adding an FTS
  * Visualization through "Bean Panes" (Panels)
  *
- * @TODO: Hack
+ * @todo Hack
  */
 function hr_layout_menu_alter(&$items) {
   $items['system/ajax']['page callback'] = 'hr_layout_ajax_form_callback';
