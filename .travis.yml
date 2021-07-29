@@ -2,11 +2,11 @@ dist: bionic
 language: php
 
 php:
-  - 7.3
+  - 7.4
 
 before_script:
   - cd $TRAVIS_BUILD_DIR
-  - composer self-update --1
+  - composer self-update --2
   - composer install
 
 script:

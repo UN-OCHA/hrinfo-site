@@ -5,7 +5,6 @@ namespace Drupal\hr_documents\Plugin\resource;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
 use Drupal\restful\Http\RequestInterface;
-use Drupal\restful\Exception\ForbiddenException;
 
 /**
  * Class definition.
@@ -26,7 +25,7 @@ class DataProviderFieldFilesCollection extends DataProviderEntity implements Dat
     $this->validateBody($object);
     $entity_info = $this->getEntityInfo();
     $bundle_key = $entity_info['entity keys']['bundle'];
-    // TODO: figure out how to derive the bundle when posting to a resource with
+    // @todo figure out how to derive the bundle when posting to a resource with
     // multiple bundles.
     $bundle = reset($this->bundles);
     $values = $bundle_key ? array($bundle_key => $bundle) : array();
@@ -39,7 +38,7 @@ class DataProviderFieldFilesCollection extends DataProviderEntity implements Dat
       unset($object['host_entity']);
     }
 
-    /* @var \EntityDrupalWrapper $wrapper */
+    /** @var \EntityDrupalWrapper $wrapper */
     $wrapper = entity_metadata_wrapper($this->entityType, $entity);
 
     $this->setPropertyValues($wrapper, $object, TRUE);
@@ -66,7 +65,7 @@ class DataProviderFieldFilesCollection extends DataProviderEntity implements Dat
       unset($object['host_entity']);
     }
 
-    /* @var \EntityDrupalWrapper $wrapper */
+    /** @var \EntityDrupalWrapper $wrapper */
     $wrapper = entity_metadata_wrapper($this->entityType, $entity_id);
 
     $this->setPropertyValues($wrapper, $object, $replace);

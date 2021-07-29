@@ -4,7 +4,6 @@ namespace Drupal\hr_events\Plugin\resource;
 
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
-use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 
 /**
  * Class RestfulEntityNodeEvents.
@@ -172,7 +171,7 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
     );
 
     $public_fields['language'] = array(
-      'property' => 'language'
+      'property' => 'language',
     );
 
     $public_fields['created'] = array(
@@ -193,7 +192,7 @@ class RestfulEntityNodeEvents extends ResourceCustom implements ResourceInterfac
 
     $public_fields['author'] = array(
       'property' => 'author',
-      'process_callbacks' => array(array($this, 'getUser'))
+      'process_callbacks' => array(array($this, 'getUser')),
     );
 
     return $public_fields;

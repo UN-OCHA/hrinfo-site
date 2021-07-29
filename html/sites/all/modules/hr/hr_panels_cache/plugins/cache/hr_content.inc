@@ -337,7 +337,7 @@ function hr_panels_cache_settings_form($conf, $display, $pid) {
     '#type' => 'select',
     '#options' => $options,
     '#default_value' => isset($conf['lifetime']) ? $conf['lifetime'] : 'none',
-    '#description' => t('The cache lifetime is the minimum amount of time that will elapse before the cache is emptied and recreated. If set to none the cache will not be recreated unless a content update triggers a rebuild.')
+    '#description' => t('The cache lifetime is the minimum amount of time that will elapse before the cache is emptied and recreated. If set to none the cache will not be recreated unless a content update triggers a rebuild.'),
   );
 
   $form['content_type'] = array(

@@ -1,8 +1,8 @@
 diff --git a/date.module b/date.module
-index e667b5dd..03d9ea88 100644
---- a/date/date.module
-+++ b/date/date.module
-@@ -231,6 +231,9 @@ function date_formatter_process($formatter, $entity_type, $entity, $field, $inst
+index 7415015a..9e9ccb9a 100644
+--- a/date.module
++++ b/date.module
+@@ -234,6 +234,9 @@ function date_formatter_process($formatter, $entity_type, $entity, array $field,
      $timezone = date_get_timezone($field['settings']['tz_handling'], $timezone);
    }
    $timezone_db = date_get_timezone_db($field['settings']['tz_handling']);

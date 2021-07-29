@@ -98,11 +98,11 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
     );
 
     $public_fields['timezone'] = array(
-      'callback' => array($this, 'getTimezone')
+      'callback' => array($this, 'getTimezone'),
     );
 
     $public_fields['social_media'] = array(
-      'property' => 'field_social_media'
+      'property' => 'field_social_media',
     );
 
     $public_fields['launch_date'] = array(
@@ -126,7 +126,7 @@ class RestfulEntityNodeOperations extends ResourceCustom implements ResourceInte
     );
 
     $public_fields['language'] = array(
-      'property' => 'language'
+      'property' => 'language',
     );
 
     return $public_fields;

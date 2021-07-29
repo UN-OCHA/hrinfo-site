@@ -154,7 +154,7 @@ function drush_hr_decommissioner_remove_contact_menus() {
       'hr_bundle',
       'hr_disaster',
       'hr_sector',
-      'hr_space'
+      'hr_space',
     ), 'IN');
   $result = $query->execute();
 
@@ -171,7 +171,7 @@ function drush_hr_decommissioner_remove_contact_menus() {
         'drush_hr_decommissioner_remove_contact_menus_callback',
         array(
           array_keys($result['node']),
-          $registry
+          $registry,
         ),
       ),
     ),

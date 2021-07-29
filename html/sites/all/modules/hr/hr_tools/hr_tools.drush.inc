@@ -57,6 +57,7 @@ function drush_hr_tools_access_rebuild() {
     $batch = array(
       'title' => t('Rebuilding content access permissions'),
       'operations' => array(
+        // @codingStandardsIgnoreLine
         array('_drush_hr_tools__node_access_rebuild_batch_operation', array($offset)),
       ),
       'finished' => '_drush_hr_tools__node_access_rebuild_batch_finished',
@@ -181,7 +182,7 @@ function drush_hr_tools_truncate_cache_tables() {
     'ctools_object_cache',
     'restful_cache_fragment',
     'views_content_cache',
-    'views_data_export_object_cache'
+    'views_data_export_object_cache',
   );
 
   foreach ($tables as $table) {

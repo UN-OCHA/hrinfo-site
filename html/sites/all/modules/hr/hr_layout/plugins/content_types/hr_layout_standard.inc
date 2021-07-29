@@ -176,6 +176,7 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
     }
   }
 
+  // @codingStandardsIgnoreStart
   $hpc_keys = array(
     'hno' => array('term' => 'Humanitarian Needs Overview', 'see_more' => 'node/' . $gid . '/documents/document-type/humanitarian-programme-cycle'),
     'srp' => array('term' => 'Strategic Response Plan', 'see_more' => 'node/' . $gid . '/documents/document-type/humanitarian-programme-cycle'),
@@ -183,6 +184,7 @@ function hr_layout_standard_render($subtype, $conf, $panel_args, $context = NULL
     'opr' => array('term' => 'Operational Peer Review Summary', 'see_more' => 'node/' . $gid . '/documents/document-type/humanitarian-programme-cycle'),
     'orp' => array('term' => 'Other Response Plan', 'see_more' => 'node/' . $gid . '/documents/document-type/other-response-plans'),
   );
+  // @codingStandardsIgnoreEnd
 
   $nodes = array();
   foreach ($hpc_keys as $hpc_key => $hpc_row) {

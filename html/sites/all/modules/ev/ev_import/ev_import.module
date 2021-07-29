@@ -295,7 +295,10 @@ function _ev_import_system_retrieve_file($url, $destination = NULL, $managed = F
   }
   $local = $managed ? file_save_data($result->data, $path, $replace) : file_unmanaged_save_data($result->data, $path, $replace);
   if (!$local) {
-    drupal_set_message(t('@remote could not be saved to @path.', array('@remote' => $url, '@path' => $path)), 'error');
+    drupal_set_message(t('@remote could not be saved to @path.', array(
+      '@remote' => $url,
+      '@path' => $path
+    )), 'error');
   }
 
   return $local;

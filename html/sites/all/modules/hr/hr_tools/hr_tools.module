@@ -248,11 +248,11 @@ function hr_tools_ga_report($node) {
           drupal_get_path('module', 'hr_tools') . '/js/hr_tools.analytics.js',
           array(
             'data' => array(
-        'hr_tools' => array(
-          'token' => $accessToken,
-          'pathFilter' => $path,
-        )
-),
+              'hr_tools' => array(
+                'token' => $accessToken,
+                'pathFilter' => $path,
+              ),
+            ),
             'type' => 'setting',
           ),
         ),
@@ -1130,7 +1130,6 @@ function hr_tools_drupal_http_request($url, array $options = array()) {
       break;
 
     // Moved permanently.
-
     case 301:
       // Moved temporarily.
     case 302:

@@ -4,17 +4,10 @@ namespace Drupal\hr_api\Plugin\resource\fields;
 
 use Drupal\restful\Plugin\resource\Field\ResourceFieldEntity;
 use Drupal\restful\Plugin\resource\Field\ResourceFieldEntityInterface;
-use Drupal\restful\Exception\ServerConfigurationException;
 use Drupal\restful\Exception\InaccessibleRecordException;
 use Drupal\restful\Exception\UnprocessableEntityException;
 use Drupal\restful\Http\Request;
 use Drupal\restful\Http\RequestInterface;
-use Drupal\restful\Plugin\resource\DataProvider\DataProvider;
-use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
-use Drupal\restful\Plugin\resource\Field\PublicFieldInfo\PublicFieldInfoEntity;
-use Drupal\restful\Plugin\resource\Field\PublicFieldInfo\PublicFieldInfoEntityInterface;
-use Drupal\restful\Plugin\resource\Field\PublicFieldInfo\PublicFieldInfoInterface;
-use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
  * Class definition.
@@ -26,7 +19,7 @@ class ResourceFieldEntityMinimal extends ResourceFieldEntity implements Resource
    */
   protected function singleValue(\EntityMetadataWrapper $property_wrapper, \EntityDrupalWrapper $wrapper, $account) {
     if ($resource = $this->getResource()) {
-      // TODO: The resource input data in the field definition has changed.
+      // @todo The resource input data in the field definition has changed.
       // Now it does not need to be keyed by bundle since you don't even need
       // an entity to use the resource based field.
       $embedded_identifier = $this->propertyIdentifier($property_wrapper);
@@ -60,7 +53,7 @@ class ResourceFieldEntityMinimal extends ResourceFieldEntity implements Resource
       $this->addMetadata($wrapper->getIdentifier(), $metadata);
       try {
         // Get the contents to embed in place of the reference ID.
-        /* @var ResourceFieldCollection $embedded_entity */
+        /** @var ResourceFieldCollection $embedded_entity */
         $embedded_entity = $embedded_resource
           ->getDataProvider()
           ->view($embedded_identifier);

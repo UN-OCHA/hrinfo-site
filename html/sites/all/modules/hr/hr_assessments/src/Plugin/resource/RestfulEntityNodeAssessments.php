@@ -155,7 +155,7 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
     );
 
     $public_fields['related_content'] = array(
-      'property' => 'field_related_content'
+      'property' => 'field_related_content',
     );
 
     $public_fields['themes'] = array(
@@ -183,7 +183,7 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
     );
 
     $public_fields['language'] = array(
-      'property' => 'language'
+      'property' => 'language',
     );
 
     $public_fields['created'] = array(
@@ -204,7 +204,7 @@ class RestfulEntityNodeAssessments extends ResourceCustom implements ResourceInt
 
     $public_fields['author'] = array(
       'property' => 'author',
-      'process_callbacks' => array(array($this, 'getUser'))
+      'process_callbacks' => array(array($this, 'getUser')),
     );
 
     return $public_fields;

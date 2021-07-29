@@ -8,7 +8,7 @@
 /**
  * Implements hook_drush_command().
  *
- * TODO: Remove: This was used once and shouldn't be used again.
+ * @todo Remove: This was used once and shouldn't be used again.
  */
 function hr_events_drush_command() {
   $items = array();
@@ -68,6 +68,7 @@ function drush_hr_events_hid_contacts_batch_operation($limit, &$context) {
 
   // Process the next 50 nodes.
   $batch_limit = $limit > 50 ? 50 : $limit;
+  // @codingStandardsIgnoreLine
   $results = db_query_range("SELECT entity_id, field_hid_contact_ref_cid FROM {field_data_field_hid_contact_ref} WHERE entity_id > :entity_id AND bundle = :bundle ORDER BY entity_id ASC", 0, $batch_limit, array(':entity_id' => $context['sandbox']['current_entity_id'], ':bundle' => 'hr_event'))->fetchAll();
   foreach ($results as $result) {
     $text = '';

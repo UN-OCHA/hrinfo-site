@@ -125,15 +125,15 @@ class RestfulEntityNodeBundles extends ResourceCustom implements ResourceInterfa
     );
 
     $public_fields['ngo_participation'] = array(
-      'property' => 'field_ngo_participation'
+      'property' => 'field_ngo_participation',
     );
 
     $public_fields['government_participation'] = array(
-      'property' => 'field_government_participation'
+      'property' => 'field_government_participation',
     );
 
     $public_fields['inter_cluster'] = array(
-      'property' => 'field_inter_cluster'
+      'property' => 'field_inter_cluster',
     );
 
     $public_fields['social_media'] = array(

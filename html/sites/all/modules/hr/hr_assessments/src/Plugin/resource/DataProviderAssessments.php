@@ -69,6 +69,7 @@ class DataProviderAssessments extends DataProviderEntity implements DataProvider
       $wrapper->field_asst_accessibility->set($values['accessibility']);
     }
     if ($values['file']) {
+      // @codingStandardsIgnoreLine
       $wrapper->field_asst_file->set(array('fid' => $values['file'], 'display' => 1));
     }
     if ($values['url']) {
@@ -87,7 +88,7 @@ class DataProviderAssessments extends DataProviderEntity implements DataProvider
     $this->validateBody($object);
     $entity_info = $this->getEntityInfo();
     $bundle_key = $entity_info['entity keys']['bundle'];
-    // TODO: figure out how to derive the bundle when posting to a resource with
+    // @todo figure out how to derive the bundle when posting to a resource with
     // multiple bundles.
     $bundle = reset($this->bundles);
     $values = $bundle_key ? array($bundle_key => $bundle) : array();
@@ -139,7 +140,7 @@ class DataProviderAssessments extends DataProviderEntity implements DataProvider
       unset($object['data']);
     }
 
-    /* @var \EntityDrupalWrapper $wrapper */
+    /** @var \EntityDrupalWrapper $wrapper */
     $wrapper = entity_metadata_wrapper($this->entityType, $entity);
 
     $this->setPropertyValues($wrapper, $object, TRUE);
@@ -187,7 +188,7 @@ class DataProviderAssessments extends DataProviderEntity implements DataProvider
       unset($object['host_entity']);
     }
 
-    /* @var \EntityDrupalWrapper $wrapper */
+    /** @var \EntityDrupalWrapper $wrapper */
     $wrapper = entity_metadata_wrapper($this->entityType, $entity_id);
 
     $report = NULL;

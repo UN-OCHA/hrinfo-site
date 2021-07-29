@@ -171,6 +171,7 @@ function hid_auth_get_user_data($cid = NULL) {
       return drupal_json_decode($res->data);
     }
     else {
+      // @codingStandardsIgnoreLine
       watchdog('hid_auth', 'Error occurred when attempting to fetch user data. HTTP code %code: @error', array('%code' => $res->code, '@error' => $res->error), WATCHDOG_WARNING);
     }
   }
