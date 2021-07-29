@@ -182,6 +182,7 @@
         "drupal/visualization": "^1.0-beta2",
         "drupal/wysiwyg": "^2.7",
         "drupal/wysiwyg_filter": "^1.6-rc9",
+        "drush/drush": "^8.3",
         "symfony/flex": "^1.11",
         "unocha/ocha_snap": "^1.1"
     },
