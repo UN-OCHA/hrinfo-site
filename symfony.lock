@@ -374,6 +374,9 @@
     "drupal/registry_autoload": {
         "version": "1.3.0"
     },
+    "drupal/registry_rebuild": {
+        "version": "2.5.0"
+    },
     "drupal/restclient": {
         "version": "2.0.0"
     },
