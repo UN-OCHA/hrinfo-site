@@ -92,6 +92,9 @@
     "drupal/date_views": {
         "version": "2.11.0-rc1"
     },
+    "drupal/daterangepicker": {
+        "version": "1.x-dev"
+    },
     "drupal/dbtng_migrator": {
         "version": "1.4.0"
     },
@@ -415,6 +418,9 @@
     },
     "drupal/smtp": {
         "version": "1.7.0"
+    },
+    "drupal/spatial": {
+        "version": "1.0.0-beta1"
     },
     "drupal/special_menu_items": {
         "version": "2.1.0"

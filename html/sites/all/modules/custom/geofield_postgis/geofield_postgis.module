@@ -1,6 +1,13 @@
 <?php
 
 /**
+ * @file
+ * This is a contrib module, but no composer-compatible version exists.
+ *
+ * @see https://www.drupal.org/project/geofield_postgis.
+ */
+
+/**
  * Implements hook_ctools_plugin_api().
  */
 function geofield_postgis_ctools_plugin_api($module, $api) {
@@ -8,8 +15,8 @@ function geofield_postgis_ctools_plugin_api($module, $api) {
 }
 
 /**
-* Implementation of hook_ctools_plugin_directory().
-*/
+ * Implements hook_ctools_plugin_directory().
+ */
 function geofield_postgis_ctools_plugin_directory($module, $plugin) {
   if ($plugin == 'geofield_backend') {
     return 'plugins/' . $plugin;
