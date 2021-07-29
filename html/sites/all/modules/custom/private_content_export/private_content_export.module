@@ -1,9 +1,13 @@
 <?php
+
 /**
  * @file
+ * This was previously in contrib, but I couldn't find where it came from.
  */
 
+// @codingStandardsIgnoreLine
 define('PCE_EXPORT_ROOT', '/tmp/pce');
+// @codingStandardsIgnoreLine
 define('PCE_EXPORT_ROOT_DATASET', '/tmp/pde');
 
 /**
@@ -38,6 +42,9 @@ function private_content_export_export_content() {
     if (!file_exists($base_path)) {
       mkdir($base_path . '/files', 0755, TRUE);
     }
+    // @todo Find out if this is needed. It's not going to work as is as $node
+    // is not defined.
+    // @codingStandardsIgnoreLine
     $output = $base_path . '/' . $node->nid . '.html';
 
     drush_print(dt("Processing @nid to @path", array(
@@ -175,7 +182,7 @@ function private_content_export_delete_content() {
 }
 
 /**
- * Implements hook_views_api()
+ * Implements hook_views_api().
  */
 function private_content_export_views_api() {
   return array(
