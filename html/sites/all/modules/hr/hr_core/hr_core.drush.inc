@@ -122,7 +122,7 @@ function drush_hr_core_operation_avg_file_size() {
 
       // Compute median file size.
       $result = db_query('SELECT percentile_disc(0.5) within group (order by filesize) FROM drupal.file_managed WHERE fid IN (:fids);', array(
-        ':fids' => $file_ids
+        ':fids' => $file_ids,
       ));
       foreach ($result as $record) {
         print_r($record);

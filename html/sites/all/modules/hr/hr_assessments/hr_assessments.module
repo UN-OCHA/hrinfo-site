@@ -126,6 +126,7 @@ function hr_assessments_form_hr_assessment_node_form_alter(&$form, &$form_state)
  */
 function hr_assessments_field_widget_form_alter(&$element, &$form_state, $context) {
   if (isset($element['#options'])) {
+    // @codingStandardsIgnoreLine
     if (in_array($element['#field_name'], array('field_population_types', 'field_themes'))) {
       foreach ($element['#options'] as $tid => &$option) {
         if (is_numeric($tid)) {

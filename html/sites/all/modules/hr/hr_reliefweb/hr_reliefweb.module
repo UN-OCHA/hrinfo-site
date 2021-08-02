@@ -714,7 +714,7 @@ function hr_reliefweb_get_list_of_filters() {
 /**
  * Map HR Info cluster to ReliefWeb filters.
  *
- * TODO: This is called from hr_reliefweb_document_list(), but is it used?
+ * @todo This is called from hr_reliefweb_document_list(), but is it used?
  */
 function _hr_reliefweb_map_cluster_to_rw_filters($node) {
   $filters = array();
@@ -725,7 +725,7 @@ function _hr_reliefweb_map_cluster_to_rw_filters($node) {
   }
 
   switch ($global_cluster) {
-    // TODO: there's inconsistency in the naming/ numbering, and there is no
+    // @todo there's inconsistency in the naming/ numbering, and there is no
     // 'global bundle' for 'Agriculture'.
     case 'Agriculture':
       $filters[] = array(

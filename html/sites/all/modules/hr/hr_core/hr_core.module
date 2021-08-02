@@ -399,7 +399,7 @@ function hr_core_form_node_form_alter(&$form, &$form_state) {
       }
 
     }
-    // TODO: check this is intended to skip all the rest of this function.
+    // @todo check this is intended to skip all the rest of this function.
     return;
   }
 
@@ -527,6 +527,7 @@ function hr_core_theme_field_multiple_value_form(array $variables) {
 
     $header = array(
       array(
+        // @codingStandardsIgnoreLine
         'data' => '<label>' . t('!title !required', array('!title' => $element['#title'], '!required' => $required)) . "</label>",
         'class' => array('field-label'),
       ),
@@ -577,6 +578,7 @@ function hr_core_theme_field_multiple_value_form(array $variables) {
 
     $header = array(
       array(
+        // @codingStandardsIgnoreLine
         'data' => '<label>' . t('!title !required', array('!title' => $element['#title'], '!required' => $required)) . "</label>",
         'colspan' => 2,
         'class' => array('field-label'),
@@ -1008,7 +1010,7 @@ function hr_core_file_feeds_set_target(FeedsSource $source, $entity, $target, ar
       try {
         $v->setAllowedExtensions($instance_info['settings']['file_extensions']);
         $field[LANGUAGE_NONE][$delta] += (array) $v->getFile($destination);
-        // @todo: Figure out how to properly populate this field.
+        // @todo Figure out how to properly populate this field.
         $field[LANGUAGE_NONE][$delta]['display'] = 1;
       }
       catch (Exception $e) {
@@ -1504,6 +1506,7 @@ function hr_core_file_update($new_file) {
       if ($is_blocked) {
         // Move the blocking file to a temporary location.
         if (!file_unmanaged_move($desired_destination, $tmp_destination)) {
+          // @codingStandardsIgnoreLine
           drupal_set_message(t('The file %old could not be moved to %new', array('%old' => $desired_destination, '%new' => $tmp_destination)), 'error');
           return;
         }
@@ -1517,6 +1520,7 @@ function hr_core_file_update($new_file) {
 
       // Move the new file to the preferred location.
       if (!file_unmanaged_move($old_destination, $desired_destination)) {
+        // @codingStandardsIgnoreLine
         drupal_set_message(t('The file %old could not be moved to %new', array('%old' => $old_destination, '%new' => $desired_destination)), 'error');
         return;
       }
@@ -1534,6 +1538,7 @@ function hr_core_file_update($new_file) {
 
         // Move the older file from temp to the new _X location.
         if (!file_unmanaged_move($tmp_destination, $old_destination)) {
+          // @codingStandardsIgnoreLine
           drupal_set_message(t('The file %old could not be moved to %new', array('%old' => $tmp_destination, '%new' => $old_destination)), 'error');
           return;
         }

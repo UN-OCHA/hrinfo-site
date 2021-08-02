@@ -29,7 +29,7 @@ function hr_offices_og_features_registry() {
  * Implements hook_form_alter()
  */
 function hr_offices_form_hr_office_node_form_alter(&$form, &$form_state, $form_id) {
-  // TODO: These two fields are no longer being collected.
+  // @todo These two fields are no longer being collected.
   // Consider how to handle changes for existing fields, or whether to remove
   // these fields altogether.
   unset($form['field_location']);

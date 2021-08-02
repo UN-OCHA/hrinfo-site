@@ -69,14 +69,14 @@ class DataProviderOptimized extends DataProviderEntity implements DataProviderIn
     $this->validateBody($object);
     $entity_info = $this->getEntityInfo();
     $bundle_key = $entity_info['entity keys']['bundle'];
-    // TODO: figure out how to derive the bundle when posting to a resource with
+    // @todo figure out how to derive the bundle when posting to a resource with
     // multiple bundles.
     $bundle = reset($this->bundles);
     $values = $bundle_key ? array($bundle_key => $bundle) : array();
 
     $entity = entity_create($this->entityType, $values);
 
-    /* @var \EntityDrupalWrapper $wrapper */
+    /** @var \EntityDrupalWrapper $wrapper */
     $wrapper = entity_metadata_wrapper($this->entityType, $entity);
 
     $this->setPropertyValues($wrapper, $object, TRUE);
@@ -127,7 +127,7 @@ class DataProviderOptimized extends DataProviderEntity implements DataProviderIn
     $entity_id = $this->getEntityIdByFieldId($identifier);
     $this->isValidEntity('update', $entity_id);
 
-    /* @var \EntityDrupalWrapper $wrapper */
+    /** @var \EntityDrupalWrapper $wrapper */
     $wrapper = entity_metadata_wrapper($this->entityType, $entity_id);
     $handler = entity_translation_get_handler($this->entityType, $wrapper->value());
     $translations = $handler->getTranslations();

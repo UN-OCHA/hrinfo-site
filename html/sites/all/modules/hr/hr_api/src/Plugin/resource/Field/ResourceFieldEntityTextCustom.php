@@ -2,8 +2,6 @@
 
 namespace Drupal\hr_api\Plugin\resource\Field;
 
-use Drupal\restful\Http\RequestInterface;
-use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 use Drupal\restful\Plugin\resource\Field\ResourceFieldEntityText;
 use Drupal\restful\Plugin\resource\Field\ResourceFieldEntityInterface;
 
@@ -17,7 +15,6 @@ class ResourceFieldEntityTextCustom extends ResourceFieldEntityText implements R
    */
   public function preprocess($value) {
     // Text field. Check if field has an input format.
-
     $field_info = field_info_field($this->getProperty());
     // If there was no bundle that had the field instance, then return NULL.
     if (!$instance = field_info_instance($this->getEntityType(), $this->getProperty(), $this->getBundle())) {
@@ -33,7 +30,7 @@ class ResourceFieldEntityTextCustom extends ResourceFieldEntityText implements R
 
       return array(
         'value' => $value,
-        // TODO: This is hardcoded! Fix it.
+        // @todo This is hardcoded! Fix it.
         'format' => 'hr_wysiwyg',
       );
     }

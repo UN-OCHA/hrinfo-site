@@ -3,7 +3,6 @@
 namespace Drupal\hr_api\Plugin\resource;
 
 use Drupal\restful\Exception\UnauthorizedException;
-use Drupal\hr_api\Plugin\resource\ResourceCustom;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 use Drupal\restful\Http\RequestInterface;
 
@@ -46,7 +45,7 @@ class RestfulFiles extends ResourceCustom implements ResourceInterface {
     );
 
     $public_fields['preview'] = array(
-      'callback' => array($this, 'getPreview')
+      'callback' => array($this, 'getPreview'),
     );
 
     return $public_fields;

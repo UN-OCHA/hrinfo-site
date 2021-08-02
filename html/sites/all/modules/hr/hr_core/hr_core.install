@@ -521,8 +521,8 @@ function hr_core_update_7031() {
 function hr_core_update_7032() {
   db_update('node_type')
     ->fields(array(
-    'modified' => 0
-  ))
+      'modified' => 0,
+    ))
     ->execute();
 }
 
@@ -580,7 +580,7 @@ function hr_core_update_7034() {
   features_revert(array(
     'hr_layout' => array(
       'context',
-    )
+    ),
   ));
 }
 
@@ -590,14 +590,14 @@ function hr_core_update_7034() {
 function hr_core_update_7035() {
   db_update('field_data_field_asst_accessibility')
     ->fields(array(
-      'field_asst_accessibility_value' => 'Available on Request'
+      'field_asst_accessibility_value' => 'Available on Request',
     ))
     ->condition('field_asst_accessibility_value', 'Restricted Distribution')
     ->execute();
 
   db_update('field_data_field_asst_accessibility')
     ->fields(array(
-      'field_asst_accessibility_value' => 'Not Available'
+      'field_asst_accessibility_value' => 'Not Available',
     ))
     ->condition('field_asst_accessibility_value', 'Not Applicable')
     ->execute();
@@ -773,6 +773,7 @@ function hr_core_update_7047(&$sandbox) {
   // Batches of 50.
   $limit = 50;
 
+  // @codingStandardsIgnoreLine
   $results = db_query_range("SELECT entity_id, field_hid_contact_ref_cid FROM {field_data_field_hid_contact_ref} WHERE entity_id > :entity_id AND bundle = :bundle AND entity_id NOT IN (SELECT entity_id FROM {field_data_field_contacts_text}) ORDER BY entity_id ASC", 0, $limit, array(':entity_id' => $sandbox['current_entity_id'], ':bundle' => 'hr_event'))->fetchAll();
 
   foreach ($results as $result) {

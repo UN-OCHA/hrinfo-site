@@ -52,7 +52,7 @@ function hr_events_views_query_alter(&$view, &$query) {
             $condition = array(
               'field' => 'field_data_field_disasters.field_disasters_target_id',
               'value' => $nid,
-              'operator' => '='
+              'operator' => '=',
             );
           }
         }
@@ -232,6 +232,7 @@ function hr_events_pdf_output($nid) {
   // Print PDF using Snap service
   // .
   // @see https://github.com/UN-OCHA/tools-snap-service
+  // @codingStandardsIgnoreLine
   $html_url = url($html_path, array('absolute' => TRUE, 'query' => $current_params));
 
   // Since Drupal's string translations are set up with this existing string, we

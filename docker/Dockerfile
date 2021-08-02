@@ -1,4 +1,12 @@
-FROM unocha/php7-k8s:${TAG:-7.3-NR-develop}
+FROM unocha/unified-builder:7.4-develop as builder
+ARG  BRANCH_ENVIRONMENT
+ENV  NODE_ENV=$BRANCH_ENVIRONMENT
+COPY . /srv/www
+WORKDIR /srv/www
+RUN composer self-update --2 && \
+    composer install --quiet --no-dev --prefer-dist
+
+FROM unocha/php-k8s:${TAG:-7.4-NR-develop}
 
 ARG VCS_REF
 ARG VCS_URL
@@ -20,11 +28,12 @@ LABEL info.humanitarianresponse.build.date=$BUILD_DATE \
       info.humanitarianresponse.build.vcs-url=$VCS_URL \
       info.humanitarianresponse.build.vcs-ref=$VCS_REF
 
-COPY ./html /srv/www/html
-COPY ./composer.json /srv/www/composer.json
-COPY ./composer.lock /srv/www/composer.lock
-COPY ./composer.patches.json /srv/www/composer.patches.json
-COPY ./docker/custom /etc/nginx/custom
+COPY --from=builder /srv/www/html /srv/www/html
+COPY --from=builder /srv/www/vendor /srv/www/vendor
+COPY --from=builder /srv/www/composer.json /srv/www/composer.json
+COPY --from=builder /srv/www/composer.lock /srv/www/composer.lock
+COPY --from=builder /srv/www/composer.patches.json /srv/www/composer.patches.json
+COPY --from=builder /srv/www/docker/custom /etc/nginx/custom
 
 RUN  cd /srv/www/html/sites && \
        rm -f www.humanitarianresponse.info && \

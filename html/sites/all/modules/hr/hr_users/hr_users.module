@@ -145,6 +145,7 @@ function hr_users_hybridauth_user_login($account, $data) {
   $profile = profile2_load_by_user($account, 'main');
   if (empty($profile)) {
     $profile_type = profile2_get_types('main');
+    // @codingStandardsIgnoreLine
     $profile = profile2_create(array('user' => $account, 'type' => $profile_type));
   }
   if (!empty($data) && $profile) {
@@ -209,7 +210,7 @@ function hr_users_check_profile($redirect = NULL) {
     $profile_path = 'user/' . $user->uid . '/edit/main';
     $allowed_paths = array(
       $profile_path,
-      'user/logout'
+      'user/logout',
     );
     if ($redirect && !in_array($_GET['q'], $allowed_paths)) {
       drupal_set_message('Please complete your profile before using other site features.');
