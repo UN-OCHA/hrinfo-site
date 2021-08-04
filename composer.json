@@ -15,6 +15,19 @@
             "url": "https://packages.drupal.org/7"
         },
         {
+            "type": "package",
+            "package": {
+                "name": "hrinfo/spatial-import",
+                "version": "dev-master",
+                "type":"drupal-module",
+                "source": {
+                    "url": "https://github.com/UN-OCHA/spatial_import.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        },
+        {
            "type": "package",
            "package": {
              "name": "lkmorlan/icalcreator",
@@ -187,6 +200,7 @@
         "drupal/wysiwyg": "^2.7",
         "drupal/wysiwyg_filter": "^1.6-rc9",
         "drush/drush": "^8.3",
+        "hrinfo/spatial-import": "dev-master",
         "symfony/flex": "^1.11",
         "unocha/ocha_snap": "^1.1"
     },
