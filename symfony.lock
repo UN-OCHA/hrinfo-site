@@ -503,6 +503,9 @@
     "drush/drush": {
         "version": "8.4.8"
     },
+    "hrinfo/spatial-import": {
+        "version": "dev-master"
+    },
     "lkmorlan/icalcreator": {
         "version": "v2.20.4"
     },

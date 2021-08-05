@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d502c809d67444e784af10f04c8be51a",
+    "content-hash": "6ccf7cc48c69d781a8d4eeeba73b336c",
     "packages": [
         {
             "name": "composer/installers",
@@ -10792,6 +10792,16 @@
             "time": "2021-03-22T15:27:55+00:00"
         },
         {
+            "name": "hrinfo/spatial-import",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/UN-OCHA/spatial_import.git",
+                "reference": "master"
+            },
+            "type": "drupal-module"
+        },
+        {
             "name": "nikic/php-parser",
             "version": "v4.12.0",
             "source": {
@@ -13145,7 +13155,8 @@
         "drupal/token_tweaks": 20,
         "drupal/twitter_pane": 20,
         "drupal/views_content_cache": 15,
-        "drupal/views_data_export": 20
+        "drupal/views_data_export": 20,
+        "hrinfo/spatial-import": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
