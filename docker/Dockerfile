@@ -3,7 +3,7 @@ ARG  BRANCH_ENVIRONMENT
 ENV  NODE_ENV=$BRANCH_ENVIRONMENT
 COPY . /srv/www
 WORKDIR /srv/www
-RUN composer self-update --2 && \
+RUN composer self-update && \
     composer install --quiet --no-dev --prefer-dist
 
 FROM unocha/php-k8s:${TAG:-7.4-NR-develop}
