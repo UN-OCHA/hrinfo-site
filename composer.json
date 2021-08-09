@@ -17,7 +17,7 @@
         {
             "type": "package",
             "package": {
-                "name": "hrinfo/spatial-import",
+                "name": "hrinfo/spatial_import",
                 "version": "dev-master",
                 "type":"drupal-module",
                 "source": {
@@ -200,7 +200,7 @@
         "drupal/wysiwyg": "^2.7",
         "drupal/wysiwyg_filter": "^1.6-rc9",
         "drush/drush": "^8.3",
-        "hrinfo/spatial-import": "dev-master",
+        "hrinfo/spatial_import": "dev-master",
         "symfony/flex": "^1.11",
         "unocha/ocha_snap": "^1.1"
     },

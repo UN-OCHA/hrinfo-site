@@ -285,6 +285,18 @@ form .table-responsive {
   }
 }
 
+/* Temporary fix for file-chooser buttons. */
+/* @see SCS-68. */
+.file-chooser-field-wrapper a.button {
+  padding: 5px 7px;
+  border-radius: 2px;
+  color: #333;
+  background: -webkit-linear-gradient(top,#ffffff 20%,#f6f6f6 50%,#eeeeee 52%,#f4f4f4 100%);
+  background: linear-gradient(top,#ffffff 20%,#f6f6f6 50%,#eeeeee 52%,#f4f4f4 100%);
+  border: 1px solid #e3e3e3;
+  text-decoration: none;
+}
+
 /* Hiding fields. */
 .js .hr-add-button {
   background: none;
