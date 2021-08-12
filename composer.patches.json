@@ -15,6 +15,9 @@
       "drupal/entity_api": {
         "Send entire node to node_access on create": "https://www.drupal.org/files/issues/2018-12-04/3017993-send_full_node.patch"
       },
+      "drupal/flag": {
+        "Unsupported operand types": "https://www.drupal.org/files/issues/flag-array-check-1925922-169.patch"
+      },
       "drupal/fts": {
         "Quite a lof of local modifications": "PATCHES/fts-hacks.patch"
       },
@@ -50,9 +53,12 @@
       "drupal/pdfpreview": {
         "HRINFO-1035 filemtime errors": "PATCHES/hrinfo-1035-pdfpreview-filemtime-error.patch"
       },
-      "drupal/redirect": {
-        "Avoid duplicates on generation": "https://www.drupal.org/files/issues/redirect-duplicate_redirect_save_handling-2260499-11.patch",
-        "Multilingual redirect to files": "https://www.drupal.org/files/issues/2543606-redirect-to-local-files-no-language-prefix-6.patch"
+      "drupal/phone": {
+        "copied_over_from_drush_make1": "https://drupal.org/files/phone-teltel-prefix-1973274-2.patch",
+        "copied_over_from_drush_make2": "https://drupal.org/files/2060301-phone_raw-1.patch",
+        "copied_over_from_drush_make3": "https://drupal.org/files/issues/updated_library-2134987-2.patch",
+        "copied_over_from_drush_make4": "https://drupal.org/files/issues/satellite_phones-2144551-1.patch",
+        "copied_over_from_drush_make5": "https://drupal.org/files/issues/2216285-migrate_issue-1.patch"
       },
       "drupal/restful": {
         "HR.info issue 754": "PATCHES/restful-754.patch",
