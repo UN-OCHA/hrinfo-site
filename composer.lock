@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6ccf7cc48c69d781a8d4eeeba73b336c",
+    "content-hash": "aa8dcd53d839926ea16a18e147bab953",
     "packages": [
         {
             "name": "composer/installers",
@@ -10792,7 +10792,7 @@
             "time": "2021-03-22T15:27:55+00:00"
         },
         {
-            "name": "hrinfo/spatial-import",
+            "name": "hrinfo/spatial_import",
             "version": "dev-master",
             "source": {
                 "type": "git",
@@ -13156,7 +13156,7 @@
         "drupal/twitter_pane": 20,
         "drupal/views_content_cache": 15,
         "drupal/views_data_export": 20,
-        "hrinfo/spatial-import": 20
+        "hrinfo/spatial_import": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
