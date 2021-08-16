@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d17af649eb73729f78721528faea0805",
+    "content-hash": "60f0cfd09581c514a8720fd07e10d377",
     "packages": [
         {
             "name": "composer/installers",
@@ -13339,17 +13339,12 @@
         "drupal/og_menu": 20,
         "drupal/og_moderation": 20,
         "drupal/openlayers": 20,
-        "drupal/panels_bootstrap_layouts": 20,
         "drupal/pdfpreview": 20,
         "drupal/phone": 20,
-        "drupal/profile2": 20,
         "drupal/search_api_sorts_widget": 20,
-        "drupal/special_menu_items": 20,
-        "drupal/title": 15,
         "drupal/token_tweaks": 20,
         "drupal/twitter_pane": 20,
         "drupal/views_content_cache": 15,
-        "drupal/views_data_export": 20,
         "hrinfo/spatial_import": 20
     },
     "prefer-stable": true,

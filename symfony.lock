@@ -512,6 +512,9 @@
     "hrinfo/spatial-import": {
         "version": "dev-master"
     },
+    "hrinfo/spatial_import": {
+        "version": "dev-master"
+    },
     "nikic/php-parser": {
         "version": "v4.12.0"
     },
