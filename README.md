@@ -7,6 +7,11 @@ previously). Pinned modules should be checked before updating them. Some
 modules don't have recent releases, so we're on the dev branch. Watch out for
 unintended updates for those.
 
+Composer isn't handling libraries at the moment - there is a w.i.p branch for
+this: HRINFO-1067-remove-contrib-modules-from-repo.
+To update CKeditor library see build-config.js. The linkit module plugin is
+copied over from the module, but may not need to be. Test this.
+
 16/03/2021 Pinned Date and Redirect modules during a composer update. Date
 because there's a warning to wait till version 2.12
 https://www.drupal.org/project/date/releases/7.x-2.11

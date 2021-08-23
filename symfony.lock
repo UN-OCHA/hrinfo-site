@@ -101,6 +101,9 @@
     "drupal/defaultconfig": {
         "version": "1.0.0-alpha11"
     },
+    "drupal/devel": {
+        "version": "1.7.0"
+    },
     "drupal/diff": {
         "version": "3.4.0"
     },
@@ -424,6 +427,9 @@
     },
     "drupal/special_menu_items": {
         "version": "2.1.0"
+    },
+    "drupal/stage_file_proxy": {
+        "version": "1.9.0"
     },
     "drupal/strongarm": {
         "version": "2.0.0"
