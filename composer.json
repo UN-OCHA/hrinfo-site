@@ -206,6 +206,8 @@
     },
     "require-dev": {
         "drupal/coder": "8.3.13",
+        "drupal/devel": "^1.7",
+        "drupal/stage_file_proxy": "^1.9",
         "phpmd/phpmd": "^2.6",
         "sebastian/phpcpd": "^4.0",
         "squizlabs/php_codesniffer": "3.6.0"
