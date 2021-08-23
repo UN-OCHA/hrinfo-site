@@ -22,6 +22,7 @@ function hr_wysiwyg_default_linkit_profiles() {
     'text_formats' => array(
       'panopoly_html_text' => 'panopoly_html_text',
       'hr_wysiwyg' => 'hr_wysiwyg',
+      'panopoly_wysiwyg_text' => 'panopoly_wysiwyg_text',
       'full_html' => 0,
       'plain_text' => 0,
       'php_code' => 0,
@@ -48,7 +49,7 @@ function hr_wysiwyg_default_linkit_profiles() {
         'weight' => '-10',
       ),
       'entity:fieldable_panels_pane' => array(
-        'enabled' => 0,
+        'enabled' => 1,
         'weight' => '-10',
       ),
       'entity:bean' => array(
