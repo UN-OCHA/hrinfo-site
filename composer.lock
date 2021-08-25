@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6ccf7cc48c69d781a8d4eeeba73b336c",
+    "content-hash": "04e89e0f62de03d9cfd89897fd056e2e",
     "packages": [
         {
             "name": "composer/installers",
@@ -10792,7 +10792,7 @@
             "time": "2021-03-22T15:27:55+00:00"
         },
         {
-            "name": "hrinfo/spatial-import",
+            "name": "hrinfo/spatial_import",
             "version": "dev-master",
             "source": {
                 "type": "git",
@@ -12374,6 +12374,126 @@
             "time": "2021-02-06T10:44:32+00:00"
         },
         {
+            "name": "drupal/devel",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/devel.git",
+                "reference": "7.x-1.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/devel-7.x-1.7.zip",
+                "reference": "7.x-1.7",
+                "shasum": "dbbd9a2e1a45b16467a26d0db2887a0c3dd6a63b"
+            },
+            "require": {
+                "drupal/drupal": "~7.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "7.x-1.7",
+                    "datestamp": "1550852888",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/7/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "drupalspoons",
+                    "homepage": "https://www.drupal.org/user/3647684"
+                },
+                {
+                    "name": "moshe weitzman",
+                    "homepage": "https://www.drupal.org/user/23"
+                }
+            ],
+            "description": "Various blocks, pages, and functions for developers.",
+            "homepage": "https://www.drupal.org/project/devel",
+            "support": {
+                "source": "https://git.drupalcode.org/project/devel"
+            }
+        },
+        {
+            "name": "drupal/stage_file_proxy",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/stage_file_proxy.git",
+                "reference": "7.x-1.9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-7.x-1.9.zip",
+                "reference": "7.x-1.9",
+                "shasum": "569a488b51cbbbc9ac5561a14fb47ca16b2bcdfa"
+            },
+            "require": {
+                "drupal/drupal": "~7.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "7.x-1.9",
+                    "datestamp": "1555519304",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/7/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "BarisW",
+                    "homepage": "https://www.drupal.org/user/107229"
+                },
+                {
+                    "name": "geek-merlin",
+                    "homepage": "https://www.drupal.org/user/229048"
+                },
+                {
+                    "name": "greggles",
+                    "homepage": "https://www.drupal.org/user/36762"
+                },
+                {
+                    "name": "markdorison",
+                    "homepage": "https://www.drupal.org/user/346106"
+                },
+                {
+                    "name": "moshe weitzman",
+                    "homepage": "https://www.drupal.org/user/23"
+                },
+                {
+                    "name": "msonnabaum",
+                    "homepage": "https://www.drupal.org/user/75278"
+                },
+                {
+                    "name": "netaustin",
+                    "homepage": "https://www.drupal.org/user/199298"
+                },
+                {
+                    "name": "robwilmshurst",
+                    "homepage": "https://www.drupal.org/user/144488"
+                }
+            ],
+            "description": "Proxies files from production server so you don't have to transfer them manually",
+            "homepage": "https://www.drupal.org/project/stage_file_proxy",
+            "support": {
+                "source": "https://git.drupalcode.org/project/stage_file_proxy"
+            }
+        },
+        {
             "name": "pdepend/pdepend",
             "version": "2.9.0",
             "source": {
@@ -13156,7 +13276,7 @@
         "drupal/twitter_pane": 20,
         "drupal/views_content_cache": 15,
         "drupal/views_data_export": 20,
-        "hrinfo/spatial-import": 20
+        "hrinfo/spatial_import": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

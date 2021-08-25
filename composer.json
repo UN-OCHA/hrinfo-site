@@ -17,7 +17,7 @@
         {
             "type": "package",
             "package": {
-                "name": "hrinfo/spatial-import",
+                "name": "hrinfo/spatial_import",
                 "version": "dev-master",
                 "type":"drupal-module",
                 "source": {
@@ -200,12 +200,14 @@
         "drupal/wysiwyg": "^2.7",
         "drupal/wysiwyg_filter": "^1.6-rc9",
         "drush/drush": "^8.3",
-        "hrinfo/spatial-import": "dev-master",
+        "hrinfo/spatial_import": "dev-master",
         "symfony/flex": "^1.11",
         "unocha/ocha_snap": "^1.1"
     },
     "require-dev": {
         "drupal/coder": "8.3.13",
+        "drupal/devel": "^1.7",
+        "drupal/stage_file_proxy": "^1.9",
         "phpmd/phpmd": "^2.6",
         "sebastian/phpcpd": "^4.0",
         "squizlabs/php_codesniffer": "3.6.0"
@@ -217,13 +219,15 @@
         "bin-dir": "vendor/bin/",
         "sort-packages": true,
         "optimize-autoloader": true,
+        "preferred-install": {
+          "*": "dist"
+        },
         "platform": {
           "php": "7.4"
         }
     },
     "minimum-stability": "alpha",
     "prefer-stable": true,
-    "prefer-dist": true,
     "extra": {
         "enable-patching": true,
         "installer-paths": {
