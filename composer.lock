@@ -4144,6 +4144,10 @@
                 {
                     "name": "slashrsm",
                     "homepage": "https://www.drupal.org/user/744628"
+                },
+                {
+                    "name": "taran2L",
+                    "homepage": "https://www.drupal.org/user/364424"
                 }
             ],
             "description": "Extends Drupal file entities to be fieldable and viewable.",
@@ -5511,7 +5515,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-1.9",
-                    "datestamp": "1618831237",
+                    "datestamp": "1618831311",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8555,7 +8559,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-1.28",
-                    "datestamp": "1626685174",
+                    "datestamp": "1628174436",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"

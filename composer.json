@@ -219,13 +219,15 @@
         "bin-dir": "vendor/bin/",
         "sort-packages": true,
         "optimize-autoloader": true,
+        "preferred-install": {
+          "*": "dist"
+        },
         "platform": {
           "php": "7.4"
         }
     },
     "minimum-stability": "alpha",
     "prefer-stable": true,
-    "prefer-dist": true,
     "extra": {
         "enable-patching": true,
         "installer-paths": {
