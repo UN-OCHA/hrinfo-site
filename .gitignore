@@ -1,3 +1,6 @@
 # Test stuff.
 /vendor
 /bin
+
+# Don't keep contrib modules in the repo.
+html/sites/all/modules/contrib
