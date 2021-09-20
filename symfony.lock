@@ -29,6 +29,9 @@
     "drupal/admin_views": {
         "version": "1.7.0"
     },
+    "drupal/admin_views_system_display": {
+        "version": "1.8.0"
+    },
     "drupal/advagg": {
         "version": "2.34.0"
     },

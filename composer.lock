@@ -692,28 +692,32 @@
         },
         {
             "name": "drupal/admin_views",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/admin_views.git",
-                "reference": "7.x-1.7"
+                "reference": "7.x-1.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/admin_views-7.x-1.7.zip",
-                "reference": "7.x-1.7",
-                "shasum": "26db1aa6e7a6888b33d17800df1b6d45c19e0b16"
+                "url": "https://ftp.drupal.org/files/projects/admin_views-7.x-1.8.zip",
+                "reference": "7.x-1.8",
+                "shasum": "5c9c631c311503e980d7f64be407bc9e052b0a8f"
             },
             "require": {
+                "drupal/admin_views_system_display": "*",
                 "drupal/drupal": "~7.0",
                 "drupal/views": "*",
-                "drupal/views_bulk_operations": "^3.2"
+                "drupal/views_bulk_operations": "*"
+            },
+            "require-dev": {
+                "drupal/views": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.7",
-                    "datestamp": "1574192284",
+                    "version": "7.x-1.8",
+                    "datestamp": "1631191205",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -735,6 +739,45 @@
                 }
             ],
             "description": "Replaces all system object management pages in Drupal core with real views.",
+            "homepage": "https://www.drupal.org/project/admin_views",
+            "support": {
+                "source": "https://git.drupalcode.org/project/admin_views"
+            }
+        },
+        {
+            "name": "drupal/admin_views_system_display",
+            "version": "1.8.0",
+            "require": {
+                "drupal/admin_views": "^1",
+                "drupal/drupal": "~7.0",
+                "drupal/views": "*"
+            },
+            "type": "metapackage",
+            "extra": {
+                "drupal": {
+                    "version": "7.x-1.8",
+                    "datestamp": "1631191205",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/7/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "DamienMcKenna",
+                    "homepage": "https://www.drupal.org/user/108450"
+                },
+                {
+                    "name": "vijaycs85",
+                    "homepage": "https://www.drupal.org/user/93488"
+                }
+            ],
+            "description": "Custom Views display plugin for overriding system pages.",
             "homepage": "https://www.drupal.org/project/admin_views",
             "support": {
                 "source": "https://git.drupalcode.org/project/admin_views"
@@ -3104,17 +3147,17 @@
         },
         {
             "name": "drupal/facetapi",
-            "version": "1.6.0",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/facetapi.git",
-                "reference": "7.x-1.6"
+                "reference": "7.x-1.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facetapi-7.x-1.6.zip",
-                "reference": "7.x-1.6",
-                "shasum": "23314e7a8e5ebb5c54c1b7d856a95c1a0d304b0b"
+                "url": "https://ftp.drupal.org/files/projects/facetapi-7.x-1.9.zip",
+                "reference": "7.x-1.9",
+                "shasum": "9fa24b8e181610cd8ad7fbd545fa22c4f93abb93"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -3123,8 +3166,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.6",
-                    "datestamp": "1568910361",
+                    "version": "7.x-1.9",
+                    "datestamp": "1630088971",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4033,17 +4076,17 @@
         },
         {
             "name": "drupal/file_entity",
-            "version": "2.30.0",
+            "version": "2.32.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/file_entity.git",
-                "reference": "7.x-2.30"
+                "reference": "7.x-2.32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/file_entity-7.x-2.30.zip",
-                "reference": "7.x-2.30",
-                "shasum": "45c22718fb0a6d2319d89fba991ff5396e028249"
+                "url": "https://ftp.drupal.org/files/projects/file_entity-7.x-2.32.zip",
+                "reference": "7.x-2.32",
+                "shasum": "5d6c1cfc13aea8901e7c562911490979263ec88e"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -4056,8 +4099,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.30",
-                    "datestamp": "1592259100",
+                    "version": "7.x-2.32",
+                    "datestamp": "1629854566",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9671,17 +9714,17 @@
         },
         {
             "name": "drupal/usermerge",
-            "version": "2.11.0",
+            "version": "2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/usermerge.git",
-                "reference": "7.x-2.11"
+                "reference": "7.x-2.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/usermerge-7.x-2.11.zip",
-                "reference": "7.x-2.11",
-                "shasum": "fae7006d387f9a8bc90eb554d67639b79c083763"
+                "url": "https://ftp.drupal.org/files/projects/usermerge-7.x-2.12.zip",
+                "reference": "7.x-2.12",
+                "shasum": "aac19c128d45a70360f6fb23f020f666a56807ba"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -9689,8 +9732,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.11",
-                    "datestamp": "1439807339",
+                    "version": "7.x-2.12",
+                    "datestamp": "1631281856",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9971,17 +10014,17 @@
         },
         {
             "name": "drupal/views",
-            "version": "3.24.0",
+            "version": "3.25.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views.git",
-                "reference": "7.x-3.24"
+                "reference": "7.x-3.25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views-7.x-3.24.zip",
-                "reference": "7.x-3.24",
-                "shasum": "2169872cbdfabdf6595aa77b48230314c3fcb97c"
+                "url": "https://ftp.drupal.org/files/projects/views-7.x-3.25.zip",
+                "reference": "7.x-3.25",
+                "shasum": "fafd10b604e3a43a126145a70e87c0521a485ce9"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -9990,8 +10033,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-3.24",
-                    "datestamp": "1583615729",
+                    "version": "7.x-3.25",
+                    "datestamp": "1631208786",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
