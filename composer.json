@@ -135,7 +135,7 @@
         "drupal/node_clone": "^1.0",
         "drupal/node_revision_delete": "^2.7",
         "drupal/og": "^2.10",
-        "drupal/og_features": "^2.0-beta4",
+        "drupal/og_features": "^2.x-dev",
         "drupal/og_menu": "^3.0+6-dev",
         "drupal/og_moderation": "^2.x-dev",
         "drupal/og_role_delegate": "^1.0-beta2",
