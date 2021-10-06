@@ -1,4 +1,4 @@
-name = "OG features"
+name = "Organic groups features"
 description = "Turn features on and off within groups."
 package = "Organic groups"
 dependencies[] = "og"

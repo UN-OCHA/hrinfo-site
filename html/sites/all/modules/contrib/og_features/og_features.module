@@ -32,6 +32,22 @@ function og_features_permission() {
 }
 
 /**
+ * Implements hook_og_permission().
+ */
+function og_features_og_permission() {
+  $perms = array();
+  $perms['edit group features'] = array(
+    'title' => t('Edit group features'),
+    'description' => t('Users may turn on/off group features.'),
+    'roles' => array(OG_ANONYMOUS_ROLE, OG_AUTHENTICATED_ROLE),
+    'default role' => array(OG_ADMINISTRATOR_ROLE),
+    'restrict access' => TRUE,
+    'module' => 'og_features',
+  );
+  return $perms;
+}
+
+/**
  * Implements hook_menu().
  */
 function og_features_menu() {
@@ -348,19 +364,21 @@ function og_features_feature_form_access($entity_type, $entity_id) {
     return FALSE;
   }
 
-  // Administers always have access
+  // Administers always have access.
   if (user_access('administer og features') || user_access('edit all group features')) {
     return TRUE;
   }
 
-  // Check if the user can edit their own group features
-  if (user_access('edit own group features')) {
-    // Make sure the user is an admin of this group
-    if (og_user_access($entity_type, $entity_id, 'administer group')) {
-      return TRUE;
-    }
+  // Check if the user can edit their own group features.
+  if (user_access('edit own group features') || $group->uid == $user->uid) {
+    return TRUE;
   }
-  
+
+  // Check if the user is able to edit features within this group.
+  if (og_user_access($entity_type, $entity_id, 'edit group features')) {
+    return TRUE;
+  }
+
   return FALSE;
 }
 
