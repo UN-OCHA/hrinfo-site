@@ -28,6 +28,9 @@
       "drupal/facetapi_bonus": {
         "Allow HTML in reset link": "https://www.drupal.org/files/issues/2020-08-26/2205469-allow_html-2.patch"
       },
+      "drupal/file_chooser_field": {
+        "Style file chooser": "PATCHES/scs-68-file-chooser-styling.patch"
+      },
       "drupal/flag": {
         "Unsupported operand types": "https://www.drupal.org/files/issues/flag-array-check-1925922-169.patch"
       },
