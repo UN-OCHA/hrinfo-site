@@ -433,7 +433,8 @@ function usermerge_usermerge_merge_accounts($user_to_delete, $user_to_keep, $rev
       // Not all revision tables have the uid stored in uid (like node_revision)
       // Some store it in revision_uid
       // Could be taking a chance here
-      $uid_column = reset(preg_grep("/uid/", $authorable_entities[$entity_type]['schema_fields_sql']['revision table']));
+      $uid_column = preg_grep("/uid/", $authorable_entities[$entity_type]['schema_fields_sql']['revision table']);
+      $uid_column = reset($uid_column);
       db_update($authorable_entities[$entity_type]['revision table'])
         ->fields(array(
                 $uid_column => $user_to_keep->uid,

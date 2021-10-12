@@ -1,5 +1,11 @@
 {
     "patches": {
+      "drupal/conditional_fields": {
+        "Copied over": "PATCHES/conditional_fields-1464950-310.patch"
+      },
+      "drupal/context_og": {
+        "Copied over": "https://drupal.org/files/context_og-2065373-conditions_dont_fire_early_enough-2.patch"
+      },
       "drupal/cors": {
         "#2280323: Sends Multiple Access-Control-Allow-Origin": "https://www.drupal.org/files/issues/sends_multiple-2280323-10.patch"
       },
@@ -27,6 +33,9 @@
       },
       "drupal/facetapi_bonus": {
         "Allow HTML in reset link": "https://www.drupal.org/files/issues/2020-08-26/2205469-allow_html-2.patch"
+      },
+      "drupal/facetapi_i18n": {
+        "Copied over and updated": "https://www.drupal.org/files/issues/facetapi_i18n_strings_not_translatable-1403082-19.patch"
       },
       "drupal/file_chooser_field": {
         "Style file chooser": "PATCHES/scs-68-file-chooser-styling.patch"
@@ -72,9 +81,12 @@
       "drupal/pdfpreview": {
         "HRINFO-1035 filemtime errors": "PATCHES/hrinfo-1035-pdfpreview-filemtime-error.patch"
       },
-      "drupal/redirect": {
-        "Avoid duplicates on generation": "https://www.drupal.org/files/issues/redirect-duplicate_redirect_save_handling-2260499-11.patch",
-        "Multilingual redirect to files": "https://www.drupal.org/files/issues/2543606-redirect-to-local-files-no-language-prefix-6.patch"
+      "drupal/phone": {
+        "copied_over_from_drush_make1": "https://drupal.org/files/phone-teltel-prefix-1973274-2.patch",
+        "copied_over_from_drush_make2": "https://drupal.org/files/2060301-phone_raw-1.patch",
+        "copied_over_from_drush_make3": "https://drupal.org/files/issues/updated_library-2134987-2.patch",
+        "copied_over_from_drush_make4": "https://drupal.org/files/issues/satellite_phones-2144551-1.patch",
+        "copied_over_from_drush_make5": "https://drupal.org/files/issues/2216285-migrate_issue-1.patch"
       },
       "drupal/restful": {
         "HR.info issue 754": "PATCHES/restful-754.patch",
