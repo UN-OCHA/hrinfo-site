@@ -384,37 +384,6 @@ function hr_layout_default_page_manager_pages() {
   $display->content['new-1b2873ca-a822-4a62-99fb-1fbe5ff6383f'] = $pane;
   $display->panels['column1'][0] = 'new-1b2873ca-a822-4a62-99fb-1fbe5ff6383f';
   $pane = new stdClass();
-  $pane->pid = 'new-10e08847-b4f7-4575-9870-c63cfc926a04';
-  $pane->panel = 'column1';
-  $pane->type = 'custom';
-  $pane->subtype = 'custom';
-  $pane->shown = TRUE;
-  $pane->access = array();
-  $pane->configuration = array(
-    'admin_title' => '',
-    'title' => 'What is HumanitarianResponse.info?',
-    'body' => '<iframe width="100%" height="200" src="https://www.youtube.com/embed/OAzNjYtabuM?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="fullscreen"></iframe>',
-    'format' => 'hr_wysiwyg',
-    'substitute' => TRUE,
-  );
-  $pane->cache = array(
-    'method' => 'simple',
-    'settings' => array(
-      'lifetime' => '604800',
-      'granularity' => 'none',
-    ),
-  );
-  $pane->style = array(
-    'settings' => NULL,
-  );
-  $pane->css = array();
-  $pane->extras = array();
-  $pane->position = 1;
-  $pane->locks = array();
-  $pane->uuid = '10e08847-b4f7-4575-9870-c63cfc926a04';
-  $display->content['new-10e08847-b4f7-4575-9870-c63cfc926a04'] = $pane;
-  $display->panels['column1'][1] = 'new-10e08847-b4f7-4575-9870-c63cfc926a04';
-  $pane = new stdClass();
   $pane->pid = 'new-1c175875-c02e-4268-8e75-6082e1a438e5';
   $pane->panel = 'column2';
   $pane->type = 'block';
@@ -436,43 +405,6 @@ function hr_layout_default_page_manager_pages() {
   $pane->uuid = '1c175875-c02e-4268-8e75-6082e1a438e5';
   $display->content['new-1c175875-c02e-4268-8e75-6082e1a438e5'] = $pane;
   $display->panels['column2'][0] = 'new-1c175875-c02e-4268-8e75-6082e1a438e5';
-  $pane = new stdClass();
-  $pane->pid = 'new-78cb0576-14ee-40ca-886f-91a3ba356067';
-  $pane->panel = 'column2';
-  $pane->type = 'custom';
-  $pane->subtype = 'custom';
-  $pane->shown = TRUE;
-  $pane->access = array();
-  $pane->configuration = array(
-    'admin_title' => '',
-    'title' => 'The Role of HumanitarianResponse.info',
-    'body' => '<p><strong>Purpose:</strong> to support efficient, effective, and coordinated humanitarian response through the sharing of operational information.</p>
-
-<p><strong>Goal: </strong>to be the place where the disaster response community can share, find, and collaborate on information to inform strategic decisions.</p>
-
-<p><strong>Target audience:</strong> persons deployed to respond to complex emergencies and disasters.</p>
-',
-    'format' => 'hr_wysiwyg',
-    'substitute' => TRUE,
-    'title_heading' => 'h2',
-  );
-  $pane->cache = array(
-    'method' => 'simple',
-    'settings' => array(
-      'lifetime' => '604800',
-      'granularity' => 'none',
-    ),
-  );
-  $pane->style = array(
-    'settings' => NULL,
-  );
-  $pane->css = array();
-  $pane->extras = array();
-  $pane->position = 1;
-  $pane->locks = array();
-  $pane->uuid = '78cb0576-14ee-40ca-886f-91a3ba356067';
-  $display->content['new-78cb0576-14ee-40ca-886f-91a3ba356067'] = $pane;
-  $display->panels['column2'][1] = 'new-78cb0576-14ee-40ca-886f-91a3ba356067';
   $pane = new stdClass();
   $pane->pid = 'new-63730577-59cd-461b-812d-2c90c4ecdffe';
   $pane->panel = 'column3';
