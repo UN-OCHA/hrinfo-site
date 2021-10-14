@@ -20,11 +20,11 @@ function hr_core_default_panels_mini() {
   $mini->admin_description = '';
   $mini->requiredcontexts = array(
     0 => array(
+      'entity_id' => '',
+      'id' => 1,
       'identifier' => 'Node',
       'keyword' => 'node',
       'name' => 'entity:node',
-      'entity_id' => '',
-      'id' => 1,
     ),
   );
   $mini->contexts = array();
@@ -34,8 +34,8 @@ function hr_core_default_panels_mini() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
-      'default' => NULL,
       'contentmain' => NULL,
+      'default' => NULL,
       'middle' => NULL,
     ),
   );
@@ -54,10 +54,10 @@ function hr_core_default_panels_mini() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'view_mode' => 'full',
     'context' => 'requiredcontext_entity:node_1',
     'override_title' => 0,
     'override_title_text' => '',
+    'view_mode' => 'full',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -78,10 +78,10 @@ function hr_core_default_panels_mini() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'view_mode' => 'full',
     'context' => 'requiredcontext_entity:node_1',
     'override_title' => 0,
     'override_title_text' => '',
+    'view_mode' => 'full',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -102,15 +102,15 @@ function hr_core_default_panels_mini() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'hidden',
-    'formatter' => 'field_collection_fields',
+    'context' => 'requiredcontext_entity:node_1',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'field_collection_fields',
     'formatter_settings' => array(
       'view_mode' => 'full',
     ),
-    'context' => 'requiredcontext_entity:node_1',
+    'label' => 'hidden',
     'override_title' => 0,
     'override_title_text' => '',
   );

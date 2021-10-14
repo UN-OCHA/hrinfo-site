@@ -416,6 +416,9 @@
     "drupal/search_api_sorts_widget": {
         "version": "1.x-dev"
     },
+    "drupal/seckit": {
+        "version": "1.11.0"
+    },
     "drupal/securelogin": {
         "version": "1.7.0"
     },
