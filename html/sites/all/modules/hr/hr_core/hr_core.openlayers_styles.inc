@@ -18,16 +18,16 @@ function hr_core_openlayers_styles() {
   $openlayers_styles->title = 'Humanitarianresponse Default';
   $openlayers_styles->description = 'Humanitarianresponse Default Style';
   $openlayers_styles->data = array(
-    'pointRadius' => 6,
     'fillColor' => '#BC2E3C',
-    'strokeColor' => '#FFFFFF',
-    'strokeWidth' => 1,
     'fillOpacity' => 0.75,
-    'strokeOpacity' => 1,
-    'strokeLinecap' => 'round',
-    'strokeDashstyle' => 'solid',
     'graphicOpacity' => 1,
     'labelAlign' => 'cm',
+    'pointRadius' => 6,
+    'strokeColor' => '#FFFFFF',
+    'strokeDashstyle' => 'solid',
+    'strokeLinecap' => 'round',
+    'strokeOpacity' => 1,
+    'strokeWidth' => 1,
   );
   $export['hr_default'] = $openlayers_styles;
 
