@@ -70,7 +70,8 @@
         "mqcdn server is down - MapQuest map is not working": "https://www.drupal.org/files/issues/replace_mqcdn_server-2877609-2.patch"
       },
       "drupal/panelizer": {
-        "HRINFO-711 panelizer access bug": "https://www.drupal.org/files/issues/panelizer-storage_type_issue-2864607-1.patch"
+        "HRINFO-711 panelizer access bug": "https://www.drupal.org/files/issues/panelizer-storage_type_issue-2864607-1.patch",
+        "HRINFO-1032 panelizer access bug part deux": "https://www.drupal.org/files/issues/2020-09-28/panelizer-fix-access-denied-2845433-42-D7.patch"
       },
       "drupal/panels": {
         "Stop logs caused by https://www.drupal.org/project/panels/issues/3032350#comment-13075861": "PATCHES/panels-style-settings-default.patch"
