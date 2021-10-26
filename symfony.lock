@@ -515,6 +515,12 @@
     "drush/drush": {
         "version": "8.4.8"
     },
+    "giggsey/libphonenumber-for-php": {
+        "version": "8.12.35"
+    },
+    "giggsey/locale": {
+        "version": "2.0"
+    },
     "hrinfo/spatial_import": {
         "version": "dev-master"
     },
