@@ -531,6 +531,7 @@ function flag_fetch_definition($entity_type = NULL) {
       $definitions = $cache->data;
     }
     else {
+      module_load_include('inc', 'flag', 'flag.flag');
       $definitions = module_invoke_all('flag_type_info');
       drupal_alter('flag_type_info', $definitions);
 

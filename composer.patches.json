@@ -41,6 +41,7 @@
         "Style file chooser": "PATCHES/scs-68-file-chooser-styling.patch"
       },
       "drupal/flag": {
+        "Undefined index errors": "https://www.drupal.org/files/issues/2019-03-12/flag-undefined_index_flag_fetch_node_by_user-2333593-3-D7.patch",
         "Unsupported operand types": "https://www.drupal.org/files/issues/flag-array-check-1925922-169.patch"
       },
       "drupal/fts": {
