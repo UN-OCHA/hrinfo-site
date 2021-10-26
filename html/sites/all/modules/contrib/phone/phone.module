@@ -26,7 +26,7 @@ function phone_libraries_info() {
     'name' => 'libphonenumber (PHP Port)',
     'vendor url' => 'https://github.com/giggsey/libphonenumber-for-php',
     'download url' => 'https://github.com/giggsey/libphonenumber-for-php/archive/master.zip',
-    'path' => 'src/libphonenumber',
+    'path' => 'src',
     'version' => '1.0',
     'files' => array(
       'php' => array(
@@ -43,8 +43,12 @@ function phone_libraries_info() {
         'CountryCodeSource.php',
         'NumberParseException.php',
         'ValidationResult.php',
-        'MetadataLoader.php',
+        'MatcherAPIInterface.php',
+        'MetadataLoaderInterface.php',
         'DefaultMetadataLoader.php',
+        'MetadataSourceInterface.php',
+        'MultiFileMetadataSourceImpl.php',
+        'RegexBasedMatcher.php',
       ),
     ),
     'integration files' => array(

@@ -10,7 +10,7 @@ Source: https://drupal.org/files/2060301-phone_raw-1.patch
 
 
 copied_over_from_drush_make3
-Source: https://drupal.org/files/issues/updated_library-2134987-2.patch
+Source: https://www.drupal.org/files/issues/2021-10-26/phone-update-library-2134987-3.patch
 
 
 copied_over_from_drush_make4
