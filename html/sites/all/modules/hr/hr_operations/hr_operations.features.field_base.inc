@@ -64,7 +64,7 @@ function hr_operations_field_default_field_bases() {
     'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'handler' => 'ref_hr_core',
+      'handler' => 'ref_shs_hr_core',
       'handler_settings' => array(
         'behaviors' => array(
           'views-select-list' => array(
