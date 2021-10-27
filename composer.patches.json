@@ -9,6 +9,9 @@
       "drupal/cors": {
         "#2280323: Sends Multiple Access-Control-Allow-Origin": "https://www.drupal.org/files/issues/sends_multiple-2280323-10.patch"
       },
+      "drupal/ctools": {
+        "Missing plugin classes": "https://www.drupal.org/files/issues/2067997-reload-plugins-class-7.patch"
+      },
       "drupal/drupal": {
         "Extended Aliases core patch": "https://www.drupal.org/files/issues/2420275-1.patch",
         "Invalid node_load() parameters fix": "PATCHES/node_load_fix.patch",
