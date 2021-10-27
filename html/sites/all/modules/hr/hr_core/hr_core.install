@@ -853,3 +853,21 @@ function hr_core_update_7050() {
   module_enable(array('ocha_assessments'));
   variable_set('ocha_assessments_base_url', 'https://assessments.hpc.tools');
 }
+
+/**
+ * Switch off Google Analytics and replace with Google Tag Manager.
+ */
+function hr_core_update_7051() {
+
+  $disable = array(
+    'googleanalytics',
+  );
+  module_disable($disable);
+  drupal_uninstall_modules($disable, FALSE);
+
+  variable_set('google_tag_container_id', 'GTM-PFJNDRG');
+  $enable = array(
+    'google_tag',
+  );
+  module_enable($enable);
+}
