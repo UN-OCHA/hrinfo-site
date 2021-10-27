@@ -882,6 +882,17 @@ function ctools_plugin_get_class($plugin_definition, $class_name) {
   }
   // @todo consider adding an else {watchdog(...)} here
 
+  if ($return && !class_exists($return)) {
+    // The class might not have been registered yet by the registry. This can
+    // happen for example in edge cases such as testing installation profiles
+    // in simpleTest, where the static caching of ctools_get_plugins() might
+    // not be cleared properly.
+    $filename = isset($plugin_definition[$class_name]['file']) ? $plugin_definition[$class_name]['file'] : $return . '.class.php';
+    $base_path = isset($plugin_definition[$class_name]['path']) ? $plugin_definition[$class_name]['path'] : $plugin_definition['path'];
+    $path = "$base_path/$filename";
+    require_once DRUPAL_ROOT . '/' . $path;
+  }
+
   return ($return && class_exists($return)) ? $return : NULL;
 }
 
