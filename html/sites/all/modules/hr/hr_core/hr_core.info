@@ -92,6 +92,7 @@ features[language][] = es
 features[language][] = fr
 features[openlayers_styles][] = hr_default
 features[panels_mini][] = hr_node_links
+features[user_permission][] = administer google tag manager
 features[user_permission][] = administer panels styles
 features[user_permission][] = change layouts in place editing
 features[user_permission][] = create files

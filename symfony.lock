@@ -212,6 +212,9 @@
     "drupal/google_analytics": {
         "version": "2.6.0"
     },
+    "drupal/google_tag": {
+        "version": "2.1.0"
+    },
     "drupal/honeypot": {
         "version": "1.26.0"
     },
