@@ -156,47 +156,6 @@ function ocha_basic_preprocess_html(&$vars) {
  * Implements template_preprocess_page().
  */
 function ocha_basic_preprocess_page(&$vars) {
-  // Bail out if function is not available.
-  if (!function_exists('language_negotiation_get_switch_links')) {
-    watchdog('ocha_basic', 'no language_negtoiation_get_switch_links()', NULL);
-    return;
-  }
-
-  // Add language links.
-  global $language;
-  $path = drupal_is_front_page() ? '<front>' : $_GET['q'];
-  $links = language_negotiation_get_switch_links('language', $path);
-
-  // Bail out if links is not enumerable.
-  if (!$links) {
-    return;
-  }
-
-  $render = array(
-    'links' => $links->links,
-    'attributes' => array(
-      'class' => [
-        'cd-global-header__dropdown',
-        'cd-dropdown',
-        'cd-user-menu__dropdown',
-      ],
-      'role' => 'menu',
-      'id' => 'cd-language',
-      'aria-labelledby' => 'cd-language-toggle',
-    ),
-  );
-
-  $output = '';
-  $output .= '<div class="cd-language-switcher">';
-  $output .= '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown" id="cd-language-toggle">';
-  $output .= $language->language;
-  $output .= '<svg class="icon icon--arrow-down"><use xlink:href="#arrow-down"></use></svg>';
-  $output .= '</button>';
-  $output .= theme('links__locale_block', $render);
-  $output .= '</div>';
-
-  $vars['page']['language_switcher'] = $output;
-
 
   global $theme_path;
 
@@ -293,6 +252,50 @@ function ocha_basic_preprocess_page(&$vars) {
       );
     }
   }
+
+  // Add language negotiation links.
+  // Bail out if function is not available.
+  if (!function_exists('language_negotiation_get_switch_links')) {
+    watchdog('ocha_basic', 'no language_negotiation_get_switch_links()', NULL);
+    return;
+  }
+
+  // Add language links.
+  global $language;
+  $path = drupal_is_front_page() ? '<front>' : $_GET['q'];
+  $links = language_negotiation_get_switch_links('language', $path);
+
+  // Bail out if links is not enumerable.
+  if (!$links) {
+    watchdog('ocha_basic', 'no language links', NULL);
+    return;
+  }
+
+  $render = array(
+    'links' => $links->links,
+    'attributes' => array(
+      'class' => [
+        'cd-global-header__dropdown',
+        'cd-dropdown',
+        'cd-user-menu__dropdown',
+      ],
+      'role' => 'menu',
+      'id' => 'cd-language',
+      'aria-labelledby' => 'cd-language-toggle',
+    ),
+  );
+
+  $output = '';
+  $output .= '<div class="cd-language-switcher">';
+  $output .= '<button type="button" class="cd-user-menu__item cd-user-menu__item--small cd-global-header__dropdown-btn" data-toggle="dropdown" id="cd-language-toggle">';
+  $output .= $language->language;
+  $output .= '<svg class="icon icon--arrow-down"><use xlink:href="#arrow-down"></use></svg>';
+  $output .= '</button>';
+  $output .= theme('links__locale_block', $render);
+  $output .= '</div>';
+
+  $vars['page']['language_switcher'] = $output;
+
 }
 
 /**
