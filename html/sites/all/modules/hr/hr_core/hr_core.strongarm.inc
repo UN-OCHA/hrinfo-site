@@ -322,7 +322,7 @@ function hr_core_strongarm() {
       'policy-uri' => '',
       'report-only' => 1,
       'report-uri' => 'report-csp-violation',
-      'script-src' => '\'self\' \'unsafe-inline\' https://www.gstatic.com https://www.google.com https://www.google-analytics.com https://platform.twitter.com https://maxcdn.bootstrapcdn.com https://static.addtoany.com https://code.highcharts.com https://cdn.jsdelivr.net',
+      'script-src' => '\'self\' \'unsafe-inline\' https://www.gstatic.com https://www.google.com https://www.google-analytics.com https://app.powerbi.com https://content.powerapps.com https://www.googletagmanager.com https://platform.twitter.com https://maxcdn.bootstrapcdn.com https://static.addtoany.com https://code.highcharts.com https://cdn.jsdelivr.net',
       'style-src' => '\'self\' \'unsafe-inline\'  https://fonts.googleapis.com https://maxcdn.bootstrapcdn.com https://stackpath.bootstrapcdn.com',
       'upgrade-req' => 0,
       'vendor-prefix' => array(
