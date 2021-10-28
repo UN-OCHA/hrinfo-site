@@ -2,21 +2,14 @@
 
 /**
  * @file
- * Install, update and uninstall functions for the Date Migrate Example module.
+ * Install, update and uninstall functions for the Date Test Feature module.
  */
-
-/**
- * Implements hook_disable().
- */
-function date_test_feature_disable() {
-  Migration::deregisterMigration('DateExample');
-}
 
 /**
  * Implements hook_uninstall().
  */
 function date_test_feature_uninstall() {
-  node_type_delete('date_test_feature');
+  node_type_delete('date_test');
   variable_del('node_preview_date_test_feature');
   node_types_rebuild();
   menu_rebuild();
