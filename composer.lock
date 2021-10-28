@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f2229b70a0b73d90efc960fc1a53113",
+    "content-hash": "694302b17fe637880ef8366cb5bd0776",
     "packages": [
         {
             "name": "composer/installers",
@@ -4585,6 +4585,55 @@
             "homepage": "https://www.drupal.org/project/google_analytics",
             "support": {
                 "source": "https://git.drupalcode.org/project/google_analytics"
+            }
+        },
+        {
+            "name": "drupal/google_tag",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/google_tag.git",
+                "reference": "7.x-2.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/google_tag-7.x-2.1.zip",
+                "reference": "7.x-2.1",
+                "shasum": "6887647bbe5a36b2c0c89ef425b4cf34d7552b36"
+            },
+            "require": {
+                "drupal/ctools": "*",
+                "drupal/drupal": "^7.40"
+            },
+            "require-dev": {
+                "drupal/variable_realm": "*",
+                "drupal/variable_store": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "7.x-2.1",
+                    "datestamp": "1576858690",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/7/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "solotandem",
+                    "homepage": "https://www.drupal.org/user/240748"
+                }
+            ],
+            "description": "Allows your website analytics to be managed using Google Tag Manager.",
+            "homepage": "https://www.drupal.org/project/google_tag",
+            "support": {
+                "source": "https://git.drupalcode.org/project/google_tag"
             }
         },
         {

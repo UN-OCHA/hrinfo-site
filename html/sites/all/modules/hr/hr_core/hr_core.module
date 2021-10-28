@@ -1748,3 +1748,75 @@ function _hr_core_check_clone_title($form, &$form_state) {
     }
   }
 }
+
+/**
+ * Implements hook_google_tag_insert_alter().
+ *
+ * Add datalayer dimensions for google tag manager.
+ * The hook is for checking whether to insert the tracking code or not.
+ */
+function hr_core_google_tag_insert_alter($satisfied) {
+  // Don't add datalayer if google_analytics module is still providing it.
+  // @todo can be removed after deployment.
+  if (!module_exists('google_tag')) {
+    return;
+  }
+
+  if ($satisfied === FALSE) {
+    return $satisfied;
+  }
+
+  // User information.
+  global $user;
+  $datalayer = array(
+    'dimension12' => token_replace('[current-user:roles]', array(
+      'current-user' => $user,
+    )),
+  );
+
+  // Get the entity for the current path.
+  if ($node = menu_get_object()) {
+    $replacement = array('node' => $node);
+    $dimensions = array(
+      'dimension1' => '[node:content-type]',
+      'dimension2' => '[node:field_document_type]',
+      'dimension3' => '[node:language]',
+      'dimension4' => '[node:og-group-ref]',
+      'dimension5' => '[node:field_bundles]',
+      'dimension6' => '[node:field_locations]',
+      'dimension7' => '[node:field-organizations]',
+      'dimension8' => '[node:field_themes]',
+      'dimension9' => '[node:field_disasters]',
+      'dimension10' => '[node:field-infographic-type]',
+      'dimension11' => '[node:og-context--node:title]',
+      'dimension13' => '[node:created:custom:Y-m-d]',
+      'dimension18' => '[node:field-event_category]',
+      'dimension19' => '[node:field-coordination-hubs]',
+      'dimension20' => '[node:group_access]',
+    );
+    $options = array('clear' => TRUE);
+    foreach ($dimensions as $key => $dimension) {
+      $dimension = token_replace($dimension, $replacement, $options);
+      if ($dimension !== '') {
+        $datalayer[$key] = $dimension;
+      }
+    }
+  }
+
+  // Sort the dimensions.
+  ksort($datalayer, SORT_NATURAL);
+
+  // Add the datalayer javascript.
+  $datalayer_json = drupal_json_encode($datalayer);
+  if (!empty($datalayer_json)) {
+    $data_layer_name = variable_get('google_tag_data_layer', 'dataLayer');
+    drupal_add_js($data_layer_name . ' = [' . $datalayer_json . '];', array(
+      'type' => 'inline',
+      'group' => JS_LIBRARY,
+      'weight' => -20,
+      'requires_jquery' => FALSE,
+    ));
+  }
+
+  return $satisfied;
+}

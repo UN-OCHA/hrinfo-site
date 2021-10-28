@@ -11,6 +11,15 @@
 function hr_core_user_default_permissions() {
   $permissions = array();
 
+  // Exported permission: 'administer google tag manager'.
+  $permissions['administer google tag manager'] = array(
+    'name' => 'administer google tag manager',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'google_tag',
+  );
+
   // Exported permission: 'administer panels styles'.
   $permissions['administer panels styles'] = array(
     'name' => 'administer panels styles',

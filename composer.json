@@ -108,6 +108,7 @@
         "drupal/geofield": "^2.4",
         "drupal/geophp": "^1.7+7-dev",
         "drupal/google_analytics": "^2.4",
+        "drupal/google_tag": "^2.1",
         "drupal/honeypot": "^1.25",
         "drupal/hybridauth": "^2.16",
         "drupal/i18n": "^1.26",
