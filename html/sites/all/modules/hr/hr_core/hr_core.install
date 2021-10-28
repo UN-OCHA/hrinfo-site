@@ -871,3 +871,13 @@ function hr_core_update_7051() {
   );
   module_enable($enable);
 }
+
+/**
+ * Enable seckit module.
+ */
+function hr_core_update_7052() {
+  $enable = array(
+    'seckit',
+  );
+  module_enable($enable);
+}
