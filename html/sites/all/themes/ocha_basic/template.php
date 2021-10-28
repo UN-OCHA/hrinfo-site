@@ -158,6 +158,7 @@ function ocha_basic_preprocess_html(&$vars) {
 function ocha_basic_preprocess_page(&$vars) {
   // Bail out if function is not available.
   if (!function_exists('language_negotiation_get_switch_links')) {
+    watchdog('ocha_basic', 'no language_negtoiation_get_switch_links()', NULL);
     return;
   }
 

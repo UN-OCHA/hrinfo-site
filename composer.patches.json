@@ -15,7 +15,8 @@
         "Notice: Undefined index: field_xxx in file_ajax_upload() and Undefined index: #suffix in file_ajax_upload": "https://www.drupal.org/files/undefined_index_file_ajax-1336212-23.patch",
         "Cannot create references to/from string offsets nor overloaded objects": "https://www.drupal.org/files/issues/cannot_create_references_tofrom_string_offsets_nor_overloaded_objects-2313517-32.patch",
         "Patch robot file": "PATCHES/allow-themes-path.patch",
-        "Discourage bots from doing searches": "PATCHES/ops-6982-robot-searches.patch"
+        "Discourage bots from doing searches": "PATCHES/ops-6982-robot-searches.patch",
+        "Empty locale filename": "https://www.drupal.org/files/issues/2019-12-13/core-filename-cannot-be-empty-locale-2163439-10.patch"
       },
       "drupal/date": {
         "HR.info issue 913": "PATCHES/hrinfo-913.patch",
