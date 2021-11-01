@@ -1794,6 +1794,9 @@ function hr_core_google_tag_insert_alter($satisfied) {
       'dimension19' => '[node:field-coordination-hubs]',
       'dimension20' => '[node:group_access]',
     );
+    if ($node->type === 'hr_operation') {
+      $dimensions['dimension4'] = '[node:title]';
+    }
     $options = array('clear' => TRUE);
     foreach ($dimensions as $key => $dimension) {
       $dimension = token_replace($dimension, $replacement, $options);
