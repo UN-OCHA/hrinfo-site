@@ -230,6 +230,7 @@ function hr_assessments_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -293,6 +294,7 @@ function hr_assessments_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -540,6 +542,7 @@ function hr_assessments_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -603,6 +606,7 @@ function hr_assessments_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -850,6 +854,7 @@ function hr_assessments_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -913,6 +918,7 @@ function hr_assessments_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -1960,7 +1966,7 @@ function hr_assessments_field_default_field_instances() {
   // Exported field_instance: 'node-hr_assessment-field_organizations'.
   $field_instances['node-hr_assessment-field_organizations'] = array(
     'bundle' => 'hr_assessment',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => 'Select the organization(s) conducting the assessment. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select "other" in the meantime.',
@@ -2056,7 +2062,7 @@ function hr_assessments_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'entityreference',
+      'module' => 'options',
       'settings' => array(
         'apply_chosen' => 1,
       ),
@@ -2159,6 +2165,7 @@ function hr_assessments_field_default_field_instances() {
         'target' => 'user',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -2475,18 +2482,16 @@ function hr_assessments_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('A field replacing fieldable panel pane title.');
-  t('Availability');
   t('Add a link to content related to the assessment you are publishing.');
   t('Assessment Data');
   t('Assessment Date(s)');
   t('Assessment Questionnaire');
   t('Assessment Report');
   t('Assessments');
+  t('Availability');
   t('Choose whether the assessment will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
-  t('Select where to publish the assessment (operation, regional site or thematic site).');
   t('Cluster(s)/Sector(s)');
   t('Collection Method(s)');
-  t('Contact(s)');
   t('Content visibility');
   t('Coordination Hub(s)');
   t('Disaster(s)/Emergency');
@@ -2494,7 +2499,6 @@ function hr_assessments_field_default_field_instances() {
   t('File');
   t('File (Restricted)');
   t('Frequency');
-  t('To show in the list, the person must have a <a href="https://humanitarian.id/" target="info">HumanitarianID</a> profile.');
   t('Indicate the number/range of communities/households/individuals surveyed during the assessment.');
   t('Indicate the phase of the assessment. Please remember to come back to this form and update the status as phases move on.');
   t('Instructions');
@@ -2504,22 +2508,23 @@ function hr_assessments_field_default_field_instances() {
   t('Location(s)');
   t('Methodology');
   t('Name');
+  t('Operations(s)/Webspace(s)');
   t('Other location');
   t('Participating Organization(s)');
   t('Population Type(s)');
   t('Related content');
   t('Sample size');
-  t('Select the country(ies) (or more specific locations) of the assessment(s). Further instructions available <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.33p6uajsech9">here</a>.');
+  t('Select the country(ies) (or more specific locations) of the assessment(s).');
+  t('Select the organization(s) conducting the assessment. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select "other" in the meantime.');
+  t('Select the organization(s) taking part in (but not leading) the assessment. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select "other" in the meantime.');
+  t('Select where to publish the assessment (operation, regional site or thematic site).');
   t('Status');
   t('Subject/Objective');
   t('Theme(s)');
   t('Title');
-  t('Select the organization(s) conducting the assessment. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select "other" in the meantime.');
-  t('Select the organization(s) taking part in (but not leading) the assessment. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select "other" in the meantime.');
   t('URL');
   t('URL (Restricted)');
   t('Unit(s) of Measurement');
-  t('Operations(s)/Webspace(s)');
 
   return $field_instances;
 }

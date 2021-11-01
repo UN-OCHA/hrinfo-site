@@ -38,8 +38,8 @@ function hr_documents_strongarm() {
   $strongarm->name = 'entity_translation_settings_node__hr_document';
   $strongarm->value = array(
     'default_language' => 'xx-et-current',
-    'hide_language_selector' => 0,
     'exclude_language_none' => 1,
+    'hide_language_selector' => 0,
     'lock_language' => 0,
     'shared_fields_original_only' => 0,
   );
@@ -50,33 +50,57 @@ function hr_documents_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__hr_document';
   $strongarm->value = array(
-    'view_modes' => array(
-      'search_result' => array(
-        'custom_settings' => TRUE,
-      ),
-      'teaser' => array(
-        'custom_settings' => TRUE,
-      ),
-      'full' => array(
-        'custom_settings' => FALSE,
-      ),
-      'rss' => array(
-        'custom_settings' => FALSE,
-      ),
-      'ical' => array(
-        'custom_settings' => FALSE,
-      ),
-      'diff_standard' => array(
-        'custom_settings' => FALSE,
-      ),
-      'token' => array(
-        'custom_settings' => FALSE,
-      ),
-    ),
     'extra_fields' => array(
+      'display' => array(
+        'hr_core_files_download_button' => array(
+          'default' => array(
+            'visible' => FALSE,
+            'weight' => '0',
+          ),
+          'search_result' => array(
+            'visible' => FALSE,
+            'weight' => '0',
+          ),
+          'teaser' => array(
+            'visible' => FALSE,
+            'weight' => '0',
+          ),
+        ),
+        'hr_core_read_more_button' => array(
+          'default' => array(
+            'visible' => FALSE,
+            'weight' => '0',
+          ),
+          'search_result' => array(
+            'visible' => FALSE,
+            'weight' => '0',
+          ),
+          'teaser' => array(
+            'visible' => FALSE,
+            'weight' => '0',
+          ),
+        ),
+        'hr_core_share_button' => array(
+          'default' => array(
+            'visible' => FALSE,
+            'weight' => '0',
+          ),
+          'search_result' => array(
+            'visible' => FALSE,
+            'weight' => '0',
+          ),
+          'teaser' => array(
+            'visible' => FALSE,
+            'weight' => '0',
+          ),
+        ),
+      ),
       'form' => array(
-        'title' => array(
-          'weight' => '-5',
+        'flag' => array(
+          'weight' => '12',
+        ),
+        'language' => array(
+          'weight' => '0',
         ),
         'path' => array(
           'weight' => '18',
@@ -84,56 +108,32 @@ function hr_documents_strongarm() {
         'redirect' => array(
           'weight' => '19',
         ),
-        'language' => array(
-          'weight' => '0',
-        ),
-        'flag' => array(
-          'weight' => '12',
+        'title' => array(
+          'weight' => '-5',
         ),
       ),
-      'display' => array(
-        'hr_core_share_button' => array(
-          'search_result' => array(
-            'weight' => '0',
-            'visible' => FALSE,
-          ),
-          'default' => array(
-            'weight' => '0',
-            'visible' => FALSE,
-          ),
-          'teaser' => array(
-            'weight' => '0',
-            'visible' => FALSE,
-          ),
-        ),
-        'hr_core_read_more_button' => array(
-          'search_result' => array(
-            'weight' => '0',
-            'visible' => FALSE,
-          ),
-          'default' => array(
-            'weight' => '0',
-            'visible' => FALSE,
-          ),
-          'teaser' => array(
-            'weight' => '0',
-            'visible' => FALSE,
-          ),
-        ),
-        'hr_core_files_download_button' => array(
-          'default' => array(
-            'weight' => '0',
-            'visible' => FALSE,
-          ),
-          'teaser' => array(
-            'weight' => '0',
-            'visible' => FALSE,
-          ),
-          'search_result' => array(
-            'weight' => '0',
-            'visible' => FALSE,
-          ),
-        ),
+    ),
+    'view_modes' => array(
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
+      'full' => array(
+        'custom_settings' => FALSE,
+      ),
+      'ical' => array(
+        'custom_settings' => FALSE,
+      ),
+      'rss' => array(
+        'custom_settings' => FALSE,
+      ),
+      'search_result' => array(
+        'custom_settings' => TRUE,
+      ),
+      'teaser' => array(
+        'custom_settings' => TRUE,
+      ),
+      'token' => array(
+        'custom_settings' => FALSE,
       ),
     ),
   );
@@ -192,25 +192,25 @@ function hr_documents_strongarm() {
   $strongarm->value = array(
     'status' => 1,
     'view modes' => array(
-      'page_manager' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
       'default' => array(
-        'status' => 1,
-        'default' => 1,
         'choice' => 0,
+        'default' => 1,
+        'status' => 1,
       ),
-      'teaser' => array(
-        'status' => 1,
-        'default' => 1,
+      'page_manager' => array(
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'search_result' => array(
-        'status' => 1,
-        'default' => 1,
         'choice' => 0,
+        'default' => 1,
+        'status' => 1,
+      ),
+      'teaser' => array(
+        'choice' => 0,
+        'default' => 1,
+        'status' => 1,
       ),
     ),
   );

@@ -16,31 +16,36 @@ function acc_incidents_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'acc_csv_impact';
   $feeds_importer->config = array(
-    'name' => 'CSV Access Impact',
+    'content_type' => '',
     'description' => 'To import Access Impact Types in csv',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'private://feeds',
         'allowed_schemes' => array(
           0 => 'public',
           1 => 'private',
         ),
+        'direct' => FALSE,
+        'directory' => 'private://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'CSV Access Impact',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'acc_impact_types',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -68,18 +73,13 @@ function acc_incidents_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '1',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'acc_impact_types',
+        'update_existing' => '1',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['acc_csv_impact'] = $feeds_importer;
 
@@ -88,33 +88,39 @@ function acc_incidents_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'acc_csv_incident';
   $feeds_importer->config = array(
-    'name' => 'CSV Access Incident',
+    'content_type' => '',
     'description' => 'To import Access Incidents in csv',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'private://feeds',
         'allowed_schemes' => array(
           0 => 'public',
           1 => 'private',
         ),
+        'direct' => FALSE,
+        'directory' => 'private://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'CSV Access Incident',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsNodeProcessor',
       'config' => array(
-        'expire' => '-1',
         'author' => 0,
         'authorize' => 1,
+        'bundle' => 'acc_incident',
+        'expire' => '-1',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Type',
@@ -187,18 +193,12 @@ function acc_incidents_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '0',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'acc_incident',
+        'update_existing' => '0',
       ),
+      'plugin_key' => 'FeedsNodeProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['acc_csv_incident'] = $feeds_importer;
 
@@ -207,31 +207,36 @@ function acc_incidents_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'acc_csv_responsible_actor';
   $feeds_importer->config = array(
-    'name' => 'CSV Access Responsible Actor',
+    'content_type' => '',
     'description' => 'To import terms for Responsible Actor taxonomy for Humanitarian Access Module',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'private://feeds',
         'allowed_schemes' => array(
           0 => 'public',
           1 => 'private',
         ),
+        'direct' => FALSE,
+        'directory' => 'private://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'CSV Access Responsible Actor',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'acc_responsible_actors',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -264,18 +269,13 @@ function acc_incidents_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '0',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'acc_responsible_actors',
+        'update_existing' => '0',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['acc_csv_responsible_actor'] = $feeds_importer;
 
@@ -284,31 +284,36 @@ function acc_incidents_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'acc_csv_types';
   $feeds_importer->config = array(
-    'name' => 'CSV Access Types',
+    'content_type' => '',
     'description' => 'To import Access Incident Types in csv',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'private://feeds',
         'allowed_schemes' => array(
           0 => 'public',
           1 => 'private',
         ),
+        'direct' => FALSE,
+        'directory' => 'private://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'CSV Access Types',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'acc_incident_types',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -336,18 +341,13 @@ function acc_incidents_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'acc_incident_types',
+        'update_existing' => '2',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['acc_csv_types'] = $feeds_importer;
 

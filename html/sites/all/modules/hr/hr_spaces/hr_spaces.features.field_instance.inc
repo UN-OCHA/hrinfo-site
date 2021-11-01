@@ -361,6 +361,7 @@ function hr_spaces_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -523,6 +524,7 @@ function hr_spaces_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -819,7 +821,6 @@ function hr_spaces_field_default_field_instances() {
   t('Category');
   t('Determine if this is an OG group.');
   t('Email');
-  t('Focal Points');
   t('Group');
   t('Group roles and permissions');
   t('Icon');

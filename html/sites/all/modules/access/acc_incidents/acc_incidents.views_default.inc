@@ -72,7 +72,7 @@ function acc_incidents_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary_options']['items_per_page'] = '25';
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -925,6 +925,8 @@ function acc_incidents_views_default_views() {
     t('Map Data'),
     t('Latitude (indexed)'),
     t('.'),
+    t('1'),
+    t('@count'),
     t('Longitude (indexed)'),
     t('Map'),
     t('Graphs'),

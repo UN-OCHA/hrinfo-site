@@ -18,20 +18,20 @@ function hr_layout_default_page_manager_pages() {
   $page->admin_description = '';
   $page->path = 'clusters';
   $page->access = array(
-    'type' => 'none',
     'settings' => NULL,
+    'type' => 'none',
   );
   $page->menu = array(
-    'type' => 'normal',
-    'title' => 'Clusters',
     'name' => 'main-menu',
-    'weight' => '4',
     'parent' => array(
-      'type' => 'none',
-      'title' => '',
       'name' => 'navigation',
+      'title' => '',
+      'type' => 'none',
       'weight' => '0',
     ),
+    'title' => 'Clusters',
+    'type' => 'normal',
+    'weight' => '4',
   );
   $page->arguments = array();
   $page->conf = array();
@@ -45,15 +45,15 @@ function hr_layout_default_page_manager_pages() {
   $handler->handler = 'panel_context';
   $handler->weight = 0;
   $handler->conf = array(
-    'title' => 'Landing page',
+    'body_classes_to_add' => '',
+    'body_classes_to_remove' => '',
+    'contexts' => array(),
+    'css' => '',
+    'css_id' => '',
     'no_blocks' => 0,
     'pipeline' => 'standard',
-    'body_classes_to_remove' => '',
-    'body_classes_to_add' => '',
-    'css_id' => '',
-    'css' => '',
-    'contexts' => array(),
     'relationships' => array(),
+    'title' => 'Landing page',
   );
   $display = new panels_display();
   $display->layout = 'radix_phelan';
@@ -75,7 +75,6 @@ function hr_layout_default_page_manager_pages() {
   $pane->access = array();
   $pane->configuration = array(
     'admin_title' => 'clusters text',
-    'title' => '',
     'body' => '<p>When emergencies occur coordination is necessary. Good coordination means less gaps and overlaps in the assistance delivered by humanitarian organizations.</p>
 
 <p>The foundations of the current international humanitarian coordination system were set by General Assembly resolution 46/182 in December 1991. Almost 15 years later, in 2005, a major reform of humanitarian coordination, known as the Humanitarian Reform Agenda, introduced a number of new elements to enhance predictability, accountability and partnership. The Cluster Approach was one of these new elements.</p>
@@ -85,6 +84,7 @@ function hr_layout_default_page_manager_pages() {
 <p class="text-center"><a class="btn btn-primary" href="/clusters/space">Read all the information about clusters</a></p>',
     'format' => 'panopoly_html_text',
     'substitute' => TRUE,
+    'title' => '',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -106,10 +106,10 @@ function hr_layout_default_page_manager_pages() {
   $pane->access = array();
   $pane->configuration = array(
     'admin_title' => '',
-    'title' => '',
     'body' => '<img src="/sites/all/themes/humanitarianresponse/assets/images/clusters.png" class="img-responsive" alt="Cluster Approach" />',
     'format' => 'panopoly_html_text',
     'substitute' => TRUE,
+    'title' => '',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -137,20 +137,20 @@ function hr_layout_default_page_manager_pages() {
   $page->admin_description = '';
   $page->path = 'coordination';
   $page->access = array(
-    'type' => 'none',
     'settings' => NULL,
+    'type' => 'none',
   );
   $page->menu = array(
-    'type' => 'normal',
-    'title' => 'Coordination',
     'name' => 'main-menu',
-    'weight' => '3',
     'parent' => array(
-      'type' => 'none',
-      'title' => '',
       'name' => 'navigation',
+      'title' => '',
+      'type' => 'none',
       'weight' => '0',
     ),
+    'title' => 'Coordination',
+    'type' => 'normal',
+    'weight' => '3',
   );
   $page->arguments = array();
   $page->conf = array();
@@ -164,24 +164,24 @@ function hr_layout_default_page_manager_pages() {
   $handler->handler = 'panel_context';
   $handler->weight = 0;
   $handler->conf = array(
-    'title' => 'Landing page',
+    'body_classes_to_add' => '',
+    'body_classes_to_remove' => '',
+    'contexts' => array(),
+    'css' => '',
+    'css_id' => '',
     'no_blocks' => 0,
     'pipeline' => 'standard',
-    'body_classes_to_remove' => '',
-    'body_classes_to_add' => '',
-    'css_id' => '',
-    'css' => '',
-    'contexts' => array(),
     'relationships' => array(),
+    'title' => 'Landing page',
   );
   $display = new panels_display();
   $display->layout = 'radix_phelan';
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
-      'default' => NULL,
       'column1' => NULL,
       'column2' => NULL,
+      'default' => NULL,
     ),
   );
   $display->cache = array();
@@ -200,12 +200,12 @@ function hr_layout_default_page_manager_pages() {
   $pane->access = array();
   $pane->configuration = array(
     'admin_title' => 'Coordination text',
-    'title' => '',
     'body' => '<p>Humanitarian coordination involves bringing together humanitarian actors to ensure a coherent and principled response to emergencies. The aim is to assist people when they most need relief or protection.</p>
 
 <p>Humanitarian coordination seeks to improve the effectiveness of humanitarian response by ensuring greater predictability, accountability and partnership. Coordination involves assessing situations and needs; agreeing common priorities; developing common strategies to address issues such as negotiating access, mobilizing funding and other resources; clarifying consistent public messaging; and monitoring progress.</p>',
     'format' => 'panopoly_html_text',
     'substitute' => TRUE,
+    'title' => '',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -246,10 +246,10 @@ function hr_layout_default_page_manager_pages() {
   $pane->access = array();
   $pane->configuration = array(
     'admin_title' => '',
-    'title' => '',
     'body' => '<img src="/sites/all/themes/humanitarianresponse/assets/images/coordination.jpg" class="img-responsive" alt="Coordination" />',
     'format' => 'panopoly_html_text',
     'substitute' => TRUE,
+    'title' => '',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -278,20 +278,20 @@ function hr_layout_default_page_manager_pages() {
   $page->admin_description = '';
   $page->path = 'home';
   $page->access = array(
-    'type' => 'none',
     'settings' => NULL,
+    'type' => 'none',
   );
   $page->menu = array(
-    'type' => 'normal',
-    'title' => 'Home',
     'name' => 'main-menu',
-    'weight' => '0',
     'parent' => array(
-      'type' => 'none',
-      'title' => '',
       'name' => 'navigation',
+      'title' => '',
+      'type' => 'none',
       'weight' => '0',
     ),
+    'title' => 'Home',
+    'type' => 'normal',
+    'weight' => '0',
   );
   $page->arguments = array();
   $page->conf = array(
@@ -307,52 +307,52 @@ function hr_layout_default_page_manager_pages() {
   $handler->handler = 'panel_context';
   $handler->weight = 0;
   $handler->conf = array(
-    'title' => 'Landing page',
+    'body_classes_to_add' => '',
+    'body_classes_to_remove' => '',
+    'contexts' => array(),
+    'css' => '',
+    'css_id' => '',
     'no_blocks' => 0,
     'pipeline' => 'standard',
-    'body_classes_to_remove' => '',
-    'body_classes_to_add' => '',
-    'css_id' => '',
-    'css' => '',
-    'contexts' => array(),
     'relationships' => array(),
+    'title' => 'Landing page',
   );
   $display = new panels_display();
   $display->layout = 'radix_mccoppin';
   $display->layout_settings = array();
   $display->panel_settings = array(
+    'contentmain' => array(
+      'style' => 'default',
+    ),
     'style_settings' => array(
-      'default' => NULL,
-      'header' => NULL,
-      'sidebar' => NULL,
-      'contentmain' => NULL,
-      'footer' => NULL,
       'column1' => NULL,
       'column2' => NULL,
       'column3' => NULL,
+      'contentmain' => NULL,
+      'default' => NULL,
+      'footer' => NULL,
+      'half' => NULL,
+      'header' => NULL,
       'quarter1' => NULL,
       'quarter2' => NULL,
-      'half' => NULL,
       'secondarycolumn1' => NULL,
       'secondarycolumn2' => NULL,
       'secondarycolumn3' => NULL,
-    ),
-    'contentmain' => array(
-      'style' => 'default',
+      'sidebar' => NULL,
     ),
   );
   $display->cache = array(
     'method' => 'hr_content',
     'settings' => array(
+      'content_type' => 'hr_operation',
       'granularity' => array(
         'args' => 'args',
         'user_role' => 'user_role',
       ),
-      'granularity_url' => 'base_url_system',
-      'granularity_roles_as_anon' => array(),
       'granularity_role_selection' => 'all',
+      'granularity_roles_as_anon' => array(),
+      'granularity_url' => 'base_url_system',
       'lifetime' => 922,
-      'content_type' => 'hr_operation',
     ),
   );
   $display->title = 'Home';
@@ -384,6 +384,37 @@ function hr_layout_default_page_manager_pages() {
   $display->content['new-1b2873ca-a822-4a62-99fb-1fbe5ff6383f'] = $pane;
   $display->panels['column1'][0] = 'new-1b2873ca-a822-4a62-99fb-1fbe5ff6383f';
   $pane = new stdClass();
+  $pane->pid = 'new-10e08847-b4f7-4575-9870-c63cfc926a04';
+  $pane->panel = 'column1';
+  $pane->type = 'custom';
+  $pane->subtype = 'custom';
+  $pane->shown = FALSE;
+  $pane->access = array();
+  $pane->configuration = array(
+    'admin_title' => '',
+    'body' => '<iframe width="100%" height="200" src="https://www.youtube.com/embed/OAzNjYtabuM?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="fullscreen"></iframe>',
+    'format' => 'hr_wysiwyg',
+    'substitute' => TRUE,
+    'title' => 'What is HumanitarianResponse.info?',
+  );
+  $pane->cache = array(
+    'method' => 'simple',
+    'settings' => array(
+      'granularity' => 'none',
+      'lifetime' => '604800',
+    ),
+  );
+  $pane->style = array(
+    'settings' => NULL,
+  );
+  $pane->css = array();
+  $pane->extras = array();
+  $pane->position = 1;
+  $pane->locks = array();
+  $pane->uuid = '10e08847-b4f7-4575-9870-c63cfc926a04';
+  $display->content['new-10e08847-b4f7-4575-9870-c63cfc926a04'] = $pane;
+  $display->panels['column1'][1] = 'new-10e08847-b4f7-4575-9870-c63cfc926a04';
+  $pane = new stdClass();
   $pane->pid = 'new-1c175875-c02e-4268-8e75-6082e1a438e5';
   $pane->panel = 'column2';
   $pane->type = 'block';
@@ -405,6 +436,43 @@ function hr_layout_default_page_manager_pages() {
   $pane->uuid = '1c175875-c02e-4268-8e75-6082e1a438e5';
   $display->content['new-1c175875-c02e-4268-8e75-6082e1a438e5'] = $pane;
   $display->panels['column2'][0] = 'new-1c175875-c02e-4268-8e75-6082e1a438e5';
+  $pane = new stdClass();
+  $pane->pid = 'new-78cb0576-14ee-40ca-886f-91a3ba356067';
+  $pane->panel = 'column2';
+  $pane->type = 'custom';
+  $pane->subtype = 'custom';
+  $pane->shown = FALSE;
+  $pane->access = array();
+  $pane->configuration = array(
+    'admin_title' => '',
+    'body' => '<p><strong>Purpose:</strong> to support efficient, effective, and coordinated humanitarian response through the sharing of operational information.</p>
+
+<p><strong>Goal: </strong>to be the place where the disaster response community can share, find, and collaborate on information to inform strategic decisions.</p>
+
+<p><strong>Target audience:</strong> persons deployed to respond to complex emergencies and disasters.</p>
+',
+    'format' => 'hr_wysiwyg',
+    'substitute' => TRUE,
+    'title' => 'The Role of HumanitarianResponse.info',
+    'title_heading' => 'h2',
+  );
+  $pane->cache = array(
+    'method' => 'simple',
+    'settings' => array(
+      'granularity' => 'none',
+      'lifetime' => '604800',
+    ),
+  );
+  $pane->style = array(
+    'settings' => NULL,
+  );
+  $pane->css = array();
+  $pane->extras = array();
+  $pane->position = 1;
+  $pane->locks = array();
+  $pane->uuid = '78cb0576-14ee-40ca-886f-91a3ba356067';
+  $display->content['new-78cb0576-14ee-40ca-886f-91a3ba356067'] = $pane;
+  $display->panels['column2'][1] = 'new-78cb0576-14ee-40ca-886f-91a3ba356067';
   $pane = new stdClass();
   $pane->pid = 'new-63730577-59cd-461b-812d-2c90c4ecdffe';
   $pane->panel = 'column3';
@@ -442,20 +510,20 @@ function hr_layout_default_page_manager_pages() {
   $page->admin_description = '';
   $page->path = 'programme-cycle';
   $page->access = array(
-    'type' => 'none',
     'settings' => NULL,
+    'type' => 'none',
   );
   $page->menu = array(
-    'type' => 'normal',
-    'title' => 'Programme Cycle',
     'name' => 'main-menu',
-    'weight' => '6',
     'parent' => array(
-      'type' => 'none',
-      'title' => '',
       'name' => 'navigation',
+      'title' => '',
+      'type' => 'none',
       'weight' => '0',
     ),
+    'title' => 'Programme Cycle',
+    'type' => 'normal',
+    'weight' => '6',
   );
   $page->arguments = array();
   $page->conf = array();
@@ -469,24 +537,24 @@ function hr_layout_default_page_manager_pages() {
   $handler->handler = 'panel_context';
   $handler->weight = 0;
   $handler->conf = array(
-    'title' => 'Landing page',
+    'body_classes_to_add' => '',
+    'body_classes_to_remove' => '',
+    'contexts' => array(),
+    'css' => '',
+    'css_id' => '',
     'no_blocks' => 0,
     'pipeline' => 'standard',
-    'body_classes_to_remove' => '',
-    'body_classes_to_add' => '',
-    'css_id' => '',
-    'css' => '',
-    'contexts' => array(),
     'relationships' => array(),
+    'title' => 'Landing page',
   );
   $display = new panels_display();
   $display->layout = 'radix_phelan';
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
-      'default' => NULL,
       'column1' => NULL,
       'column2' => NULL,
+      'default' => NULL,
     ),
   );
   $display->cache = array();
@@ -505,10 +573,10 @@ function hr_layout_default_page_manager_pages() {
   $pane->access = array();
   $pane->configuration = array(
     'admin_title' => 'Programme Cycle text',
-    'title' => '',
     'body' => '<p>Welcome to the Humanitarian Programme Cycle space on HumanitarianResponse.info</p><p>The Humanitarian Programme Cycle (HPC) is the way in which humanitarian actors work together to help people affected by disasters and conflict. In these pages, you will find guidance, practical tools and templates as well as background information on the various elements which together make up the programme cycle.</p>',
     'format' => 'panopoly_html_text',
     'substitute' => TRUE,
+    'title' => '',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -549,10 +617,10 @@ function hr_layout_default_page_manager_pages() {
   $pane->access = array();
   $pane->configuration = array(
     'admin_title' => '',
-    'title' => '',
     'body' => '<img src="/sites/all/themes/humanitarianresponse/assets/images/programme-cycle.png" class="img-responsive" alt="Programme Cycle" />',
     'format' => 'panopoly_html_text',
     'substitute' => TRUE,
+    'title' => '',
   );
   $pane->cache = array();
   $pane->style = array(

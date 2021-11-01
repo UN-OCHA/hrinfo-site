@@ -16,29 +16,34 @@ function hr_organizations_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_organization_types';
   $feeds_importer->config = array(
-    'name' => 'Organization Types',
+    'content_type' => '',
     'description' => 'Import organization types from a URL',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsHTTPFetcher',
       'config' => array(
         'auto_detect_feeds' => FALSE,
-        'use_pubsubhubbub' => FALSE,
+        'auto_scheme' => 'http',
         'designated_hub' => '',
         'request_timeout' => NULL,
-        'auto_scheme' => 'http',
+        'use_pubsubhubbub' => FALSE,
       ),
+      'plugin_key' => 'FeedsHTTPFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Organization Types',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'hr_organization_type',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -61,18 +66,13 @@ function hr_organizations_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'hr_organization_type',
+        'update_existing' => '2',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_organization_types'] = $feeds_importer;
 
@@ -81,30 +81,35 @@ function hr_organizations_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_organizations';
   $feeds_importer->config = array(
-    'name' => 'Organizations',
+    'content_type' => '',
     'description' => 'Import organizations from a CSV file',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'public://feeds',
         'allowed_schemes' => array(
           0 => 'public',
         ),
+        'direct' => FALSE,
+        'directory' => 'public://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Organizations',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'hr_organization',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -157,18 +162,13 @@ function hr_organizations_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'hr_organization',
+        'update_existing' => '2',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_organizations'] = $feeds_importer;
 

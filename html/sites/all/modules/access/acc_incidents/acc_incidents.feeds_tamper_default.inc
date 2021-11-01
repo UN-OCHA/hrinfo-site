@@ -19,9 +19,9 @@ function acc_incidents_feeds_tamper_default() {
   $feeds_tamper->source = 'Affected organization type';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -35,9 +35,9 @@ function acc_incidents_feeds_tamper_default() {
   $feeds_tamper->source = 'Affected organizations';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -51,9 +51,9 @@ function acc_incidents_feeds_tamper_default() {
   $feeds_tamper->source = 'Impact Value';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -67,9 +67,9 @@ function acc_incidents_feeds_tamper_default() {
   $feeds_tamper->source = 'Responsible Actors';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -83,9 +83,9 @@ function acc_incidents_feeds_tamper_default() {
   $feeds_tamper->source = 'Responsible Actors Type';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -99,9 +99,9 @@ function acc_incidents_feeds_tamper_default() {
   $feeds_tamper->source = 'Type of affectee';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -115,9 +115,9 @@ function acc_incidents_feeds_tamper_default() {
   $feeds_tamper->source = 'Type of impact';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';

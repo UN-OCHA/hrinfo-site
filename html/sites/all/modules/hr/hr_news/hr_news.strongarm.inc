@@ -38,8 +38,8 @@ function hr_news_strongarm() {
   $strongarm->name = 'entity_translation_settings_node__hr_news';
   $strongarm->value = array(
     'default_language' => 'xx-et-current',
-    'hide_language_selector' => 0,
     'exclude_language_none' => 1,
+    'hide_language_selector' => 0,
     'lock_language' => 0,
     'shared_fields_original_only' => 0,
   );
@@ -50,32 +50,10 @@ function hr_news_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__hr_news';
   $strongarm->value = array(
-    'view_modes' => array(
-      'teaser' => array(
-        'custom_settings' => TRUE,
-      ),
-      'search_result' => array(
-        'custom_settings' => TRUE,
-      ),
-      'full' => array(
-        'custom_settings' => FALSE,
-      ),
-      'rss' => array(
-        'custom_settings' => FALSE,
-      ),
-      'diff_standard' => array(
-        'custom_settings' => FALSE,
-      ),
-      'token' => array(
-        'custom_settings' => FALSE,
-      ),
-      'ical' => array(
-        'custom_settings' => FALSE,
-      ),
-    ),
     'extra_fields' => array(
+      'display' => array(),
       'form' => array(
-        'title' => array(
+        'language' => array(
           'weight' => '0',
         ),
         'path' => array(
@@ -84,11 +62,33 @@ function hr_news_strongarm() {
         'redirect' => array(
           'weight' => '16',
         ),
-        'language' => array(
+        'title' => array(
           'weight' => '0',
         ),
       ),
-      'display' => array(),
+    ),
+    'view_modes' => array(
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
+      'full' => array(
+        'custom_settings' => FALSE,
+      ),
+      'ical' => array(
+        'custom_settings' => FALSE,
+      ),
+      'rss' => array(
+        'custom_settings' => FALSE,
+      ),
+      'search_result' => array(
+        'custom_settings' => TRUE,
+      ),
+      'teaser' => array(
+        'custom_settings' => TRUE,
+      ),
+      'token' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
   );
   $export['field_bundle_settings_node__hr_news'] = $strongarm;
@@ -146,25 +146,25 @@ function hr_news_strongarm() {
   $strongarm->value = array(
     'status' => 1,
     'view modes' => array(
-      'page_manager' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
       'default' => array(
-        'status' => 1,
-        'default' => 1,
         'choice' => 0,
+        'default' => 1,
+        'status' => 1,
       ),
-      'teaser' => array(
-        'status' => 1,
-        'default' => 1,
+      'page_manager' => array(
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'search_result' => array(
-        'status' => 1,
-        'default' => 1,
         'choice' => 0,
+        'default' => 1,
+        'status' => 1,
+      ),
+      'teaser' => array(
+        'choice' => 0,
+        'default' => 1,
+        'status' => 1,
       ),
     ),
   );

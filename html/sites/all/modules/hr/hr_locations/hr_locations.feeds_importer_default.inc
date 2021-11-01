@@ -16,30 +16,35 @@ function hr_locations_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_locations';
   $feeds_importer->config = array(
-    'name' => 'Locations',
+    'content_type' => '',
     'description' => 'Import locations from a CSV file',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'public://feeds',
         'allowed_schemes' => array(
           0 => 'public',
         ),
+        'direct' => FALSE,
+        'directory' => 'public://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Locations',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'hr_location',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name',
@@ -72,18 +77,13 @@ function hr_locations_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 1,
-        'bundle' => 'hr_location',
+        'update_existing' => '2',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_locations'] = $feeds_importer;
 
@@ -92,29 +92,34 @@ function hr_locations_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_locations_shp';
   $feeds_importer->config = array(
-    'name' => 'Locations Shapefiles',
+    'content_type' => '',
     'description' => 'Import locations from a shapefile',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsHTTPFetcher',
       'config' => array(
         'auto_detect_feeds' => FALSE,
-        'use_pubsubhubbub' => FALSE,
         'designated_hub' => '',
         'request_timeout' => NULL,
+        'use_pubsubhubbub' => FALSE,
       ),
+      'plugin_key' => 'FeedsHTTPFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Locations Shapefiles',
     'parser' => array(
-      'plugin_key' => 'SpatialImportShapefileParser',
       'config' => array(
         'spatial_field_name' => 'geom',
         'srid' => '4326',
         'storage' => 'wkt',
       ),
+      'plugin_key' => 'SpatialImportShapefileParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'hr_location',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'HRName',
@@ -147,18 +152,13 @@ function hr_locations_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 1,
-        'bundle' => 'hr_location',
+        'update_existing' => '2',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_locations_shp'] = $feeds_importer;
 

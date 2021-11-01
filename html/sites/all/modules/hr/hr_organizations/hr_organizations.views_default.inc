@@ -398,6 +398,8 @@ function hr_organizations_views_default_views() {
     t('You can\'t find your organization in HumanitarianResposne.info ? Fill in <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1" target="_blank">this form</a> and we will get back to you!'),
     t('ID'),
     t('.'),
+    t('1'),
+    t('@count'),
     t('Name'),
     t('Type'),
     t('Acronym'),

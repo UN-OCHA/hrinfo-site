@@ -19,9 +19,9 @@ function hr_infographics_feeds_tamper_default() {
   $feeds_tamper->source = 'Clusters/Sectors';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -35,9 +35,9 @@ function hr_infographics_feeds_tamper_default() {
   $feeds_tamper->source = 'Coordination hubs';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -51,9 +51,9 @@ function hr_infographics_feeds_tamper_default() {
   $feeds_tamper->source = 'Disasters';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -67,9 +67,9 @@ function hr_infographics_feeds_tamper_default() {
   $feeds_tamper->source = 'Fundings';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -83,9 +83,9 @@ function hr_infographics_feeds_tamper_default() {
   $feeds_tamper->source = 'Locations';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -99,9 +99,9 @@ function hr_infographics_feeds_tamper_default() {
   $feeds_tamper->source = 'Organization';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -115,9 +115,9 @@ function hr_infographics_feeds_tamper_default() {
   $feeds_tamper->source = 'Sectors';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -131,9 +131,9 @@ function hr_infographics_feeds_tamper_default() {
   $feeds_tamper->source = 'Spaces';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -147,9 +147,9 @@ function hr_infographics_feeds_tamper_default() {
   $feeds_tamper->source = 'Themes';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
