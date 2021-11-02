@@ -31,8 +31,8 @@ function hr_spaces_strongarm() {
   $strongarm->name = 'entity_translation_settings_node__hr_space';
   $strongarm->value = array(
     'default_language' => 'xx-et-default',
-    'hide_language_selector' => 0,
     'exclude_language_none' => 1,
+    'hide_language_selector' => 0,
     'lock_language' => 1,
     'shared_fields_original_only' => 0,
   );
@@ -43,45 +43,45 @@ function hr_spaces_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__hr_space';
   $strongarm->value = array(
-    'view_modes' => array(
-      'search_result' => array(
-        'custom_settings' => TRUE,
-      ),
-      'teaser' => array(
-        'custom_settings' => TRUE,
-      ),
-      'full' => array(
-        'custom_settings' => FALSE,
-      ),
-      'rss' => array(
-        'custom_settings' => FALSE,
-      ),
-      'diff_standard' => array(
-        'custom_settings' => FALSE,
-      ),
-      'token' => array(
-        'custom_settings' => FALSE,
-      ),
-      'ical' => array(
-        'custom_settings' => FALSE,
-      ),
-    ),
     'extra_fields' => array(
+      'display' => array(),
       'form' => array(
+        'language' => array(
+          'weight' => '18',
+        ),
         'og_menu' => array(
           'weight' => '4',
         ),
         'path' => array(
           'weight' => '17',
         ),
-        'language' => array(
-          'weight' => '18',
-        ),
         'redirect' => array(
           'weight' => '16',
         ),
       ),
-      'display' => array(),
+    ),
+    'view_modes' => array(
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
+      'full' => array(
+        'custom_settings' => FALSE,
+      ),
+      'ical' => array(
+        'custom_settings' => FALSE,
+      ),
+      'rss' => array(
+        'custom_settings' => FALSE,
+      ),
+      'search_result' => array(
+        'custom_settings' => TRUE,
+      ),
+      'teaser' => array(
+        'custom_settings' => TRUE,
+      ),
+      'token' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
   );
   $export['field_bundle_settings_node__hr_space'] = $strongarm;
@@ -165,25 +165,25 @@ function hr_spaces_strongarm() {
   $strongarm->value = array(
     'status' => 1,
     'view modes' => array(
-      'page_manager' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
       'default' => array(
-        'status' => 1,
+        'choice' => 0,
         'default' => 1,
-        'choice' => 0,
+        'status' => 1,
       ),
-      'teaser' => array(
-        'status' => 0,
-        'default' => 0,
+      'page_manager' => array(
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'search_result' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'teaser' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
     ),
   );
@@ -209,13 +209,13 @@ function hr_spaces_strongarm() {
   $strongarm->name = 'panelizer_node:hr_space_allowed_types';
   $strongarm->value = array(
     'bean_pane-fts_visualization' => TRUE,
-    'node_body-node_body' => TRUE,
+    'fieldable_panels_pane-fieldable_panels_pane' => TRUE,
     'hr_documents_key_documents-hr_documents_key_documents' => TRUE,
     'hr_infographics_key_infographics-hr_infographics_key_infographics' => TRUE,
     'hr_layout_reliefweb-hr_layout_reliefweb' => TRUE,
     'hr_layout_rss_feeds-hr_layout_rss_feeds' => TRUE,
+    'node_body-node_body' => TRUE,
     'twitter-twitter' => TRUE,
-    'fieldable_panels_pane-fieldable_panels_pane' => TRUE,
     'views_panes-hr_documents_panes-list' => TRUE,
     'views_panes-hr_events_panes-upcoming' => TRUE,
     'views_panes-hr_infographics_panes-list' => TRUE,
@@ -236,20 +236,20 @@ function hr_spaces_strongarm() {
   $strongarm->name = 'panelizer_node:hr_space_default';
   $strongarm->value = array(
     'bean_pane' => 0,
-    'token' => 0,
-    'entity_form_field' => 0,
+    'block' => 0,
+    'custom' => 0,
     'entity_field' => 0,
     'entity_field_extra' => 0,
-    'custom' => 0,
-    'block' => 0,
+    'entity_form_field' => 0,
     'entity_view' => 0,
     'fieldable_panels_pane' => 0,
     'flag_link' => 0,
     'openlayers_map' => 0,
+    'other' => 0,
     'panels_mini' => 0,
+    'token' => 0,
     'views' => 0,
     'views_panes' => 0,
-    'other' => 0,
   );
   $export['panelizer_node:hr_space_default'] = $strongarm;
 

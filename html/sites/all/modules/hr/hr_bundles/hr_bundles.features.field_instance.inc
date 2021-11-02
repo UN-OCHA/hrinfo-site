@@ -579,6 +579,7 @@ function hr_bundles_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -646,6 +647,7 @@ function hr_bundles_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -919,14 +921,11 @@ function hr_bundles_field_default_field_instances() {
   t('Government Participation');
   t('Group');
   t('Groups audience');
-  t('HID Access');
   t('Inter-cluster');
   t('Lead Agencies');
   t('NGO Participation');
   t('Parent cluster');
   t('Partners');
-  t('Select "Open" if you want HID users to add themselves to this cluster/sector.
-Select "Closed" if you want only HID managers to be allowed to add HID users to this cluster/sector.');
   t('Social media');
   t('Title');
   t('Type');

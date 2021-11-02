@@ -11,9 +11,9 @@
 function date_test_feature_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-date_test_feature-body'.
-  $field_instances['node-date_test_feature-body'] = array(
-    'bundle' => 'date_test_feature',
+  // Exported field_instance: 'node-date_test-body'.
+  $field_instances['node-date_test-body'] = array(
+    'bundle' => 'date_test',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -55,9 +55,9 @@ function date_test_feature_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-date_test_feature-field_date'.
-  $field_instances['node-date_test_feature-field_date'] = array(
-    'bundle' => 'date_test_feature',
+  // Exported field_instance: 'node-date_test-field_date'.
+  $field_instances['node-date_test-field_date'] = array(
+    'bundle' => 'date_test',
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -87,7 +87,7 @@ function date_test_feature_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_date',
     'label' => 'Date',
-    'required' => 0,
+    'required' => FALSE,
     'settings' => array(
       'default_value' => 'now',
       'default_value2' => 'blank',
@@ -114,9 +114,9 @@ function date_test_feature_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-date_test_feature-field_date_range'.
-  $field_instances['node-date_test_feature-field_date_range'] = array(
-    'bundle' => 'date_test_feature',
+  // Exported field_instance: 'node-date_test-field_date_range'.
+  $field_instances['node-date_test-field_date_range'] = array(
+    'bundle' => 'date_test',
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -146,7 +146,7 @@ function date_test_feature_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_date_range',
     'label' => 'Date range',
-    'required' => 0,
+    'required' => FALSE,
     'settings' => array(
       'default_format' => 'medium',
       'default_value' => 'now',
@@ -173,9 +173,9 @@ function date_test_feature_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-date_test_feature-field_date_repeat'.
-  $field_instances['node-date_test_feature-field_date_repeat'] = array(
-    'bundle' => 'date_test_feature',
+  // Exported field_instance: 'node-date_test-field_date_repeat'.
+  $field_instances['node-date_test-field_date_repeat'] = array(
+    'bundle' => 'date_test',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -206,7 +206,7 @@ function date_test_feature_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_date_repeat',
     'label' => 'Date with repeat',
-    'required' => 0,
+    'required' => FALSE,
     'settings' => array(
       'default_format' => 'medium',
       'default_value' => 'now',
@@ -234,9 +234,9 @@ function date_test_feature_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-date_test_feature-field_datestamp'.
-  $field_instances['node-date_test_feature-field_datestamp'] = array(
-    'bundle' => 'date_test_feature',
+  // Exported field_instance: 'node-date_test-field_datestamp'.
+  $field_instances['node-date_test-field_datestamp'] = array(
+    'bundle' => 'date_test',
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -266,7 +266,7 @@ function date_test_feature_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_datestamp',
     'label' => 'Datestamp',
-    'required' => 0,
+    'required' => FALSE,
     'settings' => array(
       'default_format' => 'medium',
       'default_value' => 'now',
@@ -293,9 +293,9 @@ function date_test_feature_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-date_test_feature-field_datestamp_range'.
-  $field_instances['node-date_test_feature-field_datestamp_range'] = array(
-    'bundle' => 'date_test_feature',
+  // Exported field_instance: 'node-date_test-field_datestamp_range'.
+  $field_instances['node-date_test-field_datestamp_range'] = array(
+    'bundle' => 'date_test',
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -325,7 +325,7 @@ function date_test_feature_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_datestamp_range',
     'label' => 'Datestamp range',
-    'required' => 0,
+    'required' => FALSE,
     'settings' => array(
       'default_format' => 'medium',
       'default_value' => 'now',
@@ -352,9 +352,9 @@ function date_test_feature_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-date_test_feature-field_datetime'.
-  $field_instances['node-date_test_feature-field_datetime'] = array(
-    'bundle' => 'date_test_feature',
+  // Exported field_instance: 'node-date_test-field_datetime'.
+  $field_instances['node-date_test-field_datetime'] = array(
+    'bundle' => 'date_test',
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -384,7 +384,7 @@ function date_test_feature_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_datetime',
     'label' => 'Datetime',
-    'required' => 0,
+    'required' => FALSE,
     'settings' => array(
       'default_format' => 'medium',
       'default_value' => 'now',
@@ -411,9 +411,9 @@ function date_test_feature_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-date_test_feature-field_datetime_range'.
-  $field_instances['node-date_test_feature-field_datetime_range'] = array(
-    'bundle' => 'date_test_feature',
+  // Exported field_instance: 'node-date_test-field_datetime_range'.
+  $field_instances['node-date_test-field_datetime_range'] = array(
+    'bundle' => 'date_test',
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -443,11 +443,11 @@ function date_test_feature_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_datetime_range',
     'label' => 'Datetime range',
-    'required' => 0,
+    'required' => FALSE,
     'settings' => array(
       'default_format' => 'medium',
       'default_value' => 'now',
-      'default_value2' => 'blank',
+      'default_value2' => '+1 week',
       'default_value_code' => '',
       'default_value_code2' => '+1 year',
       'user_register_form' => FALSE,

@@ -50,7 +50,7 @@ function hr_sectors_views_default_views() {
   $handler->display->display_options['fields']['field_sector_type']['alter']['alter_text'] = TRUE;
   $handler->display->display_options['fields']['field_sector_type']['alter']['text'] = '<div class="clearfix"></div>[field_sector_type]';
   $handler->display->display_options['fields']['field_sector_type']['element_label_colon'] = FALSE;
-  /* Field: Content: Icon */
+  /* Field: Content: Image */
   $handler->display->display_options['fields']['field_image']['id'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
@@ -93,7 +93,7 @@ function hr_sectors_views_default_views() {
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'node';
   $handler->display->display_options['sorts']['title']['field'] = 'title';
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';

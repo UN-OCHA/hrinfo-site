@@ -19,9 +19,9 @@ function hr_indicators_feeds_tamper_default() {
   $feeds_tamper->source = 'Sector cross-tagging';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';

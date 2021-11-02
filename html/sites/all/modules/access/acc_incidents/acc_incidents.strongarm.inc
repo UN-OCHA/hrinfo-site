@@ -37,21 +37,21 @@ function acc_incidents_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__acc_incident';
   $strongarm->value = array(
-    'view_modes' => array(),
     'extra_fields' => array(
+      'display' => array(),
       'form' => array(
-        'title' => array(
-          'weight' => '0',
-        ),
         'path' => array(
           'weight' => '14',
         ),
         'redirect' => array(
           'weight' => '15',
         ),
+        'title' => array(
+          'weight' => '0',
+        ),
       ),
-      'display' => array(),
     ),
+    'view_modes' => array(),
   );
   $export['field_bundle_settings_node__acc_incident'] = $strongarm;
 
@@ -109,50 +109,50 @@ function acc_incidents_strongarm() {
   $strongarm->value = array(
     'status' => 1,
     'view modes' => array(
-      'page_manager' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
       'default' => array(
-        'status' => 1,
+        'choice' => 0,
         'default' => 1,
-        'choice' => 0,
-      ),
-      'full' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
-      'teaser' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
-      'rss' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
-      'ical' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
+        'status' => 1,
       ),
       'diff_standard' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'full' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'ical' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'page_manager' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'rss' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'search_result' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'teaser' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'token' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
     ),
   );
@@ -185,20 +185,20 @@ function acc_incidents_strongarm() {
   $strongarm->name = 'panelizer_node:acc_incident_default';
   $strongarm->value = array(
     'bean_pane' => 'bean_pane',
-    'custom' => 'custom',
     'block' => 'block',
-    'entity_form_field' => 'entity_form_field',
+    'custom' => 'custom',
     'entity_field' => 'entity_field',
     'entity_field_extra' => 'entity_field_extra',
-    'token' => 'token',
+    'entity_form_field' => 'entity_form_field',
     'entity_view' => 'entity_view',
     'fieldable_panels_pane' => 'fieldable_panels_pane',
     'flag_link' => 'flag_link',
     'openlayers_map' => 'openlayers_map',
+    'other' => 'other',
     'panels_mini' => 'panels_mini',
+    'token' => 'token',
     'views' => 'views',
     'views_panes' => 'views_panes',
-    'other' => 'other',
   );
   $export['panelizer_node:acc_incident_default'] = $strongarm;
 

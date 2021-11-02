@@ -26,7 +26,7 @@ function phone_libraries_info() {
     'name' => 'libphonenumber (PHP Port)',
     'vendor url' => 'https://github.com/giggsey/libphonenumber-for-php',
     'download url' => 'https://github.com/giggsey/libphonenumber-for-php/archive/master.zip',
-    'path' => 'src/libphonenumber',
+    'path' => 'src',
     'version' => '1.0',
     'files' => array(
       'php' => array(
@@ -43,8 +43,12 @@ function phone_libraries_info() {
         'CountryCodeSource.php',
         'NumberParseException.php',
         'ValidationResult.php',
+        'MatcherAPIInterface.php',
         'MetadataLoaderInterface.php',
         'DefaultMetadataLoader.php',
+        'MetadataSourceInterface.php',
+        'MultiFileMetadataSourceImpl.php',
+        'RegexBasedMatcher.php',
       ),
     ),
     'integration files' => array(
@@ -137,32 +141,30 @@ function phone_countries_alter(&$countries) {
  */
 function phone_countries($codes = NULL, $type = 'combined', $reset = FALSE) {
   // We don't need drupal_static() do we? Why would we reset this?
-  static $country_data = array();
-  global $language;
-  $lang_code = $language->language;
+  static $country_data = NULL;
 
-  if (!isset($country_data[$lang_code]) || $reset) {
-    if (!$reset && ($cache = cache_get('phone_countries_' . $lang_code))) {
-      $country_data[$lang_code] = $cache->data;
+  if (!isset($country_data) || $reset) {
+    if (!$reset && ($cache = cache_get('phone_countries'))) {
+      $country_data = $cache->data;
     }
 
-    if (!isset($country_data[$lang_code])) {
+    if (!isset($country_data)) {
       // Load libphonenumber.
       phone_libphonenumber();
 
-      $country_data[$lang_code] = phone_libphonenumber_get_supported_country_lists();
-      cache_set('phone_countries_' . $lang_code, $country_data[$lang_code]);
+      $country_data = phone_libphonenumber_get_supported_country_lists();
+      cache_set('phone_countries', $country_data);
     }
   }
 
   if (empty($codes)) {
-    return $country_data[$lang_code][$type];
+    return $country_data[$type];
   }
   elseif (is_array($codes)) {
-    return array_intersect_key($country_data[$lang_code][$type], drupal_map_assoc($codes));
+    return array_intersect_key($country_data[$type], drupal_map_assoc($codes));
   }
-  elseif (isset($country_data[$lang_code][$type][$codes])) {
-    return $country_data[$lang_code][$type][$codes];
+  elseif (isset($country_data[$type][$codes])) {
+    return $country_data[$type][$codes];
   }
   else {
     return FALSE;

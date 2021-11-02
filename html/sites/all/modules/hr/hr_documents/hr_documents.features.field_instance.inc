@@ -608,7 +608,7 @@ function hr_documents_field_default_field_instances() {
   // Exported field_instance: 'node-hr_document-field_organizations'.
   $field_instances['node-hr_document-field_organizations'] = array(
     'bundle' => 'hr_document',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => 'Select the source(s) of the document. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select “other” in the meantime.',
@@ -757,6 +757,7 @@ function hr_documents_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -888,6 +889,66 @@ function hr_documents_field_default_field_instances() {
       'type' => 'options_select',
       'weight' => 14,
     ),
+  );
+
+  // Exported field_instance: 'node-hr_document-group_content_access'.
+  $field_instances['node-hr_document-group_content_access'] = array(
+    'bundle' => 'hr_document',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Choose whether the document will be public, private or will have the same setting (private or public)as the webspace or sub-space (cluster, sector or working group) within which it has been published.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 17,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'group_content_access',
+    'label' => 'Content visibility',
+    'required' => 1,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'view modes' => array(
+      'full' => array(
+        'label' => 'above',
+        'type' => 'list_default',
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'type' => 'list_default',
+      ),
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'apply_chosen' => 0,
+      ),
+      'type' => 'options_select',
+      'weight' => 17,
+    ),
+    'widget_type' => 'options_select',
   );
 
   // Exported field_instance: 'node-hr_document-og_group_ref'.
@@ -1144,8 +1205,8 @@ function hr_documents_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Acronym');
-  t('Add title (max 128 characters) and URL of content related to the document you are publishing.');
   t('Add text that best describes the document - either the full text of the document, or a part of it such as the executive summary or document highlights. If no text is available, add a description of the file(s) you are publishing. More instructions available <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.7izidzeds8ps">here</a>.');
+  t('Add title (max 128 characters) and URL of content related to the document you are publishing.');
   t('Choose whether the document will be public, private or will have the same setting (private or public)as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
   t('Cluster(s)/Sector(s)');
   t('Content visibility');

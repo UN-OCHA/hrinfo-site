@@ -497,6 +497,7 @@ function hr_operations_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -564,6 +565,7 @@ function hr_operations_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -768,7 +770,6 @@ function hr_operations_field_default_field_instances() {
   t('Launch date');
   t('Managed by');
   t('Region');
-  t('Secure Humanitarian ID contact list ?');
   t('Social media');
   t('Status');
   t('Title');

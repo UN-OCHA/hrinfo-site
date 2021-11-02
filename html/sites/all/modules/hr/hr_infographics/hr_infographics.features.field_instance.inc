@@ -242,6 +242,75 @@ function hr_infographics_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-hr_infographic-field_data_sources'.
+  $field_instances['node-hr_infographic-field_data_sources'] = array(
+    'bundle' => 'hr_infographic',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Indicate the title and the url of the row data file used to create the map/infographic',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 18,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_data_sources',
+    'label' => 'Data source(s)',
+    'required' => 0,
+    'settings' => array(
+      'absolute_url' => 1,
+      'attributes' => array(
+        'class' => '',
+        'configurable_class' => 0,
+        'configurable_title' => 0,
+        'rel' => '',
+        'target' => '_blank',
+        'title' => '',
+      ),
+      'convert_aliases' => 0,
+      'display' => array(
+        'url_cutoff' => 80,
+      ),
+      'enable_tokens' => 1,
+      'entity_translation_sync' => FALSE,
+      'linkit' => array(
+        'button_text' => 'Search',
+        'enable' => 0,
+        'profile' => '',
+      ),
+      'rel_remove' => 'default',
+      'title' => 'optional',
+      'title_label_use_field_label' => 0,
+      'title_maxlength' => 128,
+      'title_value' => '',
+      'url' => 0,
+      'user_register_form' => FALSE,
+      'validate_url' => 1,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'link',
+      'settings' => array(),
+      'type' => 'link_field',
+      'weight' => 9,
+    ),
+  );
+
   // Exported field_instance: 'node-hr_infographic-field_disasters'.
   $field_instances['node-hr_infographic-field_disasters'] = array(
     'bundle' => 'hr_infographic',
@@ -501,7 +570,7 @@ function hr_infographics_field_default_field_instances() {
   // Exported field_instance: 'node-hr_infographic-field_organizations'.
   $field_instances['node-hr_infographic-field_organizations'] = array(
     'bundle' => 'hr_infographic',
-    'default_value' => NULL,
+    'default_value' => array(),
     'default_value_function' => '',
     'deleted' => 0,
     'description' => 'Select the source(s) of the document. If the organization is not available, <a href="https://docs.google.com/a/humanitarianresponse.info/forms/d/e/1FAIpQLSdpkMue4gFydSm1PwhSIQonpWRGG50ouJJdo8NbcvaMv_pcDw/viewform?c=0&w=1&usp=send_form">request it to be added</a> and select “other” in the meantime.',
@@ -649,6 +718,7 @@ function hr_infographics_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -780,6 +850,66 @@ function hr_infographics_field_default_field_instances() {
       'type' => 'options_select',
       'weight' => 15,
     ),
+  );
+
+  // Exported field_instance: 'node-hr_infographic-group_content_access'.
+  $field_instances['node-hr_infographic-group_content_access'] = array(
+    'bundle' => 'hr_infographic',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Choose whether the map/infographic will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 15,
+      ),
+      'search_result' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'group_content_access',
+    'label' => 'Content visibility',
+    'required' => 1,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'view modes' => array(
+      'full' => array(
+        'label' => 'above',
+        'type' => 'list_default',
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'type' => 'list_default',
+      ),
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'apply_chosen' => '',
+      ),
+      'type' => 'options_select',
+      'weight' => 18,
+    ),
+    'widget_type' => 'options_select',
   );
 
   // Exported field_instance: 'node-hr_infographic-og_group_ref'.
@@ -996,8 +1126,8 @@ function hr_infographics_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Acronym');
-  t('Add title (max 128 characters) and URL of content related to the map/infographic you are publishing.');
   t('Add text that best describes the map/ infographic, such as the map/infographic overview or its highlights. If no text is available, add a description of the file(s) you are publishing. More instructions available <a href="https://docs.google.com/document/d/1UNu0H4XFN_TPnr3p4hZLVToyNyfoMJUdL0y7nphX_kA/edit#heading=h.q0y1ay5fenvr">here</a>.');
+  t('Add title (max 128 characters) and URL of content related to the map/infographic you are publishing.');
   t('Choose whether the map/infographic will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
   t('Cluster(s)/Sector(s)');
   t('Content visibility');

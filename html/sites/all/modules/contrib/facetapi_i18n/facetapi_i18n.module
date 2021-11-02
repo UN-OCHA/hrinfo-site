@@ -56,12 +56,9 @@ function facetapi_i18n_map_content_types(array $values, array $options) {
 
 /**
  * Implements hook_facetapi_translate_string().
- *
- * NOTE: Facet API is always responsible for escaping the string based on how
- * its translation system is architected.
  */
 function facetapi_i18n_facetapi_translate_string($name, $string, $langcode) {
-  return i18n_string($name, $string, array('update' => TRUE, 'langcode' => $langcode, 'sanitize' => FALSE));
+  return i18n_string($name, $string, array('langcode' => $langcode, 'update' => TRUE, 'sanitize' => FALSE));
 }
 
 /**
@@ -175,11 +172,11 @@ function facetapi_i18n_ctools_export_ui_form_submit($form, $form_state) {
   // Map the CTools Export UI operation to the i18n operation.
   switch ($form_state['op']) {
     case 'edit':
+    case 'revert':
       $op = 'update';
       break;
 
     case 'delete':
-    case 'revert':
       $op = 'remove';
       break;
 

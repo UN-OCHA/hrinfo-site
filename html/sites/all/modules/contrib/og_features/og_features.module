@@ -133,6 +133,18 @@ function og_features_menu_alter(&$items) {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function og_features_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'menu_alter') {
+    // Move our hook implementation to the bottom.
+    $group = $implementations['og_features'];
+    unset($implementations['og_features']);
+    $implementations['og_features'] = $group;
+  }
+}
+
+/**
  * Implements hook_entity_load().
  */
 function og_features_entity_load($entities, $type) {
@@ -454,7 +466,7 @@ function og_features_menu_access_callback() {
  *   An array of registry information
  */
 function og_features_get_registry($feature = NULL, $reset = FALSE) {
-  static $registry = NULL;
+  $registry = &drupal_static(__FUNCTION__, NULL);
   $cache_key = 'og_features:registry';
   $hook = 'og_features_registry';
   
@@ -487,15 +499,15 @@ function og_features_get_registry($feature = NULL, $reset = FALSE) {
 /**
  * Load and attach the disabled features for a given group
  * 
- * @param &$entity
+ * @param $entity
  *   An entity object
  * @param $entity_type
  *   The type of entity being passed in
  * @param $reset
  *   TRUE if the list is disabled features should be re-generated
  */
-function og_features_load_disabled_features(&$entity, $entity_type, $reset = FALSE) {
-  static $disabled = array();
+function og_features_load_disabled_features($entity, $entity_type, $reset = FALSE) {
+  $disabled = &drupal_static(__FUNCTION__, array());
   
   // Determine and add the entity bundle and id
   $entity_info = entity_get_info($entity_type);
@@ -681,6 +693,12 @@ function og_features_save_feature_settings($entity_id, $entity_type, $features =
       'settings' => serialize($features),
     ))
     ->execute();
+
+  // Load fresh from db and re-save entity, ensuring modules get a chance to act
+  // on the new og_features settings
+  $entities = entity_load($entity_type, array($entity_id), array(), TRUE);
+  $entity = reset($entities);
+  entity_save($entity_type, $entity);
 }
 
 /**

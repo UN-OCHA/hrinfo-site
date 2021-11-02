@@ -19,9 +19,9 @@ function hr_bundles_feeds_tamper_default() {
   $feeds_tamper->source = 'Lead Agencies';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -35,9 +35,9 @@ function hr_bundles_feeds_tamper_default() {
   $feeds_tamper->source = 'Partners';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ';',
     'limit' => '',
     'real_separator' => ';',
+    'separator' => ';',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';

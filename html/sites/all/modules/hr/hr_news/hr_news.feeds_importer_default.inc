@@ -16,32 +16,38 @@ function hr_news_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_news';
   $feeds_importer->config = array(
-    'name' => 'News',
+    'content_type' => '',
     'description' => 'Import news from a CSV file',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'public://feeds',
         'allowed_schemes' => array(
           0 => 'public',
         ),
+        'direct' => FALSE,
+        'directory' => 'public://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'News',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsNodeProcessor',
       'config' => array(
-        'expire' => '-1',
         'author' => 0,
         'authorize' => 1,
+        'bundle' => 'hr_news',
+        'expire' => '-1',
+        'input_format' => 'hr_wysiwyg',
         'mappings' => array(
           0 => array(
             'source' => 'Title',
@@ -144,19 +150,13 @@ function hr_news_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'hr_wysiwyg',
         'skip_hash_check' => 0,
-        'bundle' => 'hr_news',
+        'update_existing' => '2',
         'update_non_existent' => 'skip',
       ),
+      'plugin_key' => 'FeedsNodeProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_news'] = $feeds_importer;
 

@@ -17,8 +17,8 @@ function hr_offices_strongarm() {
   $strongarm->name = 'entity_translation_settings_node__hr_office';
   $strongarm->value = array(
     'default_language' => 'xx-et-current',
-    'hide_language_selector' => 0,
     'exclude_language_none' => 1,
+    'hide_language_selector' => 0,
     'lock_language' => 0,
     'shared_fields_original_only' => 0,
   );
@@ -29,42 +29,42 @@ function hr_offices_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__hr_office';
   $strongarm->value = array(
-    'view_modes' => array(
-      'teaser' => array(
-        'custom_settings' => TRUE,
-      ),
-      'search_result' => array(
-        'custom_settings' => TRUE,
-      ),
-      'full' => array(
-        'custom_settings' => FALSE,
-      ),
-      'rss' => array(
-        'custom_settings' => FALSE,
-      ),
-      'ical' => array(
-        'custom_settings' => FALSE,
-      ),
-      'diff_standard' => array(
-        'custom_settings' => FALSE,
-      ),
-      'token' => array(
-        'custom_settings' => FALSE,
-      ),
-    ),
     'extra_fields' => array(
+      'display' => array(),
       'form' => array(
+        'language' => array(
+          'weight' => '-10',
+        ),
         'path' => array(
           'weight' => '8',
         ),
         'redirect' => array(
           'weight' => '7',
         ),
-        'language' => array(
-          'weight' => '-10',
-        ),
       ),
-      'display' => array(),
+    ),
+    'view_modes' => array(
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
+      'full' => array(
+        'custom_settings' => FALSE,
+      ),
+      'ical' => array(
+        'custom_settings' => FALSE,
+      ),
+      'rss' => array(
+        'custom_settings' => FALSE,
+      ),
+      'search_result' => array(
+        'custom_settings' => TRUE,
+      ),
+      'teaser' => array(
+        'custom_settings' => TRUE,
+      ),
+      'token' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
   );
   $export['field_bundle_settings_node__hr_office'] = $strongarm;
@@ -122,50 +122,50 @@ function hr_offices_strongarm() {
   $strongarm->value = array(
     'status' => 1,
     'view modes' => array(
-      'page_manager' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
       'default' => array(
-        'status' => 1,
+        'choice' => 0,
         'default' => 1,
-        'choice' => 0,
-      ),
-      'full' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
-      'teaser' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
-      'rss' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
-      'ical' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
+        'status' => 1,
       ),
       'diff_standard' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'full' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'ical' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'page_manager' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'rss' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'search_result' => array(
-        'status' => 1,
-        'default' => 1,
         'choice' => 0,
+        'default' => 1,
+        'status' => 1,
+      ),
+      'teaser' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'token' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
     ),
   );
@@ -192,18 +192,18 @@ function hr_offices_strongarm() {
   $strongarm->value = array(
     'bean_pane' => 'bean_pane',
     'block' => 'block',
-    'entity_form_field' => 'entity_form_field',
     'custom' => 'custom',
-    'entity_field_extra' => 'entity_field_extra',
     'entity_field' => 'entity_field',
-    'token' => 'token',
+    'entity_field_extra' => 'entity_field_extra',
+    'entity_form_field' => 'entity_form_field',
     'entity_view' => 'entity_view',
     'fieldable_panels_pane' => 'fieldable_panels_pane',
     'flag_link' => 'flag_link',
     'openlayers_map' => 'openlayers_map',
+    'other' => 'other',
+    'token' => 'token',
     'views' => 'views',
     'views_panes' => 'views_panes',
-    'other' => 'other',
   );
   $export['panelizer_node:hr_office_default'] = $strongarm;
 

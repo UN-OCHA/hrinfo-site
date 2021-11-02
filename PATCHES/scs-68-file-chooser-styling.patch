@@ -1,0 +1,64 @@
+diff --git a/css/file_chooser_field.css b/css/file_chooser_field.css
+index 2c4c1bd..2762afc 100644
+--- a/css/file_chooser_field.css
++++ b/css/file_chooser_field.css
+@@ -1,16 +1,23 @@
+-.file-chooser-field-wrapper,
+-.file-chooser-field-wrapper .progress {
+-  margin: 0.6em 0;
++.file-chooser-field-wrapper a.button {
++  padding: 5px 7px;
++  border-radius: 2px;
++  color: #333;
++  background: -webkit-linear-gradient(#ffffff 20%,#f6f6f6 50%,#eeeeee 52%,#f4f4f4 100%);
++  background: linear-gradient(#ffffff 20%,#f6f6f6 50%,#eeeeee 52%,#f4f4f4 100%);
++  border: 1px solid #e3e3e3;
++  text-decoration: none;
++}
++
++.file-chooser-field-wrapper a.button + a.button {
++  margin-left: 7px;
+ }
+ 
+ .file-chooser-field-wrapper a.button.disabled {
+-  color: #ccc;
+-  cursor: default;
++  pointer-events: none;
++  color: #b3b3b3;
++  cursor: not-allowed;
+ }
+ 
+-.file-chooser-field-wrapper a.button:active {
+-  background: #666;
+-  color: #fff;
+-  border-color: #555;
+-  text-shadow: #222 0 -1px 0;
++.file-chooser-field-wrapper a.button:hover {
++  text-decoration: none;
+ }
+diff --git a/file_chooser_field.field.inc b/file_chooser_field.field.inc
+index 96a2d54..802ece8 100644
+--- a/file_chooser_field.field.inc
++++ b/file_chooser_field.field.inc
+@@ -117,7 +117,7 @@ function file_chooser_field_field_widget_process($element, &$form_state, $form)
+     '#upload_location' => $element['#upload_location'],
+     '#file_chooser_field_upload_validators' => $upload_validators,
+     '#prefix' => '<div class="file-chooser-field-wrapper">' . theme('file_chooser_field', array(
+-        'label' => t('Browse'),
++        'label' => t('Browse your computer'),
+         'class' => 'browse',
+         'attributes' => array(),
+       ))
+diff --git a/plugins/Dropbox.php b/plugins/Dropbox.php
+index 48fb8d2..a2cf61c 100644
+--- a/plugins/Dropbox.php
++++ b/plugins/Dropbox.php
+@@ -14,7 +14,7 @@ class DropboxChooserAPI extends FileChooserFieldPlugin {
+    * {@inheritdoc}
+    */
+   public function label() {
+-    return t('Dropbox');
++    return t('Select from Dropbox');
+   }
+ 
+   /**

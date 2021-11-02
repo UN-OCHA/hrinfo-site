@@ -51,8 +51,8 @@ function hr_documents_file_default_displays() {
   $file_display->weight = 0;
   $file_display->status = FALSE;
   $file_display->settings = array(
-    'image_style' => '',
     'image_link' => '',
+    'image_style' => '',
     'show_description' => 0,
     'tag' => 'span',
   );
@@ -74,9 +74,9 @@ function hr_documents_file_default_displays() {
   $file_display->weight = 0;
   $file_display->status = FALSE;
   $file_display->settings = array(
-    'width' => '560',
-    'height' => '340',
     'autoplay' => 0,
+    'height' => '340',
+    'width' => '560',
   );
   $export['document__default__media_vimeo_video'] = $file_display;
 
@@ -112,11 +112,11 @@ function hr_documents_file_default_displays() {
   $file_display->weight = -44;
   $file_display->status = TRUE;
   $file_display->settings = array(
-    'image_style' => 'thumbnail',
+    'fallback_formatter' => 0,
     'image_link' => '',
+    'image_style' => 'thumbnail',
     'show_description' => 0,
     'tag' => 'span',
-    'fallback_formatter' => 0,
   );
   $export['document__preview__file_field_pdfpreview'] = $file_display;
 
@@ -136,9 +136,9 @@ function hr_documents_file_default_displays() {
   $file_display->weight = -48;
   $file_display->status = FALSE;
   $file_display->settings = array(
-    'width' => '560',
-    'height' => '340',
     'autoplay' => 0,
+    'height' => '340',
+    'width' => '560',
   );
   $export['document__preview__media_vimeo_video'] = $file_display;
 

@@ -28,28 +28,28 @@ function hr_disasters_context_default_contexts() {
     'block' => array(
       'blocks' => array(
         'current_search-hr_current_search' => array(
-          'module' => 'current_search',
           'delta' => 'hr_current_search',
+          'module' => 'current_search',
           'region' => 'sidebar_first',
           'weight' => '-10',
         ),
-        'facetapi-djs1o6VrivuNykMYeYyvXVKT480Y01tL' => array(
+        'facetapi-Inq9iHy8F01ng3heTk70PTVUV4G1i5Fh' => array(
+          'delta' => 'Inq9iHy8F01ng3heTk70PTVUV4G1i5Fh',
           'module' => 'facetapi',
-          'delta' => 'djs1o6VrivuNykMYeYyvXVKT480Y01tL',
           'region' => 'sidebar_first',
-          'weight' => '-9',
+          'weight' => '-7',
         ),
         'facetapi-XEALhc8ysZYJYeBGGMrztUfQM1GPRMcl' => array(
-          'module' => 'facetapi',
           'delta' => 'XEALhc8ysZYJYeBGGMrztUfQM1GPRMcl',
+          'module' => 'facetapi',
           'region' => 'sidebar_first',
           'weight' => '-8',
         ),
-        'facetapi-Inq9iHy8F01ng3heTk70PTVUV4G1i5Fh' => array(
+        'facetapi-djs1o6VrivuNykMYeYyvXVKT480Y01tL' => array(
+          'delta' => 'djs1o6VrivuNykMYeYyvXVKT480Y01tL',
           'module' => 'facetapi',
-          'delta' => 'Inq9iHy8F01ng3heTk70PTVUV4G1i5Fh',
           'region' => 'sidebar_first',
-          'weight' => '-7',
+          'weight' => '-9',
         ),
       ),
     ),

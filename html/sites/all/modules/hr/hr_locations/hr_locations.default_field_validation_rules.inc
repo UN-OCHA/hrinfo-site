@@ -22,12 +22,12 @@ function hr_locations_default_field_validation_rule() {
   $rule->bundle = 'hr_location';
   $rule->validator = 'field_validation_unique_validator';
   $rule->settings = array(
-    'data' => 'bundle',
     'bypass' => 0,
+    'data' => 'bundle',
+    'errors' => 0,
     'roles' => array(
       2 => 0,
     ),
-    'errors' => 0,
   );
   $rule->error_message = 'The PCode must be unique';
   $export['hr_locations_pcode_unique'] = $rule;

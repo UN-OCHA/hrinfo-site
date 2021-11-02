@@ -79,11 +79,11 @@ function hr_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'entity_translation_entity_types';
   $strongarm->value = array(
+    'bean' => 0,
+    'fieldable_panels_pane' => 'fieldable_panels_pane',
+    'file' => 0,
     'node' => 'node',
     'taxonomy_term' => 'taxonomy_term',
-    'fieldable_panels_pane' => 'fieldable_panels_pane',
-    'bean' => 0,
-    'file' => 0,
     'user' => 0,
   );
   $export['entity_translation_entity_types'] = $strongarm;
@@ -128,6 +128,11 @@ function hr_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'language_negotiation_language';
   $strongarm->value = array(
+    'language-default' => array(
+      'callbacks' => array(
+        'language' => 'language_from_default',
+      ),
+    ),
     'locale-url' => array(
       'callbacks' => array(
         'language' => 'locale_language_from_url',
@@ -135,11 +140,6 @@ function hr_core_strongarm() {
         'url_rewrite' => 'locale_language_url_rewrite_url',
       ),
       'file' => 'includes/locale.inc',
-    ),
-    'language-default' => array(
-      'callbacks' => array(
-        'language' => 'language_from_default',
-      ),
     ),
   );
   $export['language_negotiation_language'] = $strongarm;
@@ -149,16 +149,16 @@ function hr_core_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'language_negotiation_language_content';
   $strongarm->value = array(
+    'language-default' => array(
+      'callbacks' => array(
+        'language' => 'language_from_default',
+      ),
+    ),
     'locale-interface' => array(
       'callbacks' => array(
         'language' => 'locale_language_from_interface',
       ),
       'file' => 'includes/locale.inc',
-    ),
-    'language-default' => array(
-      'callbacks' => array(
-        'language' => 'language_from_default',
-      ),
     ),
   );
   $export['language_negotiation_language_content'] = $strongarm;
@@ -205,15 +205,136 @@ function hr_core_strongarm() {
   $strongarm->name = 'panels_page_default';
   $strongarm->value = array(
     'block' => 'block',
-    'entity_form_field' => 'entity_form_field',
     'custom' => 'custom',
-    'entity_field_extra' => 'entity_field_extra',
     'entity_field' => 'entity_field',
-    'token' => 'token',
+    'entity_field_extra' => 'entity_field_extra',
+    'entity_form_field' => 'entity_form_field',
     'entity_view' => 'entity_view',
     'other' => 'other',
+    'token' => 'token',
   );
   $export['panels_page_default'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'seckit_advanced';
+  $strongarm->value = array(
+    'csp_limits' => array(
+      'flood' => array(
+        'limit_global' => '1000',
+        'limit_user' => '100',
+        'window_global' => '3600',
+        'window_user' => '900',
+      ),
+      'max_size' => '4096',
+    ),
+    'disable_seckit' => 0,
+    'unlimited_csp_reports' => 1,
+  );
+  $export['seckit_advanced'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'seckit_clickjacking';
+  $strongarm->value = array(
+    'js_css_noscript' => 0,
+    'noscript_message' => 'Sorry, you need to enable JavaScript to visit this website.',
+    'x_frame' => '1',
+    'x_frame_allow_from' => '',
+  );
+  $export['seckit_clickjacking'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'seckit_csrf';
+  $strongarm->value = array(
+    'origin' => 1,
+    'origin_whitelist' => 'https://fonts.gstatic.com',
+  );
+  $export['seckit_csrf'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'seckit_ct';
+  $strongarm->value = array(
+    'enforce' => 0,
+    'expect_ct' => 0,
+    'max_age' => '1000',
+    'report-uri' => '',
+  );
+  $export['seckit_ct'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'seckit_fp';
+  $strongarm->value = array(
+    'feature_policy' => 0,
+    'feature_policy_policy' => '',
+  );
+  $export['seckit_fp'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'seckit_ssl';
+  $strongarm->value = array(
+    'hsts' => 0,
+    'hsts_max_age' => 1000,
+    'hsts_preload' => 0,
+    'hsts_subdomains' => 0,
+  );
+  $export['seckit_ssl'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'seckit_various';
+  $strongarm->value = array(
+    'disable_autocomplete' => 0,
+    'from_origin' => 0,
+    'from_origin_destination' => 'same',
+    'referrer_policy' => 0,
+    'referrer_policy_policy' => 'no-referrer',
+  );
+  $export['seckit_various'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'seckit_xss';
+  $strongarm->value = array(
+    'csp' => array(
+      'checkbox' => 1,
+      'child-src' => '',
+      'connect-src' => '\'self\' https://www.googletagmanager.com https://stats.g.doubleclick.net',
+      'default-src' => '\'self\' https://fonts.googleapis.com',
+      'font-src' => 'https://fonts.gstatic.com https://maxcdn.bootstrapcdn.com https://stackpath.bootstrapcdn.com',
+      'frame-ancestors' => '',
+      'frame-src' => 'https://static.addtoany.com',
+      'img-src' => '\'self\' data:',
+      'media-src' => '',
+      'object-src' => '',
+      'policy-uri' => '',
+      'report-only' => 1,
+      'report-uri' => 'report-csp-violation',
+      'script-src' => '\'self\' \'unsafe-inline\' https://www.gstatic.com https://www.google.com https://www.google-analytics.com https://app.powerbi.com https://content.powerapps.com https://www.googletagmanager.com https://platform.twitter.com https://maxcdn.bootstrapcdn.com https://static.addtoany.com https://code.highcharts.com https://cdn.jsdelivr.net',
+      'style-src' => '\'self\' \'unsafe-inline\'  https://fonts.googleapis.com https://maxcdn.bootstrapcdn.com https://stackpath.bootstrapcdn.com',
+      'upgrade-req' => 0,
+      'vendor-prefix' => array(
+        'webkit' => 0,
+        'x' => 0,
+      ),
+    ),
+    'x_xss' => array(
+      'select' => '0',
+    ),
+  );
+  $export['seckit_xss'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

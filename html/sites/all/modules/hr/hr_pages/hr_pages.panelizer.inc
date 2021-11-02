@@ -35,12 +35,12 @@ function hr_pages_panelizer_defaults() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
-      'default' => NULL,
-      'top' => NULL,
-      'left' => NULL,
-      'right' => NULL,
       'bottom' => NULL,
       'contentmain' => NULL,
+      'default' => NULL,
+      'left' => NULL,
+      'right' => NULL,
+      'top' => NULL,
     ),
   );
   $display->cache = array();
@@ -102,9 +102,9 @@ function hr_pages_panelizer_defaults() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
-      'default' => NULL,
       'center' => NULL,
       'contentmain' => NULL,
+      'default' => NULL,
     ),
   );
   $display->cache = array();
@@ -122,15 +122,15 @@ function hr_pages_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'hidden',
-    'formatter' => 'text_summary_or_trimmed',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_summary_or_trimmed',
     'formatter_settings' => array(
       'trim_length' => '600',
     ),
-    'context' => 'panelizer',
+    'label' => 'hidden',
     'override_title' => 0,
     'override_title_text' => '',
   );

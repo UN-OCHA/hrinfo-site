@@ -278,6 +278,8 @@ function hr_search_views_default_views() {
     t('Node ID'),
     t('.'),
     t(','),
+    t('1'),
+    t('@count'),
     t('Date created'),
     t('The main body text'),
     t('Title'),

@@ -35,16 +35,16 @@ function hr_bundles_panelizer_defaults() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
-      'default' => NULL,
-      'top' => NULL,
-      'left' => NULL,
-      'right' => NULL,
       'bottom' => NULL,
-      'contentmain' => NULL,
-      'header' => NULL,
       'column1' => NULL,
       'column2' => NULL,
+      'contentmain' => NULL,
+      'default' => NULL,
       'footer' => NULL,
+      'header' => NULL,
+      'left' => NULL,
+      'right' => NULL,
+      'top' => NULL,
     ),
   );
   $display->cache = array();
@@ -112,16 +112,16 @@ function hr_bundles_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'more_link' => 0,
-    'use_pager' => 0,
-    'pager_id' => '0',
-    'items_per_page' => '5',
     'context' => array(
       0 => 'panelizer',
       1 => 'panelizer',
     ),
+    'items_per_page' => '5',
+    'more_link' => 0,
     'override_title' => 0,
     'override_title_text' => '',
+    'pager_id' => '0',
+    'use_pager' => 0,
   );
   $pane->cache = array();
   $pane->style = array(
@@ -143,16 +143,16 @@ function hr_bundles_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'more_link' => 0,
-    'use_pager' => 0,
-    'pager_id' => '0',
-    'items_per_page' => '5',
     'context' => array(
       0 => 'empty',
       1 => 'panelizer',
     ),
+    'items_per_page' => '5',
+    'more_link' => 0,
     'override_title' => 0,
     'override_title_text' => '',
+    'pager_id' => '0',
+    'use_pager' => 0,
   );
   $pane->cache = array();
   $pane->style = array(
@@ -174,20 +174,20 @@ function hr_bundles_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'more_link' => 0,
-    'use_pager' => 0,
-    'pager_id' => '0',
-    'items_per_page' => '5',
-    'fields_override' => array(
-      'title' => 1,
-      'field_event_date' => 1,
-    ),
     'context' => array(
       0 => 'empty',
       1 => 'panelizer',
     ),
+    'fields_override' => array(
+      'field_event_date' => 1,
+      'title' => 1,
+    ),
+    'items_per_page' => '5',
+    'more_link' => 0,
     'override_title' => 0,
     'override_title_text' => '',
+    'pager_id' => '0',
+    'use_pager' => 0,
   );
   $pane->cache = array();
   $pane->style = array(
@@ -209,16 +209,16 @@ function hr_bundles_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'more_link' => 0,
-    'use_pager' => 0,
-    'pager_id' => '0',
-    'items_per_page' => '5',
     'context' => array(
       0 => 'panelizer',
       1 => 'panelizer',
     ),
+    'items_per_page' => '5',
+    'more_link' => 0,
     'override_title' => 0,
     'override_title_text' => '',
+    'pager_id' => '0',
+    'use_pager' => 0,
   );
   $pane->cache = array();
   $pane->style = array(
@@ -240,13 +240,13 @@ function hr_bundles_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'hidden',
-    'formatter' => 'text_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'hidden',
   );
   $pane->cache = array();
   $pane->style = array(

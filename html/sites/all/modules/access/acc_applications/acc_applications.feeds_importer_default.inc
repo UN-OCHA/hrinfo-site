@@ -16,28 +16,33 @@ function acc_applications_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'acc_submission_status';
   $feeds_importer->config = array(
-    'name' => 'CSV Access Submission Status',
+    'content_type' => '',
     'description' => 'To import Access Submission Status in csv',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsHTTPFetcher',
       'config' => array(
         'auto_detect_feeds' => FALSE,
-        'use_pubsubhubbub' => FALSE,
         'designated_hub' => '',
         'request_timeout' => NULL,
+        'use_pubsubhubbub' => FALSE,
       ),
+      'plugin_key' => 'FeedsHTTPFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'CSV Access Submission Status',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'acc_application_submission_status',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -55,18 +60,13 @@ function acc_applications_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '0',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'acc_application_submission_status',
+        'update_existing' => '0',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['acc_submission_status'] = $feeds_importer;
 
@@ -75,33 +75,39 @@ function acc_applications_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'csv_acc_application';
   $feeds_importer->config = array(
-    'name' => 'CSV Access Applications',
+    'content_type' => '',
     'description' => 'To import Access Applications in csv',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'private://feeds',
         'allowed_schemes' => array(
           0 => 'public',
           1 => 'private',
         ),
+        'direct' => FALSE,
+        'directory' => 'private://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'CSV Access Applications',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsNodeProcessor',
       'config' => array(
-        'expire' => '-1',
         'author' => 0,
         'authorize' => 1,
+        'bundle' => 'acc_application',
+        'expire' => '-1',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Title',
@@ -194,18 +200,12 @@ function acc_applications_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '0',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'acc_application',
+        'update_existing' => '0',
       ),
+      'plugin_key' => 'FeedsNodeProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['csv_acc_application'] = $feeds_importer;
 
@@ -214,28 +214,33 @@ function acc_applications_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'csv_acc_application_types';
   $feeds_importer->config = array(
-    'name' => 'Access Application Types',
+    'content_type' => '',
     'description' => 'To import Access Application Types in csv',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsHTTPFetcher',
       'config' => array(
         'auto_detect_feeds' => FALSE,
-        'use_pubsubhubbub' => FALSE,
         'designated_hub' => '',
         'request_timeout' => NULL,
+        'use_pubsubhubbub' => FALSE,
       ),
+      'plugin_key' => 'FeedsHTTPFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Access Application Types',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'acc_application_types',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -253,18 +258,13 @@ function acc_applications_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '0',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'acc_application_types',
+        'update_existing' => '0',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['csv_acc_application_types'] = $feeds_importer;
 
