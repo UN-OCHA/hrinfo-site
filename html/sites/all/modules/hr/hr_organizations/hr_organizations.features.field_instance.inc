@@ -175,7 +175,9 @@ function hr_organizations_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'link',
-        'settings' => array(),
+        'settings' => array(
+          'custom_title' => '',
+        ),
         'type' => 'link_default',
         'weight' => 4,
       ),
@@ -194,6 +196,7 @@ function hr_organizations_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),

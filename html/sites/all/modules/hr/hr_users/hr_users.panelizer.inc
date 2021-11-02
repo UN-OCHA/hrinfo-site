@@ -31,12 +31,12 @@ function hr_users_panelizer_defaults() {
   $panelizer->contexts = array();
   $panelizer->relationships = array(
     1 => array(
+      'context' => 'panelizer',
+      'id' => 1,
       'identifier' => 'Profile2 from user',
       'keyword' => 'profile2',
       'name' => 'profile2',
       'type' => 'main',
-      'context' => 'panelizer',
-      'id' => 1,
     ),
   );
   $display = new panels_display();
@@ -44,12 +44,12 @@ function hr_users_panelizer_defaults() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
-      'default' => NULL,
-      'sidebar' => NULL,
-      'contentmain' => NULL,
-      'contentheader' => NULL,
       'contentcolumn1' => NULL,
       'contentcolumn2' => NULL,
+      'contentheader' => NULL,
+      'contentmain' => NULL,
+      'default' => NULL,
+      'sidebar' => NULL,
     ),
   );
   $display->cache = array();
@@ -76,8 +76,8 @@ function hr_users_panelizer_defaults() {
     'settings' => NULL,
   );
   $pane->css = array(
-    'css_id' => '',
     'css_class' => '',
+    'css_id' => '',
   );
   $pane->extras = array();
   $pane->position = 0;
@@ -93,16 +93,16 @@ function hr_users_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'view_mode' => 'full',
     'context' => 'panelizer',
     'override_title' => 0,
-    'override_title_text' => '',
     'override_title_heading' => 'h2',
+    'override_title_text' => '',
+    'view_mode' => 'full',
   );
   $pane->cache = array();
   $pane->style = array(
-    'style' => 'default',
     'settings' => NULL,
+    'style' => 'default',
   );
   $pane->css = array();
   $pane->extras = array();
@@ -119,10 +119,10 @@ function hr_users_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'sanitize' => 1,
     'context' => 'panelizer',
     'override_title' => 1,
     'override_title_text' => '',
+    'sanitize' => 1,
   );
   $pane->cache = array();
   $pane->style = array(
@@ -143,15 +143,15 @@ function hr_users_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'relationship_entity_from_schema:uid-user-profile2_1',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'relationship_entity_from_schema:uid-user-profile2_1',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -174,13 +174,13 @@ function hr_users_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'text_default',
+    'context' => 'relationship_entity_from_schema:uid-user-profile2_1',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_default',
     'formatter_settings' => array(),
-    'context' => 'relationship_entity_from_schema:uid-user-profile2_1',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -223,13 +223,13 @@ function hr_users_panelizer_defaults() {
   $display->layout = 'radix_boxton';
   $display->layout_settings = array();
   $display->panel_settings = array(
-    'style_settings' => array(
-      'default' => NULL,
-      'middle' => NULL,
-      'contentmain' => NULL,
-    ),
     'middle' => array(
       'style' => '-1',
+    ),
+    'style_settings' => array(
+      'contentmain' => NULL,
+      'default' => NULL,
+      'middle' => NULL,
     ),
   );
   $display->cache = array();
@@ -247,10 +247,10 @@ function hr_users_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'view_mode' => 'teaser',
     'context' => 'panelizer',
     'override_title' => 1,
     'override_title_text' => '',
+    'view_mode' => 'teaser',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -271,10 +271,10 @@ function hr_users_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'sanitize' => 1,
     'context' => 'panelizer',
     'override_title' => 1,
     'override_title_text' => '',
+    'sanitize' => 1,
   );
   $pane->cache = array();
   $pane->style = array(

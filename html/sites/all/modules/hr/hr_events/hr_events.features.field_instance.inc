@@ -702,6 +702,7 @@ function hr_events_field_default_field_instances() {
         'target' => '_blank',
         'title' => '',
       ),
+      'convert_aliases' => 0,
       'display' => array(
         'url_cutoff' => 80,
       ),
@@ -1073,7 +1074,6 @@ function hr_events_field_default_field_instances() {
   t('Agenda(s)');
   t('Choose whether the event will be public, private or will have the same setting (private or public) as the webspace or sub-space (cluster, sector or working group) within which it has been published.');
   t('Cluster(s)/Sector(s)');
-  t('Contact(s)');
   t('Contacts');
   t('Content visibility');
   t('Coordination hub(s)');
@@ -1097,7 +1097,6 @@ function hr_events_field_default_field_instances() {
   t('Select where to publish the event (operation, regional site or thematic site).');
   t('Theme(s)');
   t('Title');
-  t('To show in the list, the person must have a <a href="https://humanitarian.id/">HumanitarianID</a> profile.');
   t('Venue');
 
   return $field_instances;

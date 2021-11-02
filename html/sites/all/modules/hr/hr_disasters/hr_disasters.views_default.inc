@@ -80,6 +80,8 @@ function hr_disasters_views_default_views() {
     t('Node ID'),
     t('.'),
     t(','),
+    t('1'),
+    t('@count'),
     t('Page'),
   );
   $export['hr_disasters'] = $view;
@@ -171,7 +173,7 @@ function hr_disasters_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref_target_id']['specify_validation'] = TRUE;
   $handler->display->display_options['arguments']['og_group_ref_target_id']['validate']['type'] = 'og';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['validate']['fail'] = 'ignore';
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';

@@ -379,7 +379,7 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['fields']['field_asst_unit']['table'] = 'search_api_index_default_node_index';
   $handler->display->display_options['fields']['field_asst_unit']['field'] = 'field_asst_unit';
   $handler->display->display_options['fields']['field_asst_unit']['delta_offset'] = '0';
-  /* Field: Field collection item: Accessibility */
+  /* Field: Field collection item: Availability */
   $handler->display->display_options['fields']['field_asst_accessibility_2']['id'] = 'field_asst_accessibility_2';
   $handler->display->display_options['fields']['field_asst_accessibility_2']['table'] = 'entity_field_collection_item';
   $handler->display->display_options['fields']['field_asst_accessibility_2']['field'] = 'field_asst_accessibility';
@@ -407,7 +407,7 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['fields']['field_asst_instructions_2']['field'] = 'field_asst_instructions';
   $handler->display->display_options['fields']['field_asst_instructions_2']['relationship'] = 'field_asst_report';
   $handler->display->display_options['fields']['field_asst_instructions_2']['label'] = 'Report Instructions';
-  /* Field: Field collection item: Accessibility */
+  /* Field: Field collection item: Availability */
   $handler->display->display_options['fields']['field_asst_accessibility_1']['id'] = 'field_asst_accessibility_1';
   $handler->display->display_options['fields']['field_asst_accessibility_1']['table'] = 'entity_field_collection_item';
   $handler->display->display_options['fields']['field_asst_accessibility_1']['field'] = 'field_asst_accessibility';
@@ -435,7 +435,7 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['fields']['field_asst_instructions_1']['field'] = 'field_asst_instructions';
   $handler->display->display_options['fields']['field_asst_instructions_1']['relationship'] = 'field_asst_questionnaire';
   $handler->display->display_options['fields']['field_asst_instructions_1']['label'] = 'Questionnaire Instructions';
-  /* Field: Field collection item: Accessibility */
+  /* Field: Field collection item: Availability */
   $handler->display->display_options['fields']['field_asst_accessibility']['id'] = 'field_asst_accessibility';
   $handler->display->display_options['fields']['field_asst_accessibility']['table'] = 'entity_field_collection_item';
   $handler->display->display_options['fields']['field_asst_accessibility']['field'] = 'field_asst_accessibility';
@@ -747,12 +747,14 @@ function hr_assessments_views_default_views() {
     t('Questionnaire File'),
     t('Questionnaire URL'),
     t('Questionnaire Instructions'),
-    t('Accessibility'),
+    t('Availability'),
     t('Data File'),
     t('Data URL'),
     t('Data Instructions'),
     t('Map data'),
     t('.'),
+    t('1'),
+    t('@count'),
     t('Map'),
   );
   $export['hr_assessments'] = $view;
@@ -800,7 +802,7 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary_options']['items_per_page'] = '25';
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -829,7 +831,7 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -1027,7 +1029,7 @@ function hr_assessments_views_default_views() {
   $handler->display->display_options['arguments']['field_bundles_target_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';

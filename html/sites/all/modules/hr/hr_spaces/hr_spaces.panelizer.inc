@@ -35,15 +35,15 @@ function hr_spaces_panelizer_defaults() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
-      'default' => NULL,
-      'top' => NULL,
-      'left' => NULL,
-      'right' => NULL,
       'bottom' => NULL,
-      'header' => NULL,
       'column1' => NULL,
       'column2' => NULL,
+      'default' => NULL,
       'footer' => NULL,
+      'header' => NULL,
+      'left' => NULL,
+      'right' => NULL,
+      'top' => NULL,
     ),
   );
   $display->cache = array();
@@ -61,13 +61,13 @@ function hr_spaces_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'hidden',
-    'formatter' => 'text_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'hidden',
   );
   $pane->cache = array();
   $pane->style = array(

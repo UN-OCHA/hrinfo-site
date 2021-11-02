@@ -16,32 +16,38 @@ function hr_sectors_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_sectors';
   $feeds_importer->config = array(
-    'name' => 'Sectors',
+    'content_type' => '',
     'description' => 'Import sectors from a CSV file',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'public://feeds',
         'allowed_schemes' => array(
           0 => 'public',
         ),
+        'direct' => FALSE,
+        'directory' => 'public://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Sectors',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsNodeProcessor',
       'config' => array(
-        'expire' => '-1',
         'author' => '1',
         'authorize' => 1,
+        'bundle' => 'hr_sector',
+        'expire' => '-1',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -109,19 +115,13 @@ function hr_sectors_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'hr_sector',
+        'update_existing' => '2',
         'update_non_existent' => 'skip',
       ),
+      'plugin_key' => 'FeedsNodeProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_sectors'] = $feeds_importer;
 

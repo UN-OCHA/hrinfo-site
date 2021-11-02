@@ -22,15 +22,15 @@ function hr_indicators_default_field_validation_rule() {
   $rule->bundle = 'hr_indicator';
   $rule->validator = 'field_validation_unique_validator';
   $rule->settings = array(
-    'data' => 'bundle',
-    'per_user' => 0,
     'bypass' => 0,
+    'data' => 'bundle',
+    'errors' => 0,
+    'per_user' => 0,
     'roles' => array(
       1 => 0,
       2 => 0,
       30037204 => 0,
     ),
-    'errors' => 0,
   );
   $rule->error_message = 'The indicator code must be unique';
   $export['hr_indicators_code_unique'] = $rule;

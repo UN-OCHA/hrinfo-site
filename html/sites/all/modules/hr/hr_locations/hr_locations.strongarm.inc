@@ -17,8 +17,8 @@ function hr_locations_strongarm() {
   $strongarm->name = 'entity_translation_settings_taxonomy_term__hr_location';
   $strongarm->value = array(
     'default_language' => 'xx-et-default',
-    'hide_language_selector' => 1,
     'exclude_language_none' => 0,
+    'hide_language_selector' => 1,
     'lock_language' => 0,
     'shared_fields_original_only' => 0,
   );

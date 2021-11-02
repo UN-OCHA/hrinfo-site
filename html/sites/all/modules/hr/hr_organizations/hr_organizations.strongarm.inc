@@ -17,8 +17,8 @@ function hr_organizations_strongarm() {
   $strongarm->name = 'entity_translation_settings_taxonomy_term__hr_organization';
   $strongarm->value = array(
     'default_language' => 'xx-et-default',
-    'hide_language_selector' => 1,
     'exclude_language_none' => 1,
+    'hide_language_selector' => 1,
     'lock_language' => 1,
     'shared_fields_original_only' => 0,
   );
@@ -30,8 +30,8 @@ function hr_organizations_strongarm() {
   $strongarm->name = 'entity_translation_settings_taxonomy_term__hr_organization_type';
   $strongarm->value = array(
     'default_language' => 'xx-et-default',
-    'hide_language_selector' => 1,
     'exclude_language_none' => 1,
+    'hide_language_selector' => 1,
     'lock_language' => 1,
     'shared_fields_original_only' => 0,
   );

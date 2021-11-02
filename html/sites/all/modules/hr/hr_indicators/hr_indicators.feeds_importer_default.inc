@@ -16,28 +16,33 @@ function hr_indicators_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_indicator_domains';
   $feeds_importer->config = array(
-    'name' => 'Indicator Domains',
+    'content_type' => '',
     'description' => 'Import indicator domains from a CSV file',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsHTTPFetcher',
       'config' => array(
         'auto_detect_feeds' => FALSE,
-        'use_pubsubhubbub' => FALSE,
         'designated_hub' => '',
         'request_timeout' => NULL,
+        'use_pubsubhubbub' => FALSE,
       ),
+      'plugin_key' => 'FeedsHTTPFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Indicator Domains',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'hr_indicator_domain',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -65,18 +70,13 @@ function hr_indicators_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'hr_indicator_domain',
+        'update_existing' => '2',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_indicator_domains'] = $feeds_importer;
 
@@ -85,28 +85,33 @@ function hr_indicators_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_indicator_standards';
   $feeds_importer->config = array(
-    'name' => 'Indicator Standards',
+    'content_type' => '',
     'description' => 'Import indicator standards from a CSV file',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsHTTPFetcher',
       'config' => array(
         'auto_detect_feeds' => FALSE,
-        'use_pubsubhubbub' => FALSE,
         'designated_hub' => '',
         'request_timeout' => NULL,
+        'use_pubsubhubbub' => FALSE,
       ),
+      'plugin_key' => 'FeedsHTTPFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Indicator Standards',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'hr_indicator_standard',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -134,18 +139,13 @@ function hr_indicators_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'hr_indicator_standard',
+        'update_existing' => '2',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_indicator_standards'] = $feeds_importer;
 
@@ -154,28 +154,33 @@ function hr_indicators_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_indicator_types';
   $feeds_importer->config = array(
-    'name' => 'Indicator Types',
+    'content_type' => '',
     'description' => 'Import indicator types from a CSV file',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsHTTPFetcher',
       'config' => array(
         'auto_detect_feeds' => FALSE,
-        'use_pubsubhubbub' => FALSE,
         'designated_hub' => '',
         'request_timeout' => NULL,
+        'use_pubsubhubbub' => FALSE,
       ),
+      'plugin_key' => 'FeedsHTTPFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Indicator Types',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'hr_indicator_type',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -203,18 +208,13 @@ function hr_indicators_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'hr_indicator_type',
+        'update_existing' => '2',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_indicator_types'] = $feeds_importer;
 
@@ -223,28 +223,33 @@ function hr_indicators_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_indicator_units';
   $feeds_importer->config = array(
-    'name' => 'Indicator Units',
+    'content_type' => '',
     'description' => 'Import indicator units from a CSV file',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsHTTPFetcher',
       'config' => array(
         'auto_detect_feeds' => FALSE,
-        'use_pubsubhubbub' => FALSE,
         'designated_hub' => '',
         'request_timeout' => NULL,
+        'use_pubsubhubbub' => FALSE,
       ),
+      'plugin_key' => 'FeedsHTTPFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Indicator Units',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'hr_indicator_unit',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -272,18 +277,13 @@ function hr_indicators_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'hr_indicator_unit',
+        'update_existing' => '2',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_indicator_units'] = $feeds_importer;
 
@@ -292,32 +292,38 @@ function hr_indicators_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_indicators';
   $feeds_importer->config = array(
-    'name' => 'Indicators',
+    'content_type' => '',
     'description' => 'Import indicators from a CSV file',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'public://feeds',
         'allowed_schemes' => array(
           0 => 'public',
         ),
+        'direct' => FALSE,
+        'directory' => 'public://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Indicators',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsNodeProcessor',
       'config' => array(
-        'expire' => '-1',
         'author' => 0,
         'authorize' => 1,
+        'bundle' => 'hr_indicator',
+        'expire' => '-1',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Code',
@@ -335,18 +341,12 @@ function hr_indicators_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'hr_indicator',
+        'update_existing' => '2',
       ),
+      'plugin_key' => 'FeedsNodeProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_indicators'] = $feeds_importer;
 

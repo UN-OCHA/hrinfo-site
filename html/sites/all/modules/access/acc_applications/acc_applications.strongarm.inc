@@ -37,21 +37,21 @@ function acc_applications_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__acc_application';
   $strongarm->value = array(
-    'view_modes' => array(),
     'extra_fields' => array(
+      'display' => array(),
       'form' => array(
-        'title' => array(
-          'weight' => '0',
-        ),
         'path' => array(
           'weight' => '17',
         ),
         'redirect' => array(
           'weight' => '18',
         ),
+        'title' => array(
+          'weight' => '0',
+        ),
       ),
-      'display' => array(),
     ),
+    'view_modes' => array(),
   );
   $export['field_bundle_settings_node__acc_application'] = $strongarm;
 
@@ -109,25 +109,25 @@ function acc_applications_strongarm() {
   $strongarm->value = array(
     'status' => 1,
     'view modes' => array(
-      'page_manager' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
       'default' => array(
-        'status' => 1,
+        'choice' => 0,
         'default' => 1,
-        'choice' => 0,
+        'status' => 1,
       ),
-      'teaser' => array(
-        'status' => 0,
-        'default' => 0,
+      'page_manager' => array(
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'search_result' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'teaser' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
     ),
   );
@@ -140,35 +140,35 @@ function acc_applications_strongarm() {
   $strongarm->value = array(
     'status' => 0,
     'view modes' => array(
-      'page_manager' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
       'default' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
-      ),
-      'full' => array(
-        'status' => 0,
         'default' => 0,
-        'choice' => 0,
-      ),
-      'ical' => array(
         'status' => 0,
-        'default' => 0,
-        'choice' => 0,
       ),
       'diff_standard' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'full' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'ical' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'page_manager' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'token' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
     ),
   );
@@ -181,35 +181,35 @@ function acc_applications_strongarm() {
   $strongarm->value = array(
     'status' => 0,
     'view modes' => array(
-      'page_manager' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
       'default' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
-      ),
-      'full' => array(
-        'status' => 0,
         'default' => 0,
-        'choice' => 0,
-      ),
-      'ical' => array(
         'status' => 0,
-        'default' => 0,
-        'choice' => 0,
       ),
       'diff_standard' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'full' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'ical' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'page_manager' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'token' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
     ),
   );

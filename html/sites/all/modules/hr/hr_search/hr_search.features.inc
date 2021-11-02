@@ -95,9 +95,9 @@ function hr_search_default_search_api_index() {
               "field_locations:parents_all" : "field_locations:parents_all",
               "field_document_type:parents_all" : "field_document_type:parents_all",
               "field_location:parents_all" : "field_location:parents_all",
+              "field_infographic_type:parents_all" : "field_infographic_type:parents_all",
               "field_ind_cross_tagging:parents_all" : "field_ind_cross_tagging:parents_all",
-              "field_ind_domain:parents_all" : "field_ind_domain:parents_all",
-              "field_infographic_type:parents_all" : "field_infographic_type:parents_all"
+              "field_ind_domain:parents_all" : "field_ind_domain:parents_all"
             }
           }
         },
@@ -162,6 +162,7 @@ function hr_search_default_search_api_index() {
           "weight" : "15",
           "settings" : { "fields" : {
               "title" : true,
+              "field_asst_other_location" : true,
               "title_field" : true,
               "field_ind_comments" : true,
               "field_ind_data_sources" : true,
@@ -173,7 +174,6 @@ function hr_search_default_search_api_index() {
               "field_ind_numerator" : true,
               "field_ind_threshold" : true,
               "field_ind_unit_desc" : true,
-              "field_asst_other_location" : true,
               "search_api_aggregation_1" : true,
               "search_api_aggregation_2" : true,
               "body:value" : true,
@@ -239,6 +239,7 @@ function hr_search_default_search_api_index() {
           "settings" : {
             "fields" : {
               "title" : true,
+              "field_asst_other_location" : true,
               "title_field" : true,
               "field_ind_comments" : true,
               "field_ind_data_sources" : true,
@@ -250,7 +251,6 @@ function hr_search_default_search_api_index() {
               "field_ind_numerator" : true,
               "field_ind_threshold" : true,
               "field_ind_unit_desc" : true,
-              "field_asst_other_location" : true,
               "search_api_aggregation_1" : true,
               "search_api_aggregation_2" : true,
               "body:value" : true,
@@ -366,7 +366,7 @@ function hr_search_default_search_api_index() {
 function hr_search_default_search_api_server() {
   $items = array();
   $items['hr_solr'] = entity_import('search_api_server', '{
-    "name" : "Solr",
+    "name" : "Local Solr (Overridden)",
     "machine_name" : "hr_solr",
     "description" : "http:\\/\\/solr:8983\\/solr\\/core0",
     "class" : "search_api_solr_service",
@@ -376,7 +376,7 @@ function hr_search_default_search_api_server() {
       "site_hash" : false,
       "scheme" : "http",
       "host" : "solr",
-      "port" : "8983",
+      "port" : 8983,
       "path" : "\\/solr\\/core0",
       "http_user" : "",
       "http_pass" : "",

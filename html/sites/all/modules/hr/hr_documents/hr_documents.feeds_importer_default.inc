@@ -16,30 +16,35 @@ function hr_documents_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_document_types';
   $feeds_importer->config = array(
-    'name' => 'Document Types',
+    'content_type' => '',
     'description' => 'Import document types from a CSV file',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'public://feeds',
         'allowed_schemes' => array(
           0 => 'public',
         ),
+        'direct' => FALSE,
+        'directory' => 'public://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Document Types',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsTermProcessor',
       'config' => array(
-        'vocabulary' => 0,
+        'bundle' => 'hr_document_type',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Name:en',
@@ -67,18 +72,13 @@ function hr_documents_feeds_importer_default() {
             'unique' => FALSE,
           ),
         ),
-        'update_existing' => '2',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'hr_document_type',
+        'update_existing' => '2',
+        'vocabulary' => 0,
       ),
+      'plugin_key' => 'FeedsTermProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_document_types'] = $feeds_importer;
 
@@ -87,32 +87,38 @@ function hr_documents_feeds_importer_default() {
   $feeds_importer->api_version = 1;
   $feeds_importer->id = 'hr_documents';
   $feeds_importer->config = array(
-    'name' => 'Documents',
+    'content_type' => '',
     'description' => 'Import documents from a CSV file',
+    'expire_period' => 3600,
     'fetcher' => array(
-      'plugin_key' => 'FeedsFileFetcher',
       'config' => array(
         'allowed_extensions' => 'txt csv tsv xml opml',
-        'direct' => FALSE,
-        'directory' => 'public://feeds',
         'allowed_schemes' => array(
           0 => 'public',
         ),
+        'direct' => FALSE,
+        'directory' => 'public://feeds',
       ),
+      'plugin_key' => 'FeedsFileFetcher',
     ),
+    'import_on_create' => 1,
+    'import_period' => '-1',
+    'name' => 'Documents',
     'parser' => array(
-      'plugin_key' => 'FeedsCSVParser',
       'config' => array(
         'delimiter' => ',',
         'no_headers' => 0,
       ),
+      'plugin_key' => 'FeedsCSVParser',
     ),
+    'process_in_background' => 0,
     'processor' => array(
-      'plugin_key' => 'FeedsNodeProcessor',
       'config' => array(
-        'expire' => '-1',
         'author' => 0,
         'authorize' => 1,
+        'bundle' => 'hr_document',
+        'expire' => '-1',
+        'input_format' => 'plain_text',
         'mappings' => array(
           0 => array(
             'source' => 'Guid',
@@ -225,24 +231,18 @@ function hr_documents_feeds_importer_default() {
             'unique' => FALSE,
           ),
           22 => array(
+            'pathauto_override' => 1,
             'source' => 'Path',
             'target' => 'path_alias',
-            'pathauto_override' => 1,
           ),
         ),
-        'update_existing' => '0',
-        'input_format' => 'plain_text',
         'skip_hash_check' => 0,
-        'bundle' => 'hr_document',
+        'update_existing' => '0',
         'update_non_existent' => 'skip',
       ),
+      'plugin_key' => 'FeedsNodeProcessor',
     ),
-    'content_type' => '',
     'update' => 0,
-    'import_period' => '-1',
-    'expire_period' => 3600,
-    'import_on_create' => 1,
-    'process_in_background' => 0,
   );
   $export['hr_documents'] = $feeds_importer;
 

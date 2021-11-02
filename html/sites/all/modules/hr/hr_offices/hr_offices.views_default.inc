@@ -53,7 +53,7 @@ function hr_offices_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref_target_id']['specify_validation'] = TRUE;
   $handler->display->display_options['arguments']['og_group_ref_target_id']['validate']['type'] = 'og';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['validate']['fail'] = 'ignore';
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -197,7 +197,7 @@ function hr_offices_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['summary_options']['items_per_page'] = '25';
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -393,13 +393,14 @@ function hr_offices_views_default_views() {
     t('next ›'),
     t('last »'),
     t('Office/ Hub Name'),
-    t('Phones'),
+    t('Phone(s)'),
     t('Email'),
-    t('Location'),
     t('Address'),
     t('All'),
     t('Page'),
     t('CSV'),
+    t('Name'),
+    t('Phones'),
     t('Address 1'),
     t('Address 2'),
     t('City'),
@@ -452,7 +453,7 @@ function hr_offices_views_default_views() {
   $handler->display->display_options['arguments']['og_group_ref_target_id']['specify_validation'] = TRUE;
   $handler->display->display_options['arguments']['og_group_ref_target_id']['validate']['type'] = 'og';
   $handler->display->display_options['arguments']['og_group_ref_target_id']['validate']['fail'] = 'ignore';
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';

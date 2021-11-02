@@ -87,7 +87,7 @@ function hr_users_views_default_views() {
   $handler->display->display_options['fields']['created']['table'] = 'node';
   $handler->display->display_options['fields']['created']['field'] = 'created';
   $handler->display->display_options['fields']['created']['date_format'] = 'short';
-  /* Field: Content: Published */
+  /* Field: Content: Published status */
   $handler->display->display_options['fields']['status']['id'] = 'status';
   $handler->display->display_options['fields']['status']['table'] = 'node';
   $handler->display->display_options['fields']['status']['field'] = 'status';
@@ -393,7 +393,7 @@ function hr_users_views_default_views() {
   $handler->display->display_options['arguments']['og_user_node_target_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['og_user_node_target_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['og_user_node_target_id']['summary_options']['items_per_page'] = '25';
-  /* Filter criterion: User: Active */
+  /* Filter criterion: User: Active status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'users';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -731,7 +731,7 @@ function hr_users_views_default_views() {
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: User: Active */
+  /* Filter criterion: User: Active status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'users';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -918,7 +918,7 @@ function hr_users_views_default_views() {
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: User: Active */
+  /* Filter criterion: User: Active status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'users';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -1013,6 +1013,8 @@ function hr_users_views_default_views() {
     t('Map data'),
     t('Taxonomy term entity referenced from field_location'),
     t('.'),
+    t('1'),
+    t('@count'),
     t('[name_1] ([field_job_title_other])'),
     t('Map'),
     t('User groups'),

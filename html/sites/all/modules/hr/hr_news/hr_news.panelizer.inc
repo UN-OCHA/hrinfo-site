@@ -35,8 +35,8 @@ function hr_news_panelizer_defaults() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
-      'default' => NULL,
       'contentmain' => NULL,
+      'default' => NULL,
       'sidebar' => NULL,
     ),
   );
@@ -55,11 +55,11 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'link' => 0,
-    'markup' => 'h2',
-    'id' => '',
     'class' => '',
     'context' => 'panelizer',
+    'id' => '',
+    'link' => 0,
+    'markup' => 'h2',
     'override_title' => 1,
     'override_title_text' => '',
   );
@@ -82,10 +82,10 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'view_mode' => 'full',
     'context' => 'panelizer',
     'override_title' => 0,
     'override_title_text' => '',
+    'view_mode' => 'full',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -106,13 +106,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'hidden',
-    'formatter' => 'text_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'hidden',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -133,15 +133,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 1,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -164,8 +164,8 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'link' => 1,
     'context' => 'panelizer',
+    'link' => 1,
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -188,15 +188,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -219,15 +219,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -250,15 +250,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 1,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -281,8 +281,8 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'format' => 'hr_1',
     'context' => 'panelizer',
+    'format' => 'hr_1',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -305,15 +305,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -336,15 +336,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -367,15 +367,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -398,15 +398,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -429,15 +429,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -460,15 +460,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -512,11 +512,11 @@ function hr_news_panelizer_defaults() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
+      'contentmain' => NULL,
       'default' => NULL,
+      'footer' => NULL,
       'header' => NULL,
       'sidebar' => NULL,
-      'contentmain' => NULL,
-      'footer' => NULL,
     ),
   );
   $display->cache = array();
@@ -534,15 +534,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'hidden',
-    'formatter' => 'text_summary_or_trimmed',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_summary_or_trimmed',
     'formatter_settings' => array(
       'trim_length' => '600',
     ),
-    'context' => 'panelizer',
+    'label' => 'hidden',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -591,11 +591,11 @@ function hr_news_panelizer_defaults() {
   $pane->access = array();
   $pane->configuration = array(
     'admin_title' => '',
-    'title' => '',
     'body' => '<p>by <strong><a href="%node:author:url">%node:author</a></strong> on %node:created:hr_1</p>
 ',
     'format' => 'hr_wysiwyg',
     'substitute' => 1,
+    'title' => '',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -616,16 +616,16 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'hidden',
-    'formatter' => 'image',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'image',
     'formatter_settings' => array(
-      'image_style' => 'thumbnail',
       'image_link' => 'content',
+      'image_style' => 'thumbnail',
     ),
-    'context' => 'panelizer',
+    'label' => 'hidden',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -669,8 +669,8 @@ function hr_news_panelizer_defaults() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
-      'default' => NULL,
       'contentmain' => NULL,
+      'default' => NULL,
     ),
   );
   $display->cache = array();
@@ -688,13 +688,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hidden',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'hidden',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -715,13 +715,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hidden',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'hidden',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -742,13 +742,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hidden',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'hidden',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -769,13 +769,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hidden',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'hidden',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -796,13 +796,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hidden',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'hidden',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -823,13 +823,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hidden',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'hidden',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -850,13 +850,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hidden',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'hidden',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -877,13 +877,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hidden',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'hidden',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -904,13 +904,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hidden',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'hidden',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -931,13 +931,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hidden',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'hidden',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -958,13 +958,13 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'hidden',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'hidden',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -985,15 +985,15 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'hidden',
-    'formatter' => 'text_summary_or_trimmed',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_summary_or_trimmed',
     'formatter_settings' => array(
       'trim_length' => 600,
     ),
-    'context' => 'panelizer',
+    'label' => 'hidden',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -1014,12 +1014,12 @@ function hr_news_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'override_title' => FALSE,
-    'override_title_text' => '',
     'build_mode' => 'teaser',
+    'context' => 'panelizer',
     'identifier' => '',
     'link' => TRUE,
-    'context' => 'panelizer',
+    'override_title' => FALSE,
+    'override_title_text' => '',
   );
   $pane->cache = array();
   $pane->style = array(

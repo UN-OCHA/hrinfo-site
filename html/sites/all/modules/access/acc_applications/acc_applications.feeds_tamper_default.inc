@@ -19,9 +19,9 @@ function acc_applications_feeds_tamper_default() {
   $feeds_tamper->source = 'Impact value';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -47,8 +47,8 @@ function acc_applications_feeds_tamper_default() {
   $feeds_tamper->source = 'Nationality of traveler';
   $feeds_tamper->plugin_id = '';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'String to Unix timestamp';
@@ -62,9 +62,9 @@ function acc_applications_feeds_tamper_default() {
   $feeds_tamper->source = 'Organization Type';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -78,9 +78,9 @@ function acc_applications_feeds_tamper_default() {
   $feeds_tamper->source = 'Sectors';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -94,9 +94,9 @@ function acc_applications_feeds_tamper_default() {
   $feeds_tamper->source = 'Submitted By';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';
@@ -110,9 +110,9 @@ function acc_applications_feeds_tamper_default() {
   $feeds_tamper->source = 'Type of impact';
   $feeds_tamper->plugin_id = 'explode';
   $feeds_tamper->settings = array(
-    'separator' => ',',
     'limit' => '',
     'real_separator' => ',',
+    'separator' => ',',
   );
   $feeds_tamper->weight = 0;
   $feeds_tamper->description = 'Explode';

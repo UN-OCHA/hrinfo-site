@@ -17,8 +17,8 @@ function hr_disasters_strongarm() {
   $strongarm->name = 'entity_translation_settings_node__hr_disaster';
   $strongarm->value = array(
     'default_language' => 'xx-et-current',
-    'hide_language_selector' => 0,
     'exclude_language_none' => 1,
+    'hide_language_selector' => 0,
     'lock_language' => 0,
     'shared_fields_original_only' => 0,
   );
@@ -29,45 +29,45 @@ function hr_disasters_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__hr_disaster';
   $strongarm->value = array(
-    'view_modes' => array(
-      'teaser' => array(
-        'custom_settings' => TRUE,
-      ),
-      'search_result' => array(
-        'custom_settings' => TRUE,
-      ),
-      'full' => array(
-        'custom_settings' => FALSE,
-      ),
-      'rss' => array(
-        'custom_settings' => FALSE,
-      ),
-      'ical' => array(
-        'custom_settings' => FALSE,
-      ),
-      'diff_standard' => array(
-        'custom_settings' => FALSE,
-      ),
-      'token' => array(
-        'custom_settings' => FALSE,
-      ),
-    ),
     'extra_fields' => array(
+      'display' => array(),
       'form' => array(
-        'path' => array(
-          'weight' => '11',
-        ),
-        'redirect' => array(
-          'weight' => '10',
-        ),
         'language' => array(
           'weight' => '0',
         ),
         'og_menu' => array(
           'weight' => '7',
         ),
+        'path' => array(
+          'weight' => '11',
+        ),
+        'redirect' => array(
+          'weight' => '10',
+        ),
       ),
-      'display' => array(),
+    ),
+    'view_modes' => array(
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
+      'full' => array(
+        'custom_settings' => FALSE,
+      ),
+      'ical' => array(
+        'custom_settings' => FALSE,
+      ),
+      'rss' => array(
+        'custom_settings' => FALSE,
+      ),
+      'search_result' => array(
+        'custom_settings' => TRUE,
+      ),
+      'teaser' => array(
+        'custom_settings' => TRUE,
+      ),
+      'token' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
   );
   $export['field_bundle_settings_node__hr_disaster'] = $strongarm;
@@ -149,25 +149,25 @@ function hr_disasters_strongarm() {
   $strongarm->value = array(
     'status' => 1,
     'view modes' => array(
-      'page_manager' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
       'default' => array(
-        'status' => 1,
+        'choice' => 0,
         'default' => 1,
-        'choice' => 0,
+        'status' => 1,
       ),
-      'teaser' => array(
-        'status' => 0,
-        'default' => 0,
+      'page_manager' => array(
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'search_result' => array(
-        'status' => 1,
-        'default' => 1,
         'choice' => 0,
+        'default' => 1,
+        'status' => 1,
+      ),
+      'teaser' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
     ),
   );
@@ -192,9 +192,12 @@ function hr_disasters_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'panelizer_node:hr_disaster_allowed_types';
   $strongarm->value = array(
-    'bean_pane-fts_visualization' => TRUE,
     'bean_pane-existing_bean' => TRUE,
-    'node_body-node_body' => TRUE,
+    'bean_pane-fts_visualization' => TRUE,
+    'fieldable_panels_pane-fieldable_panels_pane' => TRUE,
+    'fieldable_panels_pane-hr_assessments' => TRUE,
+    'fieldable_panels_pane-hr_documents' => TRUE,
+    'fieldable_panels_pane-hr_infographics' => TRUE,
     'hr_documents_key_documents-hr_documents_key_documents' => TRUE,
     'hr_infographics_key_infographics-hr_infographics_key_infographics' => TRUE,
     'hr_layout_reliefweb-hr_layout_reliefweb' => TRUE,
@@ -203,16 +206,13 @@ function hr_disasters_strongarm() {
     'hr_reliefweb_featured_document-hr_reliefweb_featured_document' => TRUE,
     'hr_reliefweb_key_documents-hr_reliefweb_key_documents' => TRUE,
     'hr_reliefweb_ocha_products-hr_reliefweb_ocha_products' => TRUE,
+    'node_body-node_body' => TRUE,
     'twitter-twitter' => TRUE,
-    'fieldable_panels_pane-fieldable_panels_pane' => TRUE,
-    'fieldable_panels_pane-hr_assessments' => TRUE,
-    'fieldable_panels_pane-hr_documents' => TRUE,
-    'fieldable_panels_pane-hr_infographics' => TRUE,
     'views_panes-hr_assessments_panes-list' => TRUE,
-    'views_panes-hr_events_panes-upcoming' => TRUE,
-    'views_panes-hr_news_panes-list' => TRUE,
     'views_panes-hr_documents_panes-list' => TRUE,
+    'views_panes-hr_events_panes-upcoming' => TRUE,
     'views_panes-hr_infographics_panes-list' => TRUE,
+    'views_panes-hr_news_panes-list' => TRUE,
   );
   $export['panelizer_node:hr_disaster_allowed_types'] = $strongarm;
 
@@ -229,20 +229,20 @@ function hr_disasters_strongarm() {
   $strongarm->name = 'panelizer_node:hr_disaster_default';
   $strongarm->value = array(
     'bean_pane' => 0,
-    'token' => 0,
-    'entity_form_field' => 0,
+    'block' => 0,
+    'custom' => 0,
     'entity_field' => 0,
     'entity_field_extra' => 0,
-    'custom' => 0,
-    'block' => 0,
+    'entity_form_field' => 0,
     'entity_view' => 0,
     'fieldable_panels_pane' => 0,
     'flag_link' => 0,
     'openlayers_map' => 0,
+    'other' => 0,
     'panels_mini' => 0,
+    'token' => 0,
     'views' => 0,
     'views_panes' => 0,
-    'other' => 0,
   );
   $export['panelizer_node:hr_disaster_default'] = $strongarm;
 

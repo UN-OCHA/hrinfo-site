@@ -52,8 +52,8 @@ function hr_sectors_strongarm() {
   $strongarm->name = 'entity_translation_settings_node__hr_sector';
   $strongarm->value = array(
     'default_language' => 'xx-et-default',
-    'hide_language_selector' => 0,
     'exclude_language_none' => 1,
+    'hide_language_selector' => 0,
     'lock_language' => 1,
     'shared_fields_original_only' => 0,
   );
@@ -64,30 +64,8 @@ function hr_sectors_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__hr_sector';
   $strongarm->value = array(
-    'view_modes' => array(
-      'teaser' => array(
-        'custom_settings' => TRUE,
-      ),
-      'search_result' => array(
-        'custom_settings' => TRUE,
-      ),
-      'full' => array(
-        'custom_settings' => FALSE,
-      ),
-      'rss' => array(
-        'custom_settings' => FALSE,
-      ),
-      'diff_standard' => array(
-        'custom_settings' => FALSE,
-      ),
-      'token' => array(
-        'custom_settings' => FALSE,
-      ),
-      'ical' => array(
-        'custom_settings' => FALSE,
-      ),
-    ),
     'extra_fields' => array(
+      'display' => array(),
       'form' => array(
         'language' => array(
           'weight' => '13',
@@ -102,7 +80,29 @@ function hr_sectors_strongarm() {
           'weight' => '14',
         ),
       ),
-      'display' => array(),
+    ),
+    'view_modes' => array(
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
+      'full' => array(
+        'custom_settings' => FALSE,
+      ),
+      'ical' => array(
+        'custom_settings' => FALSE,
+      ),
+      'rss' => array(
+        'custom_settings' => FALSE,
+      ),
+      'search_result' => array(
+        'custom_settings' => TRUE,
+      ),
+      'teaser' => array(
+        'custom_settings' => TRUE,
+      ),
+      'token' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
   );
   $export['field_bundle_settings_node__hr_sector'] = $strongarm;
@@ -183,25 +183,25 @@ function hr_sectors_strongarm() {
   $strongarm->value = array(
     'status' => 1,
     'view modes' => array(
-      'page_manager' => array(
-        'status' => 0,
-        'default' => 0,
-        'choice' => 0,
-      ),
       'default' => array(
-        'status' => 1,
+        'choice' => 0,
         'default' => 1,
-        'choice' => 0,
+        'status' => 1,
       ),
-      'teaser' => array(
-        'status' => 0,
-        'default' => 0,
+      'page_manager' => array(
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
       'search_result' => array(
-        'status' => 0,
-        'default' => 0,
         'choice' => 0,
+        'default' => 0,
+        'status' => 0,
+      ),
+      'teaser' => array(
+        'choice' => 0,
+        'default' => 0,
+        'status' => 0,
       ),
     ),
   );
@@ -226,12 +226,12 @@ function hr_sectors_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'panelizer_node:hr_sector_allowed_types';
   $strongarm->value = array(
-    'node_body-node_body' => '1',
+    'fieldable_panels_pane-fieldable_panels_pane' => '1',
     'hr_documents_key_documents-hr_documents_key_documents' => '1',
     'hr_infographics_key_infographics-hr_infographics_key_infographics' => '1',
     'hr_layout_reliefweb-hr_layout_reliefweb' => '1',
     'hr_layout_rss_feeds-hr_layout_rss_feeds' => '1',
-    'fieldable_panels_pane-fieldable_panels_pane' => '1',
+    'node_body-node_body' => '1',
     'views_panes-hr_documents_panes-list' => '1',
     'views_panes-hr_events_panes-upcoming' => '1',
     'views_panes-hr_news_panes-list' => '1',
@@ -252,20 +252,20 @@ function hr_sectors_strongarm() {
   $strongarm->value = array(
     'bean_pane' => 0,
     'block' => 0,
-    'entity_form_field' => 0,
     'custom' => 0,
-    'entity_field_extra' => 0,
-    'entity_field' => 0,
-    'token' => 0,
-    'entity_view' => 0,
     'entity_collection' => 0,
+    'entity_field' => 0,
+    'entity_field_extra' => 0,
+    'entity_form_field' => 0,
+    'entity_view' => 0,
     'fieldable_panels_pane' => 0,
     'flag_link' => 0,
     'openlayers_map' => 0,
+    'other' => 0,
     'panels_mini' => 0,
+    'token' => 0,
     'views' => 0,
     'views_panes' => 0,
-    'other' => 0,
   );
   $export['panelizer_node:hr_sector_default'] = $strongarm;
 

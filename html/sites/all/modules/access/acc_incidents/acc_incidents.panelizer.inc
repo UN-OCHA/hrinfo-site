@@ -35,9 +35,9 @@ function acc_incidents_panelizer_defaults() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
+      'contentmain' => NULL,
       'default' => NULL,
       'sidebar' => NULL,
-      'contentmain' => NULL,
     ),
   );
   $display->cache = array();
@@ -55,11 +55,11 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'link' => 0,
-    'markup' => 'h2',
-    'id' => '',
     'class' => '',
     'context' => 'panelizer',
+    'id' => '',
+    'link' => 0,
+    'markup' => 'h2',
     'override_title' => 1,
     'override_title_text' => '',
   );
@@ -82,13 +82,13 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'hidden',
-    'formatter' => 'text_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'hidden',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -109,11 +109,11 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'field_collection_view',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'field_collection_view',
     'formatter_settings' => array(
       'add' => 'Add',
       'delete' => 'Delete',
@@ -121,7 +121,7 @@ function acc_incidents_panelizer_defaults() {
       'edit' => 'Edit',
       'view_mode' => 'full',
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -142,13 +142,13 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'file_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'file_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -169,13 +169,13 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'og_list_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'og_list_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -196,11 +196,11 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'date_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'date_default',
     'formatter_settings' => array(
       'format_type' => 'hr_1',
       'fromto' => 'both',
@@ -209,7 +209,7 @@ function acc_incidents_panelizer_defaults() {
       'multiple_to' => '',
       'show_repeat_rule' => 'show',
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -230,15 +230,15 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => FALSE,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -259,15 +259,15 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => FALSE,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -288,15 +288,15 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => FALSE,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -317,15 +317,15 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => FALSE,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -346,15 +346,15 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => FALSE,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -375,15 +375,15 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => FALSE,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -404,15 +404,15 @@ function acc_incidents_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => FALSE,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
   );
   $pane->cache = array();
   $pane->style = array(

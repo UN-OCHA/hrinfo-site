@@ -475,6 +475,8 @@ function hr_events_views_default_views() {
     t('Global'),
     t('Global feed'),
     t('.'),
+    t('1'),
+    t('@count'),
     t('[field_event_date]
 [field_address]'),
     t('Feed'),
@@ -695,7 +697,6 @@ function hr_events_views_default_views() {
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
-  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['date_fields'] = array(
     'field_data_field_event_date.field_event_date_value' => 'field_data_field_event_date.field_event_date_value',
@@ -762,7 +763,6 @@ return 0;';
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
-  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['date_fields'] = array(
     'field_data_field_event_date.field_event_date_value' => 'field_data_field_event_date.field_event_date_value',
@@ -810,7 +810,6 @@ return 0;';
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
-  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['granularity'] = 'week';
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['date_fields'] = array(
@@ -857,7 +856,6 @@ return 0;';
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
-  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['granularity'] = 'day';
   $handler->display->display_options['arguments']['date_argument']['date_fields'] = array(
     'field_data_field_event_date.field_event_date_value' => 'field_data_field_event_date.field_event_date_value',
@@ -930,7 +928,6 @@ return 0;';
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
-  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['granularity'] = 'year';
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['date_fields'] = array(
@@ -1042,7 +1039,6 @@ return 0;';
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
-  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['date_fields'] = array(
     'field_data_field_event_date.field_event_date_value' => 'field_data_field_event_date.field_event_date_value',
@@ -1162,10 +1158,12 @@ return 0;';
       'address' => 'address',
     ),
   );
-  /* Field: Content: Contacts */
-  $handler->display->display_options['fields']['field_contacts_text']['id'] = 'field_contacts_text';
-  $handler->display->display_options['fields']['field_contacts_text']['table'] = 'field_data_field_contacts_text';
-  $handler->display->display_options['fields']['field_contacts_text']['field'] = 'field_contacts_text';
+  /* Field: Broken/missing handler */
+  $handler->display->display_options['fields']['field_hid_contact_ref']['id'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['table'] = 'field_data_field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['field'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['label'] = 'Contacts';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['element_label_class'] = 'col-sm-3';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
@@ -1186,7 +1184,6 @@ return 0;';
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
-  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['title_format'] = 'custom';
   $handler->display->display_options['arguments']['date_argument']['title_format_custom'] = 'F Y';
@@ -1346,10 +1343,11 @@ return 0;';
       'address' => 'address',
     ),
   );
-  /* Field: Content: Contacts */
-  $handler->display->display_options['fields']['field_contacts_text']['id'] = 'field_contacts_text';
-  $handler->display->display_options['fields']['field_contacts_text']['table'] = 'field_data_field_contacts_text';
-  $handler->display->display_options['fields']['field_contacts_text']['field'] = 'field_contacts_text';
+  /* Field: Broken/missing handler */
+  $handler->display->display_options['fields']['field_hid_contact_ref']['id'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['table'] = 'field_data_field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['field'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['label'] = 'Contacts';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
@@ -1370,7 +1368,6 @@ return 0;';
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
-  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['granularity'] = 'week';
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['title_format'] = 'custom';
@@ -1492,10 +1489,11 @@ return 0;';
       'address' => 'address',
     ),
   );
-  /* Field: Content: Contacts */
-  $handler->display->display_options['fields']['field_contacts_text']['id'] = 'field_contacts_text';
-  $handler->display->display_options['fields']['field_contacts_text']['table'] = 'field_data_field_contacts_text';
-  $handler->display->display_options['fields']['field_contacts_text']['field'] = 'field_contacts_text';
+  /* Field: Broken/missing handler */
+  $handler->display->display_options['fields']['field_hid_contact_ref']['id'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['table'] = 'field_data_field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['field'] = 'field_hid_contact_ref';
+  $handler->display->display_options['fields']['field_hid_contact_ref']['label'] = 'Contacts';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Content: Webspace(s) (og_group_ref) */
   $handler->display->display_options['arguments']['og_group_ref_target_id']['id'] = 'og_group_ref_target_id';
@@ -1516,7 +1514,6 @@ return 0;';
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
-  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['granularity'] = 'day';
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['title_format'] = 'custom';

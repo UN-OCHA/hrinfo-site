@@ -30,52 +30,52 @@ function acc_incidents_context_default_contexts() {
     'block' => array(
       'blocks' => array(
         'current_search-acc_current_search' => array(
-          'module' => 'current_search',
           'delta' => 'acc_current_search',
+          'module' => 'current_search',
           'region' => 'sidebar_first',
           'weight' => '-10',
         ),
-        'facetapi-Tjs9NXxZSebDxkhlJjgXCd3olaAJkXWl' => array(
-          'module' => 'facetapi',
-          'delta' => 'Tjs9NXxZSebDxkhlJjgXCd3olaAJkXWl',
-          'region' => 'sidebar_first',
-          'weight' => '-9',
-        ),
-        'facetapi-FeT1cPJ9qLvCLY6svdGdSIiJWrS0KmeG' => array(
-          'module' => 'facetapi',
-          'delta' => 'FeT1cPJ9qLvCLY6svdGdSIiJWrS0KmeG',
-          'region' => 'sidebar_first',
-          'weight' => '-8',
-        ),
-        'facetapi-dvs9HFNbA1yPbX2yB3O11ao3SK0kcNeF' => array(
-          'module' => 'facetapi',
-          'delta' => 'dvs9HFNbA1yPbX2yB3O11ao3SK0kcNeF',
-          'region' => 'sidebar_first',
-          'weight' => '-7',
-        ),
-        'facetapi-c5d9XPw6uuFO30vJLSOv1r0IoBnprcaQ' => array(
-          'module' => 'facetapi',
-          'delta' => 'c5d9XPw6uuFO30vJLSOv1r0IoBnprcaQ',
-          'region' => 'sidebar_first',
-          'weight' => '-6',
-        ),
         'facetapi-1ndZWpcD0rZWcvNy1gs5v0yk6Oocw8e6' => array(
-          'module' => 'facetapi',
           'delta' => '1ndZWpcD0rZWcvNy1gs5v0yk6Oocw8e6',
+          'module' => 'facetapi',
           'region' => 'sidebar_first',
           'weight' => '-5',
         ),
-        'facetapi-qR5mxuLQ4hVzdb2YOeX9Ydm5nAoKj141' => array(
+        'facetapi-FeT1cPJ9qLvCLY6svdGdSIiJWrS0KmeG' => array(
+          'delta' => 'FeT1cPJ9qLvCLY6svdGdSIiJWrS0KmeG',
           'module' => 'facetapi',
-          'delta' => 'qR5mxuLQ4hVzdb2YOeX9Ydm5nAoKj141',
           'region' => 'sidebar_first',
-          'weight' => '-4',
+          'weight' => '-8',
+        ),
+        'facetapi-Tjs9NXxZSebDxkhlJjgXCd3olaAJkXWl' => array(
+          'delta' => 'Tjs9NXxZSebDxkhlJjgXCd3olaAJkXWl',
+          'module' => 'facetapi',
+          'region' => 'sidebar_first',
+          'weight' => '-9',
         ),
         'facetapi-bXKrYplwVKVrTXrTgRKEoABcPBPjdJM4' => array(
-          'module' => 'facetapi',
           'delta' => 'bXKrYplwVKVrTXrTgRKEoABcPBPjdJM4',
+          'module' => 'facetapi',
           'region' => 'sidebar_first',
           'weight' => '-3',
+        ),
+        'facetapi-c5d9XPw6uuFO30vJLSOv1r0IoBnprcaQ' => array(
+          'delta' => 'c5d9XPw6uuFO30vJLSOv1r0IoBnprcaQ',
+          'module' => 'facetapi',
+          'region' => 'sidebar_first',
+          'weight' => '-6',
+        ),
+        'facetapi-dvs9HFNbA1yPbX2yB3O11ao3SK0kcNeF' => array(
+          'delta' => 'dvs9HFNbA1yPbX2yB3O11ao3SK0kcNeF',
+          'module' => 'facetapi',
+          'region' => 'sidebar_first',
+          'weight' => '-7',
+        ),
+        'facetapi-qR5mxuLQ4hVzdb2YOeX9Ydm5nAoKj141' => array(
+          'delta' => 'qR5mxuLQ4hVzdb2YOeX9Ydm5nAoKj141',
+          'module' => 'facetapi',
+          'region' => 'sidebar_first',
+          'weight' => '-4',
         ),
       ),
     ),
@@ -103,47 +103,47 @@ function acc_incidents_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-acc_incident_graphs-block_2' => array(
+        'views-698c8d70463be9d041890d880332ecb4' => array(
+          'delta' => '698c8d70463be9d041890d880332ecb4',
           'module' => 'views',
-          'delta' => 'acc_incident_graphs-block_2',
           'region' => 'content',
-          'weight' => '3',
+          'weight' => '2',
         ),
         'views-acc_incident_graphs-block_1' => array(
-          'module' => 'views',
           'delta' => 'acc_incident_graphs-block_1',
+          'module' => 'views',
           'region' => 'content',
           'weight' => '4',
         ),
-        'views-acc_incident_graphs-block_3' => array(
+        'views-acc_incident_graphs-block_2' => array(
+          'delta' => 'acc_incident_graphs-block_2',
           'module' => 'views',
+          'region' => 'content',
+          'weight' => '3',
+        ),
+        'views-acc_incident_graphs-block_3' => array(
           'delta' => 'acc_incident_graphs-block_3',
+          'module' => 'views',
           'region' => 'content',
           'weight' => '5',
         ),
         'views-acc_incident_graphs-block_4' => array(
-          'module' => 'views',
           'delta' => 'acc_incident_graphs-block_4',
+          'module' => 'views',
           'region' => 'content',
           'weight' => '0',
         ),
         'views-acc_incident_graphs-block_5' => array(
-          'module' => 'views',
           'delta' => 'acc_incident_graphs-block_5',
+          'module' => 'views',
           'region' => 'content',
           'weight' => '6',
         ),
         'views-d9cede631cd7c771b18188cc5ee4a307' => array(
-          'module' => 'views',
           'delta' => 'd9cede631cd7c771b18188cc5ee4a307',
+          'module' => 'views',
           'region' => 'content',
           'weight' => '1',
-        ),
-        'views-698c8d70463be9d041890d880332ecb4' => array(
-          'module' => 'views',
-          'delta' => '698c8d70463be9d041890d880332ecb4',
-          'region' => 'content',
-          'weight' => '2',
         ),
       ),
     ),
@@ -173,8 +173,8 @@ function acc_incidents_context_default_contexts() {
     'block' => array(
       'blocks' => array(
         'views--exp-acc_incidents-map' => array(
-          'module' => 'views',
           'delta' => '-exp-acc_incidents-map',
+          'module' => 'views',
           'region' => 'header_search',
           'weight' => '-10',
         ),
@@ -205,8 +205,8 @@ function acc_incidents_context_default_contexts() {
     'block' => array(
       'blocks' => array(
         'views--exp-acc_incidents-table' => array(
-          'module' => 'views',
           'delta' => '-exp-acc_incidents-table',
+          'module' => 'views',
           'region' => 'header_search',
           'weight' => '-10',
         ),

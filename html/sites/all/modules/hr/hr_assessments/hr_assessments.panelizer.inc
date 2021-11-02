@@ -35,9 +35,9 @@ function hr_assessments_panelizer_defaults() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
+      'contentmain' => NULL,
       'default' => NULL,
       'sidebar' => NULL,
-      'contentmain' => NULL,
     ),
   );
   $display->cache = array();
@@ -55,11 +55,11 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'link' => 0,
-    'markup' => 'h2',
-    'id' => '',
     'class' => '',
     'context' => 'panelizer',
+    'id' => '',
+    'link' => 0,
+    'markup' => 'h2',
     'override_title' => 1,
     'override_title_text' => '',
   );
@@ -82,10 +82,10 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'view_mode' => 'full',
     'context' => 'panelizer',
     'override_title' => 0,
     'override_title_text' => '',
+    'view_mode' => 'full',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -106,13 +106,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'text_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -135,13 +135,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'text_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -164,13 +164,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'text_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -193,13 +193,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'text_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -222,22 +222,22 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'field_collection_view',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'field_collection_view',
     'formatter_settings' => array(
-      'edit' => '',
-      'delete' => '',
       'add' => '',
+      'delete' => '',
       'description' => 1,
+      'edit' => '',
       'view_mode' => 'full',
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
-    'override_title_text' => '',
     'override_title_heading' => 'h2',
+    'override_title_text' => '',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -258,22 +258,22 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'field_collection_view',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'field_collection_view',
     'formatter_settings' => array(
-      'edit' => '',
-      'delete' => '',
       'add' => '',
+      'delete' => '',
       'description' => 1,
+      'edit' => '',
       'view_mode' => 'full',
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
-    'override_title_text' => '',
     'override_title_heading' => 'h2',
+    'override_title_text' => '',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -294,22 +294,22 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'field_collection_view',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'field_collection_view',
     'formatter_settings' => array(
-      'edit' => '',
-      'delete' => '',
       'add' => '',
+      'delete' => '',
       'description' => 1,
+      'edit' => '',
       'view_mode' => 'full',
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
-    'override_title_text' => '',
     'override_title_heading' => 'h2',
+    'override_title_text' => '',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -330,13 +330,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'link_default',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'link_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -350,7 +350,7 @@ function hr_assessments_panelizer_defaults() {
   $pane->locks = array();
   $pane->uuid = '70c0a7d5-41a8-4691-8cff-82c940e337d8';
   $display->content['new-70c0a7d5-41a8-4691-8cff-82c940e337d8'] = $pane;
-  $display->panels['contentmain'][10] = 'new-70c0a7d5-41a8-4691-8cff-82c940e337d8';
+  $display->panels['contentmain'][9] = 'new-70c0a7d5-41a8-4691-8cff-82c940e337d8';
   $pane = new stdClass();
   $pane->pid = 'new-df88d915-9268-4f3f-b031-45a6aeb884e2';
   $pane->panel = 'sidebar';
@@ -359,13 +359,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'og_list_default',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'og_list_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -388,20 +388,20 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'date_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'date_default',
     'formatter_settings' => array(
       'format_type' => 'hr_1',
-      'multiple_number' => '',
-      'multiple_from' => '',
-      'multiple_to' => '',
       'fromto' => 'both',
+      'multiple_from' => '',
+      'multiple_number' => '',
+      'multiple_to' => '',
       'show_repeat_rule' => 'show',
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -424,16 +424,16 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'title',
-    'formatter' => 'i18n_list_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'i18n_list_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'title',
     'override_title' => 0,
-    'override_title_text' => '',
     'override_title_heading' => 'h2',
+    'override_title_text' => '',
   );
   $pane->cache = array();
   $pane->style = array(
@@ -454,13 +454,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'list_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'list_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -483,13 +483,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'list_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'list_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -512,13 +512,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'list_default',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'list_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -541,13 +541,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'list_default',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'list_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -570,15 +570,15 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -601,15 +601,15 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 1,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -632,15 +632,15 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -663,15 +663,15 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -694,15 +694,15 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -725,13 +725,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'text_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'text_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -754,15 +754,15 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -785,15 +785,15 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'above',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'above',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -837,9 +837,9 @@ function hr_assessments_panelizer_defaults() {
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
+      'contentmain' => NULL,
       'default' => NULL,
       'sidebar' => NULL,
-      'contentmain' => NULL,
     ),
   );
   $display->cache = array();
@@ -857,15 +857,15 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'inline',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => '0',
     'delta_offset' => '0',
     'delta_reversed' => 0,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'inline',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -888,15 +888,15 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'inline',
-    'formatter' => 'entityreference_label',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'entityreference_label',
     'formatter_settings' => array(
       'link' => 0,
     ),
-    'context' => 'panelizer',
+    'label' => 'inline',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -919,13 +919,13 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'inline',
-    'formatter' => 'list_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'list_default',
     'formatter_settings' => array(),
-    'context' => 'panelizer',
+    'label' => 'inline',
     'override_title' => 0,
     'override_title_text' => '',
   );
@@ -948,20 +948,20 @@ function hr_assessments_panelizer_defaults() {
   $pane->shown = TRUE;
   $pane->access = array();
   $pane->configuration = array(
-    'label' => 'inline',
-    'formatter' => 'date_default',
+    'context' => 'panelizer',
     'delta_limit' => 0,
     'delta_offset' => '0',
     'delta_reversed' => FALSE,
+    'formatter' => 'date_default',
     'formatter_settings' => array(
       'format_type' => 'hr_1',
-      'multiple_number' => '',
-      'multiple_from' => '',
-      'multiple_to' => '',
       'fromto' => 'both',
+      'multiple_from' => '',
+      'multiple_number' => '',
+      'multiple_to' => '',
       'show_repeat_rule' => 'show',
     ),
-    'context' => 'panelizer',
+    'label' => 'inline',
     'override_title' => 0,
     'override_title_text' => '',
   );

@@ -11,16 +11,11 @@
 function hr_wysiwyg_wysiwyg_default_profiles() {
   $profiles = array();
 
-  // Exported profile: hr_wysiwyg
+  // Exported profile: hr_wysiwyg.
   $profiles['hr_wysiwyg'] = array(
     'format' => 'hr_wysiwyg',
     'editor' => 'ckeditor',
     'settings' => array(
-      'default' => 1,
-      'user_choose' => 0,
-      'show_toggle' => 0,
-      'theme' => '',
-      'language' => 'en',
       'buttons' => array(
         'default' => array(
           'Bold' => 1,
@@ -28,10 +23,10 @@ function hr_wysiwyg_wysiwyg_default_profiles() {
           'JustifyLeft' => 1,
           'JustifyCenter' => 1,
           'JustifyRight' => 1,
-          'BidiLtr' => 1,
-          'BidiRtl' => 1,
           'BulletedList' => 1,
           'NumberedList' => 1,
+          'BidiLtr' => 1,
+          'BidiRtl' => 1,
           'Unlink' => 1,
           'Source' => 1,
           'HorizontalRule' => 1,
@@ -47,6 +42,8 @@ function hr_wysiwyg_wysiwyg_default_profiles() {
           'media' => 1,
         ),
       ),
+      'theme' => '',
+      'language' => 'en',
       'toolbarLocation' => 'top',
       'resize_enabled' => 1,
       'default_toolbar_grouping' => 0,
@@ -54,24 +51,31 @@ function hr_wysiwyg_wysiwyg_default_profiles() {
       'acf_mode' => 0,
       'acf_allowed_content' => '',
       'css_setting' => 'theme',
+      'css_theme' => 'ocha_basic',
       'css_path' => '',
       'stylesSet' => 'Styled Image (right)=img.pull-right
 Styled Image (left)=img.pull-left
 Clearfix=p.clearfix',
       'block_formats' => 'p,address,pre,h2,h3,h4,h5,h6,div',
-      'advanced__active_tab' => 'edit-basic',
       'forcePasteAsPlainText' => 1,
+      'pasteFromWordPromptCleanup' => 0,
+      'pasteFromWordRemoveFontStyles' => 0,
     ),
+    'preferences' => array(
+      'default' => 1,
+      'user_choose' => 0,
+      'show_toggle' => 0,
+      'add_to_summaries' => 0,
+      'version' => '4.16.2.4e64f67219',
+    ),
+    'name' => 'formathr_wysiwyg',
   );
 
-  // Exported profile: panopoly_html_text
+  // Exported profile: panopoly_html_text.
   $profiles['panopoly_html_text'] = array(
     'format' => 'panopoly_html_text',
     'editor' => 'markitup',
     'settings' => array(
-      'default' => 1,
-      'user_choose' => 0,
-      'show_toggle' => 0,
       'theme' => 'advanced',
       'language' => 'en',
       'buttons' => array(
@@ -97,6 +101,14 @@ Clearfix=p.clearfix',
       'css_path' => '',
       'css_classes' => '',
     ),
+    'preferences' => array(
+      'add_to_summaries' => FALSE,
+      'default' => 1,
+      'show_toggle' => 0,
+      'user_choose' => 0,
+      'version' => '1.1.14',
+    ),
+    'name' => 'formatpanopoly_html_text',
   );
 
   return $profiles;
