@@ -13,10 +13,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Configure AWS Credentials
+      id: aws
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
     - name: Checkout code
       uses: actions/checkout@v1
+
     - name: Determine environment type
-      uses: docker://unocha/actions:determine-environment-main
+      uses: docker://ghcr.io/un-ocha/actions:determine-environment-main
+
     - name: Build docker image
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -35,8 +45,9 @@ jobs:
             --build-arg GITHUB_REF=${GITHUB_REF} \
           . --file docker/Dockerfile --tag unocha/hrinfo-site:${DOCKER_TAG}
         docker push unocha/hrinfo-site:${DOCKER_TAG}
+
     - name: Flowdock Notify
-      uses: docker://unocha/actions:flowdock-notify-main
+      uses: docker://ghcr.io/un-ocha/actions:flowdock-notify-main
       env:
         FLOWDOCK_TOKEN: ${{ secrets.FLOWDOCK_TOKEN }}
         FLOWDOCK_ICON: 'package'
