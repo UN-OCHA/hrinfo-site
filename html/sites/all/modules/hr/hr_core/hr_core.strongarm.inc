@@ -316,7 +316,7 @@ function hr_core_strongarm() {
       'font-src' => 'https://fonts.gstatic.com https://maxcdn.bootstrapcdn.com https://stackpath.bootstrapcdn.com',
       'frame-ancestors' => '',
       'frame-src' => 'https://static.addtoany.com',
-      'img-src' => '\'self\' data:',
+      'img-src' => '\'self\' data: https://*.twimg.com https://platform.twitter.com',
       'media-src' => '',
       'object-src' => '',
       'policy-uri' => '',
