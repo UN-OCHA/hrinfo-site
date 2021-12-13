@@ -232,7 +232,6 @@ function _hr_core_files_download_button($entity, $type) {
  * Adds share button.
  */
 function hr_core_node_view($node, $view_mode, $langcode) {
-  $url = url('node/' . $node->nid, array('absolute' => TRUE));
   $node->content['hr_core_share_button'] = [];
   $node->content['hr_core_read_more_button'] = array(
     '#type' => 'item',
