@@ -116,11 +116,7 @@ function hr_reliefweb_key_documents_render($subtype, $conf, $panel_args, $contex
       );
     }
 
-    $read_more = '<div class="more-link read-more">';
-    $read_more .= l(t('View more'), $path);
-    $read_more .= '</div>';
-
-    $block->content = $read_more . theme('links', array('links' => $links));
+    $block->content = theme('links', array('links' => $links));
   }
 
   return $block;
