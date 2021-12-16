@@ -65,7 +65,14 @@
       <div id="page-header">
 
         <?php if ($title): ?>
-          <h1 class="page-heading"><?php print $title; ?></h1>
+          <h1 class="page-heading">
+            <?php print $title; ?>
+            <?php if ($node_banner_outdated): ?>
+              <span class="node-outdated" style="font-size: 14px; color: #232323; float:right; text-align: right">
+                (<?php print $node_banner_outdated; ?>)
+              </span>
+            <?php endif; ?>
+          </h1>
         <?php endif; ?>
 
         <?php if ($tabs): ?>

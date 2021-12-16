@@ -227,11 +227,42 @@ function _hr_core_files_download_button($entity, $type) {
 }
 
 /**
+ * Implements template_preprocess_page().
+ */
+function hr_core_preprocess_page(&$vars) {
+  $vars['node_banner_outdated'] = '';
+  if (isset($vars['node'])) {
+    if (isset($vars['page']['content']['system_main']['nodes'][$vars['node']->nid])) {
+      $vars['node_banner_outdated'] = $vars['page']['content']['system_main']['nodes'][$vars['node']->nid]['node_banner_outdated'] ?? '';
+    }
+  }
+}
+
+/**
  * Implements hook_node_view().
- *
- * Adds share button.
  */
 function hr_core_node_view($node, $view_mode, $langcode) {
+  // Display banner for old content.
+  if ($view_mode === 'full') {
+    // Skip 404 page.
+    if ($node->nid == 1146) {
+      return;
+    }
+
+    // Node types to act on.
+    $node_types = [
+      'hr_page',
+      'hr_bundle',
+    ];
+
+    if (in_array($node->type, $node_types)) {
+      if ($node->changed < time() - 60 * 60 * 24 * 180) {
+        $node->content['node_banner_outdated'] = t('Last updated on: @date', ['@date' => format_date($node->changed, 'custom', 'd M Y')]);
+      }
+    }
+  }
+
+  // Extra fields.
   $node->content['hr_core_share_button'] = [];
   $node->content['hr_core_read_more_button'] = array(
     '#type' => 'item',
