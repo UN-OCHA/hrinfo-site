@@ -915,6 +915,25 @@ function hr_core_node_delete($node) {
 /**
  * Implements hook_form_FORM_ID_alter().
  */
+function hr_core_form_panels_edit_style_type_form_alter(&$form, &$form_state) {
+  if (isset($form['style']) && isset($form['style']['#options'])) {
+    $default_value = $form['style']['#default_value'] ?? FALSE;
+    // Remove bootstrap styles unless in use.
+    foreach ($form['style']['#options'] as $key => $option) {
+      if ($key === $default_value) {
+        continue;
+      }
+
+      if (strpos($key, 'bootstrap_styles') !== FALSE) {
+        unset($form['style']['#options'][$key]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function hr_core_form_panels_ipe_edit_control_form_alter(&$form, &$form_state) {
   $form['buttons']['submit']['#submit'][] = 'hr_core_panels_ipe_clear_cache';
 }
