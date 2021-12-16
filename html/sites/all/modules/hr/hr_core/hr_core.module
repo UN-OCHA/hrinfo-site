@@ -1239,7 +1239,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   // Lookup table for new categories.
   $categories = array(
     'hr_layout_rss_feeds' => array(
-      'category' => t('Custom content - test'),
+      'category' => t('Custom content'),
       'title' => t('RSS Feed'),
     ),
     'node_body' => array(
@@ -1247,7 +1247,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'title' => t('Node body'),
     ),
     'fieldable_panels_pane' => array(
-      'category' => t('Custom content - test'),
+      'category' => t('Custom content'),
       'title' => t('Free text'),
     ),
 
