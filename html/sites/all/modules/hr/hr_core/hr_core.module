@@ -1874,13 +1874,30 @@ function hr_core_google_tag_insert_alter($satisfied) {
     if ($node->type === 'hr_operation') {
       $dimensions['dimension4'] = '[node:title]';
     }
-    $options = array('clear' => TRUE);
+
+    // Force tokens to use English.
+    global $language;
+    $current_language = $language;
+    $language = language_list()['en'];
+
+    // Rebuild content types to get English name.
+    _node_types_build(TRUE);
+
+    $options = array(
+      'clear' => TRUE,
+      'language' => language_list()['en'],
+      'langcode' => 'en',
+    );
+
     foreach ($dimensions as $key => $dimension) {
       $dimension = token_replace($dimension, $replacement, $options);
       if ($dimension !== '') {
         $datalayer[$key] = $dimension;
       }
     }
+
+    // Switch back to current language.
+    $language = $current_language;
   }
 
   // Sort the dimensions.
