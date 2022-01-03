@@ -1256,6 +1256,10 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'category' => t('HR.info Content'),
       'title' => t('Dynamic documents'),
     ),
+    'documentos' => array(
+      'category' => t('HR.info Content'),
+      'title' => t('Dynamic documents'),
+    ),
     'hr_documents' => array(
       'category' => t('HR.info Content'),
       'title' => t('Documents'),
@@ -1271,6 +1275,18 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
 
     // Old events.
     'events' => array(
+      'category' => t('HR.info Content'),
+      'title' => t('HR.Info events'),
+    ),
+    'Évènements' => array(
+      'category' => t('HR.info Content'),
+      'title' => t('HR.Info events'),
+    ),
+    'eventos' => array(
+      'category' => t('HR.info Content'),
+      'title' => t('HR.Info events'),
+    ),
+    'События' => array(
       'category' => t('HR.info Content'),
       'title' => t('HR.Info events'),
     ),
@@ -1338,6 +1354,14 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'category' => t('Assessments'),
       'title' => t('Assessments'),
     ),
+    'evaluations' => array(
+      'category' => t('Assessments'),
+      'title' => t('Assessments'),
+    ),
+    'evaluaciones' => array(
+      'category' => t('Assessments'),
+      'title' => t('Assessments'),
+    ),
 
     // Outdated.
     'bean_pane' => array(
@@ -1385,21 +1409,23 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   if (isset($plugin['name']) && $plugin['name'] == 'views_panes') {
     if (is_array($subtype['category'])) {
       $key = strtolower($subtype['category'][0]);
-      // @todo Check if key ever needs translating.
-      // @codingStandardsIgnoreLine
-      if (array_key_exists(t($key), $categories)) {
-        $plugin['category'] = $categories[$key]['category'];
-        $subtype['category'] = $categories[$key]['category'];
-        if (isset($categories[$key]['title'])) {
-          $subtype['title'] = $categories[$key]['title'];
-          $plugin['title'] = $categories[$key]['title'];
-        }
-        else {
-          $subtype['title'] = $tag . $subtype['title'];
-          $plugin['title'] = $tag . $plugin['title'];
-        }
-        return;
+    }
+    else {
+      $key = strtolower($subtype['category']);
+    }
+
+    if (array_key_exists($key, $categories)) {
+      $plugin['category'] = $categories[$key]['category'];
+      $subtype['category'] = $categories[$key]['category'];
+      if (isset($categories[$key]['title'])) {
+        $subtype['title'] = $categories[$key]['title'];
+        $plugin['title'] = $categories[$key]['title'];
       }
+      else {
+        $subtype['title'] = $tag . $subtype['title'];
+        $plugin['title'] = $tag . $plugin['title'];
+      }
+      return;
     }
   }
 
@@ -1455,7 +1481,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
 function hr_core_preprocess_panels_add_content_modal(&$vars) {
   global $user;
 
-  $allowed_catergories = [
+  $allowed_categories = [
     'assessments',
     'custom-content',
     'funding',
@@ -1479,11 +1505,17 @@ function hr_core_preprocess_panels_add_content_modal(&$vars) {
     unset($vars['categories']['reliefweb-content']['content']['Static Reports and Maps']);
   }
 
+  if (isset($vars['categories']['--v--nements']['content']['{Évènements} - Evénements à venir'])) {
+    $vars['categories']['hr-info-content']['content']['{Évènements} - Evénements à venir'] = $vars['categories']['--v--nements']['content']['{Évènements} - Evénements à venir'];
+    unset($vars['categories']['--v--nements']['content']['{Évènements} - Evénements à venir']);
+    unset($vars['categories']['--v--nements']);
+  }
+
   // Remove outdated for non-administrators.
   if (is_array($user->roles) && !in_array('administrator', array_values($user->roles))) {
     $counter = 0;
     foreach ($vars['categories'] as $key => $category_info) {
-      if (!in_array($key, $allowed_catergories)) {
+      if (!in_array($key, $allowed_categories)) {
         unset($vars['categories'][$key]);
         unset($vars['categories_array'][$counter]);
       }
