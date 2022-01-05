@@ -33,4 +33,4 @@ jobs:
         ecr_jenkins_token: ${{ secrets.JENKINS_ECR_TOKEN }}
         flowdock_token: ${{ secrets.FLOWDOCK_TOKEN }}
         flowdock_icon_failure: 'banana'
-        floedock_icon_success: 'metal'
+        flowdock_icon_success: 'metal'
