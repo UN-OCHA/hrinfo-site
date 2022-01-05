@@ -1211,7 +1211,7 @@ function _hr_core_display_cache_content_defaults($minutes = 'none', $margin = 5,
 /**
  * Implements hook_ctools_content_subtype_alter().
  *
- * @see hr_core_preprocess_panels_add_content_modal().
+ * @see hr_core_preprocess_panels_add_content_modal()
  */
 function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   // Bail out soon.
