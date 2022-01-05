@@ -1241,148 +1241,148 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   // Lookup table for new categories.
   $categories = array(
     'hr_layout_rss_feeds' => array(
-      'category' => t('Custom content'),
-      'title' => t('RSS Feed'),
+      'category' => 'Custom content',
+      'title' => 'RSS Feed',
     ),
     'node_body' => array(
-      'category' => t('Outdated'),
-      'title' => t('Node body'),
+      'category' => 'Outdated',
+      'title' => 'Node body',
     ),
     'fieldable_panels_pane' => array(
-      'category' => t('Custom content'),
-      'title' => t('Free text'),
+      'category' => 'Custom content',
+      'title' => 'Free text',
     ),
 
     // Documents.
     'documents' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('Dynamic documents'),
+      'category' => 'HR.info Content',
+      'title' => 'Dynamic documents',
     ),
     'documentos' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('Dynamic documents'),
+      'category' => 'HR.info Content',
+      'title' => 'Dynamic documents',
     ),
     'hr_documents' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('Documents'),
+      'category' => 'HR.info Content',
+      'title' => 'Documents',
     ),
     'hr_documents_key_documents' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('Static documents'),
+      'category' => 'HR.info Content',
+      'title' => 'Static documents',
     ),
     'hr_layout_standard' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('Response Planning/OCHA products'),
+      'category' => 'HR.info Content',
+      'title' => 'Response Planning/OCHA products',
     ),
 
     // Old events.
     'events' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('HR.Info events'),
+      'category' => 'HR.info Content',
+      'title' => 'HR.Info events',
     ),
     'Évènements' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('HR.Info events'),
+      'category' => 'HR.info Content',
+      'title' => 'HR.Info events',
     ),
     'eventos' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('HR.Info events'),
+      'category' => 'HR.info Content',
+      'title' => 'HR.Info events',
     ),
     'События' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('HR.Info events'),
+      'category' => 'HR.info Content',
+      'title' => 'HR.Info events',
     ),
 
     // Events.
     'ev_events_upcoming' => array(
-      'category' => t('Events by<br>Humanitarian Events'),
-      'title' => t('Dynamic events'),
+      'category' => 'Events by<br>Humanitarian Events',
+      'title' => 'Dynamic events',
     ),
     'ev_events_meeting_minutes' => array(
-      'category' => t('Events by<br>Humanitarian Events'),
-      'title' => t('Meeting minutes'),
+      'category' => 'Events by<br>Humanitarian Events',
+      'title' => 'Meeting minutes',
     ),
 
     // Infographics.
     'infographics' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('Dynamic maps/infographics'),
+      'category' => 'HR.info Content',
+      'title' => 'Dynamic maps/infographics',
     ),
     'hr_infographics' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('Infographics'),
+      'category' => 'HR.info Content',
+      'title' => 'Infographics',
     ),
     'hr_infographics_key_infographics' => array(
-      'category' => t('HR.info Content'),
-      'title' => t('Static maps/infographics'),
+      'category' => 'HR.info Content',
+      'title' => 'Static maps/infographics',
     ),
 
     // Reliefweb.
     'hr_layout_reliefweb' => array(
-      'category' => t('Outdated'),
-      'title' => t('ReliefWeb API'),
+      'category' => 'Outdated',
+      'title' => 'ReliefWeb API',
     ),
     'hr_reliefweb_ocha_products' => array(
-      'category' => t('Outdated'),
-      'title' => t('Response Planning/OCHA products'),
+      'category' => 'Outdated',
+      'title' => 'Response Planning/OCHA products',
     ),
     'hr_reliefweb_key_documents' => array(
-      'category' => t('ReliefWeb Content'),
-      'title' => t('Dynamic Reports and Maps'),
+      'category' => 'ReliefWeb Content',
+      'title' => 'Dynamic Reports and Maps',
     ),
     'hr_reliefweb_featured_document' => array(
-      'category' => t('Outdated'),
-      'title' => t('Static Reports and Maps'),
+      'category' => 'Outdated',
+      'title' => 'Static Reports and Maps',
     ),
 
     // FTS.
     'fts_visualization' => array(
-      'category' => t('Funding'),
-      'title' => t('FTS Chart'),
+      'category' => 'Funding',
+      'title' => 'FTS Chart',
     ),
 
     // Assessments.
     'hr_assessments' => array(
-      'category' => t('Outdated'),
+      'category' => 'Outdated',
     ),
     'assessments' => array(
-      'category' => t('HR.info Content'),
+      'category' => 'HR.info Content',
     ),
     'ar_assessments' => array(
-      'category' => t('Assessments'),
-      'title' => t('Assessments'),
+      'category' => 'Assessments',
+      'title' => 'Assessments',
     ),
     'ocha_assessments' => array(
-      'category' => t('Assessments'),
-      'title' => t('Assessments'),
+      'category' => 'Assessments',
+      'title' => 'Assessments',
     ),
     'evaluations' => array(
-      'category' => t('Assessments'),
-      'title' => t('Assessments'),
+      'category' => 'Assessments',
+      'title' => 'Assessments',
     ),
     'evaluaciones' => array(
-      'category' => t('Assessments'),
-      'title' => t('Assessments'),
+      'category' => 'Assessments',
+      'title' => 'Assessments',
     ),
 
     // Outdated.
     'bean_pane' => array(
-      'category' => t('Outdated'),
-      'title' => t('Bean'),
+      'category' => 'Outdated',
+      'title' => 'Bean',
     ),
     'twitter' => array(
-      'category' => t('Outdated'),
+      'category' => 'Outdated',
     ),
     'additional features' => array(
-      'category' => t('Outdated'),
+      'category' => 'Outdated',
     ),
     'hr_news' => array(
-      'category' => t('Outdated'),
-      'title' => t('News'),
+      'category' => 'Outdated',
+      'title' => 'News',
     ),
     'blog posts' => array(
-      'category' => t('Outdated'),
-      'title' => t('Blog post'),
+      'category' => 'Outdated',
+      'title' => 'Blog post',
     ),
   );
 
@@ -1543,6 +1543,11 @@ function hr_core_preprocess_panels_add_content_modal(&$vars) {
     $vars['categories']['hr-info-content']['content']['{Évènements} - Evénements à venir'] = $vars['categories']['--v--nements']['content']['{Évènements} - Evénements à venir'];
     unset($vars['categories']['--v--nements']['content']['{Évènements} - Evénements à venir']);
     unset($vars['categories']['--v--nements']);
+  }
+
+  // Translate titles.
+  foreach ($vars['categories'] as &$category) {
+    $category['title'] = t($category['title']);
   }
 
   // Remove outdated for non-administrators.
