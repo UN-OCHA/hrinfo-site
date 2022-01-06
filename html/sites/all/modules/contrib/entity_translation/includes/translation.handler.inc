@@ -1695,7 +1695,12 @@ class EntityTranslationDefaultHandler implements EntityTranslationHandlerInterfa
    * Helper callback. Sorts language tabs by weight.
    */
   protected function translationTabSort($a, $b) {
-    return $a['#link']['weight'] > $b['#link']['weight'];
+    if ($a['#link']['weight'] == $b['#link']['weight']) {
+      return 0;
+    }
+    else {
+      return ($a['#link']['weight'] > $b['#link']['weight']) ? 1 : -1;
+    }
   }
 
   /**

@@ -1370,14 +1370,17 @@ function entity_translation_form_element_state_replace($element, $source_element
  * Helper function. Recursively replaces the source language with the given one.
  */
 function entity_translation_form_element_language_replace(&$element, $source, $langcode) {
+  $element_children = element_children($element);
+  // PHP >= 7.4 compatibility fix till #3165377 lands.
+  $element_properties = array_diff(array_keys($element), $element_children);
   // Iterate through the form structure recursively.
-  foreach (element_children($element) as $key) {
+  foreach ($element_children as $key) {
     entity_translation_form_element_language_replace($element[$key], $source, $langcode);
   }
 
   // Replace specific occurrences of the source language with the target
   // language.
-  foreach (element_properties($element) as $key) {
+  foreach ($element_properties as $key) {
     if ($key === '#language' && $element[$key] != LANGUAGE_NONE) {
       $element[$key] = $langcode;
     }
