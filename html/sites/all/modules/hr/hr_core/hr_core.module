@@ -1492,37 +1492,6 @@ function hr_core_preprocess_panels_add_content_modal(&$vars) {
     'reliefweb-content',
   ];
 
-  // English titles as defined in hr_core_ctools_content_subtype_alter.
-  $category_titles = [
-    'Assessments',
-    'Custom content',
-    'Funding',
-    'HR.info Content',
-    'ReliefWeb Content',
-  ];
-
-  $lang_codes = [
-    'fr',
-    'es',
-    'ru',
-  ];
-
-  foreach ($lang_codes as $lang_code) {
-    foreach ($category_titles as $category_title) {
-      $title = drupal_strtolower(t($category_title, [], ['langcode' => $lang_code]));
-      $title = drupal_clean_css_identifier($title, [
-        '.' => '-',
-        ' ' => '-',
-        '_' => '-',
-        '/' => '-',
-        '[' => '-',
-        ']' => '',
-      ]);
-
-      $allowed_categories[] = $title;
-    }
-  }
-
   // Move panes.
   if (isset($vars['categories']['custom-content']['content']['Node body'])) {
     $vars['categories']['outdated']['content']['Node body'] = $vars['categories']['custom-content']['content']['Node body'];
