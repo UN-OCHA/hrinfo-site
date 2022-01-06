@@ -10674,17 +10674,17 @@
         },
         {
             "name": "drupal/wysiwyg",
-            "version": "2.7.0",
+            "version": "2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/wysiwyg.git",
-                "reference": "7.x-2.7"
+                "reference": "7.x-2.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/wysiwyg-7.x-2.7.zip",
-                "reference": "7.x-2.7",
-                "shasum": "f250622e8c21e6d6d0d3fa2d864cbb59db620724"
+                "url": "https://ftp.drupal.org/files/projects/wysiwyg-7.x-2.9.zip",
+                "reference": "7.x-2.9",
+                "shasum": "939e43b12a0ad9f1c593955955eb203f5a5ab816"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -10692,8 +10692,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.7",
-                    "datestamp": "1622246285",
+                    "version": "7.x-2.9",
+                    "datestamp": "1641409914",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
