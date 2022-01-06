@@ -209,9 +209,6 @@
     "drupal/geophp": {
         "version": "1.7.0"
     },
-    "drupal/google_analytics": {
-        "version": "2.6.0"
-    },
     "drupal/google_tag": {
         "version": "2.1.0"
     },
