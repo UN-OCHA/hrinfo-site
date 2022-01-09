@@ -1262,6 +1262,10 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'category' => 'HR.info Content',
       'title' => 'Dynamic documents',
     ),
+    'Документы' => array(
+      'category' => 'HR.info Content',
+      'title' => 'Dynamic documents',
+    ),
     'hr_documents' => array(
       'category' => 'HR.info Content',
       'title' => 'Documents',
