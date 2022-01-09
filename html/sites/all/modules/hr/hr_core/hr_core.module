@@ -1495,7 +1495,7 @@ function hr_core_preprocess_panels_add_content_modal(&$vars) {
     'hr-info-content',
     'reliefweb-content',
   ];
-dpm($vars['categories']);
+
   // Move panes.
   if (isset($vars['categories']['custom-content']['content']['Node body'])) {
     $vars['categories']['outdated']['content']['Node body'] = $vars['categories']['custom-content']['content']['Node body'];
