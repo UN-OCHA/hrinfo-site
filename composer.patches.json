@@ -102,9 +102,6 @@
       "drupal/shs": {
         "Disable entity loading": "PATCHES/shs_lazyload.patch",
         "Disable entity loading 2": "PATCHES/shs_lazyload_2.patch"
-      },
-      "drupal/wysiwyg": {
-        "Bump accepted ckeditor version": "https://www.drupal.org/files/issues/2021-08-12/ckeditorVersion4162-3227897-5.patch"
       }
     }
 }
