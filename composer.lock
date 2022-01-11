@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f81ef48fddfa2ca55c159b958d5754a",
+    "content-hash": "ec9e95b35241bfa3d5d2ba6fef79b7c4",
     "packages": [
         {
             "name": "composer/installers",
@@ -718,7 +718,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-1.8",
-                    "datestamp": "1631191205",
+                    "datestamp": "1631903566",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -757,7 +757,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-1.8",
-                    "datestamp": "1631191205",
+                    "datestamp": "1631903566",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1222,6 +1222,10 @@
                 {
                     "name": "joelpittet",
                     "homepage": "https://www.drupal.org/user/160302"
+                },
+                {
+                    "name": "paulocs",
+                    "homepage": "https://www.drupal.org/user/3640109"
                 },
                 {
                     "name": "solide-echt",
@@ -4387,6 +4391,10 @@
             ],
             "authors": [
                 {
+                    "name": "UsingSession",
+                    "homepage": "https://www.drupal.org/user/3582050"
+                },
+                {
                     "name": "earthday47",
                     "homepage": "https://www.drupal.org/user/605842"
                 }
@@ -4525,72 +4533,6 @@
             "homepage": "https://www.drupal.org/project/geophp",
             "support": {
                 "source": "https://git.drupalcode.org/project/geophp"
-            }
-        },
-        {
-            "name": "drupal/google_analytics",
-            "version": "2.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/google_analytics.git",
-                "reference": "7.x-2.6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/google_analytics-7.x-2.6.zip",
-                "reference": "7.x-2.6",
-                "shasum": "a66b8cd58f74ba30aad42835367ea800e0999dc2"
-            },
-            "require": {
-                "drupal/drupal": "~7.0"
-            },
-            "require-dev": {
-                "drupal/token": "*"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "7.x-2.6",
-                    "datestamp": "1548968580",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/7/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "andyrigby",
-                    "homepage": "https://www.drupal.org/user/2679687"
-                },
-                {
-                    "name": "budda",
-                    "homepage": "https://www.drupal.org/user/13164"
-                },
-                {
-                    "name": "ixismark",
-                    "homepage": "https://www.drupal.org/user/3632333"
-                },
-                {
-                    "name": "japerry",
-                    "homepage": "https://www.drupal.org/user/45640"
-                },
-                {
-                    "name": "pfaocle",
-                    "homepage": "https://www.drupal.org/user/9740"
-                },
-                {
-                    "name": "roberto.rivera.ixis",
-                    "homepage": "https://www.drupal.org/user/3632325"
-                }
-            ],
-            "homepage": "https://www.drupal.org/project/google_analytics",
-            "support": {
-                "source": "https://git.drupalcode.org/project/google_analytics"
             }
         },
         {
@@ -5371,8 +5313,12 @@
                     "homepage": "https://www.drupal.org/user/17190"
                 },
                 {
-                    "name": "markcarver",
+                    "name": "markhalliwell",
                     "homepage": "https://www.drupal.org/user/501638"
+                },
+                {
+                    "name": "mcdruid",
+                    "homepage": "https://www.drupal.org/user/255969"
                 },
                 {
                     "name": "sun",
@@ -6267,10 +6213,6 @@
                 {
                     "name": "pwolanin",
                     "homepage": "https://www.drupal.org/user/49851"
-                },
-                {
-                    "name": "solideogloria",
-                    "homepage": "https://www.drupal.org/user/3589277"
                 },
                 {
                     "name": "steinmb",
@@ -8132,12 +8074,16 @@
             ],
             "authors": [
                 {
-                    "name": "arshadcn",
-                    "homepage": "https://www.drupal.org/user/571032"
+                    "name": "ckng",
+                    "homepage": "https://www.drupal.org/user/16307"
                 },
                 {
-                    "name": "dsnopek",
-                    "homepage": "https://www.drupal.org/user/266527"
+                    "name": "doxigo",
+                    "homepage": "https://www.drupal.org/user/1331334"
+                },
+                {
+                    "name": "shadcn",
+                    "homepage": "https://www.drupal.org/user/571032"
                 }
             ],
             "description": "A Drupal theme with Bootstrap and Sass.",
@@ -8943,7 +8889,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.x-dev",
-                    "datestamp": "1404146628",
+                    "datestamp": "1612391738",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -9509,7 +9455,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-1.0-beta4",
-                    "datestamp": "1614446626",
+                    "datestamp": "1614446874",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -9585,7 +9531,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-1.8",
-                    "datestamp": "1614719850",
+                    "datestamp": "1614719906",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10159,7 +10105,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-3.25",
-                    "datestamp": "1631208786",
+                    "datestamp": "1631664489",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10680,17 +10626,17 @@
         },
         {
             "name": "drupal/wysiwyg",
-            "version": "2.7.0",
+            "version": "2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/wysiwyg.git",
-                "reference": "7.x-2.7"
+                "reference": "7.x-2.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/wysiwyg-7.x-2.7.zip",
-                "reference": "7.x-2.7",
-                "shasum": "f250622e8c21e6d6d0d3fa2d864cbb59db620724"
+                "url": "https://ftp.drupal.org/files/projects/wysiwyg-7.x-2.9.zip",
+                "reference": "7.x-2.9",
+                "shasum": "939e43b12a0ad9f1c593955955eb203f5a5ab816"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -10698,8 +10644,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.7",
-                    "datestamp": "1622246285",
+                    "version": "7.x-2.9",
+                    "datestamp": "1641409914",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -12388,6 +12334,7 @@
                 "issues": "https://github.com/webmozart/path-util/issues",
                 "source": "https://github.com/webmozart/path-util/tree/2.3.0"
             },
+            "abandoned": "symfony/filesystem",
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
@@ -12549,17 +12496,17 @@
         },
         {
             "name": "drupal/stage_file_proxy",
-            "version": "1.9.0",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/stage_file_proxy.git",
-                "reference": "7.x-1.9"
+                "reference": "7.x-1.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-7.x-1.9.zip",
-                "reference": "7.x-1.9",
-                "shasum": "569a488b51cbbbc9ac5561a14fb47ca16b2bcdfa"
+                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-7.x-1.10.zip",
+                "reference": "7.x-1.10",
+                "shasum": "a28695922ccc426834478fe58e98b0e94afcffd0"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -12567,8 +12514,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.9",
-                    "datestamp": "1555519304",
+                    "version": "7.x-1.10",
+                    "datestamp": "1635281170",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
