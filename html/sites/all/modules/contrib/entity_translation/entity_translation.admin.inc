@@ -376,7 +376,7 @@ function entity_translation_overview($entity_type, $entity, $callback = NULL) {
           if ($fallback_langcode !== FALSE) {
             $status = t('Fallback from @language', array('@language' => $languages[$fallback_langcode]->name));
             $label = _entity_translation_label($entity_type, $entity, $fallback_langcode);
-            $link = isset($links->links[$langcode]['href']) ? $links->links[$langcode] : array('href' => $path, 'language' => $langcode);
+            $link = isset($links->links[$langcode]['href']) ? $links->links[$langcode] : array('href' => $path, 'language' => $language);
             $row_title = l($label, $link['href'], $link);
           }
         }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9dfe63749bc864bbaf1449212dd1925b",
+    "content-hash": "ec9e95b35241bfa3d5d2ba6fef79b7c4",
     "packages": [
         {
             "name": "composer/installers",
@@ -718,7 +718,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-1.8",
-                    "datestamp": "1631191205",
+                    "datestamp": "1631903566",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -757,7 +757,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-1.8",
-                    "datestamp": "1631191205",
+                    "datestamp": "1631903566",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1222,6 +1222,10 @@
                 {
                     "name": "joelpittet",
                     "homepage": "https://www.drupal.org/user/160302"
+                },
+                {
+                    "name": "paulocs",
+                    "homepage": "https://www.drupal.org/user/3640109"
                 },
                 {
                     "name": "solide-echt",
@@ -2637,26 +2641,30 @@
         },
         {
             "name": "drupal/entity",
-            "version": "1.9.0",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/entity.git",
-                "reference": "7.x-1.9"
+                "reference": "7.x-1.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity-7.x-1.9.zip",
-                "reference": "7.x-1.9",
-                "shasum": "23ab633d65e04f4646fc904ef89c019e5ff7b90d"
+                "url": "https://ftp.drupal.org/files/projects/entity-7.x-1.10.zip",
+                "reference": "7.x-1.10",
+                "shasum": "0c1ae0b551403231a089426d098b3dd09107910f"
             },
             "require": {
                 "drupal/drupal": "~7.0"
             },
+            "require-dev": {
+                "drupal/i18n_string": "*",
+                "drupal/rules": "*"
+            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.9",
-                    "datestamp": "1518642010",
+                    "version": "7.x-1.10",
+                    "datestamp": "1637434456",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2705,7 +2713,7 @@
         },
         {
             "name": "drupal/entity_token",
-            "version": "1.9.0",
+            "version": "1.10.0",
             "require": {
                 "drupal/drupal": "~7.0",
                 "drupal/entity": "*"
@@ -2713,8 +2721,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.9",
-                    "datestamp": "1518642010",
+                    "version": "7.x-1.10",
+                    "datestamp": "1637434456",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2763,17 +2771,17 @@
         },
         {
             "name": "drupal/entity_translation",
-            "version": "1.1.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/entity_translation.git",
-                "reference": "7.x-1.1"
+                "reference": "7.x-2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity_translation-7.x-1.1.zip",
-                "reference": "7.x-1.1",
-                "shasum": "f3f3f272ade48099c5d80c654197e94bd5bfbd7a"
+                "url": "https://ftp.drupal.org/files/projects/entity_translation-7.x-2.0.zip",
+                "reference": "7.x-2.0",
+                "shasum": "0e1be20d13d760824431bea3dca817ca4276be5d"
             },
             "require": {
                 "drupal/drupal": "^7.15"
@@ -2782,13 +2790,13 @@
                 "drupal/i18n": "*",
                 "drupal/i18n_menu": "*",
                 "drupal/pathauto": "*",
-                "drupal/title": "1.0.0-alpha9"
+                "drupal/title": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.1",
-                    "datestamp": "1574696202",
+                    "version": "7.x-2.0",
+                    "datestamp": "1639006133",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2821,10 +2829,12 @@
                     "homepage": "https://www.drupal.org/user/54136"
                 }
             ],
-            "description": "Allows entities to be translated into different languages.",
+            "description": "Allows (fieldable) entities to be translated into different languages.",
             "homepage": "https://www.drupal.org/project/entity_translation",
             "support": {
-                "source": "https://git.drupalcode.org/project/entity_translation"
+                "source": "https://git.drupalcode.org/project/entity_translation",
+                "issues": "https://www.drupal.org/project/issues/entity_translation",
+                "documentation": "https://www.drupal.org/docs/7/modules/entity-translation"
             }
         },
         {
@@ -4089,17 +4099,17 @@
         },
         {
             "name": "drupal/file_entity",
-            "version": "2.32.0",
+            "version": "2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/file_entity.git",
-                "reference": "7.x-2.32"
+                "reference": "7.x-2.35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/file_entity-7.x-2.32.zip",
-                "reference": "7.x-2.32",
-                "shasum": "5d6c1cfc13aea8901e7c562911490979263ec88e"
+                "url": "https://ftp.drupal.org/files/projects/file_entity-7.x-2.35.zip",
+                "reference": "7.x-2.35",
+                "shasum": "2a04d4ea9df711067d84caa54ade64ce7b9957d1"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -4112,8 +4122,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.32",
-                    "datestamp": "1629854566",
+                    "version": "7.x-2.35",
+                    "datestamp": "1639611296",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4380,6 +4390,10 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "UsingSession",
+                    "homepage": "https://www.drupal.org/user/3582050"
+                },
                 {
                     "name": "earthday47",
                     "homepage": "https://www.drupal.org/user/605842"
@@ -5299,8 +5313,12 @@
                     "homepage": "https://www.drupal.org/user/17190"
                 },
                 {
-                    "name": "markcarver",
+                    "name": "markhalliwell",
                     "homepage": "https://www.drupal.org/user/501638"
+                },
+                {
+                    "name": "mcdruid",
+                    "homepage": "https://www.drupal.org/user/255969"
                 },
                 {
                     "name": "sun",
@@ -5371,17 +5389,17 @@
         },
         {
             "name": "drupal/l10n_update",
-            "version": "2.4.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/l10n_update.git",
-                "reference": "7.x-2.4"
+                "reference": "7.x-2.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/l10n_update-7.x-2.4.zip",
-                "reference": "7.x-2.4",
-                "shasum": "8c8d0c6c2c3bfa95c2c899562da942e3af4eb2e5"
+                "url": "https://ftp.drupal.org/files/projects/l10n_update-7.x-2.6.zip",
+                "reference": "7.x-2.6",
+                "shasum": "351a8f0c499a55f23a2c5828bbf08494b240a312"
             },
             "require": {
                 "drupal/drupal": "*"
@@ -5389,8 +5407,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.4",
-                    "datestamp": "1590073868",
+                    "version": "7.x-2.6",
+                    "datestamp": "1636294701",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6195,10 +6213,6 @@
                 {
                     "name": "pwolanin",
                     "homepage": "https://www.drupal.org/user/49851"
-                },
-                {
-                    "name": "solideogloria",
-                    "homepage": "https://www.drupal.org/user/3589277"
                 },
                 {
                     "name": "steinmb",
@@ -8060,12 +8074,16 @@
             ],
             "authors": [
                 {
-                    "name": "arshadcn",
-                    "homepage": "https://www.drupal.org/user/571032"
+                    "name": "ckng",
+                    "homepage": "https://www.drupal.org/user/16307"
                 },
                 {
-                    "name": "dsnopek",
-                    "homepage": "https://www.drupal.org/user/266527"
+                    "name": "doxigo",
+                    "homepage": "https://www.drupal.org/user/1331334"
+                },
+                {
+                    "name": "shadcn",
+                    "homepage": "https://www.drupal.org/user/571032"
                 }
             ],
             "description": "A Drupal theme with Bootstrap and Sass.",
@@ -8518,20 +8536,20 @@
         },
         {
             "name": "drupal/rules",
-            "version": "2.12.0",
+            "version": "2.13.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/rules.git",
-                "reference": "7.x-2.12"
+                "reference": "7.x-2.13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rules-7.x-2.12.zip",
-                "reference": "7.x-2.12",
-                "shasum": "11e14c958b3c4117032ff7e1b328e03feb4163d5"
+                "url": "https://ftp.drupal.org/files/projects/rules-7.x-2.13.zip",
+                "reference": "7.x-2.13",
+                "shasum": "6239791e8856c006e85453ab21043ffa7d70cc38"
             },
             "require": {
-                "drupal/drupal": "~7.0",
+                "drupal/drupal": "^7.40",
                 "drupal/entity": "*",
                 "drupal/entity_token": "*"
             },
@@ -8541,8 +8559,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.12",
-                    "datestamp": "1548305581",
+                    "version": "7.x-2.13",
+                    "datestamp": "1638479687",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8871,7 +8889,7 @@
                 },
                 "drupal": {
                     "version": "7.x-1.x-dev",
-                    "datestamp": "1404146628",
+                    "datestamp": "1612391738",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -9437,7 +9455,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-1.0-beta4",
-                    "datestamp": "1614446626",
+                    "datestamp": "1614446874",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -9513,7 +9531,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-1.8",
-                    "datestamp": "1614719850",
+                    "datestamp": "1614719906",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10087,7 +10105,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.x-3.25",
-                    "datestamp": "1631208786",
+                    "datestamp": "1631664489",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -12316,6 +12334,7 @@
                 "issues": "https://github.com/webmozart/path-util/issues",
                 "source": "https://github.com/webmozart/path-util/tree/2.3.0"
             },
+            "abandoned": "symfony/filesystem",
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
