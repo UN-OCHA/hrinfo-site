@@ -641,10 +641,10 @@ function _ctools_content_create_form_info(&$form_info, $info, $plugin, $subtype,
       $title = t('Configure');
     }
     elseif ($op == 'add') {
-      $title = t('Configure new !subtype_title', array('!subtype_title' => $subtype['title']));
+      $title = t('Configure new !subtype_title', array('!subtype_title' => t($subtype['title'])));
     }
     else {
-      $title = t('Configure !subtype_title', array('!subtype_title' => $subtype['title']));
+      $title = t('Configure !subtype_title', array('!subtype_title' => t($subtype['title'])));
     }
     $form_info['order'] = array('form' => $title);
     $form_info['forms'] = array(
