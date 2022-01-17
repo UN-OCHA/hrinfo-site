@@ -1521,6 +1521,9 @@ function hr_core_preprocess_panels_add_content_modal(&$vars) {
   // Translate titles.
   foreach ($vars['categories'] as &$category) {
     $category['title'] = t($category['title']);
+    foreach ($category['content'] as &$content) {
+      $content['title'] = t($content['title']);
+    }
   }
 
   // Remove outdated for non-administrators.
