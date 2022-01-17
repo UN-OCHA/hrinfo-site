@@ -227,34 +227,43 @@ function _hr_core_files_download_button($entity, $type) {
 }
 
 /**
+ * Implements template_preprocess_page().
+ */
+function hr_core_preprocess_page(&$vars) {
+  $vars['node_banner_outdated'] = '';
+  if (isset($vars['node'])) {
+    if (isset($vars['page']['content']['system_main']['nodes'][$vars['node']->nid])) {
+      $vars['node_banner_outdated'] = $vars['page']['content']['system_main']['nodes'][$vars['node']->nid]['node_banner_outdated'] ?? '';
+    }
+  }
+}
+
+/**
  * Implements hook_node_view().
- *
- * Adds share button.
  */
 function hr_core_node_view($node, $view_mode, $langcode) {
-  $url = url('node/' . $node->nid, array('absolute' => TRUE));
-  $node->content['hr_core_share_button'] = array(
-    '#type' => 'item',
-    '#title' => '',
-    '#markup' => l(
-      '<i class="fa fa-share"></i> ' . t('share'),
-      'http://www.addtoany.com/share_save',
-      array(
-        'attributes' => array(
-          'class' => array(
-            'a2a_dd',
-            'btn',
-            'btn-secondary',
-            'btn-sm',
-          ),
-        ),
-        'html' => TRUE,
-      )
-    ),
-    '#suffix' => '<script type="text/javascript">if (typeof a2a_config !== "undefined") { a2a_config.linkname = "' . $node->title . '";a2a_config.linkurl = "' . $url . '";a2a.init("page");}</script>',
-    '#attached' => array('js' => array('https://static.addtoany.com/menu/page.js')),
-  );
+  // Display banner for old content.
+  if ($view_mode === 'full') {
+    // Skip 404 page.
+    if ($node->nid == 1146) {
+      return;
+    }
 
+    // Node types to act on.
+    $node_types = [
+      'hr_page',
+      'hr_bundle',
+    ];
+
+    if (in_array($node->type, $node_types)) {
+      if ($node->changed < time() - 60 * 60 * 24 * 180) {
+        $node->content['node_banner_outdated'] = t('Last updated on: @date', ['@date' => format_date($node->changed, 'custom', 'd M Y')]);
+      }
+    }
+  }
+
+  // Extra fields.
+  $node->content['hr_core_share_button'] = [];
   $node->content['hr_core_read_more_button'] = array(
     '#type' => 'item',
     '#title' => '',
@@ -906,6 +915,25 @@ function hr_core_node_delete($node) {
 /**
  * Implements hook_form_FORM_ID_alter().
  */
+function hr_core_form_panels_edit_style_type_form_alter(&$form, &$form_state) {
+  if (isset($form['style']) && isset($form['style']['#options'])) {
+    $default_value = $form['style']['#default_value'] ?? FALSE;
+    // Remove bootstrap styles unless in use.
+    foreach ($form['style']['#options'] as $key => $option) {
+      if ($key === $default_value) {
+        continue;
+      }
+
+      if (strpos($key, 'bootstrap_styles') !== FALSE) {
+        unset($form['style']['#options'][$key]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function hr_core_form_panels_ipe_edit_control_form_alter(&$form, &$form_state) {
   $form['buttons']['submit']['#submit'][] = 'hr_core_panels_ipe_clear_cache';
 }
@@ -1182,6 +1210,8 @@ function _hr_core_display_cache_content_defaults($minutes = 'none', $margin = 5,
 
 /**
  * Implements hook_ctools_content_subtype_alter().
+ *
+ * @see hr_core_preprocess_panels_add_content_modal()
  */
 function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   // Bail out soon.
@@ -1194,6 +1224,7 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     'entity_view',
     'flag_link',
     'views',
+    'node_links',
   ))) {
     return;
   }
@@ -1207,13 +1238,14 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
     return;
   }
 
+  // Lookup table for new categories.
   $categories = array(
     'hr_layout_rss_feeds' => array(
       'category' => 'Custom content',
       'title' => 'RSS Feed',
     ),
     'node_body' => array(
-      'category' => 'Custom content',
+      'category' => 'Outdated',
       'title' => 'Node body',
     ),
     'fieldable_panels_pane' => array(
@@ -1223,25 +1255,45 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
 
     // Documents.
     'documents' => array(
-      'category' => 'Content by HR.info',
+      'category' => 'HR.info Content',
+      'title' => 'Dynamic documents',
+    ),
+    'documentos' => array(
+      'category' => 'HR.info Content',
+      'title' => 'Dynamic documents',
+    ),
+    'Документы' => array(
+      'category' => 'HR.info Content',
       'title' => 'Dynamic documents',
     ),
     'hr_documents' => array(
-      'category' => 'Content by HR.info',
+      'category' => 'HR.info Content',
       'title' => 'Documents',
     ),
     'hr_documents_key_documents' => array(
-      'category' => 'Content by HR.info',
+      'category' => 'HR.info Content',
       'title' => 'Static documents',
     ),
     'hr_layout_standard' => array(
-      'category' => 'Content by HR.info',
+      'category' => 'HR.info Content',
       'title' => 'Response Planning/OCHA products',
     ),
 
     // Old events.
     'events' => array(
-      'category' => 'Content by HR.info',
+      'category' => 'HR.info Content',
+      'title' => 'HR.Info events',
+    ),
+    'Évènements' => array(
+      'category' => 'HR.info Content',
+      'title' => 'HR.Info events',
+    ),
+    'eventos' => array(
+      'category' => 'HR.info Content',
+      'title' => 'HR.Info events',
+    ),
+    'События' => array(
+      'category' => 'HR.info Content',
       'title' => 'HR.Info events',
     ),
 
@@ -1257,15 +1309,15 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
 
     // Infographics.
     'infographics' => array(
-      'category' => 'Content by HR.info',
+      'category' => 'HR.info Content',
       'title' => 'Dynamic maps/infographics',
     ),
     'hr_infographics' => array(
-      'category' => 'Content by HR.info',
+      'category' => 'HR.info Content',
       'title' => 'Infographics',
     ),
     'hr_infographics_key_infographics' => array(
-      'category' => 'Content by HR.info',
+      'category' => 'HR.info Content',
       'title' => 'Static maps/infographics',
     ),
 
@@ -1275,37 +1327,45 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
       'title' => 'ReliefWeb API',
     ),
     'hr_reliefweb_ocha_products' => array(
-      'category' => 'Content by RW',
+      'category' => 'Outdated',
       'title' => 'Response Planning/OCHA products',
     ),
     'hr_reliefweb_key_documents' => array(
-      'category' => 'Content by RW',
+      'category' => 'ReliefWeb Content',
       'title' => 'Dynamic Reports and Maps',
     ),
     'hr_reliefweb_featured_document' => array(
-      'category' => 'Content by RW',
+      'category' => 'Outdated',
       'title' => 'Static Reports and Maps',
     ),
 
     // FTS.
     'fts_visualization' => array(
-      'category' => 'Funding by FTS',
+      'category' => 'Funding',
       'title' => 'FTS Chart',
     ),
 
     // Assessments.
     'hr_assessments' => array(
-      'category' => 'Content by HR.info',
+      'category' => 'Outdated',
     ),
     'assessments' => array(
-      'category' => 'Content by HR.info',
+      'category' => 'HR.info Content',
     ),
     'ar_assessments' => array(
-      'category' => 'Assessments by AR',
+      'category' => 'Assessments',
       'title' => 'Assessments',
     ),
     'ocha_assessments' => array(
-      'category' => 'Assessments by AR',
+      'category' => 'Assessments',
+      'title' => 'Assessments',
+    ),
+    'evaluations' => array(
+      'category' => 'Assessments',
+      'title' => 'Assessments',
+    ),
+    'evaluaciones' => array(
+      'category' => 'Assessments',
       'title' => 'Assessments',
     ),
 
@@ -1355,21 +1415,23 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   if (isset($plugin['name']) && $plugin['name'] == 'views_panes') {
     if (is_array($subtype['category'])) {
       $key = strtolower($subtype['category'][0]);
-      // @todo Check if key ever needs translating.
-      // @codingStandardsIgnoreLine
-      if (array_key_exists(t($key), $categories)) {
-        $plugin['category'] = $categories[$key]['category'];
-        $subtype['category'] = $categories[$key]['category'];
-        if (isset($categories[$key]['title'])) {
-          $subtype['title'] = $categories[$key]['title'];
-          $plugin['title'] = $categories[$key]['title'];
-        }
-        else {
-          $subtype['title'] = $tag . $subtype['title'];
-          $plugin['title'] = $tag . $plugin['title'];
-        }
-        return;
+    }
+    else {
+      $key = strtolower($subtype['category']);
+    }
+
+    if (array_key_exists($key, $categories)) {
+      $plugin['category'] = $categories[$key]['category'];
+      $subtype['category'] = $categories[$key]['category'];
+      if (isset($categories[$key]['title'])) {
+        $subtype['title'] = $categories[$key]['title'];
+        $plugin['title'] = $categories[$key]['title'];
       }
+      else {
+        $subtype['title'] = $tag . $subtype['title'];
+        $plugin['title'] = $tag . $plugin['title'];
+      }
+      return;
     }
   }
 
@@ -1413,6 +1475,65 @@ function hr_core_ctools_content_subtype_alter(&$subtype, &$plugin) {
   if (variable_get('hr_core_debug_panel_categories', FALSE)) {
     $subtype['title'] = $tag . $subtype['title'];
     $plugin['title'] = $tag . $plugin['title'];
+  }
+}
+
+/**
+ * Process the panels add content modal.
+ *
+ * This is run here so that preprocess can make changes before links are
+ * actually rendered.
+ */
+function hr_core_preprocess_panels_add_content_modal(&$vars) {
+  global $user;
+
+  // List of allowed categories.
+  $allowed_categories = [
+    'assessments',
+    'custom-content',
+    'funding',
+    'hr-info-content',
+    'reliefweb-content',
+  ];
+
+  // Move panes.
+  if (isset($vars['categories']['custom-content']['content']['Node body'])) {
+    $vars['categories']['outdated']['content']['Node body'] = $vars['categories']['custom-content']['content']['Node body'];
+    unset($vars['categories']['custom-content']['content']['Node body']);
+  }
+
+  if (isset($vars['categories']['reliefweb-content']['content']['Response Planning/OCHA products'])) {
+    $vars['categories']['outdated']['content']['Response Planning/OCHA products'] = $vars['categories']['reliefweb-content']['content']['Response Planning/OCHA products'];
+    unset($vars['categories']['reliefweb-content']['content']['Response Planning/OCHA products']);
+  }
+
+  if (isset($vars['categories']['reliefweb-content']['content']['Static Reports and Maps'])) {
+    $vars['categories']['outdated']['content']['Static Reports and Maps'] = $vars['categories']['reliefweb-content']['content']['Static Reports and Maps'];
+    unset($vars['categories']['reliefweb-content']['content']['Static Reports and Maps']);
+  }
+
+  if (isset($vars['categories']['--v--nements']['content']['{Évènements} - Evénements à venir'])) {
+    $vars['categories']['hr-info-content']['content']['{Évènements} - Evénements à venir'] = $vars['categories']['--v--nements']['content']['{Évènements} - Evénements à venir'];
+    unset($vars['categories']['--v--nements']['content']['{Évènements} - Evénements à venir']);
+    unset($vars['categories']['--v--nements']);
+  }
+
+  // Translate titles.
+  foreach ($vars['categories'] as &$category) {
+    $category['title'] = t($category['title']);
+  }
+
+  // Remove outdated for non-administrators.
+  if (is_array($user->roles) && !in_array('administrator', array_values($user->roles))) {
+    $counter = 0;
+    foreach ($vars['categories'] as $key => $category_info) {
+      if (!in_array($key, $allowed_categories)) {
+        unset($vars['categories'][$key]);
+        unset($vars['categories_array'][$counter]);
+      }
+
+      $counter++;
+    }
   }
 }
 
@@ -1797,13 +1918,30 @@ function hr_core_google_tag_insert_alter($satisfied) {
     if ($node->type === 'hr_operation') {
       $dimensions['dimension4'] = '[node:title]';
     }
-    $options = array('clear' => TRUE);
+
+    // Force tokens to use English.
+    global $language;
+    $current_language = $language;
+    $language = language_list()['en'];
+
+    // Rebuild content types to get English name.
+    _node_types_build(TRUE);
+
+    $options = array(
+      'clear' => TRUE,
+      'language' => language_list()['en'],
+      'langcode' => 'en',
+    );
+
     foreach ($dimensions as $key => $dimension) {
       $dimension = token_replace($dimension, $replacement, $options);
       if ($dimension !== '') {
         $datalayer[$key] = $dimension;
       }
     }
+
+    // Switch back to current language.
+    $language = $current_language;
   }
 
   // Sort the dimensions.

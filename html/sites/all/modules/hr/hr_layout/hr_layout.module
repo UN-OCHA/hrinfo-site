@@ -481,6 +481,12 @@ function hr_layout_create_links() {
 
   $gid = NULL;
   $context = og_context();
+
+  // Skip if empty.
+  if (is_bool($context)) {
+    return $button;
+  }
+
   if ($context['gid']) {
     $gid = $context['gid'];
   }
