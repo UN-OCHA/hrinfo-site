@@ -186,6 +186,7 @@
         "drupal/token_tweaks": "1.x-dev",
         "drupal/transliteration": "^3.2",
         "drupal/twitter_pane": "1.x-dev",
+        "drupal/user_expire": "^1.5",
         "drupal/usermerge": "^2.11",
         "drupal/variable": "^2.5",
         "drupal/varnish": "^1.9",
