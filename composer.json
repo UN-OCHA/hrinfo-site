@@ -225,6 +225,13 @@
         },
         "platform": {
           "php": "7.4"
+        },
+        "allow-plugins": {
+          "composer/installers": true,
+          "composer/semver": true,
+          "cweagans/composer-patches": true,
+          "drupal-composer/preserve-paths": true,
+          "symfony/flex": true
         }
     },
     "minimum-stability": "alpha",

@@ -25,3 +25,7 @@ Discourage bots from doing searches
 Source: PATCHES/ops-6982-robot-searches.patch
 
 
+Empty locale filename
+Source: https://www.drupal.org/files/issues/2019-12-13/core-filename-cannot-be-empty-locale-2163439-10.patch
+
+
