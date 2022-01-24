@@ -1,0 +1,501 @@
+<?php
+/**
+ * @file
+ * Main module file for User expire module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function user_expire_menu() {
+  $items = array();
+
+  $items['admin/config/people/user-expire'] = array(
+    'title' => 'User expire',
+    'description' => 'Configure User expire module',
+    'page callback' => 'user_expire_settings_page',
+    'access arguments' => array('administer user expire settings'),
+    'file' => 'user_expire.admin.inc',
+  );
+
+  $items['admin/reports/expiring-users'] = array(
+    'title' => 'Expiring users',
+    'description' => 'View a list of users with an expiration date.',
+    'page callback' => 'user_expire_report',
+    'access arguments' => array('view expiring users report'),
+    'file' => 'user_expire.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function user_expire_permission() {
+  return array(
+    'set user expiration' => array(
+      'title' => t('Set user expiration'),
+    ),
+    'view expiring users report' => array(
+      'title' => t('View expiring users report'),
+    ),
+    'administer user expire settings' => array(
+      'title' => t('Administer user expire settings'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_user_load().
+ */
+function user_expire_user_load($users) {
+  foreach ($users as $uid => $user) {
+    $query = db_select('user_expire', 'ue');
+
+    $expiration = $query->condition('ue.uid', $uid)
+      ->fields('ue', array('expiration'))
+      ->execute()
+      ->fetchField();
+
+    if (!empty($expiration)) {
+      $user->expiration = $expiration;
+    }
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function user_expire_user_login(&$edit, $account) {
+  user_expire_notify_user();
+}
+
+/**
+ * Implements hook_user_cancel().
+ */
+function user_expire_user_cancel($edit, $account, $method) {
+  user_expire_set_expiration($account);
+}
+
+/**
+ * Implements hook_user_delete().
+ */
+function user_expire_user_delete($account) {
+  user_expire_set_expiration($account);
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function user_expire_fields_extra_fields() {
+  $extra['user']['user'] = array(
+    'form' => array(
+      'user_expiration' => array(
+        'label' => t('User expiration'),
+        'description' => t('Date on which this account will expire.'),
+      ),
+    ),
+  );
+
+  return $extra;
+}
+
+/**
+ * Implements hook_field_attach_form().
+ */
+function user_expire_field_attach_form($entity_type, $entity, &$form, &$form_state, $langcode) {
+  if ($entity_type == 'user' && user_access('set user expiration')) {
+    $form['user_expire'] = array(
+      '#title' => t('User expiration'),
+      '#type' => 'fieldset',
+    );
+    $form['user_expire']['user_expiration'] = array(
+      '#title' => t('Set expiration for this user'),
+      '#type' => 'checkbox',
+      '#default_value' => !empty($entity->expiration),
+    );
+
+    if (isset($entity->expiration)) {
+      $expiration = array(
+        'day' => format_date($entity->expiration, 'custom', 'j'),
+        'month' => format_date($entity->expiration, 'custom', 'n'),
+        'year' => format_date($entity->expiration, 'custom', 'Y'),
+      );
+    }
+    $form['user_expire']['user_expiration_date'] = array(
+      '#title' => t('Expiration date'),
+      '#type' => module_exists('date_popup') ? 'date_popup' : 'date',
+      '#description' => t('The date on which this account will be disabled.'),
+      '#date_format' => 'm/d/Y',
+      '#default_value' => isset($entity->expiration) ? (module_exists('date_popup') ? format_date($entity->expiration, 'custom', 'Y-m-d') : $expiration) : NULL,
+      '#required' => isset($form_state['input']['user_expiration']) && $form_state['input']['user_expiration'],
+      '#states' => array(
+        'invisible' => array(
+          ':input[name="user_expiration"]' => array('checked' => FALSE),
+        ),
+      ),
+    );
+  }
+}
+
+/**
+ * Implements hook_user_insert().
+ */
+function user_expire_user_insert(&$edit, $account, $category) {
+  _user_expire_save($account);
+}
+
+/**
+ * Implements hook_user_update().
+ */
+function user_expire_user_update(&$edit, $account, $category) {
+  if (user_access('set user expiration')) {
+    _user_expire_save($account);
+  }
+}
+
+/**
+ * Save expiration date from user edit form.
+ *
+ * @param object $account
+ *   A user object to modify.
+ */
+function _user_expire_save($account) {
+  if (isset($account->user_expiration) && $account->user_expiration) {
+    if (is_array($account->user_expiration_date) && isset($account->user_expiration_date['month'])) {
+      $time_for_datetime = $account->user_expiration_date['year'] . '-' . $account->user_expiration_date['month']  . '-' . $account->user_expiration_date['day'];
+    }
+    else {
+      $time_for_datetime = $account->user_expiration_date;
+    }
+    $new_date = new DateTime($time_for_datetime, new DateTimeZone(date_default_timezone_get()));
+    $timestamp = $new_date->getTimestamp();
+    user_expire_set_expiration($account, $timestamp);
+  }
+  else {
+    user_expire_set_expiration($account);
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function user_expire_cron() {
+  // Warn the per-role inactivity blocking first, in cases where they get
+  // blocked right after at least they will know why.
+  watchdog('user_expire', 'Processing per role expiration warning.');
+  user_expire_expire_by_role_warning();
+
+  // Then do per-user blocking.
+  watchdog('user_expire', 'Processing per user expiration.');
+  user_expire_process_per_user_expiration();
+
+  // Then per-role inactivity blocking.
+  watchdog('user_expire', 'Processing per role expiration.');
+  user_expire_expire_by_role();
+
+  watchdog('user_expire', 'Cron processing finished.');
+}
+
+/**
+ * Expires users who have an expiration that has passed.
+ */
+function user_expire_process_per_user_expiration() {
+  // Retrieve list of all users to be disabled.
+  $query = db_select('user_expire', 'ue');
+
+  $expired_users = $query->condition('ue.expiration', REQUEST_TIME, '<=')
+    ->fields('ue', array('uid'))
+    ->execute()
+    ->fetchCol();
+
+  $accounts = array();
+  foreach ($expired_users as $uid) {
+    $accounts[] = user_load($uid);
+  }
+  user_expire_expire_users($accounts);
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function user_expire_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
+/**
+ * Set a specific user's expiration time.
+ *
+ * @param object $account
+ *   A user object to modify.
+ * @param int $expiration
+ *   (Optional) An expiration time to set for the user. If this value is
+ *   omitted, it will be used to reset a user's expiration time.
+ */
+function user_expire_set_expiration($account, $expiration = NULL) {
+  if (!empty($expiration)) {
+    // If there's an expiration, save it.
+    db_merge('user_expire')
+      ->key(array('uid' => $account->uid))
+      ->fields(array(
+        'uid' => $account->uid,
+        'expiration' => $expiration,
+      ))
+      ->execute();
+
+    $account->expiration = $expiration;
+    user_expire_notify_user($account);
+  }
+  else {
+    // If the expiration is not set, delete any value that might be set.
+    if (!isset($account->is_new) || !$account->is_new) {
+      // New accounts can't have a record to delete.
+      // Existing records (!is_new) might.
+
+      // Remove user expiration times for this user.
+      $deleted = db_delete('user_expire')
+        ->condition('uid', $account->uid)
+        ->execute();
+
+      // Notify user that expiration time has been deleted.
+      if ($deleted) {
+        drupal_set_message(t("%name's expiration date has been reset.", array('%name' => $account->name)));
+      }
+    }
+  }
+}
+
+/**
+ * Expire a group of users.
+ *
+ * @param array $accounts
+ *   A set of user objects to expire.
+ */
+function user_expire_expire_users(array $accounts) {
+  foreach ($accounts as $account) {
+    if ($account) {
+      // Block user's account.
+      if (user_save($account, array('status' => 0)) !== FALSE) {
+        // User account has expired, status set to '0'.
+        // Send email to notify user about it.
+        drupal_mail('user_expire', 'account_expired', $account->mail, $account->language, array('account' => $account));
+
+        // Remove current expiration time.
+        user_expire_set_expiration($account);
+        // Log notification to watchdog.
+        watchdog('user_expire', 'User %name has expired.', array('%name' => $account->name));
+      }
+      else {
+        // User account has not been updated.
+        watchdog('user_expire', 'Cannot update status for user %name.', array('%name' => $account->name), WATCHDOG_ERROR);
+        drupal_set_message(t('Cannot update status for user %name.', array('%name' => $account->name)), 'error');
+      }
+    }
+  }
+}
+
+/**
+ * Expire a single user.
+ *
+ * @param object $account
+ *   A single user object to expire.
+ */
+function user_expire_expire_user($account) {
+  user_expire_expire_users(array($account));
+}
+
+/**
+ * Displays a message to users with expiring accounts.
+ *
+ * @param object $account
+ *   (Optional) A user object on which to report.
+ */
+function user_expire_notify_user($account = NULL) {
+  global $user;
+
+  if (is_null($account)) {
+    $account = $user;
+  }
+
+  // Only display a message on accounts with a current expiration date.
+  if (empty($account->expiration)) {
+    return;
+  }
+
+  if ($user->uid == $account->uid) {
+    // Notify current user that expiration time is in effect.
+    drupal_set_message(t("Your account's expiration date is set to @date.", array('@date' => format_date($account->expiration))));
+  }
+  else {
+    // Notify user that expiration time is in effect for this user.
+    drupal_set_message(t("%name's expiration date is set to @date.", array('%name' => $account->name, '@date' => format_date($account->expiration))));
+  }
+}
+
+/**
+ * Warns users with an upcoming expiration by roles.
+ */
+function user_expire_expire_by_role_warning() {
+  $last_run = variable_get('user_expire_warning_last_run', 0);
+  $warning_frequency = variable_get('user_expire_warning_frequency', 60 * 60 * 24 * 2);
+  // Warn people every 2 days.
+  if ($last_run && $last_run > (REQUEST_TIME - $warning_frequency)) {
+    watchdog('user_expire', 'Skipping warning as it was run within the last @hours hours',
+      array('@hours' => ($warning_frequency / (60 * 60))), WATCHDOG_DEBUG);
+    return;
+  }
+  // Find people to warn.
+  $rules = user_expire_get_role_rules();
+  $warning_offset = variable_get('user_expire_warning_offset', 60 * 60 * 24 * 7);
+
+  foreach ($rules as $rid => $rule) {
+    $uids_to_warn = user_expire_find_users_to_expire_by_role($rule->rid, $rule->inactivity_period - $warning_offset);
+    if ($uids_to_warn) {
+      foreach ($uids_to_warn as $uid) {
+        $account = user_load($uid->uid);
+        if (empty($account->uid)) {
+          watchdog('user_expire', 'Skipping warning @uid as it failed to load a valid user', array(
+            '@uid' => $uid->uid,
+          ), WATCHDOG_WARNING);
+        }
+        else {
+          watchdog('user_expire', 'Warning about expiring account @name by role', array('@name' => $account->name), WATCHDOG_INFO);
+          drupal_mail('user_expire', 'expiration_warning', $account->mail, $account->language,
+            array(
+              'account' => $account,
+            )
+          );
+        }
+      }
+    }
+  }
+  variable_set('user_expire_warning_last_run', REQUEST_TIME);
+}
+
+/**
+ * Expires user by roles according to rules in the database.
+ */
+function user_expire_expire_by_role() {
+  $rules = user_expire_get_role_rules();
+
+  foreach ($rules as $rid => $rule) {
+    $uids_to_expire = user_expire_find_users_to_expire_by_role($rule->rid, $rule->inactivity_period);
+    if ($uids_to_expire) {
+      foreach ($uids_to_expire as $uid) {
+        $account = user_load($uid->uid);
+        if (empty($account->uid)) {
+          watchdog('user_expire', 'Skipping @uid as it failed to load a valid user', array(
+            '@uid' => $uid,
+          ), WATCHDOG_WARNING);
+        }
+        else {
+          watchdog('user_expire', 'Expiring account @name by role', array('@name' => $account->name));
+          user_expire_expire_user($account);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Finds users to expire by role and expiration period.
+ *
+ * @param int $role_id
+ *   The role ID to search for.
+ * @param int $seconds_since_login
+ *   Seconds since login. To find users *about* to expire, use a smaller number.
+ *
+ * @return \DatabaseStatementInterface|null
+ *   Returns an iterator for use in a loop.
+ */
+function user_expire_find_users_to_expire_by_role($role_id, $seconds_since_login) {
+  // An inactivity period of zero means the rule is disabled for the role.
+  if (empty($seconds_since_login)) {
+    return NULL;
+  }
+  // Find all the of users that need to be expired.
+  $query = db_select('users', 'u');
+
+  $query->fields('u', array('uid'))
+    ->condition('status', 1, '=')
+    ->condition('u.uid', 0, '<>');
+
+  // Conditional fragment for checking on access.
+  $db_and_access = db_and();
+  $db_and_access->condition('u.access', REQUEST_TIME - $seconds_since_login, '<=')
+    ->condition('u.access', 0, '>');
+
+  // Conditional fragment for checking on created.
+  $db_and_created = db_and();
+  $db_and_created->condition('u.created', REQUEST_TIME - $seconds_since_login, '<=')
+    ->condition('u.access', 0, '=');
+
+  // Now OR the access and created fragments together.
+  $access_or_created = db_or()
+    ->condition($db_and_access)
+    ->condition($db_and_created);
+
+  // And finally, AND them together with the status and uid checks.
+  $query->condition($access_or_created);
+
+  // If this role is not the authenticated role, add a condition on the role.
+  // The Authenticated "role" is not in this table as it affects all users.
+  if (DRUPAL_AUTHENTICATED_RID != $role_id) {
+    $query->join('users_roles', 'ur', 'u.uid = ur.uid');
+    $query->condition('ur.rid', $role_id, '=');
+  }
+
+  return $query->execute();
+}
+
+/**
+ * Gets the role inactivity rules.
+ *
+ * @return mixed
+ *   An array of objects keyed by rid of rid and inactivity_period or FALSE.
+ */
+function user_expire_get_role_rules() {
+  return db_select('user_expire_roles', 'uer')
+    ->fields('uer', array('rid', 'inactivity_period'))
+    ->execute()->fetchAllAssoc('rid');
+}
+
+/**
+ * Implements hook_mail().
+ */
+function user_expire_mail($key, &$message, $params) {
+  if ($key == 'expiration_warning') {
+    // The subject.
+    $message['subject'] = t('@site_name: Account expiration warning', array('@site_name' => variable_get('site_name', 'Drupal.org')));
+    // The body.
+    $message['body'][] = t('Hello @user', array('@user' => format_username($params['account'])));
+    // An empty string gives a newline.
+    $message['body'][] = '';
+    $message['body'][] = t('Because you have not logged in recently, your account at @site_name will be blocked in the near future. If you still use this site, please log in @login_url to avoid having your account blocked.',
+      array(
+        '@site_name' => variable_get('site_name', 'Drupal.org'),
+        '@login_url' => url('user', array('absolute' => TRUE)),
+      )
+    );
+    $message['body'][] = '';
+    $message['body'][] = t('Thanks, @site_name', array('@site_name' => variable_get('site_name', 'Drupal.org')));
+  }
+  else if ($key == 'account_expired') {
+    // The subject.
+    $message['subject'] = t('@site_name: Account expired', array('@site_name' => variable_get('site_name', 'Drupal.org')));
+    // The body.
+    $message['body'][] = t('Hello @user', array('@user' => format_username($params['account'])));
+    // An empty string gives a newline.
+    $message['body'][] = '';
+    $message['body'][] = t('We have written this email to inform you that your account at @site_name is blocked.',
+      array(
+        '@site_name' => variable_get('site_name', 'Drupal.org'),
+      )
+    );
+    $message['body'][] = '';
+    $message['body'][] = t('Thanks, @site_name', array('@site_name' => variable_get('site_name', 'Drupal.org')));
+  }
+}

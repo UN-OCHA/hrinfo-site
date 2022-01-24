@@ -1,0 +1,121 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the User expire module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function user_expire_uninstall() {
+  field_delete_field('user_expiration');
+}
+
+/**
+ * Implements hook_schema().
+ */
+function user_expire_schema() {
+  $schema['user_expire'] = array(
+    'description' => 'The tracking table for user expirations.',
+    'fields' => array(
+      'uid' => array(
+        'description' => 'The primary identifier for a user.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'expiration' => array(
+        'description' => 'The Unix timestamp when the user will be disabled.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'foreign keys' => array(
+      'uid' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+    ),
+    'primary key' => array('uid'),
+  );
+
+  $schema['user_expire_roles'] = array(
+    'description' => 'The tracking table for user expirations.',
+    'fields' => array(
+      'rid' => array(
+        'description' => 'The primary identifier for a role.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'inactivity_period' => array(
+        'description' => 'The number of seconds of inactivity allowed before expiring a user.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'foreign keys' => array(
+      'rid' => array(
+        'table' => 'role',
+        'columns' => array('rid' => 'rid'),
+      ),
+    ),
+    'primary key' => array('rid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Deletes any leftover uids associated with deleted accounts.
+ */
+function user_expire_update_1() {
+  $query = db_select('user_expire', 'ue');
+  $query->leftJoin('users', 'u', 'ue.uid = u.uid');
+  $deleted_uids = $query
+    ->fields('ue', array('uid'))
+    ->isNull('u.uid')
+    ->execute();
+
+  foreach ($deleted_uids as $deleted_uid) {
+    db_delete('user_expire')
+      ->condition('uid', $deleted_uid->uid)
+      ->execute();
+  }
+}
+
+/**
+ * Creates the user_expire_roles table for role-based inactivity expiration.
+ */
+function user_expire_update_2() {
+  $schema['user_expire_roles'] = array(
+    'description' => 'The tracking table for user expirations.',
+    'fields' => array(
+      'rid' => array(
+        'description' => 'The primary identifier for a role.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'inactivity_period' => array(
+        'description' => 'The number of seconds of inactivity allowed before expiring a user.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'foreign keys' => array(
+      'rid' => array(
+        'table' => 'role',
+        'columns' => array('rid' => 'rid'),
+      ),
+    ),
+    'primary key' => array('rid'),
+  );
+
+  if (!db_table_exists('user_expire_roles')) {
+    db_create_table('user_expire_roles', $schema['user_expire_roles']);
+  }
+}
