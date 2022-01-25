@@ -464,6 +464,9 @@
     "drupal/twitter_pane": {
         "version": "1.x-dev"
     },
+    "drupal/user_expire": {
+        "version": "1.5.0"
+    },
     "drupal/usermerge": {
         "version": "2.11.0"
     },

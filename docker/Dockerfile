@@ -37,5 +37,4 @@ COPY --from=builder /srv/www/docker/custom /etc/nginx/custom
 
 RUN  cd /srv/www/html/sites && \
        rm -f www.humanitarianresponse.info && \
-       ln -s default www.humanitarianresponse.info && \
-       sed -i 's/libwww-perl .\+1;/libwww-perl 1;\n    ~*PetalBot 1;/' /etc/nginx/blacklist.conf
+       ln -s default www.humanitarianresponse.info

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec9e95b35241bfa3d5d2ba6fef79b7c4",
+    "content-hash": "92416c0346471775a995098176470fe3",
     "packages": [
         {
             "name": "composer/installers",
@@ -2377,23 +2377,23 @@
         },
         {
             "name": "drupal/drupal",
-            "version": "7.82.0",
+            "version": "7.87.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal.git",
-                "reference": "7.82"
+                "reference": "7.87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/drupal-7.82.zip",
-                "reference": "7.82",
-                "shasum": "a51bba09bc194c712fa1fcd349d1bc52a5c9998f"
+                "url": "https://ftp.drupal.org/files/projects/drupal-7.87.zip",
+                "reference": "7.87",
+                "shasum": "a4b0787b5b79bd4c6e1c54fd4144334c4e612516"
             },
             "type": "drupal-core",
             "extra": {
                 "drupal": {
-                    "version": "7.82",
-                    "datestamp": "1626895840",
+                    "version": "7.87",
+                    "datestamp": "1642633870",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2438,10 +2438,6 @@
                     "homepage": "https://www.drupal.org/user/1206650"
                 },
                 {
-                    "name": "drumm",
-                    "homepage": "https://www.drupal.org/user/3064"
-                },
-                {
                     "name": "effulgentsia",
                     "homepage": "https://www.drupal.org/user/78040"
                 },
@@ -2456,10 +2452,6 @@
                 {
                     "name": "mcdruid",
                     "homepage": "https://www.drupal.org/user/255969"
-                },
-                {
-                    "name": "mlhess",
-                    "homepage": "https://www.drupal.org/user/102818"
                 },
                 {
                     "name": "quietone",
@@ -9781,6 +9773,54 @@
             "homepage": "https://www.drupal.org/project/twitter_pane",
             "support": {
                 "source": "https://git.drupalcode.org/project/twitter_pane"
+            }
+        },
+        {
+            "name": "drupal/user_expire",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/user_expire.git",
+                "reference": "7.x-1.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/user_expire-7.x-1.5.zip",
+                "reference": "7.x-1.5",
+                "shasum": "359b5cb39857e71d0827bcd2b29455d15e3d9483"
+            },
+            "require": {
+                "drupal/drupal": "~7.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "7.x-1.5",
+                    "datestamp": "1479329043",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/7/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "erikwebb",
+                    "homepage": "https://www.drupal.org/user/273404"
+                },
+                {
+                    "name": "greggles",
+                    "homepage": "https://www.drupal.org/user/36762"
+                }
+            ],
+            "description": "Allows an administrator to define a date on which to expire a user account.",
+            "homepage": "https://www.drupal.org/project/user_expire",
+            "support": {
+                "source": "https://git.drupalcode.org/project/user_expire"
             }
         },
         {
