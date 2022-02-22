@@ -25,6 +25,6 @@
     "gulp-uglify": "^2.0.1",
     "imagemin-pngcrush": "^7.0.0",
     "jshint": "~2.9.1",
-    "node-sass": "^6.0.1"
+    "node-sass": "^7.0.0"
   }
 }
