@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "92416c0346471775a995098176470fe3",
+    "content-hash": "e508c88f9f91d909eb1ebfd73e0935be",
     "packages": [
         {
             "name": "composer/installers",
@@ -8131,6 +8131,62 @@
             "homepage": "https://www.drupal.org/project/radix_layouts",
             "support": {
                 "source": "https://git.drupalcode.org/project/radix_layouts"
+            }
+        },
+        {
+            "name": "drupal/readonlymode",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/readonlymode.git",
+                "reference": "7.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/readonlymode-7.x-1.2.zip",
+                "reference": "7.x-1.2",
+                "shasum": "9649a64a94c1653796f6922196ca511d434559ad"
+            },
+            "require": {
+                "drupal/drupal": "~7.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "7.x-1.2",
+                    "datestamp": "1402575060",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/7/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "BarisW",
+                    "homepage": "https://www.drupal.org/user/107229"
+                },
+                {
+                    "name": "Sharique",
+                    "homepage": "https://www.drupal.org/user/73545"
+                },
+                {
+                    "name": "petew",
+                    "homepage": "https://www.drupal.org/user/1009366"
+                },
+                {
+                    "name": "rakeshfalke",
+                    "homepage": "https://www.drupal.org/user/660062"
+                }
+            ],
+            "description": "This module will lock your site for any form postings.",
+            "homepage": "https://www.drupal.org/project/readonlymode",
+            "support": {
+                "source": "https://git.drupalcode.org/project/readonlymode"
             }
         },
         {
