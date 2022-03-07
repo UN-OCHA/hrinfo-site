@@ -23,6 +23,7 @@ function readonlymode_uninstall() {
   variable_del('site_readonly_message_form_not_saved');
   variable_del('site_readonly_message');
   variable_del('site_readonly_url');
+  variable_del('site_readonly_message_login');
 }
 
 /**

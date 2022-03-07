@@ -70,8 +70,17 @@ function readonlymode_form_alter(&$form, $form_state, $form_id) {
         drupal_goto($url);
       }
       else {
-        // Replace FAPI #after_build handlers with our block form.
-        $form['#after_build'] = array('readonlymode_block_form');
+        switch ($mode) {
+          case READONLYMODE_FORM_VIEWONLY:
+            // Replace FAPI #after_build handlers with our readonly form.
+            $form['#after_build'] = array('readonlymode_readonly_form');
+            break;
+
+          case READONLYMODE_FORM_DENIED:
+            // Replace FAPI #after_build handlers with our block form.
+            $form['#after_build'] = array('readonlymode_block_form');
+            break;
+        }
       }
     }
   }
@@ -137,7 +146,7 @@ function readonlymode_form_system_site_maintenance_mode_alter(&$form, $form_stat
   $form['read_only'] = array(
     '#title' => t('Read Only Mode'),
     '#type' => 'fieldset',
-    '#weight' => 0,
+    '#weight' => -100,
     '#collapsible' => TRUE,
     '#collapsed' => variable_get('site_readonly', FALSE) ? FALSE : TRUE,
   );
@@ -174,6 +183,13 @@ function readonlymode_form_system_site_maintenance_mode_alter(&$form, $form_stat
     '#default_value' => _readonlymode_notice_form_not_saved(),
     '#rows' => 3,
     '#required' => TRUE,
+  );
+  $form['read_only']['messages']['site_readonly_message_login'] = array(
+    '#type' => 'textarea',
+    '#title' => t('User login message'),
+    '#description' => t('This message will be displayed to users as they log in if the site is in read only mode. Leave blank to display no message upon login.'),
+    '#default_value' => variable_get('site_readonly_message_login', ''),
+    '#rows' => 3,
   );
   $form['read_only']['messages']['site_readonly_url'] = array(
     '#type' => 'textfield',
@@ -358,4 +374,13 @@ function readonlymode_check_form_validate($form, &$form_state) {
   if (_readonlymode_form_check($form['form_id']['#value']) != READONLYMODE_FORM_ALLOWED) {
     form_set_error('', _readonlymode_notice_form_not_saved());
   }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function readonlymode_user_login(&$edit, $account) {
+  if (variable_get('site_readonly', FALSE) && !empty($login_message = variable_get('site_readonly_message_login', ''))) {
+    drupal_set_message($login_message, 'warning');
+  }  
 }
