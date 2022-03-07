@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e508c88f9f91d909eb1ebfd73e0935be",
+    "content-hash": "588f7417a1e8934c23635bb154ffedce",
     "packages": [
         {
             "name": "composer/installers",
@@ -5257,29 +5257,26 @@
         },
         {
             "name": "drupal/jquery_update",
-            "version": "2.7.0",
+            "version": "dev-4.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/jquery_update.git",
-                "reference": "7.x-2.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jquery_update-7.x-2.7.zip",
-                "reference": "7.x-2.7",
-                "shasum": "1f1e663f63a6872923f0fc9cd51510f64233bae2"
+                "reference": "07b10929eefd0cf4de44b8c05f3d307a5c27dda7"
             },
             "require": {
                 "drupal/drupal": "~7.0"
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-4.x": "4.x-dev"
+                },
                 "drupal": {
-                    "version": "7.x-2.7",
-                    "datestamp": "1445458536",
+                    "version": "7.x-4.x-dev",
+                    "datestamp": "1640188090",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -5303,10 +5300,6 @@
                 {
                     "name": "jjeff",
                     "homepage": "https://www.drupal.org/user/17190"
-                },
-                {
-                    "name": "markhalliwell",
-                    "homepage": "https://www.drupal.org/user/501638"
                 },
                 {
                     "name": "mcdruid",
@@ -13551,6 +13544,7 @@
         "drupal/feeds_et": 20,
         "drupal/fullcalendar_api": 15,
         "drupal/geophp": 20,
+        "drupal/jquery_update": 20,
         "drupal/og_features": 20,
         "drupal/og_menu": 20,
         "drupal/og_moderation": 20,
