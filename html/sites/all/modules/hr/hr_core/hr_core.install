@@ -881,3 +881,14 @@ function hr_core_update_7052() {
   );
   module_enable($enable);
 }
+
+/**
+ * Disable SMTP module.
+ */
+function hr_core_update_7053() {
+  $disable = array(
+    'smtp',
+  );
+  module_disable($disable);
+  drupal_uninstall_modules($disable, FALSE);
+}
