@@ -108,6 +108,9 @@
       "drupal/shs": {
         "Disable entity loading": "PATCHES/shs_lazyload.patch",
         "Disable entity loading 2": "PATCHES/shs_lazyload_2.patch"
+      },
+      "drupal/user_expire": {
+        "If a user is activated, deactivated by the module, and reactivated by an admin, reset their expiration period": "https://git.drupalcode.org/project/user_expire/-/merge_requests/8.diff"
       }
     }
 }
