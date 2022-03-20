@@ -111,7 +111,7 @@
       },
       "drupal/user_expire": {
         "If a user is activated, deactivated by the module, and reactivated by an admin, reset their expiration period": "https://git.drupalcode.org/project/user_expire/-/merge_requests/8.diff",
-        "OPS-8147: Customise the expiry email text": "PATCHES/user-expire-2836514-mails.patch"
+        "OPS-8147: Customise the expiry email text": "PATCHES/user-expire-2836514-mails-hack.patch"
       }
     }
 }
