@@ -1,5 +1,5 @@
 diff --git a/user_expire.admin.inc b/user_expire.admin.inc
-index 5f0b215..4cf1818 100644
+index 5f0b215..580d9f9 100644
 --- a/user_expire.admin.inc
 +++ b/user_expire.admin.inc
 @@ -90,6 +90,51 @@ function user_expire_settings($form, &$form_state) {
@@ -7,7 +7,7 @@ index 5f0b215..4cf1818 100644
    }
  
 +  // Use the token list from user.module.
-+  $email_token_help = t('Available variables are: [site:name], [site:url], [user:name], [user:mail], [site:login-url], [site:url-brief], [user:edit-url], [user:one-time-login-url], [user:cancel-url].');
++  $email_token_help = t('Available variables are: [site:name], [site:url], [user:name], [user:mail], [site:login-url], [site:url-brief], [user:edit-url], [user:one-time-login-url], [user:cancel-url], [user:last-login].');
 +
 +  $form['expiration_warning'] = array(
 +    '#type' => 'fieldset',
@@ -35,7 +35,7 @@ index 5f0b215..4cf1818 100644
 +    '#title' => t('Expired Notification Email'),
 +    '#collapsible' => TRUE,
 +    '#collapsed' => FALSE,
-+    '#description' => t('Edit the notification e-mail messages sent when accounts are expired.') . ' ' . $email_token_help,
++    '#description' => t('Edit the notification e-mail messages sent hwne accounts are expired.') . ' ' . $email_token_help,
 +    '#group' => 'email',
 +  );
 +  $form['account_expired']['user_expire_expired_subject'] = array(
@@ -54,6 +54,22 @@ index 5f0b215..4cf1818 100644
    $form['actions']['submit'] = array(
      '#type' => 'submit',
      '#value' => t('Save configuration'),
+@@ -129,4 +174,15 @@ function user_expire_settings_submit($form, &$form_state) {
+         ->execute();
+     }
+   }
++
++  // Save the email template settings.
++  $fields = array(
++    'user_expire_warning_subject',
++    'user_expire_warning_body',
++    'user_expire_expired_subject',
++    'user_expire_expired_body',
++  );
++  foreach ($fields as $field) {
++    variable_set($field, $form_state['values'][$field]);
++  }
+ }
 diff --git a/user_expire.module b/user_expire.module
 index 332ab12..98b3f52 100644
 --- a/user_expire.module
