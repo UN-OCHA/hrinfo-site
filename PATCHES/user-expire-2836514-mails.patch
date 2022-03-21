@@ -1,5 +1,5 @@
 diff --git a/user_expire.admin.inc b/user_expire.admin.inc
-index 5f0b215..580d9f9 100644
+index 5f0b215..acb60bb 100644
 --- a/user_expire.admin.inc
 +++ b/user_expire.admin.inc
 @@ -90,6 +90,51 @@ function user_expire_settings($form, &$form_state) {
@@ -17,16 +17,16 @@ index 5f0b215..580d9f9 100644
 +    '#description' => t('Edit the warning e-mail messages sent before accounts are expired.') . ' ' . $email_token_help,
 +    '#group' => 'email',
 +  );
-+  $form['expiration_warning']['user_expire_warning_subject'] = array(
++  $form['expiration_warning']['user_expire_expiration_warning_subject'] = array(
 +    '#type' => 'textfield',
 +    '#title' => t('Subject'),
-+    '#default_value' => _user_expire_mail_text('warning_subject', NULL, array(), FALSE),
++    '#default_value' => _user_expire_mail_text('expiration_warning_subject', NULL, array(), FALSE),
 +    '#maxlength' => 180,
 +  );
-+  $form['expiration_warning']['user_expire_warning_body'] = array(
++  $form['expiration_warning']['user_expire_expiration_warning_body'] = array(
 +    '#type' => 'textarea',
 +    '#title' => t('Body'),
-+    '#default_value' => _user_expire_mail_text('warning_body', NULL, array(), FALSE),
++    '#default_value' => _user_expire_mail_text('expiration_warning_body', NULL, array(), FALSE),
 +    '#rows' => 15,
 +  );
 +
@@ -35,19 +35,19 @@ index 5f0b215..580d9f9 100644
 +    '#title' => t('Expired Notification Email'),
 +    '#collapsible' => TRUE,
 +    '#collapsed' => FALSE,
-+    '#description' => t('Edit the notification e-mail messages sent hwne accounts are expired.') . ' ' . $email_token_help,
++    '#description' => t('Edit the notification e-mail messages sent when accounts are expired.') . ' ' . $email_token_help,
 +    '#group' => 'email',
 +  );
-+  $form['account_expired']['user_expire_expired_subject'] = array(
++  $form['account_expired']['user_expire_account_expired_subject'] = array(
 +    '#type' => 'textfield',
 +    '#title' => t('Subject'),
-+    '#default_value' => _user_expire_mail_text('expired_subject', NULL, array(), FALSE),
++    '#default_value' => _user_expire_mail_text('account_expired_subject', NULL, array(), FALSE),
 +    '#maxlength' => 180,
 +  );
-+  $form['account_expired']['user_expire_expired_body'] = array(
++  $form['account_expired']['user_expire_account_expired_body'] = array(
 +    '#type' => 'textarea',
 +    '#title' => t('Body'),
-+    '#default_value' => _user_expire_mail_text('expired_body', NULL, array(), FALSE),
++    '#default_value' => _user_expire_mail_text('account_expired_body', NULL, array(), FALSE),
 +    '#rows' => 15,
 +  );
 +
@@ -61,17 +61,38 @@ index 5f0b215..580d9f9 100644
 +
 +  // Save the email template settings.
 +  $fields = array(
-+    'user_expire_warning_subject',
-+    'user_expire_warning_body',
-+    'user_expire_expired_subject',
-+    'user_expire_expired_body',
++    'user_expire_expiration_warning_subject',
++    'user_expire_expiration_warning_body',
++    'user_expire_account_expired_subject',
++    'user_expire_account_expired_body',
 +  );
 +  foreach ($fields as $field) {
 +    variable_set($field, $form_state['values'][$field]);
 +  }
  }
+diff --git a/user_expire.install b/user_expire.install
+index b0fe31f..f787954 100644
+--- a/user_expire.install
++++ b/user_expire.install
+@@ -9,6 +9,16 @@
+  */
+ function user_expire_uninstall() {
+   field_delete_field('user_expiration');
++
++  $fields = array(
++    'user_expire_expiration_warning_subject',
++    'user_expire_expiration_warning_body',
++    'user_expire_account_expired_subject',
++    'user_expire_account_expired_body',
++  );
++  foreach ($fields as $field) {
++    variable_del($field);
++  }
+ }
+ 
+ /**
 diff --git a/user_expire.module b/user_expire.module
-index 4d01061..98b3f52 100644
+index 4d01061..50d3790 100644
 --- a/user_expire.module
 +++ b/user_expire.module
 @@ -164,7 +164,7 @@ function user_expire_user_update(&$edit, $account, $category) {
@@ -106,16 +127,16 @@ index 4d01061..98b3f52 100644
 +  else {
 +    // No override, return default string.
 +    switch ($key) {
-+      case 'warning_subject':
++      case 'expiration_warning_subject':
 +        $text = t('[site:name]: Account expiration warning', array(), array('langcode' => $langcode));
 +        break;
-+      case 'warning_body':
++      case 'expiration_warning_body':
 +        $text = t("Hello [user:name]\n\nBecause you have not logged in recently, your account at [site:name] will be blocked in the near future. If you still use this site, please log in [site:login-url] to avoid having your account blocked.\n\nThanks, [site:name]", array(), array('langcode' => $langcode));
 +        break;
-+      case 'expired_subject':
++      case 'account_expired_subject':
 +        $text = t('[site:name]: Account expired', array(), array('langcode' => $langcode));
 +        break;
-+      case 'expired_body':
++      case 'account_expired_body':
 +        $text = t("Hello [user:name]\n\nWe have written this email to inform you that your account at [site:name] is blocked.\n\nThanks, [site:name]", array(), array('langcode' => $langcode));
 +        break;
 +    }
