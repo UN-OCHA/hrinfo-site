@@ -32,16 +32,16 @@ index 5f0b215..4cf1818 100644
 +
 +  $form['account_expired'] = array(
 +    '#type' => 'fieldset',
-+    '#title' => t('Account Is Now Expired'),
++    '#title' => t('Expired Notification Email'),
 +    '#collapsible' => TRUE,
 +    '#collapsed' => FALSE,
-+    '#description' => t('Edit the warning e-mail messages sent before accounts are expired.') . ' ' . $email_token_help,
++    '#description' => t('Edit the notification e-mail messages sent when accounts are expired.') . ' ' . $email_token_help,
 +    '#group' => 'email',
 +  );
 +  $form['account_expired']['user_expire_expired_subject'] = array(
 +    '#type' => 'textfield',
 +    '#title' => t('Subject'),
-+    '#default_value' => _user_expire_mail_text('expired_body', NULL, array(), FALSE),
++    '#default_value' => _user_expire_mail_text('expired_subject', NULL, array(), FALSE),
 +    '#maxlength' => 180,
 +  );
 +  $form['account_expired']['user_expire_expired_body'] = array(
