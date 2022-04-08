@@ -7,7 +7,8 @@
         "Copied over": "https://drupal.org/files/context_og-2065373-conditions_dont_fire_early_enough-2.patch"
       },
       "drupal/cors": {
-        "#2280323: Sends Multiple Access-Control-Allow-Origin": "https://www.drupal.org/files/issues/sends_multiple-2280323-10.patch"
+        "#2280323: Sends Multiple Access-Control-Allow-Origin": "https://www.drupal.org/files/issues/sends_multiple-2280323-10.patch",
+        "#3274131: String overrides are not loaded and thus do not work": "https://git.drupalcode.org/project/drupal/-/merge_requests/2073.diff"
       },
       "drupal/ctools": {
         "Missing plugin classes": "https://www.drupal.org/files/issues/2067997-reload-plugins-class-7.patch",
