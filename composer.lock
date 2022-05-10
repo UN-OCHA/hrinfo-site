@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "588f7417a1e8934c23635bb154ffedce",
+    "content-hash": "22fcae68fb7f12f8544b9dac5ac62518",
     "packages": [
         {
             "name": "composer/installers",
@@ -5534,17 +5534,17 @@
         },
         {
             "name": "drupal/link",
-            "version": "1.9.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/link.git",
-                "reference": "7.x-1.9"
+                "reference": "7.x-1.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/link-7.x-1.9.zip",
-                "reference": "7.x-1.9",
-                "shasum": "fdd871af43a6bbcfc31d89ced7987f76f5c820ec"
+                "url": "https://ftp.drupal.org/files/projects/link-7.x-1.11.zip",
+                "reference": "7.x-1.11",
+                "shasum": "ad688394b15d4f848d584ffa045cce4d0bf3c428"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -5556,8 +5556,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.9",
-                    "datestamp": "1618831311",
+                    "version": "7.x-1.11",
+                    "datestamp": "1651684851",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -13566,5 +13566,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
