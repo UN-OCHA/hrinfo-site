@@ -120,7 +120,7 @@
         "drupal/l10n_update": "^2.2",
         "drupal/languagefield": "^1.7",
         "drupal/libraries": "^2.5",
-        "drupal/link": "^1.6",
+        "drupal/link": "^1.11",
         "drupal/linkchecker": "^1.4",
         "drupal/linkit": "^3.5",
         "drupal/maintenance200": "^1.1",
