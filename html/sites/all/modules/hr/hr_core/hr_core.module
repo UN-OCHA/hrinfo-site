@@ -1964,3 +1964,83 @@ function hr_core_google_tag_insert_alter($satisfied) {
 
   return $satisfied;
 }
+
+/**
+ * Implements hook_menu().
+ */
+function hr_core_menu() {
+  $items = array();
+
+  $items['node/%node/panelist'] = array(
+    'title' => 'Pane list',
+    'access callback' => TRUE,
+    'page callback' => 'hr_core_get_panes',
+    'page arguments' => array(1),
+    'type' => MENU_CALLBACK,
+    'weight' => 99,
+  );
+
+  return $items;
+}
+
+function hr_core_get_panes($node) {
+  $output = [
+    'types' => [],
+    'panes' => [],
+  ];
+  $display = $node->panelizer['default']->display;
+
+  foreach ($display->content as $key => $content) {
+    $output['types'][] = $content->type;
+
+    if ($content->type == 'fieldable_panels_pane') {
+      list($op, $fpid) = explode(':', $content->subtype);
+      $entity = fieldable_panels_panes_load($fpid);
+
+      switch ($entity->bundle) {
+        case 'hr_documents':
+          $output['panes'][] = [
+            'type' => $entity->bundle,
+            'title' => $entity->title,
+            'target_ids' => $entity->field_documents['und'],
+          ];
+          break;
+
+        case 'hr_infographics':
+          $output['panes'][] = [
+            'type' => $entity->bundle,
+            'title' => $entity->title,
+            'target_ids' => $entity->field_infographics['und'],
+          ];
+          break;
+
+        case 'fieldable_panels_pane':
+          $output['panes'][] = [
+            'type' => $entity->bundle,
+            'title' => $entity->title ?? $entity->title_field['en'][0]['safe_value'],
+            'body' => $entity->description_field['en'][0]['safe_value'],
+          ];
+          break;
+
+      }
+    }
+
+    if ($content->type == 'custom') {
+      $output['panes'][] = [
+        'type' => 'custom',
+        'title' => $content->configuration['title'],
+        'body' => $content->configuration['body'],
+      ];
+    }
+
+    if ($content->type == 'node_body') {
+      $output['panes'][] = [
+        'type' => 'node_body',
+        'title' => '',
+        'body' => $node->body['en'][0]['safe_value'],
+      ];
+    }
+  }
+
+  return drupal_json_output($output);
+}
