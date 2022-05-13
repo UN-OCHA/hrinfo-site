@@ -1983,6 +1983,9 @@ function hr_core_menu() {
   return $items;
 }
 
+/**
+ * Return panes defined on a node.
+ */
 function hr_core_get_panes($node) {
   $output = [
     'types' => [],
@@ -2134,6 +2137,9 @@ function hr_core_get_panes($node) {
   return drupal_json_output($output);
 }
 
+/**
+ * Get path alias.
+ */
 function hr_core_resolve_full_url_from_configuration($configuration) {
   $results = [];
   foreach ($configuration as $item) {
@@ -2145,6 +2151,9 @@ function hr_core_resolve_full_url_from_configuration($configuration) {
   return $results;
 }
 
+/**
+ * Get path alias.
+ */
 function hr_core_resolve_full_url_from_ids($target_ids) {
   $results = [];
   foreach ($target_ids as $item) {
@@ -2156,6 +2165,9 @@ function hr_core_resolve_full_url_from_ids($target_ids) {
   return $results;
 }
 
+/**
+ * Get path alias.
+ */
 function hr_core_resolve_full_url_from_configuration_single($configuration) {
   if (isset($configuration['entity_id']) && !empty($configuration['entity_id'])) {
     return [
