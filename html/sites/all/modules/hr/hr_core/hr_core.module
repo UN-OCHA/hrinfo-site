@@ -2007,7 +2007,7 @@ function hr_core_get_panes($node) {
           $output['panes'][] = [
             'type' => $entity->bundle,
             'title' => $entity->title,
-            'target_ids' => $entity->field_documents['und'],
+            'target_ids' => hr_core_resolve_full_url_from_ids($entity->field_documents['und']),
           ];
           break;
 
@@ -2015,7 +2015,7 @@ function hr_core_get_panes($node) {
           $output['panes'][] = [
             'type' => $entity->bundle,
             'title' => $entity->title,
-            'target_ids' => $entity->field_infographics['und'],
+            'target_ids' => hr_core_resolve_full_url_from_ids($entity->field_infographics['und']),
           ];
           break;
 
@@ -2139,6 +2139,17 @@ function hr_core_resolve_full_url_from_configuration($configuration) {
   foreach ($configuration as $item) {
     if (isset($item['entity_id']) && !empty($item['entity_id'])) {
       $results[] = drupal_get_path_alias('node/' . $item['entity_id']);
+    }
+  }
+
+  return $results;
+}
+
+function hr_core_resolve_full_url_from_ids($target_ids) {
+  $results = [];
+  foreach ($target_ids as $item) {
+    if (isset($item['target_id']) && !empty($item['target_id'])) {
+      $results[] = drupal_get_path_alias('node/' . $item['target_id']);
     }
   }
 
