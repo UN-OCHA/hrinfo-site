@@ -2037,12 +2037,12 @@ function hr_core_get_panes($node) {
       $output['panes'][] = [
         'type' => 'hr_layout_standard',
         'title' => $content->configuration['override_title_text'],
-        'gid' => $content->configuration['gid'],
-        'hno' => $content->configuration['hno'],
-        'monr' => $content->configuration['monr'],
-        'srp' => $content->configuration['srp'],
-        'opr' => $content->configuration['opr'],
-        'orp' => $content->configuration['orp'],
+        'gid' => hr_core_resolve_full_url_from_configuration_single($content->configuration['gid']),
+        'hno' => hr_core_resolve_full_url_from_configuration_single($content->configuration['hno']),
+        'monr' => hr_core_resolve_full_url_from_configuration_single($content->configuration['monr']),
+        'srp' => hr_core_resolve_full_url_from_configuration_single($content->configuration['srp']),
+        'opr' => hr_core_resolve_full_url_from_configuration_single($content->configuration['opr']),
+        'orp' => hr_core_resolve_full_url_from_configuration_single($content->configuration['orp']),
       ];
     }
 
@@ -2075,7 +2075,7 @@ function hr_core_get_panes($node) {
       $output['panes'][] = [
         'type' => 'hr_infographics_key_infographics',
         'title' => $content->configuration['override_title_text'],
-        'target_ids' => $content->configuration['infographics'],
+        'target_ids' => hr_core_resolve_full_url_from_configuration($content->configuration['infographics']),
       ];
     }
 
@@ -2083,7 +2083,7 @@ function hr_core_get_panes($node) {
       $output['panes'][] = [
         'type' => 'hr_documents_key_documents',
         'title' => $content->configuration['override_title_text'],
-        'target_ids' => $content->configuration['documents'],
+        'target_ids' => hr_core_resolve_full_url_from_configuration($content->configuration['documents']),
       ];
     }
 
@@ -2097,27 +2097,33 @@ function hr_core_get_panes($node) {
     }
 
     elseif ($content->type == 'custom') {
-      $output['panes'][] = [
-        'type' => 'custom',
-        'title' => $content->configuration['title'],
-        'body' => $content->configuration['body'],
-      ];
+      if (!empty($content->configuration['body'])) {
+        $output['panes'][] = [
+          'type' => 'custom',
+          'title' => $content->configuration['title'],
+          'body' => $content->configuration['body'],
+        ];
+      }
     }
 
     elseif ($content->type == 'node_body') {
-      $output['panes'][] = [
-        'type' => 'node_body',
-        'title' => '',
-        'body' => $node->body['en'][0]['safe_value'],
-      ];
+      if (!empty($node->body['en'][0]['safe_value'])) {
+        $output['panes'][] = [
+          'type' => 'node_body',
+          'title' => '',
+          'body' => $node->body['en'][0]['safe_value'],
+        ];
+      }
     }
 
     elseif ($content->type == 'entity_field' && $content->subtype == 'node:body') {
-      $output['panes'][] = [
-        'type' => 'node_body',
-        'title' => '',
-        'body' => $node->body['en'][0]['safe_value'],
-      ];
+      if (!empty($node->body['en'][0]['safe_value'])) {
+        $output['panes'][] = [
+          'type' => 'node_body',
+          'title' => '',
+          'body' => $node->body['en'][0]['safe_value'],
+        ];
+      }
     }
 
     else {
@@ -2126,4 +2132,26 @@ function hr_core_get_panes($node) {
   }
 
   return drupal_json_output($output);
+}
+
+function hr_core_resolve_full_url_from_configuration($configuration) {
+  $results = [];
+  foreach ($configuration as $item) {
+    if (isset($item['entity_id']) && !empty($item['entity_id'])) {
+      $results[] = drupal_get_path_alias('node/' . $item['entity_id']);
+    }
+  }
+
+  return $results;
+}
+
+function hr_core_resolve_full_url_from_configuration_single($configuration) {
+  if (isset($configuration['entity_id']) && !empty($configuration['entity_id'])) {
+    return [
+      'entity_bundle' => $configuration['entity_bundle'],
+      'target_id' => drupal_get_path_alias('node/' . $configuration['entity_id']),
+    ];
+  }
+
+  return FALSE;
 }
