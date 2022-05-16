@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "92416c0346471775a995098176470fe3",
+    "content-hash": "22fcae68fb7f12f8544b9dac5ac62518",
     "packages": [
         {
             "name": "composer/installers",
@@ -5257,29 +5257,26 @@
         },
         {
             "name": "drupal/jquery_update",
-            "version": "2.7.0",
+            "version": "dev-4.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/jquery_update.git",
-                "reference": "7.x-2.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jquery_update-7.x-2.7.zip",
-                "reference": "7.x-2.7",
-                "shasum": "1f1e663f63a6872923f0fc9cd51510f64233bae2"
+                "reference": "07b10929eefd0cf4de44b8c05f3d307a5c27dda7"
             },
             "require": {
                 "drupal/drupal": "~7.0"
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-4.x": "4.x-dev"
+                },
                 "drupal": {
-                    "version": "7.x-2.7",
-                    "datestamp": "1445458536",
+                    "version": "7.x-4.x-dev",
+                    "datestamp": "1640188090",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -5303,10 +5300,6 @@
                 {
                     "name": "jjeff",
                     "homepage": "https://www.drupal.org/user/17190"
-                },
-                {
-                    "name": "markhalliwell",
-                    "homepage": "https://www.drupal.org/user/501638"
                 },
                 {
                     "name": "mcdruid",
@@ -5541,17 +5534,17 @@
         },
         {
             "name": "drupal/link",
-            "version": "1.9.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/link.git",
-                "reference": "7.x-1.9"
+                "reference": "7.x-1.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/link-7.x-1.9.zip",
-                "reference": "7.x-1.9",
-                "shasum": "fdd871af43a6bbcfc31d89ced7987f76f5c820ec"
+                "url": "https://ftp.drupal.org/files/projects/link-7.x-1.11.zip",
+                "reference": "7.x-1.11",
+                "shasum": "ad688394b15d4f848d584ffa045cce4d0bf3c428"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -5563,8 +5556,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.9",
-                    "datestamp": "1618831311",
+                    "version": "7.x-1.11",
+                    "datestamp": "1651684851",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8131,6 +8124,62 @@
             "homepage": "https://www.drupal.org/project/radix_layouts",
             "support": {
                 "source": "https://git.drupalcode.org/project/radix_layouts"
+            }
+        },
+        {
+            "name": "drupal/readonlymode",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/readonlymode.git",
+                "reference": "7.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/readonlymode-7.x-1.2.zip",
+                "reference": "7.x-1.2",
+                "shasum": "9649a64a94c1653796f6922196ca511d434559ad"
+            },
+            "require": {
+                "drupal/drupal": "~7.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "7.x-1.2",
+                    "datestamp": "1402575060",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/7/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "BarisW",
+                    "homepage": "https://www.drupal.org/user/107229"
+                },
+                {
+                    "name": "Sharique",
+                    "homepage": "https://www.drupal.org/user/73545"
+                },
+                {
+                    "name": "petew",
+                    "homepage": "https://www.drupal.org/user/1009366"
+                },
+                {
+                    "name": "rakeshfalke",
+                    "homepage": "https://www.drupal.org/user/660062"
+                }
+            ],
+            "description": "This module will lock your site for any form postings.",
+            "homepage": "https://www.drupal.org/project/readonlymode",
+            "support": {
+                "source": "https://git.drupalcode.org/project/readonlymode"
             }
         },
         {
@@ -13495,6 +13544,7 @@
         "drupal/feeds_et": 20,
         "drupal/fullcalendar_api": 15,
         "drupal/geophp": 20,
+        "drupal/jquery_update": 20,
         "drupal/og_features": 20,
         "drupal/og_menu": 20,
         "drupal/og_moderation": 20,
@@ -13516,5 +13566,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }

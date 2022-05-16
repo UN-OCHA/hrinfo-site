@@ -46,7 +46,7 @@
     "gulp-sass-lint": "^1.4.0",
     "gulp-svg-sprite": "^1.5.0",
     "ini": ">=1.3.6",
-    "minimist": "^1.2.3",
+    "minimist": "^1.2.6",
     "object-path": ">=0.11.8",
     "yargs-parser": "^18.1.3"
   }

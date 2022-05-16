@@ -1,0 +1,177 @@
+diff --git a/user_expire.admin.inc b/user_expire.admin.inc
+index 5f0b215..acb60bb 100644
+--- a/user_expire.admin.inc
++++ b/user_expire.admin.inc
+@@ -90,6 +90,51 @@ function user_expire_settings($form, &$form_state) {
+     );
+   }
+ 
++  // Use the token list from user.module.
++  $email_token_help = t('Available variables are: [site:name], [site:url], [user:name], [user:mail], [site:login-url], [site:url-brief], [user:edit-url], [user:one-time-login-url], [user:cancel-url], [user:last-login].');
++
++  $form['expiration_warning'] = array(
++    '#type' => 'fieldset',
++    '#title' => t('Expiry Warning Email'),
++    '#collapsible' => TRUE,
++    '#collapsed' => FALSE,
++    '#description' => t('Edit the warning e-mail messages sent before accounts are expired.') . ' ' . $email_token_help,
++    '#group' => 'email',
++  );
++  $form['expiration_warning']['user_expire_expiration_warning_subject'] = array(
++    '#type' => 'textfield',
++    '#title' => t('Subject'),
++    '#default_value' => _user_expire_mail_text('expiration_warning_subject', NULL, array(), FALSE),
++    '#maxlength' => 180,
++  );
++  $form['expiration_warning']['user_expire_expiration_warning_body'] = array(
++    '#type' => 'textarea',
++    '#title' => t('Body'),
++    '#default_value' => _user_expire_mail_text('expiration_warning_body', NULL, array(), FALSE),
++    '#rows' => 15,
++  );
++
++  $form['account_expired'] = array(
++    '#type' => 'fieldset',
++    '#title' => t('Expired Notification Email'),
++    '#collapsible' => TRUE,
++    '#collapsed' => FALSE,
++    '#description' => t('Edit the notification e-mail messages sent when accounts are expired.') . ' ' . $email_token_help,
++    '#group' => 'email',
++  );
++  $form['account_expired']['user_expire_account_expired_subject'] = array(
++    '#type' => 'textfield',
++    '#title' => t('Subject'),
++    '#default_value' => _user_expire_mail_text('account_expired_subject', NULL, array(), FALSE),
++    '#maxlength' => 180,
++  );
++  $form['account_expired']['user_expire_account_expired_body'] = array(
++    '#type' => 'textarea',
++    '#title' => t('Body'),
++    '#default_value' => _user_expire_mail_text('account_expired_body', NULL, array(), FALSE),
++    '#rows' => 15,
++  );
++
+   $form['actions']['submit'] = array(
+     '#type' => 'submit',
+     '#value' => t('Save configuration'),
+@@ -129,4 +174,15 @@ function user_expire_settings_submit($form, &$form_state) {
+         ->execute();
+     }
+   }
++
++  // Save the email template settings.
++  $fields = array(
++    'user_expire_expiration_warning_subject',
++    'user_expire_expiration_warning_body',
++    'user_expire_account_expired_subject',
++    'user_expire_account_expired_body',
++  );
++  foreach ($fields as $field) {
++    variable_set($field, $form_state['values'][$field]);
++  }
+ }
+diff --git a/user_expire.install b/user_expire.install
+index b0fe31f..f787954 100644
+--- a/user_expire.install
++++ b/user_expire.install
+@@ -9,6 +9,16 @@
+  */
+ function user_expire_uninstall() {
+   field_delete_field('user_expiration');
++
++  $fields = array(
++    'user_expire_expiration_warning_subject',
++    'user_expire_expiration_warning_body',
++    'user_expire_account_expired_subject',
++    'user_expire_account_expired_body',
++  );
++  foreach ($fields as $field) {
++    variable_del($field);
++  }
+ }
+ 
+ /**
+diff --git a/user_expire.module b/user_expire.module
+index 332ab12..50d3790 100644
+--- a/user_expire.module
++++ b/user_expire.module
+@@ -463,40 +463,48 @@ function user_expire_get_role_rules() {
+ }
+ 
+ /**
+- * Implements hook_mail().
++ * Ensure we can fetch the customised mail strings (or defaults) via a single function.
+  */
+-function user_expire_mail($key, &$message, $params) {
+-  if ($key == 'expiration_warning') {
+-    // The subject.
+-    $message['subject'] = t('@site_name: Account expiration warning', array('@site_name' => variable_get('site_name', 'Drupal.org')));
+-    // The body.
+-    $message['body'][] = t('Hello @user', array('@user' => format_username($params['account'])));
+-    // An empty string gives a newline.
+-    $message['body'][] = '';
+-    $message['body'][] = t('Because you have not logged in recently, your account at @site_name will be blocked in the near future. If you still use this site, please log in @login_url to avoid having your account blocked.',
+-      array(
+-        '@site_name' => variable_get('site_name', 'Drupal.org'),
+-        '@login_url' => url('user', array('absolute' => TRUE)),
+-      )
+-    );
+-    $message['body'][] = '';
+-    $message['body'][] = t('Thanks, @site_name', array('@site_name' => variable_get('site_name', 'Drupal.org')));
++function _user_expire_mail_text($key, $language = NULL, $variables = array(), $replace = TRUE) {
++  if ($admin_setting = variable_get('user_expire_' . $key, FALSE)) {
++    // An admin setting overrides the default string.
++    $text = $admin_setting;
+   }
+-  elseif ($key == 'account_expired') {
+-    // The subject.
+-    $message['subject'] = t('@site_name: Account expired', array('@site_name' => variable_get('site_name', 'Drupal.org')));
+-    // The body.
+-    $message['body'][] = t('Hello @user', array('@user' => format_username($params['account'])));
+-    // An empty string gives a newline.
+-    $message['body'][] = '';
+-    $message['body'][] = t('We have written this email to inform you that your account at @site_name is blocked.',
+-      array(
+-        '@site_name' => variable_get('site_name', 'Drupal.org'),
+-      )
+-    );
+-    $message['body'][] = '';
+-    $message['body'][] = t('Thanks, @site_name', array('@site_name' => variable_get('site_name', 'Drupal.org')));
++  else {
++    // No override, return default string.
++    switch ($key) {
++      case 'expiration_warning_subject':
++        $text = t('[site:name]: Account expiration warning', array(), array('langcode' => $langcode));
++        break;
++      case 'expiration_warning_body':
++        $text = t("Hello [user:name]\n\nBecause you have not logged in recently, your account at [site:name] will be blocked in the near future. If you still use this site, please log in [site:login-url] to avoid having your account blocked.\n\nThanks, [site:name]", array(), array('langcode' => $langcode));
++        break;
++      case 'account_expired_subject':
++        $text = t('[site:name]: Account expired', array(), array('langcode' => $langcode));
++        break;
++      case 'account_expired_body':
++        $text = t("Hello [user:name]\n\nWe have written this email to inform you that your account at [site:name] is blocked.\n\nThanks, [site:name]", array(), array('langcode' => $langcode));
++        break;
++    }
++  }
++
++  if ($replace) {
++    // We do not sanitize the token replacement, since the output of this
++    // replacement is intended for an e-mail message, not a web browser.
++    return token_replace($text, $variables, array('language' => $language, 'callback' => 'user_mail_tokens', 'sanitize' => FALSE, 'clear' => TRUE));
+   }
++
++  return $text;
++}
++
++/**
++ * Implements hook_mail().
++ */
++function user_expire_mail($key, &$message, $params) {
++  $language = $message['language'];
++  $variables = array('user' => $params['account']);
++  $message['subject'] .= _user_expire_mail_text($key . '_subject', $language, $variables);
++  $message['body'][] = _user_expire_mail_text($key . '_body', $language, $variables);
+ }
+ 
+ /**

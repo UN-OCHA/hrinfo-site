@@ -374,6 +374,9 @@
     "drupal/radix_layouts": {
         "version": "3.4.0"
     },
+    "drupal/readonlymode": {
+        "version": "1.2.0"
+    },
     "drupal/realname": {
         "version": "1.4.0"
     },

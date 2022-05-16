@@ -95,6 +95,11 @@
         "copied_over_from_drush_make4": "https://drupal.org/files/issues/satellite_phones-2144551-1.patch",
         "copied_over_from_drush_make5": "https://drupal.org/files/issues/2216285-migrate_issue-1.patch"
       },
+      "drupal/readonlymode": {
+        "Change weight of the $form['read_only']": "https://www.drupal.org/files/issues/2018-08-21/2956345_readonlymode_form_weight.patch",
+        "Forms that can be viewed option does not work as it is described in the description": "https://www.drupal.org/files/issues/readonlymode-readonly-fix-reroll-2458051-2.patch",
+        "Warning message upon user login if read only mode active": "https://www.drupal.org/files/issues/login-message-v2.patch"
+      },
       "drupal/restful": {
         "HR.info issue 754": "PATCHES/restful-754.patch",
         "HRINFO-1035 undefined index": "PATCHES/hrinfo-1035-restful-undefined-index.patch",
@@ -103,6 +108,10 @@
       "drupal/shs": {
         "Disable entity loading": "PATCHES/shs_lazyload.patch",
         "Disable entity loading 2": "PATCHES/shs_lazyload_2.patch"
+      },
+      "drupal/user_expire": {
+        "If a user is activated, deactivated by the module, and reactivated by an admin, reset their expiration period": "https://git.drupalcode.org/project/user_expire/-/merge_requests/8.diff",
+        "OPS-8147: Customise the expiry email text": "PATCHES/user-expire-2836514-mails-hack.patch"
       }
     }
 }
