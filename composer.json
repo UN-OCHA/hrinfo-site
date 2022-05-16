@@ -175,7 +175,6 @@
         "drupal/seckit": "^1.11",
         "drupal/securelogin": "^1.10",
         "drupal/shs": "^1.8",
-        "drupal/smtp": "^1.7",
         "drupal/spatial": "^1.0-beta1",
         "drupal/special_menu_items": "^2.1.0",
         "drupal/strongarm": "^2.0",
