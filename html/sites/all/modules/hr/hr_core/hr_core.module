@@ -2054,6 +2054,8 @@ function hr_core_get_panes($node) {
         'type' => 'hr_layout_reliefweb',
         'title' => $content->configuration['override_title_text'],
         'country' => $content->configuration['country'],
+        'no_of_items' => $content->configuration['no_of_items'],
+        'api_path' => $content->configuration['api_path'],
       ];
     }
 
