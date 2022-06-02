@@ -1964,3 +1964,219 @@ function hr_core_google_tag_insert_alter($satisfied) {
 
   return $satisfied;
 }
+
+/**
+ * Implements hook_menu().
+ */
+function hr_core_menu() {
+  $items = array();
+
+  $items['node/%node/panelist'] = array(
+    'title' => 'Pane list',
+    'access callback' => TRUE,
+    'page callback' => 'hr_core_get_panes',
+    'page arguments' => array(1),
+    'type' => MENU_CALLBACK,
+    'weight' => 99,
+  );
+
+  return $items;
+}
+
+/**
+ * Return panes defined on a node.
+ */
+function hr_core_get_panes($node) {
+  $output = [
+    'types' => [],
+    'undetected' => [],
+    'panes' => [],
+  ];
+  $display = $node->panelizer['default']->display;
+
+  foreach ($display->content as $key => $content) {
+    $output['types'][] = $content->type;
+
+    if ($content->type == 'views_panes') {
+      continue;
+    }
+
+    if ($content->type == 'fieldable_panels_pane') {
+      list($op, $fpid) = explode(':', $content->subtype);
+      $entity = fieldable_panels_panes_load($fpid);
+
+      switch ($entity->bundle) {
+        case 'hr_documents':
+          $output['panes'][] = [
+            'type' => $entity->bundle,
+            'title' => $entity->title,
+            'target_ids' => hr_core_resolve_full_url_from_ids($entity->field_documents['und']),
+          ];
+          break;
+
+        case 'hr_infographics':
+          $output['panes'][] = [
+            'type' => $entity->bundle,
+            'title' => $entity->title,
+            'target_ids' => hr_core_resolve_full_url_from_ids($entity->field_infographics['und']),
+          ];
+          break;
+
+        case 'fieldable_panels_pane':
+          $output['panes'][] = [
+            'type' => $entity->bundle,
+            'title' => $entity->title ?? $entity->title_field['en'][0]['safe_value'],
+            'body' => $entity->description_field['en'][0]['safe_value'],
+          ];
+          break;
+
+        default:
+          $output['undetected'][] = $content->type . ' - ' . $entity->bundle;
+          break;
+      }
+    }
+
+    elseif ($content->type == 'hr_layout_standard') {
+      $output['panes'][] = [
+        'type' => 'hr_layout_standard',
+        'title' => $content->configuration['override_title_text'],
+        'gid' => hr_core_resolve_full_url_from_configuration_single($content->configuration['gid']),
+        'hno' => hr_core_resolve_full_url_from_configuration_single($content->configuration['hno']),
+        'monr' => hr_core_resolve_full_url_from_configuration_single($content->configuration['monr']),
+        'srp' => hr_core_resolve_full_url_from_configuration_single($content->configuration['srp']),
+        'opr' => hr_core_resolve_full_url_from_configuration_single($content->configuration['opr']),
+        'orp' => hr_core_resolve_full_url_from_configuration_single($content->configuration['orp']),
+      ];
+    }
+
+    elseif ($content->type == 'hr_layout_reliefweb') {
+      $output['panes'][] = [
+        'type' => 'hr_layout_reliefweb',
+        'title' => $content->configuration['override_title_text'],
+        'country' => $content->configuration['country'],
+        'no_of_items' => $content->configuration['no_of_items'],
+        'api_path' => $content->configuration['api_path'],
+      ];
+    }
+
+    elseif ($content->type == 'hr_layout_rss_feeds') {
+      $output['panes'][] = [
+        'type' => 'hr_layout_rss_feeds',
+        'title' => $content->configuration['override_title_text'],
+        'rss' => $content->configuration['feed_url'],
+      ];
+    }
+
+    elseif ($content->type == 'hr_reliefweb_key_documents') {
+      $output['panes'][] = [
+        'type' => 'hr_reliefweb_key_documents',
+        'title' => $content->configuration['override_title_text'],
+        'filters' => $content->configuration['filters'],
+        'limit' => $content->configuration['limit'],
+      ];
+    }
+
+    elseif ($content->type == 'hr_infographics_key_infographics') {
+      $output['panes'][] = [
+        'type' => 'hr_infographics_key_infographics',
+        'title' => $content->configuration['override_title_text'],
+        'target_ids' => hr_core_resolve_full_url_from_configuration($content->configuration['infographics']),
+      ];
+    }
+
+    elseif ($content->type == 'hr_documents_key_documents') {
+      $output['panes'][] = [
+        'type' => 'hr_documents_key_documents',
+        'title' => $content->configuration['override_title_text'],
+        'target_ids' => hr_core_resolve_full_url_from_configuration($content->configuration['documents']),
+      ];
+    }
+
+    elseif ($content->type == 'bean_pane') {
+      $bean = bean_load($content->configuration['bean_delta']);
+      $output['panes'][] = [
+        'type' => $content->subtype,
+        'title' => $bean->title,
+        'appeals' => $bean->settings['appeals'],
+      ];
+    }
+
+    elseif ($content->type == 'custom') {
+      if (!empty($content->configuration['body'])) {
+        $output['panes'][] = [
+          'type' => 'custom',
+          'title' => $content->configuration['title'],
+          'body' => $content->configuration['body'],
+        ];
+      }
+    }
+
+    elseif ($content->type == 'node_body') {
+      if (!empty($node->body['en'][0]['safe_value'])) {
+        $output['panes'][] = [
+          'type' => 'node_body',
+          'title' => '',
+          'body' => $node->body['en'][0]['safe_value'],
+        ];
+      }
+    }
+
+    elseif ($content->type == 'entity_field' && $content->subtype == 'node:body') {
+      if (!empty($node->body['en'][0]['safe_value'])) {
+        $output['panes'][] = [
+          'type' => 'node_body',
+          'title' => '',
+          'body' => $node->body['en'][0]['safe_value'],
+        ];
+      }
+    }
+
+    else {
+      $output['undetected'][] = $content->type . ' - ' . $content->subtype;
+    }
+  }
+
+  return drupal_json_output($output);
+}
+
+/**
+ * Get path alias.
+ */
+function hr_core_resolve_full_url_from_configuration($configuration) {
+  $results = [];
+  foreach ($configuration as $item) {
+    if (isset($item['entity_id']) && !empty($item['entity_id'])) {
+      $results[] = drupal_get_path_alias('node/' . $item['entity_id']);
+    }
+  }
+
+  return $results;
+}
+
+/**
+ * Get path alias.
+ */
+function hr_core_resolve_full_url_from_ids($target_ids) {
+  $results = [];
+  foreach ($target_ids as $item) {
+    if (isset($item['target_id']) && !empty($item['target_id'])) {
+      $results[] = drupal_get_path_alias('node/' . $item['target_id']);
+    }
+  }
+
+  return $results;
+}
+
+/**
+ * Get path alias.
+ */
+function hr_core_resolve_full_url_from_configuration_single($configuration) {
+  if (isset($configuration['entity_id']) && !empty($configuration['entity_id'])) {
+    return [
+      'entity_bundle' => $configuration['entity_bundle'],
+      'target_id' => drupal_get_path_alias('node/' . $configuration['entity_id']),
+    ];
+  }
+
+  return FALSE;
+}

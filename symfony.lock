@@ -428,9 +428,6 @@
     "drupal/shs": {
         "version": "1.8.0"
     },
-    "drupal/smtp": {
-        "version": "1.7.0"
-    },
     "drupal/spatial": {
         "version": "1.0.0-beta1"
     },
