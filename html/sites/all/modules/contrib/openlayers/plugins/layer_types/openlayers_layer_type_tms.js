@@ -26,10 +26,6 @@ Drupal.openlayers.layer.tms = function(title, map, options) {
     }
   }
 
-  if (typeof options.tileOrigin.lon != 'undefined' && typeof options.tileOrigin.lat != 'undefined') {
-    options.tileOrigin = new OpenLayers.LonLat(parseFloat(options.tileOrigin.lon), parseFloat(options.tileOrigin.lat));
-  }
-
   options.projection = new OpenLayers.Projection(options.projection);
-    return new OpenLayers.Layer.TMS(title, options.url, options);
+  return new OpenLayers.Layer.TMS(title, options.url, options);
 };

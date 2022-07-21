@@ -164,7 +164,7 @@ function user_expire_user_update(&$edit, $account, $category) {
 function _user_expire_save($account) {
   if (isset($account->user_expiration) && $account->user_expiration) {
     if (is_array($account->user_expiration_date) && isset($account->user_expiration_date['month'])) {
-      $time_for_datetime = $account->user_expiration_date['year'] . '-' . $account->user_expiration_date['month']  . '-' . $account->user_expiration_date['day'];
+      $time_for_datetime = $account->user_expiration_date['year'] . '-' . $account->user_expiration_date['month'] . '-' . $account->user_expiration_date['day'];
     }
     else {
       $time_for_datetime = $account->user_expiration_date;
@@ -254,7 +254,6 @@ function user_expire_set_expiration($account, $expiration = NULL) {
     if (!isset($account->is_new) || !$account->is_new) {
       // New accounts can't have a record to delete.
       // Existing records (!is_new) might.
-
       // Remove user expiration times for this user.
       $deleted = db_delete('user_expire')
         ->condition('uid', $account->uid)
@@ -464,38 +463,58 @@ function user_expire_get_role_rules() {
 }
 
 /**
+ * Ensure we can fetch the customised mail strings (or defaults) via a single function.
+ */
+function _user_expire_mail_text($key, $language = NULL, $variables = array(), $replace = TRUE) {
+  if ($admin_setting = variable_get('user_expire_' . $key, FALSE)) {
+    // An admin setting overrides the default string.
+    $text = $admin_setting;
+  }
+  else {
+    // No override, return default string.
+    switch ($key) {
+      case 'expiration_warning_subject':
+        $text = t('[site:name]: Account expiration warning', array(), array('langcode' => $langcode));
+        break;
+      case 'expiration_warning_body':
+        $text = t("Hello [user:name]\n\nBecause you have not logged in recently, your account at [site:name] will be blocked in the near future. If you still use this site, please log in [site:login-url] to avoid having your account blocked.\n\nThanks, [site:name]", array(), array('langcode' => $langcode));
+        break;
+      case 'account_expired_subject':
+        $text = t('[site:name]: Account expired', array(), array('langcode' => $langcode));
+        break;
+      case 'account_expired_body':
+        $text = t("Hello [user:name]\n\nWe have written this email to inform you that your account at [site:name] is blocked.\n\nThanks, [site:name]", array(), array('langcode' => $langcode));
+        break;
+    }
+  }
+
+  if ($replace) {
+    // We do not sanitize the token replacement, since the output of this
+    // replacement is intended for an e-mail message, not a web browser.
+    return token_replace($text, $variables, array('language' => $language, 'callback' => 'user_mail_tokens', 'sanitize' => FALSE, 'clear' => TRUE));
+  }
+
+  return $text;
+}
+
+/**
  * Implements hook_mail().
  */
 function user_expire_mail($key, &$message, $params) {
-  if ($key == 'expiration_warning') {
-    // The subject.
-    $message['subject'] = t('@site_name: Account expiration warning', array('@site_name' => variable_get('site_name', 'Drupal.org')));
-    // The body.
-    $message['body'][] = t('Hello @user', array('@user' => format_username($params['account'])));
-    // An empty string gives a newline.
-    $message['body'][] = '';
-    $message['body'][] = t('Because you have not logged in recently, your account at @site_name will be blocked in the near future. If you still use this site, please log in @login_url to avoid having your account blocked.',
-      array(
-        '@site_name' => variable_get('site_name', 'Drupal.org'),
-        '@login_url' => url('user', array('absolute' => TRUE)),
-      )
-    );
-    $message['body'][] = '';
-    $message['body'][] = t('Thanks, @site_name', array('@site_name' => variable_get('site_name', 'Drupal.org')));
-  }
-  else if ($key == 'account_expired') {
-    // The subject.
-    $message['subject'] = t('@site_name: Account expired', array('@site_name' => variable_get('site_name', 'Drupal.org')));
-    // The body.
-    $message['body'][] = t('Hello @user', array('@user' => format_username($params['account'])));
-    // An empty string gives a newline.
-    $message['body'][] = '';
-    $message['body'][] = t('We have written this email to inform you that your account at @site_name is blocked.',
-      array(
-        '@site_name' => variable_get('site_name', 'Drupal.org'),
-      )
-    );
-    $message['body'][] = '';
-    $message['body'][] = t('Thanks, @site_name', array('@site_name' => variable_get('site_name', 'Drupal.org')));
+  $language = $message['language'];
+  $variables = array('user' => $params['account']);
+  $message['subject'] .= _user_expire_mail_text($key . '_subject', $language, $variables);
+  $message['body'][] = _user_expire_mail_text($key . '_body', $language, $variables);
+}
+
+/**
+ * Implements hook_user_presave().
+ *
+ * If the account was blocked but is now active, update the expiry so it is
+ * not re-blocked by the next cron run.
+ */
+function user_expire_user_presave(&$edit, $account, $category) {
+  if (!empty($account->original) && $account->original->status == 0 && $edit['status'] == 1) {
+    $edit['access'] = REQUEST_TIME;
   }
 }

@@ -15,9 +15,9 @@
 function openlayers_ui_admin_settings() {
   $client_check = variable_get('openlayers_ui_version_check', 'no-check');
   $source_description =
-    t('<p>By default your site will point to a CDN-backed version of the
+    t('<p>By default the your site will point to a hosted version of the
       OpenLayers library at %ol_api_url.</p>
-      <p>If desired, you can use an internal version of the library.
+      <p>For better performance and reliability, you should use an internal version of the library.
       <a href="!ol_url">Download the OpenLayers library</a>, and add it to your Drupal installation.
       Use the new drush command \'<em>dl-openlayers</em>\' to download it and place it at the right place automatically.
       If you download the library manually, then place it in the <em>libraries/openlayers</em> folder and new options will appear under <em>OpenLayers source type</em> on this page.
@@ -25,7 +25,7 @@ function openlayers_ui_admin_settings() {
       (eg. //www.example.com/OpenLayers.js) which then respects the use of both HTTPS and HTTP protocols.</p>
       <ul>
         <li>The default suggested, compatible version: <strong>%suggested_api</strong></li>
-        <li>The default suggested, compatible CDN-hosted URL: <strong>%ol_api_url</strong></li>
+        <li>The default suggested, compatible hosted URL:  <strong>%ol_api_url</strong></li>
         <li>Your version found from client-side, Javascript check: <strong>%client</strong></li>
       </ul>',
       array(
@@ -50,7 +50,7 @@ function openlayers_ui_admin_settings() {
       <ul>
         <li>Select internal to load the OpenLayers library from your drupal installation.
           <br/>You can use the drush command <em>dl-openlayers</em> to download the library and place it at the right place automatically.</li>
-        <li>Select external to load it from <a href="http://cdnjs.cloudflare.com">cdnjs.cloudflare.com</a>, a free public CDN.</li>
+        <li>Select external to load it from Internet.</li>
       </ul>
       <p>You should use the <a href="!libraries">libraries module</a> to enable the internal loading of the library.</p>
       ', array('!libraries' => 'http://drupal.org/project/libraries')),

@@ -120,9 +120,10 @@ function jquery_update_library_alter(&$libraries, $module) {
 
   jquery_update_jquery_replace($libraries, $cdn, $path, $min, $jquery_version);
 
+  $jqueryui_custom_version = (bool) variable_get('jquery_update_custom_version_jqueryui', FALSE);
   // Replace jQuery UI with CDN or local files. If from a CDN include all of
   // jQuery UI.
-  if (version_compare($jquery_version, '1.6', '>=')) {
+  if ($jqueryui_custom_version || version_compare($jquery_version, '1.6', '>=')) {
     jquery_update_jqueryui_replace($libraries, $cdn, $path, $min);
   }
 

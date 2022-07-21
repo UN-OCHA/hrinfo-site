@@ -33,9 +33,6 @@
       "drupal/entity_api": {
         "Send entire node to node_access on create": "https://www.drupal.org/files/issues/2018-12-04/3017993-send_full_node.patch"
       },
-      "drupal/entityreference_prepopulate": {
-        "Deprecated: Unparenthesized `a ? b : c ? d : e` is deprecated": "https://www.drupal.org/files/issues/2020-06-10/3115641-unparenthesized-ternary-deprecated.patch"
-      },
       "drupal/facetapi_bonus": {
         "Allow HTML in reset link": "https://www.drupal.org/files/issues/2020-08-26/2205469-allow_html-2.patch"
       },
@@ -54,9 +51,6 @@
       },
       "drupal/hybridauth": {
         "https://www.drupal.org/project/hybridauth/issues/3154070": "https://www.drupal.org/files/issues/2020-06-23/session_already_exist_exception-3154070-7.patch"
-      },
-      "drupal/media_youtube": {
-        "Hotfix until the next version": "https://www.drupal.org/files/issues/2021-01-07/media_youtube-1572550-117.patch"
       },
       "drupal/og": {
         "User can create node without permission": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/442.patch",

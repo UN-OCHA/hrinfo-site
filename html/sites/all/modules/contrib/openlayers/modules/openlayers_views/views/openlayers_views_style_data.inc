@@ -55,13 +55,7 @@ class openlayers_views_style_data extends views_plugin_style {
    */
   function option_definition() {
     $options = parent::option_definition();
-    $options['data_source'] = array(
-      'projection' => 'EPSG:4326',
-      'default' => 'openlayers_wkt',
-    );
-    $options['attributes'] = array(
-      'default' => array(),
-    );
+    $options['data_source'] = array('default' => 'openlayers_wkt');
     return $options;
   }
 
@@ -90,11 +84,6 @@ class openlayers_views_style_data extends views_plugin_style {
     $fields = array();
     foreach ($handlers as $field_id => $handler) {
       $fields[$field_id] = $handler->ui_name() . ' (' . $field_id .')';
-    }
-
-    $projections = array();
-    foreach (openlayers_get_all_projections() as $projection) {
-      $projections[$projection->identifier] = $projection->getLocalizedMessage();
     }
 
     $form['data_source'] = array(
@@ -143,15 +132,6 @@ class openlayers_views_style_data extends views_plugin_style {
         '#options' => $fields,
         '#default_value' => $this->options['data_source']['wkt'],
         '#states' => $this->datasource_dependent('wkt')
-      );
-
-      $form['data_source']['projection'] = array(
-        '#type' => 'select',
-        '#title' => t('Projection'),
-        '#description' => t('Choose the projection of the WKT field.'),
-        '#options' => $projections,
-        '#default_value' => $this->options['data_source']['projection'],
-        '#states' => $this->datasource_dependent('wkt'),
       );
 
       $form['data_source']['other_top'] = array(
@@ -349,7 +329,7 @@ class openlayers_views_style_data extends views_plugin_style {
 
         // Create features array.
         $feature = array(
-          'projection' => $this->options['data_source']['projection'],
+          'projection' => 'EPSG:4326',
           'attributes' => $attributes,
           'wkt' => $wkt,
         );
@@ -440,10 +420,7 @@ class openlayers_views_style_data extends views_plugin_style {
   function get_group_wkt($wkt_array) {
     geophp_load();
     $geophp = geoPHP::load($wkt_array, 'wkt');
-    if (!empty($geoPHP)) {
-      return $geophp->out('wkt');
-    }
-    return array();
+    return $geophp->out('wkt');
   }
 
   /**

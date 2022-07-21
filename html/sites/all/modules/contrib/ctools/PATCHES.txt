@@ -5,3 +5,7 @@ Missing plugin classes
 Source: https://www.drupal.org/files/issues/2067997-reload-plugins-class-7.patch
 
 
+Ctools modal title
+Source: PATCHES/ctools-translate-modal-title.patch
+
+

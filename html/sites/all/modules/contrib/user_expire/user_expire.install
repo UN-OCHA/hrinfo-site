@@ -9,6 +9,16 @@
  */
 function user_expire_uninstall() {
   field_delete_field('user_expiration');
+
+  $fields = array(
+    'user_expire_expiration_warning_subject',
+    'user_expire_expiration_warning_body',
+    'user_expire_account_expired_subject',
+    'user_expire_account_expired_body',
+  );
+  foreach ($fields as $field) {
+    variable_del($field);
+  }
 }
 
 /**

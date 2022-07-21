@@ -4,6 +4,9 @@
  * Tests for User expire module.
  */
 
+/**
+ * {@inheritdoc}
+ */
 class UserExpireTestCase extends DrupalWebTestCase {
   /**
    * Implements getInfo().
@@ -17,6 +20,9 @@ class UserExpireTestCase extends DrupalWebTestCase {
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function setUp() {
     // Enable User Expire module.
     parent::setUp('user_expire');
@@ -30,11 +36,14 @@ class UserExpireTestCase extends DrupalWebTestCase {
       'administer users',
       'set user expiration',
       'view expiring users report',
-      'administer user expire settings'
+      'administer user expire settings',
     ));
   }
 
-  function testUserExpire() {
+  /**
+   * Run all user_expire tests.
+   */
+  public function testUserExpire() {
     $this->assertTrue($this->basic_account->status, t('User account is currently enabled.'));
     user_expire_set_expiration($this->basic_account, REQUEST_TIME - 1);
     user_expire_expire_users(array($this->basic_account));
@@ -142,7 +151,7 @@ class UserExpireTestCase extends DrupalWebTestCase {
     user_expire_expire_by_role();
 
     // Ensure they are still enabled.
-    $this->drupalGet("user/$new_basic_account->uid/edit");
+    $this->drupalGet("user/{$new_basic_account->uid}/edit");
     $this->assertRaw('type="radio" id="edit-status-1" name="status" value="1" checked="checked" class="form-radio"', t('New user account stays active.'));
 
     // Age the new user's created by 90+ days.
@@ -151,9 +160,21 @@ class UserExpireTestCase extends DrupalWebTestCase {
     // Process it.
     user_expire_expire_by_role();
 
-    // Ensure they are disabled
-    $this->drupalGet("user/$new_basic_account->uid/edit");
+    // Ensure they are disabled.
+    $this->drupalGet("user/{$new_basic_account->uid}/edit");
     $this->assertRaw('type="radio" id="edit-status-0" name="status" value="0" checked="checked" class="form-radio"', t('User account is currently disabled.'));
 
+    // Manually unblock the user.
+    $edit = array();
+    $edit['status'] = 1;
+    $this->drupalPost("user/{$new_basic_account->uid}/edit", $edit, t('Save'));
+
+    // Process it.
+    user_expire_expire_by_role();
+
+    // Ensure they are still active.
+    $this->drupalGet("user/{$new_basic_account->uid}/edit");
+    $this->assertRaw('type="radio" id="edit-status-1" name="status" value="1" checked="checked" class="form-radio"', $this->t('User account is currently active.'));
   }
+
 }

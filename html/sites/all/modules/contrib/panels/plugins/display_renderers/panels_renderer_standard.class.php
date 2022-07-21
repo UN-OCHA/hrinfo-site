@@ -567,6 +567,9 @@ class panels_renderer_standard {
     if (!empty($content->content)) {
       if (!empty($pane->style['style'])) {
         $style = panels_get_style($pane->style['style']);
+        if (!isset($pane->style['settings'])) {
+          $pane->style['settings'] = array();
+        }
 
         if (isset($style) && isset($style['render pane'])) {
           $output = theme($style['render pane'], array('content' => $content, 'pane' => $pane, 'display' => $this->display, 'style' => $style, 'settings' => $pane->style['settings']));

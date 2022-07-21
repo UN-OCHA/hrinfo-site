@@ -3,10 +3,10 @@
 /**
  * @file
  * This file is a fork of the default mappers for fields in Feeds module.
- * 
+ *
  * Problem occured when Feeds module called the function _field_feeds_set_target()
  *   and hardcoded the 'und' language for each field. Thus we ought to fork these functions
- *   and alter the callbacks for targets to become as below. 
+ *   and alter the callbacks for targets to become as below.
  */
 
 /**
@@ -27,7 +27,7 @@ function _feeds_et_number_feeds_set_target($source, $entity, $target, $value) {
   $target_parts = explode(':', $target);
   $language_code = end($target_parts);
   $target = $target_parts[0];
-  _field_feeds_set_target($source, $entity, $target, $value, FALSE, $language_code);
+  _feeds_et_field_feeds_set_target($source, $entity, $target, $value, FALSE, $language_code);
 }
 
 /**
@@ -108,12 +108,12 @@ function _feeds_et_field_feeds_set_target($source, $entity, $target, $value, $in
   }
 
   // Now add translations
-  if ($language_code != $default_language) {
+  if ($default_language != LANGUAGE_NONE && $language_code != LANGUAGE_NONE) {
     $translation = array(
       'translate' => 0,
       'status' => 1,
       'language' => $language_code,
-      'source' => $default_language,
+      'source' => $language_code != $default_language ? $default_language : '',
     );
     $handler->setTranslation($translation, $entity);
   }
