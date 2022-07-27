@@ -24,7 +24,7 @@ Drupal.behaviors.openlayers_ui_admin = {
 
       // Mark as loading, then do AJAX request
       $thisContainer.addClass('throbbing');
-      var url = window.location.href + '/callbacks/version_check/' + version;
+      var url = settings.basePath + '?q=admin/structure/openlayers/callbacks/version_check/' + version;
       $.ajax({
         url: url,
         success: function(data) {

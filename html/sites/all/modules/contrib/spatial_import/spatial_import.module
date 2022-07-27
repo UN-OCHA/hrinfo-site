@@ -156,7 +156,7 @@ function _spatial_import_dbf_headers(&$fp, &$schema) {
 
   // Set basic headers.
   $headers = unpack('H2db_id/Cy/Cm/Cd/Lcount/Sheader_size/Srecord_size', $data);
-  $date = $headers['m'] . '/' . $headers['d'] . '/' . $headers['y'] + 1900;
+  $date = $headers['m'] . '/' . $headers['d'] . '/' . ($headers['y'] + 1900);
   $headers['date'] = strtotime($date);
 
   // Get the remainder of the dbf headers.

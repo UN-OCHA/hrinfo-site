@@ -12,45 +12,6 @@
  */
 function maintenance200_preprocess_maintenance_page(&$vars) {
   drupal_add_http_header('Status', variable_get('maintenance_mode_status', '200 OK'));
-  drupal_add_http_header('X-Robots-Tag', 'noarchive');
-  drupal_add_http_header('X-Robots-Tag', 'googlebot: nofollow');
-  drupal_add_http_header('X-Robots-Tag', 'noindex, nofollow');
-
-  drupal_add_html_head(array(
-    '#type' => 'html_tag',
-    '#tag' => 'meta',
-    '#attributes' => array(
-      'name' => 'robots',
-      'content' => 'noindex',
-    ),
-  ), 'robots');
-
-  drupal_add_html_head(array(
-    '#type' => 'html_tag',
-    '#tag' => 'meta',
-    '#attributes' => array(
-      'name' => 'googlebot',
-      'content' => 'noindex',
-    ),
-  ), 'googlebot');
-
-  drupal_add_html_head(array(
-    '#type' => 'html_tag',
-    '#tag' => 'meta',
-    '#attributes' => array(
-      'http-equiv' => 'pragma',
-      'content' => 'no-cache',
-    ),
-  ), 'pragma');
-
-  drupal_add_html_head(array(
-    '#type' => 'html_tag',
-    '#tag' => 'meta',
-    '#attributes' => array(
-      'http-equiv' => 'Cache-Control',
-      'content' => 'no-cache',
-    ),
-  ), 'Cache-Control');
 }
 
 /**
@@ -66,7 +27,6 @@ function maintenance200_form_system_site_maintenance_mode_alter(&$form, $form_st
     '#default_value' => variable_get('maintenance_mode_status', '200 OK'),
     '#options' => array(
       '200 OK' => '200 OK',
-      '203 Non-Authoritative Information' => '203 Non-Authoritative Information',
       '500 Internal Server Error' => '500 Internal Server Error',
       '501 Not Implemented' => '501 Not Implemented',
       '502 Bad Gateway' => '502 Bad Gateway',

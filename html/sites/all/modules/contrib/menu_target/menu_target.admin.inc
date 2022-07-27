@@ -15,8 +15,8 @@ function menu_target_edit_form_extra_elements(&$form, $node_form) {
 
   if ($node_form) {
     $type = $form['#node']->type;
-    $enabled_menus = variable_get('menu_options_' . $type, array('main-menu' => 'main-menu'));
-    if (empty($enabled_menus)) {
+    $enabled_menus = variable_get('menu_options_' . $type);
+    if (empty($enabled_menus) || empty(array_filter($enabled_menus))) {
       return;
     }
   }
