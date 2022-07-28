@@ -47,6 +47,16 @@ function jquery_update_library() {
     ),
     'version' => '0.0.1',
   );
+  $libraries['jquery_update.browser.fix'] = array(
+    'title' => 'jQuery Update Browser Fix',
+    'js' => array(
+      drupal_get_path('module', 'jquery_update') . '/js/jquery_browser.js' => array(
+        'group' => JS_LIBRARY,
+        'weight' => 3,
+      ),
+    ),
+    'version' => '0.0.1',
+  );
   $libraries['jquery.metadata'] = array(
     'title' => 'QUnit',
     'js' => array(
@@ -273,6 +283,7 @@ function jquery_update_jquery_replace(&$javascript, $cdn, $path, $min, $version)
     $version = variable_get('jquery_update_custom_version_jquery', FALSE);
     if (!empty($version)) {
       $javascript['jquery']['version'] = $version;
+      jquery_update_add_jquery_browser_fix($javascript, $version);
     }
     return;
   }
@@ -350,6 +361,19 @@ function jquery_update_jquery_replace(&$javascript, $cdn, $path, $min, $version)
     default:
       $javascript['jquery']['js']['misc/jquery.js']['data'] = $path . '/replace/jquery/' . $version . '/jquery' . $min . '.js';
       break;
+  }
+  jquery_update_add_jquery_browser_fix($javascript, $version);
+}
+
+/**
+ * Add a workaround for deprecated jQuery.browser.
+ */
+function jquery_update_add_jquery_browser_fix(&$libraries, $jquery_version) {
+  if (version_compare($jquery_version, '1.9', '>=')) {
+    $libraries['jquery']['dependencies'][] = array(
+      'jquery_update',
+      'jquery_update.browser.fix'
+    );
   }
 }
 
