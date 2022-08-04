@@ -11,15 +11,28 @@
 function jquery_update_requirements($phase) {
   $requirements = array();
 
+  if ($phase == 'install') {
+    // jquery_update_latest_version() is defined in jquery_update.module.
+    module_load_include('module', 'jquery_update');
+  }
+
   $jquery_supported_versions = array(
     '1.4.4',
     '1.12.4',
     '2.2.4',
   );
+  $latest_jquery = jquery_update_latest_version();
+  if (!empty($latest_jquery)) {
+    $jquery_supported_versions[] = $latest_jquery;
+  }
   $jquery_ui_supported_versions = array(
     '1.8.7',
     '1.10.2',
   );
+  $latest_jquery_ui = jquery_update_latest_version('jqueryui');
+  if (!empty($latest_jquery_ui)) {
+    $jquery_ui_supported_versions[] = $latest_jquery_ui;
+  }
 
   if ($phase == 'runtime') {
     $t = get_t();
@@ -63,7 +76,9 @@ function jquery_update_requirements($phase) {
           );
       }
 
-      $theme_key = variable_get($theme, FALSE);
+      if (!$theme_key = variable_get($theme, FALSE)) {
+        $theme_key = $default_theme;
+      }
       $theme_name = $themes[$theme_key]->info['name'];
 
       $requirements['jquery_update_' . $theme] = array(

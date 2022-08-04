@@ -2481,17 +2481,17 @@
         },
         {
             "name": "drupal/elysia_cron",
-            "version": "2.8.0",
+            "version": "2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/elysia_cron.git",
-                "reference": "7.x-2.8"
+                "reference": "7.x-2.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/elysia_cron-7.x-2.8.zip",
-                "reference": "7.x-2.8",
-                "shasum": "f74bce5995274fda3d7ac6a5367286c4af2b944b"
+                "url": "https://ftp.drupal.org/files/projects/elysia_cron-7.x-2.9.zip",
+                "reference": "7.x-2.9",
+                "shasum": "43b56c19f4ee398e412d03d8b566886963e2ab35"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -2499,8 +2499,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.8",
-                    "datestamp": "1596861895",
+                    "version": "7.x-2.9",
+                    "datestamp": "1659341802",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5265,7 +5265,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/jquery_update.git",
-                "reference": "ee158e8fb77811c1572937b6e8639131c817da02"
+                "reference": "6e4ad54372aa36c6f8da3abb93e5a81019f95097"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -5276,8 +5276,8 @@
                     "dev-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "7.x-4.x-dev",
-                    "datestamp": "1658500342",
+                    "version": "7.x-4.0-alpha2+1-dev",
+                    "datestamp": "1659463417",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -6252,14 +6252,6 @@
             ],
             "authors": [
                 {
-                    "name": "Fabianx",
-                    "homepage": "https://www.drupal.org/user/693738"
-                },
-                {
-                    "name": "Jeremy",
-                    "homepage": "https://www.drupal.org/user/409"
-                },
-                {
                     "name": "bdragon",
                     "homepage": "https://www.drupal.org/user/53081"
                 },
@@ -6272,8 +6264,16 @@
                     "homepage": "https://www.drupal.org/user/1037976"
                 },
                 {
+                    "name": "Fabianx",
+                    "homepage": "https://www.drupal.org/user/693738"
+                },
+                {
                     "name": "japerry",
                     "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "Jeremy",
+                    "homepage": "https://www.drupal.org/user/409"
                 },
                 {
                     "name": "jvandyk",
@@ -6526,6 +6526,10 @@
                 {
                     "name": "Robert Ngo",
                     "homepage": "https://www.drupal.org/user/610230"
+                },
+                {
+                    "name": "seanB",
+                    "homepage": "https://www.drupal.org/user/545912"
                 }
             ],
             "description": "Track and prune node revisions.",
@@ -10337,10 +10341,6 @@
             ],
             "authors": [
                 {
-                    "name": "Steven Jones",
-                    "homepage": "https://www.drupal.org/user/99644"
-                },
-                {
                     "name": "amoebanath",
                     "homepage": "https://www.drupal.org/user/2810799"
                 },
@@ -10359,6 +10359,10 @@
                 {
                     "name": "nerdstein",
                     "homepage": "https://www.drupal.org/user/1557710"
+                },
+                {
+                    "name": "Steven Jones",
+                    "homepage": "https://www.drupal.org/user/99644"
                 }
             ],
             "description": "Plugin to export views data into various file formats",
@@ -12116,16 +12120,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.4.43",
+            "version": "v4.4.44",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "07e392f0ef78376d080d5353c081a5e5704835bd"
+                "reference": "c2b28c10fb3b7ac67bafa7b8f952cd83f35acde2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/07e392f0ef78376d080d5353c081a5e5704835bd",
-                "reference": "07e392f0ef78376d080d5353c081a5e5704835bd",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/c2b28c10fb3b7ac67bafa7b8f952cd83f35acde2",
+                "reference": "c2b28c10fb3b7ac67bafa7b8f952cd83f35acde2",
                 "shasum": ""
             },
             "require": {
@@ -12167,7 +12171,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v4.4.43"
+                "source": "https://github.com/symfony/yaml/tree/v4.4.44"
             },
             "funding": [
                 {
@@ -12183,7 +12187,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-20T08:31:17+00:00"
+            "time": "2022-06-27T13:16:42+00:00"
         },
         {
             "name": "unocha/ocha_snap",

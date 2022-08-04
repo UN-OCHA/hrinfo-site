@@ -301,3 +301,67 @@ function jquery_update_settings_form() {
 
   return system_settings_form($form);
 }
+
+/**
+ * Validate handler for settings form.
+ */
+function jquery_update_settings_form_validate($form, &$form_state) {
+  // Handle empty custom paths / versions
+  if (!empty($form_state['values']['jquery_update_custom_path_jquery'])) {
+    if (empty($form_state['values']['jquery_update_custom_version_jquery'])) {
+      form_set_error('jquery_update_custom_version_jquery', 'Please provide a version for the custom jQuery path');
+    }
+  }
+  if (!empty($form_state['values']['jquery_update_custom_path_jqueryui'])) {
+    if (empty($form_state['values']['jquery_update_custom_version_jqueryui'])) {
+      form_set_error('jquery_update_custom_version_jqueryui', 'Please provide a version for the custom jQuery UI path');
+    }
+  }
+  if (!empty($form_state['values']['jquery_update_custom_path_cookie'])) {
+    if (empty($form_state['values']['jquery_update_custom_version_jquery_cookie'])) {
+      form_set_error('jquery_update_custom_version_jquery_cookie', 'Please provide a version for the custom jQuery Cookie path');
+    }
+  }
+  if (!empty($form_state['values']['jquery_update_custom_path_form'])) {
+    if (empty($form_state['values']['jquery_update_custom_version_jquery_form'])) {
+      form_set_error('jquery_update_custom_version_jquery_form', 'Please provide a version for the custom jQuery Form path');
+    }
+  }
+  if (!empty($form_state['values']['jquery_update_custom_path_migrate'])) {
+    if (empty($form_state['values']['jquery_update_custom_version_jquery_migrate'])) {
+      form_set_error('jquery_update_custom_version_jquery_migrate', 'Please provide a version for the custom jQuery Migrate path');
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function jquery_update_form_jquery_update_settings_form_alter(&$form, &$form_state, $form_id) {
+  array_unshift($form['#submit'], 'jquery_update_settings_form_submit');
+}
+
+/**
+ * Submit handler for settings form.
+ */
+function jquery_update_settings_form_submit($form, &$form_state) {
+  // Handle empty custom paths / versions
+  $variables = array(
+    'jquery_update_custom_path_cookie',
+    'jquery_update_custom_path_form',
+    'jquery_update_custom_path_jquery',
+    'jquery_update_custom_path_jqueryui',
+    'jquery_update_custom_path_migrate',
+    'jquery_update_custom_version_jquery',
+    'jquery_update_custom_version_jquery_cookie',
+    'jquery_update_custom_version_jquery_form',
+    'jquery_update_custom_version_jquery_migrate',
+    'jquery_update_custom_version_jqueryui',
+  );
+  foreach ($variables as $variable) {
+    if (empty($form_state['values'][$variable])) {
+      unset($form_state['values'][$variable]);
+      variable_del($variable);
+    }
+  }
+}

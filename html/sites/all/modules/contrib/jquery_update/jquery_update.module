@@ -532,7 +532,10 @@ function jquery_update_jquery_migrate_backup(&$javascript, $path, $min, $migrate
  */
 function jquery_update_jqueryui_replace(&$javascript, $cdn, $path, $min) {
 
-  $jqueryui_version = variable_get('jquery_update_custom_version_jqueryui', '1.10.2');
+  $jqueryui_version = variable_get('jquery_update_custom_version_jqueryui', FALSE);
+  if (empty($jqueryui_version)) {
+    $jqueryui_version = '1.10.2';
+  }
 
   // Add new components
   $javascript['ui.menu'] = array(
@@ -552,7 +555,7 @@ function jquery_update_jqueryui_replace(&$javascript, $cdn, $path, $min) {
     'dependencies' => array(array('system', 'ui.widget'), array('system', 'ui.button')),
   );
   $javascript['ui.tooltip'] = array(
-    'title' => 'jQuery UI: Spinner',
+    'title' => 'jQuery UI: Tooltip',
     'website' => 'http://jqueryui.com/demos/tooltip/',
     'version' => $jqueryui_version,
     'js' => array('misc/ui/jquery.ui.tooltip.min.js' => array()),
@@ -594,7 +597,7 @@ function jquery_update_jqueryui_replace(&$javascript, $cdn, $path, $min) {
 
   switch ($cdn) {
     case 'google':
-      $cdn = '//ajax.googleapis.com/ajax/libs/jqueryui/' . $jqueryui_version  . 'jquery-ui' . $min . '.js';
+      $cdn = '//ajax.googleapis.com/ajax/libs/jqueryui/' . $jqueryui_version  . '/jquery-ui' . $min . '.js';
       jquery_update_jqueryui_cdn($cdn, $javascript, $path, $min, $names, $jqueryui_version);
       jquery_update_jqueryui_backup($javascript, $path, $min);
       break;
@@ -827,6 +830,36 @@ function jquery_update_jquery_form_replace(&$libraries, $path, $min, $jquery_ver
     $version = variable_get('jquery_update_custom_version_jquery_form', FALSE);
     if ($version !== FALSE) {
       $libraries['jquery.form']['version'] = $version;
+    }
+  }
+}
+
+/**
+ * Query and store latest versions of jQuery libraries.
+ */
+function jquery_update_latest_version($library = 'jquery', $refresh = FALSE) {
+  $check_enabled = variable_get('jquery_update_check_latest_versions', TRUE);
+  $version = variable_get('jquery_update_latest_version_' . $library, FALSE);
+  if ($check_enabled && ($refresh || empty($version))) {
+    $r = drupal_http_request('https://api.cdnjs.com/libraries/' . $library . '?fields=version');
+    if ($r->code == 200) {
+      $version = json_decode($r->data)->version;
+      variable_set('jquery_update_latest_version_' . $library, $version);
+    }
+  }
+  return $version;
+}
+
+/**
+ * Implements hook_cron().
+ */
+function jquery_update_cron() {
+  $last_update = variable_get('jquery_update_latest_versions_checked', FALSE);
+  if (!$last_update || (REQUEST_TIME - $last_update) >= 24 * 60 * 60) {
+    $jquery = jquery_update_latest_version('jquery', TRUE);
+    $jqueryui = jquery_update_latest_version('jqueryui', TRUE);
+    if (!empty($jquery) && !empty($jqueryui)) {
+      variable_set('jquery_update_latest_versions_checked', REQUEST_TIME);
     }
   }
 }
