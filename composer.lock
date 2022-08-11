@@ -1856,17 +1856,17 @@
         },
         {
             "name": "drupal/date",
-            "version": "2.12.0",
+            "version": "2.13.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/date.git",
-                "reference": "7.x-2.12"
+                "reference": "7.x-2.13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/date-7.x-2.12.zip",
-                "reference": "7.x-2.12",
-                "shasum": "fd51716f0582ae9bef2ffcfe331711fca119833a"
+                "url": "https://ftp.drupal.org/files/projects/date-7.x-2.13.zip",
+                "reference": "7.x-2.13",
+                "shasum": "a5907cddf403c1fc2f0a7f68f582d61b50e212cb"
             },
             "require": {
                 "drupal/date_api": "*",
@@ -1884,8 +1884,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.12",
-                    "datestamp": "1633627648",
+                    "version": "7.x-2.13",
+                    "datestamp": "1659633187",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1950,7 +1950,7 @@
         },
         {
             "name": "drupal/date_api",
-            "version": "2.12.0",
+            "version": "2.13.0",
             "require": {
                 "drupal/date": "^2",
                 "drupal/drupal": "~7.0"
@@ -1958,8 +1958,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.12",
-                    "datestamp": "1633627648",
+                    "version": "7.x-2.13",
+                    "datestamp": "1659633187",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2078,7 +2078,7 @@
         },
         {
             "name": "drupal/date_views",
-            "version": "2.12.0",
+            "version": "2.13.0",
             "require": {
                 "drupal/date": "^2",
                 "drupal/date_api": "*",
@@ -2088,8 +2088,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.12",
-                    "datestamp": "1633627648",
+                    "version": "7.x-2.13",
+                    "datestamp": "1659633187",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4136,6 +4136,14 @@
             ],
             "authors": [
                 {
+                    "name": "aaron",
+                    "homepage": "https://www.drupal.org/user/33420"
+                },
+                {
+                    "name": "arthurf",
+                    "homepage": "https://www.drupal.org/user/27259"
+                },
+                {
                     "name": "Berdir",
                     "homepage": "https://www.drupal.org/user/214652"
                 },
@@ -4152,32 +4160,12 @@
                     "homepage": "https://www.drupal.org/user/290182"
                 },
                 {
-                    "name": "Drupal Media Team",
-                    "homepage": "https://www.drupal.org/user/3260690"
-                },
-                {
                     "name": "Drupal media CI",
                     "homepage": "https://www.drupal.org/user/3057985"
                 },
                 {
-                    "name": "JacobSingh",
-                    "homepage": "https://www.drupal.org/user/68912"
-                },
-                {
-                    "name": "JeffM2001",
-                    "homepage": "https://www.drupal.org/user/262092"
-                },
-                {
-                    "name": "ParisLiakos",
-                    "homepage": "https://www.drupal.org/user/1011436"
-                },
-                {
-                    "name": "aaron",
-                    "homepage": "https://www.drupal.org/user/33420"
-                },
-                {
-                    "name": "arthurf",
-                    "homepage": "https://www.drupal.org/user/27259"
+                    "name": "Drupal Media Team",
+                    "homepage": "https://www.drupal.org/user/3260690"
                 },
                 {
                     "name": "dsnopek",
@@ -4192,6 +4180,14 @@
                     "homepage": "https://www.drupal.org/user/78040"
                 },
                 {
+                    "name": "JacobSingh",
+                    "homepage": "https://www.drupal.org/user/68912"
+                },
+                {
+                    "name": "JeffM2001",
+                    "homepage": "https://www.drupal.org/user/262092"
+                },
+                {
                     "name": "joseph.olstad",
                     "homepage": "https://www.drupal.org/user/1321830"
                 },
@@ -4204,6 +4200,10 @@
                     "homepage": "https://www.drupal.org/user/315522"
                 },
                 {
+                    "name": "ParisLiakos",
+                    "homepage": "https://www.drupal.org/user/1011436"
+                },
+                {
                     "name": "robeano",
                     "homepage": "https://www.drupal.org/user/67660"
                 },
@@ -4212,7 +4212,7 @@
                     "homepage": "https://www.drupal.org/user/744628"
                 },
                 {
-                    "name": "taran2L",
+                    "name": "taran2L-1",
                     "homepage": "https://www.drupal.org/user/364424"
                 }
             ],
@@ -5265,7 +5265,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/jquery_update.git",
-                "reference": "6e4ad54372aa36c6f8da3abb93e5a81019f95097"
+                "reference": "4268d0a9d0e66fd8d8ef221bb7b35d85846877ee"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -5276,8 +5276,8 @@
                     "dev-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "7.x-4.0-alpha2+1-dev",
-                    "datestamp": "1659463417",
+                    "version": "7.x-4.0-alpha2+3-dev",
+                    "datestamp": "1659973636",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
