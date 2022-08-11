@@ -249,7 +249,7 @@ function jquery_update_get_supported_version_options() {
   }
   $custom_jquery = variable_get('jquery_update_custom_version_jquery', FALSE);
   if (!empty($custom_jquery)) {
-    $options[$custom_jquery] = $custom_jquery . ' (Custom)';
+    $options[$custom_jquery] = $custom_jquery . ' ' . t('(Custom)');
   }
   return $options;
 }
@@ -843,8 +843,12 @@ function jquery_update_latest_version($library = 'jquery', $refresh = FALSE) {
   if ($check_enabled && ($refresh || empty($version))) {
     $r = drupal_http_request('https://api.cdnjs.com/libraries/' . $library . '?fields=version');
     if ($r->code == 200) {
+      $old_version = $version;
       $version = json_decode($r->data)->version;
-      variable_set('jquery_update_latest_version_' . $library, $version);
+      if ($version != $old_version) {
+        watchdog('jquery_update', 'Updated latest %library version to %version', array('%library' => $library, '%version' => $version));
+        variable_set('jquery_update_latest_version_' . $library, $version);
+      }
     }
   }
   return $version;
