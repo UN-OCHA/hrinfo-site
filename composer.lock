@@ -3488,10 +3488,6 @@
                 {
                     "name": "nedjo",
                     "homepage": "https://www.drupal.org/user/4481"
-                },
-                {
-                    "name": "tim.plunkett",
-                    "homepage": "https://www.drupal.org/user/241634"
                 }
             ],
             "description": "Provides feature management for Drupal.",
@@ -4980,12 +4976,12 @@
             ],
             "authors": [
                 {
-                    "name": "Mohammed J. Razem",
-                    "homepage": "https://www.drupal.org/user/255384"
-                },
-                {
                     "name": "gnuget",
                     "homepage": "https://www.drupal.org/user/992990"
+                },
+                {
+                    "name": "Mohammed J. Razem",
+                    "homepage": "https://www.drupal.org/user/255384"
                 },
                 {
                     "name": "quicksketch",
@@ -5213,10 +5209,6 @@
             ],
             "authors": [
                 {
-                    "name": "RenatoG",
-                    "homepage": "https://www.drupal.org/user/3326031"
-                },
-                {
                     "name": "alex_b",
                     "homepage": "https://www.drupal.org/user/53995"
                 },
@@ -5243,6 +5235,10 @@
                 {
                     "name": "makara",
                     "homepage": "https://www.drupal.org/user/132402"
+                },
+                {
+                    "name": "RenatoG",
+                    "homepage": "https://www.drupal.org/user/3326031"
                 },
                 {
                     "name": "twistor",
@@ -8003,10 +7999,6 @@
                     "homepage": "https://www.drupal.org/user/384578"
                 },
                 {
-                    "name": "Simon Georges",
-                    "homepage": "https://www.drupal.org/user/172312"
-                },
-                {
                     "name": "jacobroufa",
                     "homepage": "https://www.drupal.org/user/168080"
                 },
@@ -8021,6 +8013,10 @@
                 {
                     "name": "rodrigoaguilera",
                     "homepage": "https://www.drupal.org/user/408170"
+                },
+                {
+                    "name": "Simon Georges",
+                    "homepage": "https://www.drupal.org/user/172312"
                 }
             ],
             "description": "Adds a 'Publish' or 'Unpublish' link on the node edit/view pages, and a 'Publish Link' field if the Views module is enabled.",
@@ -9390,8 +9386,16 @@
                     "homepage": "https://www.drupal.org/user/504128"
                 },
                 {
+                    "name": "daniel_j",
+                    "homepage": "https://www.drupal.org/user/970952"
+                },
+                {
                     "name": "eli",
                     "homepage": "https://www.drupal.org/user/49774"
+                },
+                {
+                    "name": "G.I.Joe",
+                    "homepage": "https://www.drupal.org/user/111415"
                 },
                 {
                     "name": "legolasbo",
@@ -9446,14 +9450,6 @@
             ],
             "authors": [
                 {
-                    "name": "Pol",
-                    "homepage": "https://www.drupal.org/user/47194"
-                },
-                {
-                    "name": "Sam152",
-                    "homepage": "https://www.drupal.org/user/1485048"
-                },
-                {
                     "name": "joseph.olstad",
                     "homepage": "https://www.drupal.org/user/1321830"
                 },
@@ -9470,8 +9466,16 @@
                     "homepage": "https://www.drupal.org/user/183211"
                 },
                 {
+                    "name": "Pol",
+                    "homepage": "https://www.drupal.org/user/47194"
+                },
+                {
                     "name": "ram4nd",
                     "homepage": "https://www.drupal.org/user/601534"
+                },
+                {
+                    "name": "Sam152",
+                    "homepage": "https://www.drupal.org/user/1485048"
                 },
                 {
                     "name": "stefanos.petrakis",
@@ -10559,28 +10563,16 @@
             ],
             "authors": [
                 {
+                    "name": "alex_b",
+                    "homepage": "https://www.drupal.org/user/53995"
+                },
+                {
                     "name": "DamienMcKenna",
                     "homepage": "https://www.drupal.org/user/108450"
                 },
                 {
                     "name": "David Goode",
                     "homepage": "https://www.drupal.org/user/291318"
-                },
-                {
-                    "name": "MiSc",
-                    "homepage": "https://www.drupal.org/user/382892"
-                },
-                {
-                    "name": "Nate_S",
-                    "homepage": "https://www.drupal.org/user/3531716"
-                },
-                {
-                    "name": "Will White",
-                    "homepage": "https://www.drupal.org/user/32237"
-                },
-                {
-                    "name": "alex_b",
-                    "homepage": "https://www.drupal.org/user/53995"
                 },
                 {
                     "name": "idebr",
@@ -10591,8 +10583,20 @@
                     "homepage": "https://www.drupal.org/user/271491"
                 },
                 {
+                    "name": "MiSc",
+                    "homepage": "https://www.drupal.org/user/382892"
+                },
+                {
+                    "name": "Nate_S",
+                    "homepage": "https://www.drupal.org/user/3531716"
+                },
+                {
                     "name": "rsoden",
                     "homepage": "https://www.drupal.org/user/226437"
+                },
+                {
+                    "name": "Will White",
+                    "homepage": "https://www.drupal.org/user/32237"
                 }
             ],
             "description": "Provides a views plugin that allows fields to be included in RSS feeds created using the Views module.",
@@ -12954,16 +12958,16 @@
         },
         {
             "name": "sirbrillig/phpcs-variable-analysis",
-            "version": "v2.11.4",
+            "version": "v2.11.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sirbrillig/phpcs-variable-analysis.git",
-                "reference": "e9c99cda31b21ccb4da4c2124b57c8355ddce48e"
+                "reference": "ad2b0b57803a48bb3495777bee2a9a13c8e9da53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/e9c99cda31b21ccb4da4c2124b57c8355ddce48e",
-                "reference": "e9c99cda31b21ccb4da4c2124b57c8355ddce48e",
+                "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/ad2b0b57803a48bb3495777bee2a9a13c8e9da53",
+                "reference": "ad2b0b57803a48bb3495777bee2a9a13c8e9da53",
                 "shasum": ""
             },
             "require": {
@@ -12975,7 +12979,8 @@
                 "phpcsstandards/phpcsdevcs": "^1.1",
                 "phpstan/phpstan": "^1.7",
                 "phpunit/phpunit": "^4.8.36 || ^5.7.21 || ^6.5 || ^7.0 || ^8.0 || ^9.0",
-                "sirbrillig/phpcs-import-detection": "^1.1"
+                "sirbrillig/phpcs-import-detection": "^1.1",
+                "vimeo/psalm": "^0.2 || ^0.3 || ^1.1 || ^4.24 || ^5.0@beta"
             },
             "type": "phpcodesniffer-standard",
             "autoload": {
@@ -13003,7 +13008,7 @@
                 "source": "https://github.com/sirbrillig/phpcs-variable-analysis",
                 "wiki": "https://github.com/sirbrillig/phpcs-variable-analysis/wiki"
             },
-            "time": "2022-06-13T13:49:41+00:00"
+            "time": "2022-08-16T22:19:00+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
