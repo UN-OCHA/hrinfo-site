@@ -5812,10 +5812,6 @@
             ],
             "authors": [
                 {
-                    "name": "Gurpartap Singh",
-                    "homepage": "https://www.drupal.org/user/41470"
-                },
-                {
                     "name": "andypost",
                     "homepage": "https://www.drupal.org/user/118908"
                 },
@@ -5826,6 +5822,10 @@
                 {
                     "name": "deviantintegral",
                     "homepage": "https://www.drupal.org/user/71291"
+                },
+                {
+                    "name": "Gurpartap Singh",
+                    "homepage": "https://www.drupal.org/user/41470"
                 },
                 {
                     "name": "shrop",
@@ -7256,12 +7256,12 @@
                     "homepage": "https://www.drupal.org/user/108450"
                 },
                 {
-                    "name": "EclipseGc",
-                    "homepage": "https://www.drupal.org/user/61203"
-                },
-                {
                     "name": "dsnopek",
                     "homepage": "https://www.drupal.org/user/266527"
+                },
+                {
+                    "name": "EclipseGc",
+                    "homepage": "https://www.drupal.org/user/61203"
                 },
                 {
                     "name": "japerry",
@@ -7278,10 +7278,6 @@
                 {
                     "name": "phenaproxima",
                     "homepage": "https://www.drupal.org/user/205645"
-                },
-                {
-                    "name": "tim.plunkett",
-                    "homepage": "https://www.drupal.org/user/241634"
                 }
             ],
             "description": "Allow any node type to have custom panel displays, similar to the panel node type.",
@@ -8897,16 +8893,16 @@
             ],
             "authors": [
                 {
+                    "name": "borisson_",
+                    "homepage": "https://www.drupal.org/user/2393360"
+                },
+                {
                     "name": "JeroenT",
                     "homepage": "https://www.drupal.org/user/2228934"
                 },
                 {
                     "name": "StryKaizer",
                     "homepage": "https://www.drupal.org/user/462700"
-                },
-                {
-                    "name": "borisson_",
-                    "homepage": "https://www.drupal.org/user/2393360"
                 }
             ],
             "description": "Create sort options for search queries executed via the Search API.",
@@ -10119,17 +10115,17 @@
         },
         {
             "name": "drupal/views",
-            "version": "3.25.0",
+            "version": "3.26.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views.git",
-                "reference": "7.x-3.25"
+                "reference": "7.x-3.26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views-7.x-3.25.zip",
-                "reference": "7.x-3.25",
-                "shasum": "fafd10b604e3a43a126145a70e87c0521a485ce9"
+                "url": "https://ftp.drupal.org/files/projects/views-7.x-3.26.zip",
+                "reference": "7.x-3.26",
+                "shasum": "b14000c73bba67944db64aa5dfaf1522927f52cb"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -10138,8 +10134,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-3.25",
-                    "datestamp": "1631664489",
+                    "version": "7.x-3.26",
+                    "datestamp": "1660837301",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10152,18 +10148,6 @@
             ],
             "authors": [
                 {
-                    "name": "DamienMcKenna",
-                    "homepage": "https://www.drupal.org/user/108450"
-                },
-                {
-                    "name": "Lendude",
-                    "homepage": "https://www.drupal.org/user/690914"
-                },
-                {
-                    "name": "RenatoG",
-                    "homepage": "https://www.drupal.org/user/3326031"
-                },
-                {
                     "name": "bojanz",
                     "homepage": "https://www.drupal.org/user/86106"
                 },
@@ -10174,6 +10158,10 @@
                 {
                     "name": "damiankloip",
                     "homepage": "https://www.drupal.org/user/1037976"
+                },
+                {
+                    "name": "DamienMcKenna",
+                    "homepage": "https://www.drupal.org/user/108450"
                 },
                 {
                     "name": "dawehner",
@@ -10188,8 +10176,16 @@
                     "homepage": "https://www.drupal.org/user/164022"
                 },
                 {
+                    "name": "Lendude",
+                    "homepage": "https://www.drupal.org/user/690914"
+                },
+                {
                     "name": "merlinofchaos",
                     "homepage": "https://www.drupal.org/user/26979"
+                },
+                {
+                    "name": "RenatoG",
+                    "homepage": "https://www.drupal.org/user/3326031"
                 },
                 {
                     "name": "tim.plunkett",
