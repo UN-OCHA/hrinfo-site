@@ -140,7 +140,7 @@ function advagg_bundler_analysis($filename = '', $force = FALSE, $safesql = FALS
     // See if we have a cached version of this. Generate cache ID.
     $query = db_select('advagg_aggregates_versions', 'aav')
       ->condition('aav.root', 1)
-      ->condition('aav.atime', REQUEST_TIME - max(172800, variable_get('advagg_bundler_outdated', ADVAGG_BUNDLER_OUTDATED), '>'), '>');
+      ->condition('aav.atime', REQUEST_TIME - max(172800, variable_get('advagg_bundler_outdated', ADVAGG_BUNDLER_OUTDATED)), '>');
     $query->addExpression('COUNT(aggregate_filenames_hash)', 'counter');
     $count = $query->execute()->fetchField();
     $ideal_cid = 'advagg:bundler_analysis:' . $count;
@@ -337,7 +337,7 @@ function advagg_bundler_analyisis_query($safesql) {
 
   // Create join for the advagg_aggregates_versions table.
   // 1209600 = 2 weeks.
-  $time = REQUEST_TIME - max(172800, variable_get('advagg_bundler_outdated', ADVAGG_BUNDLER_OUTDATED), '>');
+  $time = REQUEST_TIME - max(172800, variable_get('advagg_bundler_outdated', ADVAGG_BUNDLER_OUTDATED));
   $subquery_aggregates->join('advagg_aggregates_versions', 'aav', "aav.aggregate_filenames_hash=aa.aggregate_filenames_hash AND aav.root=1 AND aav.atime > $time");
 
   $subquery_aggregates = $subquery_aggregates->fields('aa', array('filename_hash'))
@@ -372,7 +372,7 @@ function advagg_bundler_analyisis_query($safesql) {
       $subquery_aggregates_versions = db_select('advagg_aggregates_versions', 'aav')
         ->fields('aav')
         ->condition('aav.root', 1)
-        ->condition('aav.atime', REQUEST_TIME - max(172800, variable_get('advagg_bundler_outdated', ADVAGG_BUNDLER_OUTDATED), '>'), '>');
+        ->condition('aav.atime', REQUEST_TIME - max(172800, variable_get('advagg_bundler_outdated', ADVAGG_BUNDLER_OUTDATED)), '>');
 
       $subquery_aggregates = db_select('advagg_aggregates', 'aa');
       $subquery_aggregates->join($subquery_aggregates_versions, 'aav', 'aav.aggregate_filenames_hash=aa.aggregate_filenames_hash');
