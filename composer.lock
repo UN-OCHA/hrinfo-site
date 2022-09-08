@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1a0fc14969adc38ff4fb633a4eece23",
+    "content-hash": "2fb041134e0c421bc21f5e2b6bc6e664",
     "packages": [
         {
             "name": "composer/installers",
@@ -5261,26 +5261,29 @@
         },
         {
             "name": "drupal/jquery_update",
-            "version": "dev-4.x",
+            "version": "4.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/jquery_update.git",
-                "reference": "1568015f04d6bf034ace872346defb126355e2fc"
+                "reference": "7.x-4.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/jquery_update-7.x-4.0-alpha2.zip",
+                "reference": "7.x-4.0-alpha2",
+                "shasum": "e8e9b6b84b70fea9eb0f61884cf10fab557d2543"
             },
             "require": {
                 "drupal/drupal": "~7.0"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-4.x": "4.x-dev"
-                },
                 "drupal": {
-                    "version": "7.x-4.0-alpha2+7-dev",
-                    "datestamp": "1662501249",
+                    "version": "7.x-4.0-alpha2",
+                    "datestamp": "1659436072",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -13497,7 +13500,7 @@
         "drupal/feeds_et": 20,
         "drupal/fullcalendar_api": 15,
         "drupal/geophp": 20,
-        "drupal/jquery_update": 20,
+        "drupal/jquery_update": 15,
         "drupal/og_features": 20,
         "drupal/og_menu": 20,
         "drupal/og_moderation": 20,
