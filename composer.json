@@ -115,7 +115,7 @@
         "drupal/imagemagick": "^1.0",
         "drupal/inline_entity_form": "^1.8",
         "drupal/job_scheduler": "^2.0",
-        "drupal/jquery_update": "4.x-dev@dev",
+        "drupal/jquery_update": "^4.0@alpha",
         "drupal/js": "^2.4",
         "drupal/l10n_update": "^2.2",
         "drupal/languagefield": "^1.7",

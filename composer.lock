@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1a0fc14969adc38ff4fb633a4eece23",
+    "content-hash": "2fb041134e0c421bc21f5e2b6bc6e664",
     "packages": [
         {
             "name": "composer/installers",
@@ -2381,23 +2381,23 @@
         },
         {
             "name": "drupal/drupal",
-            "version": "7.91.0",
+            "version": "7.92.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal.git",
-                "reference": "7.91"
+                "reference": "7.92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/drupal-7.91.zip",
-                "reference": "7.91",
-                "shasum": "36512a6115095fbf0af39c8821cd09bb7c476715"
+                "url": "https://ftp.drupal.org/files/projects/drupal-7.92.zip",
+                "reference": "7.92",
+                "shasum": "bf4fa7fc60537ea10515c8d08b76da80738ead3d"
             },
             "type": "drupal-core",
             "extra": {
                 "drupal": {
-                    "version": "7.91",
-                    "datestamp": "1658338462",
+                    "version": "7.92",
+                    "datestamp": "1662554476",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2456,6 +2456,10 @@
                 {
                     "name": "mcdruid",
                     "homepage": "https://www.drupal.org/user/255969"
+                },
+                {
+                    "name": "poker10",
+                    "homepage": "https://www.drupal.org/user/272316"
                 },
                 {
                     "name": "quietone",
@@ -5257,26 +5261,29 @@
         },
         {
             "name": "drupal/jquery_update",
-            "version": "dev-4.x",
+            "version": "4.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/jquery_update.git",
-                "reference": "4268d0a9d0e66fd8d8ef221bb7b35d85846877ee"
+                "reference": "7.x-4.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/jquery_update-7.x-4.0-alpha2.zip",
+                "reference": "7.x-4.0-alpha2",
+                "shasum": "e8e9b6b84b70fea9eb0f61884cf10fab557d2543"
             },
             "require": {
                 "drupal/drupal": "~7.0"
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-4.x": "4.x-dev"
-                },
                 "drupal": {
-                    "version": "7.x-4.0-alpha2+3-dev",
-                    "datestamp": "1659973636",
+                    "version": "7.x-4.0-alpha2",
+                    "datestamp": "1659436072",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -13493,7 +13500,7 @@
         "drupal/feeds_et": 20,
         "drupal/fullcalendar_api": 15,
         "drupal/geophp": 20,
-        "drupal/jquery_update": 20,
+        "drupal/jquery_update": 15,
         "drupal/og_features": 20,
         "drupal/og_menu": 20,
         "drupal/og_moderation": 20,
