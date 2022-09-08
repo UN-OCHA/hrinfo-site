@@ -1,5 +1,0 @@
-name = Twitter Pane
-description = "Provides a configurable pane for a Twitter widget feed."
-core = 7.x
-
-dependencies[] = panels

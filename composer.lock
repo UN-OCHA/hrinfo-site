@@ -2381,23 +2381,23 @@
         },
         {
             "name": "drupal/drupal",
-            "version": "7.91.0",
+            "version": "7.92.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal.git",
-                "reference": "7.91"
+                "reference": "7.92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/drupal-7.91.zip",
-                "reference": "7.91",
-                "shasum": "36512a6115095fbf0af39c8821cd09bb7c476715"
+                "url": "https://ftp.drupal.org/files/projects/drupal-7.92.zip",
+                "reference": "7.92",
+                "shasum": "bf4fa7fc60537ea10515c8d08b76da80738ead3d"
             },
             "type": "drupal-core",
             "extra": {
                 "drupal": {
-                    "version": "7.91",
-                    "datestamp": "1658338462",
+                    "version": "7.92",
+                    "datestamp": "1662554476",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2456,6 +2456,10 @@
                 {
                     "name": "mcdruid",
                     "homepage": "https://www.drupal.org/user/255969"
+                },
+                {
+                    "name": "poker10",
+                    "homepage": "https://www.drupal.org/user/272316"
                 },
                 {
                     "name": "quietone",
@@ -5261,7 +5265,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/jquery_update.git",
-                "reference": "4268d0a9d0e66fd8d8ef221bb7b35d85846877ee"
+                "reference": "1568015f04d6bf034ace872346defb126355e2fc"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -5272,8 +5276,8 @@
                     "dev-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "7.x-4.0-alpha2+3-dev",
-                    "datestamp": "1659973636",
+                    "version": "7.x-4.0-alpha2+7-dev",
+                    "datestamp": "1662501249",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
