@@ -1,0 +1,125 @@
+<?php
+
+/**
+ * @file
+ * Uninstall hooks for Menu Target
+ */
+
+/**
+ * Implements hook_schema and installs the database for this module
+ */
+function menu_target_schema() {
+  $schema = array();
+
+  $schema['menu_target_links'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'mlid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array(
+      'id',
+    ),
+    'unique keys' => array(
+      'mlid' => array('mlid'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function menu_target_uninstall() {
+  variable_del('menu_target_enabled');
+  variable_del('menu_target_type');
+}
+
+/**
+ * Implements hook_update_N().
+ * Creates custom table for menu target attributes
+ */
+function menu_target_update_7100() {
+  $schema['menu_target_links'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'mlid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array(
+      'id',
+    ),
+    'unique keys' => array(
+      'mlid' => array('mlid'),
+    ),
+  );
+  db_create_table('menu_target_links', $schema['menu_target_links']);
+}
+
+/**
+ * Implements hook_update_N().
+ * Removes extant attributes from the menu_links options field from previous versions of this module
+ */
+function menu_target_update_7101(&$sandbox) {
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = 0;
+    $sandbox['current'] = 0;
+    $sandbox['max'] = db_query("SELECT COUNT(DISTINCT mlid) FROM {menu_links} WHERE options LIKE '%target%'")->fetchField();
+  }
+
+  $limit = 20; // Process 20 at a time
+
+  $links = db_query_range("SELECT mlid, options FROM {menu_links} WHERE mlid > :mlid AND options LIKE '%target%' ORDER BY mlid", 0, $limit, array(':mlid' => $sandbox['current']))->fetchAllKeyed();
+  foreach ($links as $mlid => $options) {
+      $options = unserialize($options);
+      $unset = FALSE;
+
+      // Unset the "target-blank" class
+      if (isset($options['attributes']['class']) && is_array($options['attributes']['class']) && ($key = array_search("target-blank", $options['attributes']['class'])) !== FALSE) {
+        unset($options['attributes']['class'][$key]);
+        $unset = TRUE;
+      }
+
+      // unset the target="_blank" attribute
+      if (isset($options['attributes']['target']) && is_array($options['attributes']['target'])) {
+        unset($options['attributes']['target']);
+        $unset = TRUE;
+      }
+
+      if ($unset) {
+      // Save the cleaned up options array
+        db_update('menu_links')
+          ->fields(array(
+            'options' => serialize($options),
+          ))
+          ->condition('mlid', $mlid)
+          ->execute();
+
+          // Add entry for this menu link into our custom table to maintain expected functionality
+          db_insert('menu_target_links')->fields(array('mlid' => $mlid))->execute();
+      }
+
+      $sandbox['progress']++;
+      $sandbox['current'] = $mlid;
+    }
+
+  $sandbox['#finished'] = empty($sandbox['max']) ? 1 : ($sandbox['progress'] / $sandbox['max']);
+  // Flush menu caches to reset everything
+  menu_rebuild();
+
+  return t('All menu links with attributes from previous versions of menu_target have been repaired.');
+
+}

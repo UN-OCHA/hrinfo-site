@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Integrate Bean with Panels.
+ */
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function bean_pane_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && !empty($plugin)) {
+    return "plugins/$plugin";
+  }
+}
+
+/**
+ * Add form for bean panes.
+ */
+function ctools_bean_pane_content_type_form($form, &$form_state) {
+  module_load_include('inc', 'bean', 'includes/bean.pages');
+  $conf = $form_state['conf'];
+  $type = $form_state['subtype_name'];
+
+  if (empty($conf['bean_delta'])) {
+    $bean = bean_create(array('type' => $type));
+    $form += bean_form($form, $form_state, $bean, $type);
+  }
+  else {
+    if ($bean = bean_load_delta($conf['bean_delta'])) {
+      $form += bean_form($form, $form_state, $bean);
+    }
+  }
+
+  $form['actions']['#access']             = FALSE;
+  $form['buttons']['return']['#submit'][] = 'ctools_bean_pane_content_type_form_return_submit';
+  return $form;
+}

@@ -1,0 +1,12 @@
+name = Special menu items
+description = "Allow users to add placeholder and/or separator menu items."
+core = 7.x
+dependencies[] = menu
+
+configure = admin/config/system/special_menu_items
+
+; Information added by Drupal.org packaging script on 2019-07-18
+version = "7.x-2.1"
+core = "7.x"
+project = "special_menu_items"
+datestamp = "1563458074"

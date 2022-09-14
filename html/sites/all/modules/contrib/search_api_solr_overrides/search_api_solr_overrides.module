@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @file
+ * Core hook implementations for Search API Solr Overrides.
+ */
+
+/**
+ * Implements hook_search_api_server_load().
+ *
+ * Provide a configuration as the same structure as the
+ * search api server entity in array form (keyed by the
+ * machine name of the solr service).
+ *
+ * Example:
+ * $conf['search_api_solr_overrides'] = array(
+ *   'solr-server-id' => array(
+ *     'name' => 'Solr Server (Overridden)',
+ *       'options' => array(
+ *         'host' => '127.0.0.1',
+ *         'port' => 8983,
+ *         'path' => '/solr',
+ *       ),
+ *     ),
+ *   ),
+ * );
+ *
+ * Note: This is an example as solr configurations vary.
+ */
+function search_api_solr_overrides_search_api_server_load($servers) {
+  // Get the solr host overrides.
+  $overrides = variable_get('search_api_solr_overrides', FALSE);
+
+  // Ensure the is information provided.
+  if (empty($overrides) || !is_array($overrides)) {
+    return;
+  }
+
+  // Loop over an make the required updates.
+  foreach ($overrides as $id => $override) {
+    // Check to see if the server config exists.
+    if (!empty($servers[$id])) {
+      foreach ($servers[$id] as $key => $field) {
+        // Ensure we need to override. User isset, so we can set FALSE values.
+        if (!isset($override[$key])) {
+          continue;
+        }
+
+        // Check if the field contains an array.
+        if (is_array($field)) {
+          $servers[$id]->$key = array_merge($servers[$id]->$key, $override[$key]);
+        }
+        // Else its a value.
+        else {
+          $servers[$id]->$key = $override[$key];
+        }
+      }
+    }
+  }
+}

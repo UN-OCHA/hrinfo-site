@@ -1,0 +1,19 @@
+name = RESTful token authentication
+description = Authenticate a REST call using a token.
+core = 7.x
+dependencies[] = restful
+dependencies[] = entityreference
+configure = admin/config/services/restful/token-auth
+
+registry_autoload[] = PSR-0
+registry_autoload[] = PSR-4
+; This isn't picked up by registry_autoload.
+files[] = src/Entity/RestfulTokenAuthController.php
+
+files[] = tests/RestfulTokenAuthenticationTestCase.test
+
+; Information added by Drupal.org packaging script on 2019-03-20
+version = "7.x-2.17"
+core = "7.x"
+project = "restful"
+datestamp = "1553083393"
