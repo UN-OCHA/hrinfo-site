@@ -1,0 +1,255 @@
+<?php
+
+/**
+ * @file
+ * Provides a form widget for the SearchAPI Sorts module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function search_api_sorts_widget_menu() {
+  $items['admin/config/search/search_api/index/%search_api_index/sorts_widget'] = array(
+    'title' => 'Sorts widget',
+    'description' => 'Configure sorts widget settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('search_api_sorts_widget_settings_form', 5),
+    'access arguments' => array('administer search_api'),
+    'weight' => -1,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_INLINE | MENU_CONTEXT_PAGE,
+    'file' => 'search_api_sorts_widget.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function search_api_sorts_widget_theme() {
+  $themes['search_api_sorts_widget_form_table'] = array(
+    'render element' => 'element',
+    'file' => 'search_api_sorts_widget.admin.inc',
+  );
+
+  $themes['search_api_sorts_widget_form'] = array(
+    'variables' => array(
+      'items' => array(),
+      'options' => array(),
+    ),
+    'file' => 'search_api_sorts_widget.theme.inc',
+  );
+
+  return $themes;
+}
+
+/**
+ * Sorts widget form.
+ */
+function search_api_sorts_widget_form($form, &$form_state, $items, $options) {
+  $query = drupal_static('search_api_sorts_search_api_query_alter', array());
+  if (!$query) {
+    return;
+  }
+
+  if (!empty($options['attributes'])) {
+    $form['#attributes'] = $options['attributes'];
+  }
+
+  $form_state['items'] = $items;
+
+  $index = $query->getIndex();
+  $search_sorts = search_api_sorts_search_sorts($query->getIndex()->machine_name);
+  $sorts = array();
+
+  // Key the sorts by field name and add the search index name so we can do a
+  // lookup for the widget settings later.
+  foreach ($search_sorts as $sort) {
+    $sort->index_id = $query->getIndex()->machine_name;
+    $sorts[$sort->field] = $sort;
+  }
+
+  $default = '';
+
+  foreach ($items as $item) {
+    if (isset($item['#order_options']['query']['sort'])) {
+      $name = $item['#order_options']['query']['sort'];
+    }
+    elseif (isset($item['#options']['query']['sort'])) {
+      $name = $item['#options']['query']['sort'];
+    }
+    else {
+      continue;
+    }
+
+    $sort_options = $item['#active'] ? $item['#order_options'] : $item['#options'];
+    $field = $sort_options['query']['sort'];
+    $sort = new SearchApiSort((array)$sorts[$field]);
+
+    $settings = search_api_sorts_widget_load_sort_settings($sort);
+
+    if (in_array($settings['orders'], array('both', 'asc'))) {
+      $new_items[$name . '|asc'] = $settings['label_asc'];
+    }
+    if (in_array($settings['orders'], array('both', 'desc'))) {
+      $new_items[$name . '|desc'] = $settings['label_desc'];
+    }
+
+    if ($item['#active']) {
+      // The 'order' property contains the value that will be changed to, so we
+      // use the opposite for the default selection.
+      if ($item['#order_options']['query']['order'] == 'desc') {
+        $default = $name . '|asc';
+      }
+      else {
+        $default = $name . '|desc';
+      }
+    }
+  }
+
+  $form['sort_by'] = array(
+    '#type' => 'select',
+    '#options' => $new_items,
+    '#default_value' => $default,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Sort'),
+  );
+
+  $index_settings = $index->options['sorts_widget'];
+
+  // Only do autosubmit if ctools is enabled.
+  if (module_exists('ctools')) {
+    if (!empty($index_settings['autosubmit'])) {
+      $form = array_merge_recursive($form, array('#attributes' => array('class' => array('ctools-auto-submit-full-form'))));
+      $form['submit']['#attributes']['class'][] = 'ctools-use-ajax';
+      $form['submit']['#attributes']['class'][] = 'ctools-auto-submit-click';
+      $form['#attached']['js'][] = drupal_get_path('module', 'ctools') . '/js/auto-submit.js';
+
+      if (!empty($index_settings['autosubmit_hide'])) {
+        $form['submit']['#attributes']['class'][] = 'js-hide';
+      }
+    }
+  }
+
+  return $form;
+}
+
+/**
+ * Sorts widget form submit handler.
+ */
+function search_api_sorts_widget_form_submit($form, &$form_state) {
+  $items = $form_state['items'];
+  list($key, $order) = explode('|', $form_state['values']['sort_by']);
+
+  foreach ($items as $item) {
+    if (isset($item['#order_options']['query']['sort'])) {
+      $name = $item['#order_options']['query']['sort'];
+    }
+    elseif (isset($item['#options']['query']['sort'])) {
+      $name = $item['#options']['query']['sort'];
+    }
+    else {
+      continue;
+    }
+
+    if ($name == $key) {
+      if ($item['#active']) {
+        $query = $item['#order_options']['query'];
+      }
+      else {
+        $query = $item['#options']['query'];
+      }
+
+      $query['order'] = $order;
+
+      $form_state['redirect'] = array(
+        current_path(),
+        array(
+          'query' => $query,
+        ),
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_search_api_index_load()
+ */
+function search_api_sorts_widget_search_api_index_load(array $indexes) {
+  // Add default sorts widget settings.
+  foreach ($indexes as $index) {
+    if (!isset($index->options['sorts_widget'])) {
+      $index->options['sorts_widget'] = array();
+    }
+
+    $index->options['sorts_widget'] += search_api_sorts_widget_default_index_settings();
+  }
+}
+
+/**
+ * Returns an array of default settings for an index.
+ *
+ * @return array
+ */
+function search_api_sorts_widget_default_index_settings() {
+  return array(
+    'enabled' => FALSE,
+    'title' => '',
+    'autosubmit' => FALSE,
+    'autosubmit_hide' => FALSE,
+  );
+}
+
+/**
+ * Returns an array of default settings for a sort.
+ *
+ * @param $sort
+ *   SearchApiSort entity to generate defaults for.
+ *
+ * @return array
+ */
+function search_api_sorts_widget_default_sort_settings(SearchApiSort $sort) {
+  return array(
+    'label_asc' => $sort->name . ' (Asc)',
+    'label_desc' => $sort->name . ' (Desc)',
+    'orders' => 'both',
+  );
+}
+
+/**
+ * Returns an array of widget settings for a specific sort.
+ *
+ * @param $sort
+ *   SearchApiSort entity to get settings for.
+ *
+ * @return array
+ */
+function search_api_sorts_widget_load_sort_settings(SearchApiSort $sort) {
+  return variable_get(
+    'search_api_sorts_widget_settings__' . $sort->index_id . '__' . $sort->field,
+    search_api_sorts_widget_default_sort_settings($sort)
+  );
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function search_api_sorts_widget_block_view_alter(&$data, $block) {
+  if ($block->delta === 'search-sorts') {
+    $query = drupal_static('search_api_sorts_search_api_query_alter', array());
+    if (!$query) {
+      return;
+    }
+
+    $index = $query->getIndex();
+    $settings = $index->options['sorts_widget'];
+
+    if (!empty($settings['enabled'])) {
+      $data['content']['#theme'] = 'search_api_sorts_widget_form';
+    }
+  }
+}
