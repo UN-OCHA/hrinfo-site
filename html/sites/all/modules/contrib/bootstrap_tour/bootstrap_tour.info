@@ -1,0 +1,13 @@
+name = Bootstrap tour
+description = Provides Bootstrap-based tours to guide users through navigations of the site
+core = 7.x
+
+dependencies[] = jquery_update
+dependencies[] = ctools
+
+; Information added by Drupal.org packaging script on 2014-08-11
+version = "7.x-1.0-beta9"
+core = "7.x"
+project = "bootstrap_tour"
+datestamp = "1407772728"
+
