@@ -90,6 +90,51 @@ function user_expire_settings($form, &$form_state) {
     );
   }
 
+  // Use the token list from user.module.
+  $email_token_help = t('Available variables are: [site:name], [site:url], [user:name], [user:mail], [site:login-url], [site:url-brief], [user:edit-url], [user:one-time-login-url], [user:cancel-url], [user:last-login].');
+
+  $form['expiration_warning'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Expiry Warning Email'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#description' => t('Edit the warning e-mail messages sent before accounts are expired.') . ' ' . $email_token_help,
+    '#group' => 'email',
+  );
+  $form['expiration_warning']['user_expire_expiration_warning_subject'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Subject'),
+    '#default_value' => _user_expire_mail_text('expiration_warning_subject', NULL, array(), FALSE),
+    '#maxlength' => 180,
+  );
+  $form['expiration_warning']['user_expire_expiration_warning_body'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Body'),
+    '#default_value' => _user_expire_mail_text('expiration_warning_body', NULL, array(), FALSE),
+    '#rows' => 15,
+  );
+
+  $form['account_expired'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Expired Notification Email'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#description' => t('Edit the notification e-mail messages sent when accounts are expired.') . ' ' . $email_token_help,
+    '#group' => 'email',
+  );
+  $form['account_expired']['user_expire_account_expired_subject'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Subject'),
+    '#default_value' => _user_expire_mail_text('account_expired_subject', NULL, array(), FALSE),
+    '#maxlength' => 180,
+  );
+  $form['account_expired']['user_expire_account_expired_body'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Body'),
+    '#default_value' => _user_expire_mail_text('account_expired_body', NULL, array(), FALSE),
+    '#rows' => 15,
+  );
+
   $form['actions']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save configuration'),
@@ -128,5 +173,16 @@ function user_expire_settings_submit($form, &$form_state) {
         ))
         ->execute();
     }
+  }
+
+  // Save the email template settings.
+  $fields = array(
+    'user_expire_expiration_warning_subject',
+    'user_expire_expiration_warning_body',
+    'user_expire_account_expired_subject',
+    'user_expire_account_expired_body',
+  );
+  foreach ($fields as $field) {
+    variable_set($field, $form_state['values'][$field]);
   }
 }

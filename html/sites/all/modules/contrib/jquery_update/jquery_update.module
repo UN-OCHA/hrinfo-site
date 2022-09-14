@@ -47,6 +47,16 @@ function jquery_update_library() {
     ),
     'version' => '0.0.1',
   );
+  $libraries['jquery_update.browser.fix'] = array(
+    'title' => 'jQuery Update Browser Fix',
+    'js' => array(
+      drupal_get_path('module', 'jquery_update') . '/js/jquery_browser.js' => array(
+        'group' => JS_LIBRARY,
+        'weight' => 3,
+      ),
+    ),
+    'version' => '0.0.1',
+  );
   $libraries['jquery.metadata'] = array(
     'title' => 'QUnit',
     'js' => array(
@@ -120,9 +130,10 @@ function jquery_update_library_alter(&$libraries, $module) {
 
   jquery_update_jquery_replace($libraries, $cdn, $path, $min, $jquery_version);
 
+  $jqueryui_custom_version = (bool) variable_get('jquery_update_custom_version_jqueryui', FALSE);
   // Replace jQuery UI with CDN or local files. If from a CDN include all of
   // jQuery UI.
-  if (version_compare($jquery_version, '1.6', '>=')) {
+  if ($jqueryui_custom_version || version_compare($jquery_version, '1.6', '>=')) {
     jquery_update_jqueryui_replace($libraries, $cdn, $path, $min);
   }
 
@@ -272,6 +283,7 @@ function jquery_update_jquery_replace(&$javascript, $cdn, $path, $min, $version)
     $version = variable_get('jquery_update_custom_version_jquery', FALSE);
     if (!empty($version)) {
       $javascript['jquery']['version'] = $version;
+      jquery_update_add_jquery_browser_fix($javascript, $version);
     }
     return;
   }
@@ -349,6 +361,19 @@ function jquery_update_jquery_replace(&$javascript, $cdn, $path, $min, $version)
     default:
       $javascript['jquery']['js']['misc/jquery.js']['data'] = $path . '/replace/jquery/' . $version . '/jquery' . $min . '.js';
       break;
+  }
+  jquery_update_add_jquery_browser_fix($javascript, $version);
+}
+
+/**
+ * Add a workaround for deprecated jQuery.browser.
+ */
+function jquery_update_add_jquery_browser_fix(&$libraries, $jquery_version) {
+  if (version_compare($jquery_version, '1.9', '>=')) {
+    $libraries['jquery']['dependencies'][] = array(
+      'jquery_update',
+      'jquery_update.browser.fix'
+    );
   }
 }
 
@@ -507,7 +532,10 @@ function jquery_update_jquery_migrate_backup(&$javascript, $path, $min, $migrate
  */
 function jquery_update_jqueryui_replace(&$javascript, $cdn, $path, $min) {
 
-  $jqueryui_version = variable_get('jquery_update_custom_version_jqueryui', '1.10.2');
+  $jqueryui_version = variable_get('jquery_update_custom_version_jqueryui', FALSE);
+  if (empty($jqueryui_version)) {
+    $jqueryui_version = '1.10.2';
+  }
 
   // Add new components
   $javascript['ui.menu'] = array(
@@ -527,7 +555,7 @@ function jquery_update_jqueryui_replace(&$javascript, $cdn, $path, $min) {
     'dependencies' => array(array('system', 'ui.widget'), array('system', 'ui.button')),
   );
   $javascript['ui.tooltip'] = array(
-    'title' => 'jQuery UI: Spinner',
+    'title' => 'jQuery UI: Tooltip',
     'website' => 'http://jqueryui.com/demos/tooltip/',
     'version' => $jqueryui_version,
     'js' => array('misc/ui/jquery.ui.tooltip.min.js' => array()),
@@ -802,6 +830,36 @@ function jquery_update_jquery_form_replace(&$libraries, $path, $min, $jquery_ver
     $version = variable_get('jquery_update_custom_version_jquery_form', FALSE);
     if ($version !== FALSE) {
       $libraries['jquery.form']['version'] = $version;
+    }
+  }
+}
+
+/**
+ * Query and store latest versions of jQuery libraries.
+ */
+function jquery_update_latest_version($library = 'jquery', $refresh = FALSE) {
+  $check_enabled = variable_get('jquery_update_check_latest_versions', TRUE);
+  $version = variable_get('jquery_update_latest_version_' . $library, FALSE);
+  if ($check_enabled && ($refresh || empty($version))) {
+    $r = drupal_http_request('https://api.cdnjs.com/libraries/' . $library . '?fields=version');
+    if ($r->code == 200) {
+      $version = json_decode($r->data)->version;
+      variable_set('jquery_update_latest_version_' . $library, $version);
+    }
+  }
+  return $version;
+}
+
+/**
+ * Implements hook_cron().
+ */
+function jquery_update_cron() {
+  $last_update = variable_get('jquery_update_latest_versions_checked', FALSE);
+  if (!$last_update || (REQUEST_TIME - $last_update) >= 24 * 60 * 60) {
+    $jquery = jquery_update_latest_version('jquery', TRUE);
+    $jqueryui = jquery_update_latest_version('jqueryui', TRUE);
+    if (!empty($jquery) && !empty($jqueryui)) {
+      variable_set('jquery_update_latest_versions_checked', REQUEST_TIME);
     }
   }
 }

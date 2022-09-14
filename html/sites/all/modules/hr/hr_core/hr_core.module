@@ -193,7 +193,10 @@ function _hr_core_files_download_button($entity, $type) {
 
   foreach ($items as $item) {
     $fc = field_collection_item_revision_load($item['revision_id']);
-
+    // Bail if there's no file collection loaded.
+    if (!$fc) {
+      continue;
+    }
     $file = field_get_items('field_collection_item', $fc, 'field_file');
 
     // Bail if the file no longer exists.

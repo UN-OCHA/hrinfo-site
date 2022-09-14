@@ -275,38 +275,48 @@ function views_content_cache_id_record($cid) {
 /**
  * Retrieve or generate the cache id to schema mapping.
  *
- * We store the schema mapping in a static variable.
+ * We store the schema mapping in the main cache table/bin, this means that it
+ * can get invalidated quite quickly, but this will also probably coincide with
+ * the views cache being flushed, so we're are just wasting a few CPU cycles in
+ * reality.
  *
  * @param boolean $reset
- *   Reset the static cache for the schema mapping.
+ *   Reset the static and DB cache for the schema mapping.
  *
  * @return array
  *   An array where each key is a plugin key ID and each value is the
  *   corresponding database column.
  */
 function views_content_cache_id_schema($reset = FALSE) {
-  static $drupal_static_fast;
-
-  if (!isset($drupal_static_fast) || $reset) {
-    $drupal_static_fast['schema'] = &drupal_static(__FUNCTION__, array(), $reset);
-  }
-  $map = &$drupal_static_fast['schema'];
-
-  if (empty($map)) {
-    $map = array();
-
-    $cache_keys = array_keys(views_content_cache_get_plugin());
-    $i = 1;
-    foreach ($cache_keys as $key_id) {
-      // Schema is limited to 8.
-      if ($i > 8) {
-        break;
+  static $map;
+  if (!isset($map) || $reset) {
+    $cache = cache_get('views_content_cache_id_schema');
+    if (!$reset && !empty($cache->data)) {
+      $map = $cache->data;
+    }
+    else {
+      $cache_keys = array_keys(views_content_cache_get_plugin());
+      $i = 1;
+      foreach ($cache_keys as $key_id) {
+        // Schema is limited to 8.
+        if ($i > 8) {
+          break;
+        }
+        $map[$key_id] = "c{$i}";
+        $i++;
       }
-      $map[$key_id] = "c{$i}";
-      $i++;
+      // If the newly generated map and the prior map do not match invalidate
+      // all cache update records.
+      if (empty($cache->data) || ($map != $cache->data)) {
+        db_truncate('views_content_cache')->execute();
+
+        // This is probably too aggressive. @TODO: See if we can surgically
+        // invalidate only views that use VCC.
+        views_invalidate_cache();
+      }
+      cache_set('views_content_cache_id_schema', $map, 'cache');
     }
   }
-
   return $map;
 }
 

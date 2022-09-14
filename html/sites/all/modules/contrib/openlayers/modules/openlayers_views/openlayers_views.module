@@ -121,12 +121,6 @@ function openlayers_views_openlayers_layers() {
         $layer->title = empty($data->display_options['title']) ? $view->name : $data->display_options['title'];
         $layer->title .= ' - ' . $data->display_title;
         $layer->description = $view->description;
-        if (isset($data->display_options['style_options']['data_source']['projection'])) {
-          $layer->data['projection'] = array($data->display_options['style_options']['data_source']['projection']);
-        }
-        else {
-          $layer->data['projection'] = array($data->handler->default_display->display->display_options['style_options']['data_source']['projection']);
-        }
         $layer->data['views'] = array('view' => $view->name, 'display' => $display);
         $layers[$layer->name] = $layer;
       }
@@ -156,20 +150,11 @@ function openlayers_views_openlayers_layers() {
         $layer->title .= ' - ' . $data->display_title;
         $layer->description = $view->description;
 
-        /*
-         * Determine if we should use a BBOX strategy.
-         * We check if the arg_id is set to bbox manually or if the
-         * argument is not set which means bbox as that is the default.
-         */
+        // Determine if we should use a BBOX strategy.
         $useBBOX = FALSE;
         if (isset($data->display_options['arguments']) &&
           isset($data->display_options['arguments']['bbox_argument']) &&
-            ((isset($data->display_options['arguments']['bbox_argument']['default_argument_options']) &&
-            isset($data->display_options['arguments']['bbox_argument']['default_argument_options']['arg_id']) &&
-            $data->display_options['arguments']['bbox_argument']['default_argument_options']['arg_id'] == 'bbox')
-            ||
-          	(!isset($data->display_options['arguments']['bbox_argument']['default_argument_options']['arg_id']))))
-           {
+          $view->data->display_options['arguments']['bbox_argument']['arg_id'] == 'bbox') {
           $useBBOX = TRUE;
         }
 

@@ -98,11 +98,6 @@ function _openlayers_openlayers_behaviors() {
     'description' => t('Provides the ability to navigate the map interface.  This is just for user interactions and does not show any visual controls.  This behavior automatically includes the Pan Zoom, Zoom Box, and Pinch Zoom controls.'),
     'type' => 'map',
   );
-  $behaviors['openlayers_behavior_overviewmap'] = array(
-    'title' => t('Overview Map'),
-    'description' => t('Provides an overview / control map for navigation and orientation.'),
-    'type' => 'map',
-  );
   $behaviors['openlayers_behavior_panzoom'] = array(
     'title' => t('Pan and Zoom Control'),
     'description' => t('Provides controls with the ability to pan and zoom in the map interface.  Do not use with the Pan Zoom Bar Control or the Zoom Panel Control.'),

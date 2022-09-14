@@ -1354,6 +1354,7 @@ function panelizer_panels_cache_get($argument) {
     $cache_keys[] = $vid;
   }
   $cache->display->cache_key = implode(':', $cache_keys);
+  $cache->display->storage_id = $argument;
 
   // Set the allowed content types.
   if (variable_get('panelizer_' . $type . ':' . $bundle . '_allowed_types_default', FALSE)) {

@@ -5,3 +5,7 @@ HRINFO-711 panelizer access bug
 Source: https://www.drupal.org/files/issues/panelizer-storage_type_issue-2864607-1.patch
 
 
+HRINFO-1032 panelizer access bug part deux
+Source: https://www.drupal.org/files/issues/2020-09-28/panelizer-fix-access-denied-2845433-42-D7.patch
+
+

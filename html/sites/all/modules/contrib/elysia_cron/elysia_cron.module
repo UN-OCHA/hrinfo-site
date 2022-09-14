@@ -150,6 +150,9 @@ function elysia_cron_cron() {
     return;
   }
 
+  // Log that cron started.
+  elysia_cron_debug('Started Elysia Cron.');
+
   // If cron has been executed via "drush core-cron" or any other custom drush
   // command then we run internal cron handler which is designed to handle
   // cron executions from drush.
@@ -166,9 +169,11 @@ function elysia_cron_cron() {
 
   if ($manual_run) {
     if ($result) {
+      elysia_cron_debug('Cron ran successfully.');
       elysia_cron_message('Cron ran successfully');
     }
     else {
+      elysia_cron_debug('Cron run failed, disabled or nothing to do.');
       elysia_cron_message('Cron run failed, disabled or nothing to do');
     }
     // In manual execution it's better to set cron_last variable in standard way
@@ -1147,7 +1152,7 @@ function elysia_cron_prepare_run($manual_run, $start = TRUE) {
     @ignore_user_abort(TRUE);
 
     // Try to allocate enough time to run all the hook_cron implementations.
-    if (!ini_get('safe_mode') && _elysia_cron_function_available('set_time_limit')) {
+    if (_elysia_cron_function_available('set_time_limit')) {
       @set_time_limit(variable_get('elysia_cron_time_limit', 240));
     }
 

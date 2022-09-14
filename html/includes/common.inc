@@ -1104,6 +1104,14 @@ function drupal_http_request($url, array $options = array()) {
         // Redirect to the new location.
         $options['max_redirects']--;
 
+        // Check if we need to remove any potentially sensitive headers before
+        // following the redirect.
+        // @see https://www.rfc-editor.org/rfc/rfc9110.html#name-redirection-3xx
+        if (_drupal_should_strip_sensitive_headers_on_http_redirect($url, $location)) {
+          unset($options['headers']['Cookie']);
+          unset($options['headers']['Authorization']);
+        }
+
         // We need to unset the 'Host' header
         // as we are redirecting to a new location.
         unset($options['headers']['Host']);
@@ -1120,6 +1128,36 @@ function drupal_http_request($url, array $options = array()) {
   }
 
   return $result;
+}
+
+/**
+ * Determine whether to strip sensitive headers from a request when redirected.
+ *
+ * @param string $url
+ *   The url from the original outbound http request.
+ *
+ * @param string $location
+ *   The location to which the request has been redirected.
+ *
+ * @return boolean
+ *   Whether sensitive headers should be stripped from the request before
+ *   following the redirect.
+ */
+function _drupal_should_strip_sensitive_headers_on_http_redirect($url, $location) {
+  $url_parsed = parse_url($url);
+  $location_parsed = parse_url($location);
+  if (!isset($location_parsed['host'])) {
+    return FALSE;
+  }
+  $strip_on_host_change = variable_get('drupal_http_request_strip_sensitive_headers_on_host_change', TRUE);
+  $strip_on_https_downgrade = variable_get('drupal_http_request_strip_sensitive_headers_on_https_downgrade', TRUE);
+  if ($strip_on_host_change && strcasecmp($url_parsed['host'], $location_parsed['host']) !== 0) {
+    return TRUE;
+  }
+  if ($strip_on_https_downgrade && $url_parsed['scheme'] !== $location_parsed['scheme'] && 'https' !== $location_parsed['scheme']) {
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /**
@@ -1500,7 +1538,7 @@ function filter_xss($string, $allowed_tags = array('a', 'em', 'strong', 'cite', 
   // Store the text format.
   _filter_xss_split($allowed_tags, TRUE);
   // Remove NULL characters (ignored by some browsers).
-  $string = str_replace(chr(0), '', $string);
+  $string = str_replace(chr(0), '', (string) $string);
   // Remove Netscape 4 JS entities.
   $string = preg_replace('%&\s*\{[^}]*(\}\s*;?|$)%', '', $string);
 
@@ -2570,6 +2608,7 @@ function l($text, $path, array $options = array()) {
       $use_theme = FALSE;
     }
   }
+  $path = drupal_strip_dangerous_protocols((string) $path);
   if ($use_theme) {
     return theme('link', array('text' => $text, 'path' => $path, 'options' => $options));
   }
@@ -2696,6 +2735,7 @@ function drupal_deliver_html_page($page_callback_result) {
   if ($frame_options && is_null(drupal_get_http_header('X-Frame-Options'))) {
     drupal_add_http_header('X-Frame-Options', $frame_options);
   }
+  drupal_add_http_header('X-Content-Type-Options', 'nosniff');
 
   if (variable_get('block_interest_cohort', TRUE)) {
     $permissions_policy = drupal_get_http_header('Permissions-Policy');
@@ -6087,7 +6127,7 @@ function drupal_render_page($page) {
  */
 function drupal_render(&$elements) {
   // Early-return nothing if user does not have access.
-  if (empty($elements) || (isset($elements['#access']) && !$elements['#access'])) {
+  if (empty($elements) || !is_array($elements) || (isset($elements['#access']) && !$elements['#access'])) {
     return '';
   }
 
@@ -8034,8 +8074,14 @@ function entity_extract_ids($entity_type, $entity) {
   $info = entity_get_info($entity_type);
 
   // Objects being created might not have id/vid yet.
-  $id = isset($entity->{$info['entity keys']['id']}) ? $entity->{$info['entity keys']['id']} : NULL;
-  $vid = ($info['entity keys']['revision'] && isset($entity->{$info['entity keys']['revision']})) ? $entity->{$info['entity keys']['revision']} : NULL;
+  if (!empty($info)) {
+    $id = isset($entity->{$info['entity keys']['id']}) ? $entity->{$info['entity keys']['id']} : NULL;
+    $vid = ($info['entity keys']['revision'] && isset($entity->{$info['entity keys']['revision']})) ? $entity->{$info['entity keys']['revision']} : NULL;
+  }
+  else {
+    $id = NULL;
+    $vid = NULL;
+  }
 
   if (!empty($info['entity keys']['bundle'])) {
     // Explicitly fail for malformed entities missing the bundle property.
