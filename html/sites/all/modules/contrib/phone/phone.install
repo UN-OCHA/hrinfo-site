@@ -1,0 +1,300 @@
+<?php
+
+/**
+ * @file
+ * Install/Update/Uninstall functions for phone module
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function phone_requirements($phase) {
+  $requirements = array();
+
+  $t = get_t();
+
+  if ($phase == 'runtime' && !phone_libphonenumber(TRUE, TRUE)) {
+    $library_info = phone_libraries_info();
+    $requirements['phone'] = array(
+      'title' => $t('Lib Phone Number'),
+      'value' => $t('Not Installed'),
+      'severity' => REQUIREMENT_ERROR,
+      'description' => $t('The Phone module requires libphonenumber to perform country level validation and formatting of phone numbers. Download <a href="!url">here</a> and install into sites/all/libraries/libphonenumber-for-php.',
+        array('!url' => $library_info['libphonenumber-for-php']['download url'])),
+    );
+  }
+
+  return $requirements;
+}
+
+/**
+ * Implements hook_enable().
+ */
+function phone_enable() {
+  // Lets check our requirements.
+  $requirements = phone_requirements('runtime');
+  if (isset($requirements['phone'])) {
+    module_disable(array('phone'), TRUE);
+    drupal_set_message($requirements['phone']['description'], 'error');
+    drupal_set_message(t('The phone module has been disabled'), 'error');
+  }
+}
+
+/**
+ * Implements hook_field_schema().
+ */
+function phone_field_schema($field) {
+  $columns = array(
+    'numbertype' => array(
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => FALSE,
+      'default' => NULL,
+    ),
+    'number' => array(
+      'type' => 'varchar',
+      'length' => 30,
+      'not null' => FALSE,
+      'default' => NULL,
+    ),
+    'countrycode' => array(
+      'type' => 'varchar',
+      'length' => 2,
+      'not null' => FALSE,
+      'default' => NULL,
+    ),
+    'extension' => array(
+      'type' => 'varchar',
+      'length' => 7,
+      'not null' => FALSE,
+      'default' => NULL,
+    ),
+  );
+
+  return array(
+    'columns' => $columns,
+    'indexes' => array(
+      'countrycode' => array('countrycode'),
+      'numbertype' => array('numbertype'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update from phone-7.x-1.x to phone-7.x-2.x, including database changes and
+ * migrating field instance settings.
+ */
+// Notes:
+// Updates from phone-6.x and cck_phone-6.x to phone-7.x-2.x are handled
+//   by the content_migrate module that is used to migrate CCK fields, via
+//   the phone_content_migrate_* functions in phone.module.
+// phone-7.x-1.x did not include any updates -- otherwise
+//   hook_update_last_removed would probably need to be used to document
+//   that they've been dropped from this branch.
+function phone_update_7200(&$sandbox) {
+  // First loop of batch processing: update overall information including
+  // table schemas and instance settings.
+  if (!isset($sandbox['phone_instances'])) {
+    $sandbox['phone_instances'] = array();
+    $sandbox['phone_tables'] = array();
+    $sandbox['progress'] = 0;
+    $sandbox['max'] = 0;
+    $sandbox['#finished'] = 0;
+
+    // Get the 7200 version of the schema.
+    // This needs to be the 7200-specific schema so that updates can be
+    // done in sequence correctly, even if there are future schema changes.
+    // (see http://drupal.org/node/150220).
+    $columns = array(
+      'numbertype' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'number' => array(
+        'type' => 'varchar',
+        'length' => 30,
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'countrycode' => array(
+        'type' => 'varchar',
+        'length' => 2,
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+      'extension' => array(
+        'type' => 'varchar',
+        'length' => 7,
+        'not null' => FALSE,
+        'default' => NULL,
+      ),
+    );
+
+    $schema = array(
+      'columns' => $columns,
+      'indexes' => array(
+        'countrycode' => array('countrycode'),
+        'numbertype' => array('numbertype'),
+      ),
+    );
+
+    // Get list of phone field instances directly from field_config_instance
+    // database table, in order to be sure to get now-obsolete instance
+    // settings.  This is also more efficient than using field_info_instances(),
+    // since field_info_instances() does not provide a way to directly limit the
+    // list based on field type.
+    $query = db_select('field_config', 'fc')
+      ->condition('fc.type', 'phone');
+    $query->addField('fc', 'field_name', 'fc_field_name');
+    $query->addField('fc', 'data', 'fc_data');
+    $query->leftJoin('field_config_instance', 'fci', 'fc.id = fci.field_id');
+    $query->fields('fci');
+    $results = $query->execute();
+
+    $tables_done = array();
+    $field_country = array();
+    foreach ($results as $row) {
+      $field_name = $row->fc_field_name;
+
+      // Update the schema of this instance's database table (if it has not yet
+      // been done).
+      // Note: although built-in functions such as field_udpate_field() and
+      // field_update_instance() exist, they explicitly don't allow schema
+      // changes.  So stick to manually changing the information that needs
+      // be changed.
+      if (empty($tables_done[$field_name])) {
+        $tables_done[$field_name] = TRUE;
+        $data = unserialize($row->fc_data);
+
+        // Get country setting -- being moved from field_config level to
+        // instance level
+        $country = _phone_update_phone_country($data['settings']['country']);
+        $field_country[$field_name] = array('orig' => $data['settings']['country'], 'new' => $country);
+
+        foreach (array('data', 'revision') as $table_type) {
+          $table_name = 'field_' . $table_type . '_' . $field_name;
+          if (!db_table_exists($table_name))
+            continue;
+          $nrows = db_select($table_name)
+            ->countQuery()
+            ->execute()
+            ->fetchField();
+          $sandbox['phone_tables'][$table_name] = array(
+            'field_name' => $field_name,
+            'nrows' => $nrows,
+            'country' => $field_country[$field_name],
+          );
+          $sandbox['max'] += $nrows;
+          // Add all new schema columns.
+          // Don't want to delete the value column until after data has been
+          // transferred.
+          foreach ($schema['columns'] as $column => $coldata) {
+            // Note that the column name is the field-version of the column;
+            // need to prepend $field_name to get the database column name.
+            db_add_field($table_name, $field_name . '_' . $column, $coldata);
+          }
+          // Do not add indexes manually, because field_update_field()
+          // automatically manages the indexes, causing 'index already
+          // exists' errors later.
+        }
+
+        // Call field_update_field to force indexes to be updated, along with
+        // internal information about indexes.
+        // Note that this does NOT update the rest of the lists of fields under
+        // FIELD_LOAD_CURRENT and FIELD_LOAD_REVISION, but there's no apparent
+        // way to do that, nor is it done by any schema update examples.
+        field_update_field(array('field_name' => $field_name));
+      }
+
+      // Skip instance processing if a field does not have any associated instances.
+      if (empty($row->data)) {
+        continue;
+      }
+
+      $data = unserialize($row->data);
+
+      _phone_update_phone_instance_settings($data, $field_country[$field_name]);
+      db_update('field_config_instance')
+        ->fields(array('data' => serialize($data)))
+        ->condition('id', $row->id)
+        ->execute();
+    }
+    // Clear the field cache.
+    field_cache_clear();
+  }
+  elseif (empty($sandbox['phone_tables'])) {
+    $sandbox['#finished'] = 1;
+    $sandbox['progress'] = $sandbox['max'];
+  }
+  // Update the contents of the field_data and field_revision tables.  This is
+  // done using batch-mode processing in case there are a lot of entries.
+  else {
+    $phone_table = array_shift(array_keys($sandbox['phone_tables']));
+    $table_data = $sandbox['phone_tables'][$phone_table];
+    $field_name = $table_data['field_name'];
+    $process_limit = 20;
+
+    // Get next set of rows to process.
+    // Only condition is that the number is null, because all non-processed
+    // rows have null numbers.
+    $query = db_select($phone_table)
+      ->fields($phone_table)
+      ->isNull($table_data['field_name'] . '_number')
+      ->range(0, $process_limit);
+    $result = $query->execute();
+    $nrows_done = 0;
+    foreach ($result as $row) {
+      $nrows_done++;
+
+      // Convert number to individual entries
+      $newvals = _phone_migrate_phone_number($row->{$field_name . '_value'}, $table_data['country']['new']);
+
+      // Prefix $field_name onto each field value's name
+      foreach ($newvals as $valname => $value) {
+        $newvals[$field_name . '_' . $valname] = $value;
+        unset($newvals[$valname]);
+      }
+      if (empty($newvals[$field_name . '_number'])) {
+        // Make sure to set number to a non-NULL value, because a NULL value
+        // implies that the row has not been processed -- which will cause an
+        // infinite batch processing loop.
+        $newvals[$field_name . '_number'] = '';
+      }
+
+      db_update($phone_table)
+        ->fields($newvals)
+        ->condition('entity_type', $row->entity_type)
+        ->condition('entity_id', $row->entity_id)
+        ->condition('revision_id', $row->revision_id)
+        ->condition('delta', $row->delta)
+        ->condition('language', $row->language)
+        ->execute();
+    }
+
+    // If done processing this table, drop it from the sandbox and
+    // delete the value column.
+    // We're done if the query returned less than the maximum number of rows.
+    // Note that in the case where there were exactly $process_limit rows left
+    // to process, the table won't be tagged as done until the next loop, at
+    // which point the query will return 0 rows.
+    if ($nrows_done<$process_limit) {
+      unset($sandbox['phone_tables'][$phone_table]);
+      db_drop_field($phone_table, $field_name . '_value');
+    }
+
+    $sandbox['progress'] += $nrows_done;
+    if (empty($sandbox['phone_tables'])) {
+      $sandbox['#finished'] = 1;
+    }
+    else {
+      // We're not directly using progress/max to determine when processing
+      // is done, so don't allow this value to reach 1 until phone_tables has
+      // been emptied (otherwise, the final table cleanup could get skipped).
+      $sandbox['#finished'] = min(0.99, $sandbox['progress']/$sandbox['max']);
+    }
+  }
+}
