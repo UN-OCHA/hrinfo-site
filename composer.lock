@@ -3165,10 +3165,6 @@
                 {
                     "name": "mrfelton",
                     "homepage": "https://www.drupal.org/user/305669"
-                },
-                {
-                    "name": "pratik_kamble",
-                    "homepage": "https://www.drupal.org/user/3204909"
                 }
             ],
             "description": "Adds a color indicator for the different environments.",
@@ -10415,16 +10411,16 @@
             ],
             "authors": [
                 {
-                    "name": "Pol",
-                    "homepage": "https://www.drupal.org/user/47194"
-                },
-                {
                     "name": "clemens.tolboom",
                     "homepage": "https://www.drupal.org/user/125814"
                 },
                 {
                     "name": "jeffschuler",
                     "homepage": "https://www.drupal.org/user/239714"
+                },
+                {
+                    "name": "Pol",
+                    "homepage": "https://www.drupal.org/user/47194"
                 }
             ],
             "description": "Provides a Views feed style for GeoJSON output.",
