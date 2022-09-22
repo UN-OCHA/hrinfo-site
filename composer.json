@@ -207,12 +207,12 @@
         "unocha/ocha_snap": "^1.1"
     },
     "require-dev": {
-        "drupal/coder": "8.3.13",
+        "drupal/coder": "^8.3.16",
         "drupal/devel": "^1.7",
         "drupal/stage_file_proxy": "^1.9",
         "phpmd/phpmd": "^2.6",
         "sebastian/phpcpd": "^4.0",
-        "squizlabs/php_codesniffer": "3.6.0"
+        "squizlabs/php_codesniffer": "^3.7.1"
     },
     "conflict": {
         "drupal/core": "8.*"
@@ -231,6 +231,7 @@
           "composer/installers": true,
           "composer/semver": true,
           "cweagans/composer-patches": true,
+          "dealerdirect/phpcodesniffer-composer-installer": true,
           "drupal-composer/preserve-paths": true,
           "symfony/flex": true
         }
