@@ -3,22 +3,23 @@
 /**
  * @file
  * Install file for hr_decommissioner.
+ *
+ * @todo
+ * Get a fresh copy of the database
+ * Export the data of the field collection
+ * Check the field collection field_users_ref
+ * Check the subfields as well: field_user, field_users_ref_checkbox,
+ * field_users_ref_name, field_email, field_phones
+ * Remove the code in the features referring to these fields.
+ * What to do with views and panelizer, check where these things are being used.
+ * Delete the fields inside field collection
+ * Delete the field collection.
  */
-
-// @todo
-// Get a fresh copy of the database
-// Export the data of the field collection
-// Check the field collection field_users_ref
-// Check the subfields as well: field_user, field_users_ref_checkbox, field_users_ref_name, field_email, field_phones
-// Remove the code in the features referring to these fields.
-// What to do with views and panelizer, check where these things are being used.
-// Delete the fields inside field collection
-// Delete the field collection
 
 /**
  * Implements hook_install().
  *
- * As part of the install, decomission the assessments and events contact
+ * As part of the install, decommission the assessments and events contact
  * fields.
  */
 function hr_decommissioner_install() {
@@ -31,20 +32,20 @@ function hr_decommissioner_install() {
     'bundle' => 'field_users_ref',
   ));
   foreach ($instances as $instance) {
-    hr_decomissioner_delete_instance($instance);
+    hr_decommissioner_delete_instance($instance);
   }
 
   // Then, the field collection.
   $fc_instance_assessment = field_read_instance('node', 'field_users_ref', 'hr_assessment');
-  hr_decomissioner_delete_instance($fc_instance_assessment);
+  hr_decommissioner_delete_instance($fc_instance_assessment);
   $fc_instance_event = field_read_instance('node', 'field_users_ref', 'hr_event');
-  hr_decomissioner_delete_instance($fc_instance_event);
+  hr_decommissioner_delete_instance($fc_instance_event);
 
   // Remove the fields that need to be removed as they are unused.
-  hr_decomissioner_delete_field('field_user');
-  hr_decomissioner_delete_field('field_users_ref_checkbox');
-  hr_decomissioner_delete_field('field_users_ref_name');
-  hr_decomissioner_delete_field('field_users_ref');
+  hr_decommissioner_delete_field('field_user');
+  hr_decommissioner_delete_field('field_users_ref_checkbox');
+  hr_decommissioner_delete_field('field_users_ref_name');
+  hr_decommissioner_delete_field('field_users_ref');
 }
 
 /**

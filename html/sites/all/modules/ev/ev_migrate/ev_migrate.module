@@ -96,7 +96,7 @@ function ev_migrate_build_data($event) {
   $e = entity_metadata_wrapper('node', $event);
 
   $author = array(
-    'name' => isset($e->author->value()->realname) ? $e->author->value()->realname : $e->author->name->value(),
+    'name' => $e->author->value()->realname ?? $e->author->name->value(),
     'email' => $e->author->mail->value(),
     'timezone' => $e->author->value()->timezone,
     'init' => $e->author->value()->init,

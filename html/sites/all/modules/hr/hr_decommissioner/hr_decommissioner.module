@@ -15,9 +15,9 @@
  * @param string $field_name
  *   The name of the field to enable and delete.
  */
-function hr_decomissioner_delete_field($field_name) {
+function hr_decommissioner_delete_field($field_name) {
   // In case the field is inactive, first activate it and clear the field cache.
-  if (hr_decomissioner_activate_field($field_name)) {
+  if (hr_decommissioner_activate_field($field_name)) {
     field_cache_clear();
   }
 
@@ -40,7 +40,7 @@ function hr_decomissioner_delete_field($field_name) {
  * @return bool
  *   Boolean indicating whether or not the field was activated.
  */
-function hr_decomissioner_activate_field($field_name) {
+function hr_decommissioner_activate_field($field_name) {
   // Set it to active via a query because field_update_field() does
   // not work on inactive fields.
   $updated = db_update('field_config')
@@ -61,10 +61,10 @@ function hr_decomissioner_activate_field($field_name) {
  * @param array $instance
  *   The field instance info array to be deleted.
  */
-function hr_decomissioner_delete_instance(array $instance) {
+function hr_decommissioner_delete_instance(array $instance) {
   // First activate the instance's field if necessary.
   $field_name = $instance['field_name'];
-  $activated = hr_decomissioner_activate_field($field_name);
+  $activated = hr_decommissioner_activate_field($field_name);
 
   // Clear the field cache if we just activated the field.
   if ($activated) {

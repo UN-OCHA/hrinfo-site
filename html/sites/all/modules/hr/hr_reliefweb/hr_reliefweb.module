@@ -486,7 +486,7 @@ function hr_reliefweb_content($path) {
     $data = $response['data'];
     foreach ($data as $value) {
       $url = $value['fields']['url'];
-      $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
+      $title = $value['fields']['title'] ?? $value['fields']['name'];
       $data_array[$title] = array(
         'id' => $value['fields']['id'],
         'title' => $title,
@@ -526,8 +526,8 @@ function hr_reliefweb_content($path) {
           $files[] = array(
             'preview' => isset($file['preview']['url-thumb']) ? _hr_reliefweb_fix_url($file['preview']['url-thumb']) : '',
             'url' => _hr_reliefweb_fix_url($file['url']),
-            'filename' => isset($file['filename']) ? $file['filename'] : '',
-            'description' => isset($file['description']) ? $file['description'] : '',
+            'filename' => $file['filename'] ?? '',
+            'description' => $file['description'] ?? '',
           );
         }
         $data_array[$title]['files'] = $files;
@@ -587,7 +587,7 @@ function hr_reliefweb_fetch_disasters($country, $limit = 999, $offset = 0, $filt
 
     $data = $response['data'];
     foreach ($data as $value) {
-      $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
+      $title = $value['fields']['title'] ?? $value['fields']['name'];
       $data_array[$value['fields']['id']] = $title;
     }
   }

@@ -70,7 +70,7 @@ function hr_core_form_alter(&$form, &$form_state, $form_id) {
     if (is_array($item) && isset($item['#type']) && $item['#type'] == 'container') {
       switch ($item['#type']) {
         case 'container':
-          $language = isset($item['#language']) ? $item['#language'] : LANGUAGE_NONE;
+          $language = $item['#language'] ?? LANGUAGE_NONE;
           if (isset($item[$language]['#type']) && $item[$language]['#type'] == 'select') {
             $diff = array_diff($item[$language]['#options'], array('_none' => '- None -'));
             if (empty($diff)) {
@@ -991,7 +991,7 @@ function hr_core_feeds_processor_targets_alter(array &$targets, $entity_type, $b
  */
 function hr_core_file_feeds_set_target(FeedsSource $source, $entity, $target, array $values) {
   // Add default of uri for backwards compatibility.
-  list($field_name, $sub_field) = explode(':', $target . ':uri');
+  [$field_name, $sub_field] = explode(':', $target . ':uri');
   $info = field_info_field($field_name);
 
   // We're acting for uris only.
@@ -1026,7 +1026,7 @@ function hr_core_file_feeds_set_target(FeedsSource $source, $entity, $target, ar
   $destination = file_field_widget_uri($info, $instance_info, $data);
 
   // Populate entity.
-  $field = isset($entity->$field_name) ? $entity->$field_name : array(LANGUAGE_NONE => array());
+  $field = $entity->$field_name ?? array(LANGUAGE_NONE => array());
   $delta = 0;
   foreach ($values as $v) {
     if ($info['cardinality'] == $delta) {
@@ -2005,7 +2005,7 @@ function hr_core_get_panes($node) {
     }
 
     if ($content->type == 'fieldable_panels_pane') {
-      list($op, $fpid) = explode(':', $content->subtype);
+      [$op, $fpid] = explode(':', $content->subtype);
       $entity = fieldable_panels_panes_load($fpid);
 
       switch ($entity->bundle) {

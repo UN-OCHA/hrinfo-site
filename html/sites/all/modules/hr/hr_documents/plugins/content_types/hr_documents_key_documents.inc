@@ -54,7 +54,7 @@ function hr_documents_key_documents_edit_form($form, &$form_state) {
       '#era_entity_type' => 'node',
       '#era_bundles' => array('hr_document'),
       '#era_cardinality' => 1,
-      '#default_value' => isset($conf['documents'][$delta]) ? $conf['documents'][$delta] : '',
+      '#default_value' => $conf['documents'][$delta] ?? '',
       '#parents' => array('documents', $delta),
     );
   }
@@ -74,7 +74,7 @@ function hr_documents_key_documents_edit_form($form, &$form_state) {
       'default' => t('Full'),
       'link' => t('Links'),
     ),
-    '#default_value' => isset($conf['view_mode']) ? $conf['view_mode'] : '',
+    '#default_value' => $conf['view_mode'] ?? '',
   );
 
   return $form;

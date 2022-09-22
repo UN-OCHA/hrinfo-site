@@ -92,7 +92,7 @@ function geofield_postgis_backend_settings($field, $instance, $has_data) {
     '#options' => array(
       'geometry' => t('Geometry'),
     ),
-    '#default_value' => isset($defaults['fieldtype']) ? $defaults['fieldtype'] : 'geometry',
+    '#default_value' => $defaults['fieldtype'] ?? 'geometry',
     '#disabled' => $has_data,
   );
 

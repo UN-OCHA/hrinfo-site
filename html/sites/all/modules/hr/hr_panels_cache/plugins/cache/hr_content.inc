@@ -155,7 +155,7 @@ function hr_panels_cache_get_cid($conf, $display, $args, $contexts, $pane) {
         // If this is an entity, try looking for a revision_id too.
         if (!empty($plugin_pieces[0]) && $plugin_pieces[0] == 'entity' && !empty($plugin_pieces[1])) {
           if (isset($context->data) && is_object($context->data)) {
-            list($entity_id, $revision_id, $bundle) = entity_extract_ids($plugin_pieces[1], $context->data);
+            [$entity_id, $revision_id, $bundle] = entity_extract_ids($plugin_pieces[1], $context->data);
             if (!empty($revision_id)) {
               $cid[] = 'ctxrev_' . $revision_id;
             }
@@ -336,7 +336,7 @@ function hr_panels_cache_settings_form($conf, $display, $pid) {
     '#title' => t('Lifetime'),
     '#type' => 'select',
     '#options' => $options,
-    '#default_value' => isset($conf['lifetime']) ? $conf['lifetime'] : 'none',
+    '#default_value' => $conf['lifetime'] ?? 'none',
     '#description' => t('The cache lifetime is the minimum amount of time that will elapse before the cache is emptied and recreated. If set to none the cache will not be recreated unless a content update triggers a rebuild.'),
   );
 
@@ -345,7 +345,7 @@ function hr_panels_cache_settings_form($conf, $display, $pid) {
     '#description' => t('Checks for new or updated nodes of this type.'),
     '#type' => 'radios',
     '#options' => node_type_get_names(),
-    '#default_value' => isset($conf['content_type']) ? $conf['content_type'] : '',
+    '#default_value' => $conf['content_type'] ?? '',
     '#required' => TRUE,
   );
 
