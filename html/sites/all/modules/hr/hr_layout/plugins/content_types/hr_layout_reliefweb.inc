@@ -205,12 +205,12 @@ function hr_layout_reliefweb_content($path) {
     $data_array = array();
     foreach ($data as $value) {
       $url = $value['fields']['url'];
-      $title = isset($value['fields']['title']) ? $value['fields']['title'] : $value['fields']['name'];
+      $title = $value['fields']['title'] ?? $value['fields']['name'];
       $data_array[$title] = array(
         'title' => $title,
         'url' => $url,
-        'closing_date' => isset($value['fields']['date']['closing']) ? $value['fields']['date']['closing'] : NULL,
-        'source' => isset($value['fields']['source'][0]['name']) ? $value['fields']['source'][0]['name'] : '',
+        'closing_date' => $value['fields']['date']['closing'] ?? NULL,
+        'source' => $value['fields']['source'][0]['name'] ?? '',
       );
     }
     return $data_array;

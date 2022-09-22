@@ -209,7 +209,7 @@ function drush_hr_decommissioner_remove_contact_menus_callback($node_ids, $regis
     );
     $nodes = node_load_multiple($node_info);
     foreach ($nodes as $node) {
-      $disabled_features = isset($node->features_disabled) ? $node->features_disabled : array();
+      $disabled_features = $node->features_disabled ?? array();
       $enabled_features = drupal_map_assoc(array_keys(array_diff_key($registry, $disabled_features)));
 
       // Get rid of the menu for contacts.

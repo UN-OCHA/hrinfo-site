@@ -141,7 +141,7 @@ function hr_reliefweb_document_list($node) {
     }
 
     $type_path = current_path() . "/format.name/" . $value['format'];
-    $type_text = (isset($value['format']) ? $value['format'] : '');
+    $type_text = $value['format'] ?? '';
 
     $rows[] = array(
       array(
