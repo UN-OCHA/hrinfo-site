@@ -38,8 +38,8 @@ function hr_notifications_default_rules_configuration() {
         },
         { "mail" : {
             "to" : [ "account-type:mail" ],
-            "subject" : "Your  membership request was approved for \\u0027[group-name:title]\\u0027",
-            "message" : "Dear [account-type:name],\\r\\n\\r\\nWelcome to HumanitarianResponse.info platform [group-name:title]. \\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nAs a manager you have entire control of your pages: You can design your pages as you wish, add documents, create new pages, etc. You can also add others as managers or editors. To give you some guidance on how to work with the platform, please check out https:\\/\\/www.humanitarianresponse.info\\/help . If you run into trouble, please contact the OCHA Information Management Officer in country or write to us at help@humanitarianresponse.info .\\r\\n\\r\\nWe hope you will enjoy the HR.info services!\\r\\n\\r\\nYour HR.info team Site: www.humanitarianresponse.info Animation: https:\\/\\/youtu.be\\/OAzNjYtabuM Twitter: https:\\/\\/twitter.com\\/humresponse",
+            "subject" : "Your membership request was approved for [group-name:title]",
+            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href='https:\\/\\/www.humanitarianresponse.info\\/help'>Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management fficer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
             "language" : [ "account-type:language" ]
           }
         }
@@ -74,7 +74,7 @@ function hr_notifications_default_rules_configuration() {
         },
         { "mail" : {
             "to" : [ "account-type:mail" ],
-            "subject" : "Your  membership request was approved for \\u0027[group-name:title]\\u0027",
+            "subject" : "Your membership request was approved for \\u0027[group-name:title]\\u0027",
             "message" : "[account-type:name],\\r\\n\\r\\nYou are now a member in the group \\u0027[group_name:title]\\u0027 located at [group-name:url]",
             "language" : [ "account-type:language" ]
           }
@@ -117,8 +117,8 @@ function hr_notifications_default_rules_configuration() {
         },
         { "mail" : {
             "to" : [ "account-type:mail" ],
-            "subject" : "Your  membership request was approved for \\u0027[group-name:title]\\u0027",
-            "message" : "Dear [account-type:name],\\r\\n\\r\\nWelcome to HumanitarianResponse.info platform [group-name:title]. \\r\\n\\r\\nWe wanted to let you know that you are now a contributor of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nAs a contributor you have entire control of your pages: You have the capability to add new content to the site but those content are not published to the site right away.To give you some guidance on how to work with the platform, please check out https:\\/\\/www.humanitarianresponse.info\\/help . If you run into trouble, please contact the OCHA Information Management Officer in country or write to us at help@humanitarianresponse.info .\\r\\n\\r\\nWe hope you will enjoy the HR.info services!\\r\\n\\r\\nYour HR.info team\\r\\nSite: www.humanitarianresponse.info\\r\\nAnimation: https:\\/\\/youtu.be\\/OAzNjYtabuM\\r\\nTwitter: https:\\/\\/twitter.com\\/humresponse",
+            "subject" : "Your membership request was approved for [group-name:title]",
+            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href='https:\\/\\/www.humanitarianresponse.info\\/help'>Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management fficer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
             "language" : [ "account-type:language" ]
           }
         }
@@ -153,8 +153,8 @@ function hr_notifications_default_rules_configuration() {
         },
         { "mail" : {
             "to" : [ "account-type:mail" ],
-            "subject" : "Your  membership request was approved for \\u0027[group-name:title]\\u0027",
-            "message" : "Dear [account-type:name],\\r\\n\\r\\nWelcome to HumanitarianResponse.info platform [group-name:title]. \\r\\n\\r\\nWe wanted to let you know that you are now an editor of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nAs an editor you have enough permission to manage the site content by adding, editing or removing the existing content to keep the overall website up-to-date. To give you some guidance on how to work with the platform, please check out https:\\/\\/www.humanitarianresponse.info\\/help . If you run into trouble, please contact the OCHA Information Management Officer in country or write to us at help@humanitarianresponse.info .\\r\\n\\r\\nWe hope you will enjoy the HR.info services!\\r\\n\\r\\nYour HR.info team\\r\\nSite: www.humanitarianresponse.info\\r\\nAnimation: https:\\/\\/youtu.be\\/OAzNjYtabuM\\r\\nTwitter: https:\\/\\/twitter.com\\/humresponse\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n",
+            "subject" : "Your membership request was approved for [group-name:title]",
+            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href='https:\\/\\/www.humanitarianresponse.info\\/help'>Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management fficer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
             "language" : [ "account-type:language" ]
           }
         }
@@ -189,8 +189,8 @@ function hr_notifications_default_rules_configuration() {
         },
         { "mail" : {
             "to" : [ "account-type:mail" ],
-            "subject" : "Your  membership request was approved for \\u0027[group-name:title]\\u0027",
-            "message" : "Dear [account-type:name],\\r\\n\\r\\nWelcome to HumanitarianResponse.info platform [group-name:title]. \\r\\n\\r\\nWe wanted to let you know that you are now a manager of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nAs a manager you have entire control of your pages: You can design your pages as you wish, add documents, create new pages, etc. You can also add others as managers or editors. To give you some guidance on how to work with the platform, please check out https:\\/\\/www.humanitarianresponse.info\\/help . If you run into trouble, please contact the OCHA Information Management Officer in country or write to us at help@humanitarianresponse.info .\\r\\n\\r\\nWe hope you will enjoy the HR.info services!\\r\\n\\r\\nYour HR.info team\\r\\nSite: www.humanitarianresponse.info\\r\\nAnimation: https:\\/\\/youtu.be\\/OAzNjYtabuM\\r\\nTwitter: https:\\/\\/twitter.com\\/humresponse",
+            "subject" : "Your membership request was approved for [group-name:title]",
+            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href='https:\\/\\/www.humanitarianresponse.info\\/help'>Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management fficer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
             "language" : [ "account-type:language" ]
           }
         }
