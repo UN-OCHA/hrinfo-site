@@ -16,6 +16,6 @@ jobs:
         patch_branch: 'develop'
         patch_packages: 'drupal/*'
         patch_maintainers: ${{ secrets.DRUPAL_MAINTAINERS }}
-        php_version: '7.4'
+        php_version: '8.0'
         slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
         slack_channel_name: ${{ secrets.SLACK_CHANNEL }}
