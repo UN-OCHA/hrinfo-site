@@ -39,7 +39,7 @@ function hr_notifications_default_rules_configuration() {
         { "mail" : {
             "to" : [ "account-type:mail" ],
             "subject" : "Your membership request was approved for [group-name:title]",
-            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href='https:\\/\\/www.humanitarianresponse.info\\/help'>Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management fficer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
+            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href=\"https://www.humanitarianresponse.info/help\">Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management Officer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
             "language" : [ "account-type:language" ]
           }
         }
@@ -118,7 +118,7 @@ function hr_notifications_default_rules_configuration() {
         { "mail" : {
             "to" : [ "account-type:mail" ],
             "subject" : "Your membership request was approved for [group-name:title]",
-            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href='https:\\/\\/www.humanitarianresponse.info\\/help'>Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management fficer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
+            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href=\"https://www.humanitarianresponse.info/help\">Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management Officer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
             "language" : [ "account-type:language" ]
           }
         }
@@ -154,7 +154,7 @@ function hr_notifications_default_rules_configuration() {
         { "mail" : {
             "to" : [ "account-type:mail" ],
             "subject" : "Your membership request was approved for [group-name:title]",
-            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href='https:\\/\\/www.humanitarianresponse.info\\/help'>Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management fficer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
+            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href=\"https://www.humanitarianresponse.info/help\">Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management Officer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
             "language" : [ "account-type:language" ]
           }
         }
@@ -190,7 +190,7 @@ function hr_notifications_default_rules_configuration() {
         { "mail" : {
             "to" : [ "account-type:mail" ],
             "subject" : "Your membership request was approved for [group-name:title]",
-            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href='https:\\/\\/www.humanitarianresponse.info\\/help'>Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management fficer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
+            "message" : "Welcome to HumanitarianResponse.info platform\\r\\n\\r\\nWe wanted to let you know that you are now an administrative member of the page [group-name:title] located at [group-name:url].\\r\\n\\r\\nTo give you some guidance on how to work with the platform, please check out our <a href=\"https://www.humanitarianresponse.info/help\">Help Documentation</a>.  If you need further assistance, please contact the OCHA Information Management Officer for your operation or write to us at info@humanitarianresponse.info.\\r\\n\\r\\nRegards,\\r\\nOCHA Platforms and Content Support Team\\r\\n\\r\\n",
             "language" : [ "account-type:language" ]
           }
         }
