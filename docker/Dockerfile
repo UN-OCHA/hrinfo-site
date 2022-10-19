@@ -38,7 +38,7 @@ COPY --from=builder /srv/www/docker/99-elastic-apm-custom.ini /tmp/99-elastic-ap
 
 RUN  curl -L -o /tmp/apm-agent-php_1.6.1_all.apk https://github.com/elastic/apm-agent-php/releases/download/v1.6.1/apm-agent-php_1.6.1_all.apk && \
      apk add --allow-untrusted /tmp/apm-agent-php_1.6.1_all.apk && \
-     rm -f /tmp/apm-agent.apk && \
+     rm -f /tmp/apm-agent-php_1.6.1_all.apk && \
      mv -f /tmp/99-elastic-apm-custom.ini /etc/php81/conf.d/99-elastic-apm-custom.ini
 
 RUN  cd /srv/www/html/sites && \
