@@ -1184,7 +1184,7 @@ function _hr_core_display_cache_content($minutes = 'none', $margin = 5) {
  * Set caching of panel display.
  */
 // @codingStandardsIgnoreLine
-function _hr_core_display_cache_content_defaults($minutes = 'none', $margin = 5, $content_type) {
+function _hr_core_display_cache_content_defaults($minutes = 'none', $margin = 5, $content_type = '') {
   $sql = "SELECT * FROM {panels_display} WHERE storage_id LIKE 'node:$content_type%'";
   $result = db_query($sql);
   foreach ($result as $obj) {
