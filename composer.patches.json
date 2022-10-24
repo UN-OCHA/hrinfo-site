@@ -49,12 +49,16 @@
       "drupal/fts": {
         "Quite a lof of local modifications": "PATCHES/fts-hacks.patch"
       },
+      "drupal/geofield": {
+        "Deprecated: Required parameter $map_name in PHP 8.0": "https://www.drupal.org/files/issues/2021-12-13/3254220-4.patch"
+      },
       "drupal/hybridauth": {
         "https://www.drupal.org/project/hybridauth/issues/3154070": "https://www.drupal.org/files/issues/2020-06-23/session_already_exist_exception-3154070-7.patch"
       },
       "drupal/og": {
         "User can create node without permission": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/442.patch",
-        "HR.info issue 839": "PATCHES/hrinfo-839.patch"
+        "HR.info issue 839": "PATCHES/hrinfo-839.patch",
+        "PHP 8.0 compatibility. Deprecated: Required parameter follows optional parameter $data": "https://git.drupalcode.org/project/og/-/merge_requests/3.diff"
       },
       "drupal/og_features": {
         "Permission to 'edit own group features' only works if the user also has the 'administer group' permission": "https://www.drupal.org/files/2019515-og_features-group-permission.patch"
