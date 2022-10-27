@@ -17,6 +17,11 @@ function varnish_requirements($phase) {
   if ($phase == 'runtime') {
     $requirements['varnish']['title'] = $t('Varnish status');
     $status = varnish_get_status();
+    if ($status === NULL) {
+      $requirements['varnish']['value'] = $t('Required PHP extension not found. Install the <a href="https://php.net/manual/en/book.sockets.php">sockets</a> extension.');
+      $requirements['varnish']['severity'] = REQUIREMENT_ERROR;
+      return $requirements;
+    }
     foreach ($status as $terminal => $state) {
       list($server, $port) = explode(':', $terminal);
       if (!$state) {
