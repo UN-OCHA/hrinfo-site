@@ -48,7 +48,6 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
 
     // n.b. version numbers are arbitrary in most cases here, so probably no
     // real need update them as new releases come out.
-
     $form = array(
       'jquery_update_custom_path_jquery' => "https://code.jquery.com/jquery-3.6.0.js",
       'jquery_update_custom_version_jquery' => "3.6.0",
@@ -224,9 +223,9 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
     );
 
     foreach ($updates as $library => $update) {
-      // drupal_set_message warnings
+      // drupal_set_message warnings.
       $this->assertRaw('<li>' . $update . '</li>', format_string('Warning message showing update available for $%library', array('%library' => $library)));
-      // update messages in the form
+      // Update messages in the form.
       $this->assertRaw('<strong>' . $update . '</strong>', format_string('Info showing update available for $%library', array('%library' => $library)));
     }
 
@@ -244,9 +243,9 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
     $this->drupalLogin($this->admin);
     $this->drupalGet('/admin/config/development/jquery_update');
     foreach ($updates as $library => $update) {
-      // drupal_set_message warnings
+      // drupal_set_message warnings.
       $this->assertNoRaw('<li>' . $update . '</li>', format_string('No warning message showing update available for $%library', array('%library' => $library)));
-      // update messages in the form
+      // Update messages in the form.
       $this->assertRaw('<strong>' . $update . '</strong>', format_string('Info showing update available for $%library', array('%library' => $library)));
     }
 
@@ -258,7 +257,9 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Tests that obsolete jQuery versions (removed by 7.x-4.x) set in the
+   * Tests fallback for obsolete jQuery versions.
+   *
+   * Ensure that obsolete jQuery versions (removed by 7.x-4.x) set in the
    * jquery_update_jquery_version variable are replaced by a fallback.
    */
   public function testObsoleteJqueryVersion() {
@@ -281,6 +282,146 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
     $url = file_create_url($libraries['jquery']['js']['misc/jquery.js']['data']);
     $this->drupalHead($url);
     $this->assertResponse(200, 'jquery.js file correctly loaded.');
+  }
+
+  /**
+   * Tests example Custom paths in the admin UI.
+   */
+  public function testExampleCustomPaths() {
+
+    $this->drupalGet('/admin/config/development/jquery_update');
+    $this->assertRaw('Example: <em class="placeholder">https://code.jquery.com/jquery-3.6.1.js</em> or', 'Default example jquery custom path');
+    $this->assertRaw('Example: <em class="placeholder">3.6.1</em>', 'Default example jquery custom version');
+    $this->assertRaw('Example: <em class="placeholder">https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js</em> or', 'Default example jqueryui custom path');
+    $this->assertRaw('Example: <em class="placeholder">1.13.2</em>', 'Default example jqueryui custom version');
+    $this->assertRaw('Example: <em class="placeholder">https://cdn.jsdelivr.net/npm/jquery-migrate@3.4.0/dist/jquery-migrate.min.js</em> or', 'Default example jquery-migrate custom path');
+    $this->assertRaw('Example: <em class="placeholder">3.4.0</em>', 'Default example jquery-migrate custom version');
+    $this->assertRaw('Example: <em class="placeholder">https://cdn.jsdelivr.net/gh/carhartl/jquery-cookie@1.4.1/jquery.cookie.js</em> or', 'Default example jquery-cookie custom path');
+    $this->assertRaw('Example: <em class="placeholder">1.4.1</em>', 'Default example jquery-cookie custom version');
+    $this->assertRaw('Example: <em class="placeholder">https://cdn.jsdelivr.net/gh/jquery-form/form@4.3.0/dist/jquery.form.min.js</em> or', 'Default example jquery.form custom path');
+    $this->assertRaw('Example: <em class="placeholder">4.3.0</em>', 'Default example jquery.form custom version');
+
+    // These are arbitrary values just for testing.
+    $info = array(
+      'jquery_update_latest_version_jquery' => '1.2.3',
+      'jquery_update_latest_version_jqueryui' => '2.3.4',
+      'jquery_update_latest_version_jquery_migrate' => '3.4.5',
+      'jquery_update_latest_version_jquery_cookie' => '4.5.6',
+      'jquery_update_latest_version_jquery_form' => '5.6.7',
+    );
+    foreach ($info as $k => $v) {
+      variable_set($k, $v);
+    }
+
+    $this->drupalGet('/admin/config/development/jquery_update');
+    $this->assertRaw('Example: <em class="placeholder">https://code.jquery.com/jquery-1.2.3.js</em> or', 'Updated example jquery custom path');
+    $this->assertRaw('Example: <em class="placeholder">1.2.3</em>', 'Updated example jquery custom version');
+    $this->assertRaw('Example: <em class="placeholder">https://cdnjs.cloudflare.com/ajax/libs/jqueryui/2.3.4/jquery-ui.min.js</em> or', 'Updated example jqueryui custom path');
+    $this->assertRaw('Example: <em class="placeholder">2.3.4</em>', 'Updated example jqueryui custom version');
+    $this->assertRaw('Example: <em class="placeholder">https://cdn.jsdelivr.net/npm/jquery-migrate@3.4.5/dist/jquery-migrate.min.js</em> or', 'Updated example jquery-migrate custom path');
+    $this->assertRaw('Example: <em class="placeholder">3.4.5</em>', 'Updated example jquery-migrate custom version');
+    $this->assertRaw('Example: <em class="placeholder">https://cdn.jsdelivr.net/gh/carhartl/jquery-cookie@4.5.6/jquery.cookie.js</em> or', 'Updated example jquery-cookie custom path');
+    $this->assertRaw('Example: <em class="placeholder">4.5.6</em>', 'Updated example jquery-cookie custom version');
+    $this->assertRaw('Example: <em class="placeholder">https://cdn.jsdelivr.net/gh/jquery-form/form@5.6.7/dist/jquery.form.min.js</em> or', 'Updated example jquery.form custom path');
+    $this->assertRaw('Example: <em class="placeholder">5.6.7</em>', 'Updated example jquery.form custom version');
+
+  }
+
+  /**
+   * Tests setting up multiple non-core jQuery versions.
+   */
+  public function testMultipleVersions() {
+
+    $this->full_admin = $this->drupalCreateUser(
+      array(
+        'administer site configuration',
+        'administer themes',
+        'administer jquery update',
+      )
+    );
+    $this->drupalLogin($this->full_admin);
+
+    $form = array(
+      'jquery_update_custom_path_jquery' => "https://code.jquery.com/jquery-3.6.1.js",
+      'jquery_update_custom_version_jquery' => "3.6.1",
+    );
+    $this->drupalPost('admin/config/development/jquery_update', $form, t('Save configuration'));
+    $form = array(
+      'jquery_update_jquery_version' => "1.12",
+    );
+    $this->drupalPost('admin/appearance/settings/seven', $form, t('Save configuration'));
+
+    $this->drupalGet('admin/reports/status');
+
+    $admin_theme_pattern = preg_quote('jQuery Update (admin_theme: <em class="placeholder">Seven</em>)</td><td class="status-value">jQuery <em class="placeholder">1.12.4</em> (<a href="', '/');
+    $admin_theme_pattern .= '.*' . preg_quote('admin/config/development/jquery_update">configure</a>) and jQuery UI <em class="placeholder">1.10.2</em>', '/');
+
+    $default_theme_pattern = preg_quote('jQuery Update (theme_default: <em class="placeholder">Bartik</em>)</td><td class="status-value">jQuery <em class="placeholder">3.6.1</em> (<a href="', '/');
+    $default_theme_pattern .= '.*' . preg_quote('admin/config/development/jquery_update">configure</a>) and jQuery UI <em class="placeholder">1.10.2</em>', '/');
+
+    $this->assertPattern('#' . $admin_theme_pattern . '#', 'Admin theme has jQuery 1.12.4 and UI 1.10.2');
+    $this->assertPattern('#' . $default_theme_pattern . '#', 'Default theme has jQuery 3.6.1 and UI 1.10.2');
+
+    // This time also set up a custom jQuery UI version.
+    $form = array(
+      'jquery_update_custom_path_jquery' => "https://code.jquery.com/jquery-3.6.1.js",
+      'jquery_update_custom_version_jquery' => "3.6.1",
+      'jquery_update_custom_path_jqueryui' => "https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js",
+      'jquery_update_custom_version_jqueryui' => "1.13.1",
+    );
+    $this->drupalPost('admin/config/development/jquery_update', $form, t('Save configuration'));
+    $form = array(
+      'jquery_update_jquery_version' => "2.2",
+    );
+    $this->drupalPost('admin/appearance/settings/seven', $form, t('Save configuration'));
+
+    $this->drupalGet('admin/reports/status');
+
+    $admin_theme_pattern = preg_quote('jQuery Update (admin_theme: <em class="placeholder">Seven</em>)</td><td class="status-value">jQuery <em class="placeholder">2.2.4</em> (<a href="', '/');
+    $admin_theme_pattern .= '.*' . preg_quote('admin/config/development/jquery_update">configure</a>) and jQuery UI <em class="placeholder">1.13.1</em>', '/');
+
+    $default_theme_pattern = preg_quote('jQuery Update (theme_default: <em class="placeholder">Bartik</em>)</td><td class="status-value">jQuery <em class="placeholder">3.6.1</em> (<a href="', '/');
+    $default_theme_pattern .= '.*' . preg_quote('admin/config/development/jquery_update">configure</a>) and jQuery UI <em class="placeholder">1.13.1</em>', '/');
+
+    $this->assertPattern('#' . $admin_theme_pattern . '#', 'Admin theme has jQuery 2.2.4 and UI 1.13.1');
+    $this->assertPattern('#' . $default_theme_pattern . '#', 'Default theme has jQuery 3.6.1 and UI 1.13.1');
+  }
+
+  /**
+   * Tests that the library alter does not use a POST variable without a token.
+   */
+  public function testAjaxPageStateVersion() {
+    // Use jQuery 2.2 from the module for default and admin themes.
+    $theme_admin = $this->drupalCreateUser(array(
+      'administer jquery update',
+      'administer themes',
+    ));
+    $this->drupalLogin($theme_admin);
+    $form['jquery_update_jquery_version'] = '2.2';
+    $this->drupalPost('/admin/config/development/jquery_update', $form, t('Save configuration'));
+    $this->drupalPost('admin/appearance/settings/seven', $form, t('Save configuration'));
+
+    $libraries = drupal_get_library('system');
+    $this->assertEqual('2.2.4', $libraries['jquery']['version'], 'Configured version 2.2.4 before library alter.');
+    $settings = array_pop($libraries['drupal.ajax']['js']);
+    $this->assertEqual('2.2', $settings['data']['ajaxPageState']['jquery_version'], 'Drupal AJAX is configured 2.2 before library alter.');
+
+    jquery_update_library_alter($libraries, 'system');
+    $this->assertEqual('2.2.4', $libraries['jquery']['version'], 'Configured version 2.2.4 after first library alter.');
+    $settings = array_pop($libraries['drupal.ajax']['js']);
+    $this->assertEqual('2.2', $settings['data']['ajaxPageState']['jquery_version'], 'Drupal AJAX is configured 2.2 after first library alter.');
+
+    $_POST['ajax_page_state']['jquery_version'] = '1.12';
+    jquery_update_library_alter($libraries, 'system');
+    $this->assertEqual('2.2.4', $libraries['jquery']['version'], 'Configured version 2.2.4 after second library alter with POST variable set.');
+    $settings = array_pop($libraries['drupal.ajax']['js']);
+    $this->assertEqual('2.2', $settings['data']['ajaxPageState']['jquery_version'], 'Drupal AJAX is configured 2.2 after second library alter with POST variable set.');
+
+    $_POST['ajax_page_state']['jquery_version_token'] = drupal_get_token('1.12');
+    jquery_update_library_alter($libraries, 'system');
+    $this->assertEqual('1.12.4', $libraries['jquery']['version'], 'Version 1.12.4 from POST variable after third library alter with token.');
+    $settings = array_pop($libraries['drupal.ajax']['js']);
+    $this->assertEqual('1.12', $settings['data']['ajaxPageState']['jquery_version'], 'Drupal AJAX is 1.12 from POST variable after third library alter with token.');
   }
 
 }

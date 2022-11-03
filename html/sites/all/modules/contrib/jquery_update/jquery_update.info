@@ -5,8 +5,8 @@ core = 7.x
 files[] = tests/jquery_update.test
 configure = admin/config/development/jquery_update
 
-; Information added by Drupal.org packaging script on 2022-09-29
-version = "7.x-4.0-rc1"
+; Information added by Drupal.org packaging script on 2022-11-01
+version = "7.x-4.0-rc2"
 core = "7.x"
 project = "jquery_update"
-datestamp = "1664485131"
+datestamp = "1667310851"

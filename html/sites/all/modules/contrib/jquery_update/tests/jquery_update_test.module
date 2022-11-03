@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Module to help test jQuery Update.
+ */
+
+/**
  * Implements hook_init().
  */
 function jquery_update_test_init() {
