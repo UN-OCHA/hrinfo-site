@@ -4,8 +4,8 @@ package = Testing
 core = 7.x
 hidden = TRUE
 
-; Information added by Drupal.org packaging script on 2022-11-01
-version = "7.x-4.0-rc2"
+; Information added by Drupal.org packaging script on 2022-11-21
+version = "7.x-4.0"
 core = "7.x"
 project = "jquery_update"
-datestamp = "1667310851"
+datestamp = "1669044750"
