@@ -2574,12 +2574,12 @@
             ],
             "authors": [
                 {
-                    "name": "RobLoach",
-                    "homepage": "https://www.drupal.org/user/61114"
-                },
-                {
                     "name": "mh86",
                     "homepage": "https://www.drupal.org/user/59747"
+                },
+                {
+                    "name": "RobLoach",
+                    "homepage": "https://www.drupal.org/user/61114"
                 }
             ],
             "description": "Defines an email field type.",
@@ -4727,24 +4727,12 @@
             ],
             "authors": [
                 {
-                    "name": "Berdir",
-                    "homepage": "https://www.drupal.org/user/214652"
-                },
-                {
-                    "name": "Gábor Hojtsy",
-                    "homepage": "https://www.drupal.org/user/4166"
-                },
-                {
-                    "name": "Jax",
-                    "homepage": "https://www.drupal.org/user/11450"
-                },
-                {
-                    "name": "Jose Reyero",
-                    "homepage": "https://www.drupal.org/user/4299"
-                },
-                {
                     "name": "alex_b",
                     "homepage": "https://www.drupal.org/user/53995"
+                },
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
                     "name": "brucepearson",
@@ -4771,12 +4759,24 @@
                     "homepage": "https://www.drupal.org/user/66163"
                 },
                 {
+                    "name": "Gábor Hojtsy",
+                    "homepage": "https://www.drupal.org/user/4166"
+                },
+                {
                     "name": "hass",
                     "homepage": "https://www.drupal.org/user/85918"
                 },
                 {
+                    "name": "Jax",
+                    "homepage": "https://www.drupal.org/user/11450"
+                },
+                {
                     "name": "jmiccolis",
                     "homepage": "https://www.drupal.org/user/31731"
+                },
+                {
+                    "name": "Jose Reyero",
+                    "homepage": "https://www.drupal.org/user/4299"
                 },
                 {
                     "name": "joseph.olstad",
@@ -4849,24 +4849,12 @@
             ],
             "authors": [
                 {
-                    "name": "Berdir",
-                    "homepage": "https://www.drupal.org/user/214652"
-                },
-                {
-                    "name": "Gábor Hojtsy",
-                    "homepage": "https://www.drupal.org/user/4166"
-                },
-                {
-                    "name": "Jax",
-                    "homepage": "https://www.drupal.org/user/11450"
-                },
-                {
-                    "name": "Jose Reyero",
-                    "homepage": "https://www.drupal.org/user/4299"
-                },
-                {
                     "name": "alex_b",
                     "homepage": "https://www.drupal.org/user/53995"
+                },
+                {
+                    "name": "Berdir",
+                    "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
                     "name": "brucepearson",
@@ -4893,12 +4881,24 @@
                     "homepage": "https://www.drupal.org/user/66163"
                 },
                 {
+                    "name": "Gábor Hojtsy",
+                    "homepage": "https://www.drupal.org/user/4166"
+                },
+                {
                     "name": "hass",
                     "homepage": "https://www.drupal.org/user/85918"
                 },
                 {
+                    "name": "Jax",
+                    "homepage": "https://www.drupal.org/user/11450"
+                },
+                {
                     "name": "jmiccolis",
                     "homepage": "https://www.drupal.org/user/31731"
+                },
+                {
+                    "name": "Jose Reyero",
+                    "homepage": "https://www.drupal.org/user/4299"
                 },
                 {
                     "name": "joseph.olstad",
@@ -5262,17 +5262,17 @@
         },
         {
             "name": "drupal/jquery_update",
-            "version": "4.0.0-rc2",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/jquery_update.git",
-                "reference": "7.x-4.0-rc2"
+                "reference": "7.x-4.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jquery_update-7.x-4.0-rc2.zip",
-                "reference": "7.x-4.0-rc2",
-                "shasum": "0c9a9f18b6786ae94ca34d3dac242ddf76989a0a"
+                "url": "https://ftp.drupal.org/files/projects/jquery_update-7.x-4.0.zip",
+                "reference": "7.x-4.0",
+                "shasum": "3ff1a393c244f506052a26d9cc59020e3661449e"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -5280,11 +5280,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-4.0-rc2",
-                    "datestamp": "1667310849",
+                    "version": "7.x-4.0",
+                    "datestamp": "1669044747",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "RC releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -6820,6 +6820,10 @@
                 {
                     "name": "ashsc",
                     "homepage": "https://www.drupal.org/user/358576"
+                },
+                {
+                    "name": "claudiu.cristea",
+                    "homepage": "https://www.drupal.org/user/56348"
                 },
                 {
                     "name": "jide",
@@ -9923,16 +9927,16 @@
             ],
             "authors": [
                 {
-                    "name": "Jose Reyero",
-                    "homepage": "https://www.drupal.org/user/4299"
-                },
-                {
                     "name": "bforchhammer",
                     "homepage": "https://www.drupal.org/user/216396"
                 },
                 {
                     "name": "jmiccolis",
                     "homepage": "https://www.drupal.org/user/31731"
+                },
+                {
+                    "name": "Jose Reyero",
+                    "homepage": "https://www.drupal.org/user/4299"
                 },
                 {
                     "name": "mkalkbrenner",
@@ -9977,16 +9981,16 @@
             ],
             "authors": [
                 {
-                    "name": "Jose Reyero",
-                    "homepage": "https://www.drupal.org/user/4299"
-                },
-                {
                     "name": "bforchhammer",
                     "homepage": "https://www.drupal.org/user/216396"
                 },
                 {
                     "name": "jmiccolis",
                     "homepage": "https://www.drupal.org/user/31731"
+                },
+                {
+                    "name": "Jose Reyero",
+                    "homepage": "https://www.drupal.org/user/4299"
                 },
                 {
                     "name": "mkalkbrenner",
@@ -10031,16 +10035,16 @@
             ],
             "authors": [
                 {
-                    "name": "Jose Reyero",
-                    "homepage": "https://www.drupal.org/user/4299"
-                },
-                {
                     "name": "bforchhammer",
                     "homepage": "https://www.drupal.org/user/216396"
                 },
                 {
                     "name": "jmiccolis",
                     "homepage": "https://www.drupal.org/user/31731"
+                },
+                {
+                    "name": "Jose Reyero",
+                    "homepage": "https://www.drupal.org/user/4299"
                 },
                 {
                     "name": "mkalkbrenner",
@@ -12830,16 +12834,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.13.0",
+            "version": "1.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "33aefcdab42900e36366d0feab6206e2dd68f947"
+                "reference": "aac44118344d197e6d5f7c6cee91885f0a89acdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/33aefcdab42900e36366d0feab6206e2dd68f947",
-                "reference": "33aefcdab42900e36366d0feab6206e2dd68f947",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/aac44118344d197e6d5f7c6cee91885f0a89acdd",
+                "reference": "aac44118344d197e6d5f7c6cee91885f0a89acdd",
                 "shasum": ""
             },
             "require": {
@@ -12869,9 +12873,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.13.0"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.13.1"
             },
-            "time": "2022-10-21T09:57:39+00:00"
+            "time": "2022-11-20T08:52:26+00:00"
         },
         {
             "name": "phpunit/php-timer",
