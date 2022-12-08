@@ -1,6 +1,0 @@
-name = Feeds: Entity Translation
-description = Adds support for importing translations via Entity Translation.
-core = 7.x
-dependencies[] = "feeds"
-dependencies[] = "entity_translation"
-package = Feeds

@@ -1,4 +1,0 @@
-name = Spatial Import
-description = Import spatial data with Table Wizard or Feeds
-package = Geo Spatial Tools
-core = 7.x
