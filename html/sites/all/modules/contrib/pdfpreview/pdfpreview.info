@@ -1,7 +1,0 @@
-name = PDF Preview
-description = Show a snapshot of the first page of pdf files attached to nodes.
-package = Media
-core = 7.x
-dependencies[] = imagemagick
-dependencies[] = image
-
