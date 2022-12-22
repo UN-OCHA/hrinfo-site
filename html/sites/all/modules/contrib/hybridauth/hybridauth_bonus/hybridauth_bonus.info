@@ -1,0 +1,12 @@
+name = HybridAuth Bonus
+description = "Provides HybridAuth bonus features, like roles choosing upon registration."
+core = 7.x
+package = "HybridAuth"
+configure = admin/config/people/hybridauth
+dependencies[] = hybridauth
+
+; Information added by Drupal.org packaging script on 2018-07-11
+version = "7.x-2.16"
+core = "7.x"
+project = "hybridauth"
+datestamp = "1531281831"

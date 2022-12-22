@@ -1,0 +1,3 @@
+name = OCHA Snap
+description = Allows your Drupal site to use a Snap Service to generate PDF documents.
+core = 7.x

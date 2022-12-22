@@ -893,18 +893,6 @@
             ],
             "authors": [
                 {
-                    "name": "Pravin Ajaaz",
-                    "homepage": "https://www.drupal.org/user/2910049"
-                },
-                {
-                    "name": "RenatoG",
-                    "homepage": "https://www.drupal.org/user/3326031"
-                },
-                {
-                    "name": "VladimirAus",
-                    "homepage": "https://www.drupal.org/user/673120"
-                },
-                {
                     "name": "bforchhammer",
                     "homepage": "https://www.drupal.org/user/216396"
                 },
@@ -917,8 +905,24 @@
                     "homepage": "https://www.drupal.org/user/1001934"
                 },
                 {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "Pravin Ajaaz",
+                    "homepage": "https://www.drupal.org/user/2910049"
+                },
+                {
                     "name": "purushotam.rai",
                     "homepage": "https://www.drupal.org/user/3193859"
+                },
+                {
+                    "name": "RenatoG",
+                    "homepage": "https://www.drupal.org/user/3326031"
+                },
+                {
+                    "name": "VladimirAus",
+                    "homepage": "https://www.drupal.org/user/673120"
                 }
             ],
             "description": "Allows hiding of entity label fields and automatic label creation.",
@@ -4684,17 +4688,17 @@
         },
         {
             "name": "drupal/i18n",
-            "version": "1.32.0",
+            "version": "1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/i18n.git",
-                "reference": "7.x-1.32"
+                "reference": "7.x-1.33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/i18n-7.x-1.32.zip",
-                "reference": "7.x-1.32",
-                "shasum": "4471c378d493fe04e870f6e03d1eb524c549b249"
+                "url": "https://ftp.drupal.org/files/projects/i18n-7.x-1.33.zip",
+                "reference": "7.x-1.33",
+                "shasum": "0b982c34d25096b201ab0391d4ab1b4c959833b8"
             },
             "require": {
                 "drupal/drupal": "*",
@@ -4713,8 +4717,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.32",
-                    "datestamp": "1670344815",
+                    "version": "7.x-1.33",
+                    "datestamp": "1671097723",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4827,7 +4831,7 @@
         },
         {
             "name": "drupal/i18n_string",
-            "version": "1.32.0",
+            "version": "1.33.0",
             "require": {
                 "drupal/drupal": "*",
                 "drupal/i18n": "*"
@@ -4835,8 +4839,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.32",
-                    "datestamp": "1670344815",
+                    "version": "7.x-1.33",
+                    "datestamp": "1671097723",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10131,17 +10135,17 @@
         },
         {
             "name": "drupal/views",
-            "version": "3.27.0",
+            "version": "3.28.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views.git",
-                "reference": "7.x-3.27"
+                "reference": "7.x-3.28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views-7.x-3.27.zip",
-                "reference": "7.x-3.27",
-                "shasum": "75ea2803956da6cc4519c6e365ae44031620b7e7"
+                "url": "https://ftp.drupal.org/files/projects/views-7.x-3.28.zip",
+                "reference": "7.x-3.28",
+                "shasum": "7466904eed5892f881832a9f89fd6ecf4b41b029"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -10150,8 +10154,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-3.27",
-                    "datestamp": "1664210554",
+                    "version": "7.x-3.28",
+                    "datestamp": "1671451977",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -12834,16 +12838,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.15.0",
+            "version": "1.15.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "6ff970a7101acfe99b3048e4bbfbc094e55c5b04"
+                "reference": "61800f71a5526081d1b5633766aa88341f1ade76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/6ff970a7101acfe99b3048e4bbfbc094e55c5b04",
-                "reference": "6ff970a7101acfe99b3048e4bbfbc094e55c5b04",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/61800f71a5526081d1b5633766aa88341f1ade76",
+                "reference": "61800f71a5526081d1b5633766aa88341f1ade76",
                 "shasum": ""
             },
             "require": {
@@ -12873,9 +12877,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.15.0"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.15.3"
             },
-            "time": "2022-12-07T16:12:39+00:00"
+            "time": "2022-12-20T20:56:55+00:00"
         },
         {
             "name": "phpunit/php-timer",
@@ -13146,16 +13150,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "8.7.0",
+            "version": "8.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "326d195209d196be02f8c2a0034529262fc7ffcc"
+                "reference": "c51edb898bebd36aac70a190c6a41a7c056bb5b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/326d195209d196be02f8c2a0034529262fc7ffcc",
-                "reference": "326d195209d196be02f8c2a0034529262fc7ffcc",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/c51edb898bebd36aac70a190c6a41a7c056bb5b9",
+                "reference": "c51edb898bebd36aac70a190c6a41a7c056bb5b9",
                 "shasum": ""
             },
             "require": {
@@ -13195,7 +13199,7 @@
             ],
             "support": {
                 "issues": "https://github.com/slevomat/coding-standard/issues",
-                "source": "https://github.com/slevomat/coding-standard/tree/8.7.0"
+                "source": "https://github.com/slevomat/coding-standard/tree/8.7.1"
             },
             "funding": [
                 {
@@ -13207,7 +13211,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-12-13T15:02:08+00:00"
+            "time": "2022-12-14T08:49:18+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
