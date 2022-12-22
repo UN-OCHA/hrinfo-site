@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @file
+ * Tests for Secure Login module.
+ */
+
+/**
+ * Tests basic Secure Login functionality.
+ */
+class SecureLoginTestCase extends DrupalWebTestCase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Secure Login tests',
+      'description' => 'Tests Secure Login module.',
+      'group' => 'Secure Login',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp('securelogin');
+  }
+
+  /**
+   * Ensure a request over HTTP gets 301 redirected to HTTPS.
+   */
+  protected function testHttpSecureLogin() {
+    global $base_url;
+    // Disable redirect following.
+    variable_set('simpletest_maximum_redirects', 0);
+    $this->drupalGet($this->httpUrl('user/login'));
+    $headers = $this->drupalGetHeaders(TRUE);
+    $this->assertTrue(strpos($headers[0][':status'], '301'), 'Status header contains 301.');
+    $this->assertIdentical(0, strpos($headers[0]['location'], str_replace('http://', 'https://', $base_url)), 'Location header uses the secure base URL.');
+    // Re-enable redirect following.
+    variable_del('simpletest_maximum_redirects');
+  }
+
+  /**
+   * Ensure HTTPS requests do not get redirected.
+   */
+  protected function testHttpsSecureLogin() {
+    $this->drupalGet($this->httpsUrl('user/login'));
+    $this->assertResponse(200);
+    $xpath = $this->xpath('//form[@id="user-login"]');
+    $this->assertEqual(count($xpath), 1, 'The user is on the login form.');
+  }
+
+  /**
+   * Builds a URL for submitting a mock HTTPS request to HTTP test environments.
+   *
+   * @param string $url
+   *   A Drupal path such as 'user'.
+   *
+   * @return string
+   *   An absolute URL.
+   */
+  protected function httpsUrl($url) {
+    global $base_url;
+    return $base_url . '/modules/simpletest/tests/https.php?q=' . $url;
+  }
+
+  /**
+   * Builds a URL for submitting a mock HTTP request to HTTPS test environments.
+   *
+   * @param string $url
+   *   A Drupal path such as 'user'.
+   *
+   * @return string
+   *   An absolute URL.
+   */
+  protected function httpUrl($url) {
+    global $base_url;
+    return $base_url . '/modules/simpletest/tests/http.php?q=' . $url;
+  }
+
+}

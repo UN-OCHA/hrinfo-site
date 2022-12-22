@@ -1,0 +1,15 @@
+name = Bean Pane
+description = Create and edit bean content with Panels.
+core = 7.x
+
+package = Bean
+dependencies[] = bean
+dependencies[] = ctools
+dependencies[] = panels
+
+; Information added by Drupal.org packaging script on 2016-07-22
+version = "7.x-1.2"
+core = "7.x"
+project = "bean_pane"
+datestamp = "1469193855"
+

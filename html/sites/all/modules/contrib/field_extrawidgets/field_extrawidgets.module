@@ -1,0 +1,225 @@
+<?php
+
+/**
+ * @file
+ * Provides two extra widgets for the Field API.
+ *
+ * Provides two extra widgets:
+ *
+ * - Hidden: this widget doesn't show anything on the edit form, and as a
+ *   consequence prevents the user from modifying the content of the widget.
+ *   This is useful in some situations where using hook_field_access() is not 
+ *   suitable (for example when you want to have different edit forms for
+ *   different users).
+ * - Read-only: this widget shows the content of the field on the edit form,
+ *   but doesn't allow the user to edit it. The content is rendered using one
+ *   of the formatter of the field.
+ */
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function field_extrawidgets_field_widget_info() {
+  $widgets['field_extrawidgets_hidden'] = array(
+    'label' => t('Hidden'),
+    'description' => t('A widget that is completely hidden.'),
+    'field types' => array_keys(field_info_field_types()),
+    'settings' => array(),
+    'behaviors' => array(
+      'multiple values' => FIELD_BEHAVIOR_CUSTOM,
+    ),
+    'weight' => 10,
+  );
+
+  $widgets['field_extrawidgets_read_only'] = array(
+    'label' => t('Read-only'),
+    'description' => t('A widget that is read-only.'),
+    'field types' => array_keys(field_info_field_types()),
+    'settings' => array(
+      'formatter' => '',
+      'formatter_settings' => array(),
+      'display_empty' => 0,
+    ),
+    'behaviors' => array(
+      'multiple values' => FIELD_BEHAVIOR_CUSTOM,
+    ),
+    'weight' => 11,
+  );
+
+  return $widgets;
+}
+
+/**
+ * Get settings for a widget, merging in default values.
+ */
+function field_extrawidgets_widget_settings($field, $instance) {
+  $settings = isset($instance['widget']['settings']) ? $instance['widget']['settings'] : array();
+  
+  if (empty($settings['formatter'])) {
+    $field_type = field_info_field_types($field['type']);
+    $settings['formatter'] = $field_type['default_formatter'];
+    $settings['formatter_settings'] = field_info_formatter_settings($settings['formatter']);
+  }
+  return $settings;
+}
+
+/**
+ * Implements hook_field_widget_settings_form().
+ */
+function field_extrawidgets_field_widget_settings_form($field, $instance) {
+  // The Hidden widget doesn't have any settings.
+  if ($instance['widget']['type'] != 'field_extrawidgets_read_only') {
+    return array();
+  }
+
+  $settings = field_extrawidgets_widget_settings($field, $instance);
+
+  // Include the field_ui admin form.
+  module_load_include('inc', 'field_ui', 'field_ui.admin');
+
+  // Get the list of formatters for this field type, and remove our own.
+  $formatters = field_ui_formatter_options($field['type']);
+
+  $element['formatter'] = array(
+    '#type' => 'select',
+    '#title' => t('Formatter'),
+    '#options' => $formatters,
+    '#default_value' => $settings['formatter'],
+
+    // AJAX refresh the settings area when the formatter is changed.
+    '#ajax' => array(
+      'callback' => 'field_extrawidgets_field_widget_settings_ajax',
+      'wrapper' => 'field_extrawidgets-formatter-settings',
+    ),
+    '#limit_validation_errors' => array(),
+  );
+
+  // Get the settings form.
+  $element['formatter_settings'] = array(
+    '#type' => 'container',
+    '#id' => 'field_extrawidgets-formatter-settings',
+    '#process' => array('field_extrawidgets_field_widget_render_settings'),
+    '#tree' => TRUE,
+    '#field' => $field,
+    '#instance' => $instance,
+  );
+
+  $element['display_empty'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Display %text if empty', array('%text' => t('Not defined'))),
+    '#default_value' => $settings['display_empty'],
+  );
+
+  return $element;
+}
+
+/**
+ * Form #process callback: generates the formatter settings form.
+ */
+function field_extrawidgets_field_widget_render_settings($element, $form_state, $form) {
+  $parents = $element['#parents'];
+  array_pop($parents);
+  $parents[] = 'formatter';
+  $formatter_type = drupal_array_get_nested_value($form_state['values'], $parents);
+
+  $field = $element['#field'];
+  $instance = $element['#instance'];
+
+  $formatter = field_info_formatter_types($formatter_type);
+  $formatter_settings = array();
+  if (isset($form_state['values']['instance']['widget']['settings']['formatter_settings'])) {
+    $formatter_settings += $form_state['values']['instance']['widget']['settings']['formatter_settings'];
+  }
+  elseif (isset($instance['widget']['settings']['formatter_settings'])) {
+    $formatter_settings += $instance['widget']['settings']['formatter_settings'];
+  }
+  $formatter_settings += field_info_formatter_settings($formatter_type);
+
+  $settings_form = array('#value' => array());
+  $function = $formatter['module'] . '_field_formatter_settings_form';
+  $instance['display']['_dummy'] = array(
+    'type' => $formatter_type,
+    'settings' => $formatter_settings,
+  );
+  if (function_exists($function)) {
+    $element += $function($field, $instance, '_dummy', $form, $form_state);
+  }
+
+  return $element;
+}
+
+/**
+ * Form AJAX callback: refresh the formatter settings form.
+ */
+function field_extrawidgets_field_widget_settings_ajax($form, $form_state) {
+  $trigger = $form_state['triggering_element'];
+  $parents = $trigger['#array_parents'];
+  // Pop the container.
+  array_pop($parents);
+  $parents[] = 'formatter_settings';
+
+  $element = drupal_array_get_nested_value($form, $parents);
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function field_extrawidgets_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $widget_type = $instance['widget']['type'];
+  $widget_settings = field_extrawidgets_widget_settings($field, $instance);
+
+  if ($widget_type == 'field_extrawidgets_hidden') {
+    return array();
+  }
+
+  if ($widget_type == 'field_extrawidgets_read_only') {
+    // Clone the entity to avoid messing with it.
+    $entity_type = $element['#entity_type'];
+    if (!isset($form_state[$entity_type])) {
+      return array();
+    }
+    $cloned_entity = clone $form_state[$entity_type];
+
+    if (!field_access('view', $field, $entity_type, $cloned_entity)) {
+      // The current user doesn't have access to view this field.
+      return array();
+    }
+
+    // Set the fallback formatter.
+    $display['type'] = $widget_settings['formatter'];
+    $display['settings'] = $widget_settings['formatter_settings'];
+    $formatter_type = field_info_formatter_types($display['type']);
+    $display['module'] = $formatter_type['module'];
+
+    $element += field_view_field($entity_type, $cloned_entity, $field['field_name'], $display, $langcode);
+
+    // If asked to display a placeholder text, detect if the result is empty.
+    if (!isset($element[0]) && !empty($widget_settings['display_empty'])) {
+      $display = _field_info_prepare_instance_display($field, $display);
+      // Generate the field structure as done in field_default_view().
+      $element += array(
+        '#theme' => 'field',
+        '#weight' => $display['weight'],
+        '#title' => $instance['label'],
+        '#access' => TRUE,
+        '#label_display' => $display['label'],
+        '#view_mode' => '_custom_display',
+        '#language' => $langcode,
+        '#field_name' => $field['field_name'],
+        '#field_type' => $field['type'],
+        '#field_translatable' => $field['translatable'],
+        '#entity_type' => $entity_type,
+        '#bundle' => '',
+        '#object' => $cloned_entity,
+        '#items' => array(0 => ''),
+        '#formatter' => $display['type']
+      );
+      $element[0] = array(
+        '#markup' => t('Not defined'),
+      );
+    }
+
+    return $element;
+  }
+}
