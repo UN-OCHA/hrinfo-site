@@ -1,0 +1,16 @@
+/**
+ * @file
+ * Default CSS rules for the phone element.
+ */
+
+/* Make phone elements be side by side, not stacked. */
+.form-type-phone .form-item {
+  float: left; /* LTR */
+}
+.phone-label-before .form-type-phone .form-item label {
+  display: inline;
+}
+.phone-label-before .form-type-phone .form-item input,
+.phone-label-before .form-type-phone .form-item select {
+  margin-right: 1em;
+}
