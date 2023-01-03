@@ -1,0 +1,197 @@
+<?php
+
+/**
+ * @file
+ * Converts cck_phone-7.x-1.x fields into phone-7.x-2.x fields.
+ * (Note that cck_phone-6.x fields are handled by cck's
+ *  content_migrate module.)
+ */
+
+/**
+ * Implements hook_menu().
+ *
+ * Add a menu item for the conversion UI.
+ */
+function phone_cck_convert_menu() {
+  $items['admin/config/content/phone-cck-convert'] = array(
+    'title' => 'Convert cck_phone fields',
+    'description' => 'Convert cck_phone-7.x-1.x fields into phone-7.x-2.x fields.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('phone_cck_convert_admin_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_init().
+ *
+ * Add message for admins letting them know status of module.
+ */
+function phone_cck_convert_init() {
+  // Only show message to admins.
+  // Plus skip message if they're already at the form page.
+  if (user_access('access administration pages') && request_path()!='admin/config/content/phone-cck-convert') {
+    $nfields = db_select('field_config')
+      ->condition('module', 'cck_phone')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+    if (!$nfields) {
+      drupal_set_message(t('There are no cck_phone fields that need to be converted into phone fields. You can disable the CCK Phone Converter module.'), 'status', FALSE);
+    }
+    else {
+      drupal_set_message(t('The CCK Phone Converter module has not yet been run. To convert all cck_phone fields into phone fields, go the the <a href="!url">Converter admin page</a>.', array('!url' => url('admin/config/content/phone-cck-convert'))), 'status', FALSE);
+    }
+  }
+}
+
+/**
+ * Form displaying the conversion UI.
+ */
+function phone_cck_convert_admin_form($form, &$form_state) {
+  $result = db_select('field_config')
+    ->condition('module', 'cck_phone')
+    ->fields('field_config', array('field_name'))
+    ->execute();
+
+  $nfields = (int) $result->rowCount();
+  if ($nfields) {
+    $fields = $result->fetchCol();
+    $form['intro'] = array(
+      '#markup' => t('<p>There are @nfields cck_phone fields (@field_names) that need to be converted into phone fields.</p><p>To proceed with the conversion, click the %convert button.  This will irreversibly alter the existing field settings and data, so be sure to backup your data before starting the conversion.</p><p>Note that this conversion module is specifically for converting Drupal 7 (cck_phone-7.x-1.x) fields.  To convert Drupal 6 fields, use the CCK module.</p>', array('@nfields' => $nfields, '@field_names' => implode(', ', $fields), '%convert' => t('Convert'))),
+    );
+    $form['actions'] = array(
+      '#type' => 'actions',
+      'submit' => array('#type' => 'submit', '#value' => t('Convert')),
+    );
+  }
+  else {
+    $form['no-action'] = array(
+      '#markup' => t('<p>There are no cck_phone fields that need to be converted into phone fields. You can disable the CCK Phone Converter module, as well as the cck_phone module.</p><p>Note that this conversion module is specifically for converting Drupal 7 (cck_phone-7.x-1.x) fields.  To convert Drupal 6 fields, use the CCK module.</p>'),
+    );
+  }
+
+  return $form;
+}
+
+/**
+ * Submit handler.
+ */
+function phone_cck_convert_admin_form_submit($form, &$form_state) {
+  // Get the phone field schema (can pass in an empty array for $field since
+  // we know it's not used in our schema function).
+  // Note that because this conversion is not part of the update
+  // system, it's safe to get the current version of the schema.
+  // (see http://drupal.org/node/150220).
+  require_once(drupal_get_path('module', 'phone') . '/phone.install');
+  $schema = phone_field_schema(array());
+
+  // Get list of cck_phone field instances directly from field_config_instance
+  // database table.
+  $query = db_select('field_config', 'fc')
+    ->condition('fc.module', 'cck_phone');
+  $query->addField('fc', 'field_name', 'fc_field_name');
+  $query->addField('fc', 'data', 'fc_data');
+  $query->leftJoin('field_config_instance', 'fci', 'fc.id = fci.field_id');
+  $query->fields('fci');
+  $results = $query->execute();
+
+  $tables_done = array();
+  foreach ($results as $row) {
+    $field_name = $row->fc_field_name;
+
+    if (empty($tables_done[$field_name])) {
+      $tables_done[$field_name] = TRUE;
+
+      // Update the schema of this instance's database table (if it has not yet
+      // been done).
+      foreach (array('data', 'revision') as $table_type) {
+        $table_name = 'field_' . $table_type . '_' . $field_name;
+        if (!db_table_exists($table_name))
+          continue;
+
+        // Change schema for existing columns, plus add new columns
+        foreach ($schema['columns'] as $column => $coldata) {
+          // Note that the column name is the field-version of the column;
+          // need to prepend $field_name to get the database column name.
+          $full_name = $field_name . '_' . $column;
+          if ($column=='number' || $column=='extension') {
+            // For number and extension columns, simply change the existing columns.
+            db_change_field($table_name, $full_name, $full_name, $coldata);
+          }
+          elseif ($column=='countrycode') {
+            // For country code column, change name from 'country_codes', as well as change specs.
+            db_change_field($table_name, 'country_codes', $full_name, $coldata);
+          }
+          else {
+            // Other columns are new
+            db_add_field($table_name, $full_name, $coldata);
+          }
+        }
+        // Do not add indexes manually, because field_update_field()
+        // automatically manages the indexes, causing 'index already
+        // exists' errors later.
+
+        // Force drupal to rebuild its schema of this table
+        drupal_get_schema($table_name, TRUE);
+
+        // Update contents of countrycode column.
+        // Convert all codes to upper case.
+        // This is the only data conversion being done, and is
+        // sufficient to allow data to be handled by phone-7.x-2.x.
+        // More thorough conversion would be possible (comparable
+        // to phone_content_migrate_data_record_alter()), but it
+        // wouldn't accomplish much other than potentially
+        // correcting false country codes in ambiguous cases (such
+        // as Canadian phone numbers that had US as country code).
+        // Any more thorough conversion would also require switching
+        // to batch processing.
+        db_update($table_name)
+          ->expression($field_name . '_countrycode', 'UPPER(' . $field_name . '_countrycode' . ')')
+          ->execute();
+        // Replace TP with TL (Timor-Leste)
+        db_update($table_name)
+          ->fields(array($field_name . '_countrycode' => 'TL'))
+          ->condition($field_name . '_countrycode', 'TP')
+          ->execute();
+      }
+
+      // Update contents of field_config table.
+      // Need to manually set module and type in field_config table, because field_update_field
+      // explicitly forbids changes to type.
+      db_update('field_config')
+        ->fields(array(
+          'module' => 'phone',
+          'type' => 'phone',
+        ))
+        ->condition('field_name', $field_name)
+        ->execute();
+      // Then call field_update_field to force indexes to be updated, along with
+      // internal information about indexes.
+      // Note that this does NOT update the rest of the lists of fields under
+      // FIELD_LOAD_CURRENT and FIELD_LOAD_REVISION, but there's no apparent
+      // way to do that, nor is it done by any schema update examples.
+      field_update_field(array('field_name' => $field_name));
+    }
+
+    // Skip instance processing if a field does not have any associated instances.
+    if (empty($row->data)) {
+      continue;
+    }
+
+    $data = unserialize($row->data);
+
+    _phone_update_cck_phone_instance_settings($data);
+    db_update('field_config_instance')
+      ->fields(array('data' => serialize($data)))
+      ->condition('id', $row->id)
+      ->execute();
+    drupal_set_message(t('Converted field %label (machine name %field_name), attached to @entity_type @bundle, from cck_phone to phone.', array('%label' => $data['label'], '%field_name' => $field_name, '@entity_type' => $row->entity_type, '@bundle' => $row->bundle)));
+  }
+  drupal_set_message(t('All cck_phone fields have been converted to phone fields.'));
+  // Clear cache to ensure that new field settings are used.
+  field_cache_clear(TRUE);
+}

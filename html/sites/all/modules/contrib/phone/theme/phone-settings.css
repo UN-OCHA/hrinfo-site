@@ -1,0 +1,21 @@
+/**
+ * @file
+ * Default CSS rules for the phone instance settings forms.
+ */
+
+/*
+  Make the country selection checkboxes layout nicer.
+  Also make the number types allowed list layout nicer.
+*/
+.phone-settings .form-item-instance-settings-country-options-country-codes-country-selection .form-item,
+.form-item-field-settings-numbertype-allowed-values .form-item {
+  float: left;
+  width: 33%;
+}
+
+/* Make the default country in the country selection list standout. */
+.phone-settings .phone-default-country {
+  background: #eee;
+  font-weight: bold;
+}
+

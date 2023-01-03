@@ -1,0 +1,7 @@
+name = Phone Country Locator
+description = Sets the Phone Number country code based on user IP address
+core = 7.x
+package = Fields
+dependencies[] = phone
+dependencies[] = ip2country
+
