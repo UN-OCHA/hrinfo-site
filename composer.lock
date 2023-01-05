@@ -5438,17 +5438,17 @@
         },
         {
             "name": "drupal/languagefield",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/languagefield.git",
-                "reference": "7.x-1.7"
+                "reference": "7.x-1.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/languagefield-7.x-1.7.zip",
-                "reference": "7.x-1.7",
-                "shasum": "bfe51c9fe80382a7cf0e25dad7084908c5d0f530"
+                "url": "https://ftp.drupal.org/files/projects/languagefield-7.x-1.8.zip",
+                "reference": "7.x-1.8",
+                "shasum": "41c33a8ca56b371ff833b4e90442276bb54c273e"
             },
             "require": {
                 "drupal/drupal": "*"
@@ -5456,8 +5456,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.7",
-                    "datestamp": "1507136644",
+                    "version": "7.x-1.8",
+                    "datestamp": "1672748635",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10589,10 +10589,6 @@
                 {
                     "name": "maciej.zgadzaj",
                     "homepage": "https://www.drupal.org/user/271491"
-                },
-                {
-                    "name": "MiSc",
-                    "homepage": "https://www.drupal.org/user/382892"
                 },
                 {
                     "name": "Nate_S",
