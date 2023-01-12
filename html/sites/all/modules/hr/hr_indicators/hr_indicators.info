@@ -6,7 +6,6 @@ dependencies[] = context
 dependencies[] = current_search
 dependencies[] = feeds_tamper
 dependencies[] = field_validation
-dependencies[] = hr_api
 dependencies[] = hr_sectors
 dependencies[] = page_manager
 dependencies[] = panelizer

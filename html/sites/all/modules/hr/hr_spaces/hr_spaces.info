@@ -3,7 +3,6 @@ description = Content type for generic spaces
 core = 7.x
 package = Humanitarianresponse
 dependencies[] = feeds
-dependencies[] = hr_api
 dependencies[] = hr_core
 dependencies[] = hr_notifications
 dependencies[] = hr_organizations

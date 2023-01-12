@@ -8,7 +8,6 @@ dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = feeds
 dependencies[] = feeds_et
-dependencies[] = hr_api
 dependencies[] = hr_core
 dependencies[] = hr_notifications
 dependencies[] = hr_spaces

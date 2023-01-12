@@ -7,7 +7,6 @@ dependencies[] = ctools
 dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = feeds
-dependencies[] = hr_api
 dependencies[] = hr_core
 dependencies[] = link
 dependencies[] = number

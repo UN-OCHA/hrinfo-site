@@ -4,7 +4,6 @@ core = 7.x
 package = Humanitarianresponse
 dependencies[] = entityreference
 dependencies[] = feeds
-dependencies[] = hr_api
 dependencies[] = hr_core
 dependencies[] = taxonomy
 dependencies[] = views

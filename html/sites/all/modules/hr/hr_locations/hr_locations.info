@@ -9,7 +9,6 @@ dependencies[] = feeds
 dependencies[] = field_validation
 dependencies[] = geofield
 dependencies[] = geofield_postgis
-dependencies[] = hr_api
 dependencies[] = hr_core
 dependencies[] = js
 dependencies[] = number

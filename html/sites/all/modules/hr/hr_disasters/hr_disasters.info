@@ -9,7 +9,6 @@ dependencies[] = entity
 dependencies[] = entityreference
 dependencies[] = facetapi
 dependencies[] = field_permissions
-dependencies[] = hr_api
 dependencies[] = hr_core
 dependencies[] = hr_operations
 dependencies[] = number

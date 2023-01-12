@@ -6,7 +6,6 @@ dependencies[] = context
 dependencies[] = ctools
 dependencies[] = current_search
 dependencies[] = entity
-dependencies[] = hr_api
 dependencies[] = hr_layout
 dependencies[] = hr_locations
 dependencies[] = hr_operations
