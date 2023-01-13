@@ -256,18 +256,8 @@ function hr_layout_block_view($delta = '') {
       }
       if (!empty($gid)) {
         $order = array(
-          'hr_events',
-          'ev_events',
-          'hr_reliefweb_meeting_documents',
           'hr_documents',
           'hr_infographics',
-          'hr_reliefweb_documents',
-          'hdx_datasets',
-          'hr_offices',
-          'hr_assessments',
-          'hr_news',
-          'acc_applications',
-          'acc_incidents',
         );
         $og_group = entity_load('node', array($gid));
         $og_group = $og_group[$gid];
