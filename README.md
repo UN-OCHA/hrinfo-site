@@ -27,3 +27,41 @@ Content disappears from spaces and pages on saving:
 https://humanitarian.atlassian.net/browse/HRINFO-1034
 Appears to happen after modules are enabled/ disabled. Run `drush rr` after
 any work on the servers.
+
+## Decomission
+
+`select type, count(*) from node where created > 1609455600 group by type;`
+
++----------------+----------+
+| type           | count(*) |
++----------------+----------+
+| hr_assessment  |      380 |
+| hr_bundle      |       99 |
+| hr_disaster    |      169 |
+| hr_document    |    14578 |
+| hr_event       |     6479 |
+| hr_infographic |     4814 |
+| hr_office      |       25 |
+| hr_operation   |        8 |
+| hr_page        |      273 |
++----------------+----------+
+9 rows in set (0.288 sec)
+
+`select type, count(*) from node where changed > 1609455600 group by type;`
++---------------------+----------+
+| type                | count(*) |
++---------------------+----------+
+| hr_assessment       |      402 |
+| hr_bundle           |      805 |
+| hr_disaster         |      741 |
+| hr_document         |    15329 |
+| hr_event            |     6740 |
+| hr_infographic      |     5359 |
+| hr_office           |       81 |
+| hr_operation        |      241 |
+| hr_page             |      582 |
+| hr_space            |       14 |
+| hr_toolbox_category |        5 |
+| hr_toolbox_item     |      133 |
++---------------------+----------+
+12 rows in set (0.095 sec)

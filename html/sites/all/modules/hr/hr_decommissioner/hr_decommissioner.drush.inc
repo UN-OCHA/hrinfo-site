@@ -36,6 +36,12 @@ function hr_decommissioner_drush_command() {
     'aliases' => array(),
   );
 
+  $items['hr-decommissioner-remove-obsolete-nodes'] = array(
+    'description' => 'Remove obsolete content',
+    'drupal dependencies' => array(),
+    'aliases' => array(),
+  );
+
   return $items;
 }
 
@@ -284,9 +290,9 @@ function drush_hr_decommissioner_remove_old_content() {
       'hr_indicator',
       'hr_sector',
     ), 'IN');
-  $result = $query->execute();
+  $count = $query->count()->execute();
 
-  if (empty($result['node'])) {
+  if ($count == 0) {
     drush_log('No nodes found', 'ok');
     return;
   }
@@ -295,7 +301,9 @@ function drush_hr_decommissioner_remove_old_content() {
     'operations' => array(
       array(
         'drush_hr_decommissioner_remove_old_content_callback',
-        []
+        [
+          $count
+        ]
       ),
     ),
     'finished' => 'drush_hr_decommissioner_remove_old_content_finished',
@@ -312,12 +320,12 @@ function drush_hr_decommissioner_remove_old_content() {
 /**
  * Callback function to disable the HR contacts.
  */
-function drush_hr_decommissioner_remove_old_content_callback(&$context) {
+function drush_hr_decommissioner_remove_old_content_callback($count, &$context) {
   $limit = 50;
   $context['finished'] = 0;
 
   if (!isset($context['sandbox']['total_nodes'])) {
-    $context['sandbox']['total_nodes'] = 150665;
+    $context['sandbox']['total_nodes'] = $count;
     $context['results']['count'] = 0;
   }
 
@@ -365,5 +373,105 @@ function drush_hr_decommissioner_remove_old_content_callback(&$context) {
  * Batch finished callback.
  */
 function drush_hr_decommissioner_remove_old_content_finished($success, $results, $operations) {
+  drush_log('Process finished');
+}
+
+/**
+ * Drush command to remove the contact menus and replace them by hid ones.
+ */
+function drush_hr_decommissioner_remove_obsolete_nodes() {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', array(
+      'acc_application',
+      'acc_incident',
+      'hr_assessment',
+      'hr_disaster',
+      'hr_event',
+      'hr_news',
+      'hr_office',
+      'hr_toolbox_category',
+      'hr_toolbox_item',
+      'hr_indicator',
+      'hr_sector',
+    ), 'IN');
+  $count = $query->count()->execute();
+
+  if ($count == 0) {
+    drush_log('No nodes found', 'ok');
+    return;
+  }
+
+  $batch = array(
+    'operations' => array(
+      array(
+        'drush_hr_decommissioner_remove_obsolete_nodes_callback',
+        [
+          $count
+        ]
+      ),
+    ),
+    'finished' => 'drush_hr_decommissioner_remove_obsolete_nodes_finished',
+    'title' => t('Remove obsolete content'),
+    'init_message' => t('Preparing...'),
+    'progress_message' => t('Removing ...'),
+    'error_message' => t('Removing failed.'),
+  );
+
+  batch_set($batch);
+  drush_backend_batch_process();
+}
+
+/**
+ * Callback function to disable the HR contacts.
+ */
+function drush_hr_decommissioner_remove_obsolete_nodes_callback($count, &$context) {
+  $limit = 50;
+  $context['finished'] = 0;
+
+  if (!isset($context['sandbox']['total_nodes'])) {
+    $context['sandbox']['total_nodes'] = $count;
+    $context['results']['count'] = 0;
+  }
+
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->range(0, $limit)
+    ->entityCondition('bundle', array(
+      'acc_application',
+      'acc_incident',
+      'hr_assessment',
+      'hr_disaster',
+      'hr_event',
+      'hr_news',
+      'hr_office',
+      'hr_toolbox_category',
+      'hr_toolbox_item',
+      'hr_indicator',
+      'hr_sector',
+    ), 'IN');
+  $result = $query->execute();
+
+  if (empty($result['node'])) {
+    $context['finished'] = 1;
+    return;
+  }
+
+  node_delete_multiple(array_keys($result['node']));
+  $context['results']['count'] += $limit;
+
+  $context['message'] = t(
+    'Processed @count of @total nodes.',
+    array(
+      '@count' => $context['results']['count'],
+      '@total' => $context['sandbox']['total_nodes'],
+    )
+  );
+}
+
+/**
+ * Batch finished callback.
+ */
+function drush_hr_decommissioner_remove_obsolete_nodes_finished($success, $results, $operations) {
   drush_log('Process finished');
 }

@@ -17,7 +17,7 @@ services:
       file: ${HOME}/.docksal/stacks/services.yml
       service: solr
     environment:
-      - XXXSOLR_DEFAULT_CONFIG_SET=7.x-1.14
+      - SOLR_DEFAULT_CONFIG_SET=search_api_solr_7.x-1.14
     hostname: solr
     image: docksal/solr:7.5
     user: solr

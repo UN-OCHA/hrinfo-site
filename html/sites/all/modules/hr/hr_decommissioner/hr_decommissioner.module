@@ -6,6 +6,157 @@
  */
 
 /**
+ * Implements hook_menu_alter().
+ */
+function hr_decommissioner_menu_alter(&$items) {
+  $paths = [
+    'node/%/events',
+    'node/%/events/month',
+    'node/%/events/week',
+    'node/%/events/day',
+    'node/%/events/year',
+    'node/%/events/ical/%/calendar.ics',
+    'node/%/events/print',
+    'node/%/events/print/week',
+    'node/%/events/print/day',
+    'node/%node/hdx-datasets',
+    'node/%node/offices',
+    'node/%/access/applications/xls',
+    'node/%/access/applications',
+    'node/%/access/applications/table',
+    'node/%/access/applications/xls',
+    'node/%/access/applications/map',
+    'node/%/access/applications/res_reports',
+    'node/%/access/applications/imp_reports',
+    'node/%/access/incidents_by_type/xls',
+    'node/%/access/incidents_by_acc_const',
+    'node/%/access/incidents_by_sector',
+    'node/%/access/incidents',
+    'node/%/access/incidents/table',
+    'node/%/access/incidents/xls',
+    'node/%/access/incidents/map',
+    'node/%/access/incidents/graphs',
+    'node/%/meeting-documents',
+    'node/%/meeting-documents/list',
+    'node/%/meeting-documents/table',
+    'node/%/meeting-documents/csv',
+    'node/%/meeting-documents/feed',
+    'node/%/blog',
+    'node/%/blog/feed',
+    'blog',
+    'blog/feed',
+    'node/%/offices',
+    'node/%/offices/csv',
+    'node/%/offices/xml',
+    'node/%/people',
+    'node/%/people/list',
+    'node/%/people/map',
+    'admin/people/og',
+    'admin/people/og.csv',
+    'node/%/people',
+    'node/%/people/list',
+    'node/%/people/map',
+    'admin/people/og-roles',
+    'admin/people/og-manager-editor-dates.csv',
+    'search',
+    'node/%/search',
+    'search/feed',
+    'node/%/feed',
+    'node/%/content',
+    'assessments/global-map',
+    'assessments',
+    'assessments/list',
+    'assessments/table',
+    'assessments/map',
+    'node/%node/assessments',
+    'node/%node/assessments/list',
+    'node/%node/assessments/table',
+    'node/%node/assessments/map',
+    'user',
+    'user/login',
+    'login',
+    'help',
+  ];
+
+  foreach ($paths as $path) {
+    if (isset($items[$path])) {
+      $items[$path]['access callback'] = FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_views_default_views_alter().
+ */
+function hr_decommissioner_views_default_views_alter(&$views) {
+  $view_names = [
+    'acc_application_repots',
+    'acc_applications',
+    'acc_incident_graphs',
+    'acc_incidents',
+    'archive',
+    'assessments_from_registry',
+    'hr_assessments_panes',
+    'hr_documents_feed',
+    'hr_event_categories',
+    'hr_events',
+    'hr_events_panes',
+    'export_access_application',
+    'export_access_incident',
+    'hr_indicators',
+    'meeting_documents',
+    'hr_news',
+    'hr_news_panes',
+    'hr_offices',
+    'hr_offices_panes',
+    'hr_organizations',
+    'hr_search',
+    'hr_sectors',
+    'hr_space',
+    'hr_spaces',
+    'temporary_access_application',
+    'temporary_access_incident',
+    'temporary_blog',
+    'hr_themes',
+    'hr_assessments',
+  ];
+
+  foreach ($view_names as $view_name) {
+    if (isset($views[$view_name])) {
+      $views[$view_name]->disabled = TRUE;
+    }
+  }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function hr_decommissioner_block_view_alter(array &$build, $block) {
+  switch ($block->delta) {
+    case 'hr_layout_login':
+    case 'hr_help':
+      $build['subject'] = NULL;
+      $build['content'] = [];
+      break;
+
+  }
+}
+
+function hr_decommissioner_module_implements_alter(&$implementations, $hook) {
+  if (in_array($hook, array('menu_alter')) && isset($implementations['hr_decommissioner'])) {
+    $group = $implementations['hr_decommissioner'];
+    unset($implementations['hr_decommissioner']);
+    $implementations['hr_decommissioner'] = $group;
+  }
+
+  if (in_array($hook, array('views_default_views_alter')) && isset($implementations['hr_decommissioner'])) {
+    $group = $implementations['hr_decommissioner'];
+    unset($implementations['hr_decommissioner']);
+    $implementations['hr_decommissioner'] = $group;
+  }
+}
+
+/**
  * Enables and deletes the specified field.
  *
  * The normal API function for deleting fields, field_delete_field(), will not

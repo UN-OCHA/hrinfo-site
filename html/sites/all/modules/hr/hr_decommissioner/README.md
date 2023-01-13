@@ -20,4 +20,21 @@ drush pm-disable restful
 drush pm-disable hr_api
 ```
 
+Nodes to delete:
+
+- 69107
+
+
 On http://hrinfo.docksal.site/en/admin/structure/context disable all tagged contexts
+
+```
+wget --exclude-directories=/login --no-clobber --mirror --convert-links --adjust-extension --page-requisites --no-parent http://hrinfo.docksal.site/
+```
+
+## Count
+
+Count files by extension.
+
+```bash
+find . -type f | sed 's/\//\./g' | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -n 20
+```
