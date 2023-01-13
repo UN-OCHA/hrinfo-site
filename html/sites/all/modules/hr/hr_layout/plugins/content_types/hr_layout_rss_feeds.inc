@@ -62,6 +62,7 @@ function hr_layout_rss_feeds_edit_form_submit($form, &$form_state) {
  * @See ctools_plugin_examples for more advanced info.
  */
 function hr_layout_rss_feeds_render($subtype, $conf, $panel_args, $context = NULL) {
+  return [];
   $block = new stdClass();
   $block->title = 'RSS Feeds';
   $feed_url = $conf['feed_url'];
@@ -87,6 +88,7 @@ function hr_layout_rss_feeds_render($subtype, $conf, $panel_args, $context = NUL
  *   An array containing the feed titles and urls.
  */
 function hr_layout_rss_feeds_load($url) {
+  return [];
   if (module_exists('feeds')) {
     feeds_include_simplepie();
 
