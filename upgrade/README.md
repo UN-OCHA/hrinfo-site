@@ -12,3 +12,9 @@ drush sqlq "select alias, source from url_alias where substring(source,1,4) = 'n
 ```bash
 php -S localhost:8080 -t hrinfo.docksal.site/ router.php
 ```
+
+## Fix links
+
+```bash
+find . -type f -name "*.html" -exec sed -i'' -e 's#http://hrinfo\.docksal\.site/#/#g' {} +
+```
