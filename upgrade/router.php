@@ -51,4 +51,5 @@ if (!empty($matches)) {
   }
 }
 
-return FALSE;
+header('Location: /404.html');
+return TRUE;
