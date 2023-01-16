@@ -14,6 +14,11 @@
 | hr_page        |      273 |
 +----------------+----------+
 
+## Todo
+
+- disable redirect to response site
+- delete unpublished nodes
+
 ```bash
 drush pm-disable restclient
 drush pm-disable restful
@@ -37,4 +42,15 @@ Count files by extension.
 
 ```bash
 find . -type f | sed 's/\//\./g' | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -n 20
+```
+
+```
+116846 html
+12799 feed
+1223 feedrw
+71 css
+48 js
+31 png
+12 svg
+...
 ```
