@@ -32,7 +32,6 @@ dependencies[] = pathauto
 dependencies[] = phone
 dependencies[] = publishcontent
 dependencies[] = radix_layouts
-dependencies[] = redirect
 dependencies[] = role_export
 dependencies[] = strongarm
 dependencies[] = text
