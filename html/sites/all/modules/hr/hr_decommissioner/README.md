@@ -23,6 +23,8 @@
 drush pm-disable restclient
 drush pm-disable restful
 drush pm-disable hr_api
+drush pm-disable redirect
+drush en stage_file_proxy
 ```
 
 Nodes to delete:
