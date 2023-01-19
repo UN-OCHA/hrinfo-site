@@ -41,6 +41,7 @@ class MediaInternetYouTubeHandler extends MediaInternetBaseHandler {
       '@youtube\.com/\?v=([^"#\& ]+)@i',
       '@youtu\.be/([^"#\&\? ]+)@i',
       '@gdata\.youtube\.com/feeds/api/videos/([^"#\&\? ]+)@i',
+      '@youtube\.com/shorts/([^"#\&\? ]+)@i',
     );
 
     foreach ($patterns as $pattern) {

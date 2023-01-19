@@ -394,8 +394,8 @@ function i18n_menu_localize_tree($tree, $langcode = NULL) {
   foreach ($tree as $index => &$item) {
     $link = $item['link'];
     // We only process links that are visible and not processed before.
-    if (_i18n_menu_link_process($item['link'])) {
-      if (!_i18n_menu_link_is_visible($item['link'], $langcode)) {
+    if (_i18n_menu_link_process($link)) {
+      if (!_i18n_menu_link_is_visible($link, $langcode)) {
         // Remove links for other languages than current.
         // Links with language won't be localized.
         unset($tree[$index]);
@@ -403,9 +403,9 @@ function i18n_menu_localize_tree($tree, $langcode = NULL) {
         // $item['hidden'] = TRUE;
       }
       else {
-        if (_i18n_menu_link_is_localizable($item['link'])) {
+        if (_i18n_menu_link_is_localizable($link)) {
           // Item has undefined language, it is a candidate for localization.
-          _i18n_menu_link_localize($item['link'], $langcode);
+          _i18n_menu_link_localize($link, $langcode);
         }
         // Localize subtree.
         if (!empty($item['below'])) {

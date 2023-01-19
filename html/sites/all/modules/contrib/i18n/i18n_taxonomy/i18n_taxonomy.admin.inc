@@ -196,20 +196,22 @@ function i18n_taxonomy_translation_term_overview($term) {
       // Existing translation in the translation set: display status.
       // We load the full node to check whether the user can edit it.
       $translation_term = taxonomy_term_load($translations[$langcode]->tid);
-      $path = 'taxonomy/term/' . $translation_term->tid;
-      $title = l($translation_term->name, $path);
+      if (is_object($translation_term)) {
+        $path = 'taxonomy/term/' . $translation_term->tid;
+        $title = l($translation_term->name, $path);
 
-      $options['edit'] = array(
-        '#type' => 'link',
-        '#title' => t('edit'),
-        '#href' => $path . '/edit',
-        '#options' => array(
-          'query' => drupal_get_destination(),
-        ),
-      );
+        $options['edit'] = array(
+          '#type' => 'link',
+          '#title' => t('edit'),
+          '#href' => $path . '/edit',
+          '#options' => array(
+            'query' => drupal_get_destination(),
+          ),
+        );
 
-      if ($translation_term->tid == $i18n_tsid) {
-        $language_name = t('<strong>@language_name</strong> (source)', array('@language_name' => $language_name));
+        if ($translation_term->tid == $i18n_tsid) {
+          $language_name = t('<strong>@language_name</strong> (source)', array('@language_name' => $language_name));
+        }
       }
     }
     else {

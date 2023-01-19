@@ -367,7 +367,7 @@ function i18n_node_textfield_process($element) {
     // Determine if we are either editing or translating an existing node.
     // We can't act on regular node creation because we don't have a specified
     // node language.
-    $node_edit = $node = menu_get_object() && arg(2) == 'edit' && isset($node->language) && !empty($node->language);
+    $node_edit = ($node = menu_get_object()) && arg(2) == 'edit' && isset($node->language) && !empty($node->language);
     $node_translate = arg(0) == 'node' && arg(1) == 'add' && !empty($_GET['translation']) && !empty($_GET['language']);
     if ($node_edit || $node_translate) {
       $node_language = $node_edit ? $node->language : $_GET['language'];

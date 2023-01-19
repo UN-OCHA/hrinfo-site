@@ -161,8 +161,16 @@ class i18n_field_instance extends i18n_field_base {
    */
   protected function translate_field(&$object, $i18nstring, $langcode, $options) {
     if ($i18nstring->property == 'default_value') {
-      // Render string without applying format
-      $object['default_value'][0]['value'] = $i18nstring->format_translation($langcode, array('sanitize' => FALSE) + $options);
+      // Render string without applying format.
+      // Prevent PHP fatal errors: if the default value is a string and not a
+      // field array log it.
+      if (is_scalar($object['default_value'])) {
+        watchdog('i18n_debug', 'Object with wrong default value: <pre>@object</pre>', ['@object' => print_r($object, TRUE)], WATCHDOG_DEBUG);
+        $object['default_value'] = $i18nstring->format_translation($langcode, array('sanitize' => FALSE) + $options);
+      }
+      else {
+        $object['default_value'][0]['value'] = $i18nstring->format_translation($langcode, array('sanitize' => FALSE) + $options);
+      }
     }
     else {
       parent::translate_field($object, $i18nstring, $langcode, $options);
