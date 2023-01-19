@@ -656,7 +656,9 @@ function i18n_string_translate_check_string($i18nstring, $account = NULL) {
   if (!empty($i18nstring->format)) {
     if (!i18n_string_allowed_format($i18nstring->format)) {
       $format = filter_format_load($i18nstring->format);
-      return t('This string uses the %name text format. Strings with this format are not allowed for translation.', array('%name' => $format->name));
+      if (is_object($format)) {
+        return t('This string uses the %name text format. Strings with this format are not allowed for translation.', array('%name' => $format->name));
+      }
     }
     elseif ($format = filter_format_load($i18nstring->format)) {
       // It is a text format, check user access to that text format.
