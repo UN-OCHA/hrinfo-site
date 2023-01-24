@@ -51,7 +51,7 @@ function hr_infographics_key_infographics_edit_form($form, &$form_state) {
       '#era_entity_type' => 'node',
       '#era_bundles' => array('hr_infographic'),
       '#era_cardinality' => 1,
-      '#default_value' => isset($conf['infographics'][$delta]) ? $conf['infographics'][$delta] : '',
+      '#default_value' => $conf['infographics'][$delta] ?? '',
       '#parents' => array('infographics', $delta),
     );
   }
@@ -71,7 +71,7 @@ function hr_infographics_key_infographics_edit_form($form, &$form_state) {
       'default' => t('Full'),
       'link' => t('Links'),
     ),
-    '#default_value' => isset($conf['view_more']) ? $conf['view_more'] : '',
+    '#default_value' => $conf['view_more'] ?? '',
   );
 
   return $form;

@@ -4,6 +4,7 @@
  * Test case for multilingual blocks
  */
 
+#[\AllowDynamicProperties]
 class i18nBlocksTestCase extends Drupali18nTestCase {
 
   public static function getInfo() {

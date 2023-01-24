@@ -5,6 +5,7 @@
  */
 
 
+#[\AllowDynamicProperties]
 class i18nTaxonomyTestCase extends Drupali18nTestCase {
 
   public static function getInfo() {

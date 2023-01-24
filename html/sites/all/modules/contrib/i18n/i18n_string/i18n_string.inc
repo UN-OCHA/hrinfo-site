@@ -9,6 +9,7 @@
  *
  * Note all database operations must go through textgroup object so we can switch storage at some point.
  */
+#[\AllowDynamicProperties]
 class i18n_string_object {
   // Updated source string
   public $string;
@@ -320,6 +321,7 @@ class i18n_string_object {
 /**
  * Textgroup handler for i18n_string API
  */
+#[\AllowDynamicProperties]
 class i18n_string_textgroup_default {
   // Text group name
   public $textgroup;

@@ -51,13 +51,13 @@ function j2h_page($mod_api = '') {
   // Nid of Colombia.
   $group = entity_load_single('node', 77);
   og_context('node', $group);
-  return j2h($mod_api);
+  return j2h_j2h($mod_api);
 }
 
 /**
  * Callback.
  */
-function j2h($mod_api = '') {
+function j2h_j2h($mod_api = '') {
 
   $url_api_default = 'http://';
 
@@ -167,11 +167,11 @@ function j2h_block_info() {
 function j2h_block_view($delta = '') {
   switch ($delta) {
     case 'j2h':
-      $block['content'] = j2h();
+      $block['content'] = j2h_j2h();
       return $block;
 
     case 'j2h_4w':
-      $block['content'] = j2h('4w');
+      $block['content'] = j2h_j2h('4w');
       return $block;
   }
 }

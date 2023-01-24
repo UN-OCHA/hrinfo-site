@@ -164,6 +164,25 @@ function i18n_field_field_formatter_view($entity_type, $entity, $field, $instanc
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add extra handler to clear field textgroup cache after translation update.
+ */
+function i18n_field_form_i18n_string_translate_page_form_alter(&$form, &$form_state) {
+  $form['#submit'][] = 'i18n_field_form_i18n_string_translate_page_form_submit';
+}
+
+/**
+ * Field extra translation form submit function
+ *
+ * We need to clear also field textgroup cache after translation update.
+ */
+function i18n_field_form_i18n_string_translate_page_form_submit($form, &$form_state) {
+  $field_class = new i18n_string_textgroup_cached('field');
+  $field_class->cache_reset();
+}
+
+/**
  * Implements hook_field_widget_form_alter().
  *
  * Translate:

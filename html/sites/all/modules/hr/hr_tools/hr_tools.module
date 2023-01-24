@@ -297,12 +297,12 @@ function hr_tools_performance_stats($set, $param, $db = 'default') {
       'label' => $label,
       'time' => $timer['time'],
       'type' => $timer['type'],
-      'exception' => isset($timer['exception']) ? $timer['exception'] : '',
+      'exception' => $timer['exception'] ?? '',
       'external_calls' => $external_calls,
       'external_calls_debug' => $timer['external_calls'],
-      'queries' => isset($timer['queries']) ? $timer['queries'] : array(),
-      'url' => isset($timer['url']) ? $timer['url'] : '',
-      'node_type' => isset($timer['node_type']) ? $timer['node_type'] : '',
+      'queries' => $timer['queries'] ?? array(),
+      'url' => $timer['url'] ?? '',
+      'node_type' => $timer['node_type'] ?? '',
     );
   }
 
@@ -917,7 +917,7 @@ function hr_tools_drupal_http_request($url, array $options = array()) {
 
     case 'http':
     case 'feed':
-      $port = isset($uri['port']) ? $uri['port'] : 80;
+      $port = $uri['port'] ?? 80;
       $socket = 'tcp://' . $uri['host'] . ':' . $port;
       // RFC 2616: "non-standard ports MUST, default ports MAY be included".
       // We don't add the standard port to prevent from breaking rewrite rules
@@ -927,7 +927,7 @@ function hr_tools_drupal_http_request($url, array $options = array()) {
 
     case 'https':
       // Note: Only works when PHP is compiled with OpenSSL support.
-      $port = isset($uri['port']) ? $uri['port'] : 443;
+      $port = $uri['port'] ?? 443;
       $socket = 'ssl://' . $uri['host'] . ':' . $port;
       $options['headers']['Host'] = $uri['host'] . ($port != 443 ? ':' . $port : '');
       break;
@@ -963,7 +963,7 @@ function hr_tools_drupal_http_request($url, array $options = array()) {
   }
 
   // Construct the path to act on.
-  $path = isset($uri['path']) ? $uri['path'] : '/';
+  $path = $uri['path'] ?? '/';
   if (isset($uri['query'])) {
     $path .= '?' . $uri['query'];
   }
@@ -1036,7 +1036,7 @@ function hr_tools_drupal_http_request($url, array $options = array()) {
   // Parse response headers from the response body.
   // Be tolerant of malformed HTTP responses that separate header and body with
   // \n\n or \r\r instead of \r\n\r\n.
-  list($response, $result->data) = preg_split("/\r\n\r\n|\n\n|\r\r/", $response, 2);
+  [$response, $result->data] = preg_split("/\r\n\r\n|\n\n|\r\r/", $response, 2);
   $response = preg_split("/\r\n|\n|\r/", $response);
 
   // Parse the response status line.
@@ -1049,7 +1049,7 @@ function hr_tools_drupal_http_request($url, array $options = array()) {
 
   // Parse the response headers.
   while ($line = trim(array_shift($response))) {
-    list($name, $value) = explode(':', $line, 2);
+    [$name, $value] = explode(':', $line, 2);
     $name = strtolower($name);
     if (isset($result->headers[$name]) && $name == 'set-cookie') {
       // RFC 2109: the Set-Cookie response header comprises the token Set-

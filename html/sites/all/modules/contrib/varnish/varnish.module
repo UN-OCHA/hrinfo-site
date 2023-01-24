@@ -239,7 +239,7 @@ function varnish_purge_paths($host, array $paths) {
 /**
  * Get the status (up/down) of each of the varnish servers.
  *
- * @return array
+ * @return array|null
  *   An array of server statuses, keyed by varnish terminal addresses.
  *   The status will be a numeric constant, either:
  *   - VARNISH_SERVER_STATUS_UP
@@ -252,10 +252,13 @@ function varnish_get_status() {
   if (is_null($results)) {
     $results = array();
     $status = _varnish_terminal_run(array('status'));
+    if (!$status) {
+      return NULL;
+    }
     $terminals = explode(' ', variable_get('varnish_control_terminal', '127.0.0.1:6082'));
     foreach ($terminals as $terminal) {
       $stat = array_shift($status);
-      $results[$terminal] = ($stat['status']['code'] == 200) ? VARNISH_SERVER_STATUS_UP : VARNISH_SERVER_STATUS_DOWN;
+      $results[$terminal] = (isset($stat['status']['code']) && $stat['status']['code'] == 200) ? VARNISH_SERVER_STATUS_UP : VARNISH_SERVER_STATUS_DOWN;
     }
   }
   return $results;
@@ -323,6 +326,9 @@ function _varnish_get_host() {
  * Helper function that sends commands to Varnish.
  *
  * Utilizes sockets to talk to varnish terminal.
+ *
+ * @return array|false
+ *   An array of results or FALSE if socket extension is missing.
  */
 function _varnish_terminal_run($commands) {
   if (!extension_loaded('sockets')) {

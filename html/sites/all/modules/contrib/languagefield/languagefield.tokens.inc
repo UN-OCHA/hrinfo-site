@@ -30,6 +30,37 @@ function languagefield_token_info() {
 }
 
 /**
+ * Returns a list of language fields optionally filtered by entity type.
+ *
+ * @param string $entity_type
+ *   Optional machine-name of an entity type to filter the returned array by.
+ *
+ * @return array
+ *   An array of language field mapping data.
+ */
+function languagefield_get_language_fields($entity_type = '') {
+  $fields = &drupal_static(__FUNCTION__ . '_' . $entity_type);
+
+  if (isset($fields)) {
+    return $fields;
+  }
+
+  // Get mapping data for all language fields.
+  $fields = array_filter(field_info_field_map(), 'languagefield_field_map_filter');
+
+  // Filter the list of fields by entity type if specified.
+  if (!empty($fields) && !empty($entity_type)) {
+    foreach ($fields as $field_name => $field) {
+      if (!isset($field['bundles'][$entity_type])) {
+        unset($fields[$field_name]);
+      }
+    }
+  }
+
+  return $fields;
+}
+
+/**
  * Implements hook_tokens().
  */
 function languagefield_tokens($type, $tokens, array $data = array(), array $options = array()) {
@@ -58,7 +89,8 @@ function languagefield_tokens($type, $tokens, array $data = array(), array $opti
   }
 
   if ($type == 'entity') {
-    foreach (array_filter(field_info_field_map(), 'languagefield_field_map_filter') as $field_name => $field) {
+    // Loop over the language fields defined on the site.
+    foreach (languagefield_get_language_fields($data['entity_type']) as $field_name => $field) {
       if ($languagefield_tokens = token_find_with_prefix($tokens, $field_name)) {
         // If the current field is on the matching entity type...
         if (!empty($field['bundles'][$data['entity_type']])) {

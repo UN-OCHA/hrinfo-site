@@ -3,6 +3,7 @@
  * @file
  * Internationalization (i18n) module - Translation set
  */
+#[\AllowDynamicProperties]
 class i18n_translation_set {
   public $tsid = NULL;
   public $type;

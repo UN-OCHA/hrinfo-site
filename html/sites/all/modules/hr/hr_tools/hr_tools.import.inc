@@ -255,7 +255,7 @@ function hr_tools_export_locations_submit($form, $form_state) {
     );
 
     // Get parent.
-    $parent_tid = isset($location->parents[0]) ? $location->parents[0] : 0;
+    $parent_tid = $location->parents[0] ?? 0;
     $count = 0;
     while ($parent_tid != 0 && $count < 3) {
       $count++;

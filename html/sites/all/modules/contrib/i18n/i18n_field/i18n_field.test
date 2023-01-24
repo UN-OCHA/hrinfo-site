@@ -5,6 +5,7 @@
  */
 
 
+#[\AllowDynamicProperties]
 class i18nFieldTestCase extends Drupali18nTestCase {
 
   public static function getInfo() {

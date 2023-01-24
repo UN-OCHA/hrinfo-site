@@ -4,6 +4,7 @@
  * @file
  * Base class for Internationalization tests
  */
+#[\AllowDynamicProperties]
 class Drupali18nTestCase extends DrupalWebTestCase {
   protected $current_user;
   protected $default_language;
@@ -439,6 +440,7 @@ class Drupali18nTestCase extends DrupalWebTestCase {
   }
 }
 
+#[\AllowDynamicProperties]
 class Drupali18nConfigTestCase extends Drupali18nTestCase {
   public static function getInfo() {
     return array(
