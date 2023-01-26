@@ -1,9 +1,11 @@
-name = Link checker
-description = "Periodically checks for broken links in node types, blocks and fields and reports the results."
+name = Link checker Bean
+description = "Periodically checks for broken links in beans and reports the results."
 configure = admin/config/content/linkchecker
+package = "Link checker"
 core = 7.x
-files[] = linkchecker.drush.inc
-files[] = linkchecker.test
+
+dependencies[] = bean
+dependencies[] = linkchecker
 
 ; Information added by Drupal.org packaging script on 2023-01-23
 version = "7.x-1.5"

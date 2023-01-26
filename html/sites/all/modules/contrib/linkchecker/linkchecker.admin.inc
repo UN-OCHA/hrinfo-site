@@ -112,7 +112,7 @@ function linkchecker_admin_settings_form($form_state) {
   $form['check'] = array(
     '#type' => 'fieldset',
     '#title' => t('Check settings'),
-    '#description' => t('For simultaneous link checks it is recommended to install the <a href="@httprl">HTTP Parallel Request & Threading Library</a>. This may be <strong>necessary</strong> on larger sites with very many links (30.000+), but will also improve overall link check duration on smaller sites. Currently the site has @count links (@count_enabled enabled / @count_disabled disabled).', array('@httprl' => 'http://drupal.org/project/httprl', '@count' => $count_lids_enabled+$count_lids_disabled, '@count_enabled' => $count_lids_enabled, '@count_disabled' => $count_lids_disabled)),
+    '#description' => t('For simultaneous link checks it is recommended to install the <a href="@httprl">HTTP Parallel Request & Threading Library</a>. This may be <strong>necessary</strong> on larger sites with very many links (30.000+), but will also improve overall link check duration on smaller sites. Currently the site has @count links (@count_enabled enabled / @count_disabled disabled).', array('@httprl' => 'https://drupal.org/project/httprl', '@count' => $count_lids_enabled+$count_lids_disabled, '@count_enabled' => $count_lids_enabled, '@count_disabled' => $count_lids_disabled)),
     '#collapsible' => FALSE,
   );
   $form['check']['linkchecker_check_library'] = array(
@@ -162,7 +162,7 @@ function linkchecker_admin_settings_form($form_state) {
     '#default_value' => variable_get('linkchecker_disable_link_check_for_urls', LINKCHECKER_RESERVED_DOCUMENTATION_DOMAINS),
     '#type' => 'textarea',
     '#title' => t('Do not check the link status of links containing these URLs'),
-    '#description' => t('By default this list contains the domain names reserved for use in documentation and not available for registration. See <a href="@rfc-2606">RFC 2606</a>, Section 3 for more information. URLs on this list are still extracted, but the link setting <em>Check link status</em> becomes automatically disabled to prevent false alarms. If you change this list you need to clear all link data and re-analyze your content. Otherwise this setting will only affect new links added after the configuration change.', array('@rfc-2606' => 'http://www.rfc-editor.org/rfc/rfc2606.txt')),
+    '#description' => t('By default this list contains the domain names reserved for use in documentation and not available for registration. See <a href="@rfc-2606">RFC 2606</a>, Section 3 for more information. URLs on this list are still extracted, but the link setting <em>Check link status</em> becomes automatically disabled to prevent false alarms. If you change this list you need to clear all link data and re-analyze your content. Otherwise this setting will only affect new links added after the configuration change.', array('@rfc-2606' => 'https://www.rfc-editor.org/rfc/rfc2606.txt')),
   );
   $form['check']['linkchecker_log_level'] = array(
     '#default_value' => variable_get('linkchecker_log_level', WATCHDOG_INFO),

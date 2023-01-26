@@ -1783,7 +1783,6 @@
             },
             "require-dev": {
                 "drupal/advanced_help": "*",
-                "drupal/color-color": "*",
                 "drupal/page_manager": "*",
                 "drupal/panels": "*",
                 "drupal/views": "*"
@@ -2393,10 +2392,6 @@
                 "url": "https://ftp.drupal.org/files/projects/drupal-7.94.zip",
                 "reference": "7.94",
                 "shasum": "4d732bbf9b50a5076e8c353cd77d1a4e879d94a4"
-            },
-            "require-dev": {
-                "drupal/color-color": "*",
-                "drupal/rdf": "*"
             },
             "type": "drupal-core",
             "extra": {
@@ -5646,26 +5641,29 @@
         },
         {
             "name": "drupal/linkchecker",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/linkchecker.git",
-                "reference": "7.x-1.4"
+                "reference": "7.x-1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/linkchecker-7.x-1.4.zip",
-                "reference": "7.x-1.4",
-                "shasum": "aa0f20ccb135d4585433289b70dd2dd5dafa1979"
+                "url": "https://ftp.drupal.org/files/projects/linkchecker-7.x-1.5.zip",
+                "reference": "7.x-1.5",
+                "shasum": "4f63f46b9a55e8dad14923805beceacde8735067"
             },
             "require": {
                 "drupal/drupal": "~7.0"
             },
+            "require-dev": {
+                "drupal/bean": "*"
+            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.4",
-                    "datestamp": "1534714680",
+                    "version": "7.x-1.5",
+                    "datestamp": "1674441216",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5688,6 +5686,10 @@
                 {
                     "name": "hass",
                     "homepage": "https://www.drupal.org/user/85918"
+                },
+                {
+                    "name": "VladimirAus",
+                    "homepage": "https://www.drupal.org/user/673120"
                 }
             ],
             "description": "Periodically checks for broken links in node types, blocks and fields and reports the results.",
@@ -10481,12 +10483,12 @@
             ],
             "authors": [
                 {
-                    "name": "RickJ",
-                    "homepage": "https://www.drupal.org/user/3371606"
-                },
-                {
                     "name": "killua99",
                     "homepage": "https://www.drupal.org/user/699418"
+                },
+                {
+                    "name": "RickJ",
+                    "homepage": "https://www.drupal.org/user/3371606"
                 }
             ],
             "description": "Views plugin to export a view as a PDF file.",
