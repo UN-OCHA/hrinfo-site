@@ -22,8 +22,8 @@ activity under Reports -> Recent log messages.
 Required:
 
 1. For internal URL extraction you need to make sure that Cron always get called
-   with your real public site URL (for e.g. http://example.com/cron.php). Make
-   sure it's never executed with http://localhost/cron.php or any other
+   with your real public site URL (for e.g. https://example.com/cron.php). Make
+   sure it's never executed with https://localhost/cron.php or any other
    hostnames or ports, not available from public. Otherwise all links may be
    reported as broken and cannot verified as they should be.
 

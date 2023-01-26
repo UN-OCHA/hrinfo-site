@@ -354,12 +354,12 @@ function linkchecker_update_7006() {
 function linkchecker_update_7007() {
   // Available D7 filters (12/30/2011):
   //
-  // - Line break converter, http://drupal.org/project/drupal
+  // - Line break converter, https://drupal.org/project/drupal
   //     name: filter_autop (D6: filter/1)
-  // - Insert block, http://drupal.org/project/insert_block
+  // - Insert block, https://drupal.org/project/insert_block
   //     name: insert_block (D6 insert_block/0)
   //     tags: [block:name of module=delta of block]
-  // - Insert view filter, http://drupal.org/project/insert_view
+  // - Insert view filter, https://drupal.org/project/insert_view
   //     name: insert_view (D6: insert_view/0)
 
   // See core filter_update_7003();

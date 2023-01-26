@@ -72,7 +72,7 @@ class LinkCheckerLinkExtractionTest extends DrupalWebTestCase {
 <a href="./foo4/./foo5/foo6">./foo4/./foo5/foo6</a>
 <a href="./test/foo bar/is_valid-hack.test">./test/foo bar/is_valid-hack.test</a>
 
-<!-- URL with uncommon chars that could potentially fail to extract. See http://drupal.org/node/465462. -->
+<!-- URL with uncommon chars that could potentially fail to extract. See https://drupal.org/node/465462. -->
 <a href="http://www.lagrandeepicerie.fr/#e-boutique/Les_produits_du_moment,2/coffret_vins_doux_naturels,149">URL with uncommon chars</a>
 <a href="http://example.com/foo bar/is_valid-hack.test">URL with space</a>
 <a href="http://example.com/ajax.html#key1=value1&key2=value2">URL with ajax query params</a>

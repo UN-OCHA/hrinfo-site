@@ -4,7 +4,7 @@
  * @file
  * This module periodically check links in given node types, blocks etc.
  *
- * Developed by Alexander Hass, http://www.yaml-for-drupal.com/.
+ * Developed by Alexander Hass, https://www.yaml-for-drupal.com/.
  */
 
 /**
@@ -24,34 +24,34 @@ define('LINKCHECKER_RESERVED_DOCUMENTATION_DOMAINS', "example.com\nexample.net\n
  * extraction process. This filters only eat processing time or holds references
  * to other nodes.
  *
- * - Line break converter, http://drupal.org/project/drupal
+ * - Line break converter, https://drupal.org/project/drupal
  *     name: filter_autop
- * - Insert block, http://drupal.org/project/insert_block
+ * - Insert block, https://drupal.org/project/insert_block
  *     name: insert_block
  *     tags: [block:name of module=delta of block]
- * - Insert view filter, http://drupal.org/project/insert_view
+ * - Insert view filter, https://drupal.org/project/insert_view
  *     name: insert_view
  *     tags: [view:my_view]
- * - Smiley filter, http://drupal.org/project/smiley
+ * - Smiley filter, https://drupal.org/project/smiley
  *     name: smiley
  *     tags: Depends on icon set, for e.g: ":) :-) :smile:"
- * - Web Links Embed, http://drupal.org/project/weblinks
+ * - Web Links Embed, https://drupal.org/project/weblinks
  *     name: weblinks_embed
  *     tags: [links-embed: id], [links-embed: name]
- * - Web Links Filter, http://drupal.org/project/weblinks
+ * - Web Links Filter, https://drupal.org/project/weblinks
  *     name: weblinks_filter
  *     tags: [link: title]
  *
  * @todo
- * - Smileys Filter, http://drupal.org/project/smileys
+ * - Smileys Filter, https://drupal.org/project/smileys
  *     name: smileys
  *     tags: Depends on icon set, for e.g: ":) :-) :smile:"
- * - Insert node, http://drupal.org/project/InsertNode
+ * - Insert node, https://drupal.org/project/InsertNode
  *     name: insert_node/0
  *     tags: [node:<name of node> <parameters>]
- * - Weblink filter, http://drupal.org/project/links
+ * - Weblink filter, https://drupal.org/project/links
  *     name: links_weblink/0
- *     tags: [weblink:node_id|text], [weblink:node_id/link_id], [weblink:http://weblink.example.com/]
+ *     tags: [weblink:node_id|text], [weblink:node_id/link_id], [weblink:https://weblink.example.com/]
  */
 define('LINKCHECKER_DEFAULT_FILTER_BLACKLIST', 'filter_autop|insert_block|insert_view|smiley|smileys|weblinks_embed|weblinks_filter');
 
@@ -85,7 +85,7 @@ function linkchecker_permission() {
 function linkchecker_help($path, $arg) {
   switch ($path) {
     case 'admin/help#linkchecker':
-      return '<p>' . t('This module provides an aid to finding broken links on your site. It periodically checks contents of all public nodes, tries to find any html links and check for their validity. It reports broken links through the admin interface. For more information about status codes see <a href="@rfc">Status Code Definitions</a>.', array('@rfc' => 'http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html')) . '</p>';
+      return '<p>' . t('This module provides an aid to finding broken links on your site. It periodically checks contents of all public nodes, tries to find any html links and check for their validity. It reports broken links through the admin interface. For more information about status codes see <a href="@rfc">Status Code Definitions</a>.', array('@rfc' => 'https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html')) . '</p>';
   }
 }
 
@@ -167,7 +167,7 @@ function linkchecker_admin_paths() {
  *   translate.
  * @param $severity
  *   The severity of the message; one of the following values as defined in
- *   @link http://www.faqs.org/rfcs/rfc3164.html RFC 3164: @endlink
+ *   @link https://www.faqs.org/rfcs/rfc3164.html RFC 3164: @endlink
  *   - WATCHDOG_EMERGENCY: Emergency, system is unusable.
  *   - WATCHDOG_ALERT: Alert, action must be taken immediately.
  *   - WATCHDOG_CRITICAL: Critical conditions.
@@ -233,7 +233,7 @@ function _linkchecker_user_access_edit_link_settings($link) {
  */
 function _linkchecker_link_access($link) {
   $link = (object) $link;
-  return _linkchecker_link_node_ids($link) || _linkchecker_link_comment_ids($link) || _linkchecker_link_block_ids($link);
+  return (_linkchecker_link_node_ids($link) !== FALSE) || (_linkchecker_link_comment_ids($link) !== FALSE) || (_linkchecker_link_block_ids($link) !== FALSE);
 }
 
 /**
@@ -256,17 +256,20 @@ function _linkchecker_link_access($link) {
  *   additionally be restricted to only those owned by this account. Otherwise,
  *   nodes owned by any user account may be returned.
  *
- * @return array
+ * @return array|bool
  *   An array of node IDs that contain the provided link and that the current
- *   user may be allowed to view.
+ *   user may be allowed to view, or FALSE if they are not allowed access.
  */
 function _linkchecker_link_node_ids($link, $node_author_account = NULL) {
   static $fields_with_node_links = array();
 
   // Exit if all node types are disabled or if the user cannot access content,
   // there is no need to check further.
+  if (!user_access('access content')) {
+    return FALSE;
+  }
   $linkchecker_scan_nodetypes = linkchecker_scan_node_types();
-  if (empty($linkchecker_scan_nodetypes) || !user_access('access content')) {
+  if (empty($linkchecker_scan_nodetypes)) {
     return array();
   }
 
@@ -362,15 +365,18 @@ function _linkchecker_link_node_ids($link, $node_author_account = NULL) {
  *   will additionally be restricted to only those owned by this account.
  *   Otherwise, comments owned by any user account may be returned.
  *
- * @return array
+ * @return array|bool
  *   An array of comment IDs that contain the provided link and that the
- *   current user is allowed to view.
+ *   current user is allowed to view, or FALSE if they are not allowed access.
  */
 function _linkchecker_link_comment_ids($link, $comment_author_account = NULL) {
   // Exit if comments are disabled or if the user cannot access comments, there
   // is no need to check further.
+  if (!user_access('access comments')) {
+    return FALSE;
+  }
   $comment_types = linkchecker_scan_comment_types();
-  if (empty($comment_types) || !user_access('access comments')) {
+  if (empty($comment_types)) {
     return array();
   }
 
@@ -406,9 +412,9 @@ function _linkchecker_link_comment_ids($link, $comment_author_account = NULL) {
  * @param object $link
  *   An object representing the link to check.
  *
- * @return array
+ * @return array|bool
  *   An array of custom block IDs that contain the provided link and that the
- *   current user is allowed to view.
+ *   current user is allowed to view, or FALSE if they are not allowed access.
  */
 function _linkchecker_link_block_ids($link) {
   // Exit if blocks are disabled.
@@ -441,7 +447,13 @@ function _linkchecker_link_block_ids($link) {
   $query->distinct();
   $allowed_bids = $query->execute()->fetchCol();
 
-  return array_intersect($bids, $allowed_bids);
+  $results = array_intersect($bids, $allowed_bids);
+  if ((!empty($bids) && empty($allowed_bids)) || (!empty($allowed_bids) && empty($results))) {
+    return FALSE;
+  }
+  else {
+    return $results;
+  }
 }
 
 /**
@@ -500,7 +512,7 @@ function _linkchecker_check_links() {
   $linkchecker_check_useragent = variable_get('linkchecker_check_useragent', 'Drupal (+http://drupal.org/)');
 
   // Connection limit can be overridden via settings.php. Two connections is the
-  // limit defined in RFC http://www.ietf.org/rfc/rfc2616.txt. Modern browsers
+  // limit defined in RFC https://www.ietf.org/rfc/rfc2616.txt. Modern browsers
   // are typically using 6-8 connections and no more. Never use more and keep
   // in mind that you can overload other people servers.
   $linkchecker_check_domain_connections = variable_get('linkchecker_check_domain_connections', 2);
@@ -604,7 +616,7 @@ function _linkchecker_status_handling(&$response, $link) {
   // - Prevent E_ALL warnings in DB updates for non-existing $response->error.
   // - @todo drupal_http_request() may not provide an UTF8 encoded error message
   //   what results in a database UPDATE failure. For more information, see
-  //   http://drupal.org/node/371495.
+  //   https://drupal.org/node/371495.
   //   Workaround: ISO-8859-1 as source encoding may be wrong, but WFM.
   if (!isset($response->error)) {
     $response->error = '';
@@ -620,10 +632,10 @@ function _linkchecker_status_handling(&$response, $link) {
   // - or by any other element (naming with the id attribute)
   // - and must not contain a key/value pair as these type of hash fragments are
   //   typically used by AJAX applications to prevent additionally HTTP requests
-  //   e.g. http://www.example.com/ajax.html#key1=value1&key2=value2
+  //   e.g. https://www.example.com/ajax.html#key1=value1&key2=value2
   // - and must not contain '/' or ',' as this are not normal anchors.
   // - and '#top' is a reserved fragment that must not exist in a page.
-  // See http://www.w3.org/TR/html401/struct/links.html
+  // See https://www.w3.org/TR/html401/struct/links.html
   if ($response->code == 200
     && !empty($response->data)
     && !empty($response->headers['content-type'])
@@ -671,7 +683,7 @@ function _linkchecker_status_handling(&$response, $link) {
         $result = db_query('SELECT nid FROM {linkchecker_node} WHERE lid = :lid', array(':lid' => $link->lid));
         foreach ($result as $row) {
           // Explicitly don't use node_load_multiple() or the module may run
-          // into issues like http://drupal.org/node/1210606. With this logic
+          // into issues like https://drupal.org/node/1210606. With this logic
           // nodes can be updated until an out of memory occurs and further
           // updates will be made on the remaining nodes only.
           $node = node_load($row->nid);
@@ -708,7 +720,7 @@ function _linkchecker_status_handling(&$response, $link) {
         $result = db_query('SELECT cid FROM {linkchecker_comment} WHERE lid = :lid', array(':lid' => $link->lid));
         foreach ($result as $row) {
           // Explicitly don't use comment_load_multiple() or the module may run
-          // into issues like http://drupal.org/node/1210606. With this logic
+          // into issues like https://drupal.org/node/1210606. With this logic
           // comment can be updated until an out of memory occurs and further
           // updates will be made on the remaining comments only.
           $comment = comment_load($row->cid);
@@ -1107,6 +1119,33 @@ function linkchecker_form_comment_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function linkchecker_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id) {
+  $linkchecker_excludes = variable_get('linkchecker_exclude');
+  $form['field']['linkchecker_exclude'] = array (
+    '#type' => 'checkbox',
+    '#title' => t('Exclude field from Link Checker scans'),
+    '#description' => t('Force Link Checker to ignore this field when scanning content for broken links.'),
+    '#default_value' => $linkchecker_excludes[$form['#field']['field_name']] ? $linkchecker_excludes[$form['#field']['field_name']] : 0,
+  );
+  $form['#submit'][] = 'linkchecker_form_field_ui_field_edit_form_submit';
+}
+
+
+/**
+ * Custom submit handler for field edit page.
+ */
+function linkchecker_form_field_ui_field_edit_form_submit($form, &$form_state) {
+  $linkchecker_excludes = variable_get('linkchecker_exclude');    
+  if (!isset($linkchecker_excludes)) {
+    variable_set('linkchecker_exclude', array());
+  }
+  $linkchecker_excludes[$form['#field']['field_name']] = $form['field']['linkchecker_exclude']['#value'] ;
+  variable_set('linkchecker_exclude', $linkchecker_excludes);
+}
+
+/**
  * Custom submit handler for block add page.
  */
 function linkchecker_block_custom_add_form_submit($form, &$form_state) {
@@ -1194,6 +1233,15 @@ function _linkchecker_extract_node_links($node, $return_field_names = FALSE) {
   // found earlier while looping over $text_items_by_field below.
   $text_items_by_field = array_merge($text_items_by_field, _linkchecker_parse_fields('node', $node->type, $node, TRUE));
   $text_items_by_field['title'][] = _filter_url($node->title, $filter);
+  // Filter out the fields that are to be ignored.
+  $linkchecker_excludes = variable_get('linkchecker_exclude');
+  if (isset($linkchecker_excludes)) {
+    foreach ($linkchecker_excludes as $field => $value) {
+      if ($value == 1) {
+        unset($text_items_by_field[$field]);
+      }
+    }
+  }
   $text_items = _linkchecker_array_values_recursive($text_items_by_field);
 
   // Get the absolute node path for extraction of relative links.
@@ -1761,7 +1809,7 @@ function _linkchecker_parse_fields($entity_type, $bundle_name, $entity, $return_
         }
         break;
 
-      // Link module field, http://drupal.org/project/link.
+      // Link module field, https://drupal.org/project/link.
       case 'link_field':
         foreach ($entity_field as $language) {
           foreach ($language as $item) {
@@ -1823,7 +1871,7 @@ function _linkchecker_replace_fields($entity_type, $bundle_name, $entity, $old_u
         }
         break;
 
-      // Link module field, http://drupal.org/project/link.
+      // Link module field, https://drupal.org/project/link.
       case 'link_field':
         foreach ($entity_field as $language_name => $language_value) {
           foreach ($language_value as $item_name => $item_value) {
@@ -2082,7 +2130,7 @@ function _linkchecker_extract_links($text = '', $content_path = NULL) {
         // This logic intentionally does not implement all the rules definied in
         // RFC 3986, section 5.2.4 to show broken links and over-dot-segmented
         // URIs; e.g., http://example.com/../../foo/bar.
-        // For more information, see http://drupal.org/node/832388.
+        // For more information, see https://drupal.org/node/832388.
         $path = substr_replace($absolute_content_path . $url_decoded, '', 0, strlen($base_root));
 
         // Remove './' segments where possible.
@@ -2322,7 +2370,7 @@ function _linkchecker_link_replace(&$text, $old_link_fqdn = '', $new_link_fqdn =
 /**
  * Customized clone of core check_markup() with additional filter blacklist.
  *
- * See http://api.drupal.org/api/function/check_markup/7 for API documentation.
+ * See https://api.drupal.org/api/function/check_markup/7 for API documentation.
  */
 function _linkchecker_check_markup($text, $format_id = NULL, $langcode = '', $cache = FALSE) {
   if (!isset($text)) {
@@ -2554,7 +2602,7 @@ function _linkchecker_unpublish_nodes($lid) {
   $result = db_query('SELECT nid FROM {linkchecker_node} WHERE lid = :lid', array(':lid' => $lid));
   foreach ($result as $row) {
     // Explicitly don't use node_load_multiple() or the module may run
-    // into issues like http://drupal.org/node/1210606. With this logic
+    // into issues like https://drupal.org/node/1210606. With this logic
     // nodes can be updated until an out of memory occurs and further
     // updates will be made on the remaining nodes only.
     $node = node_load($row->nid);
@@ -2577,7 +2625,7 @@ function linkchecker_link_load($lid) {
 }
 
 /**
- * Impersonates another user, see http://drupal.org/node/287292#comment-3162350.
+ * Impersonates another user, see https://drupal.org/node/287292#comment-3162350.
  *
  * Each time this function is called, the active user is saved and $new_user
  * becomes the active user. Multiple calls to this function can be nested,
@@ -2657,9 +2705,9 @@ function _linkchecker_isdefaultrevision($entity) {
   //
   // This behaviour will change in D8 where $node->isDefaultRevision has been
   // introduced. See below links for more details.
-  // - http://drupal.org/node/1879482
-  // - http://drupal.org/node/218755
-  // - http://drupal.org/node/1522154
+  // - https://drupal.org/node/1879482
+  // - https://drupal.org/node/218755
+  // - https://drupal.org/node/1522154
   //
   // Every moderation module saving a forward revision needs to return FALSE.
   // @todo: Refactor this workaround under D8.
