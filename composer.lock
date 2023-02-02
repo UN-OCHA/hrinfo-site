@@ -1766,17 +1766,17 @@
         },
         {
             "name": "drupal/ctools",
-            "version": "1.20.0",
+            "version": "1.21.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ctools.git",
-                "reference": "7.x-1.20"
+                "reference": "7.x-1.21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ctools-7.x-1.20.zip",
-                "reference": "7.x-1.20",
-                "shasum": "695e3ac7705d4de343bfd0b7183706fa3203fa52"
+                "url": "https://ftp.drupal.org/files/projects/ctools-7.x-1.21.zip",
+                "reference": "7.x-1.21",
+                "shasum": "005d39917737407efd1a730ef2e2e082227e13c7"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -1790,8 +1790,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.20",
-                    "datestamp": "1642577344",
+                    "version": "7.x-1.21",
+                    "datestamp": "1675152415",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7163,7 +7163,7 @@
         },
         {
             "name": "drupal/page_manager",
-            "version": "1.20.0",
+            "version": "1.21.0",
             "require": {
                 "drupal/ctools": "*",
                 "drupal/drupal": "~7.0"
@@ -7171,8 +7171,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.20",
-                    "datestamp": "1642577344",
+                    "version": "7.x-1.21",
+                    "datestamp": "1675152415",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
