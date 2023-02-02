@@ -1,0 +1,120 @@
+diff --git a/user_expire.module b/user_expire.module
+index 4d01061f69b447cdefcd7d6b3e5bdaec09eed438..332ab12a88793eff57e233e298330721627aeb9c 100644
+--- a/user_expire.module
++++ b/user_expire.module
+@@ -164,7 +164,7 @@ function user_expire_user_update(&$edit, $account, $category) {
+ function _user_expire_save($account) {
+   if (isset($account->user_expiration) && $account->user_expiration) {
+     if (is_array($account->user_expiration_date) && isset($account->user_expiration_date['month'])) {
+-      $time_for_datetime = $account->user_expiration_date['year'] . '-' . $account->user_expiration_date['month']  . '-' . $account->user_expiration_date['day'];
++      $time_for_datetime = $account->user_expiration_date['year'] . '-' . $account->user_expiration_date['month'] . '-' . $account->user_expiration_date['day'];
+     }
+     else {
+       $time_for_datetime = $account->user_expiration_date;
+@@ -254,7 +254,6 @@ function user_expire_set_expiration($account, $expiration = NULL) {
+     if (!isset($account->is_new) || !$account->is_new) {
+       // New accounts can't have a record to delete.
+       // Existing records (!is_new) might.
+-
+       // Remove user expiration times for this user.
+       $deleted = db_delete('user_expire')
+         ->condition('uid', $account->uid)
+@@ -483,7 +482,7 @@ function user_expire_mail($key, &$message, $params) {
+     $message['body'][] = '';
+     $message['body'][] = t('Thanks, @site_name', array('@site_name' => variable_get('site_name', 'Drupal.org')));
+   }
+-  else if ($key == 'account_expired') {
++  elseif ($key == 'account_expired') {
+     // The subject.
+     $message['subject'] = t('@site_name: Account expired', array('@site_name' => variable_get('site_name', 'Drupal.org')));
+     // The body.
+@@ -499,3 +498,15 @@ function user_expire_mail($key, &$message, $params) {
+     $message['body'][] = t('Thanks, @site_name', array('@site_name' => variable_get('site_name', 'Drupal.org')));
+   }
+ }
++
++/**
++ * Implements hook_user_presave().
++ *
++ * If the account was blocked but is now active, update the expiry so it is
++ * not re-blocked by the next cron run.
++ */
++function user_expire_user_presave(&$edit, $account, $category) {
++  if (!empty($account->original) && $account->original->status == 0 && $edit['status'] == 1) {
++    $edit['access'] = REQUEST_TIME;
++  }
++}
+diff --git a/user_expire.test b/user_expire.test
+index cb9e3bdafc3ef27711b8d1b1c58ad4437257c97b..3d955a99e0c329b64fd837c7f28de875eb926eea 100644
+--- a/user_expire.test
++++ b/user_expire.test
+@@ -4,6 +4,9 @@
+  * Tests for User expire module.
+  */
+ 
++/**
++ * {@inheritdoc}
++ */
+ class UserExpireTestCase extends DrupalWebTestCase {
+   /**
+    * Implements getInfo().
+@@ -17,6 +20,9 @@ class UserExpireTestCase extends DrupalWebTestCase {
+     );
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
+   public function setUp() {
+     // Enable User Expire module.
+     parent::setUp('user_expire');
+@@ -30,11 +36,14 @@ class UserExpireTestCase extends DrupalWebTestCase {
+       'administer users',
+       'set user expiration',
+       'view expiring users report',
+-      'administer user expire settings'
++      'administer user expire settings',
+     ));
+   }
+ 
+-  function testUserExpire() {
++  /**
++   * Run all user_expire tests.
++   */
++  public function testUserExpire() {
+     $this->assertTrue($this->basic_account->status, t('User account is currently enabled.'));
+     user_expire_set_expiration($this->basic_account, REQUEST_TIME - 1);
+     user_expire_expire_users(array($this->basic_account));
+@@ -142,7 +151,7 @@ class UserExpireTestCase extends DrupalWebTestCase {
+     user_expire_expire_by_role();
+ 
+     // Ensure they are still enabled.
+-    $this->drupalGet("user/$new_basic_account->uid/edit");
++    $this->drupalGet("user/{$new_basic_account->uid}/edit");
+     $this->assertRaw('type="radio" id="edit-status-1" name="status" value="1" checked="checked" class="form-radio"', t('New user account stays active.'));
+ 
+     // Age the new user's created by 90+ days.
+@@ -151,9 +160,21 @@ class UserExpireTestCase extends DrupalWebTestCase {
+     // Process it.
+     user_expire_expire_by_role();
+ 
+-    // Ensure they are disabled
+-    $this->drupalGet("user/$new_basic_account->uid/edit");
++    // Ensure they are disabled.
++    $this->drupalGet("user/{$new_basic_account->uid}/edit");
+     $this->assertRaw('type="radio" id="edit-status-0" name="status" value="0" checked="checked" class="form-radio"', t('User account is currently disabled.'));
+ 
++    // Manually unblock the user.
++    $edit = array();
++    $edit['status'] = 1;
++    $this->drupalPost("user/{$new_basic_account->uid}/edit", $edit, t('Save'));
++
++    // Process it.
++    user_expire_expire_by_role();
++
++    // Ensure they are still active.
++    $this->drupalGet("user/{$new_basic_account->uid}/edit");
++    $this->assertRaw('type="radio" id="edit-status-1" name="status" value="1" checked="checked" class="form-radio"', $this->t('User account is currently active.'));
+   }
++
+ }
