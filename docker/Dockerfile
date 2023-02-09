@@ -6,7 +6,7 @@ WORKDIR /srv/www
 RUN composer self-update && \
     composer install --quiet --no-dev --prefer-dist
 
-FROM public.ecr.aws/unocha/php-k8s:${TAG:-7.4-NR-stable}
+FROM public.ecr.aws/unocha/php-k8s:7.4-stable
 
 ARG VCS_REF
 ARG VCS_URL
