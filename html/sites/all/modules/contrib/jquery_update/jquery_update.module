@@ -59,6 +59,16 @@ function jquery_update_library() {
     ),
     'version' => '0.0.1',
   );
+  $libraries['jquery_update.position.fix'] = array(
+    'title' => 'jQuery Update Position Fix',
+    'js' => array(
+      drupal_get_path('module', 'jquery_update') . '/js/jquery_position.js' => array(
+        'group' => JS_THEME,
+        'weight' => 2,
+      ),
+    ),
+    'version' => '0.0.1',
+  );
   $libraries['jquery.metadata'] = array(
     'title' => 'QUnit',
     'js' => array(
@@ -289,6 +299,7 @@ function jquery_update_jquery_replace(array &$javascript, $cdn, $path, $min, $ve
     if (!empty($custom_version)) {
       $javascript['jquery']['version'] = $custom_version;
       jquery_update_add_jquery_browser_fix($javascript, $custom_version);
+      jquery_update_add_jquery_position_fix($javascript, $custom_version);
     }
     return;
   }
@@ -343,6 +354,7 @@ function jquery_update_jquery_replace(array &$javascript, $cdn, $path, $min, $ve
       break;
   }
   jquery_update_add_jquery_browser_fix($javascript, $version);
+  jquery_update_add_jquery_position_fix($javascript, $version);
 }
 
 /**
@@ -353,6 +365,18 @@ function jquery_update_add_jquery_browser_fix(&$libraries, $jquery_version) {
     $libraries['jquery']['dependencies'][] = array(
       'jquery_update',
       'jquery_update.browser.fix',
+    );
+  }
+}
+
+/**
+ * Add a workaround for .position() behaviour change.
+ */
+function jquery_update_add_jquery_position_fix(&$libraries, $jquery_version) {
+  if (version_compare($jquery_version, '3.3', '>=')) {
+    $libraries['jquery']['dependencies'][] = array(
+      'jquery_update',
+      'jquery_update.position.fix',
     );
   }
 }
