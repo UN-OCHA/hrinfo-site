@@ -1508,17 +1508,17 @@
         },
         {
             "name": "drupal/context",
-            "version": "3.11.0",
+            "version": "3.12.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/context.git",
-                "reference": "7.x-3.11"
+                "reference": "7.x-3.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/context-7.x-3.11.zip",
-                "reference": "7.x-3.11",
-                "shasum": "7b577980af28d264eeb071b5fab97ec8603296dd"
+                "url": "https://ftp.drupal.org/files/projects/context-7.x-3.12.zip",
+                "reference": "7.x-3.12",
+                "shasum": "c69d450179fbbb0241be29a37b19e09102d408eb"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -1527,8 +1527,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-3.11",
-                    "datestamp": "1658944702",
+                    "version": "7.x-3.12",
+                    "datestamp": "1675905573",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1766,24 +1766,23 @@
         },
         {
             "name": "drupal/ctools",
-            "version": "1.20.0",
+            "version": "1.21.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ctools.git",
-                "reference": "7.x-1.20"
+                "reference": "7.x-1.21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ctools-7.x-1.20.zip",
-                "reference": "7.x-1.20",
-                "shasum": "695e3ac7705d4de343bfd0b7183706fa3203fa52"
+                "url": "https://ftp.drupal.org/files/projects/ctools-7.x-1.21.zip",
+                "reference": "7.x-1.21",
+                "shasum": "005d39917737407efd1a730ef2e2e082227e13c7"
             },
             "require": {
                 "drupal/drupal": "~7.0"
             },
             "require-dev": {
                 "drupal/advanced_help": "*",
-                "drupal/color-color": "*",
                 "drupal/page_manager": "*",
                 "drupal/panels": "*",
                 "drupal/views": "*"
@@ -1791,8 +1790,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.20",
-                    "datestamp": "1642577344",
+                    "version": "7.x-1.21",
+                    "datestamp": "1675152415",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2393,10 +2392,6 @@
                 "url": "https://ftp.drupal.org/files/projects/drupal-7.94.zip",
                 "reference": "7.94",
                 "shasum": "4d732bbf9b50a5076e8c353cd77d1a4e879d94a4"
-            },
-            "require-dev": {
-                "drupal/color-color": "*",
-                "drupal/rdf": "*"
             },
             "type": "drupal-core",
             "extra": {
@@ -5270,17 +5265,17 @@
         },
         {
             "name": "drupal/jquery_update",
-            "version": "4.0.0",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/jquery_update.git",
-                "reference": "7.x-4.0"
+                "reference": "7.x-4.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jquery_update-7.x-4.0.zip",
-                "reference": "7.x-4.0",
-                "shasum": "3ff1a393c244f506052a26d9cc59020e3661449e"
+                "url": "https://ftp.drupal.org/files/projects/jquery_update-7.x-4.1.zip",
+                "reference": "7.x-4.1",
+                "shasum": "c555b66fc3b353f7045c4004db858c3a75e4fab5"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -5288,8 +5283,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-4.0",
-                    "datestamp": "1669044747",
+                    "version": "7.x-4.1",
+                    "datestamp": "1675437622",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5646,26 +5641,29 @@
         },
         {
             "name": "drupal/linkchecker",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/linkchecker.git",
-                "reference": "7.x-1.4"
+                "reference": "7.x-1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/linkchecker-7.x-1.4.zip",
-                "reference": "7.x-1.4",
-                "shasum": "aa0f20ccb135d4585433289b70dd2dd5dafa1979"
+                "url": "https://ftp.drupal.org/files/projects/linkchecker-7.x-1.5.zip",
+                "reference": "7.x-1.5",
+                "shasum": "4f63f46b9a55e8dad14923805beceacde8735067"
             },
             "require": {
                 "drupal/drupal": "~7.0"
             },
+            "require-dev": {
+                "drupal/bean": "*"
+            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.4",
-                    "datestamp": "1534714680",
+                    "version": "7.x-1.5",
+                    "datestamp": "1674441216",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5688,6 +5686,10 @@
                 {
                     "name": "hass",
                     "homepage": "https://www.drupal.org/user/85918"
+                },
+                {
+                    "name": "VladimirAus",
+                    "homepage": "https://www.drupal.org/user/673120"
                 }
             ],
             "description": "Periodically checks for broken links in node types, blocks and fields and reports the results.",
@@ -7161,7 +7163,7 @@
         },
         {
             "name": "drupal/page_manager",
-            "version": "1.20.0",
+            "version": "1.21.0",
             "require": {
                 "drupal/ctools": "*",
                 "drupal/drupal": "~7.0"
@@ -7169,8 +7171,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.20",
-                    "datestamp": "1642577344",
+                    "version": "7.x-1.21",
+                    "datestamp": "1675152415",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10481,12 +10483,12 @@
             ],
             "authors": [
                 {
-                    "name": "RickJ",
-                    "homepage": "https://www.drupal.org/user/3371606"
-                },
-                {
                     "name": "killua99",
                     "homepage": "https://www.drupal.org/user/699418"
+                },
+                {
+                    "name": "RickJ",
+                    "homepage": "https://www.drupal.org/user/3371606"
                 }
             ],
             "description": "Views plugin to export a view as a PDF file.",

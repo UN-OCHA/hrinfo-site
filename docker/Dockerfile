@@ -6,7 +6,7 @@ WORKDIR /srv/www
 RUN composer self-update && \
     composer install --quiet --no-dev --prefer-dist
 
-FROM public.ecr.aws/unocha/php-k8s:${TAG:-7.4-NR-stable}
+FROM public.ecr.aws/unocha/php-k8s:7.4-stable
 
 ARG VCS_REF
 ARG VCS_URL
@@ -33,6 +33,7 @@ COPY --from=builder /srv/www/vendor /srv/www/vendor
 COPY --from=builder /srv/www/composer.json /srv/www/composer.json
 COPY --from=builder /srv/www/composer.lock /srv/www/composer.lock
 COPY --from=builder /srv/www/composer.patches.json /srv/www/composer.patches.json
+COPY --from=builder /srv/www/docker/fastcgi_drupal.conf /etc/nginx/apps/drupal/fastcgi_drupal.conf
 COPY --from=builder /srv/www/docker/custom /etc/nginx/custom
 
 RUN  cd /srv/www/html/sites && \

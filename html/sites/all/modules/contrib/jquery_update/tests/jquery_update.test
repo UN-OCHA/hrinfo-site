@@ -18,6 +18,20 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
   private $admin;
 
   /**
+   * Full admin user for tests.
+   *
+   * @var object
+   */
+  private $fullAdmin;
+
+  /**
+   * Theme admin user for tests.
+   *
+   * @var object
+   */
+  private $themeAdmin;
+
+  /**
    * Implements getInfo().
    *
    * @see DrupalWebTestCase::getInfo()
@@ -49,19 +63,19 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
     // n.b. version numbers are arbitrary in most cases here, so probably no
     // real need update them as new releases come out.
     $form = array(
-      'jquery_update_custom_path_jquery' => "https://code.jquery.com/jquery-3.6.0.js",
-      'jquery_update_custom_version_jquery' => "3.6.0",
-      'jquery_update_custom_path_jqueryui' => "/sites/default/files/jquery_update/jquery-ui.min.js",
-      'jquery_update_custom_version_jqueryui' => "1.13.0",
-      'jquery_update_custom_path_cookie' => "/sites/default/files/jquery_update/jquery.cookie.js",
-      'jquery_update_custom_version_jquery_cookie' => "1.4.1",
-      'jquery_update_custom_path_form' => "/sites/default/files/jquery_update/jquery.form.js",
-      'jquery_update_custom_version_jquery_form' => "4.2.1",
-      'jquery_update_custom_path_migrate' => "https://cdn.jsdelivr.net/npm/jquery-migrate@3.3.2/dist/jquery-migrate.min.js",
-      'jquery_update_custom_version_jquery_migrate' => "3.3.2",
+      'jquery_update_custom_path_jquery' => 'https://code.jquery.com/jquery-3.6.0.js',
+      'jquery_update_custom_version_jquery' => '3.6.0',
+      'jquery_update_custom_path_jqueryui' => '/sites/default/files/jquery_update/jquery-ui.min.js',
+      'jquery_update_custom_version_jqueryui' => '1.13.0',
+      'jquery_update_custom_path_cookie' => '/sites/default/files/jquery_update/jquery.cookie.js',
+      'jquery_update_custom_version_jquery_cookie' => '1.4.1',
+      'jquery_update_custom_path_form' => '/sites/default/files/jquery_update/jquery.form.js',
+      'jquery_update_custom_version_jquery_form' => '4.2.1',
+      'jquery_update_custom_path_migrate' => 'https://cdn.jsdelivr.net/npm/jquery-migrate@3.3.2/dist/jquery-migrate.min.js',
+      'jquery_update_custom_version_jquery_migrate' => '3.3.2',
       'jquery_update_jquery_migrate_enable' => TRUE,
     );
-    $this->drupalPost('/admin/config/development/jquery_update', $form, t('Save configuration'));
+    $this->drupalPost('admin/config/development/jquery_update', $form, t('Save configuration'));
 
     // n.b. a request from an anon user might not see the same script elements.
     $this->drupalGet('/');
@@ -73,19 +87,19 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
 
     // Test some different local vs. CDN custom paths.
     $form = array(
-      'jquery_update_custom_path_jquery' => "/sites/default/files/jquery_update/jquery.js",
-      'jquery_update_custom_version_jquery' => "3.6.0",
-      'jquery_update_custom_path_jqueryui' => "https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js",
-      'jquery_update_custom_version_jqueryui' => "1.12.1",
-      'jquery_update_custom_path_cookie' => "https://cdn.jsdelivr.net/gh/carhartl/jquery-cookie@1.4.1/jquery.cookie.js",
-      'jquery_update_custom_version_jquery_cookie' => "1.4.1",
-      'jquery_update_custom_path_form' => "https://cdn.jsdelivr.net/gh/jquery-form/form@4.2.1/dist/jquery.form.min.js",
-      'jquery_update_custom_version_jquery_form' => "4.2.1",
-      'jquery_update_custom_path_migrate' => "/sites/default/files/jquery_update/jquery-migrate.js",
-      'jquery_update_custom_version_jquery_migrate' => "3.3.2",
+      'jquery_update_custom_path_jquery' => '/sites/default/files/jquery_update/jquery.js',
+      'jquery_update_custom_version_jquery' => '3.6.0',
+      'jquery_update_custom_path_jqueryui' => 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
+      'jquery_update_custom_version_jqueryui' => '1.12.1',
+      'jquery_update_custom_path_cookie' => 'https://cdn.jsdelivr.net/gh/carhartl/jquery-cookie@1.4.1/jquery.cookie.js',
+      'jquery_update_custom_version_jquery_cookie' => '1.4.1',
+      'jquery_update_custom_path_form' => 'https://cdn.jsdelivr.net/gh/jquery-form/form@4.2.1/dist/jquery.form.min.js',
+      'jquery_update_custom_version_jquery_form' => '4.2.1',
+      'jquery_update_custom_path_migrate' => '/sites/default/files/jquery_update/jquery-migrate.js',
+      'jquery_update_custom_version_jquery_migrate' => '3.3.2',
       'jquery_update_jquery_migrate_enable' => TRUE,
     );
-    $this->drupalPost('/admin/config/development/jquery_update', $form, t('Save configuration'));
+    $this->drupalPost('admin/config/development/jquery_update', $form, t('Save configuration'));
 
     $this->drupalGet('/');
     $this->assertRaw('<script type="text/javascript" src="/sites/default/files/jquery_update/jquery.js?v=3.6.0"></script>', 'Custom jQuery 3.6.0 from local path');
@@ -97,7 +111,7 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
     // jQuery browser fix for jQuery >= 1.9
     // n.b. the full script tag looks like this in drupalci:
     // <script type="text/javascript" src="http://localhost/sites/all/modules/jquery_update/js/jquery_browser.js?v=0.0.1"></script>
-    $this->assertRaw('/jquery_update/js/jquery_browser.js?v=0.0.1"></script>', 'jQuery browser fix 0.0.1');
+    $this->assertRaw('jquery_update/js/jquery_browser.js?v=0.0.1"></script>', 'jQuery browser fix 0.0.1');
   }
 
   /**
@@ -106,21 +120,21 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
   public function testCustomPathsJsApiExternal() {
 
     $form = array(
-      'jquery_update_custom_path_jquery' => "https://code.jquery.com/jquery-3.6.1.js",
-      'jquery_update_custom_version_jquery' => "3.6.1",
-      'jquery_update_custom_path_jqueryui' => "https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js",
-      'jquery_update_custom_version_jqueryui' => "1.13.1",
-      'jquery_update_custom_path_cookie' => "https://cdn.jsdelivr.net/gh/carhartl/jquery-cookie@1.4.1/jquery.cookie.js",
-      'jquery_update_custom_version_jquery_cookie' => "1.4.1",
-      'jquery_update_custom_path_form' => "https://cdn.jsdelivr.net/gh/jquery-form/form@4.2.1/dist/jquery.form.min.js",
-      'jquery_update_custom_version_jquery_form' => "4.2.1",
-      'jquery_update_custom_path_migrate' => "https://cdn.jsdelivr.net/npm/jquery-migrate@3.3.2/dist/jquery-migrate.min.js",
-      'jquery_update_custom_version_jquery_migrate' => "3.3.2",
+      'jquery_update_custom_path_jquery' => 'https://code.jquery.com/jquery-3.6.1.js',
+      'jquery_update_custom_version_jquery' => '3.6.1',
+      'jquery_update_custom_path_jqueryui' => 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js',
+      'jquery_update_custom_version_jqueryui' => '1.13.1',
+      'jquery_update_custom_path_cookie' => 'https://cdn.jsdelivr.net/gh/carhartl/jquery-cookie@1.4.1/jquery.cookie.js',
+      'jquery_update_custom_version_jquery_cookie' => '1.4.1',
+      'jquery_update_custom_path_form' => 'https://cdn.jsdelivr.net/gh/jquery-form/form@4.2.1/dist/jquery.form.min.js',
+      'jquery_update_custom_version_jquery_form' => '4.2.1',
+      'jquery_update_custom_path_migrate' => 'https://cdn.jsdelivr.net/npm/jquery-migrate@3.3.2/dist/jquery-migrate.min.js',
+      'jquery_update_custom_version_jquery_migrate' => '3.3.2',
       'jquery_update_jquery_migrate_enable' => TRUE,
     );
-    $this->drupalPost('/admin/config/development/jquery_update', $form, t('Save configuration'));
+    $this->drupalPost('admin/config/development/jquery_update', $form, t('Save configuration'));
 
-    $js = json_decode($this->drupalGet('/jquery-update-test/drupal-add-js'), TRUE);
+    $js = json_decode($this->drupalGet('jquery-update-test/drupal-add-js'), TRUE);
     $keys = preg_grep('/custom_path/', array_keys($form));
     foreach ($keys as $custom_path) {
       $message = format_string('External custom @path set as external', array('@path' => $custom_path));
@@ -134,21 +148,21 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
   public function testCustomPathsJsApiRelative() {
 
     $form = array(
-      'jquery_update_custom_path_jquery' => "/sites/default/files/jquery_update/jquery.js",
-      'jquery_update_custom_version_jquery' => "3.6.1",
-      'jquery_update_custom_path_jqueryui' => "/sites/default/files/jquery_update/jquery-ui.min.js",
-      'jquery_update_custom_version_jqueryui' => "1.13.0",
-      'jquery_update_custom_path_cookie' => "/sites/default/files/jquery_update/jquery.cookie.js",
-      'jquery_update_custom_version_jquery_cookie' => "1.4.1",
-      'jquery_update_custom_path_form' => "/sites/default/files/jquery_update/jquery.form.js",
-      'jquery_update_custom_version_jquery_form' => "4.2.1",
-      'jquery_update_custom_path_migrate' => "/sites/default/files/jquery_update/jquery-migrate.js",
-      'jquery_update_custom_version_jquery_migrate' => "3.3.2",
+      'jquery_update_custom_path_jquery' => '/sites/default/files/jquery_update/jquery.js',
+      'jquery_update_custom_version_jquery' => '3.6.1',
+      'jquery_update_custom_path_jqueryui' => '/sites/default/files/jquery_update/jquery-ui.min.js',
+      'jquery_update_custom_version_jqueryui' => '1.13.0',
+      'jquery_update_custom_path_cookie' => '/sites/default/files/jquery_update/jquery.cookie.js',
+      'jquery_update_custom_version_jquery_cookie' => '1.4.1',
+      'jquery_update_custom_path_form' => '/sites/default/files/jquery_update/jquery.form.js',
+      'jquery_update_custom_version_jquery_form' => '4.2.1',
+      'jquery_update_custom_path_migrate' => '/sites/default/files/jquery_update/jquery-migrate.js',
+      'jquery_update_custom_version_jquery_migrate' => '3.3.2',
       'jquery_update_jquery_migrate_enable' => TRUE,
     );
-    $this->drupalPost('/admin/config/development/jquery_update', $form, t('Save configuration'));
+    $this->drupalPost('admin/config/development/jquery_update', $form, t('Save configuration'));
 
-    $js = json_decode($this->drupalGet('/jquery-update-test/drupal-add-js'), TRUE);
+    $js = json_decode($this->drupalGet('jquery-update-test/drupal-add-js'), TRUE);
     $keys = preg_grep('/custom_path/', array_keys($form));
     foreach ($keys as $custom_path) {
       $message = format_string('Relative custom @path not set as external', array('@path' => $custom_path));
@@ -185,7 +199,7 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
   public function testAvailableUpdates() {
 
     // In order to view the Status report.
-    $this->full_admin = $this->drupalCreateUser(array('administer site configuration'));
+    $this->fullAdmin = $this->drupalCreateUser(array('administer site configuration'));
 
     $info = array(
       'jquery_update_latest_version_jquery' => '3.6.1',
@@ -199,21 +213,21 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
     }
 
     $form = array(
-      'jquery_update_custom_path_jquery' => "https://code.jquery.com/jquery-3.6.0.js",
-      'jquery_update_custom_version_jquery' => "3.6.0",
-      'jquery_update_custom_path_jqueryui' => "https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js",
-      'jquery_update_custom_version_jqueryui' => "1.13.1",
-      'jquery_update_custom_path_cookie' => "https://cdn.jsdelivr.net/gh/carhartl/jquery-cookie@1.4.1/jquery.cookie.js",
-      'jquery_update_custom_version_jquery_cookie' => "1.4.1",
-      'jquery_update_custom_path_form' => "https://cdn.jsdelivr.net/gh/jquery-form/form@4.2.1/dist/jquery.form.min.js",
-      'jquery_update_custom_version_jquery_form' => "4.2.1",
-      'jquery_update_custom_path_migrate' => "https://cdn.jsdelivr.net/npm/jquery-migrate@3.3.2/dist/jquery-migrate.min.js",
-      'jquery_update_custom_version_jquery_migrate' => "3.3.2",
+      'jquery_update_custom_path_jquery' => 'https://code.jquery.com/jquery-3.6.0.js',
+      'jquery_update_custom_version_jquery' => '3.6.0',
+      'jquery_update_custom_path_jqueryui' => 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js',
+      'jquery_update_custom_version_jqueryui' => '1.13.1',
+      'jquery_update_custom_path_cookie' => 'https://cdn.jsdelivr.net/gh/carhartl/jquery-cookie@1.4.1/jquery.cookie.js',
+      'jquery_update_custom_version_jquery_cookie' => '1.4.1',
+      'jquery_update_custom_path_form' => 'https://cdn.jsdelivr.net/gh/jquery-form/form@4.2.1/dist/jquery.form.min.js',
+      'jquery_update_custom_version_jquery_form' => '4.2.1',
+      'jquery_update_custom_path_migrate' => 'https://cdn.jsdelivr.net/npm/jquery-migrate@3.3.2/dist/jquery-migrate.min.js',
+      'jquery_update_custom_version_jquery_migrate' => '3.3.2',
       'jquery_update_jquery_migrate_enable' => TRUE,
     );
-    $this->drupalPost('/admin/config/development/jquery_update', $form, t('Save configuration'));
+    $this->drupalPost('admin/config/development/jquery_update', $form, t('Save configuration'));
 
-    $this->drupalGet('/admin/config/development/jquery_update');
+    $this->drupalGet('admin/config/development/jquery_update');
 
     $updates = array(
       'jquery' => 'An update (<em class="placeholder">3.6.1</em>) is available for the current custom version (<em class="placeholder">3.6.0</em>) of the <em class="placeholder">jquery</em> library.',
@@ -231,8 +245,8 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
 
     $this->assertNoRaw('is available for the current custom version (<em class="placeholder">1.4.1</em>) of the <em class="placeholder">jquery-cookie</em> library.');
 
-    $this->drupalLogin($this->full_admin);
-    $this->drupalGet('/admin/reports/status');
+    $this->drupalLogin($this->fullAdmin);
+    $this->drupalGet('admin/reports/status');
     $this->assertRaw('Updates are available for at least one library managed by jQuery Update', 'Available updates message shown on status report');
     $this->assertRaw('<em class="placeholder">jquery, jqueryui, jquery-migrate, jquery.form</em>');
     $this->assertRaw('<span class="element-invisible">Warning</span></div></td><td class="status-title">jQuery Update library updates available', 'Status report shows a warning for available updates');
@@ -241,7 +255,7 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
     variable_set('jquery_update_warning_available_update', FALSE);
 
     $this->drupalLogin($this->admin);
-    $this->drupalGet('/admin/config/development/jquery_update');
+    $this->drupalGet('admin/config/development/jquery_update');
     foreach ($updates as $library => $update) {
       // drupal_set_message warnings.
       $this->assertNoRaw('<li>' . $update . '</li>', format_string('No warning message showing update available for $%library', array('%library' => $library)));
@@ -249,8 +263,8 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
       $this->assertRaw('<strong>' . $update . '</strong>', format_string('Info showing update available for $%library', array('%library' => $library)));
     }
 
-    $this->drupalLogin($this->full_admin);
-    $this->drupalGet('/admin/reports/status');
+    $this->drupalLogin($this->fullAdmin);
+    $this->drupalGet('admin/reports/status');
     $this->assertRaw('Updates are available for at least one library managed by jQuery Update', 'Available updates message shown on status report');
     $this->assertRaw('<em class="placeholder">jquery, jqueryui, jquery-migrate, jquery.form</em>');
     $this->assertNoRaw('<span class="element-invisible">Warning</span></div></td><td class="status-title">jQuery Update library updates available', 'Status report shows a warning for available updates');
@@ -277,7 +291,7 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
     }
     $this->assertTrue(in_array($libraries['jquery']['js']['misc/jquery.js']['data'], $supported_versions), 'Obsolete jQuery version was replaced by the default one.');
 
-    $js = json_decode($this->drupalGet('/jquery-update-test/drupal-add-js'), TRUE);
+    $js = json_decode($this->drupalGet('jquery-update-test/drupal-add-js'), TRUE);
     $this->assertTrue(array_key_exists($libraries['jquery']['js']['misc/jquery.js']['data'], $js), 'Obsolete jQuery version was rendered correctly.');
     $url = file_create_url($libraries['jquery']['js']['misc/jquery.js']['data']);
     $this->drupalHead($url);
@@ -289,7 +303,25 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
    */
   public function testExampleCustomPaths() {
 
-    $this->drupalGet('/admin/config/development/jquery_update');
+    // Disable get latest.
+    variable_set('jquery_update_check_latest_versions', FALSE);
+
+    // These are arbitrary values just for testing.
+    $info = array(
+      'jquery_update_latest_version_jquery' => '1.2.3',
+      'jquery_update_latest_version_jqueryui' => '2.3.4',
+      'jquery_update_latest_version_jquery_migrate' => '3.4.5',
+      'jquery_update_latest_version_jquery_cookie' => '4.5.6',
+      'jquery_update_latest_version_jquery_form' => '5.6.7',
+    );
+
+    // Reset to default values.
+    foreach ($info as $k => $v) {
+      variable_del($k);
+    }
+
+    // Test default values.
+    $this->drupalGet('admin/config/development/jquery_update');
     $this->assertRaw('Example: <em class="placeholder">https://code.jquery.com/jquery-3.6.1.js</em> or', 'Default example jquery custom path');
     $this->assertRaw('Example: <em class="placeholder">3.6.1</em>', 'Default example jquery custom version');
     $this->assertRaw('Example: <em class="placeholder">https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js</em> or', 'Default example jqueryui custom path');
@@ -301,19 +333,13 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
     $this->assertRaw('Example: <em class="placeholder">https://cdn.jsdelivr.net/gh/jquery-form/form@4.3.0/dist/jquery.form.min.js</em> or', 'Default example jquery.form custom path');
     $this->assertRaw('Example: <em class="placeholder">4.3.0</em>', 'Default example jquery.form custom version');
 
-    // These are arbitrary values just for testing.
-    $info = array(
-      'jquery_update_latest_version_jquery' => '1.2.3',
-      'jquery_update_latest_version_jqueryui' => '2.3.4',
-      'jquery_update_latest_version_jquery_migrate' => '3.4.5',
-      'jquery_update_latest_version_jquery_cookie' => '4.5.6',
-      'jquery_update_latest_version_jquery_form' => '5.6.7',
-    );
+    // Set custom values.
     foreach ($info as $k => $v) {
       variable_set($k, $v);
     }
 
-    $this->drupalGet('/admin/config/development/jquery_update');
+    // Test custom values.
+    $this->drupalGet('admin/config/development/jquery_update');
     $this->assertRaw('Example: <em class="placeholder">https://code.jquery.com/jquery-1.2.3.js</em> or', 'Updated example jquery custom path');
     $this->assertRaw('Example: <em class="placeholder">1.2.3</em>', 'Updated example jquery custom version');
     $this->assertRaw('Example: <em class="placeholder">https://cdnjs.cloudflare.com/ajax/libs/jqueryui/2.3.4/jquery-ui.min.js</em> or', 'Updated example jqueryui custom path');
@@ -332,22 +358,22 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
    */
   public function testMultipleVersions() {
 
-    $this->full_admin = $this->drupalCreateUser(
+    $this->fullAdmin = $this->drupalCreateUser(
       array(
         'administer site configuration',
         'administer themes',
         'administer jquery update',
       )
     );
-    $this->drupalLogin($this->full_admin);
+    $this->drupalLogin($this->fullAdmin);
 
     $form = array(
-      'jquery_update_custom_path_jquery' => "https://code.jquery.com/jquery-3.6.1.js",
-      'jquery_update_custom_version_jquery' => "3.6.1",
+      'jquery_update_custom_path_jquery' => 'https://code.jquery.com/jquery-3.6.1.js',
+      'jquery_update_custom_version_jquery' => '3.6.1',
     );
     $this->drupalPost('admin/config/development/jquery_update', $form, t('Save configuration'));
     $form = array(
-      'jquery_update_jquery_version' => "1.12",
+      'jquery_update_jquery_version' => '1.12',
     );
     $this->drupalPost('admin/appearance/settings/seven', $form, t('Save configuration'));
 
@@ -364,14 +390,14 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
 
     // This time also set up a custom jQuery UI version.
     $form = array(
-      'jquery_update_custom_path_jquery' => "https://code.jquery.com/jquery-3.6.1.js",
-      'jquery_update_custom_version_jquery' => "3.6.1",
-      'jquery_update_custom_path_jqueryui' => "https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js",
-      'jquery_update_custom_version_jqueryui' => "1.13.1",
+      'jquery_update_custom_path_jquery' => 'https://code.jquery.com/jquery-3.6.1.js',
+      'jquery_update_custom_version_jquery' => '3.6.1',
+      'jquery_update_custom_path_jqueryui' => 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js',
+      'jquery_update_custom_version_jqueryui' => '1.13.1',
     );
     $this->drupalPost('admin/config/development/jquery_update', $form, t('Save configuration'));
     $form = array(
-      'jquery_update_jquery_version' => "2.2",
+      'jquery_update_jquery_version' => '2.2',
     );
     $this->drupalPost('admin/appearance/settings/seven', $form, t('Save configuration'));
 
@@ -392,14 +418,18 @@ class JqueryUpdateTestCase extends DrupalWebTestCase {
    */
   public function testAjaxPageStateVersion() {
     // Use jQuery 2.2 from the module for default and admin themes.
-    $theme_admin = $this->drupalCreateUser(array(
+    $this->themeAdmin = $this->drupalCreateUser(array(
       'administer jquery update',
       'administer themes',
     ));
-    $this->drupalLogin($theme_admin);
-    $form['jquery_update_jquery_version'] = '2.2';
-    $this->drupalPost('/admin/config/development/jquery_update', $form, t('Save configuration'));
+    $this->drupalLogin($this->themeAdmin);
+
+    $form = array(
+      'jquery_update_jquery_version' => '2.2',
+    );
+    $this->drupalPost('admin/config/development/jquery_update', $form, t('Save configuration'));
     $this->drupalPost('admin/appearance/settings/seven', $form, t('Save configuration'));
+    drupal_static_reset('drupal_get_library');
 
     $libraries = drupal_get_library('system');
     $this->assertEqual('2.2.4', $libraries['jquery']['version'], 'Configured version 2.2.4 before library alter.');
