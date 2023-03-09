@@ -5752,6 +5752,10 @@
                 {
                     "name": "johnwebdev",
                     "homepage": "https://www.drupal.org/user/3331569"
+                },
+                {
+                    "name": "mark_fullmer",
+                    "homepage": "https://www.drupal.org/user/2612816"
                 }
             ],
             "description": "Provides an easy interface for inserting links.",
@@ -8194,16 +8198,16 @@
                     "homepage": "https://www.drupal.org/user/107229"
                 },
                 {
-                    "name": "Sharique",
-                    "homepage": "https://www.drupal.org/user/73545"
+                    "name": "bircher",
+                    "homepage": "https://www.drupal.org/user/1344166"
                 },
                 {
                     "name": "petew",
                     "homepage": "https://www.drupal.org/user/1009366"
                 },
                 {
-                    "name": "rakeshfalke",
-                    "homepage": "https://www.drupal.org/user/660062"
+                    "name": "Sharique",
+                    "homepage": "https://www.drupal.org/user/73545"
                 }
             ],
             "description": "This module will lock your site for any form postings.",
@@ -8250,20 +8254,24 @@
             ],
             "authors": [
                 {
-                    "name": "Dave Reid",
-                    "homepage": "https://www.drupal.org/user/53892"
-                },
-                {
-                    "name": "NancyDru",
-                    "homepage": "https://www.drupal.org/user/101412"
-                },
-                {
                     "name": "coderintherye",
                     "homepage": "https://www.drupal.org/user/297478"
                 },
                 {
+                    "name": "Dave Reid",
+                    "homepage": "https://www.drupal.org/user/53892"
+                },
+                {
                     "name": "hass",
                     "homepage": "https://www.drupal.org/user/85918"
+                },
+                {
+                    "name": "heddn",
+                    "homepage": "https://www.drupal.org/user/1463982"
+                },
+                {
+                    "name": "NancyDru",
+                    "homepage": "https://www.drupal.org/user/101412"
                 },
                 {
                     "name": "philltran",
@@ -12557,8 +12565,14 @@
             "version": "8.3.17",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/coder.git",
+                "url": "https://github.com/pfrenssen/coder.git",
                 "reference": "1c4662337418ab88c9ddf40348f0638e35d49182"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/1c4662337418ab88c9ddf40348f0638e35d49182",
+                "reference": "1c4662337418ab88c9ddf40348f0638e35d49182",
+                "shasum": ""
             },
             "require": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1 || ^1.0.0",
