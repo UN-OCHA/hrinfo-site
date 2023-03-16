@@ -2393,23 +2393,23 @@
         },
         {
             "name": "drupal/drupal",
-            "version": "7.94.0",
+            "version": "7.95.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal.git",
-                "reference": "7.94"
+                "reference": "7.95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/drupal-7.94.zip",
-                "reference": "7.94",
-                "shasum": "4d732bbf9b50a5076e8c353cd77d1a4e879d94a4"
+                "url": "https://ftp.drupal.org/files/projects/drupal-7.95.zip",
+                "reference": "7.95",
+                "shasum": "f84efd3b32dc1fe66749750bf1d6cf09e59f9cba"
             },
             "type": "drupal-core",
             "extra": {
                 "drupal": {
-                    "version": "7.94",
-                    "datestamp": "1671034684",
+                    "version": "7.95",
+                    "datestamp": "1678902947",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2911,17 +2911,17 @@
         },
         {
             "name": "drupal/entityreference",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/entityreference.git",
-                "reference": "7.x-1.6"
+                "reference": "7.x-1.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entityreference-7.x-1.6.zip",
-                "reference": "7.x-1.6",
-                "shasum": "066a5760c2e6c3c04f06ccdb1b69264f645ba4f0"
+                "url": "https://ftp.drupal.org/files/projects/entityreference-7.x-1.7.zip",
+                "reference": "7.x-1.7",
+                "shasum": "de2a655ebb2dd2a1588a16c7d7ea7a6fce97918a"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -2935,8 +2935,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.6",
-                    "datestamp": "1676069762",
+                    "version": "7.x-1.7",
+                    "datestamp": "1678809340",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10169,17 +10169,17 @@
         },
         {
             "name": "drupal/views",
-            "version": "3.28.0",
+            "version": "3.29.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views.git",
-                "reference": "7.x-3.28"
+                "reference": "7.x-3.29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views-7.x-3.28.zip",
-                "reference": "7.x-3.28",
-                "shasum": "7466904eed5892f881832a9f89fd6ecf4b41b029"
+                "url": "https://ftp.drupal.org/files/projects/views-7.x-3.29.zip",
+                "reference": "7.x-3.29",
+                "shasum": "4fc548a8f5252993d5edba557e2aa77ba0fe5b3b"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -10188,8 +10188,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-3.28",
-                    "datestamp": "1671451977",
+                    "version": "7.x-3.29",
+                    "datestamp": "1678722009",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -13131,16 +13131,16 @@
         },
         {
             "name": "sirbrillig/phpcs-variable-analysis",
-            "version": "v2.11.10",
+            "version": "v2.11.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sirbrillig/phpcs-variable-analysis.git",
-                "reference": "0f25a3766f26df91d6bdda0c8931303fc85499d7"
+                "reference": "d8a00fb972b9317ef4decf66725a25e712cc4cbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/0f25a3766f26df91d6bdda0c8931303fc85499d7",
-                "reference": "0f25a3766f26df91d6bdda0c8931303fc85499d7",
+                "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/d8a00fb972b9317ef4decf66725a25e712cc4cbe",
+                "reference": "d8a00fb972b9317ef4decf66725a25e712cc4cbe",
                 "shasum": ""
             },
             "require": {
@@ -13185,7 +13185,7 @@
                 "source": "https://github.com/sirbrillig/phpcs-variable-analysis",
                 "wiki": "https://github.com/sirbrillig/phpcs-variable-analysis/wiki"
             },
-            "time": "2023-01-05T18:45:16+00:00"
+            "time": "2023-03-13T14:54:42+00:00"
         },
         {
             "name": "slevomat/coding-standard",
