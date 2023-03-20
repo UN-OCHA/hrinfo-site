@@ -903,7 +903,9 @@ function hr_core_update_7054() {
       continue;
     }
 
-    watchdog('hr_core', 'Updating ' . $field['field_name']);
+    watchdog('hr_core', 'Updating @field_name', [
+      '@field_name' => $field['field_name'],
+    ]);
 
     // Use base selector.
     $field['settings']['handler'] = 'base';
