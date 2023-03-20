@@ -892,3 +892,47 @@ function hr_core_update_7053() {
   module_disable($disable);
   drupal_uninstall_modules($disable, FALSE);
 }
+
+/**
+ * Disable entity references using views.
+ */
+function hr_core_update_7054() {
+  $fields = field_info_fields();
+  foreach ($fields as $field) {
+    if (!isset($field['settings']['handler']) || $field['settings']['handler'] != 'views') {
+      continue;
+    }
+
+    watchdog('hr_core', 'Updating @field_name', [
+      '@field_name' => $field['field_name'],
+    ]);
+
+    // Use base selector.
+    $field['settings']['handler'] = 'base';
+
+    // Remove configured view.
+    $field['settings']['handler_settings']['behaviors'] = [
+      'views-select-list' => [
+        'status' => 0,
+      ],
+    ];
+
+    // Add sort.
+    if ($field['settings']['target_type'] == 'taxonomy_term') {
+      $field['settings']['handler_settings']['sort'] = [
+        'type' => 'property',
+        'property' => 'name',
+        'direction' => 'ASC',
+      ];
+    }
+    elseif ($field['settings']['target_type'] == 'node') {
+      $field['settings']['handler_settings']['sort'] = [
+        'type' => 'property',
+        'property' => 'title',
+        'direction' => 'ASC',
+      ];
+    }
+
+    field_update_field($field);
+  }
+}
