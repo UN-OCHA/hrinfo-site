@@ -57,9 +57,6 @@
         "User can create node without permission": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/442.patch",
         "HR.info issue 839": "PATCHES/hrinfo-839.patch"
       },
-      "drupal/og_features": {
-        "Permission to 'edit own group features' only works if the user also has the 'administer group' permission": "https://www.drupal.org/files/2019515-og_features-group-permission.patch"
-      },
       "drupal/og_menu": {
         "Add i18n support": "https://www.drupal.org/files/issues/og_menu-i18n-2348821-12.patch",
         "Integrate with menu_target": "https://www.drupal.org/files/issues/og_menu-integrate-menu-target-2387975-3.patch"
