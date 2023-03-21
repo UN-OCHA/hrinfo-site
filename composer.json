@@ -82,7 +82,7 @@
         "drupal/entity": "^1.9",
         "drupal/entity_translation": "^2.0",
         "drupal/entitycache": "^1.5",
-        "drupal/entityreference": "^1.5",
+        "drupal/entityreference": "1.6",
         "drupal/entityreference_autocomplete": "^1.13",
         "drupal/entityreference_filter": "^1.7",
         "drupal/entityreference_prepopulate": "^1.7",
