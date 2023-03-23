@@ -1,0 +1,6 @@
+name = Organic groups moderation
+description = "Enable access control for publishing options and revision of group content."
+core = 7.x
+package = "Organic groups"
+dependencies[] = og
+dependencies[] = og_context
