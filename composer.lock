@@ -2458,6 +2458,10 @@
                     "homepage": "https://www.drupal.org/user/4166"
                 },
                 {
+                    "name": "justafish",
+                    "homepage": "https://www.drupal.org/user/161058"
+                },
+                {
                     "name": "larowlan",
                     "homepage": "https://www.drupal.org/user/395439"
                 },
@@ -2472,6 +2476,10 @@
                 {
                     "name": "mcdruid",
                     "homepage": "https://www.drupal.org/user/255969"
+                },
+                {
+                    "name": "nod_",
+                    "homepage": "https://www.drupal.org/user/598310"
                 },
                 {
                     "name": "poker10",
@@ -4577,6 +4585,22 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "acquia",
+                    "homepage": "https://www.drupal.org/user/1231722"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "kaynen",
+                    "homepage": "https://www.drupal.org/user/733308"
+                },
+                {
+                    "name": "mglaman",
+                    "homepage": "https://www.drupal.org/user/2416470"
+                },
                 {
                     "name": "solotandem",
                     "homepage": "https://www.drupal.org/user/240748"
@@ -9211,17 +9235,17 @@
         },
         {
             "name": "drupal/special_menu_items",
-            "version": "2.1.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/special_menu_items.git",
-                "reference": "7.x-2.1"
+                "reference": "7.x-2.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/special_menu_items-7.x-2.1.zip",
-                "reference": "7.x-2.1",
-                "shasum": "ccda576265a875515518a49b3d21d8906e4615dd"
+                "url": "https://ftp.drupal.org/files/projects/special_menu_items-7.x-2.2.zip",
+                "reference": "7.x-2.2",
+                "shasum": "8b800cd9178f78a448924ad715133737235a9370"
             },
             "require": {
                 "drupal/drupal": "*"
@@ -9229,8 +9253,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.1",
-                    "datestamp": "1563457686",
+                    "version": "7.x-2.2",
+                    "datestamp": "1679319889",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9242,10 +9266,6 @@
                 "GPL-2.0-or-later"
             ],
             "authors": [
-                {
-                    "name": "Servit",
-                    "homepage": "https://www.drupal.org/user/583048"
-                },
                 {
                     "name": "danielbeeke",
                     "homepage": "https://www.drupal.org/user/2484978"
@@ -9261,6 +9281,14 @@
                 {
                     "name": "khaled.zaidan",
                     "homepage": "https://www.drupal.org/user/663072"
+                },
+                {
+                    "name": "poker10",
+                    "homepage": "https://www.drupal.org/user/272316"
+                },
+                {
+                    "name": "Servit",
+                    "homepage": "https://www.drupal.org/user/583048"
                 },
                 {
                     "name": "webflo",
@@ -13762,5 +13790,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
