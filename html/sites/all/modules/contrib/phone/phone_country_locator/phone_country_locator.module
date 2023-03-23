@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * Implements hook_field_info_alter().
+ */
+function phone_country_locator_field_info_alter(&$info) {
+  if (isset($info['phone'])) {
+    $info['phone']['instance_settings'] += array(
+      'country_code_locator' => FALSE,
+    );
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function phone_country_locator_form_alter(&$form, &$form_state, $form_id) {
+  if (isset($form['#instance']['widget']['type'])) {
+    if ($form['#instance']['widget']['type'] == 'phone' && $form_id == 'field_ui_field_edit_form') {
+      $form['instance']['settings']['enable_default_country'] += array(
+        '#default_value' => $form['#instance']['settings']['enable_default_country'],
+        '#states' => array(
+          'visible' => array(
+            ':input[name="instance[settings][country_code_locator]"]' => array('checked' => FALSE),
+          ),
+        ),
+      );
+      $form['instance']['settings']['country_code_locator'] = array(
+        '#type' => 'checkbox',
+        '#weight' => '-1',
+        '#title' => 'Enable Country Code Locator',
+        '#default_value' => $form['#instance']['settings']['country_code_locator'],
+        '#description' => t('Check this to automatically locate country code based on IP address, on node/add form.'),
+        '#states' => array(
+          'visible' => array(
+            ':input[name="instance[settings][enable_default_country]"]' => array('checked' => FALSE),
+          ),
+        ),
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function phone_country_locator_element_info_alter(&$type) {
+  if (isset($type['phone'])) {
+    $type['phone']['#process'][] = 'phone_country_locator_process';
+  }
+}
+
+function phone_country_locator_process($element, &$form_state, $form) {
+  $instance = field_widget_instance($element, $form_state);
+  $settings = $instance['settings'];
+  if ($settings['country_code_locator']) {
+    $countrycode = drupal_strtoupper(ip2country_get_country($_SERVER['REMOTE_ADDR']));
+    if (empty($settings['country_options']['country_codes']['country_selection']) || !empty($settings['country_optins']['country_codes']['country_selection'][$countrycode])) {
+      $element['countrycode']['#default_value'] = $countrycode;
+    }
+  }
+  return $element;
+}
