@@ -1,0 +1,17 @@
+name = RESTful Test
+description = Helper module for testing the RESTful module.
+core = 7.x
+dependencies[] = restful
+dependencies[] = restful_example
+dependencies[] = entity_feature
+dependencies[] = entityreference
+hidden = TRUE
+
+registry_autoload[] = PSR-0
+registry_autoload[] = PSR-4
+
+; Information added by Drupal.org packaging script on 2019-03-20
+version = "7.x-2.17"
+core = "7.x"
+project = "restful"
+datestamp = "1553083393"

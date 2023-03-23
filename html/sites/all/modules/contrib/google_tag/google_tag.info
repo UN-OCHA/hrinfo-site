@@ -1,0 +1,28 @@
+name = Google Tag Manager
+description = Allows your website analytics to be managed using Google Tag Manager.
+package = Statistics
+core = 7.x
+
+configure = admin/config/system/google_tag
+
+files[] = includes/entity/container.inc
+files[] = includes/entity/manager.inc
+files[] = includes/entity/manager_interface.inc
+files[] = includes/entity/settings.inc
+
+files[] = tests/google_tag.base.test
+files[] = tests/google_tag.norealm.test
+files[] = tests/google_tag.realm.test
+
+dependencies[] = drupal:system (>= 7.40)
+dependencies[] = ctools
+
+;test_dependencies[] = variable:variable
+test_dependencies[] = variable:variable_realm
+test_dependencies[] = variable:variable_store
+
+; Information added by Drupal.org packaging script on 2019-12-20
+version = "7.x-2.1"
+core = "7.x"
+project = "google_tag"
+datestamp = "1576858705"

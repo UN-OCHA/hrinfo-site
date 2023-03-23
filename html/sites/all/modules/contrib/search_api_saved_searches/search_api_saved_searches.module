@@ -1,0 +1,1395 @@
+<?php
+
+/**
+ * @file
+ * Offers the ability to save searches and be notified of new results.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function search_api_saved_searches_menu() {
+  $items['admin/config/search/search_api/index/%search_api_index/saved_searches'] = array(
+    'title' => 'Saved searches',
+    'description' => 'Let users save searches on this index.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('search_api_saved_searches_index_edit', 5),
+    'access arguments' => array('administer search_api_saved_searches'),
+    'weight' => -1,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_INLINE | MENU_CONTEXT_PAGE,
+    'file' => 'search_api_saved_searches.admin.inc',
+  );
+  $items['user/%user/saved-searches'] = array(
+    'title' => 'Saved searches',
+    'description' => 'View and edit your saved searches.',
+    'page callback' => 'search_api_saved_searches_user_listing',
+    'page arguments' => array(1),
+    'access callback' => 'search_api_saved_search_edit_access',
+    'access arguments' => array(1),
+    'weight' => 5,
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'search_api_saved_searches.pages.inc',
+  );
+  $items['user/%user/saved-searches/add'] = array(
+    'title' => 'Create saved search',
+    'description' => 'Create a new saved search.',
+    'page callback' => 'search_api_saved_searches_create_manual',
+    'access callback' => 'search_api_saved_search_create_personal_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_ACTION,
+    'file' => 'search_api_saved_searches.pages.inc',
+  );
+  $items['search-api/saved-searches/add'] = array(
+    'title' => 'Create saved search',
+    'description' => 'Create a new saved search.',
+    'page callback' => 'search_api_saved_searches_create_manual',
+    'access callback' => 'search_api_saved_search_create_access',
+    'access arguments' => array(NULL, TRUE),
+    'file' => 'search_api_saved_searches.pages.inc',
+  );
+  $items['search-api/saved-searches/add/%search_api_saved_searches_settings'] = array(
+    'title' => 'Create saved search',
+    'description' => 'Create a new saved search.',
+    'page callback' => 'search_api_saved_searches_create_manual',
+    'page arguments' => array(3),
+    'access callback' => 'search_api_saved_search_create_access',
+    'access arguments' => array(3, TRUE),
+    'file' => 'search_api_saved_searches.pages.inc',
+  );
+  $items['search-api/saved-search/%search_api_saved_search/activate/%'] = array(
+    'title' => 'Activate saved search',
+    'description' => 'Activate a new saved search.',
+    'page callback' => 'search_api_saved_searches_activate_page',
+    'page arguments' => array(2, 4),
+    'access callback' => 'search_api_saved_search_edit_access',
+    'access arguments' => array(NULL, 2, 4),
+    'file' => 'search_api_saved_searches.pages.inc',
+  );
+  $items['search-api/saved-search/%search_api_saved_search/enable'] = array(
+    'title' => 'Enable/Disable saved search',
+    'description' => 'Enable or disable a saved search.',
+    'page callback' => 'search_api_saved_searches_search_enable',
+    'page arguments' => array(2),
+    'access callback' => 'search_api_saved_search_edit_access',
+    'access arguments' => array(NULL, 2, 4),
+    'file' => 'search_api_saved_searches.pages.inc',
+  );
+  $items['search-api/saved-search/%search_api_saved_search/disable'] = array(
+    'title' => 'Enable/Disable saved search',
+    'description' => 'Enable or disable a saved search.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('search_api_saved_searches_search_disable_form', 2),
+    'access callback' => 'search_api_saved_search_edit_access',
+    'access arguments' => array(NULL, 2, 4),
+    'file' => 'search_api_saved_searches.pages.inc',
+  );
+  $items['search-api/saved-search/%search_api_saved_search/edit'] = array(
+    'title' => 'Edit saved search',
+    'description' => 'Edit a saved search.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('search_api_saved_searches_search_edit_form', 2),
+    'access callback' => 'search_api_saved_search_edit_access',
+    'access arguments' => array(NULL, 2, 4),
+    'file' => 'search_api_saved_searches.pages.inc',
+  );
+  $items['search-api/saved-search/%search_api_saved_search/delete'] = array(
+    'title' => 'Delete saved search',
+    'description' => 'Delete a saved search.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('search_api_saved_searches_search_delete_form', 2),
+    'access callback' => 'search_api_saved_search_edit_access',
+    'access arguments' => array(NULL, 2, 4),
+    'file' => 'search_api_saved_searches.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission();
+ */
+function search_api_saved_searches_permission() {
+  $perms['administer search_api_saved_searches'] = array(
+    'title' => t('Administer saved searches'),
+    'description' => t('Enable and configure saved searches for search indexes.'),
+  );
+  $perms['use search_api_saved_searches'] = array(
+    'title' => t('Use saved searches'),
+    'description' => t('Save searches and receive e-mail notifications.'),
+  );
+  return $perms;
+}
+
+/**
+ * Implements hook_entity_info().
+ */
+function search_api_saved_searches_entity_info() {
+  $info['search_api_saved_searches_settings'] = array(
+    'label' => t('Saved search settings'),
+    'controller class' => 'EntityAPIControllerExportable',
+    'entity class' => 'SearchApiSavedSearchesSettings',
+    'base table' => 'search_api_saved_searches_settings',
+    'uri callback' => 'search_api_saved_searches_settings_url',
+    'access callback' => 'search_api_saved_searches_settings_access',
+    'module' => 'search_api_saved_searches',
+    'exportable' => TRUE,
+    'entity keys' => array(
+      'id' => 'id',
+      'name' => 'delta',
+      'label' => 'delta',
+    ),
+  );
+  $info['search_api_saved_search'] = array(
+    'label' => t('Saved search'),
+    'controller class' => 'EntityAPIController',
+    'entity class' => 'SearchApiSavedSearch',
+    'base table' => 'search_api_saved_search',
+    'access callback' => 'search_api_saved_search_access',
+    'module' => 'search_api_saved_searches',
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'id',
+      'label' => 'name',
+    ),
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_entity_property_info_alter().
+ *
+ * Corrects the types which the Entity API automatically infers from the schema.
+ * Otherwise, the "token" types would be "text", and "boolean" and "date" would
+ * be "integer". Also, changes saved search results to be a list, not just a CSV
+ * string.
+ *
+ * Fixing this here automatically also fixes the Views integration provided by
+ * the Entity API, regarding these types.
+ */
+function search_api_saved_searches_entity_property_info_alter(array &$info) {
+  $settings = &$info['search_api_saved_searches_settings']['properties'];
+  $settings['index_id']['type'] = 'token';
+  $settings['enabled']['type'] = 'boolean';
+  $settings['module']['type'] = 'token';
+
+  $searches = &$info['search_api_saved_search']['properties'];
+  $searches['settings_id']['type'] = 'token';
+  $searches['enabled']['type'] = 'boolean';
+  $searches['created']['type'] = 'date';
+  $searches['last_queued']['type'] = 'date';
+  $searches['last_execute']['type'] = 'date';
+  // We can't assign "duration" until Entity API Views integration supports
+  // this.
+  //$searches['notify_interval']['type'] = 'duration';
+
+  $searches['results']['type'] = 'list<token>';
+  $searches['results']['getter callback'] = 'search_api_saved_searches_get_results_property';
+}
+
+/**
+ * Getter callback for the saved search results property.
+ *
+ * @param SearchApiSavedSearch $search
+ *   The search whose results should be returned.
+ * @param array $options
+ *   Options for the property. Are ignored.
+ * @param string $property
+ *   The property to retrieve. Will always be "results".
+ * @param string $entity_type
+ *   The entity type. Will always be "search_api_saved_search".
+ *
+ * @return array
+ *   An array with the IDs of all stored results.
+ */
+function search_api_saved_searches_get_results_property(SearchApiSavedSearch $search, array $options, $property, $entity_type) {
+  return $search->results ? explode(',', $search->results) : array();
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function search_api_saved_searches_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'search_api_saved_searches') . '/views',
+  );
+}
+
+/**
+ * URL callback for settings entities.
+ */
+function search_api_saved_searches_settings_url(SearchApiSavedSearchesSettings $settings) {
+  return array('path' => 'admin/config/search/search_api/index/' . $settings->index_id . '/saved_searches');
+}
+
+/**
+ * Access callback for settings entities.
+ *
+ * @param string $op
+ *   The operation being performed. One of "view", "update", "create" or
+ *   "delete".
+ * @param SearchApiSavedSearchesSettings|null $settings
+ *   (optional) The entity to check access for. If NULL is given, it will be
+ *   determined whether access is allowed for all settings.
+ * @param object|null $account
+ *   The user to check for. NULL to check for the global user.
+ *
+ * @return bool
+ *   Whether access is allowed or not.
+ *
+ * @see entity_access
+ */
+function search_api_saved_searches_settings_access($op, SearchApiSavedSearchesSettings $settings = NULL, $account = NULL) {
+  return user_access('administer search_api_saved_searches', $account);
+}
+
+/**
+ * Access callback for saved search entities.
+ *
+ * @param string $op
+ *   The operation being performed. One of "view", "update", "create" or
+ *   "delete".
+ * @param SearchApiSavedSearch|null $search
+ *   (optional) The entity to check access for. If NULL is given, it will be
+ *   determined whether access is allowed for all searches.
+ * @param object|null $account
+ *   The user to check for. NULL to check for the global user.
+ *
+ * @return bool
+ *   Whether access is allowed or not.
+ *
+ * @see entity_access
+ */
+function search_api_saved_search_access($op, SearchApiSavedSearch $search = NULL, $account = NULL) {
+  if (user_access('administer search_api_saved_searches', $account)) {
+    return TRUE;
+  }
+  if (!$account) {
+    global $user;
+    $account = $user;
+  }
+  switch ($op) {
+    case 'create':
+      return user_access('use search_api_saved_searches', $account);
+
+    default:
+      // If the search was created by an anonymous user, there's no way we can
+      // correctly determine access here.
+      if (!$search || !$search->uid) {
+        return FALSE;
+      }
+      return $search->uid == $account->uid;
+  }
+}
+
+/**
+ * Implements hook_user_insert().
+ *
+ * If a new user already has saved searches with the same mail address,
+ * associate them with the new user. However, only do this if the user is
+ * already active.
+ */
+function search_api_saved_searches_user_insert(&$edit, $account, $category) {
+  if (!empty($account->status)) {
+    foreach (search_api_saved_search_load_multiple(FALSE, array('mail' => $account->mail, 'uid' => 0)) as $search) {
+      $search->uid = $account->uid;
+      if (empty($search->settings()->options['registered_user_delete_key'])) {
+        unset($search->options['key']);
+      }
+      $search->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_user_update().
+ *
+ * If a user gets activated, associate saved searches with the same mail address
+ * with them.
+ *
+ * If a user gets deactivated, disable all related saved searches.
+ *
+ * Also, change mail address of saved searches when the user mail address
+ * changes.
+ */
+function search_api_saved_searches_user_update(&$edit, $account, $category) {
+  // Sometimes this update hook is invoked without setting $account->original.
+  // In this case, we need to load the original ourselves.
+  if (empty($account->original)) {
+    if (!empty($account->uid)) {
+      $account->original = entity_load_unchanged('user', $account->uid);
+    }
+    // If the original couldn't be loaded, we cannot do anything here.
+    if (empty($account->original)) {
+      return;
+    }
+  }
+  // For newly activated users, transfer all saved searches with their mail
+  // address to them.
+  if (!empty($account->status) && empty($account->original->status)) {
+    foreach (search_api_saved_search_load_multiple(FALSE, array('mail' => $account->mail, 'uid' => 0)) as $search) {
+      $search->uid = $account->uid;
+      if (empty($search->settings()->options['registered_user_delete_key'])) {
+        unset($search->options['key']);
+      }
+      $search->save();
+    }
+  }
+  // If an account gets deactivated/banned, disable all associated searches.
+  if (empty($account->status) && !empty($account->original->status)) {
+    foreach (search_api_saved_search_load_multiple(FALSE, array('uid' => $account->uid)) as $search) {
+      $search->enabled = FALSE;
+      $search->save();
+    }
+  }
+  // If the user's mail address changed, also change the mail address of the
+  // user's saved searches from previous (original) to current address.
+  if ($account->mail != $account->original->mail) {
+    foreach (search_api_saved_search_load_multiple(FALSE, array('mail' => $account->original->mail, 'uid' => $account->uid)) as $search) {
+      $search->mail = $account->mail;
+      $search->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_user_delete().
+ *
+ * If a user is deleted, delete their saved searches, too.
+ */
+function search_api_saved_searches_user_delete($account) {
+  entity_delete_multiple('search_api_saved_search', array_keys(search_api_saved_search_load_multiple(FALSE, array('uid' => $account->uid))));
+}
+
+/**
+ * Implements hook_search_api_index_update().
+ *
+ * If the index got disabled, do the same with its search settings.
+ */
+function search_api_saved_searches_search_api_index_update(SearchApiIndex $index) {
+  if (!$index->enabled && $index->original->enabled) {
+    foreach (search_api_saved_searches_settings_load_multiple(FALSE, array('index_id' => $index->machine_name)) as $settings) {
+      if ($settings->enabled) {
+        $settings->enabled = FALSE;
+        $settings->save();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_search_api_index_delete().
+ *
+ * Deletes the settings associated with a search index.
+ */
+function search_api_saved_searches_search_api_index_delete(SearchApiIndex $index) {
+  // Only react on real delete, not revert.
+  if ($index->status & ENTITY_IN_CODE) {
+    return;
+  }
+  foreach (search_api_saved_searches_settings_load_multiple(FALSE, array('index_id' => $index->machine_name)) as $settings) {
+    $settings->delete();
+  }
+}
+
+/**
+ * Implements hook_search_api_saved_searches_settings_insert().
+ *
+ * Clear block caches when new enabled saved search settings are saved.
+ */
+function search_api_saved_searches_search_api_saved_searches_settings_insert(SearchApiSavedSearchesSettings $settings) {
+  if ($settings->enabled) {
+    block_flush_caches();
+    cache_clear_all('*', 'cache_block', TRUE);
+  }
+}
+
+/**
+ * Implements hook_search_api_saved_searches_settings_update().
+ *
+ * Clear block caches when saved search settings are enabled or disabled.
+ */
+function search_api_saved_searches_search_api_saved_searches_settings_update(SearchApiSavedSearchesSettings $settings) {
+  if ($settings->enabled != $settings->original->enabled) {
+    block_flush_caches();
+    cache_clear_all('*', 'cache_block', TRUE);
+  }
+
+  // React if the new results determination method was switched to/from the
+  // ID-based method.
+  $options = $settings->options + array('date_field' => NULL);
+  $orig_options = $settings->original->options + array('date_field' => NULL);
+  if ($options['date_field'] != $orig_options['date_field']) {
+    if (!$options['date_field']) {
+      // When we switch to the ID-based method from another one, we need to save
+      // the current results.
+      foreach (search_api_saved_search_load_multiple(FALSE, array('settings_id' => $settings->delta)) as $search) {
+        // This will automatically populate the results.
+        $search->save();
+      }
+    }
+    elseif (!$orig_options['date_field']) {
+      // If we previously used the ID-based method and are now using a
+      // field-based one, set the saved results for all searches to NULL.
+      db_update('search_api_saved_search')
+        ->fields(array(
+          'results' => NULL,
+        ))
+        ->condition('settings_id', $settings->delta)
+        ->execute();
+    }
+  }
+}
+
+/**
+ * Implements hook_search_api_saved_searches_settings_delete().
+ *
+ * Clear block caches when enabled saved search settings are deleted.
+ */
+function search_api_saved_searches_search_api_saved_searches_settings_delete(SearchApiSavedSearchesSettings $settings) {
+  // Only react on real delete, not revert.
+  if ($settings->status & ENTITY_IN_CODE) {
+    return;
+  }
+
+  foreach (search_api_saved_search_load_multiple(FALSE, array('settings_id' => $settings->delta)) as $search) {
+    $search->delete();
+  }
+  if ($settings->enabled) {
+    block_flush_caches();
+    cache_clear_all('*', 'cache_block', TRUE);
+  }
+}
+
+/**
+ * Loads a single settings object.
+ *
+ * @param int|string $id
+ *   The settings' identifier or delta.
+ * @param bool $reset
+ *   If TRUE, will reset the internal entity cache.
+ *
+ * @return SearchApiSavedSearchesSettings
+ *   The requested entity, or FALSE if no settings for that ID exist.
+ */
+function search_api_saved_searches_settings_load($id, $reset = FALSE) {
+  $ret = search_api_saved_searches_settings_load_multiple(array($id), array(), $reset);
+  return $ret ? reset($ret) : FALSE;
+}
+
+/**
+ * Loads multiple settings objects.
+ *
+ * @param array|false $ids
+ *   The settings' identifiers or deltas; or FALSE to load all settings objects.
+ * @param array $conditions
+ *   Associative array of field => value conditions that returned objects must
+ *   satisfy.
+ * @param bool $reset
+ *   If TRUE, will reset the internal entity cache.
+ *
+ * @return SearchApiSavedSearchesSettings[]
+ *   All saved search settings matching the conditions, keyed by delta.
+ */
+function search_api_saved_searches_settings_load_multiple($ids = FALSE, array $conditions = array(), $reset = FALSE) {
+  $settings = entity_load('search_api_saved_searches_settings', $ids, $conditions, $reset);
+  return entity_key_array_by_property($settings, 'delta');
+}
+
+/**
+ * Loads a single saved search object.
+ *
+ * @param $id
+ *   The saved search's ID.
+ * @param $reset
+ *   If TRUE, will reset the internal entity cache.
+ *
+ * @return SearchApiSavedSearch
+ *   The requested entity, or FALSE if no settings for that ID exist.
+ */
+function search_api_saved_search_load($id, $reset = FALSE) {
+  $ret = entity_load('search_api_saved_search', array($id), array(), $reset);
+  return $ret ? reset($ret) : FALSE;
+}
+
+/**
+ * Loads multiple saved search objects.
+ *
+ * @param int[]|false $ids
+ *   The saved search's IDs; or FALSE to load all saved searches.
+ * @param array $conditions
+ *   Associative array of field => value conditions that returned objects must
+ *   satisfy.
+ * @param bool $reset
+ *   If TRUE, will reset the internal entity cache.
+ *
+ * @return SearchApiSavedSearch[]
+ *   All saved searches matching the conditions, keyed by their IDs.
+ */
+function search_api_saved_search_load_multiple($ids = FALSE, array $conditions = array(), $reset = FALSE) {
+  return entity_load('search_api_saved_search', $ids, $conditions, $reset);
+}
+
+/**
+ * Determine whether the current user can create a saved search for specific settings.
+ *
+ * @param SearchApiSavedSearchesSettings $settings
+ *   The settings to check for. May be NULL, if $manual is TRUE, to check if any
+ *   saved searches can be created manually.
+ * @param boolean $manual
+ *   (optional) If TRUE, check access for creating a saved search manually.
+ *
+ * @return boolean
+ *   TRUE iff the current user is allowed to create a new saved search.
+ */
+function search_api_saved_search_create_access(SearchApiSavedSearchesSettings $settings = NULL, $manual = FALSE) {
+  if ($manual) {
+    if (isset($settings)) {
+      if (!$settings->enabled || empty($settings->options['manual']['allow'])) {
+        return FALSE;
+      }
+    }
+    else {
+      foreach (search_api_saved_searches_settings_load_multiple(FALSE, array('enabled' => TRUE)) as $settings) {
+        if (!empty($settings->options['manual']['allow'])) {
+          $found = TRUE;
+          break;
+        }
+      }
+      if (empty($found)) {
+        return FALSE;
+      }
+    }
+  }
+  elseif (!$settings->enabled) {
+    return FALSE;
+  }
+
+  if (user_access('administer search_api_saved_searches')) {
+    return TRUE;
+  }
+  if (!user_access('use search_api_saved_searches')) {
+    return FALSE;
+  }
+  if (!isset($settings)) {
+    return TRUE;
+  }
+
+  // @todo Check settings-specific access rules, when there are any.
+
+  return TRUE;
+}
+
+/**
+ * Access callback: Checks access for the user-specific "add search" page.
+ *
+ * @param object $account
+ *   The account whose "add search" page is visited.
+ *
+ * @return boolean
+ *   TRUE if the current user is allowed to create a new saved search using this
+ *   page; FALSE otherwise.
+ */
+function search_api_saved_search_create_personal_access($account) {
+  global $user;
+
+  if (user_access('administer search_api_saved_searches')) {
+    return TRUE;
+  }
+  if ($account->uid !== $user->uid) {
+    return FALSE;
+  }
+
+  return search_api_saved_search_create_access(NULL, TRUE);
+}
+
+/**
+ * Determine access to the edit interface for saved searches of a given user.
+ *
+ * This is both used to determine whether the current user can edit a specific
+ * saved search, or whether she can display the overview of the user's saved
+ * searches.
+ * For anonymous users' searches an access key is generated that allows
+ * accessing and editing the searches.
+ *
+ * @param $account
+ *   (optional) The user whose saved search(es) would be edited. NULL for guest.
+ * @param SearchApiSavedSearch $search
+ *   (optional) The saved search involved, if there is just a single one.
+ * @param string $key
+ *   (optional) The secret key to access the search.
+ *
+ * @return boolean
+ *   TRUE iff the current user is allowed to edit the saved search(es).
+ */
+function search_api_saved_search_edit_access($account = NULL, SearchApiSavedSearch $search = NULL, $key = NULL) {
+  global $user;
+
+  if (empty($account)) {
+    if (empty($search)) {
+      return FALSE;
+    }
+    $account = (object) array('uid' => $search->uid);
+  }
+
+  if (user_access('administer search_api_saved_searches')) {
+    return TRUE;
+  }
+  // Barring admins, the only way to edit anonymous users' saved searches is by
+  // providing the access key. There is no overview of all saved searches.
+  if (!empty($key) && !empty($search->options['key']) && $search->options['key'] == $key) {
+    return TRUE;
+  }
+  if ($account->uid == 0) {
+    return FALSE;
+  }
+  if ($account->uid != $user->uid || !user_access('use search_api_saved_searches')) {
+    return FALSE;
+  }
+  if (isset($search)) {
+    return $search->uid == $account->uid;
+  }
+  foreach (search_api_saved_searches_settings_load_multiple() as $settings) {
+    // Allow access if users can manually create searches.
+    if (!empty($settings->options['manual']['allow'])) {
+      return TRUE;
+    }
+    // Allow access if the list should always be displayed.
+    if (!empty($settings->options['show_empty_list'])) {
+      return TRUE;
+    }
+  }
+  // Let the user view the listing if there are any saved searches.
+  $select = db_select('search_api_saved_search', 's')
+    ->condition('uid', $account->uid);
+  $select->addExpression('COUNT(1)');
+  return (bool) $select->execute()->fetchField();
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function search_api_saved_searches_block_info() {
+  $blocks = array();
+  foreach (search_api_saved_searches_settings_load_multiple(FALSE, array('enabled' => TRUE)) as $settings) {
+    try {
+      $blocks[$settings->delta] = array(
+        'info' => t('!index: Save search', array('!index' => $settings->index()->name)),
+        // @todo Is this cache setting correct?
+        'cache' => DRUPAL_CACHE_PER_ROLE | DRUPAL_CACHE_PER_PAGE,
+      );
+    }
+    catch (SearchApiException $e) {}
+  }
+  return $blocks;
+}
+
+/**
+ * Implements hook_ctools_block_info().
+ */
+function search_api_saved_searches_ctools_block_info($module, $delta, &$info) {
+  $info['category'] = t('Search API Saved Searches');
+  // Allow blocks to be used before the search results in Panels.
+  $info['render last'] = TRUE;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function search_api_saved_searches_block_configure($delta = '') {
+  $settings = search_api_saved_searches_settings_load($delta);
+  $form['settings_link'] = array(
+    '#markup' => l(t('To saved search settings'), 'admin/config/search/search_api/index/' . $settings->index_id . '/saved_searches'),
+  );
+  return $form;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function search_api_saved_searches_block_view($delta = '') {
+  $searches = search_api_current_search();
+  if (!$searches) {
+    return;
+  }
+  if (!user_access('use search_api_saved_searches')) {
+    return;
+  }
+  $settings = search_api_saved_searches_settings_load($delta);
+  if (!$settings || !search_api_saved_search_create_access($settings)) {
+    return;
+  }
+  $index_id = $settings->index_id;
+  $options = $settings->options;
+  $ids_list = drupal_map_assoc($options['ids_list']);
+  $search_ids = variable_get('search_api_saved_searches_search_ids', array());
+  foreach ($searches as $id => $data) {
+    if ($data[0]->getIndex()->machine_name == $index_id){
+      if (!isset($search_ids[$index_id][$id])) {
+        $search_ids[$index_id][$id] = $id;
+        $search_ids_updated = TRUE;
+      }
+      if (isset($ids_list[$id]) != $options['default_true']) {
+        if (isset($query)) {
+          watchdog('search_api_saved_searches', 'Two matching searches on index %index for saved search block.',
+              array('%index' => $settings->index()->name), WATCHDOG_WARNING,
+              l(t('view page'), $_GET['q'], array('query' => drupal_get_query_parameters())));
+        }
+        else {
+          list($query, $results) = $data;
+        }
+      }
+    }
+  }
+  if (isset($search_ids_updated)) {
+    variable_set('search_api_saved_searches_search_ids', $search_ids);
+  }
+  if (empty($query)) {
+    return;
+  }
+
+  return array(
+    'subject' => t('Save search'),
+    'content' => array('form' => drupal_get_form('search_api_saved_searches_save_form', $settings, $query)),
+  );
+}
+
+/**
+ * Form builder for creating a new saved search.
+ *
+ * @param SearchApiSavedSearchesSettings $settings
+ *   The saved search settings with which to create a new saved search.
+ * @param SearchApiQueryInterface $query
+ *   (optional) If creating a saved search for an already executed query, the
+ *   query.
+ *
+ * @see search_api_saved_searches_save_form_validate()
+ * @see search_api_saved_searches_save_form_submit()
+ * @ingroup forms
+ */
+function search_api_saved_searches_save_form(array $form, array &$form_state, SearchApiSavedSearchesSettings $settings, SearchApiQueryInterface $query = NULL) {
+  global $user;
+
+  if (!isset($form_state['query']) && isset($query)) {
+    $options = $query->getOptions();
+    // When checking for new results, we need all results.
+    // @todo Make this configurable?
+    unset($options['offset'], $options['limit']);
+    $options['search id'] = $settings->delta . ':' . 'saved-search';
+    $form_state['query'] = array(
+      'index_id' => $query->getIndex()->machine_name,
+      'keys' => $query->getKeys(),
+      'original_keys' => $query->getOriginalKeys(),
+      'fields' => $query->getFields(),
+      'filters' => $query->getFilter()->getFilters(),
+      'options' => $options,
+    );
+  }
+  $form_state['settings'] = $settings;
+
+  $description = $settings->getTranslatedOption('description');
+  if (!empty($description)) {
+    $form['description'] = array(
+      '#type' => 'item',
+      '#description' => _filter_autop(check_plain($description)),
+    );
+  }
+
+  if (empty($form_state['query'])) {
+    $form['query'] = _search_api_saved_searches_create_search_form($settings);
+    $form['name'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Name'),
+      '#description' => t('Enter the name that will be displayed for this saved search.'),
+      '#maxlength' => 255,
+    );
+  }
+  else {
+    $form['#prefix'] = '<div id="search-api-saved-searches-save-form-wrapper">';
+    $form['#suffix'] = '</div>';
+    if (empty($settings->options['choose_name'])) {
+      $form['name'] = array(
+        '#type' => 'value',
+        '#value' => _search_api_saved_searches_create_name($form_state['query']),
+      );
+    }
+    else {
+      $form['name'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Name'),
+        '#maxlength' => 255,
+        '#size' => 16,
+        '#required' => TRUE,
+        '#default_value' => _search_api_saved_searches_create_name($form_state['query']),
+      );
+    }
+  }
+  if (empty($user->mail) || $settings->options['registered_choose_mail']) {
+    $form['mail'] = array(
+      '#type' => 'textfield',
+      '#title' => t('E-mail address'),
+      '#maxlength' => 100,
+      '#size' => 16,
+      '#default_value' => isset($user->mail) ? $user->mail : '',
+      '#required' => TRUE,
+    );
+  }
+  else {
+    $form['mail'] = array(
+      '#type' => 'value',
+      '#value' => $user->mail,
+    );
+  }
+
+  if ($settings->options['user_select_interval'] && count($settings->options['interval_options']) > 1) {
+    $form['notify_interval'] = array(
+      '#type' => 'select',
+      '#title' => t('Notification interval'),
+      '#options' => $settings->getTranslatedOption('interval_options'),
+      '#required' => TRUE,
+    );
+  }
+  else {
+    $form['notify_interval'] = array(
+      '#type' => 'value',
+      '#value' => $settings->options['user_select_interval'] ? reset($settings->options['interval_options']) : $settings->options['set_interval'],
+    );
+  }
+
+  if (!empty($form_state['query'])) {
+    $form_state['page'] = array(
+      'path' => $_GET['q'],
+      'query' => drupal_get_query_parameters(),
+    );
+  }
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save search'),
+    '#ajax' => array(
+      'callback' => 'search_api_saved_searches_save_form_ajax',
+      'wrapper' => 'search-api-saved-searches-save-form-wrapper',
+      'effect' => 'fade',
+      'method' => 'replace',
+    ),
+    '#executes_submit_callback' => TRUE,
+  );
+  // For manual search creation we don't need AJAX functionality.
+  if (empty($form_state['query'])) {
+    unset($form['submit']['#ajax']);
+  }
+
+  return $form;
+}
+
+/**
+ * Helper function for creating a form for manually creating a saved search.
+ */
+function _search_api_saved_searches_create_search_form(SearchApiSavedSearchesSettings $settings) {
+  $index = $settings->index();
+  $wrapper = $index->entityWrapper();
+  $options = isset($settings->options['manual']) ? $settings->options['manual'] : array();
+
+  $form['#tree'] = TRUE;
+  $form['fields'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Search'),
+  );
+  if (!empty($options['fulltext'])) {
+    $form['fields']['search_api_saved_searches_fulltext'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Keywords'),
+    );
+  }
+  if (!empty($options['fields'])) {
+    foreach ($options['fields'] as $field) {
+      if (!empty($index->options['fields'][$field])) {
+        // Extract the necessary field information out of the wrapper.
+        $tmp = $wrapper;
+        foreach (explode(':', $field) as $part) {
+          if (!isset($tmp->$part)) {
+            continue 2;
+          }
+          $tmp = $tmp->$part;
+        }
+        $info = $tmp->info();
+        $form['fields'][$field]['#title'] = isset($info['label']) ? $info['label'] : $field;
+        if ($optList = $tmp->optionsList('view')) {
+          $optList = array(NULL => t('- Any -')) + $optList;
+          $form['fields'][$field]['#type'] = 'select';
+          $form['fields'][$field]['#options'] = $optList;
+        }
+        else {
+          $form['fields'][$field]['#type'] = 'textfield';
+        }
+      }
+    }
+  }
+
+  return $form;
+}
+
+/**
+ * AJAX submit handler for search_api_saved_searches_save_form().
+ */
+function search_api_saved_searches_save_form_ajax(array $form, array &$form_state) {
+  return form_get_errors() ? $form : array('#theme' => 'status_messages');
+}
+
+/**
+ * Form validation handler for search_api_saved_searches_save_form().
+ *
+ * @see search_api_saved_searches_save_form()
+ * @see search_api_saved_searches_save_form_submit()
+ */
+function search_api_saved_searches_save_form_validate(array $form, array &$form_state) {
+  if ($msg = user_validate_mail($form_state['values']['mail'])) {
+    form_error($form['mail'], $msg);
+  }
+}
+
+/**
+ * Form validation handler for search_api_saved_searches_save_form().
+ *
+ * @return boolean
+ *   TRUE iff the search was successfully saved.
+ *
+ * @see search_api_saved_searches_save_form()
+ * @see search_api_saved_searches_save_form_validate()
+ */
+function search_api_saved_searches_save_form_submit(array $form, array &$form_state) {
+  global $user;
+
+  $values = $form_state['values'];
+  $settings = $form_state['settings'];
+
+  if (empty($form_state['query'])) {
+    $fields = $values['query']['fields'];
+    $query = array(
+      'keys' => isset($fields['search_api_saved_searches_fulltext']) ? $fields['search_api_saved_searches_fulltext'] : NULL,
+      'fields' => NULL,
+      'filters' => array(),
+      'options' => array(
+        'search id' => $settings->delta . ':' . 'saved-search',
+      ),
+    );
+    unset($fields['search_api_saved_searches_fulltext']);
+    foreach ($fields as $field => $value) {
+      if ($value || is_numeric($value)) {
+        if (is_array($value)) {
+          foreach ($value as $key => $single_value) {
+            if ($single_value) {
+              $query['filters'][] = array($field, $single_value, '=');
+            }
+          }
+        }
+        else {
+          $query['filters'][] = array($field, $value, '=');
+        }
+      }
+      else {
+        unset($fields[$field]);
+      }
+    }
+
+    if (empty($values['name'])) {
+      $query['original_keys'] = $query['keys'];
+      $values['name'] = _search_api_saved_searches_create_name($query);
+      unset($query['original_keys']);
+    }
+
+    if (empty($form_state['page']) && !empty($settings->options['manual']['page']['path'])) {
+      $page_options = $settings->options['manual']['page'];
+      $form_state['page'] = array(
+        'path' => $page_options['path'],
+        'query' => array(),
+      );
+      if (isset($query['keys'])) {
+        if (empty($page_options['fulltext'])) {
+          $form_state['page']['path'] .= '/' . $query['keys'];
+        }
+        else {
+          $form_state['page']['query'][$page_options['fulltext']] = $query['keys'];
+        }
+      }
+      foreach ($fields as $field => $value) {
+        if (empty($page_options['direct_filter_params'])) {
+          if (is_array($value)) {
+            foreach ($value as $key => $single_value) {
+              if ($single_value) {
+                $form_state['page']['query']['f'][] = $field . ':' . $single_value;
+              }
+            }
+          }
+          else {
+            $form_state['page']['query']['f'][] = $field . ':' . $value;
+          }
+        }
+        else {
+          $form_state['page']['query'][$field] = $value;
+        }
+      }
+    }
+  }
+  else {
+    $query = array_intersect_key($form_state['query'], drupal_map_assoc(array('keys', 'fields', 'filters', 'options')));
+  }
+
+  // Enable the saved search right away, if a logged-in user uses their own mail
+  // address, or when they have admin privileges, or when activation mails are
+  // generally deactivated, or if there are already active saved searches for
+  // that user with that mail address. Otherwise, an activation mail will be
+  // sent.
+  $enabled = (!empty($user->mail) && $user->mail == $values['mail'])
+      || user_access('administer search_api_saved_searches')
+      || empty($settings->options['mail']['activate']['send'])
+      || ($user->uid && search_api_saved_search_load_multiple(FALSE, array('enabled' => TRUE, 'uid' => $user->uid, 'mail' => $values['mail'])));
+  // If an anonymous user uses an existing user's mail address to create a
+  // saved search, file the saved search under that user right away.
+  $uid = $user->uid;
+  if (!$uid && ($users = user_load_multiple(FALSE, array('mail' => $values['mail'], 'status' => 1)))) {
+    $uid = key($users);
+  }
+  $search = entity_create('search_api_saved_search', array(
+    'uid' => $uid,
+    'settings_id' => $settings->delta,
+    'enabled' => $enabled,
+    'name' => $values['name'],
+    'mail' => $values['mail'],
+    'created' => REQUEST_TIME,
+    'last_queued' => REQUEST_TIME,
+    'last_execute' => REQUEST_TIME,
+    'notify_interval' => $values['notify_interval'],
+    'query' => $query,
+    'options' => array(),
+  ));
+  // Choose where to redirect.
+  if (!empty($form_state['page'])) {
+    $search->options['page'] = $form_state['page'];
+    $form_state['redirect'] = array($form_state['page']['path'], $form_state['page']);
+  }
+  elseif ($user->uid) {
+    $form_state['redirect'] = 'user/' . $user->uid . '/saved-searches';
+  }
+  // Save saved search.
+  $ret = $search->save();
+  // Display success or error message.
+  if (!$ret) {
+    drupal_set_message(t('An error occurred while trying to save the search. Please contact the site administrator.'), 'error');
+    $form_state['rebuild'] = TRUE;
+    return FALSE;
+  }
+  else {
+    if ($enabled) {
+      if ($search->notify_interval < 0) {
+        drupal_set_message(t('Your saved search was successfully created.'));
+      }
+      else {
+        drupal_set_message(t('Your saved search was successfully created. You will receive e-mail notifications for new results in the future.'));
+      }
+    }
+    else {
+      drupal_set_message(t('Your saved search was successfully created. You will soon receive an e-mail with a confirmation link to activate it.'));
+    }
+    return TRUE;
+  }
+}
+
+/**
+ * Helper function for creating a name for a saved search with the given query.
+ */
+function _search_api_saved_searches_create_name(array $query) {
+  if (!empty($query['original_keys']) && is_scalar($query['original_keys'])) {
+    $ret[] = $query['original_keys'];
+  }
+  $name = isset($ret) ? implode(' / ', $ret) : t('Saved search');
+  drupal_alter('search_api_saved_search_create_name', $name, $query);
+  return $name;
+}
+
+/**
+ * Implements hook_mail().
+ *
+ * Two mails are provided, which expect the following values in the $params
+ * array:
+ * - activate:
+ *   - search: The SearchApiSavedSearch object that should be activated.
+ *   - user: The user object to which the saved search belongs.
+ * - notify:
+ *   - user: The user to which the executed searches belong.
+ *   - settings: The settings with which the searches are associated.
+ *   - searches: An array containing arrays with the following keys:
+ *     - search: A SearchApiSavedSearch object that was checked.
+ *     - num_results: The number of new results for that saved search.
+ *     - results: An array of entities representing the new results for that
+ *       saved search.
+ */
+function search_api_saved_searches_mail($key, array &$message, array $params) {
+  $language = $message['language'];
+  switch ($key) {
+    case 'activate':
+      $search = $params['search'];
+      $settings = $search->settings();
+      $data = array(
+        'user' => $params['user'],
+        'search_api_saved_search_info' => array(
+          'search' => $search,
+          'results' => array(),
+        ),
+      );
+      $title = $settings->getTranslatedOption('mail.activate.title', $language->language);
+      $message['subject'] .= token_replace($title, $data, array('language' => $language, 'sanitize' => FALSE));
+      $body = $settings->getTranslatedOption('mail.activate.body', $language->language);
+      $message['body'][] = token_replace($body, $data, array('language' => $language, 'sanitize' => FALSE));
+      break;
+
+    case 'notify':
+      $settings = $params['settings'];
+      $search = $params['searches'][0]['search'];
+      $data = array(
+        'user' => $params['user'],
+        'search_api_saved_searches' => $params['searches'],
+        'search_api_saved_search_info' => array(
+          'search' => $search,
+          'results' => array(),
+        ),
+      );
+      $title = $settings->getTranslatedOption('mail.notify.title', $language->language);
+      $message['subject'] .= token_replace($title, $data, array('language' => $language, 'sanitize' => FALSE));
+      $body = $settings->getTranslatedOption('mail.notify.body', $language->language);
+      $message['body'][] = token_replace($body, $data, array('language' => $language, 'sanitize' => FALSE));
+      break;
+  }
+}
+
+/**
+ * Implements hook_cron().
+ *
+ * Queue the saved searches that should be checked for new items.
+ */
+function search_api_saved_searches_cron() {
+  $ids = search_api_saved_searches_get_searches_to_be_executed();
+  if (!$ids) {
+    return;
+  }
+  // Get the queue and load the queries.
+  $queue = DrupalQueue::get('search_api_saved_searches_check_updates');
+  $searches = search_api_saved_search_load_multiple($ids);
+  // Group the search according to mail and settings. Grouping by mail prevents
+  // a user from getting several mails at once, for different searches. Grouping
+  // by settings is necessary since the mails can differ between settings.
+  $user_searches = array();
+  foreach ($searches as $search) {
+    // Check whether notifications are enabled for this search.
+    $settings = search_api_saved_searches_settings_load($search->settings_id);
+    $options = $settings->options;
+    if (!isset($options['mail']['notify']['send']) || $options['mail']['notify']['send']) {
+      $user_searches[$search->mail . ' ' . $search->settings_id][] = $search->id;
+      // Set the last execution timestamp now, so the interval doesn't move and we
+      // don't get problems if the next cron run occurs before the queue is
+      // completely executed.
+      $search->last_queued = REQUEST_TIME;
+      $search->save();
+    }
+  }
+  foreach ($user_searches as $searches) {
+    $queue->createItem($searches);
+  }
+}
+
+/**
+ * Retrieves the saved searches that need to be executed.
+ *
+ * @param string|int|null $settings_id
+ *   (optional) The ID or delta of the saved search settings entity for which to
+ *   retrieve searches. NULL to retrieve for all.
+ *
+ * @return int[]
+ *   The IDs of all searches that need to be executed.
+ */
+function search_api_saved_searches_get_searches_to_be_executed($settings_id = NULL) {
+  // Get all searches whose last execution lies more than the notify_interval
+  // in the past. Add a small amount to the current time, so small differences
+  // in execution time don't result in a delay until the next cron run.
+  $select = db_select('search_api_saved_search', 's');
+  $select->fields('s', array('id'))
+    ->condition('enabled', 1)
+    ->condition('notify_interval', 0, '>=')
+    ->where('last_execute >= last_queued')
+    ->where('last_queued + notify_interval < :time', array(':time' => REQUEST_TIME + 15));
+  if ($settings_id !== NULL) {
+    // The {search_api_saved_search} table stores the setting as a machine name.
+    // If the caller passed a numeric ID, we need to convert it.
+    if (is_numeric($settings_id)) {
+      $sql = 'SELECT delta FROM {search_api_saved_searches_settings} WHERE id = :id';
+      $settings_id = db_query($sql, array(':id' => $settings_id))->fetchField();
+      if ($settings_id === FALSE) {
+        return array();
+      }
+    }
+    $select->condition('settings_id', $settings_id);
+  }
+  return $select->execute()->fetchCol();
+}
+
+/**
+ * Implements hook_cron_queue_info().
+ *
+ * Defines a queue for saved searches that should be checked for new items.
+ */
+function search_api_saved_searches_cron_queue_info() {
+  return array(
+    'search_api_saved_searches_check_updates' => array(
+      'worker callback' => 'search_api_saved_searches_check_updates',
+      'time' => variable_get('search_api_saved_search_queue_item_time', 10),
+    ),
+  );
+}
+
+/**
+ * Checks for new results for saved searches, and sends a mail if necessary.
+ *
+ * Used as a worker callback for the homonymous cron queue.
+ *
+ * @param int[] $search_ids
+ *   The IDs of the saved searches to check for new results. All of these should
+ *   have the same mail address and base settings.
+ *
+ * @throws SearchApiException
+ *   If an error occurred in one of the searches.
+ *
+ * @see search_api_saved_searches_cron_queue_info()
+ */
+function search_api_saved_searches_check_updates(array $search_ids) {
+  if (!$search_ids) {
+    return;
+  }
+  // Since in earlier versions this function got the loaded searches passed
+  // directly instead of just IDs, and there might still be some such items in
+  // the queue when updating to the new style, we have to stay
+  // backwards-compatible here. So, when an array of loaded searches is passed,
+  // we first replace them with their IDs and only then load them again.
+  if (!is_scalar(reset($search_ids))) {
+    /** @var SearchApiSavedSearch[] $searches */
+    $searches = $search_ids;
+    $search_ids = array();
+    foreach ($searches as $search) {
+      $search_ids[] = $search->id;
+    }
+  }
+  $searches = search_api_saved_search_load_multiple($search_ids, array('enabled' => 1));
+  if (!$searches) {
+    return;
+  }
+  $search = $searches[key($searches)];
+  $settings = $search->settings();
+  $index = $settings->index();
+  $mail_params = array();
+  foreach ($searches as $search) {
+    $results = search_api_saved_search_fetch_search_results($search);
+    if (!$results['result_count']) {
+      continue;
+    }
+    // Load the result items.
+    if ($results['results']) {
+      $results['results'] = $index->loadItems($results['results']);
+    }
+    $mail_params['searches'][] = $results;
+  }
+  // If we set any searches in the mail parameters, send the mail.
+  if ($mail_params) {
+    $mail_params['user'] = user_load($search->uid);
+    $mail_params['settings'] = $settings;
+    $message = drupal_mail('search_api_saved_searches', 'notify', $search->mail,
+      user_preferred_language($mail_params['user']), $mail_params);
+    if ($message['result']) {
+      watchdog('search_api_saved_searches', 'A mail with new saved search results was sent to @mail.',
+        array('@mail' => $search->mail), WATCHDOG_INFO);
+    }
+  }
+}
+
+/**
+ * Fetches the results for a given search object.
+ *
+ * @param SearchApiSavedSearch $search
+ *   The saved search to check for new results.
+ *
+ * @return array
+ *   An associative array with the following keys:
+ *   - search: The executed search.
+ *   - result_count: The number of new results.
+ *   - results: The IDs of the new results.
+ *
+ * @throws SearchApiException
+ *   If an error occurred in the search.
+ */
+function search_api_saved_search_fetch_search_results(SearchApiSavedSearch $search) {
+  $return = array(
+    'search' => $search,
+    'result_count' => 0,
+    'results' => array(),
+  );
+
+  $settings = $search->settings();
+  try {
+    // Make sure we run the query as the user who owns the saved search.
+    // Otherwise node access will not work properly.
+    $search->query['options']['search_api_access_account'] = $search->uid;
+    // Get actual results for the query.
+    $query = $search->query();
+
+    // If a date field is set, use that to filter results.
+    if (!empty($settings->options['date_field'])) {
+      $query->condition($settings->options['date_field'], $search->last_execute, '>');
+    }
+    $response = $query->execute();
+    if (!empty($response['results'])) {
+      $old = array();
+      $new = $results = drupal_map_assoc(array_keys($response['results']));
+      if (empty($settings->options['date_field'])) {
+        // ID-based method: Compare these results to the old ones.
+        $old = drupal_map_assoc(explode(',', $search->results));
+        $new = array_diff_key($results, $old);
+      }
+      if ($new) {
+        // We have new results: send them to the user.
+        // Only load those items that will be sent.
+        $sent_new = $new;
+        if (!empty($settings->options['mail']['notify']['max_results'])) {
+          $sent_new = array_slice($new, 0, $settings->options['mail']['notify']['max_results']);
+        }
+        $new_results = $sent_new + $new;
+        // Let other modules alter these results.
+        drupal_alter('search_api_saved_searches_new_results', $new_results, $search);
+        if ($new_results) {
+          // We have to slice again in case some items were moved around or
+          // removed by alter hooks.
+          $sent_new = $new_results;
+          if (!empty($settings->options['mail']['notify']['max_results'])) {
+            $sent_new = array_slice($new_results, 0, $settings->options['mail']['notify']['max_results']);
+          }
+          $return['result_count'] = count($new_results);
+          $return['results'] = $sent_new;
+        }
+      }
+      if (empty($settings->options['date_field']) && ($new || array_diff($old, $results))) {
+        // The results changed in some way: store the latest version.
+        $search->results = implode(',', $results);
+      }
+    }
+    // Use time() instead of REQUEST_TIME to minimize the potential of sending
+    // duplicate results due to longer-running cron queue workers.
+    $search->last_execute = time();
+    $search->save();
+  }
+  catch (SearchApiException $e) {
+    $args = _drupal_decode_exception($e);
+    $args['@id'] = $search->id;
+    throw new SearchApiException(t('%type while trying to check for new results on saved search @id: !message in %function (line %line of %file).', $args));
+  }
+
+  return $return;
+}

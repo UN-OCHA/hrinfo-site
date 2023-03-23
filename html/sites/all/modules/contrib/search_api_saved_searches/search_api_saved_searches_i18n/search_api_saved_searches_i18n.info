@@ -1,0 +1,15 @@
+name = Search API saved searches translation
+description = Translate Search API saved searches settings.
+dependencies[] = search_api_saved_searches
+dependencies[] = i18n_string
+core = 7.x
+package = Multilingual - Internationalization
+
+files[] = search_api_saved_searches_i18n.controller.inc
+files[] = search_api_saved_searches_i18n.string_wrapper.inc
+
+; Information added by Drupal.org packaging script on 2018-09-17
+version = "7.x-1.7"
+core = "7.x"
+project = "search_api_saved_searches"
+datestamp = "1537174700"
