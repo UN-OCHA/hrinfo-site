@@ -20,6 +20,7 @@
 - delete unpublished nodes
 
 ```bash
+drush en hr_decommissioner
 drush pm-disable restclient
 drush pm-disable restful
 drush pm-disable hr_api
