@@ -3,17 +3,6 @@
 /**
  * @file
  * Install file for hr_decommissioner.
- *
- * @todo
- * Get a fresh copy of the database
- * Export the data of the field collection
- * Check the field collection field_users_ref
- * Check the subfields as well: field_user, field_users_ref_checkbox,
- * field_users_ref_name, field_email, field_phones
- * Remove the code in the features referring to these fields.
- * What to do with views and panelizer, check where these things are being used.
- * Delete the fields inside field collection
- * Delete the field collection.
  */
 
 /**

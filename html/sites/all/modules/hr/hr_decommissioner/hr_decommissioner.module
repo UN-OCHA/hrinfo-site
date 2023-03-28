@@ -156,6 +156,21 @@ function hr_decommissioner_module_implements_alter(&$implementations, $hook) {
   }
 }
 
+function hr_decommissioner_diable_contexts() {
+  $contexts = context_load();
+  $result = [];
+
+  foreach ($contexts as $context) {
+    if (!empty($context->tag)) {
+      $result[$context->name] = $context->tag;
+      if (!$context->disabled) {
+        ctools_export_crud_disable('context', $context);
+      }
+    }
+  }
+}
+
+
 /**
  * Enables and deletes the specified field.
  *
