@@ -1,6 +1,6 @@
-!#/bin/sh
+#!/bin/sh
 
-BASE_URL=http://hrinfo.docksal.site/node
+BASE_URL=http://hrinfo.docksal.site
 
 input="./nid.txt"
 while read -r line
