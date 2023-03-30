@@ -28,6 +28,7 @@ drush eval "hr_decommissioner_diable_contexts()"
 ```bash
 drush sqlq "SELECT nid FROM node WHERE status = 1 order by nid" > nid.txt
 drush sqlq "SELECT alias, source FROM url_alias WHERE substring(source,1,4) = 'node' order by pid" > alias.tsv
+awk '{print $1}' < alias.tsv > extra_urls.txt
 drush sqlq "SELECT nid FROM node WHERE status = 1 AND type='hr_operation' order by nid" > operations.txt
 drush sqlq "SELECT nid FROM node WHERE status = 1 AND type='hr_bundle' order by nid" > clusters.txt
 ```
