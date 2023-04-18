@@ -2158,13 +2158,11 @@ function hr_core_get_id_from_alias() {
   $params = drupal_get_query_parameters();
   $url = $params['alias'];
   $path = ltrim(parse_url($url, PHP_URL_PATH), '/');
-  watchdog('hr_core_get_id_from_alias', 'path::' . $path);
 
   // Check redirects and get final path.
   if (function_exists('redirect_load_by_source')) {
     if ($redirect = redirect_load_by_source($path)) {
       $path = $redirect['redirect'];
-      watchdog('hr_core_get_id_from_alias', 'redirect::' . $path);
     }
   }
 
@@ -2176,7 +2174,6 @@ function hr_core_get_id_from_alias() {
     ]);
   }
 
-  watchdog('hr_core_get_id_from_alias', $node_path);
   $node = menu_get_object('node', 1, $node_path);
 
   return drupal_json_output([
