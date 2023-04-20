@@ -2393,23 +2393,23 @@
         },
         {
             "name": "drupal/drupal",
-            "version": "7.95.0",
+            "version": "7.96.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal.git",
-                "reference": "7.95"
+                "reference": "7.96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/drupal-7.95.zip",
-                "reference": "7.95",
-                "shasum": "f84efd3b32dc1fe66749750bf1d6cf09e59f9cba"
+                "url": "https://ftp.drupal.org/files/projects/drupal-7.96.zip",
+                "reference": "7.96",
+                "shasum": "66956d147c037d5f016e1d33d52f1b1ca18252cc"
             },
             "type": "drupal-core",
             "extra": {
                 "drupal": {
-                    "version": "7.95",
-                    "datestamp": "1678902947",
+                    "version": "7.96",
+                    "datestamp": "1681926133",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3615,10 +3615,6 @@
                 {
                     "name": "tobby",
                     "homepage": "https://www.drupal.org/user/154797"
-                },
-                {
-                    "name": "tristanoneil",
-                    "homepage": "https://www.drupal.org/user/340659"
                 },
                 {
                     "name": "twistor",
@@ -12590,16 +12586,16 @@
         },
         {
             "name": "drupal/coder",
-            "version": "8.3.17",
+            "version": "8.3.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pfrenssen/coder.git",
-                "reference": "1c4662337418ab88c9ddf40348f0638e35d49182"
+                "reference": "d5911f812b69ca3bda5524899bdd06b3b4e687ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/1c4662337418ab88c9ddf40348f0638e35d49182",
-                "reference": "1c4662337418ab88c9ddf40348f0638e35d49182",
+                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/d5911f812b69ca3bda5524899bdd06b3b4e687ff",
+                "reference": "d5911f812b69ca3bda5524899bdd06b3b4e687ff",
                 "shasum": ""
             },
             "require": {
@@ -12637,7 +12633,7 @@
                 "issues": "https://www.drupal.org/project/issues/coder",
                 "source": "https://www.drupal.org/project/coder"
             },
-            "time": "2023-02-19T21:05:01+00:00"
+            "time": "2023-04-18T12:07:59+00:00"
         },
         {
             "name": "drupal/devel",
