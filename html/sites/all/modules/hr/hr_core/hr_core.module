@@ -2169,6 +2169,10 @@ function hr_core_reverse_lookup() {
     return hr_core_get_alias_from_filename($params['filename']);
   }
 
+  if (isset($params['fid'])) {
+    return hr_core_get_alias_from_file_id($params['fid']);
+  }
+
   return drupal_json_output([
     'nid' => FALSE,
     'alias' => FALSE,
@@ -2178,20 +2182,8 @@ function hr_core_reverse_lookup() {
 /**
  * Get alias from filename.
  */
-function hr_core_get_alias_from_filename($filename) {
-  $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'file')
-    ->propertyCondition('filename', $filename);
-  $result = $query->execute();
-
-  if (empty($result['file'])) {
-    return drupal_json_output([
-      'alias' => FALSE,
-    ]);
-  }
-
-  $files = entity_load('file', array_keys($result['file']));
-  $file = reset($files);
+function hr_core_get_alias_from_file_id($fid) {
+  $file = file_load($fid);
   $usage = file_usage_list($file);
 
   if (!isset($usage['file'])) {
@@ -2219,6 +2211,27 @@ function hr_core_get_alias_from_filename($filename) {
   return drupal_json_output([
     'alias' => FALSE,
   ]);
+}
+
+/**
+ * Get alias from filename.
+ */
+function hr_core_get_alias_from_filename($filename) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'file')
+    ->propertyCondition('filename', $filename);
+  $result = $query->execute();
+
+  if (empty($result['file'])) {
+    return drupal_json_output([
+      'alias' => FALSE,
+    ]);
+  }
+
+  $files = entity_load('file', array_keys($result['file']));
+  $file = reset($files);
+
+  return hr_core_get_alias_from_file_id($file->id);
 }
 
 /**
