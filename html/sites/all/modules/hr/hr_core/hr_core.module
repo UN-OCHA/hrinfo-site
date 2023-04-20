@@ -2225,7 +2225,9 @@ function hr_core_get_alias_from_filename($filename) {
  * Get alias from nid.
  */
 function hr_core_get_alias_from_id($nid) {
-
+  return drupal_json_output([
+    'alias' => drupal_lookup_path('alias', 'node/' . $nid),
+  ]);
 }
 
 /**
