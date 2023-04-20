@@ -1,5 +1,0 @@
-name = Date range picker
-description = Provides a date range picker element.
-dependencies[] = moment
-package = Libraries
-core = 7.x
