@@ -2181,7 +2181,7 @@ function hr_core_reverse_lookup() {
 function hr_core_get_alias_from_filename($filename) {
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'file')
-        ->propertyCondition('filename', $filename);
+    ->propertyCondition('filename', $filename);
   $result = $query->execute();
 
   if (empty($result['file'])) {
