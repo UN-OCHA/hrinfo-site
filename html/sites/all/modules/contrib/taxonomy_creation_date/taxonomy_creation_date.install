@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * Implements hook_schema_alter().
+ */
+function taxonomy_creation_date_schema_alter(&$schema) {
+  $schema['taxonomy_term_data']['fields']['created'] = array(
+    'description' => 'Unix timestamp when the Taxonomy term was created.',
+    'type'        => 'int',
+    'not null'    => TRUE,
+    'default'     => 0,
+  );
+  $schema['taxonomy_term_data']['fields']['changed'] = array(
+    'description' => 'Unix timestamp when the Taxonomy term was last modified.',
+    'type'        => 'int',
+    'not null'    => TRUE,
+    'default'     => 0,
+  );
+}
+
+/**
+ * Implements hook_install().
+ */
+function taxonomy_creation_date_install() {
+  $schema = array();
+  taxonomy_creation_date_schema_alter($schema);
+  // Altering the {taxonomy_term_data} table.
+  db_add_field('taxonomy_term_data', 'created', $schema['taxonomy_term_data']['fields']['created']);
+  db_add_field('taxonomy_term_data', 'changed', $schema['taxonomy_term_data']['fields']['changed']);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function taxonomy_creation_date_uninstall() {
+  // Delete the additional columns from the {taxonomy_term_data} table.
+  db_drop_field('taxonomy_term_data', 'created');
+  db_drop_field('taxonomy_term_data', 'changed');
+}

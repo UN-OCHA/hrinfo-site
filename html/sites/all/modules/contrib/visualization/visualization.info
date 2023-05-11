@@ -1,0 +1,19 @@
+name = Visualization
+description = Provides a theming hook and display plugin for Views that provides charting capabilities.
+core = 7.x
+dependencies[] = ctools
+
+: Interface for plugins
+files[] = includes/interfaces.inc
+
+; Views plugin
+files[] = includes/views/visualization_plugin_style.inc
+
+configure = admin/config/system/visualization
+
+; Information added by Drupal.org packaging script on 2015-08-08
+version = "7.x-1.0-beta2"
+core = "7.x"
+project = "visualization"
+datestamp = "1439073240"
+

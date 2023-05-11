@@ -1,0 +1,88 @@
+Search API Saved Searches 1.7 (2018-09-17):
+-------------------------------------------
+- #2971725 by martin_klima, mh86, drunken monkey: Fixed reaction to a user
+  changing their mail address.
+- #2907340 by ClassicCut, drunken monkey: Fixed checking alerts via Rules.
+- #2521976 by natew, drunken monkey, lukedekker: Fixed double-encoding of query
+  parameters when displaying saved searches with Views.
+- #2795599 by drunken monkey: Increased the maximum length of saved search
+  names.
+
+Search API Saved Searches 1.6 (2017-07-18):
+-------------------------------------------
+- #1118138 by MorinLuc0, drunken monkey: Added Rules integration for sending
+  notifications.
+- #2856331 by drunken monkey: Fixed access check for the "Create saved search"
+  page.
+- #2216453 by drunken monkey: Fixed exception for saved searches after fulltext
+  fields change.
+- #2665578 by drunken monkey: Fixed notices caused by missing $original in
+  hook_user_update().
+- #2597143 by drunken monkey: Added an option to allow users to edit a saved
+  search's keywords.
+- #2532078 by krishna savithraj: Added a hidden setting to give the cron job
+  more time to execute.
+- #2602532 by kaptenkolja, drunken monkey: Fixed handling of multi-valued
+  fields when creating a new saved search manually.
+- #2564969 by drunken monkey: Fixed escaping of fields option labels.
+- #1306622 by drunken monkey: Fixed token handling for anonymous users.
+
+Search API Saved Searches 1.5 (2015-06-08):
+-------------------------------------------
+- #2346679 by drunken monkey, dcmul: Added display of saved search
+  enabled/disabled status to UI.
+- #2346677 by drunken monkey, dcmul: Fixed firing of saved searches for
+  disabled users.
+- #2387155 by Dimiona, drunken monkey: Fixed default value for custom
+  notification interval.
+- #2359003 by drunken monkey: Fixed removal of cron queue items of deleted
+  searches.
+- #2347243 by queenvictoria, drunken monkey: Added tokens from the first search
+  to the mail texts.
+- #1829678 by aschmoe: Fixed render order of "Save search" block in panels.
+- #2354863 by drunken monkey: Fixed alert intervals not being respected.
+- #2300175 by drunken monkey: Added database indexes to improve performance.
+- #2221683 by drunken monkey | rjacobs: Fixed duplicate mails due to overlaps
+  conditions in cron queue.
+
+Search API Saved Searches 1.3 (2014-05-24):
+-------------------------------------------
+- #2082325 by balajidharma, drunken monkey: Added classes to edit and delete
+  links.
+- #2088045 by leeomara, drunken monkey: Added hook to override generated names.
+- #2042299 by drunken monkey: Added access callbacks for both entity types.
+
+Search API Saved Searches 1.2 (2013-07-21):
+-------------------------------------------
+- #2040469 by drunken monkey: Fixed Views display of saved search results.
+- #2027441 by drunken monkey: Added option to filter by date instead of IDs.
+- #2027449 by drunken monkey: Fixed loading of new result items.
+- #1398300 by Leksat, drunken monkey: Added option for disabling notifications.
+- #2018983 by drunken monkey: Fixed error after deleting last saved search.
+- #2012714 by drunken monkey: Fixed the $reset parameter for load functions.
+
+Search API Saved Searches 1.1 (2013-03-27):
+-------------------------------------------
+- #1371344 by leeomara, drunken monkey: Added a README.txt file.
+- #1888140 by drunken monkey: Added extended Views integration.
+- #1941934 by drunken monkey: Added possibility to edit the notification
+  interval.
+- #1885036 by mh86: Added custom interval labels to saved searches overview
+  page.
+- #1888146 by drunken monkey: Added an option to allow registered users
+  logged-out deleting of their searches.
+- #1447004 by fago, drunken monkey, mh86: Added i18n support.
+- #1888126 by drunken monkey: Fixed "Cancel" link in delete forms for anonymous
+  users.
+- #1881704 by drunken monkey: Added option to limit number of results sent per
+  mail.
+- #1874132 by drunken monkey: Added automatic reactions for saved searches when
+  users are created, edited or deleted.
+- #1868488 by drunken monkey: Fixed logic for whether to activate a saved search
+  right away.
+- #1398310 by drunken monkey: Fixed visibility of "custom time" field.
+- #1857822 by sepgil: Added quantity tokens.
+
+Search API Saved Searches 1.0 (2012-10-04):
+-------------------------------------------
+First stable release of the Search API Saved Searches project.

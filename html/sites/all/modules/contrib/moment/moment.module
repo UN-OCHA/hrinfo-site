@@ -1,0 +1,443 @@
+<?php
+/**
+ * @file
+ * Moment.js integration.
+ */
+
+/**
+ * Implements hook_libraries_info().
+ */
+function moment_libraries_info() {
+  $libraries = array();
+
+  if (($library_path = libraries_get_path('moment'))) {
+    $libraries['moment'] = array(
+      'library path' => $library_path,
+      'name' => 'Moment.js',
+      'vendor url' => 'http://momentjs.com',
+      'download url' => 'https://github.com/moment/moment/releases',
+      'version callback' => 'moment_get_library_version',
+      'version arguments' => array(),
+      'callbacks' => array(
+        'pre-load' => array(
+          'moment_library_moment_pre_load_locale',
+        ),
+      ),
+      'files' => array(
+        'js' => array(
+          'min/moment.min.js',
+        ),
+      ),
+      'variants' => array(
+        'none' => array(
+          'files' => array(
+            'js' => array(
+              'moment.js',
+            ),
+          ),
+        ),
+        'with-locales.none' => array(
+          'callbacks' => array(
+            'pre-load' => array(),
+          ),
+          'files' => array(
+            'js' => array(
+              'min/moment-with-locales.js',
+            ),
+          ),
+        ),
+        'with-locales.min' => array(
+          'callbacks' => array(
+            'pre-load' => array(),
+          ),
+          'files' => array(
+            'js' => array(
+              'min/moment-with-locales.min.js',
+            ),
+          ),
+        ),
+      ),
+
+      'integration files' => array(
+        'moment' => array(
+          'js' => array(
+            'js/moment.js' => array(),
+            'js/moment.locale.js' => array(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  if (($library_path = libraries_get_path('moment-timezone'))) {
+    $libraries['moment-timezone'] = array(
+      'library path' => $library_path,
+      'name' => 'Moment Timezone',
+      'vendor url' => 'http://momentjs.com/timezone',
+      'download url' => 'https://github.com/moment/moment-timezone/releases',
+      'version callback' => 'moment_get_library_version',
+      'version arguments' => array(),
+      'files' => array(
+        'js' => array(
+          'builds/moment-timezone-with-data.min.js',
+        ),
+      ),
+      'dependencies' => array(
+        'moment',
+      ),
+      'variants' => array(
+        'without-data.none' => array(
+          'files' => array(
+            'js' => array(
+              'moment-timezone.js',
+            ),
+          ),
+        ),
+        'without-data.min' => array(
+          'files' => array(
+            'js' => array(
+              'builds/moment-timezone.min.js',
+            ),
+          ),
+        ),
+        'with-data.none' => array(
+          'files' => array(
+            'js' => array(
+              'builds/moment-timezone-with-data.js',
+            ),
+          ),
+        ),
+        'with-data.min' => array(
+          'files' => array(
+            'js' => array(
+              'builds/moment-timezone-with-data.min.js',
+            ),
+          ),
+        ),
+        'with-data-2010-2020.none' => array(
+          'files' => array(
+            'js' => array(
+              'builds/moment-timezone-with-data-2010-2020.js',
+            ),
+          ),
+        ),
+        'with-data-2010-2020.min' => array(
+          'files' => array(
+            'js' => array(
+              'builds/moment-timezone-with-data-2010-2020.min.js',
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  return $libraries;
+}
+
+/**
+ * Library info "version callback".
+ *
+ * @param array $info
+ *   Library info.
+ *
+ * @return string|false
+ *   Version number.
+ */
+function moment_get_library_version(array $info) {
+  return moment_get_package_version($info['library path']);
+}
+
+/**
+ * Get the version number from package JSON.
+ *
+ * @param string $library_path
+ *   Directory.
+ *
+ * @return string|false
+ *   Version number.
+ */
+function moment_get_package_version($library_path) {
+  static $versions = array();
+
+  if (!$library_path) {
+    return FALSE;
+  }
+
+  if (!isset($version[$library_path])) {
+    $versions[$library_path] = FALSE;
+    if (is_readable("$library_path/package.json")) {
+      $package = drupal_json_decode(file_get_contents("$library_path/package.json"));
+      if ($package && !empty($package['version'])) {
+        $versions[$library_path] = $package['version'];
+      }
+    }
+  }
+
+  return $versions[$library_path];
+}
+
+/**
+ * Implements callback_libraries_info__callbacks__pre-load().
+ */
+function moment_library_moment_pre_load_locale(array &$library) {
+  if (!variable_get('preprocess_js', 0)) {
+    // Drupal.t() does not work without JS aggregation.
+    if (isset($library['integration files']['moment']['js']['js/moment.locale.js'])) {
+      unset($library['integration files']['moment']['js']['js/moment.locale.js']);
+
+      if (empty($library['integration files']['moment']['js'])) {
+        unset($library['integration files']['moment']['js']);
+
+        if (empty($library['integration files']['moment'])) {
+          unset($library['integration files']['moment']);
+        }
+      }
+    }
+  }
+
+  $has_locales = FALSE;
+  foreach (array_keys($library['files']['js']) as $file_path) {
+    if (preg_match('/locales(\.min){0,1}\.js$/', $file_path)) {
+      $has_locales = TRUE;
+
+      break;
+    }
+  }
+
+  if (!$has_locales) {
+    // Language code, e.g. ’hu’ or ’en-us’.
+    $lang_code = drupal_strtolower($GLOBALS['language']->language);
+    $file_path = "locale/{$lang_code}.js";
+    if (file_exists("{$library['library path']}/$file_path")) {
+      $library['files']['js'][$file_path] = array();
+    }
+    elseif (strpos($lang_code, '-') !== FALSE) {
+      list($lang_code) = explode('-', $lang_code);
+      $file_path = "locale/{$lang_code}.js";
+      if (file_exists("{$library['library path']}/$file_path")) {
+        $library['files']['js'][$file_path] = array();
+      }
+    }
+  }
+}
+
+/**
+ * The format replacement patterns for the Moment.js library.
+ *
+ * @see http://php.net/date
+ * @see http://momentjs.com/docs/#/displaying/format
+ *
+ * @return array
+ *   Key is the PHP date format character, the value is the corresponding
+ *   Moment.js format string.
+ */
+function moment_get_date_format_replacements() {
+  // PHP => Moment.js.
+  // PHP does not support the following formats:
+  // @todo Complete this list.
+  // Seconds              0 1 ... 58 59.
+  // '?' => 's'
+  // Day of Week        Su Mo ... Fr Sa.
+  // '?' => 'dd'
+  return array(
+    // Hour             01 02 ... 11 12.
+    'h' => 'hh',
+    // Hour             00 01 ... 22 23.
+    'H' => 'HH',
+    // Hour              1  2 ... 11 12.
+    'g' => 'h',
+    // Hour              0  1 ... 22 23.
+    'G' => 'H',
+
+    // Minute           00 01 ... 58 59.
+    'i' => 'mm',
+
+    // Seconds.         00 01 ... 58 59.
+    's' => 'ss',
+
+    // Year         1970 1971 ... 2029 2030
+    'Y' => 'YYYY',
+    // Year           70   71 ...   29   30
+    'y' => 'YY',
+
+    // Month             1  2 ... 11 12.
+    'n' => 'M',
+    // Month            01 02 ... 11 12.
+    'm' => 'MM',
+    // Month          Jan Feb ... Nov Dec.
+    'M' => 'MMM',
+    // Month January February ... November December.
+    'F' => 'MMMM',
+
+    // Day of Year    001 002 ... 364 365.
+    'z' => 'DDDD',
+
+    // Day of Month      1  2 ... 30 31.
+    'j' => 'D',
+    // Day of Month     01 02 ... 30 31.
+    'd' => 'DD',
+    // Day of Month   1st 2nd ... 30th 31st
+    'jS' => 'Do',
+
+    // Day of Week        0 1 ... 5 6.
+    'w' => 'd',
+    // Day of Week (ISO)  1 2 ... 6 7.
+    'N' => 'E',
+    // Day of Week    Sun Mon ... Fri Sat.
+    'D' => 'ddd',
+    // Day of W Sunday Monday ... Friday Saturday.
+    'l' => 'dddd',
+
+    // Week of Year       1 2 ... 52 53
+    'W' => 'w',
+
+    // Timezone -07:00 -06:00 ... +06:00 +07:00.
+    'P' => 'Z',
+    // Timezone   -0700 -0600 ... +0600 +0700.
+    'O' => 'ZZ',
+
+    // Shortcut to: Y-m-d\TH:i:sP
+    // Example:     2004-02-12T15:19:21+00:00
+    'c' => 'YYYY-MM-DDTHH:mm:ssZ',
+    // Shortcut to: D, d M Y H:i:s O
+    // Example:     Thu, 21 Dec 2000 16:01:07 +0200
+    'r' => 'ddd, DD MMM YYYY HH:mm:ss ZZ',
+
+    // Unix Timestamp.
+    'U' => 'X',
+  );
+}
+
+/**
+ * Convert a date format type to Moment.js compatible date format.
+ *
+ * @param string $date_format_type
+ *   Examples: "short", "medium", "long".
+ * @param null|string|object $lang
+ *   Language code or language object.
+ *
+ * @return string
+ *   Date format which is suitable for Moment.js.
+ */
+function moment_date_format_type_to_moment_date_format($date_format_type, $lang = NULL) {
+  return moment_date_format_to_moment_date_format(date_format_type_format($date_format_type, $lang));
+}
+
+/**
+ * Convert a date format to Moment.js compatible date format.
+ *
+ * @todo Care about the escaped symbols.
+ *
+ * @param string $date_format
+ *   PHP date format that is suitable for date().
+ *
+ * @return string
+ *   Date format which is suitable for Moment.js.
+ */
+function moment_date_format_to_moment_date_format($date_format) {
+  return strtr($date_format, moment_get_date_format_replacements());
+}
+
+/**
+ * Provide information about weekdays.
+ *
+ * @return array
+ *   Zero based numeric indexes. Values are array with the following keys:
+ *   - numeric: int Numeric identifier.
+ *   - name: string Machine name.
+ *   - label: string Localized name of the day.
+ */
+function moment_info_weekdays() {
+  return array(
+    array(
+      'numeric' => 0,
+      'name' => 'sunday',
+      'label' => t('Sunday'),
+    ),
+    array(
+      'numeric' => 1,
+      'name' => 'monday',
+      'label' => t('Monday'),
+    ),
+    array(
+      'numeric' => 2,
+      'name' => 'tuesday',
+      'label' => t('Tuesday'),
+    ),
+    array(
+      'numeric' => 3,
+      'name' => 'wednesday',
+      'label' => t('Wednesday'),
+    ),
+    array(
+      'numeric' => 4,
+      'name' => 'thursday',
+      'label' => t('Thursday'),
+    ),
+    array(
+      'numeric' => 5,
+      'name' => 'friday',
+      'label' => t('Friday'),
+    ),
+    array(
+      'numeric' => 6,
+      'name' => 'saturday',
+      'label' => t('Saturday'),
+    ),
+  );
+}
+
+/**
+ * Option list with numeric keys.
+ *
+ * @return array
+ *   Array of key-value pairs.
+ */
+function moment_weekday_number_options() {
+  return moment_weekday_options('numeric');
+}
+
+/**
+ * Option list with machine readable keys.
+ *
+ * @return array
+ *   Array of key-value pairs.
+ */
+function moment_weekday_name_options() {
+  return moment_weekday_options('name');
+}
+
+/**
+ * Build an option list from weekdays.
+ *
+ * @param string $key
+ *   The $key property will be used as key.
+ * @param int|null $first_day
+ *   First day of the week. Sunday = 0.
+ * @param string $label
+ *   The $label property will be used as label.
+ *
+ * @return array
+ *   Array of key-value pairs.
+ */
+function moment_weekday_options($key = 'name', $first_day = NULL, $label = 'label') {
+  if ($first_day === NULL) {
+    $first_day = variable_get('date_first_day', 0);
+  }
+
+  $weekdays = moment_info_weekdays();
+  if ($first_day != 0) {
+    $weekdays = array_merge(
+      array_slice($weekdays, $first_day),
+      array_slice($weekdays, 0, $first_day)
+    );
+  }
+
+  $options = array();
+  foreach ($weekdays as $weekday) {
+    $options[$weekday[$key]] = $weekday[$label];
+  }
+
+  return $options;
+}
