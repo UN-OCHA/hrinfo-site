@@ -1983,6 +1983,15 @@ function hr_core_menu() {
     'weight' => 99,
   );
 
+  $items['reverse-lookup'] = array(
+    'title' => 'Reversed lookup',
+    'access callback' => TRUE,
+    'page callback' => 'hr_core_reverse_lookup',
+    'page arguments' => array(),
+    'type' => MENU_CALLBACK,
+    'weight' => 99,
+  );
+
   return $items;
 }
 
@@ -2140,6 +2149,127 @@ function hr_core_get_panes($node) {
   }
 
   return drupal_json_output($output);
+}
+
+/**
+ * Look up nodes based on alias, nid or filename.
+ */
+function hr_core_reverse_lookup() {
+  $params = drupal_get_query_parameters();
+
+  if (isset($params['alias'])) {
+    return hr_core_get_id_from_alias($params['alias']);
+  }
+
+  if (isset($params['nid'])) {
+    return hr_core_get_alias_from_id($params['nid']);
+  }
+
+  if (isset($params['filename'])) {
+    return hr_core_get_alias_from_filename($params['filename']);
+  }
+
+  if (isset($params['fid'])) {
+    return hr_core_get_alias_from_file_id($params['fid']);
+  }
+
+  return drupal_json_output([
+    'nid' => FALSE,
+    'alias' => FALSE,
+  ]);
+}
+
+/**
+ * Get alias from filename.
+ */
+function hr_core_get_alias_from_file_id($fid) {
+  $file = file_load($fid);
+  $usage = file_usage_list($file);
+
+  if (!isset($usage['file'])) {
+    return drupal_json_output([
+      'alias' => FALSE,
+    ]);
+  }
+
+  $entity_type = reset(array_keys($usage['file']));
+  $entity_id = reset(array_keys($usage['file'][$entity_type]));
+  $entities = entity_load($entity_type, [$entity_id]);
+  $entity = reset($entities);
+
+  $parent = $entity;
+  while ($parent instanceof FieldCollectionItemEntity) {
+    $parent = $entity->hostEntity();
+  }
+
+  if ($parent && isset($parent->nid)) {
+    return drupal_json_output([
+      'alias' => drupal_lookup_path('alias', 'node/' . $parent->nid),
+    ]);
+  }
+
+  return drupal_json_output([
+    'alias' => FALSE,
+  ]);
+}
+
+/**
+ * Get alias from filename.
+ */
+function hr_core_get_alias_from_filename($filename) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'file')
+    ->propertyCondition('filename', $filename);
+  $result = $query->execute();
+
+  if (empty($result['file'])) {
+    return drupal_json_output([
+      'alias' => FALSE,
+    ]);
+  }
+
+  $files = entity_load('file', array_keys($result['file']));
+  $file = reset($files);
+
+  return hr_core_get_alias_from_file_id($file->id);
+}
+
+/**
+ * Get alias from nid.
+ */
+function hr_core_get_alias_from_id($nid) {
+  return drupal_json_output([
+    'alias' => drupal_lookup_path('alias', 'node/' . $nid),
+  ]);
+}
+
+/**
+ * Get Id from alias.
+ */
+function hr_core_get_id_from_alias($url) {
+  $path = ltrim(parse_url($url, PHP_URL_PATH), '/');
+
+  // Check redirects and get final path.
+  if (function_exists('redirect_load_by_source')) {
+    if ($redirect = redirect_load_by_source($path)) {
+      $path = $redirect['redirect'];
+    }
+  }
+
+  $node_path = drupal_lookup_path('source', $path);
+
+  if (!$node_path) {
+    return drupal_json_output([
+      'nid' => FALSE,
+    ]);
+  }
+
+  $node = menu_get_object('node', 1, $node_path);
+
+  return drupal_json_output([
+    'nid' => $node->nid,
+    'exclude_reliefweb' => isset($node->field_exclude_reliefweb[LANGUAGE_NONE]) ? $node->field_exclude_reliefweb[LANGUAGE_NONE][0]['value'] : FALSE,
+  ]);
 }
 
 /**
