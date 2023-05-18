@@ -1,9 +1,0 @@
-name = Taxonomy Creation Date
-description = Extend core taxonomy terms with creation time and last change.
-core = 7.x
-; Information added by Drupal.org packaging script on 2016-03-11
-version = "7.x-1.2"
-core = "7.x"
-project = "taxonomy_creation_date"
-datestamp = "1457713742"
-
