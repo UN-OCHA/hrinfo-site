@@ -1,0 +1,40 @@
+<?php
+/**
+ * @file
+ * Code for the Maintenance 200 module.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * Set the Status header to the selected code when the maintenance page
+ * is preprocessed.
+ */
+function maintenance200_preprocess_maintenance_page(&$vars) {
+  drupal_add_http_header('Status', variable_get('maintenance_mode_status', '200 OK'));
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add elements for setting the maintenance mode status code to the maintenance form.
+ */
+function maintenance200_form_system_site_maintenance_mode_alter(&$form, $form_state, $form_id) {
+  $form['maintenance_mode_status'] = array(
+    '#type' => 'radios',
+    '#title' => t('Maintenance mode response code'),
+    '#description' => t('This option controls what HTTP Status is returned when the site is in maintenance mode.  503 is the Drupal default.'),
+    '#default_value' => variable_get('maintenance_mode_status', '200 OK'),
+    '#options' => array(
+      '200 OK' => '200 OK',
+      '500 Internal Server Error' => '500 Internal Server Error',
+      '501 Not Implemented' => '501 Not Implemented',
+      '502 Bad Gateway' => '502 Bad Gateway',
+      '503 Service Unavailable' => '503 Service Unavailable',
+      '504 Gateway Time-out' => '504 Gateway Time-out',
+    ),
+  );
+
+  // Drive the maintenance_mode_message input down below the status input.
+  $form['maintenance_mode_message']['#weight'] = 1;
+}

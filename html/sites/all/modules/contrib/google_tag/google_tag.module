@@ -1,0 +1,419 @@
+<?php
+
+/**
+ * @file
+ * Provides primary Drupal hook implementations.
+ *
+ * Adds a JavaScript snippet to selected page responses to trigger analytics and
+ * other tracking items configured using the Google Tag Manager.
+ *
+ * @author Jim Berry ("solotandem", http://drupal.org/user/240748)
+ */
+
+/**
+ * Default for matching all items except listed.
+ */
+const GOOGLE_TAG_EXCLUDE_LISTED = 'exclude listed';
+
+/**
+ * Default for matching only listed items.
+ */
+const GOOGLE_TAG_INCLUDE_LISTED = 'include listed';
+
+/**
+ * Default list of relative paths.
+ */
+define('GOOGLE_TAG_PATHS', "admin*\nbatch*\nnode/add*\nnode/*/edit\nnode/*/delete\nuser/*/edit*\nuser/*/cancel*");
+
+/**
+ * Default list of HTTP response statuses that override path conditions.
+ */
+define('GOOGLE_TAG_STATUSES', "403 Forbidden\n404 Not Found");
+
+/**
+ * Default list of tag classes to allow.
+ */
+define('GOOGLE_TAG_WHITELIST_CLASSES', "google\nnonGooglePixels\nnonGoogleScripts\nnonGoogleIframes");
+
+/**
+ * Default list of tag classes to forbid.
+ */
+define('GOOGLE_TAG_BLACKLIST_CLASSES', "customScripts\ncustomPixels");
+
+/**
+ * Implements hook_help().
+ */
+function google_tag_help($path, $arg) {
+  module_load_include('inc', 'google_tag', 'includes/info');
+  return _google_tag_help($path, $arg);
+}
+
+/**
+ * Implements hook_menu().
+ */
+function google_tag_menu() {
+  module_load_include('inc', 'google_tag', 'includes/info');
+  return _google_tag_menu();
+}
+
+/**
+ * Implements hook_permission().
+ */
+function google_tag_permission() {
+  module_load_include('inc', 'google_tag', 'includes/info');
+  return _google_tag_permission();
+}
+
+/**
+ * Implements hook_flush_caches().
+ *
+ * This is called from system_cron() and drupal_flush_all_caches().
+ */
+function google_tag_flush_caches() {
+  if (\GTMSettings::getInstance()->get('rebuild_snippets')) {
+    google_tag_assets_create();
+  }
+}
+
+/**
+ * Implements hook_variable_group_info().
+ *
+ * @deprecated in 7.x-2.0 and is removed in release 7.x-2.1.
+ */
+function google_tag_variable_group_info() {
+  require_once DRUPAL_ROOT . '/includes/install.inc';
+  $version = (int) drupal_get_installed_schema_version('google_tag');
+  if ($version >= 7200) {
+    // After update hook finishes, remove the variable integration.
+    return;
+  }
+  module_load_include('inc', 'google_tag', 'includes/variable');
+  return _google_tag_variable_group_info();
+}
+
+/**
+ * Implements hook_variable_info().
+ *
+ * @deprecated in 7.x-2.0 and is removed in release 7.x-2.1.
+ */
+function google_tag_variable_info($options) {
+  require_once DRUPAL_ROOT . '/includes/install.inc';
+  $version = (int) drupal_get_installed_schema_version('google_tag');
+  if ($version >= 7200) {
+    // After update hook finishes, remove the variable integration.
+    return;
+  }
+  module_load_include('inc', 'google_tag', 'includes/variable');
+  return _google_tag_variable_info($options + array('use_prefix' => TRUE));
+}
+
+/**
+ * Implements hook_page_build().
+ *
+ * Adds the snippet to the page array if the insertion conditions are met.
+ *
+ * @see drupal_render_page()
+ */
+function google_tag_page_build(&$page) {
+  $manager = \GTMContainerManager::getInstance();
+  $manager->getScriptAttachments($page);
+  $manager->getNoScriptAttachments($page);
+}
+
+/**
+ * Returns applicable realm name and key for the request.
+ *
+ * @return array
+ *   The realm name and key.
+ */
+function google_tag_realm_values() {
+  $realm_name = $realm_key = '';
+
+  if (module_exists('variable_realm') && module_exists('variable_store')) {
+    // If realms exist, then the non-realm snippet files will not be loaded.
+    // These are in the 'google_tag' directory beneath the site files directory.
+    // If variable_realm module is later removed, then visit the module settings
+    // page and update the settings.
+    $realms = variable_realm_current();
+    // Remove the global realm as this is always active.
+    unset($realms['global']);
+    if (empty($realms)) {
+      $realm_name = 'global';
+      $realm_key = 'default';
+    }
+    else {
+      // The variable_realm module allows multiple realms to be 'active' on a
+      // page request. The realms are ordered with 'greater' weight having
+      // precedence. Select the last realm but allow other modules to override.
+      $realm_name = key(array_reverse($realms));
+      $realm_key = variable_realm_status($realm_name);
+    }
+    // Allow other modules to alter the realm name and key.
+    $realm_values = array('name' => $realm_name, 'key' => $realm_key);
+    drupal_alter('google_tag_realm', $realm_values);
+    $realm_name = $realm_values['name'];
+    $realm_key = $realm_values['key'];
+
+    $debug = \GTMSettings::getInstance()->get('debug_output');
+    $debug ? drupal_set_message(t('realm:key = @realm:@key', array('@realm' => $realm_name, '@key' => $realm_key))) : '';
+  }
+  return array($realm_name, $realm_key);
+}
+
+/**
+ * Saves snippet files and data layer classes based on current settings.
+ */
+function google_tag_assets_create() {
+  $manager = \GTMContainerManager::getInstance();
+  $manager->createAllAssets();
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function google_tag_ctools_plugin_directory($module, $plugin_type) {
+  if ($module == 'ctools' && $plugin_type == 'export_ui') {
+    return 'plugins/' . $plugin_type;
+  }
+}
+
+/**
+ * Returns a single exportable object.
+ *
+ * This routine exists to deal with a bug in ctools_export_load_object() with
+ * a $type of 'names' being treated differently than a $type of 'conditions' as
+ * far as building the object arrays.
+ *
+ * After google_tag_object_factory() is called, the object consists of the items
+ * from the data column of the table. The $export['key'] of 'name' in the data
+ * column is the actual machine name while the $name parameter passed to the
+ * function is the value in the name column of the table.
+ *
+ * The last key in $cache[$table][$object->{$export['key']}] is not $name but
+ * the last segment of $name (after explode on '.') which matches the actual
+ * machine name of the item stored in the data column of the table. The code
+ * involving 'names' looks for an entry in this array with a $name key while the
+ * corresponding code involving 'conditions' correctly uses the $export['key']
+ * entry in the array. The former entry is absent.
+ *
+ * @param string $table
+ *   The name of the table to use to retrieve $schema values. This table
+ *   must have an 'export' section containing data or this function
+ *   will fail.
+ * @param string $name
+ *   The unique ID to load. The field for this ID will be specified by
+ *   the export key, which normally defaults to 'name'.
+ *
+ * @return object
+ *   The loaded object.
+ */
+function gtag_export_crud_load($table, $name) {
+  ctools_include('export');
+  $parts = explode('.', $name);
+  $machine_name = array_pop($parts);
+  $result = ctools_export_load_object('gtag_config', 'conditions', array('name' => $name));
+  if (isset($result[$machine_name])) {
+    return $result[$machine_name];
+  }
+}
+
+/**
+ * Callback: object factory for ctools_export_load_object().
+ *
+ * See 'export' items in google_tag_schema().
+ *
+ * @return object
+ *   The unpacked object with the $export['key'] property being the actual
+ *   machine name not the name column in the export table.
+ */
+function google_tag_object_factory($schema, $item) {
+  $container = (object) unserialize($item->data);
+  return $container;
+}
+
+/**
+ * Callback: load all for ctools_export_crud_load_all().
+ *
+ * See 'export' items in google_tag_schema().
+ *
+ * @return array
+ *   An array of all loaded objects, keyed by the unique IDs of the export key.
+ */
+function google_tag_export_load($reset) {
+  $keys = array_flip(array('settings'));
+  $items = ctools_export_load_object('gtag_config', 'all');
+  $items = array_diff_key($items, $keys);
+  return $items;
+}
+
+/**
+ * Returns array of condition plugin types.
+ *
+ * @return array
+ *   An array of condition plugin types.
+ */
+function google_tag_condition_info() {
+  $description = t('On this and the following tabs, specify the conditions on which the GTM JavaScript snippet will either be inserted on or omitted from the page response, thereby enabling or disabling tracking and other analytics. All conditions must be satisfied for the snippet to be inserted. The snippet will be omitted if any condition is not met.');
+  $groups = array(
+    'path' => array('title' => t('Request path'), 'description' => $description),
+    'role' => array('title' => t('User role')),
+    'status' => array('title' => t('Response status')),
+    'domain' => array('title' => t('Domain')),
+    'language' => array('title' => t('Language')),
+    'realm' => array('title' => t('Realm key')),
+  );
+  return $groups;
+}
+
+/**
+ * Returns filtered list of condition plugin types and loads code file.
+ *
+ * @return array
+ *   An array of condition plugin types.
+ */
+function google_tag_condition_filter() {
+  static $types;
+
+  if (!isset($types)) {
+    $types = google_tag_condition_info();
+    $optional = array(
+      'domain' => array('domain'),
+      'language' => array('locale'),
+      'realm' => array('variable_realm', 'variable_store'),
+    );
+    foreach ($optional as $type => $requires) {
+      foreach ($requires as $require) {
+        if (!module_exists($require)) {
+          unset($types[$type]);
+          continue 2;
+        }
+      }
+    }
+    drupal_alter('google_tag_conditions', $types);
+
+    foreach ($types as $type => $value) {
+      if (is_array($value) && isset($value['file'])) {
+        require_once DRUPAL_ROOT . '/' . $value['file'];
+      }
+    }
+  }
+  return $types;
+}
+
+/**
+ * Checks that the directory exists and is writable.
+ *
+ * @todo Remove this function if core is updated to check the executable bit.
+ *
+ * @see file_prepare_directory()
+ */
+function _file_prepare_directory(&$directory, $options = FILE_MODIFY_PERMISSIONS) {
+  if (!file_stream_wrapper_valid_scheme(file_uri_scheme($directory))) {
+    // Only trim if we're not dealing with a stream.
+    $directory = rtrim($directory, '/\\');
+  }
+
+  // Check if directory exists.
+  if (!is_dir($directory)) {
+    // Let mkdir() recursively create directories and use the default directory
+    // permissions.
+    if (($options & FILE_CREATE_DIRECTORY) && @drupal_mkdir($directory, NULL, TRUE)) {
+      return drupal_chmod($directory);
+    }
+    return FALSE;
+  }
+  // The directory exists, so check to see if it is writable.
+  $writable = _google_tag_is_writable($directory) && _google_tag_is_executable($directory);
+  if (!$writable && ($options & FILE_MODIFY_PERMISSIONS)) {
+    return drupal_chmod($directory);
+  }
+
+  return $writable;
+}
+
+/**
+ * Determines whether a directory is writable.
+ *
+ * Remove this if PHP is_writable() is changed to respect ACLS on a 'local'
+ * stream wrapper other than the local file wrapper provided by PHP.
+ *
+ * @param string $uri
+ *   A directory path or stream wrapper URI.
+ *
+ * @return bool
+ *   Whether the directory is writable.
+ */
+function _google_tag_is_writable($uri) {
+  // Use the local path, if applicable, since PHP only checks ACLs on its local
+  // file wrapper.
+  $realpath = FALSE;
+  if ($wrapper = file_stream_wrapper_get_instance_by_uri($uri)) {
+    $realpath = $wrapper->realpath($uri);
+  }
+  return is_writable($realpath ? $realpath : $uri);
+}
+
+/**
+ * Determines whether a directory is searchable.
+ *
+ * Remove this if PHP is_executable() is changed to not return FALSE simply
+ * because the URI points to a directory (not a file) in a stream wrapper other
+ * than the local file wrapper provided by PHP.
+ *
+ * @param string $uri
+ *   A directory path or stream wrapper URI.
+ *
+ * @return bool
+ *   Whether the directory is searchable.
+ */
+function _google_tag_is_executable($uri) {
+  if ($wrapper = file_stream_wrapper_get_instance_by_uri($uri)) {
+    if ($realpath = $wrapper->realpath($uri)) {
+      // The URI is a local stream wrapper.
+      // Use local path since PHP only checks ACLs on its local file wrapper.
+      // Remove OS check if PHP is_executable() is changed to not return FALSE
+      // simply because the URI points to a directory (not a file) on Windows.
+      return _google_tag_is_windows() || is_executable($realpath);
+    }
+
+    // The URI is a remote stream wrapper.
+    if (!($stat = $wrapper->url_stat($uri, 0))) {
+      return FALSE;
+    }
+
+    if (!function_exists('posix_getuid') || !function_exists('posix_getgid')) {
+      // These functions are never defined on Windows and the extension that
+      // provides them may not be included on a Linux distribution.
+      // If directory is not searchable, then fault the site deployment process.
+      // @todo Is it worse to return true or false at this point?
+      return TRUE;
+    }
+
+    // Determine the appropriate permissions bit mask as an octal.
+    // The stat array is likely to have uid=gid=0 so that the mask is octal 01.
+    // This is true for Amazon S3 and Google Cloud Storage.
+    $mask = 1;
+    if ($stat['uid'] == posix_getuid()) {
+      $mask = $mask << 6;
+    }
+    elseif ($stat['gid'] == posix_getgid()) {
+      $mask = $mask << 3;
+    }
+    return ($stat['mode'] & $mask) != 0;
+  }
+  else {
+    // The URI is a local path.
+    return is_executable($uri);
+  }
+}
+
+/**
+ * Determines whether the operating system is Windows.
+ *
+ * @return bool
+ *   Whether the operating system is Windows.
+ */
+function _google_tag_is_windows() {
+  return (defined('PHP_OS_FAMILY') && PHP_OS_FAMILY == 'Windows') ||
+    (defined('PHP_OS') && strcasecmp(substr(PHP_OS, 0, 3), 'win') == 0);
+}

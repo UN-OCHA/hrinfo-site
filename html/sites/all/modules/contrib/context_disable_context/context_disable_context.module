@@ -1,0 +1,51 @@
+<?php
+// $Id$
+/**
+ * @file context_disable_context.module
+ * TODO: Enter file description here.
+ */
+
+/**
+ * CTools plugin API hook for Context. Note that a proper entry in
+ * hook_ctools_plugin_api() must exist for this hook to be called.
+ */
+function context_disable_context_context_plugins() {
+  $plugins = array();
+
+  $plugins['context_reaction_disable_context'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'context_disable_context') .'/plugins',
+      'file' => 'context_reaction_disable_context.inc',
+      'class' => 'context_reaction_disable_context',
+      'parent' => 'context_reaction',
+    ),
+  );
+  
+  return $plugins;
+}
+
+/**
+ * Registry hook for conditions & reactions.
+ *
+ * Each entry associates a condition or reaction with the CTools plugin to be
+ * used as its plugin class.
+ */
+function context_disable_context_context_registry() {
+  return array(
+    'reactions' => array(
+      'disable_context' => array(
+        'title' => t('Disable context'),
+        'plugin' => 'context_reaction_disable_context',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_context_page_reaction().
+ */
+function context_disable_context_context_page_reaction() {
+  if ($plugin = context_get_plugin('reaction', 'disable_context')) {
+    $plugin->execute();
+  }
+}

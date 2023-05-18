@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Installation functions for the Facet API Translation module.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function facetapi_i18n_enable() {
+  variable_set('facetapi:translator_module', 'facetapi_i18n');
+}
+
+/**
+ * Implements hook_disable().
+ */
+function facetapi_i18n_disable() {
+  if ('facetapi_i18n' == variable_get('facetapi:translator_module', NULL)) {
+    variable_del('facetapi:translator_module');
+  }
+}

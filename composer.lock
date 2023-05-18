@@ -4079,17 +4079,17 @@
         },
         {
             "name": "drupal/file_chooser_field",
-            "version": "1.12.0",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/file_chooser_field.git",
-                "reference": "7.x-1.12"
+                "reference": "7.x-1.13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/file_chooser_field-7.x-1.12.zip",
-                "reference": "7.x-1.12",
-                "shasum": "40d94c97705248481b1d8f3d6f8c00b15eb9f5e5"
+                "url": "https://ftp.drupal.org/files/projects/file_chooser_field-7.x-1.13.zip",
+                "reference": "7.x-1.13",
+                "shasum": "e1b7ff7029a5faffd7e9c487fa0dba92c55abe33"
             },
             "require": {
                 "drupal/drupal": "*"
@@ -4097,8 +4097,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-1.12",
-                    "datestamp": "1446333839",
+                    "version": "7.x-1.13",
+                    "datestamp": "1684344408",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4435,17 +4435,17 @@
         },
         {
             "name": "drupal/geofield",
-            "version": "2.4.0",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/geofield.git",
-                "reference": "7.x-2.4"
+                "reference": "7.x-2.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/geofield-7.x-2.4.zip",
-                "reference": "7.x-2.4",
-                "shasum": "0ceeb28bdde500e000ec503e0db6a6fb7f71952e"
+                "url": "https://ftp.drupal.org/files/projects/geofield-7.x-2.5.zip",
+                "reference": "7.x-2.5",
+                "shasum": "7f890c3917b346b98f6a293ea18269c3e8d5d1cb"
             },
             "require": {
                 "drupal/ctools": "*",
@@ -4455,8 +4455,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.4",
-                    "datestamp": "1540417981",
+                    "version": "7.x-2.5",
+                    "datestamp": "1683999477",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4469,14 +4469,6 @@
             ],
             "authors": [
                 {
-                    "name": "bdragon",
-                    "homepage": "https://www.drupal.org/user/53081"
-                },
-                {
-                    "name": "Brandonian",
-                    "homepage": "https://www.drupal.org/user/77766"
-                },
-                {
                     "name": "itamair",
                     "homepage": "https://www.drupal.org/user/1179076"
                 },
@@ -4485,8 +4477,8 @@
                     "homepage": "https://www.drupal.org/user/47098"
                 },
                 {
-                    "name": "plopesc",
-                    "homepage": "https://www.drupal.org/user/282415"
+                    "name": "poker10",
+                    "homepage": "https://www.drupal.org/user/272316"
                 }
             ],
             "description": "Stores geographic and location data (points, lines, and polygons).",
@@ -5193,12 +5185,12 @@
                     "homepage": "https://www.drupal.org/user/972218"
                 },
                 {
-                    "name": "kaythay",
-                    "homepage": "https://www.drupal.org/user/2182186"
-                },
-                {
                     "name": "oknate",
                     "homepage": "https://www.drupal.org/user/471638"
+                },
+                {
+                    "name": "podarok",
+                    "homepage": "https://www.drupal.org/user/116002"
                 },
                 {
                     "name": "ram4nd",
@@ -13221,16 +13213,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "8.11.1",
+            "version": "8.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "af87461316b257e46e15bb041dca6fca3796d822"
+                "reference": "f69e2524e8770efb9b3e5ac4a0ebc0d54eb446d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/af87461316b257e46e15bb041dca6fca3796d822",
-                "reference": "af87461316b257e46e15bb041dca6fca3796d822",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/f69e2524e8770efb9b3e5ac4a0ebc0d54eb446d7",
+                "reference": "f69e2524e8770efb9b3e5ac4a0ebc0d54eb446d7",
                 "shasum": ""
             },
             "require": {
@@ -13242,11 +13234,11 @@
             "require-dev": {
                 "phing/phing": "2.17.4",
                 "php-parallel-lint/php-parallel-lint": "1.3.2",
-                "phpstan/phpstan": "1.10.14",
+                "phpstan/phpstan": "1.10.15",
                 "phpstan/phpstan-deprecation-rules": "1.1.3",
                 "phpstan/phpstan-phpunit": "1.3.11",
                 "phpstan/phpstan-strict-rules": "1.5.1",
-                "phpunit/phpunit": "7.5.20|8.5.21|9.6.6|10.1.1"
+                "phpunit/phpunit": "7.5.20|8.5.21|9.6.8|10.1.3"
             },
             "type": "phpcodesniffer-standard",
             "extra": {
@@ -13270,7 +13262,7 @@
             ],
             "support": {
                 "issues": "https://github.com/slevomat/coding-standard/issues",
-                "source": "https://github.com/slevomat/coding-standard/tree/8.11.1"
+                "source": "https://github.com/slevomat/coding-standard/tree/8.12.1"
             },
             "funding": [
                 {
@@ -13282,7 +13274,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-04-24T08:19:01+00:00"
+            "time": "2023-05-15T21:42:25+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

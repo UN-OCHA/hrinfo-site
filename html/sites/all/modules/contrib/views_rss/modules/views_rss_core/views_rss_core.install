@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * @file
+ * (Un)installation functions for Views RSS: Core Elements module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function views_rss_core_install() {
+  cache_clear_all('views_rss:', 'cache_views', TRUE);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function views_rss_core_uninstall() {
+  if (db_table_exists('cache_views')) {
+    cache_clear_all('views_rss:', 'cache_views', TRUE);
+  }
+}
+
+/**
+ * Rename all old "enclosure_file" and "enclosure_image" field formatters
+ * for any field in any view to new "enclosure".
+ */
+function views_rss_core_update_7201() {
+  $sql = "SELECT vd.*, vv.name FROM {views_display} vd JOIN {views_view} vv USING(vid)";
+  $result = db_query($sql);
+  foreach ($result as $record) {
+    $updated = 0;
+    if (isset($record->display_options)) {
+      $display_options = unserialize($record->display_options);
+      if (isset($display_options['fields']) && is_array($display_options['fields'])) {
+        foreach ($display_options['fields'] as $field_key => $field) {
+          if (isset($field['type']) && ($field['type'] == 'enclosure_image' || $field['type'] == 'enclosure_file')) {
+            $display_options['fields'][$field_key]['type'] = 'enclosure';
+            $updated++;
+          }
+        }
+      }
+    }
+    if ($updated) {
+      db_update('views_display')
+        ->fields(array('display_options' => serialize($display_options)))
+        ->condition('vid', $record->vid)
+        ->condition('id', $record->id)
+        ->execute();
+      drupal_set_message(t('Enclosure formatter has been updated for %count fields in %display display in %view_name.', array(
+        '%count' => $updated,
+        '%display' => $record->display_title,
+        '%view_name' => $record->name,
+      )));
+    }
+  }
+}
