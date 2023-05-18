@@ -1,0 +1,285 @@
+<?php
+
+/**
+ * Tests the Google Tag Manager.
+ *
+ * @todo
+ * Use the settings form to save configuration and create snippet files.
+ * Confirm snippet file and page response contents.
+ *
+ * Test further the snippet insertion conditions.
+ */
+class GTMBaseTestCase extends DrupalWebTestCase {
+
+  /**
+   * The message group, base path to snippet files, and snippet file types.
+   *
+   * @var string|array
+   */
+  protected $group = 'Google Tag module';
+  protected $basePath = 'public:/';
+  protected $types = array('script', 'noscript');
+
+  /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  protected $modules = array('google_tag');
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Google Tag Manager :: Base',
+      'description' => 'Tests the Google Tag Manager [do NOT select this: no tests]',
+      'group' => 'Google tag',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp($this->modules);
+  }
+
+  /**
+   * Test the module.
+   */
+  public function testModule() {
+    if (get_class($this) == 'GTMBaseTestCase') {
+      $this->assertTrue(TRUE, t('No assertions on base test class'), $this->group);
+      return;
+    }
+
+    try {
+      $this->modifySettings();
+      // Create containers in code.
+      $this->createData();
+      $this->saveContainers();
+      $this->checkSnippetFiles();
+      $this->checkPageResponse();
+      // Delete containers.
+      $this->deleteContainers();
+      // Create containers in user interface.
+      $this->submitContainers();
+      $this->checkSnippetFiles();
+      $this->checkPageResponse();
+    }
+    catch (Exception $e) {
+      $this->assertTrue(TRUE, t('Inside CATCH block'), $this->group);
+      watchdog_exception('gtm_test', $e);
+    }
+    finally {
+      $this->assertTrue(TRUE, t('Inside FINALLY block'), $this->group);
+    }
+  }
+
+  /**
+   * Modify settings for test purposes.
+   */
+  protected function modifySettings() {
+    // Modify default settings.
+    // These should propagate to each container created in test.
+    $settings = \GTMSettings::getInstance();
+    $settings->flush_snippets = 1;
+    $settings->debug_output = 1;
+    $settings->role_toggle = 'include listed';
+    $settings->role_list = array('content viewer' => 'content viewer');
+    $settings->save();
+  }
+
+  /**
+   * Create test data: configuration variables.
+   */
+  protected function createData() {
+  }
+
+  /**
+   * Save containers in the database and create snippet files.
+   */
+  protected function saveContainers() {
+    foreach ($this->variables as $key => $variables) {
+      $export = new GTMContainerExport();
+      $default = $export->default_container();
+      unset($default->data, $default->export_type, $default->type);
+
+      array_walk($variables, function ($value, $key) use ($default) {
+        $default->$key = $value;
+      });
+      // Save container.
+      $container = new GTMContainer((array) $default);
+      $container->save(NULL);
+
+      // Create snippet files.
+      $manager = \GTMContainerManager::getInstance();
+      $manager->createAssets($container);
+    }
+  }
+
+  /**
+   * Delete containers from the database and delete snippet files.
+   */
+  protected function deleteContainers() {
+    // Delete containers.
+    foreach ($this->variables as $key => $variables) {
+      $container = new GTMContainer(array(), $key);
+      $container->delete();
+    }
+
+    // Confirm no containers.
+    $manager = \GTMContainerManager::getInstance();
+    $containers = $manager->loadContainers();
+    $message = 'No containers found after delete';
+    $this->assert(empty($containers), $message, $this->group);
+
+    // Delete snippet files.
+    $directory = \GTMSettings::getInstance()->get('uri');
+    if (\GTMSettings::getInstance()->get('flush_snippets')) {
+      if (!empty($directory)) {
+        // Remove any stale files (e.g. module update or machine name change).
+        file_unmanaged_delete_recursive($directory . '/google_tag');
+      }
+    }
+
+    // Confirm no snippet files.
+    $message = 'No snippet files found after delete';
+    $this->assert(!is_dir($directory . '/google_tag'), $message, $this->group);
+  }
+
+  /**
+   * Add containers through user interface.
+   */
+  protected function submitContainers() {
+    // Create and login an admin user.
+    $role_id = $this->drupalCreateRole(array('access content', 'administer google tag manager'), 'admin user');
+    $admin_user = $this->drupalCreateUser();
+    $admin_user->roles[$role_id] = 'admin user';
+    user_save($admin_user);
+    $this->drupalLogin($admin_user);
+
+    foreach ($this->variables as $key => $variables) {
+      $edit = (array) $variables;
+      unset($edit['status']);
+      if (isset($edit['realm_list'])) {
+        $realm = current($edit['realm_list']);
+        $edit["realm_list[$realm]"] = $realm;
+        unset($edit['realm_list']);
+      }
+
+      $this->drupalGet('/admin/config/system/google_tag/add');
+      $this->drupalPost(NULL, $edit, 'Save');
+
+      $text = 'Created @count snippet files for %container container based on configuration.';
+      $args = array('@count' => 3, '%container' => $variables->label);
+      $text = t($text, $args);
+      $message = 'Found snippet confirmation message in page response';
+      $this->assertRaw($text, $message, $this->group);
+
+      $text = 'Created @count snippet files for @container container based on configuration.';
+      $args = array('@count' => 3, '@container' => $variables->label);
+      $text = t($text, $args);
+      $this->assertText($text, $message, $this->group);
+    }
+  }
+
+  /**
+   * Inspect the snippet files.
+   */
+  protected function checkSnippetFiles() {
+  }
+
+  /**
+   * Verify the snippet file contents.
+   */
+  protected function verifyScriptSnippet($contents, $variables) {
+    $status = strpos($contents, "'$variables->container_id'") !== FALSE;
+    $message = 'Found in script snippet file: container_id';
+    $this->assert($status, $message, $this->group);
+
+    $status = strpos($contents, "gtm_preview=$variables->environment_id") !== FALSE;
+    $message = 'Found in script snippet file: environment_id';
+    $this->assert($status, $message, $this->group);
+
+    $status = strpos($contents, "gtm_auth=$variables->environment_token") !== FALSE;
+    $message = 'Found in script snippet file: environment_token';
+    $this->assert($status, $message, $this->group);
+  }
+
+  /**
+   * Verify the snippet file contents.
+   */
+  protected function verifyNoScriptSnippet($contents, $variables) {
+    $status = strpos($contents, "id=$variables->container_id") !== FALSE;
+    $message = 'Found in noscript snippet file: container_id';
+    $this->assert($status, $message, $this->group);
+
+    $status = strpos($contents, "gtm_preview=$variables->environment_id") !== FALSE;
+    $message = 'Found in noscript snippet file: environment_id';
+    $this->assert($status, $message, $this->group);
+
+    $status = strpos($contents, "gtm_auth=$variables->environment_token") !== FALSE;
+    $message = 'Found in noscript snippet file: environment_token';
+    $this->assert($status, $message, $this->group);
+  }
+
+  /**
+   * Verify the snippet file contents.
+   */
+  protected function verifyDataLayerSnippet($contents, $variables) {
+  }
+
+  /**
+   * Inspect the page response.
+   */
+  protected function checkPageResponse() {
+    // Create and login a test user.
+    $role_id = $this->drupalCreateRole(array('access content'), 'content viewer');
+    $non_admin_user = $this->drupalCreateUser();
+    $non_admin_user->roles[$role_id] = 'content viewer';
+    user_save($non_admin_user);
+    $this->drupalLogin($non_admin_user);
+  }
+
+  /**
+   * Verify the tag in page response.
+   */
+  protected function verifyScriptTag($realpath) {
+    $string = variable_get('css_js_query_string', '');
+    $text = "src=\"$realpath?$string\"";
+    $message = 'Found script source string in page response';
+    $this->assertRaw($text, $message, $this->group);
+
+    $xpath = "//script[@src=\"$realpath?$string\"]";
+    $elements = $this->xpath($xpath);
+    $status = !empty($elements);
+    $message = 'Found script tag in page response';
+    $this->assert($status, $message, $this->group);
+  }
+
+  /**
+   * Verify the tag in page response.
+   */
+  protected function verifyNoScriptTag($realpath, $variables) {
+    $xpath = '//div//noscript//iframe';
+    $elements = $this->xpath($xpath);
+
+    $contents = (array) $elements[0]['src'];
+    $contents = $contents[0];
+
+    $status = strpos($contents, "id=$variables->container_id") !== FALSE;
+    $message = 'Found in noscript tag: container_id';
+    $this->assert($status, $message, $this->group);
+
+    $status = strpos($contents, "gtm_preview=$variables->environment_id") !== FALSE;
+    $message = 'Found in noscript tag: environment_id';
+    $this->assert($status, $message, $this->group);
+
+    $status = strpos($contents, "gtm_auth=$variables->environment_token") !== FALSE;
+    $message = 'Found in noscript tag: environment_token';
+    $this->assert($status, $message, $this->group);
+  }
+
+}
