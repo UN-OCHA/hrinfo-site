@@ -55,6 +55,11 @@
   </div>
 
   <div class="cd-container" id="main-content">
+    <div class="block__content">
+      <div id="hr-decommissioner-banner">
+        <?php print t('This site is archived. Please find the new site - ReliefWeb Response - at <a href="https://response.reliefweb.int/">https://response.reliefweb.int/</a>') ?>
+      </div>
+    </div>
     <?php if (!empty($page['sidebar_first'])): ?>
       <aside id="sidebar-first" class="col-md-3 hidden-print" role="complementary">
         <?php print render($page['sidebar_first']); ?>
