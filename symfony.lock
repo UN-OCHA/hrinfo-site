@@ -23,6 +23,9 @@
     "dflydev/dot-access-data": {
         "version": "v1.1.0"
     },
+    "drupal-composer/preserve-paths": {
+        "version": "0.1.6"
+    },
     "drupal/addressfield": {
         "version": "1.3.0"
     },
