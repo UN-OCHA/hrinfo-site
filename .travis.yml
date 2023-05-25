@@ -6,7 +6,7 @@ php:
 
 before_script:
   - cd $TRAVIS_BUILD_DIR
-  # - composer self-update --2
+  - composer self-update 2.5.5
   - composer install
 
 script:
