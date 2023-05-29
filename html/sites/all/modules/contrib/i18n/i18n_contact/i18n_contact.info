@@ -1,0 +1,12 @@
+name = Contact translation
+description = Makes contact categories and replies available for translation.
+dependencies[] = contact
+dependencies[] = i18n_string
+package = Multilingual - Internationalization
+core = 7.x
+
+; Information added by Drupal.org packaging script on 2023-01-12
+version = "7.x-1.34"
+core = "7.x"
+project = "i18n"
+datestamp = "1673540259"

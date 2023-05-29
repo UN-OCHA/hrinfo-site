@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Alter the Taxonomy table to add timestamps.
+ */
+
+/**
+ * Implements hook_taxonomy_term_presave().
+ */
+function taxonomy_creation_date_taxonomy_term_presave($term) {
+  $term->changed = REQUEST_TIME;
+  if (empty($term->created)) {
+    $term->created = REQUEST_TIME;
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function taxonomy_creation_date_views_api() {
+  return array(
+    'api'  => 3,
+    'path' => drupal_get_path('module', 'taxonomy_creation_date') . '/views',
+  );
+}

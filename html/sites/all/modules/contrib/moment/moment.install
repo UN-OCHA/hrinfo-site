@@ -1,0 +1,33 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the Moment.js module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function moment_requirements($phase) {
+  $return = array();
+  // Ensure translations don't break at install time.
+  $t = get_t();
+
+  if ($phase === 'runtime') {
+    $libraries = array(
+      'moment' => 'Moment.js',
+      'moment-timezone' => 'Moment Timezone',
+    );
+
+    foreach ($libraries as $name => $label) {
+      $library = libraries_detect($name);
+      $version = !empty($library['version']) ? $library['version'] : FALSE;
+      $return["moment_library_$name"] = array(
+        'title' => $t('@label library version', array('@label' => $label)),
+        'value' => $version ?: $t('Not available'),
+        'severity' => $version ? REQUIREMENT_OK : REQUIREMENT_ERROR,
+      );
+    }
+  }
+
+  return $return;
+}

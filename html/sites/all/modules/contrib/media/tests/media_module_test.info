@@ -1,0 +1,13 @@
+name = Media test
+description = Provides hooks for testing Media module functionality.
+package = Media
+core = 7.x
+hidden = TRUE
+
+files[] = includes/MediaModuleTest.inc
+
+; Information added by Drupal.org packaging script on 2018-04-25
+version = "7.x-2.19"
+core = "7.x"
+project = "media"
+datestamp = "1524677887"
