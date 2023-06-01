@@ -1,0 +1,39 @@
+<?php
+/**
+ * @file
+ *
+ * Tests functionality of the Maintenance 200 module.
+ */
+
+/**
+ * Tests functionality of the Maintenance 200 module.
+ */
+class Maintenance200TestCase extends DrupalWebTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => 'Maintenance 200',
+      'description' => 'Ensure that the Maintenance 200 module returns the selected HTTP Status when maintenance mode is enabled.',
+      'group' => 'Maintenance 200',
+    );
+  }
+
+  public function setUp() {
+    // Enable the Maintenance 200 module.
+    parent::setUp('maintenance200');
+
+    // Login as an admin user.
+    $admin = $this->drupalCreateUser(array('administer site configuration'));
+    $this->drupalLogin($admin);
+
+    // Put the site into mainenance mode and set the status to 200.
+    $form = array();
+    $form['maintenance_mode'] = 1;
+    $this->drupalPost('admin/config/development/maintenance', $form, t('Save configuration'));
+  }
+
+  public function testMaintenance200Status() {
+    $this->assertTrue(variable_get('maintenance_mode', FALSE), 'Site is in maintenance mode.');
+    $this->drupalGet('');
+    $this->assertResponse(200, 'Site returns a 200 Status code.');
+  }
+}

@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Provides primary Drupal hook implementations.
+ *
+ * Helper module for testing the Google Tag Manager module.
+ *
+ * @author Jim Berry ("solotandem", http://drupal.org/user/240748)
+ */
+
+/**
+ * Implements hook_variable_realm_info().
+ */
+function gtm_test_variable_realm_info() {
+  $realm['gtm_test'] = array(
+    'title' => t('GTM test realm'),
+    'weight' => 10,
+    // 'controller class' => 'VariableRealmDefaultController',
+    'store class' => 'VariableStoreRealmStore',
+    'keys' => array(
+      'primary' => t('Primary key variables'),
+      'secondary' => t('Secondary key variables'),
+    ),
+    'options' => array(
+      'google_tag_container_id',
+      'google_tag_environment_id',
+      'google_tag_environment_token',
+      // 'google_tag_include_environment',
+    ),
+  );
+  return $realm;
+}
+
+/**
+ * Implements hook_google_tag_realm_alter().
+ */
+function gtm_test_google_tag_realm_alter(array &$realm_values) {
+  if (empty($_GET['name']) || empty($_GET['key'])) {
+    return;
+  }
+
+  $realm_name = $_GET['name'];
+  $realm_key = $_GET['key'];
+  $realm_values = array('name' => $realm_name, 'key' => $realm_key);
+}

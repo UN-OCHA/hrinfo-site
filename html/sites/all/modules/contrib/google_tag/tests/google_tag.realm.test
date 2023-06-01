@@ -1,0 +1,129 @@
+<?php
+
+/**
+ * Tests the Google Tag Manager for a site with realms.
+ */
+class GTMRealmTestCase extends GTMBaseTestCase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Google Tag Manager :: Realm',
+      'description' => 'Tests the Google Tag Manager with variable realm',
+      'group' => 'Google tag',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    $this->modules[] = 'gtm_test';
+    $this->modules[] = 'variable_realm';
+    $this->modules[] = 'variable_store';
+    parent::setUp();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function createData() {
+    $this->variables['default'] = (object) array(
+      'name' => 'default',
+      'label' => 'Default',
+      'status' => TRUE,
+      'weight' => 3,
+      'container_id' => 'GTM-default',
+      'environment_id' => 'env-7',
+      'environment_token' => 'ddddddddddddddddddddd',
+      'include_environment' => '1',
+      'realm_toggle' => 'include listed',
+      'realm_list' => array('global:default' => 'global:default'),
+    );
+
+    // Set variables for gtm_test:primary.
+    $this->variables['primary'] = (object) array(
+      'name' => 'primary',
+      'label' => 'Primary',
+      'status' => TRUE,
+      'weight' => 2,
+      'container_id' => 'GTM-primary',
+      'environment_id' => 'env-1',
+      'environment_token' => 'ppppppppppppppppppppp',
+      'include_environment' => '1',
+      'realm_toggle' => 'include listed',
+      'realm_list' => array('gtm_test:primary' => 'gtm_test:primary'),
+    );
+
+    // Set variables for gtm_test:secondary.
+    $this->variables['secondary'] = (object) array(
+      'name' => 'secondary',
+      'label' => 'Secondary',
+      'status' => TRUE,
+      'weight' => 1,
+      'container_id' => 'GTM-secondary',
+      'environment_id' => 'env-2',
+      'environment_token' => 'sssssssssssssssssssss',
+      'include_environment' => '1',
+      'realm_toggle' => 'include listed',
+      'realm_list' => array('gtm_test:secondary' => 'gtm_test:secondary'),
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @todo Revise this to loop on $this->variables for code reuse.
+   *   This can be done in base test class.
+   */
+  protected function checkSnippetFiles() {
+    $realms = variable_realm_list();
+    foreach ($realms as $realm_name => $realm_title) {
+      $keys = variable_realm_keys($realm_name);
+      foreach ($keys as $key_name => $key_title) {
+        $message = format_string('realm:key = @realm:@key', array('@realm' => $realm_name, '@key' => $key_name));
+        $this->pass($message, $this->group);
+        foreach ($this->types as $type) {
+          $url = "$this->basePath/google_tag/{$key_name}/google_tag.$type.js";
+          $contents = @file_get_contents($url);
+          $function = "verify{$type}Snippet";
+          $this->$function($contents, $this->variables[$key_name]);
+        }
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function checkPageResponse() {
+    parent::checkPageResponse();
+
+    // Remove global realm as no page response will use these values.
+    $realms = variable_realm_list();
+    unset($realms['global']);
+    foreach ($realms as $realm_name => $realm_title) {
+      $keys = variable_realm_keys($realm_name);
+      foreach ($keys as $key_name => $key_title) {
+        // The gtm_test module sets the realm from the query arguments.
+        $this->drupalGet('', array('query' => array('name' => $realm_name, 'key' => $key_name)));
+        $message = format_string('realm:key = @realm:@key', array('@realm' => $realm_name, '@key' => $key_name));
+        $this->pass($message, $this->group);
+        foreach ($this->types as $type) {
+          $uri = "$this->basePath/google_tag/{$key_name}/google_tag.$type.js";
+          if ($wrapper = file_stream_wrapper_get_instance_by_uri($uri)) {
+            $realpath = $wrapper->getExternalUrl($uri);
+            $function = "verify{$type}Tag";
+            $this->$function($realpath, $this->variables[$key_name]);
+          }
+          else {
+            // @todo
+          }
+        }
+      }
+    }
+  }
+
+}

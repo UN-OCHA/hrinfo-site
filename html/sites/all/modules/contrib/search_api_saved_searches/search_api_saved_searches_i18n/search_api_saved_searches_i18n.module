@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Search API Saved Searches i18n integration module via entity API i18n support.
+ *
+ * @see EntityDefaultI18nController
+ */
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function search_api_saved_searches_i18n_entity_info_alter(&$info) {
+  // Enable i18n support via the entity API.
+  $info['search_api_saved_searches_settings']['i18n controller class'] = 'SearchApiSavedSearchesSettingsI18nController';
+}
+
+/**
+ * Implements hook_search_api_saved_searches_settings_insert().
+ */
+function search_api_saved_searches_i18n_search_api_saved_searches_settings_insert(SearchApiSavedSearchesSettings $settings) {
+  i18n_string_object_update('search_api_saved_searches_settings', $settings);
+}
+
+/**
+ * Implements hook_search_api_saved_searches_update().
+ */
+function search_api_saved_searches_i18n_search_api_saved_searches_settings_update(SearchApiSavedSearchesSettings $settings) {
+  // Account for name changes.
+  if ($settings->original->delta != $settings->delta) {
+    i18n_string_update_context("search_api_saved_searches:search_api_saved_searches_settings:{$settings->original->delta}:*", "search_api_saved_searches:search_api_saved_searches_settings:{$settings->delta}:*");
+  }
+  i18n_string_object_update('search_api_saved_searches_settings', $settings);
+}
+
+/**
+ * Implements hook_search_api_saved_searches_delete().
+ */
+function search_api_saved_searches_i18n_search_api_saved_searches_settings_delete(SearchApiSavedSearchesSettings $settings) {
+  if ($settings->hasStatus(ENTITY_IN_CODE)) {
+    i18n_string_object_update('search_api_saved_searches_settings', $settings);
+  }
+  else {
+    i18n_string_object_remove('search_api_saved_searches_settings', $settings);
+  }
+}

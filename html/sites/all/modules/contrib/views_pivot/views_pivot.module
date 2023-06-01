@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * Implements hook_views_api().
+ */
+function views_pivot_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function views_pivot_theme() {
+  return array(
+    'views_ui_style_plugin_pivot' => array(
+      'render element' => 'form',
+      'file' => 'views_pivot.theme.inc',
+    ),
+  );
+}

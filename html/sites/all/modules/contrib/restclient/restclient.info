@@ -1,0 +1,24 @@
+; Enables REST based interfaces between Drupal and remote services
+
+name = REST Client
+description = Enables a standard REST API to connect to RESTful services
+core = 7.x
+package = Web Services
+
+suggests[] = chr
+suggests[] = oauth2_client
+suggests[] = hybridauth
+
+; Files
+files[] = restclient.test
+files[] = restclient.wsconnector.inc
+
+; Configuration page
+configure = admin/config/services/restclient
+
+; Information added by Drupal.org packaging script on 2016-09-19
+version = "7.x-2.0"
+core = "7.x"
+project = "restclient"
+datestamp = "1474305840"
+
