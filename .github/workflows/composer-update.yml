@@ -2,7 +2,7 @@ name: Run Composer Update
 
 on:
   schedule:
-    - cron: '30 6 * * 4'
+    - cron: '30 5 * * 4'
   workflow_dispatch:
 
 jobs:
@@ -16,7 +16,6 @@ jobs:
         github_access_token: ${{ secrets.PAT }}
         patch_branch: 'develop'
         patch_packages: 'drupal/*'
-        patch_maintainers: ${{ secrets.DRUPAL_MAINTAINERS }}
-        php_version: '7.4'
+        patch_maintainers: ${{ vars.DRUPAL_MAINTAINERS }}
         slack_bot_token: ${{ secrets.SLACK_BOT_TOKEN }}
-        slack_channel_name: ${{ secrets.SLACK_CHANNEL }}
+        slack_channel_name: ${{ vars.SLACK_CHANNEL }}
