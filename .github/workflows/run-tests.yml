@@ -93,7 +93,7 @@ jobs:
             sleep 10
             docker ps -a
             docker-compose -f tests/docker-compose.yml exec -w /srv/www -T drupal composer self-update 2.5.5
-            docker-compose -f tests/docker-compose.yml exec -w /srv/www -T drupal composer install
+            docker-compose -f tests/docker-compose.yml exec -w /srv/www -T drupal composer install --dev
         env:
           fail-fast: true
 
@@ -102,7 +102,8 @@ jobs:
         uses: cafuego/command-output@main
         with:
           run: |
-            docker-compose -f tests/docker-compose.yml exec -u appuser -w /srv/www -T drupal phpcs -p --report=full --standard=phpcs.xml ./html/sites/all/modules/custom ./html/sites/all/modules/access ./html/sites/all/modules/ar ./html/sites/all/modules/ev ./html/sites/all/modules/hdx ./html/sites/all/modules/hid ./html/sites/all/modules/hr
+            docker-compose -f tests/docker-compose.yml exec -w /srv/www -T drupal phpcs vendor/drupal/coder/coder_sniffer
+            docker-compose -f tests/docker-compose.yml exec -u appuser -w /srv/www -T drupal phpcs -np --report=full --standard=phpcs.xml ./html/sites/all/modules/custom ./html/sites/all/modules/access ./html/sites/all/modules/ar ./html/sites/all/modules/ev ./html/sites/all/modules/hdx ./html/sites/all/modules/hid ./html/sites/all/modules/hr
         env:
           fail-fast: true
 
