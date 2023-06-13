@@ -47,13 +47,13 @@ jobs:
         uses: cafuego/command-output@main
         with:
           run: |
-            test ! -d ./html/modules/custom || find -L ./html/modules/custom -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
-            test ! -d ./html/modules/access || find -L ./html/modules/access -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
-            test ! -d ./html/modules/ar || find -L ./html/modules/ar -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
-            test ! -d ./html/modules/ev || find -L ./html/modules/ev -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
-            test ! -d ./html/modules/hdx || find -L ./html/modules/hdx -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
-            test ! -d ./html/modules/hid || find -L ./html/modules/hid -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
-            test ! -d ./html/modules/hr || find -L ./html/modules/hr -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/custom || find -L ./html/sites/all/modules/custom -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/access || find -L ./html/sites/all/modules/access -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/ar || find -L ./html/sites/all/modules/ar -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/ev || find -L ./html/sites/all/modules/ev -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/hdx || find -L ./html/sites/all/modules/hdx -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/hid || find -L ./html/sites/all/modules/hid -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/hr || find -L ./html/sites/all/modules/hr -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
         env:
           fail-fast: true
 
@@ -102,7 +102,7 @@ jobs:
         uses: cafuego/command-output@main
         with:
           run: |
-            docker-compose -f tests/docker-compose.yml exec -u appuser -w /srv/www -T drupal phpcs -p --report=full --standard=phpcs.xml ./html/modules/custom ./html/modules/access ./html/modules/ar ./html/modules/ev ./html/modules/hdx ./html/modules/hid ./html/modules/hr
+            docker-compose -f tests/docker-compose.yml exec -u appuser -w /srv/www -T drupal phpcs -p --report=full --standard=phpcs.xml ./html/sites/all/modules/custom ./html/sites/all/modules/access ./html/sites/all/modules/ar ./html/sites/all/modules/ev ./html/sites/all/modules/hdx ./html/sites/all/modules/hid ./html/sites/all/modules/hr
         env:
           fail-fast: true
 
