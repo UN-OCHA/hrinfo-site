@@ -1,0 +1,209 @@
+name: Run tests
+
+on: [pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        id: checkout
+        uses: actions/checkout@v3
+
+      - name: Extract PHP Version
+        id: php
+        uses: docker://ghcr.io/un-ocha/actions:extract-php-version-main
+        with:
+          docker_file: 'docker/Dockerfile'
+          docker_image: 'public.ecr.aws/unocha/php-k8s'
+
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ steps.php.outputs.php_version }}
+          tools: composer:2.5.5
+        env:
+          fail-fast: true
+
+      - name: Software versions
+        id: versions
+        uses: cafuego/command-output@main
+        with:
+          run: |
+            php --version && composer --version
+
+      - name: Composer Validate
+        id: validate
+        uses: cafuego/command-output@main
+        with:
+          run: |
+            composer validate
+        env:
+          fail-fast: true
+
+      - name: Code Lint
+        id: lint
+        uses: cafuego/command-output@main
+        with:
+          run: |
+            test ! -d ./html/sites/all/modules/custom || find -L ./html/sites/all/modules/custom -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/access || find -L ./html/sites/all/modules/access -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/ar || find -L ./html/sites/all/modules/ar -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/ev || find -L ./html/sites/all/modules/ev -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/hdx || find -L ./html/sites/all/modules/hdx -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/hid || find -L ./html/sites/all/modules/hid -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+            test ! -d ./html/sites/all/modules/hr || find -L ./html/sites/all/modules/hr -iregex '.*\.\(php\|module\|inc\|install\)$' -print0 | xargs -0 -n 1 -P 4 php -l
+        env:
+          fail-fast: true
+
+      - name: Configure AWS Credentials
+        id: aws
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Public ECR
+        id: aws-login
+        uses: docker/login-action@v2.1.0
+        with:
+          registry: public.ecr.aws
+          username: ${{ secrets.ECR_AWS_ACCESS_KEY_I }}
+          password: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
+        env:
+          AWS_REGION: us-east-1
+
+      - name: Build Image
+        id: build
+        uses: cafuego/command-output@main
+        with:
+          run: |
+            make
+        env:
+          fail-fast: true
+
+      - name: Setup Environment
+        id: docker
+        uses: cafuego/command-output@main
+        with:
+          run: |
+            docker-compose -f tests/docker-compose.yml up -d
+            sleep 10
+            docker ps -a
+            docker-compose -f tests/docker-compose.yml exec -w /srv/www -T drupal composer self-update 2.5.5
+            docker-compose -f tests/docker-compose.yml exec -w /srv/www -T drupal composer install --dev
+        env:
+          fail-fast: true
+
+      - name: PHPCS
+        id: phpcs
+        uses: cafuego/command-output@main
+        with:
+          run: |
+            docker-compose -f tests/docker-compose.yml exec -w /srv/www -T drupal phpcs vendor/drupal/coder/coder_sniffer
+            docker-compose -f tests/docker-compose.yml exec -u appuser -w /srv/www -T drupal phpcs -np --report=full --standard=phpcs.xml ./html/sites/all/modules/custom ./html/sites/all/modules/access ./html/sites/all/modules/ar ./html/sites/all/modules/ev ./html/sites/all/modules/hdx ./html/sites/all/modules/hid ./html/sites/all/modules/hr
+        env:
+          fail-fast: true
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Build output
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ### Test Run Output
+            #### Software Versions
+            #### Composer Validate `${{ steps.validate.outcome }}`
+            #### PHP Lint `${{ steps.lint.outcome }}`
+            #### Docker Build `${{ steps.build.outcome }}`
+            #### Environment Setup `${{ steps.docker.outcome }}`
+            #### PHP Code Sniffer `${{ steps.phpcs.outcome }}`
+
+            <details><summary>Software Versions</summary>
+            <code>${{ steps.versions.outputs.stdout }}</code>
+            <code>${{ steps.versions.outputs.stderr }}</code>
+            </details>
+
+            <details><summary>Composer Validate</summary>
+            <code>${{ steps.validate.outputs.stdout }}</code>
+            <code>${{ steps.validate.outputs.stderr }}</code>
+            </details>
+
+            <details><summary>PHP Lint</summary>
+            <code>${{ steps.lint.outputs.stdout }}</code>
+            <code>${{ steps.lint.outputs.stderr }}</code>
+            </details>
+
+            <details><summary>PHPCS</summary>
+            <code>${{ steps.phpcs.outputs.stdout }}</code>
+            <code>${{ steps.phpcs.outputs.stderr }}</code>
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: `${{ github.event_name }}`, Workflow: `${{ github.workflow }}`*
+          edit-mode: replace
+
+      - name: Slack Success Notification
+        id: slack_success
+        if: success()
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: '${{ vars.SLACK_CHANNEL }}'
+          payload: |
+            {
+              "text": "Tests passed for a pull request on ${{ github.repository }}",
+              "attachments": [
+                {
+                  "color": "#00FF00",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "Pull request by @${{ github.triggering_actor }} to merge _${{ github.head_ref }}_ into _${{ github.base_ref }}_ on <${{ github.repositoryUrl }}|${{ github.repository }}> passed tests (<${{ github.event.pull_request.html_url }}|Review>)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Slack Failure Notification
+        id: slack_failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: '${{ vars.SLACK_CHANNEL }}'
+          payload: |
+            {
+              "text": "Tests failed for a pull request on ${{ github.repository }}",
+              "attachments": [
+                {
+                  "color": "#FF0000",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "Pull request by @${{ github.triggering_actor }} to merge _${{ github.head_ref }}_ into _${{ github.base_ref }}_ on <${{ github.repositoryUrl }}|${{ github.repository }}> failed tests (<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Review>)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
