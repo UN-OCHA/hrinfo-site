@@ -152,16 +152,6 @@ jobs:
             <code>${{ steps.phpcs.outputs.stderr }}</code>
             </details>
 
-            <details><summary>Tests</summary>
-            <code>${{ steps.tests.outputs.stdout }}</code>
-            <code>${{ steps.tests.outputs.stderr }}</code>
-            </details>
-
-            <details><summary>Drupal Logs</summary>
-            <code>${{ steps.dblog.outputs.stdout }} </code>
-            <code>${{ steps.dblog.outputs.stderr }} </code>
-            </details>
-
             *Pusher: @${{ github.actor }}, Action: `${{ github.event_name }}`, Workflow: `${{ github.workflow }}`*
           edit-mode: replace
 
