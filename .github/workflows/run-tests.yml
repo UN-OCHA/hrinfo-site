@@ -129,7 +129,6 @@ jobs:
             #### PHP Lint `${{ steps.lint.outcome }}`
             #### Docker Build `${{ steps.build.outcome }}`
             #### Environment Setup `${{ steps.docker.outcome }}`
-            #### Site Install `${{ steps.install.outcome }}`
             #### PHP Code Sniffer `${{ steps.phpcs.outcome }}`
 
             <details><summary>Software Versions</summary>
