@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * Tests the Google Tag Manager for a site with no realms.
+ */
+class GTMNoRealmTestCase extends GTMBaseTestCase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Google Tag Manager :: Standard',
+      'description' => 'Tests the Google Tag Manager with no variable realm',
+      'group' => 'Google tag',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function createData() {
+    $this->variables['primary'] = (object) array(
+      'name' => 'primary',
+      'label' => 'Primary',
+      'status' => TRUE,
+      'container_id' => 'GTM-norealm',
+      'environment_id' => 'env-6',
+      'environment_token' => 'nnnnnnnnnnnnnnnnnnnnn',
+      'include_environment' => '1',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function checkSnippetFiles() {
+    foreach ($this->variables as $key => $variables) {
+      $message = "Start on container $key";
+      $this->pass($message, $this->group);
+      foreach ($this->types as $type) {
+        $url = "$this->basePath/google_tag/{$key}/google_tag.$type.js";
+        $contents = @file_get_contents($url);
+        $function = "verify{$type}Snippet";
+        $this->$function($contents, $this->variables[$key]);
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function checkPageResponse() {
+    parent::checkPageResponse();
+
+    foreach ($this->variables as $key => $variables) {
+      $this->drupalGet('');
+      $message = "Start on container $key";
+      $this->pass($message, $this->group);
+      foreach ($this->types as $type) {
+        $uri = "$this->basePath/google_tag/{$key}/google_tag.$type.js";
+        if ($wrapper = file_stream_wrapper_get_instance_by_uri($uri)) {
+          $realpath = $wrapper->getExternalUrl($uri);
+          $function = "verify{$type}Tag";
+          $this->$function($realpath, $this->variables[$key]);
+        }
+      }
+    }
+  }
+
+}
