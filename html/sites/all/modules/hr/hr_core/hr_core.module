@@ -2313,3 +2313,19 @@ function hr_core_resolve_full_url_from_configuration_single($configuration) {
 
   return FALSE;
 }
+
+/**
+ * Implements hook_redirect_alter().
+ *
+ * Ensure that redirects to response.reliefweb.int are not emitted if the
+ * user-agent header contains "archive" so that archive.org can get our
+ * original content.
+ *
+ * @see https://humanitarian.atlassian.net/browse/OPS-9290
+ */
+function hr_core_redirect_alter(&$redirect) {
+
+  if (isset($redirect->redirect) && (strpos($redirect->redirect, "https://response.reliefweb.int") !== FALSE) && isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], "archive") !== FALSE)) {
+    $redirect->redirect = FALSE;
+  }
+}
