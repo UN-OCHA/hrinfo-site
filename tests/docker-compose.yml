@@ -1,0 +1,49 @@
+version: "2.2"
+
+networks:
+  default:
+
+volumes:
+  hrinfo-site-public:
+  hrinfo-site-private:
+
+services:
+  mysql:
+    image: public.ecr.aws/unocha/mysql:10.6
+    hostname: hrinfo-test-mysql
+    container_name: hrinfo-test-mysql
+    environment:
+      - MYSQL_DB=hrinfo
+      - MYSQL_USER=hrinfo
+      - MYSQL_PASS=hrinfo
+    networks:
+      - default
+
+  drupal:
+    image: public.ecr.aws/unocha/hrinfo-site:local
+    hostname: hrinfo-test-site
+    container_name: hrinfo-test-site
+    volumes:
+      - "./settings:/srv/www/shared/settings:ro"
+      # Mount volumes for the private and public files.
+      - "hrinfo-site-public:/srv/www/html/sites/default/files:rw"
+      - "hrinfo-site-private:/srv/www/html/sites/default/private:rw"
+      # Mount the folders needed for the tests.
+      - "../tests:/srv/www/tests"
+      - "../phpcs.xml:/srv/www/phpcs.xml:ro"
+      - "../phpunit.xml:/srv/www/phpunit.xml:ro"
+    environment:
+      - TERM=xterm
+      - ENVIRONMENT=dev
+      - NGINX_SERVERNAME=hrinfo-test-site,localhost,127.0.0.1
+      - NGINX_OVERRIDE_PROTOCOL=HTTP,hrinfo-test-site,localhost,127.0.0.1
+      - DRUSH_OPTIONS_URI=http://hrinfo-test-site
+      - DRUPAL_DB_DATABASE=hrinfo
+      - DRUPAL_DB_USERNAME=hrinfo
+      - DRUPAL_DB_PASSWORD=hrinfo
+      - DRUPAL_DB_HOST=mysql
+      - DRUPAL_DB_DRIVER=mysql
+    networks:
+      - default
+    depends_on:
+      - mysql
