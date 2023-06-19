@@ -2,8 +2,8 @@
 
 namespace Drupal\hr_disasters\Plugin\resource;
 
-use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
+use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
 use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**

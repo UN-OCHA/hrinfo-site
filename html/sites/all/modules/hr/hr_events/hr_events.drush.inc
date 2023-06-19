@@ -47,7 +47,7 @@ function drush_hr_events_hid_contacts() {
     'finished' => 'drush_hr_events_hid_contacts_batch_finished',
   );
   batch_set($batch);
-  $batch =& batch_get();
+  $batch = & batch_get();
   drush_backend_batch_process();
 }
 

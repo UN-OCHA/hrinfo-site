@@ -2,9 +2,9 @@
 
 namespace Drupal\hr_documents\Plugin\resource;
 
+use Drupal\restful\Http\RequestInterface;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
-use Drupal\restful\Http\RequestInterface;
 
 /**
  * Class definition.

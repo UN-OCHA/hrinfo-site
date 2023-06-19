@@ -63,7 +63,7 @@ function drush_hr_tools_access_rebuild() {
       'finished' => '_drush_hr_tools__node_access_rebuild_batch_finished',
     );
     batch_set($batch);
-    $batch =& batch_get();
+    $batch = & batch_get();
     drush_backend_batch_process();
   }
   if (!isset($batch)) {

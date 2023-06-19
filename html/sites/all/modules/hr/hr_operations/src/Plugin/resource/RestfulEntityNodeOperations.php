@@ -3,8 +3,8 @@
 namespace Drupal\hr_operations\Plugin\resource;
 
 use Drupal\hr_api\Plugin\resource\ResourceCustom;
-use Drupal\restful\Plugin\resource\ResourceInterface;
 use Drupal\restful\Plugin\resource\DataInterpreter\DataInterpreterInterface;
+use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
  * Class RestfulEntityNodeOperations.

@@ -2,12 +2,12 @@
 
 namespace Drupal\hr_api\Plugin\resource\fields;
 
-use Drupal\restful\Plugin\resource\Field\ResourceFieldEntity;
-use Drupal\restful\Plugin\resource\Field\ResourceFieldEntityInterface;
 use Drupal\restful\Exception\InaccessibleRecordException;
 use Drupal\restful\Exception\UnprocessableEntityException;
 use Drupal\restful\Http\Request;
 use Drupal\restful\Http\RequestInterface;
+use Drupal\restful\Plugin\resource\Field\ResourceFieldEntity;
+use Drupal\restful\Plugin\resource\Field\ResourceFieldEntityInterface;
 
 /**
  * Class definition.

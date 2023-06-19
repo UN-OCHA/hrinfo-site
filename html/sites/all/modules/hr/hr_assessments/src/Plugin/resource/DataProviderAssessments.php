@@ -2,10 +2,10 @@
 
 namespace Drupal\hr_assessments\Plugin\resource;
 
+use Drupal\restful\Exception\ForbiddenException;
+use Drupal\restful\Http\RequestInterface;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
 use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
-use Drupal\restful\Http\RequestInterface;
-use Drupal\restful\Exception\ForbiddenException;
 
 /**
  * Class definition.
