@@ -3,8 +3,8 @@
 namespace Drupal\hr_api\Plugin\resource;
 
 use Drupal\restful\Exception\UnauthorizedException;
-use Drupal\restful\Plugin\resource\ResourceInterface;
 use Drupal\restful\Http\RequestInterface;
+use Drupal\restful\Plugin\resource\ResourceInterface;
 
 /**
  * Class RestfulFiles.

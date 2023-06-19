@@ -2,11 +2,11 @@
 
 namespace Drupal\hr_api\Plugin\resource;
 
-use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
-use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
-use Drupal\restful\Http\RequestInterface;
 use Drupal\restful\Exception\ForbiddenException;
 use Drupal\restful\Exception\UnprocessableEntityException;
+use Drupal\restful\Http\RequestInterface;
+use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
+use Drupal\restful\Plugin\resource\DataProvider\DataProviderInterface;
 
 /**
  * Class definition.
