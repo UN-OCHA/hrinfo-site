@@ -3,8 +3,8 @@
 namespace Drupal\hr_api\Plugin\resource\DataProvider;
 
 use Drupal\restful\Exception\ForbiddenException;
-use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
 use Drupal\restful\Http\RequestInterface;
+use Drupal\restful\Plugin\resource\DataProvider\DataProviderEntity;
 
 /**
  * Class DataProviderOgMemberships.

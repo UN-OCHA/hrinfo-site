@@ -2,8 +2,8 @@
 
 namespace Drupal\hr_api\Plugin\resource\Field;
 
-use Drupal\restful\Plugin\resource\Field\ResourceFieldEntityText;
 use Drupal\restful\Plugin\resource\Field\ResourceFieldEntityInterface;
+use Drupal\restful\Plugin\resource\Field\ResourceFieldEntityText;
 
 /**
  * Class definition.

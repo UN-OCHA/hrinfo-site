@@ -2319,13 +2319,19 @@ function hr_core_resolve_full_url_from_configuration_single($configuration) {
  *
  * Ensure that redirects to response.reliefweb.int are not emitted if the
  * user-agent header contains "archive" so that archive.org can get our
- * original content.
+ * original content. Prevent caching, so *other* users get redirected and
+ * not actual content from the page or varnish cache.
  *
  * @see https://humanitarian.atlassian.net/browse/OPS-9290
  */
 function hr_core_redirect_alter(&$redirect) {
+  // Early return if not archive.org.
+  if (!isset($_SERVER['HTTP_USER_AGENT']) || (stripos($_SERVER['HTTP_USER_AGENT'], "archive") == FALSE)) {
+    return;
+  }
 
-  if (isset($redirect->redirect) && (strpos($redirect->redirect, "https://response.reliefweb.int") !== FALSE) && isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], "archive") !== FALSE)) {
+  if (isset($redirect->redirect) && (stripos($redirect->redirect, "https://response.reliefweb.int") !== FALSE)) {
+    drupal_page_is_cacheable(FALSE);
     $redirect->redirect = FALSE;
   }
 }

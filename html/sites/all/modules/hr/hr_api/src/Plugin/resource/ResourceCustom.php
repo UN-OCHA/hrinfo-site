@@ -2,8 +2,8 @@
 
 namespace Drupal\hr_api\Plugin\resource;
 
-use Drupal\restful\Plugin\resource\ResourceEntity;
 use Drupal\restful\Http\HttpHeader;
+use Drupal\restful\Plugin\resource\ResourceEntity;
 
 /**
  * Class definition.
