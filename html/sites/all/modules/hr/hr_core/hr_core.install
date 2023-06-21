@@ -892,3 +892,14 @@ function hr_core_update_7053() {
   module_disable($disable);
   drupal_uninstall_modules($disable, FALSE);
 }
+
+/**
+ * Enable and configure redirect_404 module.
+ */
+function hr_core_update_7054() {
+  variable_set('redirect_404_redirect', 'https://response.reliefweb.int/404');
+  $enable = array(
+    'redirect_404',
+  );
+  module_enable($enable);
+}
