@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ba3ea429f7ef803d22864719073ad83",
+    "content-hash": "dda09a4ed3ac9114b0afa45da8018bd5",
     "packages": [
         {
             "name": "composer/installers",
@@ -8378,6 +8378,50 @@
             "homepage": "https://www.drupal.org/project/redirect",
             "support": {
                 "source": "https://git.drupalcode.org/project/redirect"
+            }
+        },
+        {
+            "name": "drupal/redirect_404",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/redirect_404.git",
+                "reference": "7.x-1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/redirect_404-7.x-1.1.zip",
+                "reference": "7.x-1.1",
+                "shasum": "21a18f2846f5027494cc94024ea094b6c29a20da"
+            },
+            "require": {
+                "drupal/drupal": "~7.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "7.x-1.1",
+                    "datestamp": "1378403209",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/7/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "vlad.pavlovic",
+                    "homepage": "https://www.drupal.org/user/92673"
+                }
+            ],
+            "description": "Redirects 404 allows you to specify a number of servers that should be attempted to be redirected to if a 404 (Page not found) error is encountered.",
+            "homepage": "https://www.drupal.org/project/redirect_404",
+            "support": {
+                "source": "https://git.drupalcode.org/project/redirect_404"
             }
         },
         {
