@@ -1,0 +1,136 @@
+<?php
+/**
+ * @file
+ * Module file for User Merge Self.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function usermerge_self_permission() {
+  return array(
+    'merge own accounts' => array(
+      'title' => t('Merge own accounts'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function usermerge_self_menu() {
+  $items['user/%user/edit/merge'] = array(
+    'title' => 'Merge accounts',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('usermerge_self_merge_form', 1),
+    'access callback' => 'usermerge_self_access',
+    'access arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/**
+ * Access callback for Self-Serve User Merge.
+ */
+function usermerge_self_access($account) {
+  return (($GLOBALS['user']->uid == $account->uid) && user_access('merge own accounts'));
+}
+
+/**
+ * Form where the current user can enter user name and password
+ * of the account to be removed.
+ */
+function usermerge_self_merge_form($form, &$form_state) {
+  drupal_set_title(t('Merge accounts'));
+
+  $form['general']['usermerge_user_delete'] = array(
+    '#type' => 'textfield',
+    '#title' => t('The e-mail address of the account you wish to remove'),
+    '#required' => TRUE,
+  );
+
+  $form['general']['usermerge_user_delete_password'] = array(
+    '#type' => 'password',
+    '#title' => t('Password'),
+    '#required' => TRUE,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Merge accounts')
+  );
+
+  if (module_exists('html5tools')) {
+    $form['general']['usermerge_user_delete']['#type'] = 'emailfield';
+  }
+
+  if (module_exists('password_toggle')) {
+    password_toggle_add_js_and_css();
+  }
+
+  return $form;
+}
+
+/**
+ * Validates the self-serve user merge form.
+ */
+function usermerge_self_merge_form_validate($form, &$form_state) {
+  $user_to_delete = usermerge_self_user_load_by_mail($form_state['values']['usermerge_user_delete']);
+  $user_to_keep = $form_state['build_info']['args'][0];
+
+  if (isset($user_to_delete) && is_object($user_to_delete)) {
+    // If the entered used is the same as the current user, return an error message
+    if ($user_to_delete->uid == $user_to_keep->uid) {
+      form_set_error('usermerge_user_delete', t('You’re logged in using the same account you’re trying to merge. Please enter an e-mail address associated with a different account.'));
+    }
+    // Allow alternate password hashing schemes.
+    require_once DRUPAL_ROOT . '/' . variable_get('password_inc', 'includes/password.inc');
+
+    if (user_check_password($form_state['values']['usermerge_user_delete_password'], $user_to_delete)) {
+      if ($user_to_delete->uid == 1) {
+        form_set_error('usermerge_user_delete', t('Blocking user 1 is not allowed.'));
+      }
+    }
+    else {
+      form_set_error('usermerge_user_delete', t('Sorry, unrecognized e-mail address or password.'));
+    }
+  }
+  else {
+    form_set_error('usermerge_user_delete', t('Sorry, unrecognized e-mail address or password.'));
+  }
+}
+
+/**
+ * Submits the self-serve user merge form.
+ *
+ * It loads the data-review form structure from usermerge.module, without
+ * displaying the review table. Default decisions on how data should be handled are
+ * made on behalf of the user before submitting the review form.
+ *
+ * @see usermerge_merge_form()
+ */
+function usermerge_self_merge_form_submit($form, &$form_state) {
+  $user_to_delete = usermerge_self_user_load_by_mail($form_state['values']['usermerge_user_delete']);
+  $user_to_keep = $form_state['build_info']['args'][0];
+
+  usermerge_do($user_to_delete, $user_to_keep);
+}
+
+/**
+ * Fetches a user object by email address, using multiple_email when available.
+ */
+function usermerge_self_user_load_by_mail($email) {
+  if (module_exists('multiple_email')) {
+    $email = multiple_email_find_address($email);
+    if (isset($email->uid)) {
+      $account = user_load($email->uid);
+    }
+  }
+  else {
+    $account = user_load_by_mail($email);
+  }
+
+  return isset($account) ? $account : NULL;
+}

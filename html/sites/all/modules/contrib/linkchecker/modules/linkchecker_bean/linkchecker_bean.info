@@ -1,0 +1,14 @@
+name = Link checker Bean
+description = "Periodically checks for broken links in beans and reports the results."
+configure = admin/config/content/linkchecker
+package = "Link checker"
+core = 7.x
+
+dependencies[] = bean
+dependencies[] = linkchecker
+
+; Information added by Drupal.org packaging script on 2023-01-23
+version = "7.x-1.5"
+core = "7.x"
+project = "linkchecker"
+datestamp = "1674441219"

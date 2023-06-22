@@ -1,0 +1,356 @@
+<?php
+
+/**
+ * @file
+ * Adds separate pages for viewing and editing profiles.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function profile2_page_menu() {
+  $items = array();
+
+  // Bugfix for uninstalling the module, see http://drupal.org/node/1008346.
+  if (!module_exists('profile2')) {
+    return;
+  }
+
+  $profile2_view_tab_count = 0;
+  foreach (profile2_get_types() as $type_name => $type) {
+    if (!empty($type->data['use_page'])) {
+      $path = profile2_page_get_base_path($type);
+      $count = count(explode('/', $path));
+
+      // This is the menu item for opening the user's own profile page.
+      $items[$path] = array(
+        'title callback' => 'profile2_page_title',
+        'title arguments' => array($type_name, TRUE),
+        'page callback' => 'profile2_page_own',
+        'page arguments' => array($path),
+        'access callback' => 'user_access',
+        'access arguments' => array("view own $type_name profile"),
+        'file' => 'profile2_page.inc',
+        'menu_name' => 'user-menu',
+      );
+
+      // This is the router item that opens the page view.
+      $items[$path . '/%profile2_by_uid'] = array(
+        // Title is added in profile2_page_preprocess_page().
+        'page callback' => 'profile2_page_view',
+        'page arguments' => array($count),
+        'load arguments' => array($type_name),
+        'access callback' => 'profile2_access',
+        'access arguments' => array('view', $count),
+        'file' => 'profile2_page.inc',
+        'type' => MENU_CALLBACK,
+      );
+      $items[$path . '/%profile2_by_uid/view'] = array(
+        'title' => 'View',
+        'type' => MENU_DEFAULT_LOCAL_TASK,
+        'load arguments' => array($type_name),
+        'weight' => -10,
+      );
+      $items[$path . '/%profile2_by_uid/edit'] = array(
+        'page callback' => 'entity_ui_get_form',
+        'page arguments' => array('profile2', $count),
+        'load arguments' => array($type_name),
+        'access callback' => 'profile2_access',
+        'access arguments' => array('edit', $count),
+        'title' => 'Edit',
+        'type' => MENU_LOCAL_TASK,
+        'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+        'file' => 'profile2_page.inc',
+      );
+      $items[$path . '/%profile2_by_uid/delete'] = array(
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('profile2_page_delete_confirm_form', $count),
+        'load arguments' => array($type_name),
+        'access callback' => 'profile2_access',
+        'access arguments' => array('delete', $count),
+        'title' => 'Delete',
+        'type' => MENU_LOCAL_TASK,
+        'context' => MENU_CONTEXT_INLINE,
+        'file' => 'profile2_page.inc',
+      );
+      // Devel integration.
+      if (module_exists('devel')) {
+        $devel_path = drupal_get_path('module', 'devel');
+        $items[$path . '/%profile2_by_uid/devel'] = array(
+          'title' => 'Devel',
+          'page callback' => 'devel_load_object',
+          'file' => 'devel.pages.inc',
+          'file path' => $devel_path,
+          'page arguments' => array('profile2', $count),
+          'access arguments' => array('access devel information'),
+          'type' => MENU_LOCAL_TASK,
+          'weight' => 100,
+        );
+        $items[$path . '/%profile2_by_uid/devel/load'] = array(
+          'title' => 'Load',
+          'type' => MENU_DEFAULT_LOCAL_TASK,
+        );
+        $items[$path . '/%profile2_by_uid/devel/render'] = array(
+          'title' => 'Render',
+          'page callback' => 'devel_render_object',
+          'page arguments' => array('profile2', $count),
+          'access arguments' => array('access devel information'),
+          'file' => 'devel.pages.inc',
+          'file path' => $devel_path,
+          'type' => MENU_LOCAL_TASK,
+          'weight' => 100,
+        );
+      }
+    }
+    else if (!empty($type->data['use_tab'])) {
+      // Make tab(s) under user profile page.
+      $items['user/%profile2_by_uid/view/' . $type_name] = array(
+        'title callback' => 'profile2_page_title',
+        'title arguments' => array($type_name),
+        'page callback' => 'profile2_page_view',
+        'page arguments' => array(1),
+        'load arguments' => array($type_name),
+        'access callback' => 'profile2_access',
+        'access arguments' => array('view', 1),
+        'type' => MENU_LOCAL_TASK,
+        'file' => 'profile2_page.inc',
+      );
+    }
+    $profile2_view_tab_count++;
+  }
+  // If there exists at least one tab for profile2 type,
+  // then we need to create default tab for user account page.
+  if ($profile2_view_tab_count) {
+    $items['user/%user/view/account'] = array(
+      'title' => 'Account',
+      'type' => MENU_DEFAULT_LOCAL_TASK,
+      'weight' => -10,
+    );
+  }
+  return $items;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ *
+ * If viewing or editing a profile sub-tab, change the URL of the
+ * edit or view tab (if present) so it edits or views the profile,
+ * not the main account page. Subject to permissions.
+ */
+function profile2_page_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  if (strpos($root_path, 'user/%/') === 0 && isset($router_item['original_map'][3])) {
+    $ptype = $router_item['original_map'][3];
+    $profile = profile2_type_load($ptype);
+    // Only do this if the current profile is in use-tab mode.
+    if (!empty($profile->data['use_tab'])) {
+      switch ($router_item['original_map'][2]) {
+        case 'view':
+          $href_suff = '/edit';
+          $ptype_pref = '';
+          $access = 'edit';
+          break;
+        case 'edit':
+          $href_suff = '';
+          $ptype_pref = '/view';
+          $access = 'view';
+          break;
+        default:
+          return;
+      }
+      // Get the uid & profile type name.
+      $uid = $router_item['original_map'][1];
+
+      if (profile2_access($access, profile2_by_uid_load($uid, $ptype))) {
+        // Get the part of the link URL containing "user/<uid>".
+        $href = "{$router_item['tab_root_href']}$href_suff";
+
+        //Walk the menu tree to find the account link, and append the profile type.
+        array_walk_recursive($data, function (&$item) use ($href, $ptype_pref, $ptype) {
+          if ($item == $href) {
+            $item .= "$ptype_pref/$ptype";
+          }
+        });
+      }
+    }
+  }
+}
+
+/**
+ * Returns the base path to use as profile page.
+ */
+function profile2_page_get_base_path($profile_type) {
+  // Allow for an easy customization of the page's base path.
+  if (!empty($profile_type->data['page_path'])) {
+    return $profile_type->data['page_path'];
+  }
+  return 'profile-' . $profile_type->type;
+}
+
+/**
+ * Implements hook_forms().
+ */
+function profile2_page_forms($form_id, $args) {
+  // For efficiency, only act if the third argument is 'profile2'.
+  if (isset($args[2]) && is_string($args[2]) && $args[2] == 'profile2') {
+    $info = entity_get_info('profile2');
+    // Translate bundle form ids to the base form id 'profile2_form'.
+    foreach ($info['bundles'] as $bundle => $bundle_info) {
+      $forms['profile2_edit_' . $bundle . '_form']['callback'] = 'profile2_form';
+      $forms['profile2_edit_' . $bundle . '_form']['wrapper callback'] = 'entity_ui_form_defaults';
+    }
+    if (!empty($forms)) {
+      // Include the file with profile2_form() callback. This needed when the
+      // form is loaded from the outside, for example, from the ajax callback.
+      form_load_include($form_state, 'inc', 'profile2_page');
+      return $forms;
+    }
+  }
+}
+
+/**
+ * Implements hook_profile2_type_load().
+ */
+function profile2_page_profile2_type_load($types) {
+  foreach ($types as $type) {
+    if (!empty($type->data['use_page'])) {
+      // Disable user categories and the user account view.
+      $type->userCategory = FALSE;
+      $type->userView = FALSE;
+    }
+    elseif (!empty($type->data['use_tab'])) {
+      $type->userView = FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function profile2_page_entity_info_alter(&$entity_info) {
+  // Add new view modes for the page.
+  $entity_info['profile2']['view modes']['page'] = array(
+    'label' => t('Profile page'),
+     'custom settings' => FALSE,
+  );
+  $entity_info['profile2']['view modes']['teaser'] = array(
+    'label' => t('Teaser'),
+    'custom settings' => FALSE,
+  );
+  $entity_info['profile2']['uri callback'] = 'profile2_page_uri_callback';
+  $entity_info['profile2']['form callback'] = 'profile2_page_form_callback';
+
+  // Integrate with Metatag module to enable metatags support for separate
+  // profile pages.
+  if (module_exists('metatag')) {
+    $entity_info['profile2']['metatags'] = TRUE;
+  }
+}
+
+/**
+ * URI callback pointing to the profile page.
+ *
+ * @see profile2_pages_entity_info_alter()
+ */
+function profile2_page_uri_callback($profile) {
+  $type = $profile->type();
+  if (!empty($type->data['use_page'])) {
+    return array('path' => profile2_page_get_base_path($type) . '/' . $profile->uid);
+  }
+  else if (!empty($type->data['use_tab'])) {
+    return array('path' => "user/{$profile->uid}/view/{$profile->type}");
+  }
+  // Fall back to the default callback.
+  return $profile->defaultUri();
+}
+
+/**
+ * Form callback for entity_form().
+ */
+function profile2_page_form_callback($profile) {
+  // Pre-populate the form-state with the right form include.
+  $form_state = form_state_defaults();
+  form_load_include($form_state, 'inc', 'profile2_page');
+  return entity_ui_get_form('profile2', $profile, 'edit', $form_state);
+}
+
+/**
+ * Menu title callbacks.
+ */
+function profile2_page_title($type_name, $my = FALSE) {
+  $label = profile2_get_types($type_name)->getTranslation('label');
+  if ($my) {
+    $label = t('My @title', array('@title' => $label));
+  }
+  return $label;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for the profile2 type form..
+ */
+function profile2_page_form_profile2_type_form_alter(&$form, &$form_state) {
+  $type = $form_state['profile2_type'];
+  $form['data']['use_page'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Provide a separate page for editing profiles.'),
+    '#description' => t('If enabled, a separate menu item for viewing and editing the profile is generated, and the profile is hidden from the user account page.'),
+    '#default_value' => empty($type->is_new) && !empty($type->data['use_page']),
+    '#states' => array(
+      'invisible' => array(
+       ':input[name="data[use_tab]"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['data']['edit_label'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Allow the profile title to be edited.'),
+    '#description' => t('If enabled, the title of the profile is editable, and is used as-is when displaying the profile.'),
+    '#default_value' => empty($type->is_new) && !empty($type->data['edit_label']),
+    '#states' => array(
+      'invisible' => array(
+       ':input[name="data[use_page]"]' => array('checked' => FALSE),
+      ),
+    ),
+  );
+  $form['data']['use_tab'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Provide a separate tab for viewing profiles.'),
+    '#description' => t('If enabled, the profile is shown under a separate tab on the user account page.'),
+    '#default_value' => empty($type->is_new) && !empty($type->data['use_tab']),
+    '#states' => array(
+      'invisible' => array(
+       ':input[name="data[use_page]"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['data']['#tree'] = TRUE;
+  $form['#validate'][] = 'profile2_page_form_profile2_type_form_validate';
+}
+
+/**
+ * Ensure edit_label flag is never set if use_page is not set.
+ */
+function profile2_page_form_profile2_type_form_validate($form, &$form_state) {
+  if (empty($form_state['values']['data']['use_page'])) {
+    $form_state['values']['data']['edit_label'] = 0;
+  }
+}
+
+/**
+ * Implements hook_preprocess_page().
+ *
+ * Fix the page titles on the profile view pages.
+ * We want the titles to be the full profile label, giving the user name & profile name.
+ *
+ * Note: the title for the separate edit page is already correct.
+ */
+function profile2_page_preprocess_page(&$vars) {
+  // This is true for profile2 view pages, both as a tab and a separate page.
+  if (!empty($vars['page']['content']['system_main']['profile2'])) {
+    // Get the one item, index is unknown..
+    $item = reset($vars['page']['content']['system_main']['profile2']);
+    // If we've found an item, and it has a profile2 entity, display the title.
+    if (!empty($item['#entity'])) {
+      $vars['title'] = $item['#entity']->label();
+    }
+  }
+}

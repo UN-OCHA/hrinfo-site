@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Redirects 404 module.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function redirect_404_enable() {
+  // When Redirects 404 is enabled, we set it to be the default site_404 page.
+  variable_set('redirect_404_site_404', variable_get('site_404', ''));
+  variable_set('site_404', 'redirect_404');
+}
+
+/**
+ * Implements hook_disable().
+ */
+function redirect_404_disable() {
+  // When Redirects 404 is disabled we return site_404 to original state.
+  variable_set('site_404', variable_set('redirect_404_site_404', ''));
+}
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function redirect_404_uninstall() {
+  // Clean up after ourselves when the module is uninstalled.
+  variable_del('redirect_404_site_404');
+  variable_del('redirect_404_servers');
+  variable_del('redirect_404_search');
+  variable_del('redirect_404_redirect');
+  variable_del('redirect_404_title');
+  variable_del('redirect_404_content');
+}
