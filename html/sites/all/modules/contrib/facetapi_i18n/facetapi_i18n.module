@@ -1,0 +1,231 @@
+<?php
+
+/**
+ * @file
+ * Integrates Facet API with the i18n module to translate custom strings and
+ * mapped facet values
+ */
+
+/**
+ * Implements hook_i18n_string_info().
+ */
+function facetapi_i18n_i18n_string_info() {
+  $groups = array();
+
+  $groups['facetapi'] = array(
+    'title' => t('Facet API'),
+    'description' => t('Custom strings in facet configurations.'),
+    'format' => FALSE,
+    'list' => FALSE,
+  );
+
+  $groups['current_search'] = array(
+    'title' => t('Current Search Blocks'),
+    'description' => t('Custom strings in current search block configurations.'),
+    'format' => FALSE,
+    'list' => FALSE,
+  );
+
+  return $groups;
+}
+
+/**
+ * Implements hook_facetapi_facet_info_alter().
+ */
+function facetapi_i18n_facetapi_facet_info_alter(array &$facet_info, array $searcher_info) {
+  $translate_node_types = function_exists('i18n_node_type_name');
+  foreach ($facet_info as $name => $facet) {
+    // Overrides bundle mapping callback if we are mapping node bundles.
+    if ($translate_node_types && 'facetapi_map_bundle' == $facet['map callback'] && !$facet['map options']) {
+      $facet_info[$name]['map callback'] = 'facetapi_i18n_map_content_types';
+    }
+  }
+}
+
+/**
+ * Map callback for content types.
+ */
+function facetapi_i18n_map_content_types(array $values, array $options) {
+  $names = node_type_get_names();
+  $map = array_intersect_key($names, array_flip($values));
+  foreach ($map as $type => $name) {
+    $map[$type] = i18n_node_type_name($type, $name);
+  }
+  return $map;
+}
+
+/**
+ * Implements hook_facetapi_translate_string().
+ */
+function facetapi_i18n_facetapi_translate_string($name, $string, $langcode) {
+  return i18n_string($name, $string, array('langcode' => $langcode, 'update' => TRUE, 'sanitize' => FALSE));
+}
+
+/**
+ * Implements hook_facetapi_i18n_translatable_settings().
+ *
+ * Current Search Blocks module's implementation.
+ */
+function current_search_facetapi_i18n_translatable_settings() {
+  return array(
+    'current_search' => array(
+      'text' => array(
+        'text',
+        'text_plural',
+      ),
+      'active' => array(
+        'pattern',
+      ),
+      'group' => array(
+        'field_pattern',
+      ),
+    ),
+  );
+}
+
+/**
+ * Gets the translatable strings associated with a module.
+ *
+ * @param $module
+ *   The module managing the settings being translated.
+ * @param $id
+ *   The machine readable name of the plugin.
+ *
+ * @return array
+ *   An associative array keyed by plugin ID to element key.
+ */
+function facetapi_i18n_get_translatable_settings($module = NULL, $id = NULL) {
+  $settings = &drupal_static(__FUNCTION__);
+  if (NULL === $settings) {
+    $settings = module_invoke_all('facetapi_i18n_translatable_settings');
+  }
+  if (NULL === $module) {
+    return $settings;
+  }
+  elseif (NULL === $id) {
+    return (isset($settings[$module])) ? $settings[$module] : array();
+  }
+  else {
+    return (isset($settings[$module][$id])) ? $settings[$module][$id] : array();
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function facetapi_i18n_form_facetapi_facet_display_form_alter(&$form, &$form_state) {
+  $form['#submit'][] = 'facetapi_i18n_facetapi_facet_display_form_submit';
+}
+
+/**
+ * Form submission handler for facetapi_facet_display_form_submit().
+ *
+ * @see facetapi_facet_display_form()
+ */
+function facetapi_i18n_facetapi_facet_display_form_submit($form, &$form_state) {
+  // Pulls variables for code readability.
+  $facet = $form['#facetapi']['facet'];
+  $realm = $form['#facetapi']['realm'];
+  $empty_text = $form_state['values']['empty_text']['value'];
+
+  // Formats the name of the configuration for use with the i18n module.
+  $name = $form['#facetapi']['adapter']->getFacetSettings($facet, $realm)->name;
+  $config_name = preg_replace('@[^a-zA-Z0-9]@', '_', $name);
+
+  // Updates / creates translation source for the user defined string.
+  i18n_string_update('facetapi:' . $config_name . ':empty_text:empty_text', $empty_text);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function facetapi_i18n_form_current_search_delete_item_form_alter(&$form, &$form_state) {
+  // Add elements that true CTools forms add.
+  $form_state['op'] = 'delete';
+  $form_state['item'] = $form['#current_search']['item'];
+  $form['#submit'][] = 'facetapi_i18n_ctools_export_ui_form_submit';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function facetapi_i18n_form_ctools_export_ui_edit_item_form_alter(&$form, &$form_state) {
+  if (!empty($form_state['item']->table) && 'current_search' == $form_state['item']->table) {
+    $form['#submit'][] = 'facetapi_i18n_ctools_export_ui_form_submit';
+    $form['plugins']['actions']['add_item']['#submit'][] = 'facetapi_i18n_ctools_export_ui_form_submit';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function facetapi_i18n_form_ctools_export_ui_delete_confirm_form_alter(&$form, &$form_state) {
+  if ('current_search' == $form_state['item']->table) {
+    $form['#submit'][] = 'facetapi_i18n_ctools_export_ui_form_submit';
+  }
+}
+
+/**
+ * Form submission handler for CTools export UI forms.
+ */
+function facetapi_i18n_ctools_export_ui_form_submit($form, $form_state) {
+  // Map the CTools Export UI operation to the i18n operation.
+  switch ($form_state['op']) {
+    case 'edit':
+    case 'revert':
+      $op = 'update';
+      break;
+
+    case 'delete':
+      $op = 'remove';
+      break;
+
+    default:
+      $op = FALSE;
+      break;
+  }
+
+  // Perform action if we have an operation.
+  if ($op) {
+    $name = $form_state['item']->name;
+    $settings = $form_state['item']->settings['items'];
+    facetapi_i18n_string_action($op, 'current_search', $name, $settings);
+  }
+}
+
+/**
+ * Helper function for taking an action on a group of strings.
+ *
+ * @param $op
+ *   The operation being performed, i.e. update or remove.
+ * @param $module
+ *   The module managing the settings.
+ * @param $name
+ *   The machine readable name of the configuration.
+ * @param array $settings
+ *   An array of settings keyed by group name, such as a current search block
+ *   item. to an associative array of saved settings.
+ * @param $id_key
+ *   The array key in the group settings containing the machine readable name
+ *   of the plugin.
+ */
+function facetapi_i18n_string_action($op, $module, $name, $settings, $id_key = 'id') {
+  foreach ($settings as $group_name => $group_settings) {
+    // Builds base name for i18n strings, gets plugin ID. Uses module and plugin
+    // ID to get the translatable string provided by this plugin.
+    $base_name = $module . ':' . $name . ':' . $group_name . ':';
+    $plugin_id = $group_settings[$id_key];
+    $i18n_settings = facetapi_i18n_get_translatable_settings($module, $plugin_id);
+
+    // Iterates over translatable string and performs action.
+    foreach ($i18n_settings as $element_name) {
+      $string_name = $base_name . $element_name;
+      $params = array($string_name);
+      if ('update' == $op) {
+        $params[] = $group_settings[$element_name];
+      }
+      $function = 'i18n_string_' . $op;
+      call_user_func_array($function, $params);
+    }
+  }
+}

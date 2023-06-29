@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="drupal_core">
+  <description>Default PHP CodeSniffer configuration for Drupal core.</description>
+  <file>.</file>
+  <arg name="extensions" value="inc,info,install,module,php,profile,test,theme,js"/>
+
+  <!--Exclude third party code.-->
+  <exclude-pattern>./vendor/*</exclude-pattern>
+  <exclude-pattern>*.md</exclude-pattern>
+  <exclude-pattern>*.css</exclude-pattern>
+  <exclude-pattern>*.features.*</exclude-pattern>
+  <exclude-pattern>node_modules/*</exclude-pattern>
+  <exclude-pattern>assets/*</exclude-pattern>
+  <exclude-pattern>gulpfile.js</exclude-pattern>
+
+  <rule ref="Drupal" />
+  <rule ref="DrupalPractice" />
+</ruleset>

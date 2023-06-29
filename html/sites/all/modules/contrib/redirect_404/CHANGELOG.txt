@@ -1,0 +1,25 @@
+Redirects 404 7.x
+===================
+===================
+Version 7.x-1.1
+===================
+- [#2076963]: Redirect module integration; save confirmed redirects.
+- Change simple redirect to include a Request URI (if specified via token)
+- Fix variable_del name for 'redirect_404_content'
+===================
+Version 7.x-1.0
+===================
+- Review Issue #12 [#1950228] by chx: Remove extra parenthesis. 
+- Review Issue #10 [#1950228] by klausi: Remove check_markup from 
+  redirects_settings_validate().
+- Review Issue #8 [#1950228] by pagolo: Fix notices for 2xx status code
+- Review Issue #3 [#1950228] by artem.taranyuk: Changed the title to 
+  'title callback' for user configured page title.
+- Review Issue #4 [#1950228] by klausi: Changed the module to use 
+  drupal_http_request(), as opposed to cURL.
+- Add options for request_uri token as part of server path,
+  added search paths (ie: if nothing is found, do a search),
+  added simple redirect if previous options do not redirect,
+  added option to use the previous value from site_404 variable
+  added configurable 404 page. 
+- Initial commit of working code.

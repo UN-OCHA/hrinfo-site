@@ -1,0 +1,238 @@
+<?php
+
+/**
+ * @file
+ * Controls the redirects when page is not found.
+ */
+
+/**
+ * Display Redirects 404 settings form.
+ */
+function redirect_404_settings() {
+  $form = array();
+  $form['redirect_options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Redirect options'),
+  );
+
+  $form['redirect_options']['redirect_404_servers'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Legacy servers'),
+    '#description' => t('Please enter server addresses (ex: http://legacy.example.com). If you exclude the protocol, it will be preserved based on the current connection type. Enter one server per line, the order determines the preference. If you require the request URI to be a part of a longer address, use the [request_uri] token (ex: http://legacy.example.com/[request_uri]/index.html). Please note that the resulting URI will be verified prior to the redirect. '),
+    '#default_value' => variable_get('redirect_404_servers', ''),
+  );
+
+  $form['redirect_options']['redirect_404_search'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Search path'),
+    '#description' => t('Please enter the search path (ex: http://search.example.com) you wish to use if no legacy servers are found. If you require the request URI to be a part of a longer address, use the [request_uri] token (ex: http://search.example.com/[request_uri]/results)'),
+    '#default_value' => variable_get('redirect_404_search', ''),
+  );
+
+  $form['redirect_options']['redirect_404_redirect'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Direct redirect'),
+    '#description' => t('If no options above have resulted in a successful redirect, specify a path to redirect the user to (without checking if it results in a valid page). The Request URI is not included in this redirect, unless specified with the [request_uri] token (ex: http://legacy.example.com/[request_uri]).'),
+    '#default_value' => variable_get('redirect_404_redirect', ''),
+  );
+
+  $form['redirect_options']['redirect_404_site_404'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Default/Previous 404 (not found) page'),
+    '#default_value' => variable_get('redirect_404_site_404', ''),
+    '#size' => 40,
+    '#description' => t('This page is what was used before Redirects 404 was installed. This page is displayed when no other content matches the requested document.'),
+    '#field_prefix' => url(NULL, array('absolute' => TRUE)) . (variable_get('clean_url', 0) ? '' : '?q='),
+  );
+
+  $form['redirect_options']['redirect_404_save_redirect'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Save Redirect?'),
+    '#default_value' => variable_get('redirect_404_save_redirect', 0),
+    '#description' => t('Save a found 404 Redirect using the <a href="!url"> Redirect module</a>. If checked, new requests will not result in 404, but instead will be redirected.', array('!url' => url('admin/config/search/redirect'))),
+    '#access' => module_exists('redirect'),
+  );
+
+  $form['nothing_found'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('No redirect found options'),
+    '#description' => t('If none of the options specified above resulted in a successful redirect, please specify the content of the resulting 404 page.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['nothing_found']['redirect_404_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Page not found title'),
+    '#description' => t('Please enter the title you would like to use on the page.'),
+    '#default_value' => variable_get('redirect_404_title', t('404 - Page not found')),
+  );
+
+  $form['nothing_found']['redirect_404_content'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Page not found body'),
+    '#description' => t('Please enter the body of the 404 page.'),
+    '#default_value' => variable_get('redirect_404_content', t('Page not found')),
+  );
+  $form['#validate'][] = 'redirect_404_settings_validate';
+
+  return system_settings_form($form);
+}
+
+/**
+ * Validates the submitted settings form.
+ */
+function redirect_404_settings_validate($form, &$form_state) {
+  // Get the normal paths of both error pages.
+  if (!empty($form_state['values']['redirect_404_site_404'])) {
+    form_set_value($form['redirect_options']['redirect_404_site_404'], drupal_get_normal_path($form_state['values']['redirect_404_site_404']), $form_state);
+  }
+  // Validate 404 error path.
+  if (!empty($form_state['values']['redirect_404_site_404']) && !drupal_valid_path($form_state['values']['redirect_404_site_404'])) {
+    form_set_error('redirect_404_site_404', t("The path '%path' is either invalid or you do not have access to it.", array('%path' => $form_state['values']['redirect_404_site_404'])));
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function redirect_404_permission() {
+  return array(
+    'administer redirects 404' => array(
+      'title' => t('Administer redirect 404'),
+      'description' => t('Administer redirect 404 configuration settings.'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function redirect_404_menu() {
+  $items = array();
+  $items['redirect_404'] = array(
+    'title callback' => '_redirect_404_title',
+    'description' => 'The page you are looking for could not be found.',
+    'page callback' => 'redirect_404',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/system/redirect_404'] = array(
+    'title' => 'Redirect 404',
+    'description' => 'Redirect 404 will redirect your user to the server(s) outlined below preserving the full request URL.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('redirect_404_settings'),
+    'access arguments' => array('administer redirects 404'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Retrieves the title for the redirects 404 page.
+ */
+function _redirect_404_title() {
+  return variable_get('redirect_404_title', t('404 - Page not found'));
+}
+
+/**
+ * Retrieves the server paths and redirects if the server + request are valid.
+ */
+function redirect_404() {
+  global $is_https;
+  // Check the protocol in case it's not defined.
+  $protocol = $is_https ? 'https://' : 'http://';
+  $servers = explode("\n", variable_get('redirect_404_servers', ''));
+  // Initialize the variables.
+  $new_status = '';
+  $new_status_code = 0;
+  $new_path = '';
+  $request = request_uri();
+  $save_redirect = variable_get('redirect_404_save_redirect', 0);
+  if ($request != '/redirect_404') {
+    foreach ($servers as $server) {
+      $path = (FALSE === strpos($server, '://')) ? $protocol . trim($server) : trim($server);
+      if (FALSE === strpos($path, '[request_uri]')) {
+        $path .= $request;
+      }
+      else {
+        $path = str_replace('/[request_uri]', $request, $path);
+      }
+      $header_info = drupal_http_request($path, array('method' => 'HEAD', 'timeout' => 2));
+      if ($header_info->code >= 200 && $header_info->code <= 250) {
+        // We found the actual document on this server, set to 302 Found.
+        $new_status = (isset($header_info->redirect_code)) ? $header_info->redirect_code . ' ' . $header_info->status_message : '302 Found';
+        $new_status_code = 302;
+        $new_path = (isset($header_info->redirect_url)) ? ($header_info->redirect_url) : $path;
+        break;
+      }
+      elseif ($header_info->code >= 300 && $header_info->code <= 308) {
+        // No resource, but found another redirect, so follow the redirect.
+        $new_status = $header_info->redirect_code . ' ' . $header_info->status_message;
+        $new_status_code = $header_info->redirect_code;
+        $new_path = ($header_info->redirect_url) ? $header_info->redirect_url : $path;
+        break;
+      }
+    }
+  }
+  // If there is no status/path to use, see if we are searching.
+  if (!$new_status && !$new_path) {
+    $search_path = variable_get('redirect_404_search', '');
+    if ($search_path) {
+      drupal_set_message(t('The page you were trying to navigate to could not be found. Below you will see search results which may help you find what you are looking for.'));
+      $new_status = '302 Found';
+      $new_status_code = 302;
+      $new_path = $search_path . '/' . trim(str_replace('/', ' ', $request));
+      // We do not save a search redirect.
+      $save_redirect = FALSE;
+    }
+  }
+  // If there is no status/path to use, see if a simple redirect is specified.
+  if (!$new_status && !$new_path) {
+    $redirect_path = variable_get('redirect_404_redirect', '');
+    if ($redirect_path) {
+      $new_status = '302 Found';
+      $new_status_code = 302;
+      $new_path = str_replace('/[request_uri]', $request, $redirect_path);
+    }
+  }
+  // If there is no status/path to use, see if a simple redirect is specified.
+  if (!$new_status && !$new_path) {
+    $redirect_path = variable_get('redirect_404_site_404', '');
+    if ($redirect_path) {
+      $new_status = '302 Found';
+      $new_status_code = 302;
+      $new_path = url($redirect_path);
+      // We do not save a redirect path redirect.
+      $save_redirect = FALSE;
+    }
+  }
+  // If there is a status and a path, we go there.
+  if ($new_status && $new_path) {
+    if (module_exists('redirect') && $save_redirect) {
+      // Save to Redirect module system.
+      $redirect = new stdClass();
+      redirect_object_prepare($redirect, array(
+        'source' => ltrim($request, '/'),
+        'redirect' => $new_path,
+        'status_code' => $new_status_code,
+      ));
+      redirect_save($redirect);
+    }
+    drupal_add_http_header('Status', $new_status);
+    drupal_add_http_header('location', $new_path);
+    drupal_exit($new_path);
+  }
+  return variable_get('redirect_404_content', t('Page not found'));
+}
+
+/**
+ * Implements hook_help().
+ */
+function redirect_404_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#redirect_404':
+      return t('Redirect 404 allows you to specify a number of servers that should be attempted to be redirected to if a 404 (Page not found) error is encountered. ');
+  }
+}
