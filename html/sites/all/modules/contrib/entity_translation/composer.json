@@ -1,0 +1,16 @@
+{
+    "name": "drupal/entity_translation",
+    "description": "Allows (fieldable) entities to be translated into different languages.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/entity_translation",
+        "documentation": "https://www.drupal.org/docs/7/modules/entity-translation",
+        "source": "https://git.drupalcode.org/project/entity_translation"
+    },
+    "require-dev": {
+        "drupal/pathauto": "*",
+        "drupal/title": "*",
+        "drupal/i18n": "*"
+    }
+}

@@ -1,0 +1,10 @@
+name = Redirect 404
+description = Redirects 404 allows you to specify a number of servers that should be attempted to be redirected to if a 404 (Page not found) error is encountered.
+core = 7.x
+
+; Information added by drupal.org packaging script on 2013-09-05
+version = "7.x-1.1"
+core = "7.x"
+project = "redirect_404"
+datestamp = "1378403209"
+
