@@ -11,4 +11,6 @@ vendor/
 
 # Never commit contrib modules or themes.
 html/sites/all/modules/contrib
-html/sites/all/themes/contrib
+html/sites/all/themes
+# Except the custom theme.
+!html/sites/all/themes/ocha_basic
