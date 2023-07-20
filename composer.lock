@@ -786,17 +786,17 @@
         },
         {
             "name": "drupal/advagg",
-            "version": "2.35.0",
+            "version": "2.36.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/advagg.git",
-                "reference": "7.x-2.35"
+                "reference": "7.x-2.36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/advagg-7.x-2.35.zip",
-                "reference": "7.x-2.35",
-                "shasum": "53af49bc80da92edc1b16d9a00a053c3598ab4b4"
+                "url": "https://ftp.drupal.org/files/projects/advagg-7.x-2.36.zip",
+                "reference": "7.x-2.36",
+                "shasum": "81e63b82adec7e2039d0f647ebb3d7bab2807100"
             },
             "require": {
                 "drupal/drupal": "~7.0"
@@ -807,8 +807,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "7.x-2.35",
-                    "datestamp": "1605792713",
+                    "version": "7.x-2.36",
+                    "datestamp": "1689359986",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -836,6 +836,10 @@
                 {
                     "name": "NickDickinsonWilde",
                     "homepage": "https://www.drupal.org/user/3094661"
+                },
+                {
+                    "name": "poker10",
+                    "homepage": "https://www.drupal.org/user/272316"
                 },
                 {
                     "name": "rupl",
@@ -2504,10 +2508,6 @@
                 {
                     "name": "quietone",
                     "homepage": "https://www.drupal.org/user/2572884"
-                },
-                {
-                    "name": "webchick",
-                    "homepage": "https://www.drupal.org/user/24967"
                 },
                 {
                     "name": "xjm",
@@ -12646,16 +12646,16 @@
         },
         {
             "name": "drupal/coder",
-            "version": "8.3.20",
+            "version": "8.3.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pfrenssen/coder.git",
-                "reference": "88055e40931a56074b6510a631d3403794c91625"
+                "reference": "a0b76c6c8ea277b07d58fa75dcacf102a203ad51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/88055e40931a56074b6510a631d3403794c91625",
-                "reference": "88055e40931a56074b6510a631d3403794c91625",
+                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/a0b76c6c8ea277b07d58fa75dcacf102a203ad51",
+                "reference": "a0b76c6c8ea277b07d58fa75dcacf102a203ad51",
                 "shasum": ""
             },
             "require": {
@@ -12693,7 +12693,7 @@
                 "issues": "https://www.drupal.org/project/issues/coder",
                 "source": "https://www.drupal.org/project/coder"
             },
-            "time": "2023-06-15T07:16:09+00:00"
+            "time": "2023-07-17T15:36:49+00:00"
         },
         {
             "name": "drupal/devel",
