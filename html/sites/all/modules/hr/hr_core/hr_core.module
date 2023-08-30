@@ -2318,15 +2318,21 @@ function hr_core_resolve_full_url_from_configuration_single($configuration) {
  * Implements hook_redirect_alter().
  *
  * Ensure that redirects to response.reliefweb.int are not emitted if the
- * user-agent header contains "archive" so that archive.org can get our
- * original content. Prevent caching, so *other* users get redirected and
- * not actual content from the page or varnish cache.
+ * user-agent header contains "archive" or "humanitarianresponse" so that
+ * archive.org can get our original content. Prevent caching, so *other*
+ * users get redirected and not actual content from the page or
+ * varnish cache.
  *
  * @see https://humanitarian.atlassian.net/browse/OPS-9290
  */
 function hr_core_redirect_alter(&$redirect) {
-  // Early return if not archive.org.
-  if (!isset($_SERVER['HTTP_USER_AGENT']) || (stripos($_SERVER['HTTP_USER_AGENT'], "archive") == FALSE)) {
+  // No UA? Return.
+  if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+    return;
+  }
+
+  // Early return if not archive.org old OR new bot name.
+  if ((stripos($_SERVER['HTTP_USER_AGENT'], "archive") == FALSE) && (stripos($_SERVER['HTTP_USER_AGENT'], "humanitarianresponse") == FALSE)) {
     return;
   }
 
