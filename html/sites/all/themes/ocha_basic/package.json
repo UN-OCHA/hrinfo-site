@@ -28,7 +28,7 @@
     "jshint": "^2.10.2",
     "jshint-stylish": "^2.2.1",
     "node-sass": "^9.0.0",
-    "postcss": "^8.3.9"
+    "postcss": "^8.4.31"
   },
   "engines": {
     "node": "^10.18.1",
