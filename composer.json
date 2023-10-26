@@ -233,7 +233,8 @@
             "composer/semver": true,
             "cweagans/composer-patches": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "symfony/flex": true
+            "symfony/flex": true,
+            "drupal-composer/preserve-paths": false
         }
     },
     "minimum-stability": "alpha",
