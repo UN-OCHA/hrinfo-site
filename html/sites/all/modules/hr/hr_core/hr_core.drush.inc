@@ -45,15 +45,30 @@ function drush_hr_core_rwr_392() {
   $file_out = fopen('/var/www/rwr_links_found.csv', 'w');
   $file_skipped = fopen('/var/www/rwr_links_skipped.csv', 'w');
   $counter = 0;
+  $max_items = 9999;
 
   // Add header to skipped.
   $row = fgetcsv($file_in);
   fputcsv($file_skipped, $row);
 
   // Add new headers to output.
+  $row = array_merge($row, [
+    'id',
+    'type',
+    'title',
+    'status',
+    'language',
+    'publication_date',
+    'operation',
+    'operation_url',
+    'cluster',
+    'cluster_url',
+    'organization',
+    'document_type',
+  ]);
   fputcsv($file_out, $row);
 
-  while (($row = fgetcsv($file_in)) !== FALSE && $counter < 50) {
+  while (($row = fgetcsv($file_in)) !== FALSE && $counter < $max_items) {
     $counter++;
     if ($row[8] == 'The linked content originates from a prior revision of a paragraph.') {
       continue;
@@ -129,11 +144,6 @@ function drush_hr_core_rwr_392() {
       $meta = _hr_core_get_meta($nid);
       $row = array_merge($row, array_values($meta));
       fputcsv($file_out, $row);
-      drush_print_r([
-        $url,
-        $nid,
-        $row,
-      ]);
     }
   }
 
@@ -151,12 +161,44 @@ function _hr_core_get_meta($nid) {
     return [];
   }
 
+  $wrapper = entity_metadata_wrapper('node', $node);
+
   $meta = [
-    'type' => $node->type,
-    'title' => $node->title,
+    'id' => $wrapper->getIdentifier(),
+    'type' => $wrapper->getBundle(),
+    'title' => $wrapper->label(),
     'status' => $node->status,
     'language' => $node->language,
+    'publication_date' => '',
+    'operation' => '',
+    'operation_url' => '',
+    'cluster' => '',
+    'cluster_url' => '',
+    'organization' => '',
+    'document_type' => '',
   ];
+
+  if (isset($wrapper->og_group_ref) && isset($wrapper->og_group_ref[0])) {
+    $meta['operation'] = $wrapper->og_group_ref[0]->label();
+    $meta['operation_url'] = url('node/'. $wrapper->og_group_ref[0]->getIdentifier());
+  }
+
+  if (isset($wrapper->field_bundles) && isset($wrapper->field_bundles[0])) {
+    $meta['cluster'] = $wrapper->field_bundles[0]->label();
+    $meta['cluster_url'] = url('node/'. $wrapper->field_bundles[0]->getIdentifier());
+  }
+
+  if (isset($wrapper->field_organizations) && isset($wrapper->field_organizations[0])) {
+    $meta['organization'] = $wrapper->field_organizations[0]->label();
+  }
+
+  if (isset($wrapper->field_publication_date)) {
+    $meta['publication_date'] = date('Y-m-d', $wrapper->field_publication_date->value());
+  }
+
+  if (isset($wrapper->field_document_type)) {
+    $meta['document_type'] = $wrapper->field_document_type->label();
+  }
 
   return $meta;
 }
@@ -181,8 +223,11 @@ function _hr_core_get_id_from_alias($url) {
   }
 
   $node = menu_get_object('node', 1, $node_path);
+  if ($node) {
+    return $node->nid;
+  }
 
-  return $node->nid;
+  return FALSE;
 }
 
 /**
