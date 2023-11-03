@@ -41,13 +41,19 @@ function hr_core_drush_command() {
  * Get the average file size of all files uploaded on HR.info.
  */
 function drush_hr_core_rwr_392() {
-  $file = fopen('/var/www/rwr_links.csv', 'r');
+  $file_in = fopen('/var/www/rwr_links.csv', 'r');
+  $file_out = fopen('/var/www/rwr_links_found.csv', 'w');
+  $file_skipped = fopen('/var/www/rwr_links_skipped.csv', 'w');
   $counter = 0;
 
-  // Skip header.
-  $row = fgetcsv($file);
+  // Add header to skipped.
+  $row = fgetcsv($file_in);
+  fputcsv($file_skipped, $row);
 
-  while (($row = fgetcsv($file)) !== FALSE && $counter < 50) {
+  // Add new headers to output.
+  fputcsv($file_out, $row);
+
+  while (($row = fgetcsv($file_in)) !== FALSE && $counter < 50) {
     $counter++;
     if ($row[8] == 'The linked content originates from a prior revision of a paragraph.') {
       continue;
@@ -116,12 +122,43 @@ function drush_hr_core_rwr_392() {
 
     }
 
-    drush_print_r([
-      $url,
-      $nid
-    ]);
+    if (!$nid) {
+      fputcsv($file_skipped, $row);
+    }
+    else {
+      $meta = _hr_core_get_meta($nid);
+      $row = array_merge($row, array_values($meta));
+      fputcsv($file_out, $row);
+      drush_print_r([
+        $url,
+        $nid,
+        $row,
+      ]);
+    }
   }
-  fclose($file);
+
+  fclose($file_in);
+  fclose($file_out);
+  fclose($file_skipped);
+}
+
+/**
+ * Get meta data.
+ */
+function _hr_core_get_meta($nid) {
+  $node = node_load($nid);
+  if (!$node) {
+    return [];
+  }
+
+  $meta = [
+    'type' => $node->type,
+    'title' => $node->title,
+    'status' => $node->status,
+    'language' => $node->language,
+  ];
+
+  return $meta;
 }
 
 /**
