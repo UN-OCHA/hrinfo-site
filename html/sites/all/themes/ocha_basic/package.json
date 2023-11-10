@@ -40,7 +40,7 @@
     "icon-rename": "rename -c -s _ - -s icon- '' img/icons/*"
   },
   "devDependencies": {
-    "axios": ">=0.21.2",
+    "axios": ">=1.6.0",
     "dot-prop": ">=4.2.1",
     "eslint": "^8.0.0",
     "gulp-sass-lint": "^1.4.0",
