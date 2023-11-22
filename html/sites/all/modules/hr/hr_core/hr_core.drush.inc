@@ -34,6 +34,12 @@ function hr_core_drush_command() {
     'aliases' => array(),
   );
 
+  $items['hr-core-hrinfo-1278'] = array(
+    'description' => "Get attachments",
+    'drupal dependencies' => array(),
+    'aliases' => array(),
+  );
+
   return $items;
 }
 
@@ -428,4 +434,76 @@ function drush_hr_core_operation_avg_file_size() {
   else {
     drush_print('No operation provided');
   }
+}
+
+/**
+ * Get all attachments.
+ */
+function drush_hr_core_hrinfo_1278() {
+  $file_in = fopen('/var/www/hrinfo_1278.csv', 'r');
+  $base_dir = '/var/www/filelists/';
+  $counter = 0;
+  $max_items = 999;
+
+  while (($row = fgetcsv($file_in)) !== FALSE && $counter < $max_items) {
+    $counter++;
+    $last_page = 99;
+
+    $url = trim(strtok($row[0], '?'));
+    libxml_use_internal_errors(true);
+
+    $path = parse_url($url, PHP_URL_PATH);
+    $path = trim($path, '/');
+    $path = preg_replace('/[^a-zA-Z0-9\-]/', '_', $path);
+    $path = $base_dir . $path;
+    if (!is_dir($path)) {
+      mkdir($path);
+    }
+    else {
+      drush_log($path . ' exists, skipping');
+      continue;
+    }
+    $file_out = fopen($path . '/filelist.txt', 'w');
+
+    // Get last page.
+    $html = file_get_contents($url);
+
+    $dom = new DOMDocument();
+    $dom->loadHTML($html);
+
+    $xpath = new DOMXpath($dom);
+    $elements = $xpath->query("//li[contains(@class, 'pager-last')]/a");
+    if (!is_null($elements) && !is_bool($elements) && $elements->count() > 0) {
+      $element = $elements[0];
+      $href = $element->getAttribute('href');
+      $query = parse_url($href, PHP_URL_QUERY);
+      parse_str($query, $query);
+      $last_page = $query['page'] ?? 0;
+    }
+
+    foreach (range(0, $last_page) as $page) {
+      drush_log($url . '?page=' . $page);
+      $html = file_get_contents($url . '?page=' . $page);
+
+      $dom = new DOMDocument();
+      $dom->loadHTML($html);
+
+      $xpath = new DOMXpath($dom);
+      $elements = $xpath->query("//div[contains(@class, 'pane-node-hr-core-files-download-button')]//a");
+
+      if (!is_null($elements) && !is_bool($elements) && $elements->count() > 0) {
+        foreach ($elements as $element) {
+          $href = $element->getAttribute('href');
+          fputcsv($file_out, [$href]);
+        }
+      }
+      else {
+        break;
+      }
+    }
+
+    fclose($file_out);
+  }
+
+  fclose($file_in);
 }
