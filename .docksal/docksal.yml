@@ -1,4 +1,4 @@
-version: "2.1"
+version: "3.9"
 
 services:
   mail:
@@ -12,6 +12,15 @@ services:
     labels:
       - io.docksal.virtual-host=webmail.${VIRTUAL_HOST}
     user: root
+#  db:
+#    extends:
+#      file: ${HOME}/.docksal/stacks/services.yml
+#      service: mysql
+#    volumes:
+#      - project_root:/var/www:ro,nocopy,cached  # Project root volume (read-only)
+#      - db_data:/var/lib/mysql  # Database data volume
+#    tmpfs:
+#      - /var/lib/mysql:uid=999,gid=999
   solr:
     extends:
       file: ${HOME}/.docksal/stacks/services.yml
@@ -29,3 +38,10 @@ services:
     dns:
       - ${DOCKSAL_DNS1}
       - ${DOCKSAL_DNS2}
+
+# volumes:
+#   db_data:
+#     driver_opts:
+#       type: tmpfs
+#       device: tmpfs
+#
