@@ -39,9 +39,6 @@
       "drupal/facetapi_i18n": {
         "Copied over and updated": "https://www.drupal.org/files/issues/facetapi_i18n_strings_not_translatable-1403082-19.patch"
       },
-      "drupal/file_chooser_field": {
-        "Style file chooser": "PATCHES/scs-68-file-chooser-styling.patch"
-      },
       "drupal/flag": {
         "Undefined index errors": "https://www.drupal.org/files/issues/2019-03-12/flag-undefined_index_flag_fetch_node_by_user-2333593-3-D7.patch",
         "Unsupported operand types": "https://www.drupal.org/files/issues/flag-array-check-1925922-169.patch"
@@ -55,9 +52,6 @@
       "drupal/og": {
         "User can create node without permission": "https://patch-diff.githubusercontent.com/raw/Gizra/og/pull/442.patch",
         "HR.info issue 839": "PATCHES/hrinfo-839.patch"
-      },
-      "drupal/og_features": {
-        "Permission to 'edit own group features' only works if the user also has the 'administer group' permission": "https://www.drupal.org/files/2019515-og_features-group-permission.patch"
       },
       "drupal/og_menu": {
         "Add i18n support": "https://www.drupal.org/files/issues/og_menu-i18n-2348821-12.patch",

@@ -74,7 +74,7 @@ function drush_hr_core_rwr_392() {
       continue;
     }
 
-    $url = $row[0];
+    $url = urldecode($row[0]);
 
     // Check if it's a link to a node.
     if (strpos($url, '/node/') !== FALSE) {
@@ -103,7 +103,6 @@ function drush_hr_core_rwr_392() {
         $path = ltrim(parse_url($url, PHP_URL_PATH), '/');
         $parts = explode('/', $path);
         $title = array_pop($parts);
-        $title = urldecode($title);
 
         $query = new EntityFieldQuery();
         $query->entityCondition('entity_type', 'node')
@@ -122,7 +121,6 @@ function drush_hr_core_rwr_392() {
         $path = ltrim(parse_url($url, PHP_URL_PATH), '/');
         $parts = explode('/', $path);
         $title = array_pop($parts);
-        $title = urldecode($title);
         $title = str_replace('-', ' ', $title);
 
         $query = new EntityFieldQuery();
@@ -137,13 +135,23 @@ function drush_hr_core_rwr_392() {
 
     }
 
-    if (!$nid) {
-      fputcsv($file_skipped, $row);
-    }
-    else {
+    if ($nid) {
       $meta = _hr_core_get_meta($nid);
       $row = array_merge($row, array_values($meta));
       fputcsv($file_out, $row);
+
+      continue;
+    }
+
+    // It might be a file.
+    $meta = _hr_core_get_alias_from_filename($url);
+
+    if (!empty($meta)) {
+      $row = array_merge($row, array_values($meta));
+      fputcsv($file_out, $row);
+    }
+    else {
+      fputcsv($file_skipped, $row);
     }
   }
 
@@ -201,6 +209,93 @@ function _hr_core_get_meta($nid) {
   }
 
   return $meta;
+}
+
+/**
+ * Get file from filename.
+ */
+function _hr_core_get_alias_from_filename($url) {
+  $filename = '';
+  $fid = FALSE;
+
+  // Private file.
+  if (strpos($url, '/system/files/') !== FALSE) {
+    $path = ltrim(parse_url($url, PHP_URL_PATH), '/');
+    $parts = explode('/', $path);
+    $filename = array_pop($parts);
+  }
+  // Public file.
+  elseif (strpos($url, '/files/') !== FALSE) {
+    $path = ltrim(parse_url($url, PHP_URL_PATH), '/');
+    $parts = explode('/', $path);
+    $filename = array_pop($parts);
+  }
+  // Direct link to file.
+  elseif (strpos($url, '/file/') !== FALSE && strpos($url, '/download') !== FALSE) {
+    $path = ltrim(parse_url($url, PHP_URL_PATH), '/');
+    $parts = explode('/', $path);
+    // Skip download part.
+    $fid = array_pop($parts);
+    $fid = array_pop($parts);
+  }
+  // Direct link to file.
+  elseif (strpos($url, '/file/') !== FALSE) {
+    $path = ltrim(parse_url($url, PHP_URL_PATH), '/');
+    $parts = explode('/', $path);
+    $fid = array_pop($parts);
+  }
+
+  if (empty($filename) && !$fid) {
+    return [];
+  }
+
+  $file = FALSE;
+  if (!empty($filename)) {
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'file')
+      ->propertyCondition('filename', $filename);
+    $result = $query->execute();
+
+    if (empty($result['file'])) {
+      return [];
+    }
+
+    $files = entity_load('file', array_keys($result['file']));
+    $file = reset($files);
+  }
+  elseif (!empty($fid)) {
+    $file = entity_load_single('file', $fid);
+  }
+
+  if (!$file) {
+    return [];
+  }
+
+  $usage = file_usage_list($file);
+
+  if (!isset($usage['file'])) {
+    return [];
+  }
+
+  $entity_type = array_keys($usage['file']);
+  $entity_type = reset($entity_type);
+
+  $entity_id = array_keys($usage['file'][$entity_type]);
+  $entity_id = reset($entity_id);
+
+  $entities = entity_load($entity_type, [$entity_id]);
+  $entity = reset($entities);
+
+  $parent = $entity;
+  while ($parent instanceof FieldCollectionItemEntity) {
+    $parent = $entity->hostEntity();
+  }
+
+  if ($parent && isset($parent->nid)) {
+    return _hr_core_get_meta($parent->nid);
+  }
+
+  return [];
 }
 
 /**
